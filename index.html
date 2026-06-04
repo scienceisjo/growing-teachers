@@ -440,6 +440,29 @@ ol.steps li span{color:var(--ink-soft);font-size:.94rem}
 .wall-card .wc-when{color:#9aa0b8;font-size:.74rem;white-space:nowrap}
 @media(max-width:560px){.wall-list{grid-template-columns:1fr}}
 
+/* ───── MODEL BOX ───── */
+.model-box{margin-top:22px;background:#fbf7ec;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:20px 22px}
+.mb-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:14px}
+.mb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mb-t{font-weight:800;color:var(--gold-deep);font-size:.86rem;margin-bottom:8px;letter-spacing:.02em}
+.mb-col .rule-list li{font-size:.88rem}
+@media(max-width:720px){.mb-grid{grid-template-columns:1fr;gap:16px}}
+
+/* ───── IMAGE TOOLS ───── */
+.imgtools{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.it-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
+.it-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;box-shadow:var(--shadow)}
+.it-card.hot{border:2px solid var(--gold);background:#fffdf5}
+.it-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.02rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.it-m{font-size:.78rem;color:var(--gold-deep);font-weight:700;margin:3px 0 9px}
+.it-pick{font-size:.66rem;background:var(--gold);color:#fff;padding:2px 9px;border-radius:20px;letter-spacing:.02em}
+.it-card .rule-list li{font-size:.85rem}
+.why-gpt{margin-top:16px;background:var(--navy);border-radius:14px;padding:18px 20px}
+.why-gpt .it-h{color:var(--gold-soft)}
+.why-gpt .rule-list li{color:#e9e5d7;font-size:.9rem}
+.why-note{margin-top:12px;color:var(--gold-soft);font-size:.86rem;line-height:1.55;background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px}
+@media(max-width:720px){.it-grid{grid-template-columns:1fr}}
+
 /* ───── FOOTER ───── */
 footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:50px 26px;position:relative;overflow:hidden}
 footer .fstar{position:absolute;background:#fff;border-radius:50%;opacity:.5;animation:tw 6s infinite}
@@ -472,8 +495,8 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <button class="tab active" data-tab="home">홈</button>
     <button class="tab" data-tab="about">강사 소개</button>
     <button class="tab" data-tab="flow">흐름</button>
-    <button class="tab" data-tab="labs">실습</button>
     <button class="tab" data-tab="vibe">바이브코딩</button>
+    <button class="tab" data-tab="labs">실습</button>
     <button class="tab" data-tab="deploy">배포</button>
     <button class="tab" data-tab="submit">과제 제출</button>
     <button class="tab" data-tab="photo">사진</button>
@@ -502,19 +525,19 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     </div>
   </div>
   <div class="wrap home-extra">
-    <p class="home-lead">오늘은 직접 만들어봅니다! 말로 시켜서 만드는 과학 시뮬레이션, ChatGPT·Canva로 뚝딱 뽑는 인포그래픽과 만화까지 — 손으로 다 해봐요.</p>
+    <p class="home-lead">오늘은 직접 만들어요! 🛠️ 말로 만드는 과학 시뮬레이터, ChatGPT·Canva 인포그래픽·만화까지 — 보지 말고 손으로! ㅎㅎ</p>
     <div class="home-cards">
       <button class="hcard" onclick="switchTab('flow')">
         <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>오늘의 흐름<span class="arr">→</span></span>
-        <small>2시간 · 7단계로 한눈에</small>
+        <small>2시간 · 7단계로 한눈에! ⏱️</small>
       </button>
       <button class="hcard" onclick="switchTab('labs')">
         <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a2 2 0 0 0 2.8 2.8l6-6a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.1-2.1z"/></svg>실습 가이드<span class="arr">→</span></span>
-        <small>시뮬레이션 · 인포그래픽 · 만화</small>
+        <small>시뮬레이션 · 인포그래픽 · 만화 🎨</small>
       </button>
       <button class="hcard" onclick="switchTab('uploads')">
         <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>결과물 올리기<span class="arr">→</span></span>
-        <small>모둠 결과물 갤러리</small>
+        <small>모둠 결과물 갤러리 🖼️</small>
       </button>
     </div>
   </div>
@@ -526,7 +549,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">ABOUT</div>
       <h2>강사 소개</h2>
-      <p>오늘 함께할 강사를 잠깐 소개할게요.</p>
+      <p>오늘 함께할 강사예요 😊 반가워요!</p>
     </div>
 
     <div class="teacher-card">
@@ -570,24 +593,24 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
           </div>
         </div>
         <div class="me-photo-text">
-          <p class="me-lead">학생들에게 <b>마음을 많이 주고, 많이 받는</b> 교사예요.</p>
-          <p class="me-sub">아이들과 주고받은 마음이, 다음 수업을 준비하는 힘이 됩니다.</p>
+          <p class="me-lead">학생에게 <b>마음을 많이 주고, 많이 받는</b> 교사예요 🥰</p>
+          <p class="me-sub">그 주고받은 마음이 다음 수업의 힘이 돼요!</p>
         </div>
       </div>
 
-      <p class="me-lead" style="margin-top:26px">그리고 그 무엇보다 <b>수업이 중요한</b> 교사예요.</p>
+      <p class="me-lead" style="margin-top:26px">그리고 무엇보다 <b>수업이 중요한</b> 교사랍니다 😊</p>
       <p class="ab-sub" style="margin:10px 0 0">아래 칸을 눌러보세요 👇</p>
       <div class="daymood">
         <div class="dm good"><div class="dm-emo">😀</div><div class="dm-t">수업이 잘 된 날</div><div class="dm-d"><span class="blank" onclick="revealBlank(this)" data-a="엄청 기쁩니다!">눌러보기</span></div></div>
         <div class="dm bad"><div class="dm-emo">😞</div><div class="dm-t">수업이 잘 안 된 날</div><div class="dm-d"><span class="blank" onclick="revealBlank(this)" data-a="힘이 쭉 빠지죠…">눌러보기</span></div></div>
       </div>
 
-      <div class="focus-quote">수업을 위해 할 수 있는 노력은 많지만, <b>오늘은 AI·디지털 도구로 ‘수업 자료’를 만드는 것</b>에 초점을 두고 싶습니다.</div>
+      <div class="focus-quote">수업을 위한 노력은 많지만 — 오늘의 초점은 <b>‘AI·디지털로 수업 자료 만들기’</b>예요! ✨</div>
     </div>
 
     <div class="about-block">
-      <h3 class="about-h">강사가 만든 자료 둘러보기</h3>
-      <p class="ab-sub">버튼을 누르면 실제 자료로 바로 이동해요.</p>
+      <h3 class="about-h">제가 만든 자료 둘러보기 🔍</h3>
+      <p class="ab-sub">누르면 실제 자료로 바로 이동해요! 👉</p>
       <div class="res-btns">
         <a class="res-btn" href="https://joo.is/과학탐구월드" target="_blank" rel="noopener"><span class="rb-icon">🔬</span><span class="rb-t">과학탐구월드</span><span class="rb-u">joo.is/과학탐구월드</span></a>
         <a class="res-btn" href="https://joo.is/교실을깨우자" target="_blank" rel="noopener"><span class="rb-icon">⚡</span><span class="rb-t">교실을 깨우자</span><span class="rb-u">joo.is/교실을깨우자</span></a>
@@ -597,7 +620,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
 
     <div class="about-block">
       <h3 class="about-h">아이들이 보낸 편지</h3>
-      <p class="ab-sub">과학 시간을 함께한 아이들이 남긴 한마디예요. <span style="color:var(--gold-deep)">(편지 내용은 곧 채워 넣을 예정)</span></p>
+      <p class="ab-sub">과학 시간을 함께한 아이들의 한마디예요 💌 <span style="color:var(--gold-deep)">(내용 곧 추가할게요!)</span></p>
       <div class="letters">
         <figure class="letter"><div class="quote">“</div><blockquote>여기에 아이가 쓴 편지 내용이 들어갑니다. 편지 텍스트를 주시면 이 카드에 예쁘게 정리해 드릴게요.</blockquote><figcaption>— OO이</figcaption></figure>
         <figure class="letter"><div class="quote">“</div><blockquote>두 번째 편지가 들어갈 자리예요. 카드 개수는 편지 수에 맞춰 늘리거나 줄일 수 있어요.</blockquote><figcaption>— OO이</figcaption></figure>
@@ -636,7 +659,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">TODAY'S FLOW</div>
       <h2>오늘의 흐름</h2>
-      <p>강의는 짧게, 실습은 길게! 실습 약 75분, 강의·정리 약 35분. 각 항목을 눌러 자세히 보세요.</p>
+      <p>강의 짧게 · 실습 길게! ⏱️ 실습 75분 / 강의·정리 35분. 항목을 누르면 펼쳐져요 👇</p>
     </div>
     <div class="timeline" id="timeline"></div>
   </div>
@@ -648,30 +671,62 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">HANDS-ON</div>
       <h2>실습 가이드</h2>
-      <p>실습 A는 혼자, 실습 B는 모둠으로! 시작 프롬프트는 그대로 복사해서 쓰세요.</p>
+      <p>실습 A 개인 · 실습 B 모둠! 프롬프트는 복사해서 바로 쓰세요 ✨</p>
     </div>
     <div class="lab-grid">
       <!-- 실습 A -->
       <div class="lab">
-        <div class="lab-tag">실습 A · 45분</div>
-        <h3>학생이 만들고 고치는<br>과학 시뮬레이션 수업</h3>
-        <p class="goal">학생이 바이브 코딩으로 시뮬레이션을 <b>직접 만들고 스스로 고쳐</b> 나가는 수업입니다. 오늘은 선생님이 학생이 되어 그 과정을 그대로 경험해 봅니다. 예: 온도 슬라이더가 있는 '입자 운동 상자'. 도구는 Gemini·Claude를 권합니다.</p>
-        <p class="note" style="margin-top:12px">핵심은 <b>고치는 과정</b>입니다 — 시뮬레이션이 이상하게 동작할 때, 학생이 직접 원인을 찾아 고치며 개념을 점검합니다.</p>
-        <div class="label">시작 프롬프트 — 일부러 두루뭉술하게</div>
+        <div class="lab-tag">실습 A · 개인 · 45분</div>
+        <h3>당장 가까운 수업에서 쓸<br>과학 시뮬레이터 만들기</h3>
+        <p class="goal">내 <b>다음 수업에 바로 쓸</b> 시뮬레이터를 직접 개발! 🛠️ 과학 원리를 <b>말로 표현</b> → Gemini·Claude가 <b>시뮬레이션으로 구현</b> → 확인·수정 🔧</p>
+        <div class="label">과정 — 말로 표현 → 구현 → 수정</div>
+        <ol class="steps">
+          <li><span><b>원리 고르기</b> — 다음 수업에서 다룰 개념 하나.</span></li>
+          <li><span><b>말로 표현</b> — 무엇이 / 어떻게 변하는지 일상어로.</span></li>
+          <li><span><b>구현 요청</b> — 끝에 “HTML 한 파일로 만들어줘”.</span></li>
+          <li><span><b>확인·수정</b> — 원리와 다른 점은 대화로 고치기.</span></li>
+          <li><span><b>(여유되면) 배포</b> — 링크로 공유.</span></li>
+        </ol>
+        <div class="label">시작 프롬프트 — 빈칸만 채우기</div>
         <div class="prompt-box">
           <span class="pl">COPY &amp; PASTE</span>
           <button class="copy-btn" data-copy="promptA"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-          <code id="promptA">상자 안에 기체 입자들이 들어 있는 모습을 보여주는 웹페이지를 만들어줘. 슬라이더로 온도를 올리면 입자들이 더 빨라지게 해줘. HTML 한 파일로 만들어줘.</code>
+          <code id="promptA">‘[다룰 과학 원리]’를 보여주는 시뮬레이션을 만들어줘. [무엇]이 [어떻게] 변하는지 슬라이더나 버튼으로 조절하게 해줘. HTML 한 파일로 만들어줘.</code>
         </div>
-        <div class="label">만들고 → 고치는 과정</div>
-        <ol class="steps">
-          <li><span><b>두루뭉술하게 말하기</b> — 처음부터 자세히 명세하지 마세요. 일상어 그대로.</span></li>
-          <li><span><b>예측 한 줄</b> — 돌리기 전에 "무엇이 보일 것 같은가"를 적어보세요.</span></li>
-          <li><span><b>실행하고 관찰</b> — 예측과 다른 점을 찾으세요. 입자가 벽을 통과하나요?</span></li>
-          <li><span><b>대화로 고치기</b> — "벽에 부딪히면 튕기게", "입자끼리 충돌하게", "온도 0이면 멈추게".</span></li>
-          <li><span><b>(여유되면) 배포</b> — GitHub Pages로 올려 링크를 공유하세요.</span></li>
-        </ol>
-        <p class="note" style="margin-top:18px">학생 결과물을 받는 방법(링크·코드·녹화)은 <b>배포</b> 탭에서 비교해 보세요.</p>
+        <p class="note">예) 온도 슬라이더 → 입자 빨라지기 · 거리 → 중력 세기 · 농도 → 확산 속도 😎</p>
+
+        <div class="model-box">
+          <div class="mb-h">왜 직접 만들어 보나요? — 과학교육론의 ‘모형(Model)’ 🧩</div>
+          <div class="mb-grid">
+            <div class="mb-col">
+              <div class="mb-t">모형의 특징</div>
+              <ul class="rule-list">
+                <li>실제를 <b>단순화</b>한 표상 — 전부가 아닌 핵심만</li>
+                <li><b>예측·설명</b>의 도구</li>
+                <li><b>한계</b>가 있음 — 다 담지 못함</li>
+                <li><b>잠정적</b> — 계속 수정·발전</li>
+                <li>여러 모형이 <b>공존</b> 가능</li>
+              </ul>
+            </div>
+            <div class="mb-col">
+              <div class="mb-t">왜 중요한가</div>
+              <ul class="rule-list">
+                <li>과학의 핵심 = 모형 <b>만들고·쓰고·고치기</b></li>
+                <li>개념을 ‘받기’ → ‘<b>구성하기</b>’로</li>
+                <li>가치 = <b>표현·예측·재조정의 과정</b></li>
+              </ul>
+            </div>
+            <div class="mb-col">
+              <div class="mb-t">학생이 ‘주체’</div>
+              <ul class="rule-list">
+                <li>모형의 <b>소비자 → 제작자</b></li>
+                <li>만들고 고치며 개념·한계 <b>스스로</b> 점검</li>
+                <li>그래서 → <b>교사가 먼저</b> 경험 (= 오늘)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <div class="tools">
           <a class="tool" href="https://gemini.google.com" target="_blank" rel="noopener"><i>✦</i>Gemini</a>
           <a class="tool" href="https://claude.ai" target="_blank" rel="noopener"><i>✦</i>Claude</a>
@@ -682,7 +737,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
       <div class="lab">
         <div class="lab-tag">실습 B · 모둠 · 30분</div>
         <h3>ChatGPT + Canva로<br>인포그래픽 · 만화</h3>
-        <p class="goal">과학 개념을 담은 <b>인포그래픽 설명자료</b> 또는 <b>만화</b>를 만들어 결과물 탭에 올립니다.</p>
+        <p class="goal">과학 개념을 담은 <b>인포그래픽 설명자료</b> 또는 <b>만화</b> 제작 → 결과물 탭 업로드! 🎨</p>
 
         <div class="callout strong">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
@@ -703,7 +758,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
           <button class="copy-btn" data-copy="promptB"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
           <code id="promptB">중학교 과학 '(개념)'을 설명하는 인포그래픽을 만들어줘. 단, 글자(텍스트)는 절대 넣지 말고 배경·아이콘·일러스트와 빈 공간만 단정하게 구성해줘. 교육용 스타일로.</code>
         </div>
-        <p class="note">만화는 "4컷 구도와 그림만, 말풍선은 빈 칸으로" 식으로 바꿔 요청하세요.</p>
+        <p class="note">만화는 → “4컷 구도·그림만, 말풍선은 빈 칸으로”! 💬</p>
 
         <div class="label">모둠 역할 (3~4인)</div>
         <div class="roles">
@@ -719,6 +774,52 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
         </div>
       </div>
     </div>
+
+    <div class="imgtools">
+      <div class="label">🎨 이미지 생성, 플랫폼마다 ‘엔진’이 달라요!</div>
+      <p class="note">같은 “이미지 만들어줘”라도 도구마다 모델이 달라요. 대표만 콕 집어볼게요 ㅎㅎ</p>
+      <div class="it-grid">
+        <div class="it-card">
+          <div class="it-h">🟢 Gemini</div>
+          <div class="it-m">엔진 = Nano Banana 🍌</div>
+          <ul class="rule-list">
+            <li>구글 Gemini 안에서 바로 생성·편집</li>
+            <li>대화로 고치기 · 캐릭터·사물 <b>일관성</b> 강함</li>
+            <li>Pro/최신 버전은 <b>한글 등 다국어 글자</b>도 꽤 정확 → 인포그래픽·다이어그램 굿</li>
+            <li>빠르고, 무료로도 접근 쉬움</li>
+          </ul>
+        </div>
+        <div class="it-card hot">
+          <div class="it-h">🔵 ChatGPT <span class="it-pick">제 선택!</span></div>
+          <div class="it-m">엔진 = ChatGPT Images 2.0 (gpt-image-2)</div>
+          <ul class="rule-list">
+            <li><b>한글 글자 렌더링</b>이 특히 좋아졌어요</li>
+            <li>‘생각’하고 그림 — 레이아웃 먼저 계획 후 생성</li>
+            <li>대화 맥락 그대로 → 여러 번 고치기 자연스러움</li>
+            <li>늘 쓰던 챗 안에서 한 번에!</li>
+          </ul>
+        </div>
+        <div class="it-card">
+          <div class="it-h">🟣 그 외</div>
+          <div class="it-m">Midjourney · Adobe Firefly 등</div>
+          <ul class="rule-list">
+            <li>Midjourney — 예술적·감성 비주얼 끝판왕 🎭</li>
+            <li>Adobe Firefly — 상업적 안전(저작권)·디자인 툴 연동</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="why-gpt">
+        <div class="it-h">💙 그래도 제가 ChatGPT를 쓰는 이유</div>
+        <ul class="rule-list">
+          <li>이미 매일 쓰는 도구라, 따로 옮길 필요가 없어요</li>
+          <li>한글 글자를 비교적 잘 써줘서 만화 말풍선·인포 초안에 편해요</li>
+          <li>“이건 이렇게 바꿔줘” 대화로 고치는 흐름이 자연스러워요</li>
+          <li>교육용 일러스트 톤이 깔끔하게 잘 나와요 ㅎㅎ</li>
+        </ul>
+        <p class="why-note">💡 그래도 글자가 많거나 또박또박해야 하면 <b>최종 글씨는 Canva</b>가 제일 안전해요! (실습 B 원칙 그대로 😊)</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -728,61 +829,61 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">VIBE CODING</div>
       <h2>바이브코딩 하는 법</h2>
-      <p>코드를 짜는 게 아니라, 말로 시킵니다. 여기선 <b>과학 시뮬레이션</b>을 만들어요. (수업자료 전체를 만드는 건 토큰 한계로 무료론 어렵지만, 시뮬레이션 하나하나는 충분히 가능!)</p>
+      <p>코드 작성 X · 말로 시키기 O! 🗣️ 오늘은 <b>과학 시뮬레이션</b>! (전체 수업자료는 토큰 한계로 무료론 부담 / 시뮬 하나하나는 충분해요 ㅎㅎ)</p>
     </div>
 
     <div class="sub-block">
       <div class="label">① 이렇게 시킵니다</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">만들고 싶은 걸 일상어로 설명하고, 끝에 <b style="color:var(--navy)">"HTML 한 파일로 만들어줘"</b>를 붙이면 됩니다. Gemini가 코드를 만들어 주면, 보고 "이건 이렇게 바꿔줘"로 다듬어요.</p>
+      <p style="color:var(--ink-soft);font-size:.95rem">일상어로 설명 + 끝에 <b style="color:var(--navy)">“HTML 한 파일로 만들어줘”</b>! 결과 보고 “이건 이렇게 바꿔줘”로 다듬으면 끝 ㅎㅎ</p>
       <div class="prompt-box" style="margin-top:12px">
         <span class="pl">Gemini에 붙여넣기</span>
         <button class="copy-btn" data-copy="vibePrompt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
         <code id="vibePrompt">[만들고 싶은 것]을 만들어줘. 중학생이 쓸 수 있게 간단하고 직관적으로. HTML, CSS, JavaScript를 한 파일에 담아서 줘.</code>
       </div>
-      <p class="note">Gemini는 코드를 코드블록으로 보여줘요. 블록 오른쪽 위 복사 버튼으로 전체를 복사하면 됩니다.</p>
+      <p class="note">코드는 코드블록으로 출력 → 블록 오른쪽 위 복사 버튼으로 전체 복사! 📋</p>
     </div>
 
     <div class="sub-block">
       <div class="label">② HTML · CSS · JavaScript, 딱 이만큼만</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">직접 짤 필요는 없지만, 이름을 알면 AI에게 콕 집어 요청할 수 있어요.</p>
+      <p style="color:var(--ink-soft);font-size:.95rem">직접 짤 필요 X · 이름만 알면 콕 집어 요청 가능! 😊</p>
       <div class="trio">
         <div class="tcard"><div class="tn">HTML</div><div class="tt">뼈대 · 구조</div><p>무엇이 있는지 — 제목, 버튼, 글, 입력칸.<em>건물의 골조</em></p></div>
         <div class="tcard"><div class="tn">CSS</div><div class="tt">꾸미기 · 디자인</div><p>어떻게 보이는지 — 색, 크기, 배치, 글꼴.<em>페인트와 인테리어</em></p></div>
         <div class="tcard"><div class="tn">JavaScript</div><div class="tt">기능 · 움직임</div><p>어떻게 작동하는지 — 클릭 반응, 계산, 애니메이션.<em>전기와 배관</em></p></div>
       </div>
-      <p class="note">그래서 이렇게 요청할 수 있어요 — "버튼(HTML) 색을 파랗게(CSS)", "누르면 입자가 움직이게(JS)".</p>
+      <p class="note">요청 예 — “버튼(HTML) 색 파랗게(CSS)” · “누르면 입자가 움직이게(JS)”! 👍</p>
     </div>
 
     <div class="sub-block">
       <div class="label">③ 토큰 아끼는 법</div>
       <ul class="rule-list">
-        <li><b>한 번에 몰아서</b> — 고칠 것 여러 개를 한 메시지에 묶어 요청하세요. 잦은 왕복이 토큰을 가장 많이 씁니다.</li>
-        <li><b>짧고 분명하게</b> — 장황한 설명보다 핵심만. 군더더기도 다 토큰이에요.</li>
-        <li><b>새 작업은 새 채팅으로</b> — 대화가 길어지면 매번 앞 내용까지 다시 읽어 토큰을 써요. 주제가 바뀌면 새로 시작.</li>
-        <li><b>완성되면 바로 저장</b> — 코드를 메모장에 저장해 두면 다시 만들 일이 없어요(아래 ④).</li>
-        <li><b>이미지 생성은 특히 비쌈</b> — 만들기 전에 계획부터(실습 B).</li>
+        <li><b>한 번에 몰아서</b> — 고칠 것 여러 개를 한 메시지에. 잦은 왕복 = 토큰 낭비.</li>
+        <li><b>짧고 분명하게</b> — 핵심만. 군더더기도 토큰.</li>
+        <li><b>새 작업 = 새 채팅</b> — 긴 대화는 앞 내용까지 매번 재읽음. 주제 바뀌면 새로.</li>
+        <li><b>완성 즉시 저장</b> — 메모장에 두면 다시 만들 일 X (아래 ④).</li>
+        <li><b>이미지 생성은 특히 비쌈</b> — 만들기 전 계획부터 (실습 B).</li>
       </ul>
     </div>
 
     <div class="sub-block">
       <div class="label">④ 코드를 메모장에 저장하기</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">완성한 코드는 이렇게 저장하면 사라지지 않아요. <b style="color:var(--navy)">이 연수에서는 이 파일을 강사에게 주시면 강사가 대신 배포해 드립니다.</b></p>
+      <p style="color:var(--ink-soft);font-size:.95rem">완성한 코드는 이렇게 저장하면 사라지지 않아요! <b style="color:var(--navy)">이 연수에서는 이 파일을 저에게 주시면 제가 대신 배포해드려요 ㅎㅎ</b> 😊</p>
       <ol class="steps" style="margin-top:12px">
         <li><span>Gemini 코드블록 오른쪽 위 <b>복사</b> 버튼으로 전체 복사.</span></li>
         <li><span>메모장(윈도우)이나 텍스트 편집기(맥)를 열고 <b>붙여넣기</b>.</span></li>
         <li><span><b>저장</b>할 때 파일 이름 끝을 <code>.html</code>로 — 예: <code>my-sim.html</code> <em>(윈도우 메모장은 '파일 형식: 모든 파일'로 두고 저장)</em></span></li>
         <li><span>그 <code>.html</code> 파일을 더블클릭하면 브라우저에서 바로 작동 확인!</span></li>
-        <li><span>이 파일을 <b>강사에게 제출</b> → 강사가 배포해 결과물 갤러리에 올립니다.</span></li>
+        <li><span>이 파일을 <b>저에게 제출</b> → 제가 배포해서 결과물 갤러리에 올려드릴게요! 🚀</span></li>
       </ol>
     </div>
 
     <div class="proposal">
       <div class="kicker" style="color:var(--gold-soft)">제안 &amp; 결론</div>
-      <h3>처음부터 다 만들지 말고 — 참고하고, 다듬어 쓰세요</h3>
-      <p>모든 걸 맨바닥부터 개발하려 하면 벅찰 수 있어요. 그럴 땐 <b>이미 공유된 레퍼런스를 참고</b>하면 훨씬 쉽습니다. 재과만처럼 자료가 공유된 곳에 가서:</p>
+      <h3>처음부터 다 만들지 말고 — 참고하고, 다듬어 쓰세요! 😉</h3>
+      <p>맨바닥부터 다 만들면 벅차요 😅 → <b>공유된 레퍼런스 참고</b>가 훨씬 쉬워요! 재과만처럼 자료 공유된 곳에서:</p>
       <p style="margin-left:2px;line-height:1.9">· <code>Ctrl + U</code> — <b>코드 보기</b>로 그 페이지의 코드를 통째로 열고<br>· <code>Ctrl + F</code> — <b>검색</b>으로 원하는 부분만 콕 찾아 읽은 뒤<br>· 그 코드를 복붙해서 <b>선생님의 설명 방식대로</b> 고쳐 쓰면 됩니다.</p>
-      <p><b>🍯 꿀팁.</b> AI에게 “맨 아래에 <b>제작 : (선생님 성함)</b> 을 넣어줘”라고 해보세요. 학생들이 선생님의 능력에 감탄하고, 그 감탄은 ‘과학 시간은 들어야 하는 시간’이라는 마음으로 이어지더라고요.</p>
-      <p>그리고 <b>꼬리별 선생님들끼리 각자 전공 분야의 과학 시뮬레이션을 만드는 것</b>도 좋은 방법이라고 생각합니다.</p>
+      <p><b>🍯 꿀팁!</b> AI에게 “맨 아래에 <b>제작 : (선생님 성함)</b> 넣어줘”라고 해보세요. 학생들이 우와~ 하고 감탄하고 😆 그 감탄이 ‘과학 시간은 들어야 할 시간’이라는 마음으로 이어지더라고요 ㅎㅎ</p>
+      <p>그리고 <b>꼬리별 선생님들끼리 전공별 과학 시뮬레이션 제작</b> — 완전 추천이에요! 🌠</p>
     </div>
 
   </div>
@@ -798,7 +899,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     </div>
     <div class="callout strong" style="margin-bottom:24px">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
-      <p><b>이 연수에서는</b> 코드를 메모장에 저장해 <b>강사에게 주시면 강사가 배포</b>해 드립니다(바이브코딩 탭 ④ 참고). 아래 단계는 <b>나중에 직접 또는 학생과 함께</b> 배포할 때 보세요.</p>
+      <p><b>이 연수에서는</b> 코드를 메모장에 저장해서 <b>저에게 주시면 제가 배포해드려요!</b> 😊 (바이브코딩 탭 ④ 참고) 아래 단계는 <b>나중에 직접 또는 학생과 함께</b> 배포할 때 보세요 👇</p>
     </div>
 
     <div class="glossary-box" style="margin-top:0;margin-bottom:24px">
@@ -917,7 +1018,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">SUBMIT</div>
       <h2>코드 제출</h2>
-      <p>배포가 안 됐어도 괜찮아요. 메모장에 저장한 <b>HTML 코드</b>를 여기에 올리면 강사가 확인합니다.</p>
+      <p>배포 안 해도 OK! 메모장에 저장한 <b>HTML 코드</b>를 올리면 제가 확인할게요 ㅎㅎ 📩</p>
     </div>
 
     <div class="setup-notice" id="submitSetupNotice" style="display:none">
@@ -939,7 +1040,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
 
       <div class="dash-wrap">
         <div class="dash-head">
-          <div><div class="dash-title">강사용 대시보드</div><div class="dash-note">제출된 코드를 강사만 확인해요</div></div>
+          <div><div class="dash-title">강사용 대시보드 🔒</div><div class="dash-note">제출된 코드는 저만 볼 수 있어요</div></div>
           <button class="dash-toggle" id="dashToggle">열기 ›</button>
         </div>
         <div class="dash-gate" id="dashGate" style="display:none">
@@ -1094,12 +1195,12 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">REFERENCE</div>
       <h2>핵심 개념</h2>
-      <p>오늘 기억할 두 가지. 막히면 여기 펼쳐 보세요.</p>
+      <p>오늘 기억할 두 가지! 막히면 여기 보세요 👀</p>
     </div>
     <div class="concepts">
       <div class="concept">
         <div class="cn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>토큰</div>
-        <p>AI가 글을 읽고 쓰는 최소 단위입니다. 한국어는 영어보다 토큰을 더 씁니다. 사용량과 요금, 한도가 모두 이 토큰으로 매겨집니다.</p>
+        <p>AI가 글을 읽고 쓰는 최소 단위! 한국어 &gt; 영어(토큰 더 씀) 😮 사용량·요금·한도 모두 토큰 기준이에요.</p>
       </div>
       <div class="concept msg">
         <div class="cn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e7d199" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.7L5.7 21.4 8 14 2 9.4h7.6z"/></svg>오늘의 한 줄</div>
@@ -1143,7 +1244,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
     <div class="sec-head">
       <div class="kicker">SHOWCASE</div>
       <h2>결과물 갤러리</h2>
-      <p>바이브코딩 시뮬레이션과 Canva로 완성한 인포그래픽·만화를 한곳에서 봅니다.</p>
+      <p>시뮬레이션 · 인포그래픽 · 만화를 한곳에서! 🖼️</p>
     </div>
 
     <div class="setup-notice" id="setupNotice">
@@ -1163,7 +1264,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
         <div class="form-row" id="rowFile" style="display:none"><label>이미지 파일</label><input type="file" id="fFile" accept="image/*"></div>
         <button class="up-btn" id="uploadBtn">올리기</button>
         <div class="up-status" id="uploadStatus"></div>
-        <p class="reminder" id="upReminder">※ 시뮬레이션은 강사가 배포한 링크를 붙여넣으세요. 인포그래픽·만화는 Canva로 완성한 이미지를 올려주세요.</p>
+        <p class="reminder" id="upReminder">※ 시뮬레이션은 제가 배포해드린 링크를 붙여넣어요! 🔗 인포그래픽·만화는 Canva로 완성한 이미지를 올려주세요 🎨</p>
       </div>
 
       <div class="gallery-head">
@@ -1187,8 +1288,8 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
 
 <script>
 /* ═══════════ Supabase 연동 — 선생님이 채우세요 ═══════════ */
-const SUPABASE_URL = 'https://hmzklbrksfdhzsgwzfyg.supabase.co';            // 예: https://hmzklbrksfdhzsgwzfyg.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtemtsYnJrc2ZkaHpzZ3d6ZnlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTY4NDcsImV4cCI6MjA5NTA5Mjg0N30.LuTEeJyu-mtkNzUTNaA8IigmdtWPWXS2ucVgXDeevPA';            // anon public key
+const SUPABASE_URL = '';            // 예: https://xxxxxxxx.supabase.co
+const SUPABASE_KEY = '';            // anon public key
 const BUCKET       = 'kkb-submissions';      // Storage 버킷 이름 (public)
 const TABLE        = 'kkb_submissions';      // 결과물 갤러리 테이블
 const CODE_TABLE   = 'kkb_code_submissions'; // 코드 제출(과제) 테이블
@@ -1197,7 +1298,7 @@ const IDEAS_TABLE  = 'kkb_ideas';            // 공유 보드(아이디어) 테�
 /* ════════════════════════════════════════════════════════ */
 
 /* ───── 탭 전환 ───── */
-const TABS=['home','about','flow','labs','vibe','deploy','submit','photo','concepts','timer','uploads'];
+const TABS=['home','about','flow','vibe','labs','deploy','submit','photo','concepts','timer','uploads'];
 function switchTab(name){
   if(!TABS.includes(name))name='home';
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -1220,12 +1321,12 @@ const ft=document.getElementById('foot');ft.dataset.cls='fstar';makeStars(ft,18,
 
 /* ───── 타임라인 ───── */
 const FLOW=[
-  {t:'0–15분',mode:'lec',badge:'강의+시연',cls:'',title:'오프닝과 사례 소개',d:'강사가 직접 만든 것들을 쭉 보여드려요. \u2018선생님이 이걸요?\u2019 싶은 것부터, 하나는 어떻게 만들었는지까지. 가볍게 시작합니다.'},
-  {t:'15–27분',mode:'lec',badge:'강의',cls:'',title:'기초 다지기',d:'바이브 코딩이 뭔지, 토큰이 뭔지, 모델마다 얼마나 쓸 수 있는지, 뭘 만들 수 있는지. 실습 전에 딱 필요한 것만 빠르게!'},
-  {t:'27–72분',mode:'lab',badge:'실습',cls:'lab',title:'실습 A · 학생이 만들고 고치는 과학 시뮬레이션 수업',d:'학생이 바이브 코딩으로 시뮬레이션을 만들고 직접 고쳐 보는 수업이에요. 오늘은 선생님이 학생이 되어 똑같이 해봅니다(예: 온도 슬라이더가 있는 \u2018입자 운동 상자\u2019). 핵심은 고치는 과정!'},
-  {t:'72–80분',mode:'rest',badge:'휴식',cls:'rest',title:'휴식',d:'8분, 잠깐 쉬어 갑니다.'},
-  {t:'80–110분',mode:'lab',badge:'실습',cls:'lab',title:'실습 B · ChatGPT + Canva 시각 자료',d:'ChatGPT로 인포그래픽·만화의 틀과 그림만(글자 없이) 만들고, Canva에서 글씨를 직접 넣어 완성해요. 다 만들면 결과물 탭에 올려 서로 구경!'},
-  {t:'110–120분',mode:'lec',badge:'강의+Q&A',cls:'',title:'마무리',d:'사용량·저작권 같은 현실 얘기랑 Q&A. 오늘 만든 걸 교실에서 어떻게 써먹을지 정리하고 마무리!'}
+  {t:'0–15분',mode:'lec',badge:'강의+시연',cls:'',title:'오프닝 · 사례 👀',d:'제가 만든 것들 쭉 보여드려요 — ‘이걸 직접?’ 싶은 것부터, 하나는 만든 과정까지! 가볍게 출발 ㅎㅎ'},
+  {t:'15–27분',mode:'lec',badge:'강의',cls:'',title:'기초 다지기 🧱',d:'바이브코딩 · 토큰 · 모델별 사용량 · 무엇을 만들 수 있나! 실습 전 핵심만 쏙쏙 ✨'},
+  {t:'27–72분',mode:'lab',badge:'실습',cls:'lab',title:'실습 A · 수업에서 쓸 과학 시뮬레이터 개발 🛠️',d:'다음 수업에 바로 쓸 시뮬레이터 직접 개발! 과학 원리 ‘말로 표현’ → Gemini·Claude로 ‘구현’ → 확인·수정 🔧 왜 직접? 과학교육론의 ‘모형’ 때문!'},
+  {t:'72–80분',mode:'rest',badge:'휴식',cls:'rest',title:'휴식 ☕',d:'8분 · 잠깐 쉬어가요!'},
+  {t:'80–110분',mode:'lab',badge:'실습',cls:'lab',title:'실습 B · ChatGPT + Canva 시각자료 🎨',d:'인포그래픽·만화! ChatGPT로 틀·그림만(글자 X) → Canva에서 글씨 직접 → 결과물 탭 업로드 📤'},
+  {t:'110–120분',mode:'lec',badge:'정리+Q&A',cls:'',title:'마무리 · 모형의 개발과 활용 🎯',d:'정리 — 모형의 개발·활용 · 학생이 직접 만들고 고치는 수업 · 사용량·저작권·Q&A!<br><a href="#" onclick="return false" style="display:inline-block;margin-top:8px;color:#3a49a3;font-weight:700;text-decoration:underline">해누리 학생들이 만든 시뮬레이션 보기 →</a> <span style="color:#9aa0b8;font-size:.85em">(링크는 제가 추가할게요!)</span>'}
 ];
 const bc={lec:'b-lec',lab:'b-lab',rest:'b-rest'};
 const tl=document.getElementById('timeline');
@@ -1353,7 +1454,7 @@ async function submitCode(){
   status.textContent='제출 중…';
   var ins=await sb.from(CODE_TABLE).insert({teacher:name,title:title,html:code});
   if(ins.error){status.textContent='제출 실패: '+ins.error.message;return;}
-  status.textContent='제출 완료! 강사가 확인할게요. 감사합니다 🙌';
+  status.textContent='제출 완료! 제가 확인할게요 ㅎㅎ 감사합니다 🙌';
   document.getElementById('sTitle').value='';document.getElementById('sCode').value='';document.getElementById('sFile').value='';
   setTimeout(function(){status.textContent='';},3200);
 }
