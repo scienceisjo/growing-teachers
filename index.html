@@ -403,6 +403,7 @@ ol.steps li span{color:var(--ink-soft);font-size:.94rem}
 .blank{display:inline-block;cursor:pointer;border:1.5px dashed var(--gold);background:#fbf7ec;color:var(--gold-deep);font-weight:700;padding:2px 14px;border-radius:9px;font-size:.95em;user-select:none;transition:.15s;line-height:1.6}
 .blank:hover{background:#f3e9cf}
 .blank.on{border-style:solid;border-color:transparent;background:linear-gradient(135deg,#1b2256,var(--navy));color:#fff;animation:blankpop .32s ease}
+.proposal .blank.on{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#1a1f3d}
 @keyframes blankpop{0%{transform:scale(.88)}55%{transform:scale(1.1)}100%{transform:scale(1)}}
 @media(max-width:620px){.me-photo-row{flex-direction:column}.me-photo{width:100%}.daymood{grid-template-columns:1fr}.res-btns{grid-template-columns:1fr}}
 
@@ -716,9 +717,10 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
 
     <div class="proposal">
       <div class="kicker" style="color:var(--gold-soft)">MESSAGE</div>
-      <h3>경력의 강점이 있다면, 젊음의 강점도 있습니다</h3>
-      <p>오랜 경력으로 실력을 쌓으신 선생님들께 그분들만의 강점이 있듯, <b>신규이고 젊은 우리</b>가 더 잘할 수 있는 것도 있어요. 예를 들면 <b>만화</b> 같은 영역 — ‘공감’과 ‘밈’을 살리고, 원리(내용)만큼 <b>‘흥미’</b>를 신경 쓴 만화요.</p>
-      <p>그런데 이건 제 생각일 뿐이에요. <b>여러분 생각은요?</b> 우리가 더 잘할 수 있는 것, 아이들이 ‘어, 이거 내 얘기네’ 하고 웃게 만들 아이디어를 <b>아래에 남겨주세요.</b> 적는 순간 이 페이지를 보는 <b>모든 분께 바로 공유</b>됩니다.</p>
+      <h3>저경력 교사의 강점은 무엇일까?</h3>
+      <p>경력의 강점이 있다면, <b>젊음의 강점</b>도 있어요! 예를 들면 — ‘공감’·‘밈’을 살린 <b>만화</b>(흥미를 끄는!), <b>최신 유행·학생 관심사</b> 빠르게 파악 같은 것들이요.</p>
+      <p>그리고 제가 생각하는 <b>제 강점</b>은…? <span class="blank" onclick="revealBlank(this)" data-a="자취 · 미혼 · 친구 없음 → 시간이 아주 많음 ㅋㅋㅋ">눌러보기</span></p>
+      <p><b>여러분 생각은요?</b> 아이들이 ‘어, 이거 내 얘기네’ 하고 웃게 만들 아이디어를 <b>아래에 남겨주세요</b> — 적는 순간 모두에게 바로 공유돼요!</p>
     </div>
 
     <div class="wall">
@@ -728,7 +730,7 @@ footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family
       </div>
       <div class="wall-form" id="wallForm">
         <input type="text" id="wName" class="wall-name" placeholder="이름(선택)" maxlength="20">
-        <textarea id="wText" class="wall-text" rows="2" placeholder="예: 밈 한 컷으로 개념 정리 — 아이들이 캡처해서 공유해요!" maxlength="200"></textarea>
+        <textarea id="wText" class="wall-text" rows="2" placeholder="예: 최신 유행·학생 관심사 파악, 밈 한 컷으로 개념 정리…" maxlength="200"></textarea>
         <div class="wall-actions"><button class="wall-btn" id="wBtn">남기기</button><span class="wall-status" id="wStatus"></span></div>
       </div>
       <div class="wall-list" id="wallList">
