@@ -382,8 +382,8 @@ ol.steps li span{color:var(--ink-soft);font-size:.94rem;line-height:1.55}
 @keyframes flash{0%,100%{box-shadow:var(--shadow-lg)}50%{box-shadow:0 0 0 4px rgba(242,177,52,.5),var(--shadow-lg)}}
 
 .teacher-card{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:18px}
-.t-avatar{flex-shrink:0;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1d524a,var(--deep));color:var(--amber);font-family:var(--serif);font-size:1.7rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px var(--deep);overflow:hidden}
-.t-avatar .t-photo{width:100%;height:100%;object-fit:cover}
+.t-avatar{flex-shrink:0;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1d524a,var(--deep));color:var(--amber);font-family:var(--serif);font-size:1.7rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px var(--deep);overflow:hidden;position:relative}
+.t-avatar .t-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .t-name{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.3rem}
 .t-nick{font-size:.82rem;color:var(--live-deep);font-weight:700;margin-left:6px}
 .t-role{color:var(--ink-soft);font-size:.92rem;margin-top:2px}
@@ -535,6 +535,46 @@ ol.steps li span{color:var(--ink-soft);font-size:.94rem;line-height:1.55}
 .vid-cap{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.96rem;align-self:flex-start}
 .vid-frame{position:relative;width:100%;max-width:300px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#000}
 .vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.me-photo-row{display:flex;gap:18px;align-items:center;margin:14px 0 4px}
+.me-photo{flex-shrink:0;width:210px}
+.me-img{width:100%;height:170px;object-fit:cover;border-radius:16px;box-shadow:var(--shadow);display:block;border:1px solid var(--line)}
+.me-photo.no-img .me-img{display:none}
+.me-ph{display:none;width:100%;height:170px;border:2px dashed var(--amber);border-radius:16px;background:var(--card-2);flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#8a6c1c;font-size:.82rem;font-weight:700;text-align:center;padding:18px;line-height:1.45}
+.me-photo.no-img .me-ph{display:flex}
+.me-photo-text{flex:1}
+.me-lead-photo{font-size:1.05rem;color:var(--ink);line-height:1.6;margin:0}
+.me-lead-photo b{color:var(--deep)}
+.me-sub-photo{color:var(--ink-soft);font-size:.92rem;margin-top:6px}
+.res-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-top:8px}
+.res-btn{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px 18px;box-shadow:var(--shadow);transition:.16s}
+.res-btn:hover{transform:translateY(-2px);border-color:var(--live);box-shadow:var(--shadow)}
+.rb-icon{font-size:1.45rem}
+.rb-t{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.04rem;margin-top:4px}
+.rb-sub{font-size:.78rem;color:var(--live);font-weight:700;margin-top:1px}
+.rb-u{font-size:.76rem;color:var(--teal-deep);font-family:var(--mono);word-break:break-all;margin-top:3px}
+.obj-box{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:16px;padding:22px 26px;margin-bottom:34px;box-shadow:var(--shadow)}
+.obj-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.12rem;margin-bottom:12px}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0;padding:0}
+.obj-list li{position:relative;padding-left:24px;color:var(--ink);font-size:.97rem;line-height:1.55}
+.obj-list li::before{content:"\2713";position:absolute;left:2px;top:1px;color:var(--teal-deep);font-weight:800}
+.obj-list b{color:var(--deep)}
+.reward-note{background:linear-gradient(135deg,rgba(242,177,52,.14),rgba(255,106,77,.08));border:1px solid var(--amber);border-radius:14px;padding:15px 18px;margin-bottom:18px;color:var(--ink);font-size:.95rem;line-height:1.6}
+.reward-note b{color:var(--deep)}
+.move-cue{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--live),#ff8a6e);color:#fff;font-size:.82rem;font-weight:800;padding:6px 14px;border-radius:999px;margin-bottom:11px;box-shadow:var(--shadow)}
+.lib-browse{margin-top:24px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.lb-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.12rem;margin-bottom:6px}
+.lb-sub{color:var(--ink-soft);font-size:.93rem;line-height:1.6;margin-bottom:14px}
+.lb-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lb-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.lb-card.z{border-top:3px solid #7c5cff}
+.lb-card.q{border-top:3px solid var(--amber)}
+.lb-t{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.02rem;margin-bottom:6px}
+.lb-card p{color:var(--ink-soft);font-size:.9rem;line-height:1.55;margin-bottom:10px}
+.opt-quizn{margin-top:30px;padding-top:22px;border-top:2px dashed var(--line)}
+.oq-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.1rem;margin-bottom:4px}
+.oq-sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:6px}
+@media(max-width:640px){.lb-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.res-btns{grid-template-columns:1fr}.me-photo-row{flex-direction:column}.me-photo{width:100%}}
 .model-grid>.flip-card{height:146px}
 .merit-grid>.flip-card{height:148px}
 .demerit-grid>.flip-card{height:148px}
@@ -663,8 +703,8 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
     <div class="respviz"><div class="respbar" id="respbar"></div><div class="pills" id="pills"></div></div>
     <div class="hero-inner">
       <span class="hero-eyebrow fu d1"><span class="ld"></span>2026 학교로 찾아가는 수업 평가혁신 직무연수</span>
-      <h1 class="fu d2">묻고, <span class="ac-live">모두가</span> 답하고,<br><span class="ac-amb">데이터로</span> 남는다</h1>
-      <p class="sub fu d3">온라인 퀴즈·평가 도구를 활용한 <b>참여형 수업 설계</b> — 도구를 늘리는 연수가 아니라, <b>'설계'를 바꾸는</b> 연수예요 🙌</p>
+      <h1 class="fu d2">퀴즈처럼 <span class="ac-live">즐겁게</span>,<br>평가답게 <span class="ac-amb">단단하게</span></h1>
+      <p class="sub fu d3">온라인 퀴즈·평가 도구를 활용한 <b>참여형 수업 설계</b></p>
       <div class="hero-meta fu d4">
         <span class="mi">⏱ 2시간 · <b>실습 중심</b></span>
         <span class="mi">👩‍🏫 도곡중학교 선생님</span>
@@ -684,6 +724,15 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
     <div class="goal-banner">
       <div class="gb-eyebrow">◆ 오늘 가져가실 단 하나 — 거꾸로 설계</div>
       <p class="gb-text"><span class="gb-strike">'재미있는 도구'에서 시작</span> ✕ &nbsp;→&nbsp; <b>끝에서 시작, 거꾸로</b><br>① 무엇을 알고 싶은가 &nbsp;→&nbsp; ② 어떻게 드러낼까 &nbsp;→&nbsp; ③ 어떤 도구 &nbsp;·&nbsp; <b>도구 = 맨 마지막</b></p>
+    </div>
+        <div class="obj-box">
+      <div class="obj-h">🎯 오늘의 연수 목표</div>
+      <ul class="obj-list">
+        <li>온라인 퀴즈를 <b>‘평가의 눈’</b>으로 바라보고, 학습을 돕는 평가로 활용할 수 있다.</li>
+        <li><b>퀴즈앤·젭퀴즈</b>의 장단점을 견주어, 수업 목적·순간에 맞는 도구를 선택할 수 있다.</li>
+        <li><b>타당한 문항 요소</b>를 적용해, 수업 모형(STAD·직소)과 결합한 퀴즈를 설계·제작할 수 있다.</li>
+        <li><b>학습 통계·데이터</b>를 과정중심평가의 피드백 근거로 활용할 수 있다.</li>
+      </ul>
     </div>
     <div class="poll" id="poll">
       <div class="poll-q"><span class="live-chip"><i></i>LIVE</span>도곡중학교 선생님들께서, 활용하신 경험이 있는 온라인 퀴즈 도구는?</div>
@@ -712,8 +761,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
     <div class="sec-head"><span class="eyebrow"><span class="num">00</span> · ABOUT</span><h2>강사 소개</h2><p>도곡중학교 선생님들, 반갑습니다 😊 오늘 함께할 해누리중학교 조승재입니다.</p></div>
     <div class="teacher-card">
       <div class="t-avatar">
-        <!-- 강사 사진 넣기: 아래 한 줄의 주석을 풀고 src를 본인 사진 주소(github raw 이미지 등)로 바꾸면 '조' 대신 사진이 동그라미에 들어가요.
-        <img class="t-photo" src="사진주소" alt="조승재"> -->
+        <img class="t-photo" src="images/teacher.jpeg" alt="조승재" onerror="this.style.display='none'">
         조
       </div>
       <div class="t-info">
@@ -722,9 +770,39 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
         <div class="t-homeroom">🏫 2학년 3반 ‘이삼한 친구들’의 담임</div>
       </div>
     </div>
+    <details class="model-detail" style="margin-top:14px"><summary>📋 약력 · 이력 펼쳐보기</summary>
+      <div class="md-body">
+        <p><b>학력</b> — 한국교원대학교 화학교육과 졸업 <span style="color:var(--ink-faint)">(2025.2)</span></p>
+        <p style="font-weight:700;color:var(--deep);margin:8px 0 5px">이력 · 활동</p>
+        <ul>
+          <li>2025–2026 AI디지털 기반 교육혁신 선도교사</li>
+          <li>2025–2026 AIEDAP 마스터교원</li>
+          <li>2025–2026 MIEE (Microsoft Innovative Educator Expert)</li>
+          <li>2026 MAI HERO</li>
+          <li>2026 AI 에듀테크 선도교사</li>
+          <li>AI·디지털 학교로 찾아가는 컨설팅 강사·보조강사</li>
+          <li>서울시 학교 간 AI·디지털 활용 교육 · 센서 활용 교육</li>
+          <li>미래엔–에듀테크 수업 해커톤 2위</li>
+          <li>지능형 과학실 운영</li>
+        </ul>
+      </div>
+    </details>
     <div class="about-block">
       <h3 class="about-h">저는 이런 교사예요</h3>
-      <p class="letters-intro">제 소개 = <b>아이들이 써 준 편지</b> · 눌러서 펼쳐 보세요 💌</p>
+      <div class="me-photo-row">
+        <div class="me-photo">
+          <img class="me-img" src="images/teacher-students.jpg" alt="학생들과 함께한 사진" onerror="this.closest('.me-photo').classList.add('no-img')">
+          <div class="me-ph">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c0922e" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 5l1.5-2h5L16 5"/></svg>
+            <span>학생들과의 사진을 여기에<br>(images/teacher-students.jpg)</span>
+          </div>
+        </div>
+        <div class="me-photo-text">
+          <p class="me-lead-photo">학생에게 <b>마음을 많이 주고, 많이 받는</b> 교사예요 🥰</p>
+          <p class="me-sub-photo">그 주고받은 마음이 다음 수업의 힘이 돼요!</p>
+        </div>
+      </div>
+      <p class="letters-intro">제 소개 = <b>아이들이 써 준 편지</b> · 누르면 내용을 확인할 수 있습니다.</p>
 
       <div class="ltr">
         <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">선생님 수업을 듣고 생각이 바뀌었어요</span><span class="ltr-chev">▾</span></button>
@@ -752,12 +830,31 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
         <h3>학생들이 바라보는 저는 — <span class="hl">열정 가득한 선생님</span>에 가까운 것 같아요.</h3>
       </div>
     </div>
+    <div class="about-block">
+      <h3 class="about-h">제가 만든 자료 둘러보기 🔍</h3>
+      <p class="letters-intro">누르면 실제 자료로 바로 이동해요! 👉</p>
+      <div class="res-btns">
+        <a class="res-btn" href="https://joo.is/과학탐구월드" target="_blank" rel="noopener"><span class="rb-icon">🔬</span><span class="rb-t">과학탐구월드</span><span class="rb-u">joo.is/과학탐구월드</span></a>
+        <a class="res-btn" href="https://joo.is/교실을깨우자" target="_blank" rel="noopener"><span class="rb-icon">⚡</span><span class="rb-t">교실을 깨우자</span><span class="rb-u">joo.is/교실을깨우자</span></a>
+        <a class="res-btn" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener"><span class="rb-icon">🍎</span><span class="rb-t">해누리 질문 과수원</span><span class="rb-sub">질문하는 교실 · 바이브코딩 ✨</span><span class="rb-u">scienceisjo.github.io/questionuri</span></a>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <section class="panel" id="tab-flow">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow"><span class="num">02</span> · FLOW</span><h2>오늘의 흐름</h2><p>강의 짧게 · 실습 길게! 실습 약 65분 / 강의·정리·나눔 약 55분. 항목을 누르면 펼쳐져요 👇</p></div>
+    <div class="obj-box">
+      <div class="obj-h">🎯 오늘의 연수 목표</div>
+      <ul class="obj-list">
+        <li>온라인 퀴즈를 <b>‘평가의 눈’</b>으로 바라보고, 학습을 돕는 평가로 활용할 수 있다.</li>
+        <li><b>퀴즈앤·젭퀴즈</b>의 장단점을 견주어, 수업 목적·순간에 맞는 도구를 선택할 수 있다.</li>
+        <li><b>타당한 문항 요소</b>를 적용해, 수업 모형(STAD·직소)과 결합한 퀴즈를 설계·제작할 수 있다.</li>
+        <li><b>학습 통계·데이터</b>를 과정중심평가의 피드백 근거로 활용할 수 있다.</li>
+      </ul>
+    </div>
     <div class="timeline" id="timeline"></div>
   </div>
 </section>
@@ -1010,8 +1107,8 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
       <div class="design-card">
         <div class="dc-step"><div class="dc-n">1</div><div><h4>무엇을 위한 평가?</h4><p>FOR · AS · OF 중 하나 고르기</p><div class="eval-chips"><span class="ec for">FOR · 학습을 위한</span><span class="ec as">AS · 학습으로서의</span><span class="ec of">OF · 결과 확인</span></div><div class="ex">예) 형성평가 → FOR</div></div></div>
         <div class="dc-step"><div class="dc-n">2</div><div><h4>순간 고르기</h4><p>도입 · 전개 · 정리 중</p><div class="ex">예) 전개 — 굴절 설명 직후</div></div></div>
-        <div class="dc-step"><div class="dc-n">3</div><div><h4>알고 싶은 것 한 문장</h4><p><b>들여다보고 싶은 것</b> + <b>학생이 얻을 것</b></p><div class="ex">예) 굴절각 변화를 '거꾸로' 알진 않나?</div></div></div>
-        <div class="dc-step"><div class="dc-n">4</div><div><h4>수업 방식 정하기</h4><p>전원이 '생각하게' 모형 + 퀴즈 결합 (아래)</p><div class="ex">예) 짝 토론 후 응답</div></div></div>
+        <div class="dc-step"><div class="dc-n">3</div><div><h4>알고 싶은 것 한 문장</h4><p><b>들여다보고 싶은 것</b> + <b>학생이 얻을 것</b></p><div class="ex">예) "성취기준 00을 잘 이해하고 적용할 수 있는가?"</div></div></div>
+        <div class="dc-step"><div class="dc-n">4</div><div><h4>수업 방식 정하기</h4><p>전원이 '생각하게' 모형 + 퀴즈 결합 (아래)</p><div class="ex">예) "STAD·직소(JIGSAW) 등 수업 모형을 활용할지, 개인이 풀도록 할지 등"</div></div></div>
       </div>
       <div class="label" style="margin-top:26px">수업 모형 — 전원이 '생각하게'</div>
       <div class="model-grid">
@@ -1056,7 +1153,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
           <li><b>적절한 난이도</b> — 너무 쉽지도 어렵지도 않게, 핵심을 가르는 수준으로.</li>
           <li><b>매력적인 오답</b> — 오답 보기가 <b>흔한 오개념을 반영</b>해 그럴듯해야. (찍기 방지)</li>
         </ul>
-        <div class="ai-warn">🤖 <b>주의 — 퀴즈 플랫폼 내장 AI 문제 생성은 위 요소를 대부분 충족하지 못해요.</b> 오히려 <b>고치는 데 더 오래 걸립니다</b>. → <b>다른 선생님이 공유하신 퀴즈를 복사해 쓰거나, 처음부터 직접 만드는 편</b>이 더 빠르고 좋아요.</div>
+        <div class="ai-warn">🤖 <b>주의 — 퀴즈 플랫폼 내장 AI 문제 생성은 위 요소를 대부분 충족하지 못해요.</b> 오히려 <b>고치는 데 더 오래 걸립니다</b>. → <b>다른 선생님이 공유하신 퀴즈를 복사해 쓰거나, 처음부터 직접 만드는 편</b>이 더 빠르고 좋아요. <b>차라리 성능 좋은 기존 생성형 AI(ChatGPT·Gemini·Claude 등)를 활용해 문제를 생성</b>하시는 것을 추천드려요.</div>
       </div>
       <div class="label">보너스 — 실제로 만들어 보기</div>
       <p class="note"><b>퀴즈앤·젭퀴즈로 직접 제작</b> · 자료실에 비슷한 게 있으면 <b>복제 후 수정</b>, 없으면 새로 → <b>나눔 보드</b>에 공유 🙌</p>
@@ -1081,7 +1178,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
 
 <section class="panel" id="tab-makequiz">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow"><span class="num">06</span> · MAKE</span><h2>오늘 만들 퀴즈 — 따라 만들기</h2><p>화면 시연을 따라 <b>퀴즈앤·젭퀴즈</b>로 <b>당장 수업에서 쓸 퀴즈 하나</b>를 직접 만들어요. 키워드만 보고, 나머지는 함께 클릭하면서 ✨</p></div>
+    <div class="sec-head"><span class="eyebrow"><span class="num">06</span> · MAKE</span><h2>오늘 만들 퀴즈 — 따라 만들기</h2><p>오늘은 <b>젭퀴즈(ZEP QUIZ)</b>로 <b>당장 수업에서 쓸 퀴즈 하나</b>를 직접 만들어요. 시간이 남으면 <b>퀴즈앤</b>도! 키워드만 보고, 나머지는 함께 클릭하면서 ✨</p></div>
     <div class="selfpaced">
       <div class="sp-h">📣 이 시간은 '강의' 대신 '직접 해보기'예요</div>
       <p>선생님마다 <b>속도가 다르고</b>, 이미 만들어 보신 분도 계실 거예요. 그래서 정해진 속도로 강의하지 않고, <b>매뉴얼을 보며 각자 직접</b> 만들어 보시도록 했어요. 대신 제가 <b>열심히 돌아다니며 도와드릴게요!</b> 🏃 막히면 언제든 손 들어 주세요!</p>
@@ -1131,19 +1228,24 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
         <div class="sc"><div class="sc-n">②</div><div><b>없으면 → 새로 만들기</b><p>딱 맞는 게 없으면 아래 순서대로 직접 제작.</p></div></div>
       </div>
     </div>
-    <div class="make-grid">
-      <div class="make-card quizn">
-        <h3>🟠 퀴즈앤으로 만들기</h3>
-        <div class="mk-sub">SEN스쿨 계정 = Pro 무료 · 한국형 카훗</div>
-        <ol class="steps">
-          <li><span><b>SEN스쿨(AIEP) 로그인</b> → 수업 도구 → 퀴즈앤</span></li>
-          <li><span><b>'만들기'</b> → 제목 입력</span></li>
-          <li><span><b>퀴즈 타입</b> 고르기 (선택형·OX·단답·순서완성·초성…)</span></li>
-          <li><span><b>문항·보기</b> 입력 — <b>오개념 보기 한 개</b> 넣기!</span></li>
-          <li><span><b>저장</b> → Show(실시간) / 과제로 공유</span></li>
-        </ol>
-        <div class="demo-tip">📊 응시 후 → 학생별 결과 · 엑셀 내보내기</div>
+    <div class="lib-browse">
+      <div class="lb-h">📂 먼저 — 자료실 둘러보기 (복사할 퀴즈 찾기)</div>
+      <p class="lb-sub">만들기 전에! 다른 선생님이 올린 퀴즈를 <b>둘러보고 → 복사 → 내 수업에 맞게 수정</b>하면 가장 빨라요. 두 플랫폼 모두 자료실이 있어요.</p>
+      <div class="lb-grid">
+        <div class="lb-card z">
+          <div class="lb-t">🟣 젭퀴즈 자료실</div>
+          <p>로그인하면 뜨는 <b>‘둘러보기’</b>에서 다른 선생님 퀴즈를 검색 → <b>복사</b> 한 번이면 내 퀴즈로!</p>
+          <a class="spm-btn z" href="https://quiz.zep.us" target="_blank" rel="noopener">젭퀴즈 둘러보기 →</a>
+        </div>
+        <div class="lb-card q">
+          <div class="lb-t">🟠 퀴즈앤 자료실</div>
+          <p>퀴즈앤 로그인 후 <b>‘둘러보기 / 퀴즈 탐색’</b>에서 공유된 퀴즈를 검색 → <b>복제 후 수정</b>.</p>
+          <a class="spm-btn" href="https://www.quizn.show" target="_blank" rel="noopener">퀴즈앤 바로가기 →</a>
+        </div>
       </div>
+    </div>
+    <div class="oq-h" style="margin-top:26px;font-size:1.18rem">✍️ 이제 직접 만들어요 — 오늘은 <b>젭퀴즈</b>로! <span style="font-size:.76rem;color:var(--live);font-weight:800">· 오늘의 메인</span></div>
+    <div class="make-grid" style="grid-template-columns:1fr">
       <div class="make-card zep">
         <h3>🟣 젭퀴즈로 만들기</h3>
         <div class="mk-sub">메타버스 + 퀴즈 · 학생별 통계 무료</div>
@@ -1173,7 +1275,25 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
           <li><b>전체 참여 현황·특이사항</b> — 불가</li>
         </ul>
       </div>
-      <div class="plan-ai">🤖 <b>Quiz AI</b> — 이용은 되지만 <b>비추천</b>(유사 문제·보기/정답 생성·다국어 번역·AI 학습 도우미는 사실상 막힘). 차라리 <b>자료실에서 다른 선생님 퀴즈를 복사 후 수정</b>하는 게 더 빠르고 좋아요.</div>
+      <div class="plan-ai">🤖 <b>Quiz AI</b> — 이용은 되지만 <b>비추천</b>(유사 문제·보기/정답 생성·다국어 번역·AI 학습 도우미는 사실상 막힘). 차라리 <b>자료실에서 다른 선생님 퀴즈를 복사 후 수정</b>하거나, <b>성능 좋은 기존 생성형 AI로 문제를 생성</b>하는 게 더 빠르고 좋아요.</div>
+    </div>
+    <div class="opt-quizn">
+      <div class="oq-h">⏰ 시간이 남으신 선생님께 — 퀴즈앤으로도 만들어 보기</div>
+      <p class="oq-sub">오늘의 메인은 젭퀴즈예요. 먼저 끝내고 여유가 있으면, 같은 퀴즈를 <b>퀴즈앤</b>으로도 만들어 보세요!</p>
+    </div>
+    <div class="make-grid" style="grid-template-columns:1fr">
+      <div class="make-card quizn">
+        <h3>🟠 퀴즈앤으로 만들기</h3>
+        <div class="mk-sub">SEN스쿨 계정 = Pro 무료 · 한국형 카훗</div>
+        <ol class="steps">
+          <li><span><b>SEN스쿨(AIEP) 로그인</b> → 수업 도구 → 퀴즈앤</span></li>
+          <li><span><b>'만들기'</b> → 제목 입력</span></li>
+          <li><span><b>퀴즈 타입</b> 고르기 (선택형·OX·단답·순서완성·초성…)</span></li>
+          <li><span><b>문항·보기</b> 입력 — <b>오개념 보기 한 개</b> 넣기!</span></li>
+          <li><span><b>저장</b> → Show(실시간) / 과제로 공유</span></li>
+        </ol>
+        <div class="demo-tip">📊 응시 후 → 학생별 결과 · 엑셀 내보내기</div>
+      </div>
     </div>
     <div class="make-goal">🎯 오늘의 목표 — 당장 수업에서 쓸 퀴즈 하나 완성!</div>
   </div>
@@ -1183,7 +1303,9 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow"><span class="num">07</span> · SHARE</span><h2>나눔 보드</h2><p>오늘의 절반 = '서로에게 배우기' · 도구·경험·설계를 실시간 공유 💬</p></div>
     <div class="demo-banner" id="shareBanner">⚙️ <b>지금은 데모 모드예요</b> — 적은 내용이 이 화면엔 바로 뜨지만, 새로고침하면 사라지고 다른 기기와도 공유되지 않아요. 실제 연수에서 <b>여러 기기 실시간 공유</b>가 필요하면, 꼬리별 페이지에서 쓰시던 것처럼 맨 위 <code>SUPABASE_URL</code>·<code>SUPABASE_KEY</code>만 채우면 됩니다(아래 보드 두 개가 자동으로 연결돼요).</div>
+    <div class="reward-note">☕ 나눔 보드에 공유해 주신 내용은 <b>연수가 끝난 뒤 제가 확인</b>해, <b>가장 열심히 참여해 주신 선생님</b>께 커피 쿠폰을 보내드릴게요. (연락처 공개가 부담되시면 <b>이메일</b>을 남겨 주셔도 좋아요!)</div>
     <div class="wall">
+      <div class="move-cue">🔖 평가와 퀴즈 직후 · 25~35분 — 여기서 잠시 이동!</div>
       <div class="wall-head"><h3>🧰 평소 쓰는 도구 + 한 줄 경험 <span class="wall-count" id="w1Count"></span></h3></div>
       <p class="wall-sub">평소 쓰는 도구 + 한 줄 경험 (성공/실패)</p>
       <div class="wall-form">
@@ -1202,6 +1324,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
       <div class="wall-list" id="w1List"><p class="wall-empty">아직 글이 없어요. 첫 경험을 남겨보세요!</p></div>
     </div>
     <div class="wall">
+      <div class="move-cue">🔖 실습 1 마무리 · ≈55~60분 — 여기서 잠시 이동!</div>
       <div class="wall-head"><h3>🧪 오늘 체험한 도구 후기 <span class="wall-count" id="w3Count"></span></h3></div>
       <p class="wall-sub">실습 1에서 써본 도구 + <b>학생 입장 느낌</b> · <b>우리 수업에 맞을지</b></p>
       <div class="wall-form">
@@ -1224,6 +1347,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
       <div class="wall-list" id="w3List"><p class="wall-empty">아직 후기가 없어요. 첫 체험 후기를 남겨보세요!</p></div>
     </div>
     <div class="wall">
+      <div class="move-cue">🔖 실습 2 마무리 · ≈95~100분 — 여기서 잠시 이동!</div>
       <div class="wall-head"><h3>🎯 오늘 설계한 '평가 한 장면' <span class="wall-count" id="w2Count"></span></h3></div>
       <p class="wall-sub">실습 2 설계 장면 + 링크 · 서로의 설계 = 영감</p>
       <div class="wall-form">
@@ -1282,8 +1406,8 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
 
 <section class="panel" id="tab-nonsense">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow"><span class="num">09</span> · BREAK</span><h2>넌센스 퀴즈 — 쉬어가기</h2><p>먼저 맞춰보고, 클릭해서 정답 확인! 머리 식히고 다시 집중 😄</p></div>
-    <div class="nonsense-note">🧠 진행자가 문제를 읽으면 다 같이 정답 외치기 → 클릭해서 확인! <b>총 15문제</b>예요.</div>
+    <div class="sec-head"><span class="eyebrow"><span class="num">09</span> · ANSWERS</span><h2>넌센스 퀴즈 (정답 확인하기)</h2><p>제가 낸 넌센스 문제를 <b>퀴즈 플랫폼에서 학생처럼</b> 풀어보세요! 답이 막히면 — <b>여기서 정답을 확인</b>하고 플랫폼에 입력하시면 돼요 😄</p></div>
+    <div class="nonsense-note">🧠 <b>퀴즈앤·젭퀴즈를 학생 입장에서 체험</b>하실 때 제가 이 넌센스 문제들을 출제할게요. 고민해 보시고 <b>막히면 여기서 정답을 확인</b>해 플랫폼에 입력하세요! <b>총 15문제</b>예요.</div>
     <details class="nq"><summary>1. 오이가 무를 치면?</summary><div class="nq-a">→ 오이무침</div></details>
     <details class="nq"><summary>2. 오징어가 대출을 못 받는 이유는? <span class="nq-h">(○○○○)</span></summary><div class="nq-a">→ 연체동물 <span class="nq-x">(대출 '연체' ↔ 연체동물)</span></div></details>
     <details class="nq"><summary>3. 사고 나면 후회하는 의자는? <span class="nq-h">(○○○○○)</span></summary><div class="nq-a">→ 팔걸이의자</div></details>
@@ -1397,7 +1521,7 @@ const sbReady = !!(SUPABASE_URL && SUPABASE_KEY && typeof window.supabase!=='und
 let sb = sbReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 /* ───── 탭 전환 ───── */
-const TABS=['home','about','flow','principles','tools','labs','data','share','timer'];
+const TABS=['home','about','flow','principles','tools','labs','makequiz','share','timer','nonsense','data'];
 function switchTab(name){
   if(!TABS.includes(name))name='home';
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
