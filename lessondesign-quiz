@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두가 답하는 교실 · 수업 평가혁신 직무연수</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!-- (선택) 실시간 보드용 Supabase — 배포 사이트에서 로드됩니다 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
+<style>
+:root{
+  --hero-photo: none;
+  --paper:#ecefe8; --card:#fbfcf8; --card-2:#f4f6ef;
+  --ink:#16241f; --ink-soft:#566059; --ink-faint:#8a938b;
+  --deep:#0d2e2b; --deep-2:#134039; --deep-3:#1b524a;
+  --live:#ff6a4d; --live-deep:#d6492f; --live-soft:#ffd8cd;
+  --teal:#129e84; --teal-deep:#0c7a66; --teal-soft:#c2ebe1;
+  --amber:#f2b134; --amber-deep:#b9821a; --amber-soft:#f8e4ad;
+  --line:#dde2d8; --line-soft:#e8ebe2;
+  --shadow:0 2px 4px rgba(16,36,31,.04), 0 10px 30px rgba(16,36,31,.06);
+  --shadow-lg:0 8px 18px rgba(16,36,31,.07), 0 24px 60px rgba(16,36,31,.11);
+  --serif:'Gowun Batang','Nanum Myeongjo',serif;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:'DM Mono','SFMono-Regular',ui-monospace,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+::selection{background:var(--amber-soft);color:var(--deep)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+
+.appbar{position:sticky;top:0;z-index:100;background:rgba(236,239,232,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.topbar{max-width:1180px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:none;font-family:inherit;text-align:left}
+.brand .mark{width:30px;height:30px;flex-shrink:0;position:relative}
+.brand .mark i{position:absolute;border-radius:50%;display:block}
+.brand .mark .m1{width:9px;height:9px;background:var(--live);left:0;top:9px;animation:bpulse 1.8s infinite}
+.brand .mark .m2{width:7px;height:7px;background:var(--teal);left:12px;top:2px}
+.brand .mark .m3{width:7px;height:7px;background:var(--amber);left:13px;top:16px}
+.brand .mark .m4{width:6px;height:6px;background:var(--deep-3);left:22px;top:9px}
+@keyframes bpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.6);opacity:.5}}
+.brand .wm{font-family:var(--serif);font-weight:700;font-size:1.04rem;line-height:1;color:var(--deep)}
+.ver-badge{display:inline-block;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:999px;margin-left:9px;vertical-align:2px;background:var(--amber-soft);color:var(--amber-deep);border:1px solid var(--amber)}
+.ver-badge.present{background:rgba(18,158,132,.14);color:var(--teal-deep);border-color:var(--teal)}
+.brand .tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;color:var(--teal-deep);display:block;margin-top:4px}
+.mini-timer{display:none;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;background:var(--deep);color:#fff;font-variant-numeric:tabular-nums;font-weight:600;font-size:.82rem;cursor:pointer;border:none;font-family:var(--mono)}
+.mini-timer.live{display:inline-flex}
+.mini-timer .dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:bpulse 1.4s infinite}
+.tabs{max-width:1180px;margin:0 auto;padding:0 26px;display:flex;gap:1px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:.9rem;color:var(--ink-soft);padding:13px 14px;border-bottom:2.5px solid transparent;white-space:nowrap;transition:.2s;margin-bottom:-1px;display:flex;align-items:center;gap:7px}
+.tab .tn{font-family:var(--mono);font-size:.66rem;color:var(--ink-faint);font-weight:500}
+.tab:hover{color:var(--deep)}
+.tab.active{color:var(--deep);border-bottom-color:var(--live)}
+.tab.active .tn{color:var(--live-deep)}
+
+.panel{display:none}
+.panel.active{display:block;animation:panelIn .42s cubic-bezier(.2,.7,.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{max-width:1100px;margin:0 auto;padding:60px 26px}
+
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.14em;color:var(--teal-deep);margin-bottom:16px;text-transform:uppercase}
+.eyebrow .num{color:var(--ink-faint)}
+.sec-head{margin-bottom:42px;max-width:760px}
+.sec-head h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.7rem,3.6vw,2.5rem);color:var(--deep);line-height:1.24;letter-spacing:-.01em}
+.sec-head p{color:var(--ink-soft);margin-top:13px;font-size:1.02rem}
+
+.hero{position:relative;min-height:clamp(440px,60vh,560px);display:flex;align-items:center;overflow:hidden;background:linear-gradient(165deg,rgba(13,46,43,.86),rgba(13,46,43,.93) 60%,rgba(8,30,28,.98)),var(--hero-photo,none),radial-gradient(120% 100% at 82% 8%,#1d524a,var(--deep) 60%);background-size:cover;background-position:center}
+.hero-inner{position:relative;z-index:3;max-width:1100px;margin:0 auto;padding:56px 26px;width:100%}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--amber-soft);margin-bottom:22px;border:1px solid rgba(248,228,173,.28);padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.03)}
+.hero-eyebrow .ld{width:8px;height:8px;border-radius:50%;background:var(--live);box-shadow:0 0 10px 2px var(--live);animation:bpulse 1.7s infinite}
+.hero h1{font-family:var(--serif);color:#fff;font-weight:700;font-size:clamp(2.3rem,6.4vw,4.3rem);line-height:1.1;letter-spacing:-.02em;text-shadow:0 2px 40px rgba(0,0,0,.4)}
+.hero h1 .ac-live{color:var(--live)}
+.hero h1 .ac-amb{color:var(--amber)}
+.hero .sub{color:rgba(255,255,255,.85);font-size:clamp(1rem,2vw,1.24rem);margin-top:20px;max-width:600px;line-height:1.62}
+.hero .sub b{color:#fff}
+.hero-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:32px;color:rgba(255,255,255,.66);font-size:.88rem;font-family:var(--mono)}
+.hero-meta .mi{display:flex;align-items:center;gap:8px}
+.hero-meta b{color:#fff;font-weight:500}
+.hero-meta button.mi{background:none;border:none;font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+.respviz{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.respbar{position:absolute;left:0;right:0;bottom:0;height:120px;display:flex;align-items:flex-end;gap:5px;padding:0 4%;opacity:.5}
+.respbar .seg{flex:1;background:linear-gradient(180deg,rgba(255,106,77,0),rgba(255,106,77,.55));border-radius:4px 4px 0 0;height:8px;transform-origin:bottom;animation:grow 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+.respbar .seg.t{background:linear-gradient(180deg,rgba(18,158,132,0),rgba(18,158,132,.5))}
+.respbar .seg.a{background:linear-gradient(180deg,rgba(242,177,52,0),rgba(242,177,52,.5))}
+@keyframes grow{to{height:var(--h)}}
+.pills{position:absolute;inset:0}
+.pill{position:absolute;font-family:var(--mono);font-size:.66rem;color:rgba(255,255,255,.5);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:3px 9px;opacity:0;animation:pillin .6s ease forwards}
+@keyframes pillin{to{opacity:1;transform:translateY(0)}}
+.fu{opacity:0;transform:translateY(20px);animation:fuk .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes fuk{to{opacity:1;transform:none}}
+.d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.32s}.d4{animation-delay:.46s}
+
+.home-extra{padding-top:50px;padding-bottom:70px}
+.access-card{display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--card);border:2px solid var(--teal);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow-lg);margin-bottom:30px;flex-wrap:wrap}
+.ac-eyebrow{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.1rem;margin-bottom:8px}
+.ac-url{font-family:var(--mono);font-size:.88rem;color:var(--teal-deep);font-weight:500;word-break:break-all;background:var(--card-2);border-radius:8px;padding:8px 12px;display:inline-block;max-width:100%}
+.ac-copy{margin-top:10px;display:inline-block;font-family:inherit;font-weight:700;background:var(--deep);color:#fff;border:none;padding:9px 18px;border-radius:10px;cursor:pointer;transition:.15s}
+.ac-copy:hover{filter:brightness(1.2)}
+.ac-qr{flex:0 0 auto;background:#fff;border-radius:12px;padding:8px;line-height:0;box-shadow:var(--shadow)}
+.ac-qr img{width:150px;height:150px;display:block;image-rendering:pixelated}
+.goal-banner{background:var(--deep);border-radius:18px;padding:24px 26px;margin-bottom:36px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.goal-banner .gb-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--amber);margin-bottom:10px}
+.gb-text{color:#f2f5ee;font-size:1.06rem;line-height:1.65;position:relative;z-index:1}
+.gb-text b{color:#fff;border-bottom:2px solid var(--live);padding-bottom:1px}
+.gb-strike{color:rgba(255,255,255,.55);text-decoration:line-through;text-decoration-color:var(--live)}
+.poll{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow);margin-bottom:36px}
+.poll-q{font-family:var(--serif);font-weight:700;font-size:1.28rem;color:var(--deep);display:flex;align-items:center;gap:10px}
+.poll-q .live-chip{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:#fff;background:var(--live);padding:3px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}
+.poll-q .live-chip i{width:6px;height:6px;border-radius:50%;background:#fff;animation:bpulse 1.4s infinite}
+.poll-sub{color:var(--ink-soft);font-size:.92rem;margin:7px 0 18px}
+.poll-opts{display:flex;flex-direction:column;gap:9px}
+.poll-opt{position:relative;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;cursor:pointer;background:var(--card-2);overflow:hidden;transition:.18s;font-family:inherit;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.poll-opt:hover{border-color:var(--teal);transform:translateX(2px)}
+.poll-opt .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--teal-soft);z-index:0;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.poll-opt.picked .fill{background:var(--live-soft)}
+.poll-opt.on{border-color:var(--live)}
+.poll-opt.on .fill{background:var(--live-soft)}
+.poll-opt .chk{position:relative;z-index:1;width:19px;height:19px;border:1.8px solid var(--line);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;background:#fff;font-weight:800;order:-1}
+.poll-opt.on .chk{background:var(--live);border-color:var(--live)}
+.poll-opt.on .lab{color:var(--live-deep)}
+.poll-add{margin-top:12px}
+.poll-add-btn{font-family:inherit;font-weight:700;font-size:.88rem;color:var(--teal-deep);background:var(--card-2);border:1.5px dashed var(--teal);border-radius:12px;padding:11px 16px;cursor:pointer;transition:.15s;width:100%}
+.poll-add-btn:hover{background:#fff;border-style:solid}
+.poll-add-form{display:flex;gap:8px;margin-top:8px}
+.poll-add-form input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;font-family:inherit;font-size:.92rem;background:var(--card-2);color:var(--ink)}
+.poll-add-form input:focus{outline:none;border-color:var(--teal)}
+.poll-add-go{font-family:inherit;font-weight:700;background:var(--deep);color:#fff;border:none;padding:0 20px;border-radius:12px;cursor:pointer}
+.poll-opt .lab,.poll-opt .pct{position:relative;z-index:1}
+.poll-opt .lab{font-weight:600;color:var(--ink)}
+.poll-opt .pct{font-family:var(--mono);font-size:.86rem;color:var(--ink-soft);font-weight:500}
+.poll.voted .poll-opt{cursor:default}
+.poll-foot{margin-top:16px;font-size:.86rem;color:var(--teal-deep);background:var(--card-2);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:11px 14px;line-height:1.55}
+.poll-foot b{color:var(--deep)}
+.poll-total{font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);margin-top:10px}
+.home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hcard{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;font-family:var(--sans);transition:.25s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:5px}
+.hcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--live)}
+.hcard .hc-t{font-family:var(--serif);font-weight:700;font-size:1.14rem;color:var(--deep);display:flex;align-items:center;gap:8px}
+.hcard small{color:var(--ink-soft);font-size:.84rem}
+.hcard .arr{margin-left:auto;color:var(--live);font-family:var(--mono)}
+.timeline{position:relative}
+.tl-item{display:grid;grid-template-columns:104px 30px 1fr;align-items:start;position:relative}
+.panel.active .tl-item{opacity:0;animation:fuk .55s ease forwards}
+.panel.active .tl-item:nth-child(1){animation-delay:.05s}.panel.active .tl-item:nth-child(2){animation-delay:.12s}.panel.active .tl-item:nth-child(3){animation-delay:.19s}.panel.active .tl-item:nth-child(4){animation-delay:.26s}.panel.active .tl-item:nth-child(5){animation-delay:.33s}.panel.active .tl-item:nth-child(6){animation-delay:.4s}.panel.active .tl-item:nth-child(7){animation-delay:.47s}.panel.active .tl-item:nth-child(8){animation-delay:.54s}
+.tl-time{font-family:var(--mono);text-align:right;padding:22px 16px 22px 0;color:var(--ink-soft);font-weight:500;font-size:.8rem;white-space:nowrap}
+.tl-axis{position:relative;display:flex;justify-content:center}
+.tl-axis::before{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--line)}
+.tl-item:first-child .tl-axis::before{top:30px}
+.tl-item:last-child .tl-axis::before{bottom:auto;height:30px}
+.tl-dot{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:var(--card);border:2.5px solid var(--teal);margin-top:28px}
+.tl-item.lab .tl-dot{border-color:var(--live);box-shadow:0 0 0 5px rgba(255,106,77,.14)}
+.tl-item.rest .tl-dot{border-color:var(--ink-faint);background:var(--ink-faint)}
+.tl-card{margin:13px 0 13px 18px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:.25s}
+.tl-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.tl-btn{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:17px 20px;display:flex;align-items:center;gap:13px;font-family:inherit}
+.tl-btn .ttl{font-family:var(--serif);font-weight:700;font-size:1.08rem;color:var(--deep);flex:1;line-height:1.35}
+.badge{font-family:var(--mono);font-size:.66rem;font-weight:500;letter-spacing:.03em;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.b-lec{background:rgba(18,158,132,.12);color:var(--teal-deep)}
+.b-lab{background:rgba(255,106,77,.14);color:var(--live-deep)}
+.b-rest{background:rgba(86,96,89,.12);color:var(--ink-soft)}
+.b-share{background:rgba(242,177,52,.18);color:var(--amber-deep)}
+.chev{color:var(--ink-faint);transition:transform .3s}
+.tl-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tl-detail{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.tl-detail .inner{padding:15px 20px 20px;color:var(--ink-soft);font-size:.94rem;border-top:1px solid var(--line-soft)}
+.tl-detail .inner a{color:var(--live-deep);font-weight:700;text-decoration:underline}
+
+.thesis{background:var(--deep);border-radius:22px;padding:38px;color:#fff;box-shadow:var(--shadow-lg);margin-bottom:40px;position:relative;overflow:hidden}
+.thesis .t-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--amber);margin-bottom:14px}
+.thesis h3{font-family:var(--serif);font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.32;margin-bottom:14px}
+.thesis h3 .hl{color:var(--live)}
+.thesis p{color:rgba(255,255,255,.82);font-size:1rem;line-height:1.72}
+.thesis p b{color:var(--amber-soft)}
+.principle{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow);margin-bottom:22px;position:relative}
+.principle::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0}
+.principle.p1::before{background:linear-gradient(90deg,var(--live),var(--live-soft))}
+.principle.p2::before{background:linear-gradient(90deg,var(--amber),var(--amber-soft))}
+.principle.p3::before{background:linear-gradient(90deg,var(--teal),var(--teal-soft))}
+.p-num{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:8px}
+.principle h3{font-family:var(--serif);font-weight:700;font-size:1.42rem;color:var(--deep);line-height:1.3;margin-bottom:12px}
+.principle>p{color:var(--ink-soft);font-size:.97rem;margin-bottom:18px}
+.principle b{color:var(--deep)}
+.bd-chain{display:flex;align-items:stretch;gap:8px;margin:6px 0 4px}
+.bd-step{flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--card-2)}
+.bd-step.s1{border-top:3px solid var(--live)}
+.bd-step.s2{border-top:3px solid var(--amber)}
+.bd-step.s3{border-top:3px solid var(--teal)}
+.bd-n{font-family:var(--mono);font-size:.66rem;letter-spacing:.03em;color:var(--ink-faint);margin-bottom:6px}
+.bd-step.s3 .bd-n{color:var(--teal-deep)}
+.bd-t{font-weight:800;color:var(--deep);font-size:1rem;line-height:1.3;margin-bottom:5px}
+.bd-d{color:var(--ink-soft);font-size:.83rem;line-height:1.5}
+.bd-arrow{display:flex;align-items:center;color:var(--live);font-family:var(--mono);font-weight:700;flex-shrink:0}
+@media(max-width:680px){.bd-chain{flex-direction:column}.bd-arrow{transform:rotate(90deg);justify-content:center;padding:1px 0}}
+.moments{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+.moment{border:1px solid var(--line);border-radius:12px;padding:15px;background:var(--card-2)}
+.moment .mm-when{font-family:var(--mono);font-size:.68rem;color:var(--live-deep);letter-spacing:.06em;margin-bottom:7px}
+.moment .mm-q{font-weight:700;color:var(--deep);font-size:.94rem;line-height:1.4}
+.moment .mm-d{color:var(--ink-soft);font-size:.83rem;margin-top:5px;line-height:1.5}
+.depth-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.depth{border-radius:12px;padding:16px 18px}
+.depth.surf{background:#fdeee9;border:1px solid #f6cabd}
+.depth.cog{background:#e6f6f1;border:1px solid #bfe7dc}
+.depth .dh{font-weight:800;font-size:.82rem;letter-spacing:.02em;margin-bottom:7px}
+.depth.surf .dh{color:var(--live-deep)}.depth.cog .dh{color:var(--teal-deep)}
+.depth p{font-size:.9rem;color:var(--ink);line-height:1.55}
+.design-list{list-style:none;margin:18px 0 2px;display:flex;flex-direction:column;gap:9px}
+.design-list li{padding-left:26px;position:relative;font-size:.94rem;color:var(--ink-soft);line-height:1.55}
+.design-list li::before{content:"→";position:absolute;left:0;color:var(--live);font-weight:700;font-family:var(--mono)}
+.design-list b{color:var(--deep)}
+.three-pos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+.pos{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card-2)}
+.pos .pk{font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;margin-bottom:8px}
+.pos.of .pk{color:var(--ink-faint)}.pos.forr .pk{color:var(--teal-deep)}.pos.ass .pk{color:var(--live-deep)}
+.pos .pt{font-weight:800;color:var(--deep);font-size:.96rem;margin-bottom:5px}
+.pos .pd{color:var(--ink-soft);font-size:.85rem;line-height:1.5}
+.value-strip{margin-top:18px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;gap:14px;flex-wrap:wrap}
+.value-strip .vs{flex:1;min-width:140px}
+.value-strip .vsk{font-family:var(--mono);font-size:.66rem;color:var(--amber-deep);letter-spacing:.04em;margin-bottom:5px}
+.value-strip .vst{font-weight:700;color:var(--deep);font-size:.92rem}
+.value-strip .vsd{color:var(--ink-soft);font-size:.82rem;margin-top:3px;line-height:1.45}
+
+.map-intro{background:var(--card);border:1px dashed var(--teal);border-radius:16px;padding:22px 24px;margin-bottom:30px}
+.map-intro p{color:var(--ink-soft);font-size:.96rem;line-height:1.6}
+.map-intro b{color:var(--deep)}
+.purpose-band{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.pchip{font-family:var(--mono);font-size:.74rem;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);font-weight:500}
+.pchip b{color:var(--deep)}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);transition:.22s}
+.tool:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.tool-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px}
+.tool h3{font-family:var(--serif);font-weight:700;font-size:1.4rem;color:var(--deep)}
+.tool .moment-tag{font-family:var(--mono);font-size:.66rem;color:var(--teal-deep);background:rgba(18,158,132,.1);padding:4px 9px;border-radius:999px;white-space:nowrap}
+.tool .ident{color:var(--ink-soft);font-size:.92rem;margin-bottom:16px;line-height:1.5}
+.tool dl{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;font-size:.9rem;align-items:start}
+.tool dt{font-weight:800;font-size:.74rem;letter-spacing:.02em;white-space:nowrap;padding-top:2px}
+.tool dt.k-str{color:var(--teal-deep)}.tool dt.k-warn{color:var(--live-deep)}.tool dt.k-fit{color:var(--amber-deep)}.tool dt.k-tip{color:var(--deep)}
+.tool dd{color:var(--ink-soft);line-height:1.5}
+.tool dd b{color:var(--ink)}
+.tool .data-note{margin-top:14px;background:var(--card-2);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:10px 13px;font-size:.84rem;color:var(--teal-deep);line-height:1.5}
+.tool .data-note b{color:var(--deep)}
+.matrix-wrap{margin-top:34px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);background:var(--card)}
+table.matrix{border-collapse:collapse;width:100%;min-width:620px;font-size:.86rem}
+table.matrix th,table.matrix td{padding:12px 14px;text-align:center;border-bottom:1px solid var(--line-soft)}
+table.matrix thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--deep);background:var(--card-2);font-weight:600}
+table.matrix tbody th{text-align:left;font-weight:700;color:var(--deep);background:var(--card-2);white-space:nowrap}
+table.matrix .yes{color:var(--teal-deep);font-weight:800}
+table.matrix .mid{color:var(--amber-deep)}
+table.matrix .no{color:var(--ink-faint)}
+.more-tools{margin-top:22px;font-size:.9rem;color:var(--ink-soft);background:var(--card-2);border-radius:12px;padding:14px 16px;line-height:1.6}
+.more-tools b{color:var(--deep)}
+
+.lab{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:var(--shadow);position:relative;overflow:hidden;margin-bottom:26px}
+.lab::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--live),var(--amber))}
+.lab-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--live-deep);margin-bottom:8px}
+.lab h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;color:var(--deep);line-height:1.3}
+.lab .goal{color:var(--ink-soft);margin-top:10px;font-size:.96rem;line-height:1.55}
+.lab .goal b{color:var(--deep)}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--teal-deep);margin:24px 0 11px;font-weight:500}
+ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:12px}
+ol.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start}
+ol.steps li::before{content:counter(s);flex-shrink:0;width:27px;height:27px;border-radius:50%;background:rgba(255,106,77,.12);color:var(--live-deep);font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;margin-top:1px;font-family:var(--mono)}
+ol.steps li b{color:var(--deep);font-weight:700}
+ol.steps li span{color:var(--ink-soft);font-size:.94rem;line-height:1.55}
+.callout{margin-top:22px;background:rgba(242,177,52,.1);border:1.5px solid var(--amber);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
+.callout .ci{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;margin-top:1px}
+.callout p{font-size:.92rem;color:var(--ink);line-height:1.55}
+.callout b{color:var(--amber-deep)}
+.design-card{background:var(--card-2);border:1px solid var(--line);border-radius:14px;padding:4px;margin-top:6px}
+.dc-step{display:grid;grid-template-columns:46px 1fr;gap:14px;padding:16px 18px;align-items:start}
+.dc-step + .dc-step{border-top:1px solid var(--line-soft)}
+.dc-n{width:46px;height:46px;border-radius:12px;background:var(--deep);color:var(--amber);font-family:var(--serif);font-weight:700;font-size:1.3rem;display:flex;align-items:center;justify-content:center}
+.dc-step h4{font-weight:800;color:var(--deep);font-size:1rem;margin-bottom:4px}
+.dc-step p{color:var(--ink-soft);font-size:.9rem;line-height:1.5}
+.dc-step .ex{color:var(--ink-faint);font-size:.85rem;margin-top:5px}
+.prompt-box{background:var(--deep);border-radius:12px;padding:18px 18px 16px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);margin-top:14px}
+.prompt-box .pl{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--amber);font-weight:500;display:block;margin-bottom:9px}
+.prompt-box code{color:#eef4f0;font-family:var(--mono);font-size:.83rem;line-height:1.7;display:block;white-space:pre-wrap;word-break:keep-all}
+.copy-btn{position:absolute;top:13px;right:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;font-family:var(--mono);font-size:.7rem;font-weight:500;padding:6px 11px;border-radius:8px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:5px}
+.copy-btn:hover{background:rgba(255,255,255,.16)}
+.copy-btn.done{background:var(--teal);border-color:var(--teal);color:#fff}
+.note{font-size:.84rem;color:var(--ink-soft);margin-top:10px;line-height:1.5}
+.rule-list{list-style:none;margin:6px 0 2px;display:flex;flex-direction:column;gap:8px}
+.rule-list li{padding-left:23px;position:relative;font-size:.92rem;color:var(--ink-soft);line-height:1.55}
+.rule-list li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700}
+.rule-list b{color:var(--deep)}
+.q-guide{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.q-guide h4{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.08rem;margin-bottom:6px}
+.q-guide .qg-sub{color:var(--ink-soft);font-size:.9rem;margin-bottom:14px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.tool-link{display:flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--card-2);border-radius:10px;padding:9px 14px;color:var(--deep);font-weight:700;font-size:.86rem;transition:.2s}
+.tool-link:hover{border-color:var(--live);background:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
+.tool-link i{font-style:normal;color:var(--live)}
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 30px;align-items:stretch}
+.loop-node{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);position:relative;text-align:center}
+.loop-node .ln-n{font-family:var(--mono);font-size:.66rem;color:var(--ink-faint);margin-bottom:8px}
+.loop-node .ln-t{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.05rem}
+.loop-node .ln-d{color:var(--ink-soft);font-size:.82rem;margin-top:6px;line-height:1.45}
+.loop-node:not(:last-child)::after{content:"→";position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--live);font-family:var(--mono);font-weight:700;z-index:2;background:var(--paper);padding:0 1px}
+.data-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow);margin-bottom:22px}
+.data-card .dc-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--teal-deep);margin-bottom:8px}
+.data-card h3{font-family:var(--serif);font-weight:700;font-size:1.4rem;color:var(--deep);line-height:1.3;margin-bottom:6px}
+.data-card>p{color:var(--ink-soft);font-size:.95rem;line-height:1.6;margin-bottom:14px}
+.data-card b{color:var(--deep)}
+.vibe-tie{margin-top:18px;background:var(--deep);border-radius:14px;padding:20px 22px}
+.vibe-tie .vt-h{font-family:var(--serif);font-weight:700;color:#fff;font-size:1.06rem;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.vibe-tie p{color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.6}
+.vibe-tie b{color:var(--amber-soft)}
+.record-strip{margin-top:30px;background:linear-gradient(135deg,var(--deep),var(--deep-3));border-radius:18px;padding:28px;color:#fff;box-shadow:var(--shadow-lg)}
+.record-strip .rs-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--amber);margin-bottom:12px}
+.record-strip h3{font-family:var(--serif);font-weight:700;font-size:1.35rem;line-height:1.34;margin-bottom:12px}
+.record-strip p{color:rgba(255,255,255,.82);font-size:.96rem;line-height:1.68}
+.record-strip b{color:var(--amber-soft)}
+
+.demo-banner{background:rgba(242,177,52,.12);border:1px solid var(--amber);border-radius:12px;padding:13px 16px;font-size:.86rem;color:var(--amber-deep);margin-bottom:24px;line-height:1.55}
+.demo-banner b{color:var(--deep)}
+.demo-banner code{font-family:var(--mono);background:#fff;border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:.82em;color:var(--teal-deep)}
+.wall{margin-bottom:42px}
+.wall-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.wall-head h3{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.3rem}
+.wall-count{font-family:var(--mono);font-size:.82rem;color:var(--live-deep);font-weight:500}
+.wall-sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:14px}
+.wall-form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.wall-form .row2{display:flex;gap:10px;flex-wrap:wrap}
+.w-name{border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.92rem;background:var(--card-2);max-width:200px}
+.w-sel{border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.92rem;background:var(--card-2);color:var(--ink)}
+.w-text{border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:.95rem;background:var(--card-2);resize:vertical;line-height:1.55;color:var(--ink)}
+.w-name:focus,.w-text:focus,.w-sel:focus,.w-url:focus,.w-title:focus{outline:none;border-color:var(--live)}
+.wall-actions{display:flex;align-items:center;gap:12px}
+.wall-btn{font-family:inherit;font-weight:700;background:var(--deep);color:#fff;border:none;padding:11px 22px;border-radius:11px;cursor:pointer;transition:.15s}
+.wall-btn:hover{filter:brightness(1.2)}
+.wall-status{font-size:.85rem;color:var(--teal-deep);font-weight:700}
+.w-url,.w-title{border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.92rem;background:var(--card-2);width:100%}
+.wall-list{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.wall-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);padding:26px;font-size:.92rem;background:var(--card-2);border-radius:14px}
+.wcard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.wcard.t-design{border-left-color:var(--live)}
+.wcard .wc-tool{font-family:var(--mono);font-size:.68rem;color:var(--teal-deep);background:rgba(18,158,132,.1);padding:3px 9px;border-radius:999px;display:inline-block;margin-bottom:9px}
+.wcard.t-design .wc-tool{color:var(--live-deep);background:rgba(255,106,77,.1)}
+.wcard.t-review{border-left-color:var(--amber)}
+.wcard.t-review .wc-tool{color:var(--amber-deep);background:rgba(242,177,52,.12)}
+.wc-fit{font-family:var(--mono);font-size:.68rem;color:var(--deep);background:var(--card-2);border:1px solid var(--line);padding:3px 9px;border-radius:999px;display:inline-block;margin:0 0 9px 6px}
+.wcard .wc-text{color:var(--ink);font-size:.93rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.wcard .wc-link{display:inline-block;margin-top:9px;font-family:var(--mono);font-size:.78rem;color:var(--live-deep);font-weight:500;word-break:break-all}
+.wcard .wc-meta{margin-top:11px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line-soft);padding-top:9px}
+.wcard .wc-name{font-family:var(--serif);color:var(--deep);font-weight:700;font-size:.86rem}
+.wcard .wc-when{font-family:var(--mono);color:var(--ink-faint);font-size:.72rem;white-space:nowrap}
+
+.timer-wrap{background:radial-gradient(120% 120% at 82% 8%,#1d524a,var(--deep));border-radius:22px;padding:44px;color:#fff;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center}
+.dial{position:relative;width:220px;height:220px;margin:0 auto}
+.dial svg{transform:rotate(-90deg);width:100%;height:100%}
+.dial .track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:9}
+.dial .prog{fill:none;stroke:var(--amber);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.dial .read{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial .read .t{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:2.9rem;font-weight:500;line-height:1}
+.dial .read .lab2{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--amber-soft);margin-top:8px}
+.timer-ctl h3{font-family:var(--serif);font-weight:700;font-size:1.35rem;margin-bottom:6px}
+.timer-ctl .desc{color:rgba(255,255,255,.7);font-size:.92rem;margin-bottom:20px}
+.presets{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+.preset{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:9px 15px;border-radius:10px;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:.84rem;transition:.2s}
+.preset:hover{background:rgba(255,255,255,.15)}
+.preset.active{background:var(--amber);border-color:var(--amber);color:var(--deep)}
+.custom{display:flex;align-items:center;gap:8px;margin-bottom:20px;color:rgba(255,255,255,.7);font-size:.85rem}
+.custom input{width:64px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:.9rem;text-align:center}
+.custom input:focus{outline:none;border-color:var(--amber-soft)}
+.timer-actions{display:flex;gap:11px}
+.t-btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:.92rem;padding:13px 28px;border-radius:11px;transition:.2s}
+.t-start{background:var(--amber);color:var(--deep)}
+.t-start:hover{filter:brightness(1.08)}
+.t-reset{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.t-reset:hover{background:rgba(255,255,255,.18)}
+.timer-wrap.done .dial .prog{stroke:var(--live)}
+.timer-wrap.done{animation:flash 1s ease 3}
+@keyframes flash{0%,100%{box-shadow:var(--shadow-lg)}50%{box-shadow:0 0 0 4px rgba(242,177,52,.5),var(--shadow-lg)}}
+
+.teacher-card{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:18px}
+.t-avatar{flex-shrink:0;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1d524a,var(--deep));color:var(--amber);font-family:var(--serif);font-size:1.7rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px var(--deep);overflow:hidden}
+.t-avatar .t-photo{width:100%;height:100%;object-fit:cover}
+.t-name{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.3rem}
+.t-nick{font-size:.82rem;color:var(--live-deep);font-weight:700;margin-left:6px}
+.t-role{color:var(--ink-soft);font-size:.92rem;margin-top:2px}
+.t-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.t-tags span{font-family:var(--mono);font-size:.7rem;color:var(--teal-deep);background:rgba(18,158,132,.1);border:1px solid rgba(18,158,132,.2);padding:3px 9px;border-radius:20px}
+.about-block{margin-top:28px}
+.about-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.22rem;margin-bottom:6px}
+.ab-sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:14px}
+.me-lead{font-size:1.04rem;color:var(--ink);line-height:1.6}
+.me-lead b{color:var(--deep)}
+.edit-hint{margin-top:14px;font-size:.84rem;color:var(--amber-deep);background:rgba(242,177,52,.1);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:11px 14px;line-height:1.55}
+.res-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px}
+.res-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:.16s}
+.res-btn:hover{transform:translateY(-2px);border-color:var(--live);box-shadow:0 14px 30px -14px rgba(255,106,77,.5)}
+.rb-icon{font-size:1.4rem}
+.rb-t{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.04rem;margin-top:4px}
+.rb-u{font-family:var(--mono);font-size:.74rem;color:var(--teal-deep);word-break:break-all}
+.res-btns.res-2{grid-template-columns:repeat(2,1fr);max-width:520px}
+.letters-intro{font-size:1.04rem;color:var(--ink);line-height:1.6;margin-bottom:14px}
+.letters-intro b{color:var(--deep)}
+.ltr{border:1px solid var(--line);border-radius:13px;margin-bottom:9px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;transition:.2s}
+.ltr:hover{border-color:var(--amber-soft)}
+.ltr-head{width:100%;display:flex;align-items:center;gap:11px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:15px 18px}
+.ltr-q{font-family:var(--serif);font-size:1.7rem;color:var(--amber);line-height:.5;flex-shrink:0;margin-top:6px}
+.ltr-label{flex:1;font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.02rem;line-height:1.4}
+.ltr-chev{color:var(--amber-deep);transition:transform .3s;font-size:.85rem;flex-shrink:0}
+.ltr-head[aria-expanded="true"] .ltr-chev{transform:rotate(180deg)}
+.ltr-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.ltr-inner{padding:0 18px 18px;border-top:1px solid var(--line-soft)}
+.ltr-inner blockquote{margin:14px 0 0;color:var(--ink);font-size:.94rem;line-height:1.72}
+.ltr-inner .ltr-by{display:block;margin-top:12px;text-align:right;font-family:var(--serif);color:var(--amber-deep);font-weight:700;font-size:.9rem}
+.synth{margin-top:24px;background:linear-gradient(135deg,var(--deep),var(--deep-3));border-radius:18px;padding:28px;color:#fff;box-shadow:var(--shadow-lg)}
+.synth .sy-k{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--amber);margin-bottom:12px}
+.synth h3{font-family:var(--serif);font-weight:700;font-size:1.32rem;line-height:1.36;margin-bottom:13px;color:#fff}
+.synth h3 .hl{color:var(--live)}
+.synth p{color:rgba(255,255,255,.85);font-size:.98rem;line-height:1.72;margin-bottom:9px}
+.synth p:last-child{margin-bottom:0}
+.synth b{color:var(--amber-soft)}
+.t-homeroom{margin-top:7px;font-size:.92rem;color:var(--teal-deep);font-weight:600}
+.myclass{display:flex;flex-direction:column;gap:12px}
+.mc-item{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow)}
+.mc-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.06rem;margin-bottom:7px}
+.mc-item p{color:var(--ink);font-size:.95rem;line-height:1.68;margin:0}
+.mc-item em{color:var(--teal-deep);font-style:normal}
+.photo-ph{margin-top:11px;border:1.5px dashed var(--line);border-radius:11px;background:var(--card-2);padding:24px 16px;text-align:center;color:var(--ink-soft);font-size:.9rem;font-weight:600}
+.photo-ph small{display:block;margin-top:4px;font-weight:400;color:var(--ink-faint);font-size:.8rem}
+.mc-photo{width:100%;border-radius:11px;margin-top:11px;display:block}
+.sen-note{display:flex;gap:13px;align-items:flex-start;background:linear-gradient(135deg,rgba(18,158,132,.09),rgba(242,177,52,.08));border:1px solid var(--teal);border-radius:14px;padding:16px 18px;margin:20px 0 6px}
+.sen-flag{font-size:1.5rem;line-height:1;flex-shrink:0}
+.sen-h{font-weight:800;color:var(--deep);margin-bottom:5px;font-size:1.02rem}
+.sen-note p{color:var(--ink);font-size:.93rem;line-height:1.65;margin:0}
+.sen-note a{color:var(--teal-deep);font-weight:700;border-bottom:1px solid var(--teal);white-space:nowrap}
+.sen-sum{margin-top:11px;padding-top:11px;border-top:1px dashed var(--teal);font-size:.85rem;line-height:1.7;color:var(--ink-soft)}
+.sen-sum b{color:var(--deep)}
+.why-sen{background:linear-gradient(135deg,rgba(13,46,43,.05),rgba(18,158,132,.08));border:1px solid var(--teal);border-left:4px solid var(--teal);border-radius:14px;padding:18px 20px;margin-bottom:22px}
+.why-sen .why-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.08rem;margin-bottom:10px;line-height:1.4}
+.why-sen p{color:var(--ink);font-size:.94rem;line-height:1.68;margin:0 0 8px}
+.why-sen ul{margin:6px 0 4px;padding-left:19px}
+.why-sen li{color:var(--ink);font-size:.92rem;line-height:1.62;margin-bottom:5px}
+.why-sen .sen-story{margin-top:13px;padding-top:12px;border-top:1px dashed var(--teal)}
+.why-sen .ss-h{font-weight:700;color:var(--teal-deep);font-size:.9rem;margin-bottom:5px}
+.make-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 4px}
+.make-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.make-card.quizn{border-top:3px solid var(--amber)}
+.make-card.zep{border-top:3px solid #7c5cff}
+.make-card h3{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.08rem;margin-bottom:3px}
+.make-card .mk-sub{color:var(--ink-faint);font-size:.81rem;margin-bottom:12px}
+.make-card .demo-tip{margin-top:12px;font-size:.81rem;color:var(--ink-soft);background:var(--card-2);border-radius:9px;padding:9px 12px;line-height:1.5}
+.make-goal{margin-top:22px;text-align:center;background:var(--deep);color:#f2f5ee;font-family:var(--serif);font-weight:700;font-size:1.1rem;padding:18px 20px;border-radius:14px}
+.bonus-lead{color:var(--teal-deep)!important;font-size:.92rem!important;font-weight:600;margin:9px 0 2px!important;line-height:1.55}
+.tab[data-tab="data"] .tn{color:var(--teal-deep)}
+.assume-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:6px}
+.assume{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 17px;box-shadow:var(--shadow)}
+.assume .as-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.98rem;margin-bottom:6px}
+.assume p{color:var(--ink);font-size:.9rem;line-height:1.6;margin:0}
+.assume .src,.flip-back .src{font-family:var(--mono);font-size:.73rem;color:var(--ink-faint);font-weight:500;white-space:nowrap}
+.merit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.merit{background:linear-gradient(135deg,rgba(18,158,132,.07),rgba(18,158,132,.02));border:1px solid var(--teal);border-radius:13px;padding:14px 16px}
+.merit .m-h{font-family:var(--serif);font-weight:700;color:var(--teal-deep);font-size:.98rem;margin-bottom:5px}
+.merit p{color:var(--ink);font-size:.88rem;line-height:1.58;margin:0}
+.merit em{color:var(--teal-deep);font-style:normal;font-weight:600}
+.demerit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.demerit{background:linear-gradient(135deg,rgba(255,106,77,.07),rgba(255,106,77,.02));border:1px solid var(--live);border-radius:13px;padding:14px 16px}
+.demerit .d-h{font-family:var(--serif);font-weight:700;color:#c2402a;font-size:.98rem;margin-bottom:5px}
+.demerit p{color:var(--ink);font-size:.88rem;line-height:1.58;margin:0}
+.qz-toggle{display:inline-block;margin-top:14px;cursor:pointer;background:var(--deep);color:#f2f5ee;font-family:var(--mono);font-size:.82rem;font-weight:700;padding:10px 16px;border-radius:999px;border:none;transition:background .2s}
+.qz-toggle:hover{background:var(--teal-deep)}
+.qz-toggle .lbl-on{display:none}
+.qz-hint{display:none;margin-top:12px;background:rgba(18,158,132,.08);border-left:3px solid var(--teal);border-radius:9px;padding:11px 14px;color:var(--ink);font-size:.9rem;line-height:1.6}
+.qz-check:checked ~ .qz-toggle .lbl-off{display:none}
+.qz-check:checked ~ .qz-toggle .lbl-on{display:inline}
+.qz-check:checked ~ .qz-hint{display:block}
+.qz-check:checked ~ .qz-target .qz-no{display:none}
+.qz-check:checked ~ .qz-target{grid-template-columns:1fr 1fr}
+.ref-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.12rem;margin-bottom:11px;padding-bottom:7px;border-bottom:2px solid var(--teal)}
+.ref-block{background:var(--card-2);border-radius:13px;padding:16px 18px;margin-bottom:8px}
+.ref-block p{color:var(--ink);font-size:.93rem;line-height:1.68;margin:0 0 9px}
+.ref-block p:last-child{margin-bottom:0}
+.eval-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.ec{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid}
+.ec.for{color:var(--teal-deep);border-color:var(--teal)}
+.ec.as{color:#9a6a00;border-color:var(--amber)}
+.ec.of{color:var(--ink-faint);border-color:var(--line)}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.model{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--deep);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow)}
+.model .mo-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.96rem;margin-bottom:5px}
+.model p{color:var(--ink);font-size:.87rem;line-height:1.55;margin:0}
+.start-choice{background:linear-gradient(135deg,rgba(242,177,52,.09),rgba(242,177,52,.02));border:1px solid var(--amber);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.start-choice .sc-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.02rem;margin-bottom:11px}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sc{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.sc-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--amber);color:#3a2a00;font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.sc b{color:var(--deep);font-size:.94rem}
+.sc p{color:var(--ink);font-size:.85rem;line-height:1.5;margin:4px 0 0}
+.plan-box{background:var(--card);border:1px solid var(--line);border-top:3px solid #7c5cff;border-radius:14px;padding:17px 19px;margin-top:18px}
+.plan-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.02rem;margin-bottom:12px}
+.plan-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.plan-yes,.plan-no{list-style:none;margin:0;padding:0}
+.plan-yes li,.plan-no li{font-size:.87rem;line-height:1.5;padding:5px 0 5px 22px;position:relative}
+.plan-yes li{color:var(--ink)}
+.plan-yes li::before{content:"✓";position:absolute;left:0;color:var(--teal-deep);font-weight:800}
+.plan-no li{color:var(--ink-soft)}
+.plan-no li::before{content:"✕";position:absolute;left:0;color:var(--ink-faint);font-weight:800}
+.plan-ai{margin-top:13px;padding-top:12px;border-top:1px dashed var(--line);font-size:.86rem;line-height:1.6;color:var(--ink)}
+.nonsense-note{background:rgba(242,177,52,.1);border-left:3px solid var(--amber);border-radius:9px;padding:11px 14px;margin-bottom:16px;font-size:.9rem;color:var(--ink);line-height:1.55}
+.nq{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.nq summary{cursor:pointer;padding:15px 18px;font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.02rem;list-style:none}
+.nq summary::-webkit-details-marker{display:none}
+.nq summary::before{content:"▶ ";color:var(--teal-deep);font-size:.8rem}
+.nq[open] summary::before{content:"▼ "}
+.nq-a{padding:0 18px 15px 18px;color:var(--live);font-weight:700;font-size:1.05rem}
+.nq-h{font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);font-weight:600}
+.nq-x{color:var(--ink-faint);font-weight:500;font-size:.85rem}
+.access-box{background:linear-gradient(135deg,rgba(18,158,132,.07),rgba(18,158,132,.02));border:1px solid var(--teal);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.access-box .ab-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.02rem;margin-bottom:11px}
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ab{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.ab-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;margin-bottom:7px}
+.ab-tag.yes{background:rgba(18,158,132,.14);color:var(--teal-deep)}
+.ab-tag.no{background:rgba(242,177,52,.18);color:#9a6a00}
+.ab p{color:var(--ink);font-size:.88rem;line-height:1.55;margin:0}
+.ab a:not(.ab-btn){color:var(--teal-deep);font-weight:700}
+.ab-btn{display:inline-block;margin-top:10px;background:var(--deep);color:#f2f5ee!important;font-family:var(--mono);font-size:.8rem;font-weight:700;padding:9px 14px;border-radius:999px;text-decoration:none;border-bottom:none!important}
+.ab-btn:hover{background:var(--teal-deep)}
+.flip-card{position:relative;background:transparent!important;border:none!important;border-left:none!important;border-top:none!important;box-shadow:none!important;padding:0!important;perspective:1100px;cursor:pointer}
+.three-pos>.flip-card{height:180px}
+.assume-grid>.flip-card{height:174px}
+.vid-embed{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.vid-cap{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.96rem;align-self:flex-start}
+.vid-frame{position:relative;width:100%;max-width:300px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#000}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.model-grid>.flip-card{height:146px}
+.merit-grid>.flip-card{height:148px}
+.demerit-grid>.flip-card{height:148px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.45,.05,.2,1);transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border:1px solid var(--line);border-radius:14px;padding:15px 17px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);overflow:hidden}
+.flip-front{background:var(--card)}
+.flip-back{background:var(--card-2);transform:rotateY(180deg)}
+.flip-hint{position:absolute;bottom:9px;right:13px;font-family:var(--mono);font-size:.64rem;color:var(--ink-faint);font-weight:600;opacity:.6}
+.flip-back .pd,.flip-back p{font-size:.87rem;line-height:1.52;margin:0;color:var(--ink)}
+.flip-card.forr .flip-front,.flip-card.merit .flip-front{border-top:3px solid var(--teal)}
+.flip-card.ass .flip-front{border-top:3px solid var(--amber)}
+.flip-card.of .flip-front{border-top:3px solid var(--ink-faint)}
+.flip-card.demerit .flip-front{border-top:3px solid var(--live)}
+.flip-card.model .flip-front{border-top:3px solid var(--deep)}
+.flip-card.assume .flip-front{border-top:3px solid var(--teal-deep)}
+.tool-toggle{margin-top:10px;border-top:1px dashed var(--line);padding-top:7px}
+.tool-toggle summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--teal-deep);list-style:none;padding:4px 0}
+.tool-toggle summary::-webkit-details-marker{display:none}
+.tool-toggle summary::before{content:"▶ ";font-size:.7rem}
+.tool-toggle[open] summary::before{content:"▼ "}
+.tt-body{padding:8px 2px 2px;font-size:.84rem;line-height:1.55;color:var(--ink)}
+.tt-lead{margin:0 0 8px;color:var(--ink-soft)}
+.tt-h{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.9rem;margin:10px 0 5px}
+.tt-body ol{margin:0 0 4px;padding-left:20px}
+.tt-body li{margin-bottom:3px}
+.tt-body code{background:var(--card-2);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:.82rem}
+.tt-note{background:rgba(242,177,52,.12);border-radius:7px;padding:7px 10px;margin:8px 0 2px;font-size:.82rem;color:var(--ink)}
+.tt-body a{color:var(--teal-deep);font-weight:600}
+.qr-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+.qr-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.qr-code{width:96px;height:96px;background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;padding:6px}
+.qr-code img{width:100%;height:100%;image-rendering:pixelated}
+.qr-item span{font-size:.78rem;color:var(--ink-soft);font-weight:600}
+.model-detail{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.model-detail summary{cursor:pointer;padding:13px 16px;font-family:var(--serif);font-weight:700;color:var(--deep);font-size:.98rem;list-style:none}
+.model-detail summary::-webkit-details-marker{display:none}
+.model-detail summary::before{content:"▶ ";color:var(--teal-deep);font-size:.78rem}
+.model-detail[open] summary::before{content:"▼ "}
+.md-body{padding:0 16px 14px;font-size:.88rem;line-height:1.6;color:var(--ink)}
+.md-yes{background:rgba(18,158,132,.1);border-radius:8px;padding:9px 12px;margin:0 0 10px}
+.md-body ol{margin:0 0 8px;padding-left:20px}
+.md-body ul{margin:0 0 8px;padding-left:20px}
+.md-body li{margin-bottom:5px}
+.md-tip{background:var(--card-2);border-radius:8px;padding:9px 12px;margin:0;font-size:.85rem;color:var(--ink-soft)}
+.ai-warn{margin-top:13px;background:rgba(255,106,77,.09);border-left:3px solid var(--live);border-radius:9px;padding:11px 14px;font-size:.86rem;line-height:1.6;color:var(--ink)}
+.selfpaced{background:linear-gradient(135deg,rgba(255,106,77,.08),rgba(242,177,52,.05));border:1px solid var(--amber);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.selfpaced .sp-h{font-family:var(--serif);font-weight:800;color:var(--deep);font-size:1.05rem;margin-bottom:8px}
+.selfpaced p{color:var(--ink);font-size:.92rem;line-height:1.62;margin:0 0 10px}
+.sp-manuals{font-size:.86rem;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:11px;display:flex;flex-direction:column;gap:11px}
+.spm-head{font-weight:700;color:var(--ink-soft);font-size:.84rem}
+.spm-group{display:flex;flex-direction:column;gap:6px}
+.spm-label{font-family:var(--serif);font-weight:800;font-size:.92rem;color:var(--deep)}
+.spm-links{display:flex;flex-wrap:wrap;gap:7px}
+.spm-btn{display:inline-block;background:var(--deep);color:#f2f5ee!important;font-family:var(--mono);font-size:.76rem;font-weight:700;padding:7px 12px;border-radius:999px;text-decoration:none;border-bottom:none!important}
+.spm-btn:hover{background:var(--teal-deep)}
+.spm-btn.z{background:#7c5cff}
+.spm-btn.z:hover{background:#6646e0}
+.spm-tip{font-size:.82rem;color:var(--ink-soft);margin:1px 0 0;font-style:italic}
+.sp-pending{display:inline-block;background:var(--card-2);color:var(--ink-faint);border-radius:6px;padding:2px 8px;font-size:.82rem;font-style:italic}
+.design-fields{display:flex;flex-direction:column;gap:8px}
+.df-row{display:flex;gap:8px;flex-wrap:wrap}
+.df-l{flex:1;min-width:104px;display:flex;flex-direction:column;gap:3px;font-size:.72rem;font-weight:800;color:var(--teal-deep);letter-spacing:.01em}
+.df-l .w-sel{font-weight:500;color:var(--ink);width:100%}
+@media(max-width:760px){.ab-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.sc-grid,.plan-cols{grid-template-columns:1fr}}
+@media(max-width:760px){.model-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.assume-grid,.merit-grid,.demerit-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.make-grid{grid-template-columns:1fr}}
+
+footer{background:var(--deep);color:rgba(255,255,255,.6);text-align:center;padding:50px 26px;position:relative;overflow:hidden}
+footer .fmark{display:flex;gap:5px;justify-content:center;margin-bottom:16px}
+footer .fmark i{width:9px;height:9px;border-radius:50%;display:block}
+footer .fmark .f1{background:var(--live);animation:bpulse 1.8s infinite}
+footer .fmark .f2{background:var(--teal)}
+footer .fmark .f3{background:var(--amber)}
+footer .fw{font-family:var(--serif);color:#fff;font-size:1.12rem;font-weight:700}
+footer .fs{font-family:var(--mono);font-size:.78rem;margin-top:8px}
+footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-family:var(--serif)}
+
+@media(max-width:880px){
+  .home-cards,.tool-grid,.three-pos,.value-strip{grid-template-columns:1fr}
+  .moments{grid-template-columns:1fr 1fr}
+  .loop{grid-template-columns:1fr 1fr}
+  .loop-node:not(:last-child)::after{display:none}
+  .timer-wrap{grid-template-columns:1fr;gap:30px;padding:34px}
+  .depth-row,.res-btns{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .wrap{padding:46px 20px}.hero-inner{padding:44px 20px}
+  .tl-item{grid-template-columns:66px 26px 1fr}.tl-time{padding:22px 10px 22px 0;font-size:.72rem;white-space:normal}
+  .lab,.tool,.data-card,.principle{padding:22px}
+  .moments{grid-template-columns:1fr}.brand .tag{display:none}
+  .dc-step{grid-template-columns:1fr;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="topbar">
+    <button class="brand" onclick="switchTab('home')">
+      <span class="mark"><i class="m1"></i><i class="m2"></i><i class="m3"></i><i class="m4"></i></span>
+      <span><span class="wm">모두가 답하는 교실</span><span class="ver-badge present">발표용</span><span class="tag">ASSESSMENT × PARTICIPATION</span></span>
+    </button>
+    <button class="mini-timer" id="miniTimer" onclick="switchTab('timer')"><span class="dot"></span><span id="miniTime">00:00</span></button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="about"><span class="tn">00</span>강사</button>
+    <button class="tab" data-tab="home"><span class="tn">01</span>홈</button>
+    <button class="tab" data-tab="flow"><span class="tn">02</span>흐름</button>
+    <button class="tab" data-tab="principles"><span class="tn">03</span>평가와 퀴즈</button>
+    <button class="tab" data-tab="tools"><span class="tn">04</span>도구 지도</button>
+    <button class="tab" data-tab="labs"><span class="tn">05</span>실습</button>
+    <button class="tab" data-tab="makequiz"><span class="tn">06</span>퀴즈 만들기</button>
+    <button class="tab" data-tab="share"><span class="tn">07</span>나눔 보드</button>
+    <button class="tab" data-tab="timer"><span class="tn">08</span>타이머</button>
+    <button class="tab" data-tab="nonsense"><span class="tn">09</span>넌센스 퀴즈</button>
+    <button class="tab" data-tab="data"><span class="tn">＋</span>참고 자료</button>
+  </nav>
+</div>
+
+<main>
+<section class="panel" id="tab-home">
+  <div class="hero">
+    <div class="respviz"><div class="respbar" id="respbar"></div><div class="pills" id="pills"></div></div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow fu d1"><span class="ld"></span>2026 학교로 찾아가는 수업 평가혁신 직무연수</span>
+      <h1 class="fu d2">묻고, <span class="ac-live">모두가</span> 답하고,<br><span class="ac-amb">데이터로</span> 남는다</h1>
+      <p class="sub fu d3">온라인 퀴즈·평가 도구를 활용한 <b>참여형 수업 설계</b> — 도구를 늘리는 연수가 아니라, <b>'설계'를 바꾸는</b> 연수예요 🙌</p>
+      <div class="hero-meta fu d4">
+        <span class="mi">⏱ 2시간 · <b>실습 중심</b></span>
+        <span class="mi">👩‍🏫 도곡중학교 선생님</span>
+        <button class="mi" onclick="switchTab('about')">✦ 강사 · <b>해누리중학교 조승재</b> ›</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap home-extra">
+    <div class="access-card">
+      <div class="ac-left">
+        <div class="ac-eyebrow">📱 각자 기기로 지금 접속하세요!</div>
+        <div class="ac-url" id="acUrl">주소를 불러오는 중…</div>
+        <button class="ac-copy" id="acCopy">주소 복사</button>
+      </div>
+      <div class="ac-qr" id="acQr"></div>
+    </div>
+    <div class="goal-banner">
+      <div class="gb-eyebrow">◆ 오늘 가져가실 단 하나 — 거꾸로 설계</div>
+      <p class="gb-text"><span class="gb-strike">'재미있는 도구'에서 시작</span> ✕ &nbsp;→&nbsp; <b>끝에서 시작, 거꾸로</b><br>① 무엇을 알고 싶은가 &nbsp;→&nbsp; ② 어떻게 드러낼까 &nbsp;→&nbsp; ③ 어떤 도구 &nbsp;·&nbsp; <b>도구 = 맨 마지막</b></p>
+    </div>
+    <div class="poll" id="poll">
+      <div class="poll-q"><span class="live-chip"><i></i>LIVE</span>도곡중학교 선생님들께서, 활용하신 경험이 있는 온라인 퀴즈 도구는?</div>
+      <p class="poll-sub">써보신 도구를 <b>모두</b> 눌러 주세요. 목록에 없으면 아래 <b>‘＋ 카드 만들기’</b>로 추가! 👇</p>
+      <div class="poll-opts" id="pollOpts"></div>
+      <div class="poll-add">
+        <button class="poll-add-btn" id="pollAddBtn" type="button">＋ 카드 만들기</button>
+        <div class="poll-add-form" id="pollAddForm" style="display:none">
+          <input type="text" id="pollAddInput" placeholder="도구 이름 (예: 퀴즈앤, 워드월…)" maxlength="24">
+          <button class="poll-add-go" id="pollAddGo" type="button">추가</button>
+        </div>
+      </div>
+      <div class="poll-total" id="pollTotal"></div>
+      <div class="poll-foot" id="pollFoot" style="display:none"><b>방금 이게 바로 형성평가였어요.</b> 여러분의 응답이 실시간으로 한눈에 모였죠 — 누가 무엇을 써봤는지, 우리 학교의 ‘도구 지도’가 그려집니다. 오늘은 이 경험을 그대로 <b>수업으로</b> 가져갑니다.</div>
+    </div>
+    <div class="home-cards">
+      <button class="hcard" onclick="switchTab('principles')"><span class="hc-t">평가와 퀴즈<span class="arr">→</span></span><small>평가의 3요소 → 퀴즈 장단점 🧭</small></button>
+      <button class="hcard" onclick="switchTab('labs')"><span class="hc-t">실습<span class="arr">→</span></span><small>학생이 되어 체험 · 내 수업 설계 🛠️</small></button>
+      <button class="hcard" onclick="switchTab('share')"><span class="hc-t">나눔 보드<span class="arr">→</span></span><small>도구·경험 실시간 공유 💬</small></button>
+    </div>
+  </div>
+</section>
+
+<section class="panel active" id="tab-about">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">00</span> · ABOUT</span><h2>강사 소개</h2><p>도곡중학교 선생님들, 반갑습니다 😊 오늘 함께할 해누리중학교 조승재입니다.</p></div>
+    <div class="teacher-card">
+      <div class="t-avatar">
+        <!-- 강사 사진 넣기: 아래 한 줄의 주석을 풀고 src를 본인 사진 주소(github raw 이미지 등)로 바꾸면 '조' 대신 사진이 동그라미에 들어가요.
+        <img class="t-photo" src="사진주소" alt="조승재"> -->
+        조
+      </div>
+      <div class="t-info">
+        <div class="t-name">조승재</div>
+        <div class="t-role">해누리중학교 과학교사</div>
+        <div class="t-homeroom">🏫 2학년 3반 ‘이삼한 친구들’의 담임</div>
+      </div>
+    </div>
+    <div class="about-block">
+      <h3 class="about-h">저는 이런 교사예요</h3>
+      <p class="letters-intro">제 소개 = <b>아이들이 써 준 편지</b> · 눌러서 펼쳐 보세요 💌</p>
+
+      <div class="ltr">
+        <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">선생님 수업을 듣고 생각이 바뀌었어요</span><span class="ltr-chev">▾</span></button>
+        <div class="ltr-body"><div class="ltr-inner"><blockquote>저는 사실 거의 모든 내용을 선행했었거든요. 그래서 그냥 수업 때 적당히 대답하고 지낼려고 했는데 선생님의 수업을 듣고 조금 생각이 바뀌었어요. 선생님이 열정적으로 어떻게든 저희를 즐겁게 가르치르고 하시는 것이 눈에 너무 잘 보이더라구요. 그 이후 항상 선생님의 수업이 궁금해졌어요. 매주 실험이나 영상으로 진행하니 재밌고 미쳐 이해하지 못했던 부분을 배울 수 있어 좋았어요. 항상 재미있는 수업 해주셔서 감사했습니다.</blockquote><span class="ltr-by">— OO이</span></div></div>
+      </div>
+      <div class="ltr">
+        <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">세상 모든 물체에 화살표가 그려져요</span><span class="ltr-chev">▾</span></button>
+        <div class="ltr-body"><div class="ltr-inner"><blockquote>힘 단원을 배우고 나서는 세상 모든 물체들에게 화살표가 그려지더라구요. 너무 지나친 것 같지만 실제러 그랬습니다… 가능하다면 다른 힘에 대해서도 배워보고 싶어요. 전에 숏폼을 내리는데 장력에 관한 영상이 뜨더라구요. 장력도 배워보고 싶어요. 자석의 밀어내는 힘도 궁금합니다아</blockquote><span class="ltr-by">— OO이</span></div></div>
+      </div>
+      <div class="ltr">
+        <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">과학이 제 최애 과목이 됐어요</span><span class="ltr-chev">▾</span></button>
+        <div class="ltr-body"><div class="ltr-inner"><blockquote>선생님! 항상 재밌게 수업해주셔서 감사해요. 덕분에 과학이랑은 하나도 맞지 않다고 생각했던 제가 드디어 과학에 흥미를 느끼게 되었어요. 과학을 공부하면서 저의 문제해결능력? 도 늘었다고 생각하고 과학이 너무 재미있어졌어요. 그냥 제 최애 과목이에요. 항상 과학이 저의 큰 걸림돌이었는데 사람 한 명 살려주셔서 감사해요!!!</blockquote><span class="ltr-by">— OO이</span></div></div>
+      </div>
+      <div class="ltr">
+        <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">두렵던 과학이 기대되는 과목으로 바뀌었어요</span><span class="ltr-chev">▾</span></button>
+        <div class="ltr-body"><div class="ltr-inner"><blockquote>저는 원래 흥미 있는 단원이 아니면 과학은 집중을 안했고.. 점수차가 좀 있었거든요? 근데 선생님께서 직접 학습지 및 플래폼도 만들어주시고, 항상 적극적으로, 이해를 도우려고 하시고 실험 영상같은 것도 많이 제작해주셔서 저의 과학 성적에 많이 도움이 된 것 같아요!! 정말 두렵고, 지루하기만 했던 과목인 과학이 선생님덕분에 더 흥미롭고, 기대되는 과목으로 변화한 것 같아요 정말 선생님께서 저의 최애 선생님이십니당 정말 선생님과 헤어지고 선생님께서 다른 학년을 가르치신다는게 너무너도 질투날 정도에요!! 이번에 과학 콘서트에 선생님과 같이 참여한 것도 너무나도 좋은 경험이었던 것 같아요 항상 진심으로, 최선을 다해서 과학이란 과목을 가르쳐주셔서 감사합니다</blockquote><span class="ltr-by">— OO이</span></div></div>
+      </div>
+      <div class="ltr">
+        <button class="ltr-head" onclick="toggleLetter(this)" aria-expanded="false"><span class="ltr-q">“</span><span class="ltr-label">수업에 얼마나 진심이신지 알게 됐어요</span><span class="ltr-chev">▾</span></button>
+        <div class="ltr-body"><div class="ltr-inner"><blockquote>항상 1학년 모든 반 학생들을 위해 수업을 열심히 준비해주셔서 정말 감사합니다. 과학A 디지털 교과서에 선생님께서 적어주신 모든 것을 빠짐 없이 꼼꼼히 다 보고 활동도 다 하려고 하고 주신 자료와 실험실 링크도 다 보고 들어갔는데 선생님께서 수업에 얼마나 진심이셨는지 알게 되어 정말 감동이었습니다… 선생님께서 만들어주신 노래 다 외워서 이번 기말 때 정말 도움이 되었어요오… 이렇게 열심히 준비해주시는데 스트레스를 받지 않는다는 선생님이 정말 존경스러웠고 배우고 싶었습니다. 정말 늘 감사하고 2학년 때도 저희 가르쳐주세요!!! 정말 선생님 수업이 가장 이해도 잘되고 재밌는 것 같아요! 항상 감사하고 사랑합니다🩵</blockquote><span class="ltr-by">— OO이</span></div></div>
+      </div>
+
+      <div class="synth">
+        <div class="sy-k">◆ 편지를 조합하면</div>
+        <h3>학생들이 바라보는 저는 — <span class="hl">열정 가득한 선생님</span>에 가까운 것 같아요.</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="tab-flow">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">02</span> · FLOW</span><h2>오늘의 흐름</h2><p>강의 짧게 · 실습 길게! 실습 약 65분 / 강의·정리·나눔 약 55분. 항목을 누르면 펼쳐져요 👇</p></div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<section class="panel" id="tab-principles">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">03</span> · ASSESSMENT</span><h2>평가의 눈으로 — 그래서 온라인 퀴즈</h2><p><b>평가가 무엇을 위한 것인지</b> → 그 위에서 <b>온라인 퀴즈의 장점·한계</b></p></div>
+
+    <div class="label">평가의 3요소 — 무엇을 위한 평가인가</div>
+    <input type="checkbox" id="qzToggle" class="qz-check" hidden>
+    <div class="three-pos qz-target">
+      <div class="pos forr qz-yes"><div class="pk">ASSESSMENT FOR</div><div class="pt">학습을 위한 평가</div><div class="pd">이해도 확인 + <b>즉각 피드백</b>으로 교수·학습 개선</div></div>
+      <div class="pos ass qz-yes"><div class="pk">ASSESSMENT AS</div><div class="pt">학습으로서의 평가</div><div class="pd">학생 <b>자기주도 성찰</b>·점검·조정 · 과정 중심</div></div>
+      <div class="pos of qz-no"><div class="pk">ASSESSMENT OF</div><div class="pt">학습 결과 확인</div><div class="pd">총괄·성취도 종합 판단·성적 · 결과 중심</div></div>
+    </div>
+    <label for="qzToggle" class="qz-toggle"><span class="lbl-off">🔵 온라인 퀴즈 플랫폼(젭·퀴즈앤)에 해당하는 것만 보기</span><span class="lbl-on">↩ 전체 평가 보기</span></label>
+    <p class="qz-hint">젭·퀴즈앤은 <b>실시간 형성평가(FOR)</b>와 <b>학생 자기점검(AS)</b>에 특히 강해요. 결과 확인(OF·총괄)도 가능하지만, 고유한 강점은 FOR·AS예요.</p>
+
+    <div class="label" style="margin-top:30px">왜 효과적일까?</div>
+    <div class="assume-grid">
+      <div class="assume"><div class="as-h">🔁 꺼내야 남아요</div><p>이해한 걸 '꺼내기' = 핵심 학습 과정 · <b>약을 간식에 섞듯</b> 거부감↓ → 학습 장벽↓</p></div>
+      <div class="assume"><div class="as-h">🎁 보상이 만드는 몰입</div><p>잘 풀면 보상 → 그러려면 <b>수업 집중</b> → 열심히 참여 (교실 경험)</p></div>
+      <div class="assume"><div class="as-h">🙋 모두가 나와서 풀어요</div><p>"나와서 풀 사람?" 한 명 ✕ → <b>모두가 동시에</b> 풀고 서로 그 모습을 봄</p></div>
+    </div>
+    <div class="vid-embed">
+      <div class="vid-cap">🎬 <b>'꺼내야 남아요'</b> — 영상으로 보기</div>
+      <div class="vid-frame"><iframe src="https://www.youtube.com/embed/pjUySif6W54" title="꺼내야 남아요" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    </div>
+    <div class="thesis" style="margin-top:26px">
+      <div class="t-eyebrow">◆ 그래서 — 온라인 퀴즈 플랫폼의 장점</div>
+      <h3>그래서 교실에선 <span class="hl">이런 장점</span>으로 이어져요.</h3>
+    </div>
+    <div class="merit-grid">
+      <div class="merit"><div class="m-h">⚡ 즉시성</div><p>응답이 실시간으로 모여 <b>바로 보고 바로 조정</b> (→ FOR). <em>시간의 연속성</em>과 맞닿아요.</p></div>
+      <div class="merit"><div class="m-h">📊 데이터·기록</div><p>학생별 결과가 누적되어 <b>과정중심평가·피드백의 근거</b>. <em>종합성·연속성</em> 실현.</p></div>
+      <div class="merit"><div class="m-h">🪞 자기 점검</div><p>학생이 '내 결과 확인'으로 <b>스스로 성찰·조정</b> (→ AS). <em>잠재능력</em>을 믿는 평가.</p></div>
+      <div class="merit"><div class="m-h">🧭 오답의 자원화</div><p>오답 분포가 <b>오개념 지도</b>가 되어 다음 수업 설계로 이어져요.</p></div>
+      <div class="merit"><div class="m-h">📚 문제 제작 부담 완화</div><p>다른 선생님 퀴즈를 <b>복사 후 수정</b>해 바로 활용. 혼자 다 만들 필요 ✕.</p></div>
+    </div>
+    <details class="model-detail" style="margin-top:14px"><summary>📊 '데이터·기록' 자세히 — 연속성·종합성 & 젭퀴즈 학습 통계</summary>
+      <div class="md-body">
+        <p><b>시간의 연속성</b> = 평가가 한 번으로 끝나지 않고 <b>수업 전 과정에 걸쳐 이어지는 것</b>. <b>종합성</b> = 지필 하나가 아니라 <b>여러 자료로 학생을 종합적으로</b> 보는 것.</p>
+        <p class="md-yes">📈 <b>학생별 결과가 누적</b>되면 → 과정중심평가·피드백의 든든한 근거가 돼요. 젭퀴즈는 이걸 <b>학습 통계</b>로 제공해요!</p>
+        <p style="font-weight:700;color:var(--deep);margin:4px 0 8px">우리 반 학생들의 학습 현황을 확인해 볼까요?</p>
+        <div class="spm-links" style="margin-bottom:10px">
+          <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/articles/%ED%95%99%EC%8A%B5-%ED%86%B5%EA%B3%84-cc717048#%F0%9F%93%88-%ED%80%B4%EC%A6%88-%EA%B2%B0%EA%B3%BC-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0" target="_blank" rel="noopener">📈 퀴즈 결과 확인</a>
+          <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/articles/%ED%95%99%EC%8A%B5-%ED%86%B5%EA%B3%84-cc717048#%F0%9F%91%A5-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A5%BC-%EB%B0%94%EA%BF%94%EA%B0%80%EB%A9%B0-%EB%B9%84%EA%B5%90%ED%95%98%EC%84%B8%EC%9A%94" target="_blank" rel="noopener">👥 클래스 비교</a>
+          <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/articles/%ED%95%99%EC%8A%B5-%ED%86%B5%EA%B3%84-cc717048#%F0%9F%A7%91%E2%80%8D%F0%9F%8E%93-%ED%95%99%EC%83%9D%EB%B3%84-%ED%95%99%EC%8A%B5-%ED%86%B5%EA%B3%84-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0" target="_blank" rel="noopener">🧑‍🎓 학생별 통계</a>
+        </div>
+        <ul>
+          <li><b>퀴즈 결과 확인</b> — 퀴즈 카드의 <b>'학습 리포트'</b> 클릭 → 클래스 단위 결과. 같은 퀴즈를 여러 반에 공유해도 <b>클래스별 따로</b> 확인.</li>
+          <li><b>클래스 비교</b> — 상단 드롭다운에서 반 전환. <b>'전체 응시자'</b> 선택 시 모든 결과를 한 번에.</li>
+          <li><b>학생별 통계</b> — '학생 탭'에서 학생 클릭 → <b>퀴즈별 정답률 · 풀이 시간 · 문제별 정답/오답 · 완료 여부</b>.</li>
+          <li><b>플랜</b> — 학생별 통계는 <b>모든 플랜</b>. 학습 리포트 / 문제별 통계 / AI 학습 도우미는 <b>Pro 이상</b>.</li>
+        </ul>
+        <p class="md-tip">💡 정답률이 낮은 문제를 확인해 <b>다음 수업의 복습 자료</b>로 활용해 보세요.</p>
+      </div>
+    </details>
+    <div class="value-strip">
+      <div class="vs"><div class="vsk">즉시성</div><div class="vst">바로 보고 바로 조정</div><div class="vsd">응답이 실시간으로 모임</div></div>
+      <div class="vs"><div class="vsk">모두 참여</div><div class="vst">이미 모두가 나와서 푸는 셈</div><div class="vsd">"나와서 풀 사람?"이 필요 없어요</div></div>
+      <div class="vs"><div class="vsk">데이터</div><div class="vst">피드백·기록으로 연결</div><div class="vsd">과정중심평가의 근거</div></div>
+    </div>
+    <p style="margin-top:16px;color:var(--ink-soft);font-size:.95rem;line-height:1.65">즉시성 · 모두 참여 · 데이터 = 도구가 <b style="color:var(--deep)">'평가혁신'과 만나는 지점</b>. 오늘의 설계: <b style="color:var(--deep)">순간 → 알고 싶은 것 → 가벼운 도구 → 전원이 '생각하게'</b>.</p>
+    <div class="label" style="margin-top:30px">하지만 — 온라인 퀴즈의 한계도 분명해요</div>
+    <div class="demerit-grid">
+      <div class="demerit"><div class="d-h">✍️ 얕은 사고 우려</div><p>종이에 풀이 과정을 직접 쓰며 사고할 때보다, <b>보기 클릭은 얕은 사고</b>에 그칠 확률이 높아요.</p></div>
+      <div class="demerit"><div class="d-h">🏁 경쟁·속도 과열</div><p>순위·속도 점수가 <b>경쟁에만 치중</b>하게 해, 천천히 깊게 생각하는 학생이 불리해져요.</p></div>
+      <div class="demerit"><div class="d-h">🎮 표면적 참여</div><p>게임적 재미에 몰입해 <b>'내용'보다 '게임'</b>에 집중할 수 있어요.</p></div>
+      <div class="demerit"><div class="d-h">📵 기기·네트워크 의존</div><p>디바이스 속도·와이파이 문제로 <b>수업 흐름이 끊길</b> 수 있어요.</p></div>
+      <div class="demerit"><div class="d-h">🔲 닫힌 응답 형식</div><p>객관식 위주라 <b>서술·풀이 과정·창의적 표현</b>을 담기 어려워요.</p></div>
+      <div class="demerit"><div class="d-h">🫥 사고 과정 증발</div><p>화살표·그림·고쳐 쓴 흔적 같은 <b>'사고의 과정'이 남지 않아요</b>.</p></div>
+    </div>
+    <div class="callout"><span class="ci">!</span><p>그래서 <b>'언제 종이, 언제 퀴즈'</b>를 가르는 눈이 필요해요 — 깊은 사고가 핵심이면 종이, 즉시성·전원·데이터가 핵심이면 퀴즈.</p></div>
+  </div>
+</section>
+
+<section class="panel" id="tab-tools">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">04</span> · TOOL MAP</span><h2>도구 지도 — 목적으로 읽기</h2><p>"이 도구가 뭐예요?" ✕ &nbsp;→&nbsp; <b>"이 목적엔 어떤 도구?"</b> ○ &nbsp;·&nbsp; 강점 + <b>함정</b></p></div>
+    <div class="map-intro"><p>기능 설명서 ✕ &nbsp;·&nbsp; <b>순간 · 목적 · 주의할 함정</b> 중심</p></div>
+    <div class="purpose-band">
+      <span class="pchip">🟠 <b>동기·에너지</b></span>
+      <span class="pchip">🟢 <b>형성·사고 드러내기</b></span>
+      <span class="pchip">🔵 <b>데이터·피드백·기록</b></span>
+      <span class="pchip">🟣 <b>몰입·협력</b></span>
+    </div>
+    <div class="tool-grid">
+      <div class="tool">
+        <div class="tool-top"><h3>Kahoot</h3><span class="moment-tag">도입 · 정리</span></div>
+        <p class="ident">실시간 경쟁 퀴즈 · 빠른 에너지</p>
+        <dl>
+          <dt class="k-str">강점</dt><dd>즉각 에너지 · 아이스브레이킹 · 빠른 진단/확인</dd>
+          <dt class="k-warn">함정</dt><dd><b>속도 점수 = '빠른 손' 보상</b> · 게임이 내용 가림</dd>
+          <dt class="k-fit">잘 맞는 순간</dt><dd>도입(진단) · 정리(확인)</dd>
+          <dt class="k-tip">설계 팁</dt><dd>속도 끄기 · 익명 · <b>짝 토론 후 응답</b></dd>
+        </dl>
+      </div>
+      <div class="tool">
+        <div class="tool-top"><h3>Blooket</h3><span class="moment-tag">전개 · 복습</span></div>
+        <p class="ident">같은 문제 → <b>여러 게임 모드</b> · 운(luck) 요소</p>
+        <dl>
+          <dt class="k-str">강점</dt><dd><b>속도 불안 덜함</b> · 자기 페이스 모드</dd>
+          <dt class="k-warn">함정</dt><dd>게임에 밀려 <b>내용이 뒤로</b> (대충 찍기)</dd>
+          <dt class="k-fit">잘 맞는 순간</dt><dd>전개 반복·정착 · 단원 복습</dd>
+          <dt class="k-tip">설계 팁</dt><dd>핵심만 · 게임 후 <b>'왜?' 되짚기</b></dd>
+        </dl>
+      </div>
+      <div class="tool">
+        <div class="tool-top"><h3>젭 Zep Quiz</h3><span class="moment-tag">단원 마무리 · 협력</span></div>
+        <p class="ident">메타버스 공간 + 퀴즈 · '참여'가 곧 경험</p>
+        <dl>
+          <dt class="k-str">강점</dt><dd>이동·협력·몰입 · <b>방탈출/협력 미션</b></dd>
+          <dt class="k-warn">함정</dt><dd>적응·기기 부담 · <b>준비 시간 큼</b> (매 차시는 무거움)</dd>
+          <dt class="k-fit">잘 맞는 순간</dt><dd>단원 마무리 · 협력 탐구 · 특별한 한 차시</dd>
+          <dt class="k-tip">설계 팁</dt><dd><b>공간 맥락과 엮기</b> (문제 나열만 ✕)</dd>
+        </dl>
+      </div>
+      <div class="tool">
+        <div class="tool-top"><h3>MS Forms <span style="font-size:.66rem;color:var(--ink-faint)">+ Teams</span></h3><span class="moment-tag">형성 · 기록</span></div>
+        <p class="ident">설문·퀴즈 + 자동 채점. <b>Teams</b>로 배포·수합·분석까지 끊김 없이.</p>
+        <dl>
+          <dt class="k-str">강점</dt><dd>자동 채점·즉시 피드백, Teams 과제로 <b>배정·기록</b>, Insights로 데이터.</dd>
+          <dt class="k-warn">함정</dt><dd>게임적 재미는 약함 — <b>동기는 설계로 보완</b>.</dd>
+          <dt class="k-fit">잘 맞는 순간</dt><dd>형성평가, 과정중심평가 수합·기록, 누적 데이터.</dd>
+          <dt class="k-tip">설계 팁</dt><dd>학교가 MS 환경이면 최고의 선택. '분기(branching)'로 맞춤 피드백.</dd>
+        </dl>
+        <details class="tool-toggle"><summary>📋 Teams 연동 — 단계별 자세히</summary>
+          <div class="tt-body">
+            <p class="tt-lead">채팅창에서 <code>@Forms</code> 봇으로 즉석 퀴즈를 보내거나, 채널 탭에 폼을 고정해 함께 분석할 수 있어요.</p>
+            <div class="tt-h">1. 채팅·채널에서 퀴즈/설문 추가 (폴링)</div>
+            <ol>
+              <li>대화창 하단 도구에서 Forms 아이콘 클릭 또는 <code>@Forms</code> 입력</li>
+              <li>'새 설문 조사 만들기' 클릭</li>
+              <li>질문·보기 입력, 복수 응답 여부 설정</li>
+              <li>저장 후 보내기 → 채팅창에 공유, 바로 참여</li>
+            </ol>
+            <div class="tt-h">2. 팀 채널에 퀴즈 탭 추가</div>
+            <ol>
+              <li>연동할 채널로 이동 → 상단 탭 우측 <b>+</b>(탭 추가) 클릭</li>
+              <li>Forms 앱 검색·선택</li>
+              <li>'기존 양식 추가'로 내 퀴즈 연결 또는 새로 만들기</li>
+              <li>'공동 작업'·'결과 표시'·'양식 표시' 중 선택 → 저장</li>
+            </ol>
+          </div>
+        </details>
+        <div class="data-note">📊 응답 → 자동 채점 → <b>Excel·Insights</b> → 피드백·과세특 근거로</div>
+      </div>
+      <div class="tool">
+        <div class="tool-top"><h3>Google Forms <span style="font-size:.66rem;color:var(--ink-faint)">+ Classroom</span></h3><span class="moment-tag">형성 · 성적 연동</span></div>
+        <p class="ident">Forms 퀴즈를 <b>구글 클래스룸 과제</b>로 — 자동 채점부터 <b>성적 자동 입력</b>까지 한 흐름.</p>
+        <dl>
+          <dt class="k-str">강점</dt><dd>퀴즈 과제 → 제출 → <b>'성적 가져오기'</b>로 클래스룸 성적표에 자동 입력.</dd>
+          <dt class="k-fit">잘 맞는 순간</dt><dd>클래스룸 쓰는 학급의 형성·총괄평가, 점수 기록.</dd>
+          <dt class="k-tip">설계 팁</dt><dd>정확한 성적 연동을 위해 <b>과제엔 퀴즈 설문 1개만</b> 첨부!</dd>
+        </dl>
+        <details class="tool-toggle"><summary>📋 구글 클래스룸 연동 — 단계별 자세히</summary>
+          <div class="tt-body">
+            <div class="tt-h">🛠️ 1. 퀴즈 과제 생성 및 설정</div>
+            <ol>
+              <li><a href="https://classroom.google.com/" target="_blank" rel="noopener">Google Classroom</a> 접속 → 원하는 수업 선택</li>
+              <li>[수업] 탭 → [만들기] → <b>[퀴즈 과제]</b> 클릭</li>
+              <li>생성된 빈 Google 설문지를 클릭해 퀴즈 작성</li>
+              <li>설문지 우측 상단 톱니바퀴(설정)에서 <b>'퀴즈 만들기' 활성화</b></li>
+              <li>각 문항 [정답]·[배점] 입력 → 완성</li>
+            </ol>
+            <div class="tt-h">🔗 2. 퀴즈 연동 및 배포</div>
+            <ol>
+              <li>'퀴즈 과제' 창으로 돌아오기</li>
+              <li>첨부된 설문지 아래 <b>'성적 가져오기'</b>가 켜져 있는지 확인</li>
+              <li>[과제 만들기] 클릭 → 학생에게 배포</li>
+            </ol>
+            <p class="tt-note">⚠️ 정확한 성적 연동을 위해 과제엔 <b>퀴즈 설문지 1개만</b> 첨부하세요.</p>
+            <div class="tt-h">💯 3. 성적 가져오기</div>
+            <ol>
+              <li>학생 제출 후 → 과제 페이지 <b>[학생 과제]</b> 탭</li>
+              <li>우측 상단 <b>[성적 가져오기]</b> 클릭</li>
+              <li>학생별 점수가 클래스룸 성적표에 자동 입력</li>
+            </ol>
+          </div>
+        </details>
+        <div class="data-note">📊 퀴즈 과제 → 자동 채점 → <b>성적 자동 입력</b> → 기록</div>
+      </div>
+      <div class="tool" style="display:flex;flex-direction:column;justify-content:center;background:var(--card-2);border-style:dashed">
+        <div class="tool-top"><h3 style="color:var(--teal-deep)">+ 선생님 도구는?</h3></div>
+        <p class="ident" style="margin-bottom:6px">퀴즈앤 · Mentimeter · Padlet · Wordwall … <b>핵심은 도구가 아니라 목적</b></p>
+        <p style="font-size:.9rem;color:var(--ink-soft);line-height:1.55">평소 도구·경험을 <b style="color:var(--deep)">나눔 보드</b>에 → 함께 지도 넓히기</p>
+        <button class="tool-link" style="margin-top:14px;width:fit-content" onclick="switchTab('share')"><i>→</i>나눔 보드로 가기</button>
+      </div>
+    </div>
+    <div class="sen-note">
+      <div class="sen-flag">🇰🇷</div>
+      <div>
+        <div class="sen-h">퀴즈앤·젭퀴즈 — 서울 선생님께 희소식!</div>
+        <p>협약 교육청 × 퀴즈앤(AIEP) 루트 · <b>SEN스쿨 계정으로 퀴즈앤 유료 라이선스 무료</b> · 학생별 결과·엑셀까지 풀 기능. <a href="https://blog.naver.com/quizn0714/224144726385" target="_blank" rel="noopener">협약 안내 →</a></p>
+        <div class="sen-sum"><b>협약 교육청 11곳</b> — 전남·충남·부산·광주·전북·서울·인천·대전·경남·경북·강원. 지정 루트로 접속하면 유료 라이선스 자동 부여.<br><b>서울(SEN스쿨) 적용:</b> ① AIEP(senedu.kr) 접속 → 교사 로그인 → ② <b>@senedu.kr</b> 계정 → ③ 수업 도구 → 퀴즈앤 → ④ Pro 자동 부여 (~2027.02.28)</div>
+        <div class="sen-h" style="margin-top:15px">젭퀴즈(ZEP QUIZ)도 — 서울 공급 계약 ✅</div>
+        <p>젭퀴즈도 <b>서울특별시교육청교육연구정보원과 공급 계약</b>을 체결했어요(2025.09). 서울·부산 등 <b>시·도 교육청 산하 직속 기관을 통해 일선 학교에 공급</b>되고 있어, 서울 교사(<b>@sen.go.kr</b> 계정)는 교육청 루트로 도입·지원받을 수 있어요. <a href="https://docs.channel.io/zepquiz/ko/articles/zepquizxseouledu-89efc765" target="_blank" rel="noopener">젭퀴즈 × 서울교육청 안내 →</a></p>
+        <div class="sen-sum"><b>서울 도입:</b> 교육연구정보원 공급 계약(2025.09)으로 서울 학교에 보급 중 · <b>@sen.go.kr</b> 계정 루트 이용. 전국 <b>9,500여 개 학교 · 교사 8만여 명</b>이 활용, 교육부 'AI 중점 학교'에도 정식 도입돼요.</div>
+      </div>
+    </div>
+    <div class="label" style="margin-top:34px">한눈에 — 순간 × 도구 (◎ 매우 적합 · ○ 적합 · · 보통)</div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead><tr><th>순간 \ 도구</th><th>Kahoot</th><th>Blooket</th><th>젭 Zep</th><th>MS Forms</th><th>G Forms</th></tr></thead>
+        <tbody>
+          <tr><th>도입 · 진단</th><td class="yes">◎</td><td class="no">·</td><td class="no">·</td><td class="mid">○</td><td class="yes">◎</td></tr>
+          <tr><th>전개 · 형성</th><td class="mid">○</td><td class="yes">◎</td><td class="mid">○</td><td class="yes">◎</td><td class="yes">◎</td></tr>
+          <tr><th>정리 · 확인</th><td class="yes">◎</td><td class="yes">◎</td><td class="no">·</td><td class="mid">○</td><td class="mid">○</td></tr>
+          <tr><th>몰입 · 협력</th><td class="no">·</td><td class="mid">○</td><td class="yes">◎</td><td class="no">·</td><td class="no">·</td></tr>
+          <tr><th>데이터 · 기록</th><td class="no">·</td><td class="no">·</td><td class="no">·</td><td class="yes">◎</td><td class="yes">◎</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="more-tools">💡 이 표는 <b>정답이 아니라 출발점</b>이에요. 학교 환경(MS/Google), 학생 기기, 차시 성격에 따라 칸은 얼마든지 바뀝니다. 실습에서 직접 '체험하고 판단'해 보면서 여러분만의 표를 채워 보세요.</p>
+  </div>
+</section>
+
+<section class="panel" id="tab-labs">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">05</span> · HANDS-ON</span><h2>실습 — 직접 체험하고 설계하기</h2><p>실습 1은 <b>학생 입장에서 두 플랫폼(퀴즈앤·젭퀴즈)을 체험</b>, 실습 2는 '내 수업'의 평가 한 장면을 설계해 봅니다.</p></div>
+    <div class="lab">
+      <div class="lab-tag">실습 1 · 개인 체험 · 약 20분</div>
+      <h3>퀴즈앤·젭퀴즈, '학생'이 되어 직접 써보기</h3>
+      <p class="goal"><b>퀴즈앤·젭퀴즈</b>를 학생 입장에서 직접 체험 · 진행자 <b>PIN·QR</b>로 입장 → 재미·부담·이해 체감</p>
+      <div class="label">이렇게 해요</div>
+      <ol class="steps">
+        <li><span><b>PIN·QR로 입장</b> — 퀴즈앤 PIN / 젭 코드·QR</span></li>
+        <li><span><b>'학생'으로 직접 풀기</b> — 응답·랭킹·결과까지</span></li>
+        <li><span><b>'교사의 눈'으로 판단</b> — 우리 학교·내 수업에 맞나? 생각 vs 손?</span></li>
+        <li><span><b>보드에 후기</b> — <u>나눔 보드</u>에 한 줄</span></li>
+      </ol>
+      <div class="callout"><span class="ci">!</span><p><b>정답 없음.</b> 잣대는 하나 — <b>'우리 학교 학생, 그리고 내 수업'</b></p></div>
+      <div class="label">체험 링크 — 학생용 입장</div>
+      <div class="tools">
+        <a class="tool-link" href="https://www.quizn.show/quz/pin/gamePinForm.do" target="_blank" rel="noopener"><i>✦</i>퀴즈앤 입장(PIN)</a>
+        <a class="tool-link" href="https://zep.us" target="_blank" rel="noopener"><i>✦</i>젭퀴즈 입장</a>
+      </div>
+      <div class="qr-row">
+        <div class="qr-item"><div class="qr-code" data-qr="https://www.quizn.show/quz/pin/gamePinForm.do"></div><span>퀴즈앤 입장</span></div>
+        <div class="qr-item"><div class="qr-code" data-qr="https://zep.us"></div><span>젭퀴즈 입장</span></div>
+      </div>
+      <button class="wall-btn" style="margin-top:18px" onclick="switchTab('share')">📝 나눔 보드에 후기 →</button>
+    </div>
+    <div class="lab">
+      <div class="lab-tag">실습 2 · 개인 · 약 32분 · 오늘의 메인 🎯</div>
+      <h3>내 다음 수업의 '평가 한 장면' 설계하기</h3>
+      <p class="goal">내 수업의 <b>평가 한 장면</b>을 <b>목적 적합성</b>으로 설계 · 4단계 카드 따라가기</p>
+      <div class="label">4단계 설계 카드</div>
+      <div class="design-card">
+        <div class="dc-step"><div class="dc-n">1</div><div><h4>무엇을 위한 평가?</h4><p>FOR · AS · OF 중 하나 고르기</p><div class="eval-chips"><span class="ec for">FOR · 학습을 위한</span><span class="ec as">AS · 학습으로서의</span><span class="ec of">OF · 결과 확인</span></div><div class="ex">예) 형성평가 → FOR</div></div></div>
+        <div class="dc-step"><div class="dc-n">2</div><div><h4>순간 고르기</h4><p>도입 · 전개 · 정리 중</p><div class="ex">예) 전개 — 굴절 설명 직후</div></div></div>
+        <div class="dc-step"><div class="dc-n">3</div><div><h4>알고 싶은 것 한 문장</h4><p><b>들여다보고 싶은 것</b> + <b>학생이 얻을 것</b></p><div class="ex">예) 굴절각 변화를 '거꾸로' 알진 않나?</div></div></div>
+        <div class="dc-step"><div class="dc-n">4</div><div><h4>수업 방식 정하기</h4><p>전원이 '생각하게' 모형 + 퀴즈 결합 (아래)</p><div class="ex">예) 짝 토론 후 응답</div></div></div>
+      </div>
+      <div class="label" style="margin-top:26px">수업 모형 — 전원이 '생각하게'</div>
+      <div class="model-grid">
+        <div class="model"><div class="mo-h">STAD · 모둠성취분담</div><p>모둠 학습 → <b>개별 퀴즈</b> → 향상 점수 · 개별 책무성</p></div>
+        <div class="model"><div class="mo-h">짝 토론 · Think-Pair-Share</div><p>혼자 → 짝 → 응답 · <b>응답 전 짝 토론</b></p></div>
+        <div class="model"><div class="mo-h">직소 · Jigsaw</div><p>전문가 그룹 → 원 모둠 전달 → <b>파트별 퀴즈</b></p></div>
+      </div>
+      <div class="label" style="margin-top:24px">🔬 온라인 퀴즈로 수업 모형 적용하기 — STAD · 직소</div>
+      <details class="model-detail"><summary>STAD(모둠성취분담) — 온라인 퀴즈로 이렇게 (수업 사례)</summary>
+        <div class="md-body">
+          <p class="md-yes">✅ <b>온라인 퀴즈와 찰떡 — '개별 향상 점수 → 모둠 점수'를 데이터로 쉽게 계산해요.</b></p>
+          <p style="font-weight:700;color:var(--deep);margin:2px 0 6px">📚 예시 수업 — 중2 과학 '밀도'</p>
+          <ol>
+            <li><b>전체 제시</b> — 교사가 '밀도 = 질량/부피' 핵심 개념을 전체에게 설명·시연 (약 10분).</li>
+            <li><b>모둠 학습</b> — 4명 이질 모둠. 연습문제를 함께 풀며 <b>서로 가르쳐</b> 모두가 이해하게 (모둠 전체의 책임). 잘하는 학생은 설명, 막히는 학생은 질문.</li>
+            <li><b>개별 퀴즈</b> — 퀴즈앤/젭으로 <b>개별 응시</b> (모둠 도움 ✕). 각자 실력을 측정해요.</li>
+            <li><b>향상 점수 → 모둠 점수</b> — 지난 퀴즈(기준 점수) 대비 <b>얼마나 올랐는지</b>를 점수화. 모둠원 향상 점수의 합 = 모둠 점수. <b>못하던 학생도 오르면 크게 기여 → 모두가 동기!</b></li>
+            <li><b>모둠 보상</b> — 향상 점수가 높은 모둠을 인정·보상.</li>
+          </ol>
+          <p class="md-tip">💡 젭 <b>학습 통계</b>로 학생별 점수를 추적하면 향상도 계산이 쉬워요. 같은 난이도 퀴즈를 주기적으로 내면 '성장'이 한눈에 보여요.</p>
+        </div>
+      </details>
+      <details class="model-detail"><summary>직소(Jigsaw) — 온라인 퀴즈로 이렇게</summary>
+        <div class="md-body">
+          <p class="md-yes">✅ <b>됩니다 — 전문가 그룹용 퀴즈 + 종합 퀴즈로 책무성을 잡아요.</b></p>
+          <ol>
+            <li><b>주제 분담</b> — 원 모둠에서 학생마다 다른 소주제 배정.</li>
+            <li><b>전문가 그룹 학습</b> — 같은 주제끼리 모여 학습 → <b>그 주제 퀴즈</b>로 숙달 확인(통과해야 복귀).</li>
+            <li><b>원 모둠 복귀</b> — 각자 자기 주제를 모둠원에게 가르침.</li>
+            <li><b>종합 퀴즈로 개별 확인</b> — <b>모든 주제를 포함</b>한 퀴즈를 개별로 풀기. 내 주제만 알면 못 풀게 설계.</li>
+            <li>젭 <b>클래스</b>로 모둠별 결과를 분리해 보면 누가 어느 주제에서 막혔는지 한눈에.</li>
+          </ol>
+          <p class="md-tip">💡 퀴즈 2종 준비: <b>주제별(전문가용)</b> + <b>종합(개별 확인용)</b>. 자료실에서 복사해 빠르게!</p>
+        </div>
+      </details>
+      <div class="q-guide">
+        <h4>🧪 평가 문항이 갖춰야 할 요소</h4>
+        <p class="qg-sub">'맞히기 게임'을 넘어, <b>한 문항이 갖춰야 할 기본기</b>를 체크해요.</p>
+        <ul class="rule-list">
+          <li><b>타당도</b> — 측정하려는 <b>성취기준·목표를 실제로</b> 측정하는가. (목표 ↔ 문항 일치)</li>
+          <li><b>명확한 발문</b> — 한 가지로만 해석되는 분명한 질문. 애매함·중의성 제거.</li>
+          <li><b>적절한 난이도</b> — 너무 쉽지도 어렵지도 않게, 핵심을 가르는 수준으로.</li>
+          <li><b>매력적인 오답</b> — 오답 보기가 <b>흔한 오개념을 반영</b>해 그럴듯해야. (찍기 방지)</li>
+        </ul>
+        <div class="ai-warn">🤖 <b>주의 — 퀴즈 플랫폼 내장 AI 문제 생성은 위 요소를 대부분 충족하지 못해요.</b> 오히려 <b>고치는 데 더 오래 걸립니다</b>. → <b>다른 선생님이 공유하신 퀴즈를 복사해 쓰거나, 처음부터 직접 만드는 편</b>이 더 빠르고 좋아요.</div>
+      </div>
+      <div class="label">보너스 — 실제로 만들어 보기</div>
+      <p class="note"><b>퀴즈앤·젭퀴즈로 직접 제작</b> · 자료실에 비슷한 게 있으면 <b>복제 후 수정</b>, 없으면 새로 → <b>나눔 보드</b>에 공유 🙌</p>
+      <div class="prompt-box">
+        <span class="pl">설계 메모 — 복사해서 채우기</span>
+        <button class="copy-btn" data-copy="designTpl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
+        <code id="designTpl">[평가 유형] FOR/AS/OF 중:
+[순간] 도입/전개/정리 중:
+[알고 싶은 것] 들여다볼 것 / 학생이 얻을 것:
+[수업 방식] STAD/짝토론/동료교수/직소 중:
+[문항 1] :
+[문항 2] :
+[오답으로 드러낼 오개념] :</code>
+      </div>
+      <div class="tools">
+        <a class="tool-link" href="https://www.quizn.show" target="_blank" rel="noopener"><i>✦</i>퀴즈앤</a>
+        <a class="tool-link" href="https://zep.us" target="_blank" rel="noopener"><i>✦</i>젭퀴즈</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="tab-makequiz">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">06</span> · MAKE</span><h2>오늘 만들 퀴즈 — 따라 만들기</h2><p>화면 시연을 따라 <b>퀴즈앤·젭퀴즈</b>로 <b>당장 수업에서 쓸 퀴즈 하나</b>를 직접 만들어요. 키워드만 보고, 나머지는 함께 클릭하면서 ✨</p></div>
+    <div class="selfpaced">
+      <div class="sp-h">📣 이 시간은 '강의' 대신 '직접 해보기'예요</div>
+      <p>선생님마다 <b>속도가 다르고</b>, 이미 만들어 보신 분도 계실 거예요. 그래서 정해진 속도로 강의하지 않고, <b>매뉴얼을 보며 각자 직접</b> 만들어 보시도록 했어요. 대신 제가 <b>열심히 돌아다니며 도와드릴게요!</b> 🏃 막히면 언제든 손 들어 주세요!</p>
+      <div class="sp-manuals">
+        <div class="spm-head">📄 따라 할 매뉴얼 — 막히면 참고하세요</div>
+        <div class="spm-group">
+          <div class="spm-label">🟠 퀴즈앤</div>
+          <div class="spm-links">
+            <a class="spm-btn" href="https://blog.naver.com/quizn0714/224144726385" target="_blank" rel="noopener">SEN스쿨 계정 로그인 방법</a>
+            <a class="spm-btn" href="https://softninc-my.sharepoint.com/:b:/r/personal/gy_lee_softn_kr1/Documents/1.%20%ED%80%B4%EC%A6%88%EC%95%A4/%EB%A7%A4%EB%89%B4%EC%96%BC/softN_QuizN_%EB%A7%A4%EB%89%B4%EC%96%BC_260612/softN_QuizN_Show%20%EB%A7%A4%EB%89%B4%EC%96%BC_260612.pdf?csf=1&amp;web=1&amp;e=2f7vN5" target="_blank" rel="noopener">퀴즈쇼 이용 매뉴얼 (PDF)</a>
+          </div>
+          <p class="spm-tip">💡 매뉴얼을 보기보다 <b>버튼을 직접 눌러보며</b> 기능을 익히는 걸 추천해요!</p>
+        </div>
+        <div class="spm-group">
+          <div class="spm-label">🟣 젭퀴즈</div>
+          <div class="spm-links">
+            <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/categories/%ED%80%B4%EC%A6%88-%EC%A0%9C%EC%9E%91%ED%95%98%EA%B8%B0-a75c2e88" target="_blank" rel="noopener">퀴즈 제작하기</a>
+            <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/categories/%ED%81%B4%EB%9E%98%EC%8A%A4-%EC%A0%9C%EC%9E%91%ED%95%98%EA%B8%B0-9629fc5f" target="_blank" rel="noopener">클래스 제작하기</a>
+            <a class="spm-btn z" href="https://docs.channel.io/zepquiz/ko/categories/%EC%88%98%EC%97%85%EC%97%90%EC%84%9C-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0-b3a80e78" target="_blank" rel="noopener">수업에서 활용하기</a>
+            <a class="spm-btn z" href="https://quiz-blog.zep.us/zep-quiz-class-feature#%EC%A0%AD-%ED%80%B4%EC%A6%88-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%9E%80-0" target="_blank" rel="noopener">젭 퀴즈 클래스란?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="why-sen">
+      <div class="why-h">왜 퀴즈앤 · 젭퀴즈? — 서울교육청과 함께</div>
+      <ul>
+        <li><b>퀴즈앤</b> — 서울교육청 협약 → <b>SEN스쿨(AIEP) 계정 = Pro 무료</b> (~2027.02.28)</li>
+        <li><b>젭(Zep)</b> — 서울교육청 지원 에듀테크 (캔바·패들렛·Gemini·GPT 등과 함께)</li>
+      </ul>
+      <div class="sen-story">
+        <div class="ss-h">+ SEN스쿨 계정, 이제는 표준</div>
+        <p>SENGPT도 5/1부터 SEN스쿨 전용 · 혜택 집중 = 사실상 강제 → <b>안 쓸 이유 없음</b></p>
+      </div>
+    </div>
+    <div class="access-box">
+      <div class="ab-h">🔑 접속하기 — SEN스쿨 계정 있으세요?</div>
+      <div class="ab-grid">
+        <div class="ab"><span class="ab-tag yes">계정 있음</span><p><b>SEN스쿨 계정이 있으면</b> → <a href="https://senedu.kr" target="_blank" rel="noopener">senedu.kr</a> 접속 → 수업 도구에서 <b>퀴즈앤·젭퀴즈 바로 사용</b> (Pro 무료!)</p></div>
+        <div class="ab"><span class="ab-tag no">계정 없음</span><p><b>아직 없으면</b> → 퀴즈앤부터 가입하세요. 아래 매뉴얼대로 따라오면 금방이에요.</p><a class="ab-btn" href="https://softninc-my.sharepoint.com/personal/gy_lee_softn_kr1/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fgy%5Flee%5Fsoftn%5Fkr1%2FDocuments%2F1%2E%20%ED%80%B4%EC%A6%88%EC%95%A4%2F%EB%A7%A4%EB%89%B4%EC%96%BC%2FsoftN%5FQuizN%5F%ED%9A%8C%EC%9B%90%20%EA%B0%80%EC%9E%85%20%EC%95%88%EB%82%B4%5F20240924%2Epdf&amp;parent=%2Fpersonal%2Fgy%5Flee%5Fsoftn%5Fkr1%2FDocuments%2F1%2E%20%ED%80%B4%EC%A6%88%EC%95%A4%2F%EB%A7%A4%EB%89%B4%EC%96%BC&amp;ga=1" target="_blank" rel="noopener">📄 퀴즈앤 가입 매뉴얼(PDF) →</a></div>
+      </div>
+    </div>
+    <div class="start-choice">
+      <div class="sc-h">시작 전 — 둘 중 하나로</div>
+      <div class="sc-grid">
+        <div class="sc"><div class="sc-n">①</div><div><b>이미 있다면 → 복제 후 수정</b><p>자료실에 비슷한 퀴즈가 있으면, <b>다른 선생님이 올린 퀴즈를 복사</b>해 내 수업에 맞게 고쳐 쓰기 — 가장 빠른 길!</p></div></div>
+        <div class="sc"><div class="sc-n">②</div><div><b>없으면 → 새로 만들기</b><p>딱 맞는 게 없으면 아래 순서대로 직접 제작.</p></div></div>
+      </div>
+    </div>
+    <div class="make-grid">
+      <div class="make-card quizn">
+        <h3>🟠 퀴즈앤으로 만들기</h3>
+        <div class="mk-sub">SEN스쿨 계정 = Pro 무료 · 한국형 카훗</div>
+        <ol class="steps">
+          <li><span><b>SEN스쿨(AIEP) 로그인</b> → 수업 도구 → 퀴즈앤</span></li>
+          <li><span><b>'만들기'</b> → 제목 입력</span></li>
+          <li><span><b>퀴즈 타입</b> 고르기 (선택형·OX·단답·순서완성·초성…)</span></li>
+          <li><span><b>문항·보기</b> 입력 — <b>오개념 보기 한 개</b> 넣기!</span></li>
+          <li><span><b>저장</b> → Show(실시간) / 과제로 공유</span></li>
+        </ol>
+        <div class="demo-tip">📊 응시 후 → 학생별 결과 · 엑셀 내보내기</div>
+      </div>
+      <div class="make-card zep">
+        <h3>🟣 젭퀴즈로 만들기</h3>
+        <div class="mk-sub">메타버스 + 퀴즈 · 학생별 통계 무료</div>
+        <ol class="steps">
+          <li><span><b>퀴즈 '만들기'</b> → 문항 추가</span></li>
+          <li><span><b>'클래스' 만들기</b> (반 이름 → 입장 코드)</span></li>
+          <li><span><b>클래스에 퀴즈 연결</b></span></li>
+          <li><span><b>학생 초대</b> (코드·QR · <b>로그인 먼저!</b>)</span></li>
+          <li><span><b>학습 통계</b>로 학생별 결과 확인 → 복습</span></li>
+        </ol>
+        <div class="demo-tip">🗂️ 반별 자동 분리 · 닉네임 바꿔도 학급 이름 유지</div>
+      </div>
+    </div>
+    <div class="plan-box">
+      <div class="plan-h">참고 · 젭퀴즈 Basic(무료) 플랜 — 이만큼 됩니다</div>
+      <div class="plan-cols">
+        <ul class="plan-yes">
+          <li><b>동시 접속</b> 최대 200명</li>
+          <li><b>맵</b> — 무료 맵 + 베이직 전용 맵</li>
+          <li><b>퀴즈 비공개</b> — 자료실에 공개 안 하고 나만 보기</li>
+          <li><b>학습 리포트(학생별)</b> — 참여자별 정답률 + 풀이시간</li>
+        </ul>
+        <ul class="plan-no">
+          <li><b>워크시트 PDF 저장</b> — 제한</li>
+          <li><b>여러 퀴즈 이어 풀기</b> — 제한</li>
+          <li><b>문제별 평균 정답률·소요시간</b> — 불가</li>
+          <li><b>전체 참여 현황·특이사항</b> — 불가</li>
+        </ul>
+      </div>
+      <div class="plan-ai">🤖 <b>Quiz AI</b> — 이용은 되지만 <b>비추천</b>(유사 문제·보기/정답 생성·다국어 번역·AI 학습 도우미는 사실상 막힘). 차라리 <b>자료실에서 다른 선생님 퀴즈를 복사 후 수정</b>하는 게 더 빠르고 좋아요.</div>
+    </div>
+    <div class="make-goal">🎯 오늘의 목표 — 당장 수업에서 쓸 퀴즈 하나 완성!</div>
+  </div>
+</section>
+
+<section class="panel" id="tab-share">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">07</span> · SHARE</span><h2>나눔 보드</h2><p>오늘의 절반 = '서로에게 배우기' · 도구·경험·설계를 실시간 공유 💬</p></div>
+    <div class="demo-banner" id="shareBanner">⚙️ <b>지금은 데모 모드예요</b> — 적은 내용이 이 화면엔 바로 뜨지만, 새로고침하면 사라지고 다른 기기와도 공유되지 않아요. 실제 연수에서 <b>여러 기기 실시간 공유</b>가 필요하면, 꼬리별 페이지에서 쓰시던 것처럼 맨 위 <code>SUPABASE_URL</code>·<code>SUPABASE_KEY</code>만 채우면 됩니다(아래 보드 두 개가 자동으로 연결돼요).</div>
+    <div class="wall">
+      <div class="wall-head"><h3>🧰 평소 쓰는 도구 + 한 줄 경험 <span class="wall-count" id="w1Count"></span></h3></div>
+      <p class="wall-sub">평소 쓰는 도구 + 한 줄 경험 (성공/실패)</p>
+      <div class="wall-form">
+        <div class="row2">
+          <input type="text" id="w1Name" class="w-name" placeholder="이름(선택)" maxlength="20">
+          <select id="w1Tool" class="w-sel">
+            <option value="">도구 선택…</option>
+            <option>Kahoot</option><option>Blooket</option><option>젭 Zep</option>
+            <option>MS Forms</option><option>Google Forms</option><option>퀴즈앤</option>
+            <option>Mentimeter</option><option>Padlet</option><option>기타</option>
+          </select>
+        </div>
+        <textarea id="w1Text" class="w-text" rows="2" placeholder="예: Blooket은 복습에 좋은데, 게임에 빠져서 문제를 대충 읽더라고요…" maxlength="220"></textarea>
+        <div class="wall-actions"><button class="wall-btn" id="w1Btn">남기기</button><span class="wall-status" id="w1Status"></span></div>
+      </div>
+      <div class="wall-list" id="w1List"><p class="wall-empty">아직 글이 없어요. 첫 경험을 남겨보세요!</p></div>
+    </div>
+    <div class="wall">
+      <div class="wall-head"><h3>🧪 오늘 체험한 도구 후기 <span class="wall-count" id="w3Count"></span></h3></div>
+      <p class="wall-sub">실습 1에서 써본 도구 + <b>학생 입장 느낌</b> · <b>우리 수업에 맞을지</b></p>
+      <div class="wall-form">
+        <div class="row2">
+          <input type="text" id="w3Name" class="w-name" placeholder="이름(선택)" maxlength="20">
+          <select id="w3Tool" class="w-sel">
+            <option value="">체험한 도구…</option>
+            <option>Kahoot</option><option>Blooket</option><option>젭 Zep</option>
+            <option>MS Forms</option><option>Google Forms</option><option>퀴즈앤</option>
+            <option>Mentimeter</option><option>Padlet</option><option>기타</option>
+          </select>
+          <select id="w3Fit" class="w-sel">
+            <option value="">우리 수업에…</option>
+            <option>강추 👍</option><option>괜찮아요 🙂</option><option>상황 따라 🤔</option><option>우리 학교엔 글쎄 🙅</option>
+          </select>
+        </div>
+        <textarea id="w3Text" class="w-text" rows="2" placeholder="예: 학생으로 써보니 부담 없이 빠져들었어요. 다만 속도 경쟁이 과해서, 우리 반엔 익명 모드로 쓰면 좋겠어요." maxlength="220"></textarea>
+        <div class="wall-actions"><button class="wall-btn" id="w3Btn">후기 남기기</button><span class="wall-status" id="w3Status"></span></div>
+      </div>
+      <div class="wall-list" id="w3List"><p class="wall-empty">아직 후기가 없어요. 첫 체험 후기를 남겨보세요!</p></div>
+    </div>
+    <div class="wall">
+      <div class="wall-head"><h3>🎯 오늘 설계한 '평가 한 장면' <span class="wall-count" id="w2Count"></span></h3></div>
+      <p class="wall-sub">실습 2 설계 장면 + 링크 · 서로의 설계 = 영감</p>
+      <div class="wall-form">
+        <div class="row2">
+          <input type="text" id="w2Name" class="w-name" placeholder="이름(선택)" maxlength="20">
+          <input type="text" id="w2Title" class="w-title" placeholder="장면 제목 — 예: '굴절 오개념 점검'" maxlength="40" style="flex:1;min-width:160px">
+        </div>
+        <div class="design-fields">
+          <div class="df-row">
+            <label class="df-l">평가 유형
+              <select id="w2Type" class="w-sel"><option value="">선택</option><option>FOR</option><option>AS</option><option>OF</option></select>
+            </label>
+            <label class="df-l">순간
+              <select id="w2Moment" class="w-sel"><option value="">선택</option><option>도입</option><option>전개</option><option>정리</option></select>
+            </label>
+            <label class="df-l">수업 방식
+              <select id="w2Method" class="w-sel"><option value="">선택</option><option>STAD</option><option>짝토론</option><option>동료교수법</option><option>직소</option><option>기타</option></select>
+            </label>
+          </div>
+          <input type="text" id="w2Want" class="w-text" placeholder="알고 싶은 것 — 들여다볼 것 / 학생이 얻을 것" maxlength="120">
+          <textarea id="w2Q1" class="w-text" rows="2" placeholder="문항 1 — 실제 낼 문항을 적어보세요" maxlength="160"></textarea>
+          <textarea id="w2Q2" class="w-text" rows="2" placeholder="문항 2 — (선택)" maxlength="160"></textarea>
+          <input type="text" id="w2Misc" class="w-text" placeholder="오답으로 드러낼 오개념 —" maxlength="120">
+        </div>
+        <input type="text" id="w2Url" class="w-url" placeholder="만든 링크(선택) — https://…">
+        <div class="wall-actions"><button class="wall-btn" id="w2Btn">공유하기</button><span class="wall-status" id="w2Status"></span></div>
+      </div>
+      <div class="wall-list" id="w2List"><p class="wall-empty">아직 공유된 설계가 없어요. 첫 설계를 올려보세요!</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="tab-timer">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">08</span> · TIMER</span><h2>진행 타이머</h2><p>실습·휴식 시간을 함께 지켜요. 시작하면 상단 바에도 남은 시간이 떠요.</p></div>
+    <div class="timer-wrap" id="timerWrap">
+      <div class="dial">
+        <svg viewBox="0 0 240 240"><circle class="track" cx="120" cy="120" r="108"/><circle class="prog" id="progRing" cx="120" cy="120" r="108" stroke-dasharray="678.58" stroke-dashoffset="0"/></svg>
+        <div class="read"><div class="t" id="timerDisplay">25:00</div><div class="lab2" id="timerLabel">실습 1</div></div>
+      </div>
+      <div class="timer-ctl">
+        <h3>지금 무엇을 하고 있나요?</h3>
+        <p class="desc">프리셋을 고르거나 직접 분을 입력하세요.</p>
+        <div class="presets" id="presets">
+          <button class="preset active" data-min="25" data-label="실습 1">실습 1 · 25분</button>
+          <button class="preset" data-min="32" data-label="실습 2">실습 2 · 32분</button>
+          <button class="preset" data-min="10" data-label="경험 나눔">나눔 · 10분</button>
+          <button class="preset" data-min="8" data-label="휴식">휴식 · 8분</button>
+        </div>
+        <div class="custom">직접 설정 · <input type="number" id="customMin" min="1" max="180" placeholder="분"> <button class="preset" id="setCustom">설정</button></div>
+        <div class="timer-actions"><button class="t-btn t-start" id="startBtn">시작</button><button class="t-btn t-reset" id="resetBtn">초기화</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="tab-nonsense">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">09</span> · BREAK</span><h2>넌센스 퀴즈 — 쉬어가기</h2><p>먼저 맞춰보고, 클릭해서 정답 확인! 머리 식히고 다시 집중 😄</p></div>
+    <div class="nonsense-note">🧠 진행자가 문제를 읽으면 다 같이 정답 외치기 → 클릭해서 확인! <b>총 15문제</b>예요.</div>
+    <details class="nq"><summary>1. 오이가 무를 치면?</summary><div class="nq-a">→ 오이무침</div></details>
+    <details class="nq"><summary>2. 오징어가 대출을 못 받는 이유는? <span class="nq-h">(○○○○)</span></summary><div class="nq-a">→ 연체동물 <span class="nq-x">(대출 '연체' ↔ 연체동물)</span></div></details>
+    <details class="nq"><summary>3. 사고 나면 후회하는 의자는? <span class="nq-h">(○○○○○)</span></summary><div class="nq-a">→ 팔걸이의자</div></details>
+    <details class="nq"><summary>4. 의자에 앉으면 졸린 이유는? <span class="nq-h">(○○○)</span></summary><div class="nq-a">→ 안자서 <span class="nq-x">('앉아서')</span></div></details>
+    <details class="nq"><summary>5. 자동차가 화나면 오히려? <span class="nq-h">(○○○)</span></summary><div class="nq-a">→ 차분함</div></details>
+    <details class="nq"><summary>6. 호주에서 꽃을 사면 안 되는 이유는? 꽃이 ○○○까.</summary><div class="nq-a">→ 시드니 <span class="nq-x">('꽃이 시드니까')</span></div></details>
+    <details class="nq"><summary>7. 베를린에서 물을 마시면 안 되는 이유는? ○○ ○○ 있으니까.</summary><div class="nq-a">→ 독일수도 <span class="nq-x">('독일 수도 있으니까')</span></div></details>
+    <details class="nq"><summary>8. 그늘에 있으면 행복한 이유는? ○○해서.</summary><div class="nq-a">→ 해피 <span class="nq-x">('해 피해서' = happy)</span></div></details>
+    <details class="nq"><summary>9. 김치가 가위바위보에서 바위를 내면 안 되는 이유는? ○○○니까.</summary><div class="nq-a">→ 묵은지 <span class="nq-x">(바위='묵' → '묵은지'니까)</span></div></details>
+    <details class="nq"><summary>10. 사슴을 맨손으로 만지면 안 되는 이유는? ○○○서.</summary><div class="nq-a">→ 손디어 <span class="nq-x">('손 대어서')</span></div></details>
+    <details class="nq"><summary>11. 사슴이 시력이 좋으면? <span class="nq-h">(○○○○○)</span></summary><div class="nq-a">→ 굿아이디어 <span class="nq-x">(good + 아이(eye) + deer)</span></div></details>
+    <details class="nq"><summary>12. 산소를 싫어하는 사람은? ○○기피자.</summary><div class="nq-a">→ 오뚜기피자 <span class="nq-x">(O₂(오투) 기피자)</span></div></details>
+    <details class="nq"><summary>13. 아이언맨이 사실 여자인 이유는? <span class="nq-h">(영어 6글자)</span></summary><div class="nq-a">→ female <span class="nq-x">(Fe(철) + male)</span></div></details>
+    <details class="nq"><summary>14. 세상에서 제일 뜨거운 과일은? <span class="nq-h">(○○○○○)</span></summary><div class="nq-a">→ 천도복숭아 <span class="nq-x">(1000°)</span></div></details>
+    <details class="nq"><summary>15. 자동차 키의 색깔은? <span class="nq-h">(○○○)</span></summary><div class="nq-a">→ 카키색 <span class="nq-x">(car + 키)</span></div></details>
+  </div>
+</section>
+
+<section class="panel" id="tab-data">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><span class="num">＋</span> · APPENDIX</span><h2>[참고] 강의에서 다루지 않은 내용</h2><p class="bonus-lead">📎 여러 내용이 섞여 있지만, 모두 <b>강의에서 다루지 않고 자료로만 남겨 둔</b> 참고용이에요. (거꾸로 설계 · 데이터·피드백)</p><p>게임적 재미 너머 → <b>응답을 '성장의 증거'로</b> · 피드백·기록으로 닫히는 고리</p></div>
+    <div class="ref-h">① 거꾸로(백워드) 설계 & 참여의 깊이</div>
+    <div class="ref-block">
+      <p><b>도구는 맨 마지막에.</b> '재미있는 도구'에서 시작하지 말고, 끝(무엇을 알고 싶은가)에서 시작해 거꾸로 — ① 목표·증거 → ② 어떻게 드러낼까 → ③ 그래서 어떤 도구.</p>
+      <p><b>'참여'에는 깊이가 있어요.</b> 빠른 클릭(표면적) ≠ '왜'를 생각하는 것(인지적). 끌어올리는 장치: <b>짝 토론 후 응답 · 속도 끄기·익명 · 전원 응답 · 오답의 자원화</b>.</p>
+    </div>
+    <div class="ref-h" style="margin-top:26px">② 데이터·피드백의 고리</div>
+    <div class="label">평가의 고리 — 응답이 여기서 닫힙니다</div>
+    <div class="loop">
+      <div class="loop-node"><div class="ln-n">STEP 1</div><div class="ln-t">응답</div><div class="ln-d">전원이 답하며 사고를 드러냄</div></div>
+      <div class="loop-node"><div class="ln-n">STEP 2</div><div class="ln-t">채점·분석</div><div class="ln-d">자동 채점 + 보기 분포로 오개념 파악</div></div>
+      <div class="loop-node"><div class="ln-n">STEP 3</div><div class="ln-t">피드백</div><div class="ln-d">개인·집단 맞춤 피드백</div></div>
+      <div class="loop-node"><div class="ln-n">STEP 4</div><div class="ln-t">기록</div><div class="ln-d">과정중심평가·과세특 근거로 누적</div></div>
+    </div>
+    <div class="data-card">
+      <div class="dc-tag">GOOGLE FORMS + APPS SCRIPT</div>
+      <h3>응답을 '자동 피드백'으로 — 손은 덜고, 피드백은 늘리고</h3>
+      <p>Google Forms 자동 채점 + <b>Apps Script</b> → <b>학생별 맞춤 피드백 자동 발송</b> · 점수대별 분기 · <b>대시보드</b>. 응답이 곧바로 <b>피드백으로</b> 돌아옴.</p>
+      <ul class="rule-list">
+        <li>제출 즉시 <b>개인 피드백 메일</b> 자동 발송 (오답 문항·해설 포함)</li>
+        <li>점수·응답에 따라 <b>맞춤 분기</b> (예: 60점 미만엔 보충 자료 링크)</li>
+        <li>응답을 시트에 모아 <b>반별·문항별 대시보드</b>로 한눈에</li>
+      </ul>
+      <div class="vibe-tie">
+        <div class="vt-h">🪄 스크립트, 직접 짜지 마세요 — AI에게 시키세요!</div>
+        <p>이미 <b>'말로 만드는'</b> 분들이잖아요 😉 프롬프트 → Gemini·ChatGPT → 코드를 Forms 스크립트 편집기에 붙이면 끝!</p>
+      </div>
+      <div class="prompt-box">
+        <span class="pl">APPS SCRIPT 요청 프롬프트</span>
+        <button class="copy-btn" data-copy="appsScript"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
+        <code id="appsScript">Google Forms 응답이 제출되면, 응답한 학생 이메일로 '개인 맞춤 피드백 메일'을 자동으로 보내는 Apps Script를 만들어줘. 점수가 60점 미만이면 보충 안내 문구를, 이상이면 칭찬 문구를 넣어줘. 폼에는 이름·이메일·객관식 문항이 있어. 설치 방법(트리거 설정 포함)도 한국어로 단계별로 알려줘.</code>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="dc-tag">MS FORMS + TEAMS</div>
+      <h3>학교가 MS 환경이라면 — 배정·채점·기록이 한 흐름</h3>
+      <p>MS Forms 퀴즈 → <b>Teams 과제</b> = 배정·채점·반환·기록이 한 흐름 · <b>Insights</b>로 패턴 · <b>Excel</b>로 분석.</p>
+      <ul class="rule-list">
+        <li>Teams 과제로 <b>배정 → 자동 채점 → 점수 반환</b>이 한 곳에서</li>
+        <li><b>Insights</b>로 참여·정답 패턴을 데이터로</li>
+        <li>응답을 <b>Excel</b>로 내려 과정중심평가 기록으로</li>
+      </ul>
+    </div>
+    <div class="record-strip">
+      <div class="rs-eyebrow">◆ 왜 이게 '혁신'인가</div>
+      <h3>일회성 점수에서 → '성장의 증거'로</h3>
+      <p>핵심은 <b>'재미'가 아니라 '고리'</b> · 응답 → <b>피드백</b> → <b>다음 수업</b> → <b>성장의 근거(과세특)</b>. 도구는 바퀴일 뿐, 중심은 늘 <b>'학생의 사고를 보는 설계'</b>.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="fmark"><i class="f1"></i><i class="f2"></i><i class="f3"></i></div>
+  <div class="fw">모두가 답하는 교실</div>
+  <div class="fs">2026 학교로 찾아가는 수업 평가혁신 직무연수</div>
+  <div class="fmsg">— 도구가 아니라, 설계가 수업을 바꾼다 —</div>
+</footer>
+
+<script>
+/* ═══════════ (선택) Supabase 연동 — 실시간 공유가 필요하면 채우세요 ═══════════
+   비워 두면 '데모 모드'(이 화면 안에서만, 새로고침 시 초기화)로 동작합니다.
+   채우면 두 개의 나눔 보드가 자동으로 실시간 공유로 전환돼요. (꼬리별 페이지와 동일한 방식)
+
+   ▸ Supabase SQL Editor에서 한 번 실행:
+     create table madap_tools  (id bigint generated always as identity primary key,
+        name text, tool text, content text, created_at timestamptz default now());
+     create table madap_reviews(id bigint generated always as identity primary key,
+        name text, tool text, fit text, content text, created_at timestamptz default now());
+     create table madap_designs(id bigint generated always as identity primary key,
+        name text, title text, content text, url text, created_at timestamptz default now());
+     alter table madap_tools   enable row level security;
+     alter table madap_reviews enable row level security;
+     alter table madap_designs enable row level security;
+     create policy madap_tools_sel   on madap_tools   for select using (true);
+     create policy madap_tools_ins   on madap_tools   for insert with check (true);
+     create policy madap_reviews_sel on madap_reviews for select using (true);
+     create policy madap_reviews_ins on madap_reviews for insert with check (true);
+     create policy madap_designs_sel on madap_designs for select using (true);
+     create policy madap_designs_ins on madap_designs for insert with check (true);
+     alter publication supabase_realtime add table madap_tools, madap_reviews, madap_designs;
+*/
+const SUPABASE_URL = 'https://vbvtnmnodeoocbbjauap.supabase.co';   // 예: 'https://xxxx.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc';   // anon public key
+const TOOLS_TABLE   = 'madap_tools';
+const REVIEWS_TABLE = 'madap_reviews';
+const DESIGNS_TABLE = 'madap_designs';
+/* ════════════════════════════════════════════════════════════════════════ */
+
+const sbReady = !!(SUPABASE_URL && SUPABASE_KEY && typeof window.supabase!=='undefined');
+let sb = sbReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+/* ───── 탭 전환 ───── */
+const TABS=['home','about','flow','principles','tools','labs','data','share','timer'];
+function switchTab(name){
+  if(!TABS.includes(name))name='home';
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  var btn=document.querySelector('.tab[data-tab="'+name+'"]'); if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'auto'});
+  if(history.replaceState)history.replaceState(null,'','#'+name);
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+/* ───── 편지 토글 ───── */
+function toggleLetter(btn){
+  var open=btn.getAttribute('aria-expanded')==='true';
+  var body=btn.nextElementSibling;
+  btn.setAttribute('aria-expanded',!open);
+  body.style.maxHeight=open?null:body.scrollHeight+'px';
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function vtrim(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function whenStr(ts){try{return new Date(ts).toLocaleDateString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return'';}}
+function playPop(){try{var ac=new(window.AudioContext||window.webkitAudioContext)();function n(f,s,d,v){var o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.setValueAtTime(f,ac.currentTime+s);g.gain.setValueAtTime(.0001,ac.currentTime+s);g.gain.exponentialRampToValueAtTime(v,ac.currentTime+s+.015);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+s+d);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+s);o.stop(ac.currentTime+s+d+.02);}n(720,0,.12,.26);n(1150,.07,.14,.18);}catch(e){}}
+
+/* ───── HERO: 라이브 응답 시그니처 ───── */
+(function(){
+  var bar=document.getElementById('respbar'); if(!bar)return;
+  var N=46, cls=['','t','a'];
+  for(var i=0;i<N;i++){
+    var s=document.createElement('div');
+    s.className='seg '+cls[i%3===0?(i%2?1:2):0];
+    var h=18+Math.round(Math.abs(Math.sin(i*0.7)*70)+Math.random()*22);
+    s.style.setProperty('--h',h+'px');
+    s.style.animationDelay=(i*0.025)+'s';
+    bar.appendChild(s);
+  }
+  var pills=document.getElementById('pills');
+  var labels=['A','B','C','D','✓','A','C','B'];
+  var spots=[[12,28],[78,22],[30,62],[64,70],[46,18],[88,52],[20,80],[70,40]];
+  spots.forEach(function(p,i){
+    var el=document.createElement('div');el.className='pill';
+    el.textContent=labels[i%labels.length];
+    el.style.left=p[0]+'%';el.style.top=p[1]+'%';
+    el.style.transform='translateY(8px)';
+    el.style.animationDelay=(0.6+i*0.18)+'s';
+    pills.appendChild(el);
+  });
+})();
+
+/* ───── LIVE POLL (다중 선택 + 카드 추가 · 데모: 인메모리) ───── */
+let POLL_OPTS=['Kahoot','Blooket','젭 Zep','MS Forms','Google Forms','퀴즈앤','Padlet'];
+let pollVotes=[2,2,1,3,3,1,1];      // 데모 시드 (실제 연수에선 전부 0으로 시작해도 좋아요)
+let myPicks=new Set();
+let pollTouched=false;
+function renderPoll(){
+  var box=document.getElementById('pollOpts'); if(!box)return;
+  var maxV=Math.max(1,Math.max.apply(null,pollVotes));
+  box.innerHTML=POLL_OPTS.map(function(o,i){
+    var on=myPicks.has(i);
+    var w=Math.round(pollVotes[i]/maxV*100);
+    return '<button class="poll-opt'+(on?' on':'')+'" data-i="'+i+'"><span class="fill" style="width:'+w+'%"></span><span class="chk">'+(on?'✓':'')+'</span><span class="lab">'+escapeHtml(o)+'</span><span class="pct">'+pollVotes[i]+'</span></button>';
+  }).join('');
+  box.querySelectorAll('.poll-opt').forEach(function(b){b.addEventListener('click',function(){togglePick(parseInt(b.dataset.i));});});
+  var picks=myPicks.size;
+  document.getElementById('pollTotal').textContent=picks?('내가 표시한 도구 · '+picks+'개'):'';
+}
+function togglePick(i){
+  if(myPicks.has(i)){myPicks.delete(i);pollVotes[i]=Math.max(0,pollVotes[i]-1);}
+  else{myPicks.add(i);pollVotes[i]++;pollTouched=true;playPop();}
+  renderPoll();
+  if(pollTouched)document.getElementById('pollFoot').style.display='block';
+}
+function addPollCard(){
+  var inp=document.getElementById('pollAddInput'); var v=inp.value.trim();
+  if(!v)return;
+  var exist=-1;
+  for(var k=0;k<POLL_OPTS.length;k++){ if(POLL_OPTS[k].toLowerCase()===v.toLowerCase()){exist=k;break;} }
+  if(exist>=0){ if(!myPicks.has(exist))togglePick(exist); }
+  else{ POLL_OPTS.push(v); pollVotes.push(0); togglePick(POLL_OPTS.length-1); }
+  inp.value='';
+  document.getElementById('pollAddForm').style.display='none';
+}
+(function(){
+  var addBtn=document.getElementById('pollAddBtn'); if(!addBtn)return;
+  addBtn.addEventListener('click',function(){
+    var f=document.getElementById('pollAddForm'); var show=f.style.display==='none';
+    f.style.display=show?'flex':'none'; if(show)document.getElementById('pollAddInput').focus();
+  });
+  document.getElementById('pollAddGo').addEventListener('click',addPollCard);
+  document.getElementById('pollAddInput').addEventListener('keydown',function(e){if(e.key==='Enter')addPollCard();});
+})();
+renderPoll();
+
+/* ───── 타임라인 ───── */
+const FLOW=[
+  {t:'0–10분',mode:'lec',badge:'강의+LIVE',cls:'',title:'오프닝 · 라이브 진단 📡',d:'라이브 폴로 시작 — 평가혁신을 \'평가\'로 직접 경험.'},
+  {t:'10–25분',mode:'lec',badge:'강의',cls:'',title:'평가와 퀴즈 🧭',d:'뼈대 — 평가의 3요소 → 온라인 퀴즈 장단점. <a href="#" onclick="switchTab(&#39;principles&#39;);return false">평가와 퀴즈 →</a>'},
+  {t:'25–35분',mode:'share',badge:'나눔',cls:'',title:'경험 나눔 💬',d:'경험·도구를 나눔 보드에 공유 · 서로에게 배우기. <a href="#" onclick="switchTab(&#39;share&#39;);return false">나눔 보드 →</a>'},
+  {t:'35–60분',mode:'lab',badge:'실습 1',cls:'lab',title:'실습 1 · 도구를 \'학생\'으로 직접 써보기 🧪',d:'도구를 학생으로 체험 → 우리 수업에 맞나 판단 → 후기 남기기. <a href="#" onclick="switchTab(&#39;labs&#39;);return false">실습 가이드 →</a>'},
+  {t:'60–68분',mode:'rest',badge:'휴식',cls:'rest',title:'휴식 ☕',d:'8분 · 잠깐 쉬어가요!'},
+  {t:'68–100분',mode:'lab',badge:'실습 2',cls:'lab',title:'실습 2 · 내 수업 \'평가 한 장면\' 설계 🎯',d:'메인 · 순간 → 목적 → 가벼운 도구 → 전원 사고. 설계+제작 후 공유.'},
+  {t:'100–117분',mode:'lab',badge:'실습',cls:'lab',title:'퀴즈 만들기 — 퀴즈앤·젭퀴즈 🛠️',d:'서울교육청 협약 도구로 당장 쓸 퀴즈 하나를 시연 따라 직접 제작. <a href="#" onclick="switchTab(&#39;makequiz&#39;);return false">퀴즈 만들기 →</a>'},
+  {t:'117–120분',mode:'share',badge:'정리+Q&A',cls:'',title:'정리 · 나눔 · 다음 걸음 🌱',d:'핵심 정리 · 설계 갤러리 · Q&A.'}
+];
+const bc={lec:'b-lec',lab:'b-lab',rest:'b-rest',share:'b-share'};
+const tl=document.getElementById('timeline');
+FLOW.forEach(function(f){var it=document.createElement('div');it.className='tl-item '+f.cls;it.innerHTML='<div class="tl-time">'+f.t+'</div><div class="tl-axis"><div class="tl-dot"></div></div><div class="tl-card"><button class="tl-btn" aria-expanded="false"><span class="badge '+bc[f.mode]+'">'+f.badge+'</span><span class="ttl">'+f.title+'</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="tl-detail"><div class="inner">'+f.d+'</div></div></div>';tl.appendChild(it);});
+tl.querySelectorAll('.tl-btn').forEach(function(btn){btn.addEventListener('click',function(){var open=btn.getAttribute('aria-expanded')==='true';var det=btn.nextElementSibling;btn.setAttribute('aria-expanded',!open);det.style.maxHeight=open?null:det.scrollHeight+'px';});});
+
+/* ───── 복사 버튼 ───── */
+document.querySelectorAll('.copy-btn').forEach(function(btn){btn.addEventListener('click',async function(){var txt=document.getElementById(btn.dataset.copy).innerText;try{await navigator.clipboard.writeText(txt);}catch(e){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}var o=btn.innerHTML;btn.classList.add('done');btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>복사됨';setTimeout(function(){btn.classList.remove('done');btn.innerHTML=o;},1900);});});
+
+/* ───── 타이머 ───── */
+var total=25*60,remain=total,tick=null,running=false;const RING=678.58;
+var disp=document.getElementById('timerDisplay'),lbl=document.getElementById('timerLabel'),ring=document.getElementById('progRing'),startBtn=document.getElementById('startBtn'),resetBtn=document.getElementById('resetBtn'),twrap=document.getElementById('timerWrap'),mini=document.getElementById('miniTimer'),miniT=document.getElementById('miniTime');
+function fmt(s){var m=Math.floor(s/60),x=s%60;return String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
+function tRender(){disp.textContent=fmt(remain);miniT.textContent=fmt(remain);ring.style.strokeDashoffset=RING*(1-remain/total);}
+function tStop(){clearInterval(tick);running=false;startBtn.textContent='시작';mini.classList.remove('live');}
+function tStart(){if(running||remain<=0)return;running=true;startBtn.textContent='일시정지';twrap.classList.remove('done');mini.classList.add('live');tick=setInterval(function(){remain--;tRender();if(remain<=0){clearInterval(tick);running=false;startBtn.textContent='시작';twrap.classList.add('done');mini.classList.remove('live');tBeep();}},1000);}
+function tBeep(){try{var ac=new(window.AudioContext||window.webkitAudioContext)();[0,.25,.5].forEach(function(d){var o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.001,ac.currentTime+d);g.gain.exponentialRampToValueAtTime(.25,ac.currentTime+d+.03);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d+.22);o.start(ac.currentTime+d);o.stop(ac.currentTime+d+.24);});}catch(e){}}
+function setTimer(min,label){tStop();total=min*60;remain=total;if(label)lbl.textContent=label;twrap.classList.remove('done');tRender();}
+startBtn.addEventListener('click',function(){running?tStop():tStart();});
+resetBtn.addEventListener('click',function(){tStop();remain=total;twrap.classList.remove('done');tRender();});
+document.querySelectorAll('#presets .preset').forEach(function(p){if(p.id==='setCustom')return;p.addEventListener('click',function(){document.querySelectorAll('#presets .preset').forEach(function(x){if(x.id!=='setCustom')x.classList.remove('active');});p.classList.add('active');setTimer(parseInt(p.dataset.min),p.dataset.label);});});
+document.getElementById('setCustom').addEventListener('click',function(){var v=parseInt(document.getElementById('customMin').value);if(v>0&&v<=180){document.querySelectorAll('#presets .preset').forEach(function(x){if(x.id!=='setCustom')x.classList.remove('active');});setTimer(v,'직접 설정');}});
+tRender();
+
+/* ───── 나눔 보드 (Supabase 있으면 실시간, 없으면 인메모리 데모) ───── */
+var WALLS={
+  tools:   {table:TOOLS_TABLE,   list:'w1List', count:'w1Count', empty:'아직 글이 없어요. 첫 경험을 남겨보세요!'},
+  reviews: {table:REVIEWS_TABLE, list:'w3List', count:'w3Count', empty:'아직 후기가 없어요. 첫 체험 후기를 남겨보세요!'},
+  designs: {table:DESIGNS_TABLE, list:'w2List', count:'w2Count', empty:'아직 공유된 설계가 없어요. 첫 설계를 올려보세요!'}
+};
+var mem={tools:[],reviews:[],designs:[]};
+function wallCard(kind,r){
+  var name=escapeHtml(r.name||'익명'), when=escapeHtml(whenStr(r.created_at)), text=escapeHtml(r.content||'');
+  var meta='<div class="wc-meta"><span class="wc-name">— '+name+'</span><span class="wc-when">'+when+'</span></div>';
+  if(kind==='tools'){
+    return '<div class="wcard"><span class="wc-tool">'+escapeHtml(r.tool||'기타')+'</span><div class="wc-text">'+text+'</div>'+meta+'</div>';
+  }else if(kind==='reviews'){
+    var fit=r.fit?('<span class="wc-fit">'+escapeHtml(r.fit)+'</span>'):'';
+    return '<div class="wcard t-review"><span class="wc-tool">'+escapeHtml(r.tool||'기타')+'</span>'+fit+'<div class="wc-text">'+text+'</div>'+meta+'</div>';
+  }else{
+    var link=r.url?('<a class="wc-link" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener">'+escapeHtml(r.url)+' ↗</a>'):'';
+    var ttl=r.title?('<span class="wc-tool">'+escapeHtml(r.title)+'</span>'):'';
+    return '<div class="wcard t-design">'+ttl+'<div class="wc-text">'+text+'</div>'+link+meta+'</div>';
+  }
+}
+async function wallLoad(kind){
+  var W=WALLS[kind]; if(!W)return;
+  var listEl=document.getElementById(W.list), cntEl=document.getElementById(W.count);
+  var rows=[];
+  if(sbReady){
+    var res=await sb.from(W.table).select('*').order('created_at',{ascending:false});
+    if(res.error){listEl.innerHTML='<p class="wall-empty">불러오기 실패: '+escapeHtml(res.error.message)+'</p>';return;}
+    rows=res.data||[];
+  }else{ rows=mem[kind].slice().reverse(); }
+  cntEl.textContent=rows.length?'('+rows.length+')':'';
+  if(!rows.length){listEl.innerHTML='<p class="wall-empty">'+W.empty+'</p>';return;}
+  listEl.innerHTML=rows.map(function(r){return wallCard(kind,r);}).join('');
+}
+async function wallAdd(kind,obj,statusId){
+  var W=WALLS[kind], status=document.getElementById(statusId);
+  obj.created_at=new Date().toISOString();
+  if(sbReady){
+    status.textContent='올리는 중…';
+    var ins=await sb.from(W.table).insert(obj);
+    if(ins.error){status.textContent='실패: '+ins.error.message;return false;}
+  }else{ mem[kind].push(obj); }
+  status.textContent='공유됐어요! 🙌';
+  wallLoad(kind); playPop();
+  setTimeout(function(){status.textContent='';},2400);
+  return true;
+}
+document.getElementById('w1Btn').addEventListener('click',function(){
+  var content=vtrim('w1Text');
+  if(!content){document.getElementById('w1Status').textContent='경험을 한 줄 적어주세요.';return;}
+  wallAdd('tools',{name:vtrim('w1Name')||'익명',tool:vtrim('w1Tool')||'기타',content:content},'w1Status').then(function(ok){
+    if(ok){document.getElementById('w1Text').value='';}
+  });
+});
+document.getElementById('w3Btn').addEventListener('click',function(){
+  var content=vtrim('w3Text');
+  if(!content){document.getElementById('w3Status').textContent='후기를 한 줄 적어주세요.';return;}
+  wallAdd('reviews',{name:vtrim('w3Name')||'익명',tool:vtrim('w3Tool')||'기타',fit:vtrim('w3Fit'),content:content},'w3Status').then(function(ok){
+    if(ok){document.getElementById('w3Text').value='';}
+  });
+});
+document.getElementById('w2Btn').addEventListener('click',function(){
+  var type=vtrim('w2Type'),moment=vtrim('w2Moment'),method=vtrim('w2Method'),want=vtrim('w2Want'),q1=vtrim('w2Q1'),q2=vtrim('w2Q2'),misc=vtrim('w2Misc');
+  if(!want&&!q1){document.getElementById('w2Status').textContent='알고 싶은 것이나 문항을 적어주세요.';return;}
+  var lines=['[평가 유형] '+(type||'-')+'  ·  [순간] '+(moment||'-')+'  ·  [수업 방식] '+(method||'-')];
+  if(want)lines.push('[알고 싶은 것] '+want);
+  if(q1)lines.push('[문항 1] '+q1);
+  if(q2)lines.push('[문항 2] '+q2);
+  if(misc)lines.push('[오개념] '+misc);
+  var content=lines.join('\n');
+  wallAdd('designs',{name:vtrim('w2Name')||'익명',title:vtrim('w2Title'),content:content,url:vtrim('w2Url')},'w2Status').then(function(ok){
+    if(ok){['w2Type','w2Moment','w2Method','w2Want','w2Q1','w2Q2','w2Misc','w2Title','w2Url'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}
+  });
+});
+if(sbReady){
+  var banner=document.getElementById('shareBanner'); if(banner)banner.style.display='none';
+  try{
+    sb.channel('madap_tools_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:TOOLS_TABLE},function(){wallLoad('tools');}).subscribe();
+    sb.channel('madap_reviews_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:REVIEWS_TABLE},function(){wallLoad('reviews');}).subscribe();
+    sb.channel('madap_designs_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:DESIGNS_TABLE},function(){wallLoad('designs');}).subscribe();
+  }catch(e){}
+}
+wallLoad('tools'); wallLoad('reviews'); wallLoad('designs');
+
+/* ───── 접속 안내 (QR + 주소) ───── */
+(function(){
+  var urlEl=document.getElementById('acUrl'),qrEl=document.getElementById('acQr'),copyBtn=document.getElementById('acCopy');
+  if(!urlEl)return;
+  var url=location.href.split('#')[0];
+  if(location.protocol==='file:'){
+    urlEl.textContent='배포(GitHub Pages) 후 이 자리에 접속 주소와 QR이 자동으로 나타나요!';
+    if(qrEl)qrEl.style.display='none'; if(copyBtn)copyBtn.style.display='none'; return;
+  }
+  urlEl.textContent=url;
+  try{
+    if(typeof qrcode!=='undefined'){var qr=qrcode(0,'M');qr.addData(url);qr.make();qrEl.innerHTML=qr.createImgTag(6,4);}
+    else if(qrEl){qrEl.style.display='none';}
+  }catch(e){if(qrEl)qrEl.style.display='none';}
+  if(copyBtn)copyBtn.addEventListener('click',function(){try{navigator.clipboard.writeText(url);}catch(e){}copyBtn.textContent='복사됨!';setTimeout(function(){copyBtn.textContent='주소 복사';},1500);});
+})();
+
+/* ───── 초기 탭 ───── */
+try{switchTab((location.hash||'').replace('#','')||'about');}catch(e){}
+
+/* ───── 카드 뒤집기 + 클릭 사운드 ───── */
+(function(){
+  function flipify(cards, fc){
+    cards.forEach(function(card){
+      if(card.classList.contains('flip-card')) return;
+      var kids = Array.prototype.slice.call(card.children);
+      var inner=document.createElement('div'); inner.className='flip-inner';
+      var front=document.createElement('div'); front.className='flip-front';
+      var back=document.createElement('div'); back.className='flip-back';
+      kids.forEach(function(k,i){ (i<fc?front:back).appendChild(k); });
+      var hint=document.createElement('span'); hint.className='flip-hint'; hint.textContent='탭 ↻';
+      front.appendChild(hint);
+      inner.appendChild(front); inner.appendChild(back); card.appendChild(inner);
+      card.classList.add('flip-card');
+      card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+    });
+  }
+  flipify(document.querySelectorAll('.three-pos > .pos'), 2);
+  flipify(document.querySelectorAll('.assume-grid > .assume'), 1);
+  flipify(document.querySelectorAll('.model-grid > .model'), 1);
+  flipify(document.querySelectorAll('.merit-grid > .merit'), 1);
+  flipify(document.querySelectorAll('.demerit-grid > .demerit'), 1);
+  document.querySelectorAll('.qr-code[data-qr]').forEach(function(el){try{if(typeof qrcode!=='undefined'){var q=qrcode(0,'M');q.addData(el.getAttribute('data-qr'));q.make();el.innerHTML=q.createImgTag(4,2);}}catch(e){}});
+  var _ac=null;
+  function _blip(f,d){
+    try{
+      if(!_ac)_ac=new (window.AudioContext||window.webkitAudioContext)();
+      if(_ac.state==='suspended')_ac.resume();
+      var o=_ac.createOscillator(),g=_ac.createGain(),t=_ac.currentTime;
+      o.type='triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(0.16,t+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+      o.connect(g);g.connect(_ac.destination);o.start(t);o.stop(t+d);
+    }catch(e){}
+  }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('.flip-card')) _blip(680,0.10);
+    else if(e.target.closest('button,.tab,.hcard,summary,label[for=qzToggle]')) _blip(520,0.06);
+  },true);
+})();
+</script>
+</body>
+</html>
