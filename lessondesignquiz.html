@@ -345,6 +345,7 @@ ol.steps li span{color:var(--ink-soft);font-size:.94rem;line-height:1.55}
 .wcard.t-design{border-left-color:var(--live)}
 .wcard .wc-tool{font-family:var(--mono);font-size:.68rem;color:var(--teal-deep);background:rgba(18,158,132,.1);padding:3px 9px;border-radius:999px;display:inline-block;margin-bottom:9px}
 .wcard.t-design .wc-tool{color:var(--live-deep);background:rgba(255,106,77,.1)}
+.wcard.t-ideas{border-left:3px solid var(--teal-deep);background:linear-gradient(135deg,rgba(18,158,132,.06),rgba(18,158,132,.02));}
 .wcard.t-review{border-left-color:var(--amber)}
 .wcard.t-review .wc-tool{color:var(--amber-deep);background:rgba(242,177,52,.12)}
 .wc-fit{font-family:var(--mono);font-size:.68rem;color:var(--deep);background:var(--card-2);border:1px solid var(--line);padding:3px 9px;border-radius:999px;display:inline-block;margin:0 0 9px 6px}
@@ -1305,6 +1306,25 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
     <div class="demo-banner" id="shareBanner">⚙️ <b>지금은 데모 모드예요</b> — 적은 내용이 이 화면엔 바로 뜨지만, 새로고침하면 사라지고 다른 기기와도 공유되지 않아요. 실제 연수에서 <b>여러 기기 실시간 공유</b>가 필요하면, 꼬리별 페이지에서 쓰시던 것처럼 맨 위 <code>SUPABASE_URL</code>·<code>SUPABASE_KEY</code>만 채우면 됩니다(아래 보드 두 개가 자동으로 연결돼요).</div>
     <div class="reward-note">☕ 나눔 보드에 공유해 주신 내용은 <b>연수가 끝난 뒤 제가 확인</b>해, <b>가장 열심히 참여해 주신 선생님</b>께 커피 쿠폰을 보내드릴게요. (연락처 공개가 부담되시면 <b>이메일</b>을 남겨 주셔도 좋아요!)</div>
     <div class="wall">
+      <!-- ★ w4 : 참여형 수업이란? -->
+      <div class="move-cue">🔖 연수 시작 직후 · 오프닝 — 첫 번째 입장 전에!</div>
+      <div class="wall-head">
+        <h3>💬 선생님이 생각하는 <span style="color:var(--teal-deep)">'참여형 수업'</span>이란? <span class="wall-count" id="w4Count"></span></h3>
+      </div>
+      <p style="font-size:.93rem;color:var(--ink-soft);margin-bottom:10px;line-height:1.55">
+        정답은 없어요. <b>한 문장으로</b> 자유롭게 써 주세요.<br>
+        <span style="font-size:.85rem;color:var(--faint)">예: 학생이 스스로 질문을 만들 때 · 모든 아이가 동시에 답할 수 있을 때 · 틀려도 괜찮은 분위기일 때…</span>
+      </p>
+      <div class="wall-form">
+        <div class="wf-row">
+          <input type="text" id="w4Name" class="w-name" placeholder="이름(선택)" maxlength="20">
+        </div>
+        <textarea id="w4Text" class="w-text" rows="2" placeholder="선생님이 생각하는 참여형 수업을 한 문장으로 적어주세요!" maxlength="200"></textarea>
+        <div class="wall-actions"><button class="wall-btn" id="w4Btn">공유하기</button><span class="wall-status" id="w4Status"></span></div>
+      </div>
+      <div class="wall-list" id="w4List"><p class="wall-empty">아직 응답이 없어요. 첫 번째로 남겨보세요!</p></div>
+      <hr style="border:none;border-top:1.5px solid var(--line);margin:18px 0">
+
       <div class="move-cue">🔖 오프닝 · 라이브 폴 직후 — 여기서 잠시 이동!</div>
       <div class="wall-head"><h3>🧰 평소 쓰는 도구 + 한 줄 경험 <span class="wall-count" id="w1Count"></span></h3></div>
       <p class="wall-sub">평소 쓰는 도구 + 한 줄 경험 (성공/실패)</p>
@@ -1513,6 +1533,7 @@ footer .fmsg{color:var(--amber-soft);font-size:.84rem;margin-top:16px;font-famil
 const SUPABASE_URL = 'https://vbvtnmnodeoocbbjauap.supabase.co';   // 예: 'https://xxxx.supabase.co'
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc';   // anon public key
 const TOOLS_TABLE   = 'madap_tools';
+const IDEAS_TABLE   = 'madap_ideas';
 const REVIEWS_TABLE = 'madap_reviews';
 const DESIGNS_TABLE = 'madap_designs';
 /* ════════════════════════════════════════════════════════════════════════ */
@@ -1678,11 +1699,13 @@ tRender();
 
 /* ───── 나눔 보드 (Supabase 있으면 실시간, 없으면 인메모리 데모) ───── */
 var WALLS={
+  ideas:   {table:IDEAS_TABLE,   list:'w4List', count:'w4Count', empty:'아직 응답이 없어요. 첫 번째로 남겨보세요!'},
+
   tools:   {table:TOOLS_TABLE,   list:'w1List', count:'w1Count', empty:'아직 글이 없어요. 첫 경험을 남겨보세요!'},
   reviews: {table:REVIEWS_TABLE, list:'w3List', count:'w3Count', empty:'아직 후기가 없어요. 첫 체험 후기를 남겨보세요!'},
   designs: {table:DESIGNS_TABLE, list:'w2List', count:'w2Count', empty:'아직 공유된 설계가 없어요. 첫 설계를 올려보세요!'}
 };
-var mem={tools:[],reviews:[],designs:[]};
+var mem={tools:[],reviews:[],designs:[],ideas:[]};
 function wallCard(kind,r){
   var name=escapeHtml(r.name||'익명'), when=escapeHtml(whenStr(r.created_at)), text=escapeHtml(r.content||'');
   var meta='<div class="wc-meta"><span class="wc-name">— '+name+'</span><span class="wc-when">'+when+'</span></div>';
@@ -1691,8 +1714,10 @@ function wallCard(kind,r){
   }else if(kind==='reviews'){
     var fit=r.fit?('<span class="wc-fit">'+escapeHtml(r.fit)+'</span>'):'';
     return '<div class="wcard t-review"><span class="wc-tool">'+escapeHtml(r.tool||'기타')+'</span>'+fit+'<div class="wc-text">'+text+'</div>'+meta+'</div>';
+  }else if(kind==='ideas'){
+    return '<div class="wcard t-ideas"><div class="wc-text">'+text+'</div>'+meta+'</div>';
   }else{
-    var link=r.url?('<a class="wc-link" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener">'+escapeHtml(r.url)+' ↗</a>'):'';
+    var link=r.url?('<a class="wc-link" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener">'+escapeHtml(r.url)+' ↗</a>'):''; 
     var ttl=r.title?('<span class="wc-tool">'+escapeHtml(r.title)+'</span>'):'';
     return '<div class="wcard t-design">'+ttl+'<div class="wc-text">'+text+'</div>'+link+meta+'</div>';
   }
@@ -1737,6 +1762,14 @@ document.getElementById('w3Btn').addEventListener('click',function(){
     if(ok){document.getElementById('w3Text').value='';}
   });
 });
+
+document.getElementById('w4Btn').addEventListener('click',function(){
+  var content=vtrim('w4Text');
+  if(!content){document.getElementById('w4Status').textContent='내용을 적어주세요.';return;}
+  wallAdd('ideas',{name:vtrim('w4Name')||'익명',content:content},'w4Status').then(function(ok){
+    if(ok){document.getElementById('w4Text').value='';}
+  });
+});
 document.getElementById('w2Btn').addEventListener('click',function(){
   var type=vtrim('w2Type'),moment=vtrim('w2Moment'),method=vtrim('w2Method'),want=vtrim('w2Want'),q1=vtrim('w2Q1'),q2=vtrim('w2Q2'),misc=vtrim('w2Misc');
   if(!want&&!q1){document.getElementById('w2Status').textContent='알고 싶은 것이나 문항을 적어주세요.';return;}
@@ -1755,6 +1788,7 @@ if(sbReady){
   try{
     sb.channel('madap_tools_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:TOOLS_TABLE},function(){wallLoad('tools');}).subscribe();
     sb.channel('madap_reviews_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:REVIEWS_TABLE},function(){wallLoad('reviews');}).subscribe();
+    sb.channel('madap_ideas_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:IDEAS_TABLE},function(){wallLoad('ideas');}).subscribe();
     sb.channel('madap_designs_rt').on('postgres_changes',{event:'INSERT',schema:'public',table:DESIGNS_TABLE},function(){wallLoad('designs');}).subscribe();
   }catch(e){}
 }
