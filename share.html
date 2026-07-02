@@ -169,6 +169,23 @@ body{
   border-radius:0 12px 12px 0;padding:12px 16px;line-height:1.6;
 }
 .intro .info .humble b{color:var(--sun-d);}
+.intro .info .letter-photo{
+  margin-top:16px;background:#fff;border:1px solid var(--bd);border-radius:16px;
+  padding:8px;box-shadow:var(--sh);overflow:hidden;
+}
+.intro .info .letter-photo img{
+  display:block;width:100%;max-height:360px;object-fit:cover;border-radius:11px;
+}
+.intro .info .letter-photo .ph-fallback{
+  display:none;text-align:center;color:var(--tl);font-size:var(--fs-sm);font-weight:600;
+  padding:40px 16px;background:var(--card-2, #f2f8f5);border-radius:11px;line-height:1.6;
+}
+.intro .info .letter-photo .ph-fallback small{font-weight:500;opacity:.7;font-size:.85em;}
+.intro .info .letter-photo.no-img img{display:none;}
+.intro .info .letter-photo.no-img .ph-fallback{display:block;}
+.intro .info .letter-photo figcaption{
+  text-align:center;font-size:var(--fs-xs);color:var(--tl);font-weight:600;padding:10px 6px 4px;
+}
 
 /* ---------- 사례 카드 ---------- */
 .cards{display:flex;flex-direction:column;gap:clamp(18px,3vw,26px);}
@@ -282,12 +299,17 @@ body{
         <h3>조승재</h3>
         <span class="role">해누리중학교 과학교사</span>
         <p>💌 학생들이 써 준 편지를 종합해 보면, 저는 이런 교사라고 합니다 —
-        <b>지루하고 두렵던 과학을 '최애 과목'으로 바꿔 준, 열정 가득한 선생님.</b>
-        매주 실험과 영상, 직접 만든 학습지로 수업을 채웁니다. 🥰</p>
+        <b>지루하고 두렵던 과학을 '최애 과목'으로 바꿔 준, 열정 가득한 선생님.</b></p>
         <p class="humble">아직 교직경력 <b>1년 4개월</b>의 저경력 교사입니다.
         그럼에도 선생님들 앞에 서서 저의 작은 사례를 나눌 수 있어 영광입니다!!! 🔥😆</p>
+        <figure class="letter-photo">
+          <img src="images/exam-cheer-letter.jpeg" alt="학생들에게 쓴 시험 응원 편지"
+               loading="lazy" onerror="this.closest('.letter-photo').classList.add('no-img')">
+          <div class="ph-fallback">🖼️ 시험 응원 편지 사진<br><small>images/exam-cheer-letter.jpeg</small></div>
+          <figcaption>✍️ 시험을 앞둔 학생들에게 직접 써 준 응원 편지</figcaption>
+        </figure>
         <details class="more-creds">
-          <summary>이력 · 약력 펼쳐보기</summary>
+          <summary>이력 · 약력 펼쳐보지말기</summary>
           <ul class="creds">
             <li>한국교원대학교 화학교육과 졸업 (2025.2.)</li>
             <li>교직경력 1년 4개월</li>
@@ -345,7 +367,7 @@ body{
           <p class="note">💭 DB 데이터를 바탕으로 생기부 작성까지… 는 아직 <b>상상</b>일 뿐이라 많이 미비합니다 ㅠㅠ</p>
         </div>
         <div class="btns">
-          <a class="btn" href="https://scienceisjo.github.io/assignmentmanual/#home" target="_blank" rel="noopener">📦 학생 산출물 아카이브 예시 <span class="arrow">→</span></a>
+          <a class="btn" href="https://scienceisjo.github.io/assignmentmanual/#home" target="_blank" rel="noopener">📦 주제선택 수업 산출물 아카이브 예시 <span class="arrow">→</span></a>
           <a class="btn" href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">🔬 MBL센서 활용 수업 허브 <span class="wip">제작중</span> <span class="arrow">→</span></a>
           <a class="btn" href="https://scienceisjo.github.io/scienceclassjo/" target="_blank" rel="noopener">📖 2학기 과학 수업 교사용 페이지 <span class="wip">제작중</span> <span class="arrow">→</span></a>
         </div>
