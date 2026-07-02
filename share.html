@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>☀️ AI 디지털 기반 역량중심 영재교육 · 보조강사 사례나눔</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Gaegu:wght@400;700&family=Jua&display=swap" rel="stylesheet">
+<style>
+/* ========================================================================
+   ☀️ 여름 느낌 밝은 허브페이지
+   맑은 하늘 · 바다 · 햇살 · 신선한 초록 톤
+   ======================================================================== */
+:root{
+  /* 색상 — 여름 팔레트 */
+  --sky:#4FC3F7;        /* 하늘 */
+  --sky-d:#2196C9;      /* 진한 하늘 */
+  --sun:#FFC93C;        /* 햇살 노랑 */
+  --sun-d:#FF9F1C;      /* 진한 노랑/주황 */
+  --sea:#38C1B0;        /* 바다 청록 */
+  --leaf:#6DD36F;       /* 잎사귀 초록 */
+  --coral:#FF7B72;      /* 산호 코랄 */
+  --tx:#1F3A44;         /* 본문 진청록 */
+  --tl:#5E7A84;         /* 흐린 글자 */
+  --card:#ffffff;
+  --bd:rgba(31,58,68,.08);
+  --sh:0 10px 30px rgba(33,150,201,.13);
+  --sh-h:0 18px 44px rgba(33,150,201,.24);
+  --r:22px;
+
+  /* 반응형 타이포 */
+  --fs-xs:  clamp(13px, 2.2vw, 15px);
+  --fs-sm:  clamp(14px, 2.5vw, 16px);
+  --fs-md:  clamp(15px, 2.8vw, 18px);
+  --fs-lg:  clamp(17px, 3.2vw, 21px);
+  --fs-xl:  clamp(20px, 3.8vw, 26px);
+  --fs-2xl: clamp(23px, 4.6vw, 32px);
+  --fs-3xl: clamp(28px, 6vw, 46px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  color:var(--tx);
+  line-height:1.65;
+  /* 여름 하늘 → 바다 그라데이션 배경 */
+  background:
+    radial-gradient(1200px 600px at 85% -5%, rgba(255,201,60,.55), transparent 60%),
+    radial-gradient(900px 500px at 10% 5%, rgba(109,211,111,.35), transparent 55%),
+    linear-gradient(180deg, #E8F8FF 0%, #DFF6F1 45%, #EAFBEA 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* 둥실둥실 여름 장식 이모지 */
+.deco{position:fixed;z-index:0;pointer-events:none;opacity:.5;filter:saturate(1.1);animation:float 8s ease-in-out infinite;}
+.deco.d1{top:6%;left:6%;font-size:clamp(30px,6vw,58px);animation-delay:0s;}
+.deco.d2{top:14%;right:8%;font-size:clamp(34px,7vw,68px);animation-delay:1.2s;}
+.deco.d3{bottom:10%;left:9%;font-size:clamp(28px,5.5vw,52px);animation-delay:2.4s;}
+.deco.d4{bottom:16%;right:6%;font-size:clamp(26px,5vw,48px);animation-delay:3.1s;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-16px) rotate(4deg);}}
+
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:clamp(20px,5vw,56px) clamp(16px,4vw,32px) 80px;}
+
+/* ---------- 헤더 ---------- */
+.hero{
+  text-align:center;
+  padding:clamp(28px,6vw,56px) clamp(20px,4vw,40px);
+  margin-bottom:clamp(28px,5vw,48px);
+  background:linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.6));
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:calc(var(--r) + 8px);
+  box-shadow:var(--sh);
+}
+.hero .badge{
+  display:inline-block;
+  font-family:'Jua',sans-serif;
+  font-size:var(--fs-sm);
+  color:#fff;
+  background:linear-gradient(90deg,var(--sun-d),var(--coral));
+  padding:6px 18px;border-radius:999px;
+  box-shadow:0 6px 16px rgba(255,123,114,.35);
+  margin-bottom:clamp(14px,2.5vw,20px);
+  letter-spacing:.5px;
+}
+.hero h1{
+  font-family:'Jua',sans-serif;
+  font-size:var(--fs-3xl);
+  color:var(--tx);
+  line-height:1.35;
+  letter-spacing:-.5px;
+}
+.hero h1 .hl{
+  background:linear-gradient(180deg,transparent 62%, rgba(255,201,60,.7) 62%);
+  padding:0 4px;
+}
+.hero p.sub{
+  margin-top:clamp(12px,2vw,18px);
+  font-size:var(--fs-md);
+  color:var(--tl);
+  font-weight:500;
+}
+
+/* ---------- 섹션 제목 ---------- */
+.section-title{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Jua',sans-serif;
+  font-size:var(--fs-2xl);
+  color:var(--sky-d);
+  margin:clamp(30px,5vw,52px) 0 clamp(16px,3vw,26px);
+}
+.section-title::after{
+  content:"";flex:1;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,var(--sky),transparent);
+}
+.section-title .ico{font-size:1.2em;}
+
+/* ---------- 강사 소개 카드 ---------- */
+.intro{
+  display:flex;flex-wrap:wrap;align-items:center;gap:clamp(18px,4vw,32px);
+  background:var(--card);
+  border:1px solid var(--bd);
+  border-radius:var(--r);
+  padding:clamp(22px,4vw,36px);
+  box-shadow:var(--sh);
+}
+.intro .avatar{
+  flex:0 0 auto;
+  width:clamp(96px,20vw,128px);height:clamp(96px,20vw,128px);
+  border-radius:50%;
+  display:grid;place-items:center;
+  font-size:clamp(48px,10vw,66px);
+  background:linear-gradient(135deg,var(--sky),var(--sea));
+  box-shadow:0 8px 22px rgba(56,193,176,.4);
+}
+.intro .info{flex:1;min-width:220px;}
+.intro .info h3{font-family:'Jua',sans-serif;font-size:var(--fs-xl);margin-bottom:6px;}
+.intro .info .role{
+  display:inline-block;font-size:var(--fs-xs);font-weight:700;color:var(--sea);
+  background:rgba(56,193,176,.12);padding:3px 12px;border-radius:999px;margin-bottom:12px;
+}
+.intro .info p{font-size:var(--fs-sm);color:var(--tl);}
+.intro .info p b{color:var(--sea);}
+.intro .info .creds{
+  list-style:none;margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;
+}
+.intro .info .creds li{
+  font-size:var(--fs-xs);font-weight:600;color:var(--sky-d);
+  background:rgba(79,195,247,.12);padding:5px 12px;border-radius:999px;
+}
+.intro .info .more-creds{margin-top:10px;}
+.intro .info .more-creds summary{
+  display:inline-block;cursor:pointer;list-style:none;
+  font-size:var(--fs-xs);font-weight:700;color:var(--tl);
+  padding:4px 10px;border-radius:999px;border:1px dashed rgba(31,58,68,.22);
+  transition:color .15s ease,border-color .15s ease;
+}
+.intro .info .more-creds summary::-webkit-details-marker{display:none;}
+.intro .info .more-creds summary::before{content:"＋ ";}
+.intro .info .more-creds[open] summary::before{content:"－ ";}
+.intro .info .more-creds summary:hover{color:var(--sky-d);border-color:var(--sky);}
+.intro .info .more-creds .creds{margin-top:12px;flex-direction:column;align-items:flex-start;gap:7px;}
+.intro .info .humble{
+  margin-top:14px;font-size:var(--fs-sm);color:var(--tx);
+  background:rgba(255,201,60,.13);border-left:4px solid var(--sun);
+  border-radius:0 12px 12px 0;padding:12px 16px;line-height:1.6;
+}
+.intro .info .humble b{color:var(--sun-d);}
+
+/* ---------- 사례 카드 ---------- */
+.cards{display:flex;flex-direction:column;gap:clamp(18px,3vw,26px);}
+.case{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--bd);
+  border-radius:var(--r);
+  padding:clamp(22px,4vw,34px);
+  box-shadow:var(--sh);
+  transition:transform .25s ease, box-shadow .25s ease;
+  overflow:hidden;
+}
+.case::before{
+  content:"";position:absolute;top:0;left:0;width:7px;height:100%;
+  background:var(--accent, var(--sky));
+}
+.case:hover{transform:translateY(-4px);box-shadow:var(--sh-h);}
+.case.c1{--accent:linear-gradient(180deg,var(--sky),var(--sky-d));}
+.case.c2{--accent:linear-gradient(180deg,var(--leaf),var(--sea));}
+.case.c3{--accent:linear-gradient(180deg,var(--sun),var(--sun-d));}
+
+.case .head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.case .num{
+  flex:0 0 auto;
+  width:clamp(40px,8vw,52px);height:clamp(40px,8vw,52px);
+  border-radius:14px;display:grid;place-items:center;
+  font-family:'Jua',sans-serif;font-size:var(--fs-xl);color:#fff;
+  background:var(--accent);
+}
+.case .titles{flex:1;}
+.case h3{font-family:'Jua',sans-serif;font-size:var(--fs-lg);line-height:1.4;}
+.case .time{
+  display:inline-block;margin-top:6px;font-size:var(--fs-xs);font-weight:700;color:var(--sun-d);
+  background:rgba(255,159,28,.13);padding:2px 10px;border-radius:999px;
+}
+.case .body{font-size:var(--fs-sm);color:var(--tx);}
+.case .body ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+.case .body ul li{position:relative;padding-left:24px;color:var(--tl);}
+.case .body ul li::before{content:"🌊";position:absolute;left:0;top:0;font-size:.9em;}
+.case .body .note{
+  margin-top:14px;font-size:var(--fs-xs);color:var(--coral);
+  background:rgba(255,123,114,.08);border-radius:12px;padding:10px 14px;line-height:1.55;
+}
+
+.case .tools-lead{margin-top:16px;font-size:var(--fs-sm);font-weight:700;color:var(--sun-d);}
+.btn .wip{font-size:.72em;font-weight:700;background:rgba(255,255,255,.28);padding:1px 8px;border-radius:8px;}
+
+/* ---------- 이전 연수 자료 ---------- */
+.prev{
+  background:var(--card);border:1px solid var(--bd);border-radius:var(--r);
+  padding:clamp(22px,4vw,32px);box-shadow:var(--sh);
+}
+.prev .prev-lead{font-size:var(--fs-sm);color:var(--tl);margin-bottom:16px;}
+.prev .btns{margin-top:0;}
+
+/* ---------- 링크 버튼 ---------- */
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:var(--fs-sm);
+  text-decoration:none;cursor:pointer;
+  padding:11px 20px;border-radius:14px;border:none;
+  color:#fff;background:var(--accent, var(--sky));
+  box-shadow:0 6px 16px rgba(33,150,201,.28);
+  transition:transform .15s ease, filter .15s ease;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);}
+.btn:active{transform:translateY(0);}
+.btn.ghost{
+  background:#fff;color:var(--sky-d);border:2px solid rgba(79,195,247,.4);
+  box-shadow:none;
+}
+.btn .arrow{transition:transform .15s ease;}
+.btn:hover .arrow{transform:translateX(3px);}
+/* 아직 연결 안 된 링크 표시 */
+.btn[href="#"]{opacity:.85;}
+.btn[href="#"]::after{content:"준비중";font-size:.72em;font-weight:600;background:rgba(255,255,255,.25);padding:1px 7px;border-radius:8px;margin-left:2px;}
+
+/* ---------- 푸터 ---------- */
+.foot{text-align:center;margin-top:clamp(40px,7vw,64px);color:var(--tl);font-size:var(--fs-xs);}
+.foot .wave{font-size:1.6em;display:block;margin-bottom:6px;}
+
+@media (max-width:560px){
+  .intro{flex-direction:column;text-align:center;}
+  .intro .info{min-width:0;}
+}
+</style>
+</head>
+<body>
+  <!-- 여름 장식 -->
+  <span class="deco d1">☀️</span>
+  <span class="deco d2">🌴</span>
+  <span class="deco d3">🐚</span>
+  <span class="deco d4">🍉</span>
+
+  <div class="wrap">
+
+    <!-- 헤더 -->
+    <header class="hero">
+      <span class="badge">☀️ 약 20분 스피드 사례나눔</span>
+      <h1>AI 디지털 기반<br><span class="hl">역량중심 영재교육</span> 보조강사 사례나눔</h1>
+      <p class="sub">직접 만든 웹앱과 수업 도구를 함께 나눕니다 🌊</p>
+    </header>
+
+    <!-- 강사 소개 -->
+    <h2 class="section-title"><span class="ico">🙋</span> 강사 소개</h2>
+    <section class="intro">
+      <div class="avatar">🔬</div>
+      <div class="info">
+        <h3>조승재</h3>
+        <span class="role">해누리중학교 과학교사</span>
+        <p>💌 학생들이 써 준 편지를 종합해 보면, 저는 이런 교사라고 합니다 —
+        <b>지루하고 두렵던 과학을 '최애 과목'으로 바꿔 준, 열정 가득한 선생님.</b>
+        매주 실험과 영상, 직접 만든 학습지로 수업을 채웁니다. 🥰</p>
+        <p class="humble">아직 교직경력 <b>1년 4개월</b>의 저경력 교사입니다.
+        그럼에도 선생님들 앞에 서서 저의 작은 사례를 나눌 수 있어 영광입니다!!! 🔥😆</p>
+        <details class="more-creds">
+          <summary>이력 · 약력 펼쳐보기</summary>
+          <ul class="creds">
+            <li>한국교원대학교 화학교육과 졸업 (2025.2.)</li>
+            <li>교직경력 1년 4개월</li>
+            <li>AI디지털 기반 교육혁신 선도교사</li>
+            <li>AIEDAP 마스터교원 · MIEE · MAI HERO</li>
+            <li>AI·디지털 학교로 찾아가는 컨설팅 강사·보조강사</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- 확장 사례 예시 -->
+    <h2 class="section-title"><span class="ico">🧭</span> 확장 사례 예시</h2>
+    <div class="cards">
+
+      <!-- 사례 1 -->
+      <article class="case c1">
+        <div class="head">
+          <div class="num">1</div>
+          <div class="titles">
+            <h3>하나의 레포지토리에 여러 웹앱 등록하기</h3>
+            <span class="time">⏱️ 약 5분</span>
+          </div>
+        </div>
+        <div class="body">
+          하나의 저장소(Repository) 안에 여러 개의 웹앱을 함께 담고,
+          버튼으로 각 앱을 연결하는 방식을 간단히 소개합니다.
+          <ul>
+            <li>여러 웹앱을 한 곳에서 관리하는 구조</li>
+            <li>버튼(링크)으로 앱 사이를 오가는 방법</li>
+          </ul>
+        </div>
+        <div class="btns">
+          <a class="btn" href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html#top" target="_blank" rel="noopener">🔬 과학탐구월드 — 바이브코딩 자료 허브 <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 사례 2 -->
+      <article class="case c2">
+        <div class="head">
+          <div class="num">2</div>
+          <div class="titles">
+            <h3>2학기용 교사 개인 수업 페이지</h3>
+            <span class="time">🌱 제작 중</span>
+          </div>
+        </div>
+        <div class="body">
+          2학기를 위해 만들고 있는 교사 개인용 수업 페이지입니다.
+          차시별 학생 산출물을 아카이브하고, 칭찬도장판을 디지털화합니다.
+          <ul>
+            <li>차시별 학생 산출물 아카이브</li>
+            <li>칭찬도장판 디지털화</li>
+            <li>DB 연결 시 발전 가능성 — 학습 기록·산출물 아카이브</li>
+          </ul>
+          <p class="note">💭 DB 데이터를 바탕으로 생기부 작성까지… 는 아직 <b>상상</b>일 뿐이라 많이 미비합니다 ㅠㅠ</p>
+        </div>
+        <div class="btns">
+          <a class="btn" href="https://scienceisjo.github.io/assignmentmanual/#home" target="_blank" rel="noopener">📦 학생 산출물 아카이브 예시 <span class="arrow">→</span></a>
+          <a class="btn" href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">🔬 MBL센서 활용 수업 허브 <span class="wip">제작중</span> <span class="arrow">→</span></a>
+          <a class="btn" href="https://scienceisjo.github.io/scienceclassjo/" target="_blank" rel="noopener">📖 2학기 과학 수업 교사용 페이지 <span class="wip">제작중</span> <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 사례 3 -->
+      <article class="case c3">
+        <div class="head">
+          <div class="num">3</div>
+          <div class="titles">
+            <h3>토큰 이야기 — 개인화된 도구의 필요성</h3>
+            <span class="time">⏱️ 약 2~3분</span>
+          </div>
+        </div>
+        <div class="body">
+          이미 있는 도구를 다시 만들 필요는 없다고 생각합니다.
+          대신 <b>나에게 꼭 맞는 개인화된 도구</b>를 만드는 것의 필요성에 대해
+          짧게 이야기 나눕니다.
+          <ul>
+            <li>바퀴를 다시 발명하지 않기</li>
+          </ul>
+        </div>
+        <p class="tools-lead">🛠️ 내 수업에 맞춰 직접 만든 개인화 도구 예시</p>
+        <div class="btns">
+          <a class="btn" href="https://scienceisjo.github.io/lettermaker/" target="_blank" rel="noopener">💌 카드 편지지 만들기 <span class="arrow">→</span></a>
+          <a class="btn" href="https://scienceisjo.github.io/brain-break-lab/sonic" target="_blank" rel="noopener">🎮 전자칠판 게임 <span class="arrow">→</span></a>
+          <a class="btn" href="https://scienceisjo.github.io/s-alimi/notice_display.html" target="_blank" rel="noopener">📢 전자칠판 알리미 <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- 이전 연수 자료 -->
+    <h2 class="section-title"><span class="ico">📚</span> 이전 연수 자료</h2>
+    <section class="prev">
+      <p class="prev-lead">이전에 진행했던 연수 자료도 함께 나눕니다.</p>
+      <div class="btns">
+        <a class="btn" href="https://scienceisjo.github.io/growing-teachers/#home" target="_blank" rel="noopener">🗣️ 말로 만드는 과학 수업 <span class="arrow">→</span></a>
+        <a class="btn ghost" href="https://scienceisjo.github.io/growing-teachers/lessondesignquiz.html#home" target="_blank" rel="noopener">📝 온라인 퀴즈·평가 도구 활용 참여형 수업 설계 <span class="arrow">→</span></a>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span class="wave">🌊</span>
+      AI 디지털 기반 역량중심 영재교육 · 보조강사 사례나눔
+    </footer>
+
+  </div>
+</body>
+</html>
