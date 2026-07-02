@@ -70,6 +70,15 @@
   .rtitle{font-family:var(--serif);font-weight:700;font-size:20px;margin:0 0 8px;}
   .rwhy{font-size:14px;color:#36404f;margin:0 0 16px;}
   .rbtns{display:flex;gap:10px;flex-wrap:wrap;}
+  .rrank{list-style:none;margin:6px 0 0;padding:0;}
+  .rrank li{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 0;border-top:1px solid var(--hair);}
+  .rrank li:first-child{border-top:none;}
+  .rk{flex:none;width:25px;height:25px;border-radius:50%;background:var(--primary);color:#fff;font-family:var(--mono);font-size:13px;font-weight:700;display:grid;place-items:center;}
+  .rrank li:first-child .rk{box-shadow:0 0 0 3px var(--primary-soft);}
+  .rk-a{font-family:var(--serif);font-weight:700;font-size:15.5px;color:var(--primary);cursor:pointer;text-decoration:none;}
+  .rk-a:hover{text-decoration:underline;}
+  .rk-b{font-size:12.5px;color:var(--muted);flex-basis:100%;margin-left:35px;}
+  .rnote{background:var(--paid-soft);border-radius:10px;padding:11px 14px;font-size:13px;color:#7a5a1e;margin-top:14px;line-height:1.55;}
   .btn{border:none;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .14s;text-decoration:none;display:inline-block;}
   .btn-primary{background:var(--primary);color:#fff;}.btn-primary:hover{background:#184559;}
   .btn-ghost{background:var(--card);border:1px solid var(--hair2);color:var(--muted);}.btn-ghost:hover{border-color:var(--primary);color:var(--primary);}
@@ -232,6 +241,28 @@
   .ex-title{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:700;margin:12px 0 4px;}
   details.ex-details ul{margin:6px 0 4px;padding-left:20px;font-size:13.5px;color:#36404f;}
   details.ex-details ul li{margin-bottom:6px;}
+  .task-hint{font-size:13px;color:var(--muted);margin:0 0 14px;}
+  .task-filter{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;}
+  .fchip{border:1px solid var(--hair2);background:var(--card);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;color:var(--muted);font-family:var(--sans);cursor:pointer;transition:all .14s;}
+  .fchip:hover{border-color:var(--primary);color:var(--primary);}
+  .fchip.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .task-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:12px;}
+  .tile{text-align:left;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:16px 16px 14px;cursor:pointer;font-family:var(--sans);display:flex;flex-direction:column;gap:6px;transition:all .15s;box-shadow:0 4px 14px rgba(20,60,120,.05);}
+  .tile:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,60,120,.12);}
+  .tile-emoji{font-size:26px;line-height:1;}
+  .tile-title{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--ink);line-height:1.3;}
+  .tile-desc{font-size:13px;color:var(--muted);line-height:1.45;flex:1;}
+  .tile-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+  .tg{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;font-family:var(--sans);}
+  .tg-common{background:#E6F1FE;color:#1257ad;}
+  .tg-sci{background:#EDE7FB;color:#6D3BD1;}
+  .tg-free{background:var(--free-soft);color:var(--free);}
+  .tg-paid{background:var(--paid-soft);color:var(--paid);}
+  .tg-lv{background:#EEF0F4;color:#5a6b85;}
+  .back-btn{background:none;border:none;color:var(--primary);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;padding:0;margin:2px 0 16px;}
+  .back-btn:hover{text-decoration:underline;}
+  .badge.b-common{background:#E6F1FE;color:#1257ad;}
+  .badge.b-sci{background:#EDE7FB;color:#6D3BD1;}
   @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}html{scroll-behavior:auto;}}
 </style>
 </head>
@@ -267,13 +298,6 @@
     <button class="tab tab-sos" data-view="sos" type="button">🆘 SOS</button>
     <button class="tab" data-view="submit" type="button">📤 제출</button>
   </div>
-  <div class="subtabs" id="subtabs" hidden>
-    <button class="stab active" data-task="t1" type="button">① 3종 연결</button>
-    <button class="stab" data-task="t2" type="button">② 카드 바꾸기</button>
-    <button class="stab" data-task="t3" type="button">③ 명세서</button>
-    <button class="stab" data-task="t5" type="button">④ 새 산출물</button>
-    <button class="stab" data-task="t6" type="button">⑤ 틀린 모형</button>
-  </div>
 </nav>
 
 <div class="wrap">
@@ -282,25 +306,34 @@
   <!-- 자기진단 -->
   <section id="diag-sec">
     <h2 class="sec-h">시작 전, 자기진단</h2>
-    <p class="sec-desc">두 가지만 골라 주시면, 지금 하기 딱 좋은 과제를 추천해 드릴게요! 😊</p>
+    <p class="sec-desc">세 가지만 골라 주시면 지금 하기 딱 좋은 과제를 추천해 드려요! 여러 과제 중 골라 1시간 몰입해 보세요 😊</p>
     <div class="diag">
       <div class="q">
-        <p class="q-label"><span class="q-num">1</span>지금 내 AI(클로드·지피티·제미나이) 토큰 상황은?</p>
-        <p class="q-hint">확인하는 법을 모르겠다면 → 바로 아래 <a href="#token-sec">🔋 토큰 상황 확인 & 계속하는 법</a>을 먼저 보세요.</p>
+        <p class="q-label"><span class="q-num">1</span>어떤 교과를 가르치시나요?</p>
+        <p class="q-hint">명세서·틀린 모형 과제는 과학 교과용이에요. 그 외 교과면 자동으로 빼 드려요.</p>
+        <div class="opts" id="q-subj">
+          <button class="opt" data-subj="sci">🔬 과학</button>
+          <button class="opt" data-subj="other">📚 그 외 교과</button>
+        </div>
+      </div>
+      <div class="q">
+        <p class="q-label"><span class="q-num">2</span>지금 내 AI(클로드·지피티·제미나이) 토큰 상황은?</p>
+        <p class="q-hint">확인하는 법을 모르겠다면 → 위 <b>🔋 토큰</b> 탭을 먼저 보세요.</p>
         <div class="opts" id="q-token">
           <button class="opt" data-token="yes">아직 여유 있어요</button>
           <button class="opt" data-token="no">제한에 걸렸어요 · 거의 없어요 · 잘 모르겠어요</button>
         </div>
       </div>
       <div class="q">
-        <p class="q-label"><span class="q-num">2</span>이 시간, 나는 무엇을 하고 싶나요?</p>
+        <p class="q-label"><span class="q-num">3</span>이 시간, 나는 무엇을 하고 싶나요?</p>
         <div class="opts" id="q-goal">
-          <button class="opt" data-goal="fill">오늘 만든 걸 '완성된 아카이브'로 채우고 싶다</button>
-          <button class="opt" data-goal="mine">내 과목·수업에 맞게 바꾸고 싶다</button>
-          <button class="opt" data-goal="design">학생에게 시킬 '수업(산출물)'을 설계하고 싶다</button>
-          <button class="opt" data-goal="debug">학생이 '모형의 오류를 찾아 고치는' 수업을 만들고 싶다</button>
-          <button class="opt" data-goal="create">새로운 산출물을 직접 만들어보고 싶다</button>
-          <button class="opt" data-goal="slow">천천히, 부담 없이 둘러보고 싶다</button>
+          <button class="opt" data-goal="finish">오늘 만든 사이트를 '완성'하고 싶어요</button>
+          <button class="opt" data-goal="adapt">내 교과에 맞게 바꾸고 다듬고 싶어요</button>
+          <button class="opt" data-goal="teachtool">바로 쓸 수업 도구·자료를 만들고 싶어요 (퀴즈·카드·타이머)</button>
+          <button class="opt" data-goal="product">학생용 인터랙티브 산출물을 직접 만들고 싶어요</button>
+          <button class="opt" data-goal="reallife">내 삶·업무의 불편을 푸는 프로그램을 만들고 싶어요</button>
+          <button class="opt" data-goal="realtime">서버에 저장되는 '실시간' 앱(DB)을 만들고 싶어요</button>
+          <button class="opt" data-goal="model" data-sci="1">학생 탐구 '모형'을 설계·정교화하고 싶어요</button>
         </div>
       </div>
       <div class="result" id="result"></div>
@@ -365,7 +398,7 @@
           <li>새 계정은 한도가 새로 시작되니, 하던 작업을 그대로 이어서 하면 됩니다.</li>
           <li>또는 <b>제미나이</b>나 <b>Google AI Studio</b>(aistudio.google.com)로 갈아타도 좋아요 — 무료로 넉넉히 쓸 수 있는 다른 창구입니다.</li>
         </ol>
-        <div class="call"><span class="ico">🙋</span><div>로그인·계정 전환이 헷갈리시면 <b>보조강사에게 도움을 요청해주세요!</b> 옆에서 같이 창을 열어 드릴게요 😊 그리고 토큰이 없어도 정말 괜찮아요 — 아래 <b>①②③</b>은 AI 없이 다 되고, <b>⑤</b>(틀린 모형)도 설계까지는 됩니다!</div></div>
+        <div class="call"><span class="ico">🙋</span><div>로그인·계정 전환이 헷갈리시면 <b>보조강사에게 도움을 요청해주세요!</b> 옆에서 같이 창을 열어 드릴게요 😊 그리고 토큰이 없어도 정말 괜찮아요 — <b>연결·카드 바꾸기·명세서</b> 같은 과제는 AI 없이 다 되고, <b>틀린 모형</b>도 설계까지는 됩니다!</div></div>
       </div>
     </div>
   </section>
@@ -373,16 +406,37 @@
   </div><!--/view-token-->
 
   <div class="view" id="view-tasks" hidden>
-  <!-- 과제 -->
   <section>
-    <h2 class="sec-h" style="margin-bottom:4px">과제</h2>
-    <p class="sec-desc">위 탭 <b>①~⑤</b>에서 편하게 골라 보세요 😊 각 과제는 따로 완결돼서 하나만 하셔도 제출할 결과가 나온답니다. 막히는 지점마다 🙋 표시를 넣어 뒀어요!</p>
+    <h2 class="sec-h" style="margin-bottom:4px">과제 고르기</h2>
+    <p class="task-hint">각자 <b>수준·교과</b>에 맞게 하나 골라 1시간 몰입해 보세요. 여러 개 해도 좋아요! 카드를 누르면 자세한 안내가 나와요 😊 <br>🔬 <b>명세서·틀린 모형</b>은 과학 교과 전용이에요.</p>
+
+    <div class="task-filter" id="task-filter">
+      <button class="fchip active" data-f="all" type="button">✨ 전체 과제</button>
+      <button class="fchip" data-f="common" type="button">📚 전 교과 과제만</button>
+    </div>
+
+    <div class="task-menu" id="task-menu">
+      <button class="tile" data-task="t1" data-cat="common" type="button" onclick="openTask('t1')"><span class="tile-emoji">🔗</span><span class="tile-title">제공 데모 3종 연결하기</span><span class="tile-desc">받은 산출물을 카드에 연결해 완성형 아카이브로</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-free">AI 불필요</i><i class="tg tg-lv">쉬움</i></span></button>
+      <button class="tile" data-task="t2" data-cat="common" type="button" onclick="openTask('t2')"><span class="tile-emoji">✏️</span><span class="tile-title">카드를 내 수업 언어로</span><span class="tile-desc">제목·카드 글자를 내 과목 탐구로 교체</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-free">AI 불필요</i><i class="tg tg-lv">쉬움</i></span></button>
+      <button class="tile" data-task="t7" data-cat="common" type="button" onclick="openTask('t7')"><span class="tile-emoji">❓</span><span class="tile-title">자동 채점 퀴즈 만들기</span><span class="tile-desc">풀면 즉시 정답·해설이 뜨는 우리 과목 퀴즈</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">쉬움</i></span></button>
+      <button class="tile" data-task="t8" data-cat="common" type="button" onclick="openTask('t8')"><span class="tile-emoji">🃏</span><span class="tile-title">개념 플래시카드 앱</span><span class="tile-desc">누르면 뒤집히는 용어·개념 암기 카드</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">쉬움</i></span></button>
+      <button class="tile" data-task="t9" data-cat="common" type="button" onclick="openTask('t9')"><span class="tile-emoji">🧰</span><span class="tile-title">수업 도구 만들기</span><span class="tile-desc">모둠 편성·타이머·랜덤 뽑기 — 내일 바로 사용</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">쉬움</i></span></button>
+      <button class="tile" data-task="t5" data-cat="common" type="button" onclick="openTask('t5')"><span class="tile-emoji">✨</span><span class="tile-title">새 산출물 만들기</span><span class="tile-desc">바이브코딩으로 인터랙티브 산출물 제작·연결</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">보통</i></span></button>
+      <button class="tile" data-task="t12" data-cat="common" type="button" onclick="openTask('t12')"><span class="tile-emoji">🛠️</span><span class="tile-title">내 삶·업무 불편 해결</span><span class="tile-desc">내가 겪는 불편을 직접 푸는 나만의 앱</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">보통</i></span></button>
+      <button class="tile" data-task="t10" data-cat="common" type="button" onclick="openTask('t10')"><span class="tile-emoji">📊</span><span class="tile-title">데이터 탐구 시각화 앱</span><span class="tile-desc">값을 바꾸면 그래프가 즉시 변하는 탐구 도구</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">보통</i></span></button>
+      <button class="tile" data-task="t3" data-cat="sci" type="button" onclick="openTask('t3')"><span class="tile-emoji">📄</span><span class="tile-title">모형 명세서 한 장 설계</span><span class="tile-desc">학생 탐구 '모형'을 설계도 한 장으로</span><span class="tile-badges"><i class="tg tg-sci">과학</i><i class="tg tg-free">AI 불필요</i><i class="tg tg-lv">보통</i></span></button>
+      <button class="tile" data-task="t11" data-cat="common" type="button" onclick="openTask('t11')"><span class="tile-emoji">🗃️</span><span class="tile-title">Supabase 실시간 보드</span><span class="tile-desc">글이 모두에게 실시간으로 뜨는 미니 DB 실습</span><span class="tile-badges"><i class="tg tg-common">전 교과</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">도전</i></span></button>
+      <button class="tile" data-task="t6" data-cat="sci" type="button" onclick="openTask('t6')"><span class="tile-emoji">🐞</span><span class="tile-title">일부러 틀린 모형 디버깅</span><span class="tile-desc">오개념 심은 모형으로 '고치기' 수업 만들기</span><span class="tile-badges"><i class="tg tg-sci">과학</i><i class="tg tg-paid">AI 필요</i><i class="tg tg-lv">도전</i></span></button>
+    </div>
+
+    <div class="task-detail" id="task-detail" hidden>
+      <button class="back-btn" type="button" onclick="closeTask()">← 과제 목록으로</button>
 
     <!-- T1 -->
     <div class="task shown" id="t1">
       <div class="task-top">
-        <h3>① 제공 산출물 3종을 내 아카이브에 다 연결하기</h3>
-        <div class="badges"><span class="badge b-free">AI 불필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">20~25분</span></div>
+        <h3>제공 데모 3종을 내 아카이브에 다 연결하기</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-free">AI 불필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">20~25분</span></div>
       </div>
       <p class="goal"><b>🎯 끝나면:</b> 카드 3개가 모두 '살아 도는' 완성형 아카이브!</p>
       <p class="prep"><b>준비물:</b> <code>saturation.html</code>·<code>glucose.html</code> 파일 — <b>패들렛에서 내려받으세요</b> 📥 (강사가 안내한 패들렛에 올려 두었어요).</p>
@@ -411,7 +465,6 @@
           </ol>
         </div>
       </div>
-
       <p class="step-h">2단계 · 카드에 연결하기</p>
       <ol class="steps">
         <li>저장소에서 <b>index.html</b>을 클릭한 뒤, 오른쪽 위 <b>연필(✏️ Edit) 아이콘</b>을 누릅니다.</li>
@@ -426,15 +479,15 @@
     <!-- T2 -->
     <div class="task" id="t2">
       <div class="task-top">
-        <h3>② 카드를 '내 수업 탐구'로 바꿔 쓰기</h3>
-        <div class="badges"><span class="badge b-free">AI 불필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">20~25분</span></div>
+        <h3>카드를 '내 수업 언어'로 바꿔 쓰기</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-free">AI 불필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">20~25분</span></div>
       </div>
       <p class="goal"><b>🎯 끝나면:</b> 내 과목·학교 이름이 들어간 '우리 반 탐구 목록'!</p>
       <p class="step-h">따라하기</p>
       <ol class="steps">
         <li>저장소에서 <b>index.html</b>을 열고 <b>연필(✏️ Edit) 아이콘</b>을 누릅니다.</li>
         <li>맨 위 <code>&lt;h1&gt; … &lt;/h1&gt;</code> 사이의 글자(제목)를 내 아카이브 이름으로 바꿉니다.
-          <ol class="sub"><li>예: <code>&lt;h1&gt;○○중 3학년 과학 탐구 아카이브&lt;/h1&gt;</code></li><li><b>꺾쇠(&lt; &gt;)는 절대 지우지 말고, 그 사이 글자만</b> 바꿔요.</li></ol>
+          <ol class="sub"><li>예: <code>&lt;h1&gt;○○중 3학년 국어 탐구 아카이브&lt;/h1&gt;</code></li><li><b>꺾쇠(&lt; &gt;)는 절대 지우지 말고, 그 사이 글자만</b> 바꿔요.</li></ol>
         </li>
         <li>그 아래 소개 문단(<code>&lt;p&gt;</code>) 글자도 내 수업 소개로 바꿉니다.</li>
         <li>각 카드에서 <b>네 부분</b>의 글자를 내 수업 탐구로 교체합니다 — 제목 · '탐구 질문' · '사고 흔적' · '열린 결론'. (카드 개수는 그대로)</li>
@@ -442,50 +495,88 @@
       </ol>
       <p class="check"><b>✅ 확인:</b> 1~2분 뒤 새로고침 → 카드가 내 과목 언어로 바뀌어 보이면 성공이에요! 🎉</p>
       <p class="stuck"><b>⚠️ 막힘 대비</b> · 글자가 겹치거나 모양이 깨짐 → 꺾쇠 태그를 실수로 지웠을 가능성. <code>Ctrl+Z</code>로 되돌리고 <b>글자만</b> 다시 바꿔요. · 한글이 잠깐 깨져 보임 → 대개 정상, 새로고침하면 돌아옵니다.</p>
-      <p class="stuck"><b>💡 핵심 팁</b> · '사고 흔적'과 '열린 결론' 칸이 일반 갤러리와의 결정적 차이예요. 정답이 아니라 <b>어디서 막혔고, 무엇을 바꿔 다시 했고, 어떤 질문이 남았는지</b>를 적어 주세요.</p>
       <div class="call"><span class="ico">🙋</span><div>되돌려도 계속 화면이 깨진다면 <b>보조강사에게 도움을 요청해주세요!</b> 원본 카드 코드를 다시 붙여넣도록 도와드릴게요 😊</div></div>
     </div>
 
-    <!-- T3 -->
-    <div class="task" id="t3">
+    <!-- T7 (신규) -->
+    <div class="task" id="t7">
       <div class="task-top">
-        <h3>③ '모형 명세서' 한 장 설계하기</h3>
-        <div class="badges"><span class="badge b-free">AI 불필요</span><span class="badge b-plain">종이·문서</span><span class="badge b-plain">15~20분</span></div>
+        <h3>❓ 자동 채점 퀴즈(형성평가) 만들기</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">20분</span></div>
       </div>
-      <p class="goal"><b>🎯 끝나면:</b> 학생에게 시킬 산출물의 설계도 — 그대로 프롬프트가 돼요!</p>
-      <p class="whatis"><b>📄 모형 명세서가 뭔가요?</b> 학생에게 <b>어떤 과학 모형을 만들게 할지 미리 정리하는 '설계도 한 장'</b>이에요. 무엇을 조작하고 무엇을 예측하는 모형인지 아래 다섯 칸으로 정해 두면, 그게 곧 <b>학생 활동의 뼈대</b>이자 나중에 <b>AI에게 그대로 줄 프롬프트</b>가 된답니다. 오늘은 이 한 장만 완성하셔도 훌륭한 산출물이에요! 😊</p>
-      <p style="font-size:14px;color:#36404f;margin:0 0 10px">아래 다섯 칸을 채우면 명세서 완성이에요! 종이·메모장에 적으셔도 되고, 그대로 옮겨 쓰셔도 됩니다. <b>맨 오른쪽은 자유낙하 예시</b>예요 👇</p>
-      <table class="spec">
-        <tr><td>탐구 질문</td><td class="ex-c">학생이 붙들 질문 한 문장</td></tr>
-        <tr class="ex"><td>&nbsp;↳ 예시</td><td>속력은 시간에 따라 어떻게 변할까?</td></tr>
-        <tr><td>학생이 조작할 변수</td><td class="ex-c">슬라이더·선택으로 바꿀 것</td></tr>
-        <tr class="ex"><td>&nbsp;↳ 예시</td><td>중력(지구·달·화성), 시작/다시</td></tr>
-        <tr><td>조작 후 예측·확인할 것</td><td class="ex-c">결과로 나타날 값·패턴</td></tr>
-        <tr class="ex"><td>&nbsp;↳ 예시</td><td>속력이 일정하게 증가 · 그래프가 직선 · 기울기 = 중력가속도</td></tr>
-        <tr><td>담을 규칙·공식</td><td class="ex-c">학생이 탐구에서 찾은 관계</td></tr>
-        <tr class="ex"><td>&nbsp;↳ 예시</td><td>v = g·t (등가속도)</td></tr>
-        <tr><td>검증 방법</td><td class="ex-c">모형이 맞는지 무엇과 비교할지</td></tr>
-        <tr class="ex"><td>&nbsp;↳ 예시</td><td>실제 측정한 시간–속력 값과 대조</td></tr>
-      </table>
-      <p class="stuck"><b>💡</b> 코딩 실력과 무관한, <b>가장 중요한 사고</b>의 과제예요. 여기서 만든 명세서는 여유가 될 때 <b>④(새 산출물)</b>나 <b>⑤(틀린 모형)</b>의 프롬프트로 그대로 씁니다.</p>
-      <div class="call"><span class="ico">🙋</span><div>무엇을 '조작할 변수'로 삼을지 감이 안 오시면 <b>보조강사에게 도움을 요청해주세요!</b> 같이 정해 봐요 😊 한 개만 잘 정하면 나머지는 술술 풀린답니다!</div></div>
+      <p class="goal"><b>🎯 끝나면:</b> 학생이 풀면 즉시 정답·해설이 뜨는 우리 과목 퀴즈!</p>
+      <p class="step-h">1단계 · AI로 만들기</p>
+      <ol class="steps">
+        <li>클로드·지피티·제미나이에 아래를 붙여넣고 <b>[ ]만</b> 내 과목으로 바꾸세요.
+          <div class="prompt">우리 수업용 자동 채점 퀴즈 웹앱을 만들어줘.
+[과목/주제]:
+[문항]: 객관식 5문제 (각 4지선다, 정답과 한 줄 해설 포함)
+조건: 하나의 .html 파일 / 외부 라이브러리·CDN·이미지 금지 / 인터넷 없이 작동 / 한국어 / 큰 글씨·반응형 / 풀면 즉시 정오와 해설 표시 / 마지막에 점수 / '다시 풀기' 버튼 / 코드는 한 블록.</div>
+        </li>
+        <li>받은 답에서 코드를 전부 복사합니다.</li>
+      </ol>
+      <p class="step-h">2단계 · 올리고 연결하기</p>
+      <ol class="steps">
+        <li>저장소에 <code>quiz.html</code>로 올립니다(새 파일 붙여넣기 또는 업로드).</li>
+        <li><b>index.html</b>의 카드 하나 <code>href</code>를 <code>quiz.html</code>로 바꿔 연결합니다.</li>
+      </ol>
+      <p class="check"><b>✅ 확인:</b> 카드에서 열어 한 문제 풀어보고 정오·해설이 뜨면 성공이에요! 🎉</p>
+      <div class="call"><span class="ico">🙋</span><div>문항이 어색하면 "○번 문제를 이렇게 바꿔줘"라고 다시 요청하거나, 막히면 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
+    </div>
+
+    <!-- T8 (신규) -->
+    <div class="task" id="t8">
+      <div class="task-top">
+        <h3>🃏 개념 플래시카드(뒤집기) 앱</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">15분</span></div>
+      </div>
+      <p class="goal"><b>🎯 끝나면:</b> 클릭하면 뒤집히는 우리 과목 용어·개념 카드 세트!</p>
+      <p class="step-h">1단계 · AI로 만들기</p>
+      <ol class="steps">
+        <li>아래를 붙여넣고 <b>[ ]만</b> 바꾸세요.
+          <div class="prompt">개념 암기용 플래시카드 웹앱을 만들어줘.
+[과목/주제]:
+[카드]: 앞면=용어/질문, 뒷면=뜻/답. 10장 정도 예시로 채워줘.
+조건: 하나의 .html 파일 / 외부 라이브러리·CDN·이미지 금지 / 인터넷 없이 작동 / 한국어 / 큰 글씨·반응형 / 카드를 누르면 뒤집힘 / '다음·이전'과 '섞기' 버튼 / 코드는 한 블록.</div>
+        </li>
+        <li>받은 코드를 <code>cards.html</code>로 올리고, index.html 카드에 연결합니다.</li>
+      </ol>
+      <p class="check"><b>✅ 확인:</b> 카드를 눌러 뒤집히고 '다음'으로 넘어가면 성공! 🎉</p>
+      <div class="call"><span class="ico">🙋</span><div>내용을 더 넣고 싶으면 "카드 10장 더 추가해줘"라고 하세요. 막히면 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
+    </div>
+
+    <!-- T9 (신규) -->
+    <div class="task" id="t9">
+      <div class="task-top">
+        <h3>🧰 바로 쓰는 수업 도구 (모둠 편성·타이머·랜덤 뽑기)</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">쉬움</span><span class="badge b-plain">15~20분</span></div>
+      </div>
+      <p class="goal"><b>🎯 끝나면:</b> 내일 교실에서 바로 쓸 나만의 수업 도구 하나!</p>
+      <p class="step-h">1단계 · 하나 골라 AI로 만들기</p>
+      <p style="font-size:14px;color:#36404f;margin:0 0 8px">아래 중 하나로 <b>[ ]</b>를 채워 요청하세요.</p>
+      <div class="prompt">교실에서 쓸 [ 랜덤 이름 뽑기 / 모둠 자동 편성 / 카운트다운 타이머 ] 웹앱을 만들어줘.
+[세부]: (예: 학생 30명 이름을 넣으면 4명씩 모둠 편성)
+조건: 하나의 .html 파일 / 외부 라이브러리·CDN·이미지 금지 / 인터넷 없이 작동 / 한국어 / 큰 글씨·반응형 / 결과가 크고 시원하게 보이게 / '다시' 버튼 / 코드는 한 블록.</div>
+      <p class="step-h">2단계 · 올리고 연결</p>
+      <ol class="steps"><li><code>tool.html</code>로 올리고 index.html 카드에 연결합니다.</li></ol>
+      <p class="check"><b>✅ 확인:</b> 이름을 넣고 '뽑기/편성'을 눌러 결과가 나오면 성공! 🎉</p>
+      <div class="call"><span class="ico">🙋</span><div>원하는 대로 안 나오면 "이렇게 바꿔줘"라고 다시 요청하세요. 막히면 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
     </div>
 
     <!-- T5 -->
     <div class="task" id="t5">
       <div class="task-top">
-        <h3>④ 새 산출물 만들어 연결하기 · 두 사이트 잇기</h3>
-        <div class="badges"><span class="badge b-paid">AI 필요(토큰)</span><span class="badge b-plain">심화</span><span class="badge b-plain">시간 여유 시</span></div>
+        <h3>✨ 새 산출물 만들어 연결하기 (바이브코딩)</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요(토큰)</span><span class="badge b-plain">보통</span></div>
       </div>
       <p class="goal"><b>🎯 끝나면:</b> 내가 설계한 산출물 하나가 아카이브에 딱 연결!</p>
-      <p class="prep"><b>준비물:</b> ③에서 만든 명세서 1장 · AI 토큰 여유(없으면 위 <a href="#token-sec" style="color:var(--primary)">🔋 새 계정</a> 참고, 그래도 어려우면 ③까지만 해도 충분).</p>
+      <p class="prep"><b>준비물:</b> 무엇을 만들지 한 줄 아이디어 · AI 토큰 여유(없으면 위 <a href="#token-sec" style="color:var(--primary)">🔋 새 계정</a> 참고). <span style="color:var(--faint)">과학이면 '모형 명세서' 과제를 먼저 하면 더 매끄러워요.</span></p>
       <p class="step-h">1단계 · AI로 코드 받기</p>
       <ol class="steps">
         <li>클로드·지피티·제미나이 중 하나를 엽니다.</li>
-        <li><b>🧩 프롬프트 탭</b>의 <b>'① 산출물 만능 프롬프트'</b>를 복사해, 대괄호 [ ] 다섯 칸만 내 교과로 바꿔 붙여넣으세요. <span style="color:var(--faint)">(③ 명세서를 채우셨다면 그대로 옮기면 돼요!)</span></li>
+        <li><b>🧩 프롬프트 탭</b>의 <b>'① 산출물 만능 프롬프트'</b>를 복사해, 대괄호 [ ] 다섯 칸만 내 교과로 바꿔 붙여넣으세요. <span style="color:var(--faint)">(무엇을 조작하고 무엇을 확인할지만 정해두면 술술 나와요!)</span></li>
         <li>받은 답에서 <b>코드블록 오른쪽 위의 복사 버튼</b>으로 코드를 전부 복사합니다.</li>
       </ol>
-
       <p class="step-h">2단계 · 저장소에 올리기</p>
       <div class="toggle-block">
         <div class="toggle-tabs">
@@ -508,27 +599,140 @@
           </ol>
         </div>
       </div>
-
       <p class="step-h">3단계 · 대문(index.html)에 연결하기</p>
       <ol class="steps">
         <li><b>직접 연결:</b> <b>index.html</b>을 Edit → <b>기존 카드 하나</b>의 <code>href</code>를 <code>mymodel.html</code>로 바꿔 연결 → Commit. (카드를 새로 추가하지 않아요)</li>
         <li><b>또는 AI로 통째로:</b> 🧩 프롬프트 탭의 <b>'② 대문 생성 프롬프트'</b>에 내 파일명을 넣어 요청하면, AI가 <b>링크까지 넣은 index.html</b>을 만들어 줘요. 받은 코드를 <code>index.html</code>로 올리면 끝! 😊</li>
-        <li>여유가 더 있으면 — 워크북 심화처럼 <b>두 사이트를 서로 링크</b>로 이어 봅니다.</li>
       </ol>
-      <p class="check"><b>✅ 확인:</b> 그 카드의 '산출물 열기'를 눌러 내 모형이 작동하면 성공이에요! 🎉</p>
-      <p class="stuck"><b>⚠️ 막힘 대비</b> · 코드가 중간에 잘림 → "이어서 계속"이라고 다시 요청. · 열었는데 작동이 이상함 → "이 부분이 이렇게 안 돼, 고쳐줘"로 다시 요청. · 토큰 한도에 걸림 → 위 <a href="#token-sec" style="color:var(--paid)">🔋 새 계정으로</a> 이어가거나, 오늘은 ③ 설계까지만.</p>
+      <p class="check"><b>✅ 확인:</b> 그 카드의 '산출물 열기'를 눌러 내 산출물이 작동하면 성공이에요! 🎉</p>
+      <p class="stuck"><b>⚠️ 막힘 대비</b> · 코드가 중간에 잘림 → "이어서 계속"이라고 다시 요청. · 열었는데 작동이 이상함 → "이 부분이 이렇게 안 돼, 고쳐줘"로 다시 요청. · 토큰 한도에 걸림 → 위 <a href="#token-sec" style="color:var(--paid)">🔋 새 계정으로</a> 이어가기.</p>
       <div class="call"><span class="ico">🙋</span><div><b>파일은 올렸는데 카드에서 안 열리나요?</b> '파일 올리기'와 '카드에 연결하기'는 서로 다른 두 작업이에요. 여기서 제일 많이 멈추는 지점이니, 막히면 바로 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
     </div>
 
-    <!-- T6 (신규) -->
+    <!-- T12 (신규) -->
+    <div class="task" id="t12">
+      <div class="task-top">
+        <h3>🛠️ 내 삶·업무의 불편을 푸는 프로그램 만들기</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">보통</span><span class="badge b-plain">자유</span></div>
+      </div>
+      <p class="goal"><b>🎯 끝나면:</b> 내가 매일 겪는 불편 하나를 실제로 해결하는 나만의 웹앱!</p>
+      <p class="whatis"><b>거창하지 않아도 돼요.</b> 매번 반복하는 계산, 관리가 번거로운 목록, 자꾸 까먹는 일 같은 <b>작은 불편</b>을 하나 골라 AI와 함께 해결해 봐요. 학생들에게 '실생활 문제 해결'을 가르치기 전에, 선생님이 먼저 경험해 보는 과제예요! 😊</p>
+      <p class="step-h">1단계 · 불편 하나 고르기</p>
+      <p style="font-size:14px;color:#36404f;margin:0 0 8px">이런 것들이 좋아요 👇 (딱 하나만!)</p>
+      <ul class="steps" style="list-style:disc;padding-left:22px">
+        <li><b>생활:</b> 식단·메뉴 랜덤 추천, 물 마시기·습관 체크, 더치페이·가계부 계산기, D-day·기념일 계산기</li>
+        <li><b>업무:</b> 학생 이름으로 발표 순서·자리 배치, 수행평가 점수 자동 합산기, 마감·할 일 체크리스트, 학급비 정산기</li>
+      </ul>
+      <p class="step-h">2단계 · AI로 만들기</p>
+      <ol class="steps">
+        <li>클로드·지피티·제미나이에 아래를 붙여넣고 <b>[ ]</b>를 내 불편으로 채우세요.
+          <div class="prompt">내가 겪는 이런 불편을 해결하는 웹앱을 만들어줘.
+[불편/상황]:
+[하는 일]: (예: 학생 이름을 넣으면 발표 순서를 랜덤으로 정해준다)
+[입력]: / [결과로 보여줄 것]:
+조건: 하나의 .html 파일 / 외부 라이브러리·CDN·이미지 금지 / 인터넷 없이 작동 / 한국어 / 큰 글씨·반응형 / 필요하면 입력값을 저장(localStorage) / 코드는 한 블록.</div>
+        </li>
+        <li>받은 코드를 복사합니다.</li>
+      </ol>
+      <p class="step-h">3단계 · 올리고(선택) 연결</p>
+      <ol class="steps">
+        <li><code>mytool.html</code>로 저장소에 올립니다.</li>
+        <li>아카이브에 넣고 싶으면 index.html 카드 하나에 연결하고, 개인 도구로 쓸 거면 그 파일 주소(<code>username.github.io/저장소/mytool.html</code>)만 즐겨찾기 해도 돼요!</li>
+      </ol>
+      <p class="check"><b>✅ 확인:</b> 실제로 내 불편이 조금이라도 편해졌다면 성공이에요! 🎉 (제출엔 '어떤 불편을 풀었는지' 한 줄만 적어 주세요.)</p>
+      <p class="stuck"><b>⚠️ 막힘 대비</b> · 원하는 대로 안 나옴 → "이 부분을 이렇게 바꿔줘"로 다시 요청. · 저장이 안 됨 → "입력값을 localStorage에 저장하도록 해줘"라고 요청.</p>
+      <div class="call"><span class="ico">🙋</span><div>어떤 불편을 고를지가 제일 어렵고 제일 중요해요! 감이 안 오면 <b>보조강사에게 도움을 요청해주세요!</b> 같이 하나 정해봐요 😊</div></div>
+    </div>
+
+    <!-- T10 (신규) -->
+    <div class="task" id="t10">
+      <div class="task-top">
+        <h3>📊 데이터를 바꾸면 그래프가 변하는 탐구 앱</h3>
+        <div class="badges"><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">보통</span><span class="badge b-plain">25분</span></div>
+      </div>
+      <p class="goal"><b>🎯 끝나면:</b> 학생이 값을 바꾸면 즉시 그래프가 변하는 탐구 도구!</p>
+      <p class="whatis">사회 통계, 수학 함수, 과학 데이터, 음악 파형처럼 <b>'값을 바꾸며 패턴을 발견'</b>하는 주제에 잘 맞아요.</p>
+      <p class="step-h">1단계 · AI로 만들기</p>
+      <ol class="steps">
+        <li>아래를 붙여넣고 <b>[ ]만</b> 바꾸세요.
+          <div class="prompt">데이터 탐구용 웹앱을 만들어줘.
+[과목/주제]:
+[학생이 조작할 것]: (예: 슬라이더로 값·계수를 바꾼다)
+[보여줄 그래프]: (예: 막대/선 그래프가 실시간으로 변한다)
+[발견할 패턴/개념]:
+조건: 하나의 .html 파일 / 외부 라이브러리·CDN·이미지 금지(그래프는 순수 canvas 또는 SVG로) / 인터넷 없이 작동 / 한국어 / 큰 글씨·반응형 / '다시 시작' 버튼 / 코드는 한 블록.</div>
+        </li>
+        <li>받은 코드를 <code>data.html</code>로 올리고 index.html 카드에 연결합니다.</li>
+      </ol>
+      <p class="check"><b>✅ 확인:</b> 값을 바꿨을 때 그래프가 즉시 변하면 성공이에요! 🎉</p>
+      <div class="call"><span class="ico">🙋</span><div>그래프가 안 그려지면 "외부 라이브러리 없이 순수 canvas로 다시 만들어줘"라고 요청하세요. 막히면 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
+    </div>
+
+    <!-- T3 -->
+    <div class="task" id="t3">
+      <div class="task-top">
+        <h3>📄 '모형 명세서' 한 장 설계하기</h3>
+        <div class="badges"><span class="badge b-sci">과학</span><span class="badge b-free">AI 불필요</span><span class="badge b-plain">종이·문서</span><span class="badge b-plain">15~20분</span></div>
+      </div>
+      <p class="goal"><b>🎯 끝나면:</b> 학생에게 시킬 산출물의 설계도 — 그대로 프롬프트가 돼요!</p>
+      <p class="whatis"><b>📄 모형 명세서가 뭔가요?</b> 학생에게 <b>어떤 과학 모형을 만들게 할지 미리 정리하는 '설계도 한 장'</b>이에요. 무엇을 조작하고 무엇을 예측하는 모형인지 아래 다섯 칸으로 정해 두면, 그게 곧 <b>학생 활동의 뼈대</b>이자 나중에 <b>AI에게 그대로 줄 프롬프트</b>가 된답니다. 오늘은 이 한 장만 완성하셔도 훌륭한 산출물이에요! 😊</p>
+      <p style="font-size:14px;color:#36404f;margin:0 0 10px">아래 다섯 칸을 채우면 명세서 완성이에요! 종이·메모장에 적으셔도 되고, 그대로 옮겨 쓰셔도 됩니다. <b>맨 오른쪽은 자유낙하 예시</b>예요 👇</p>
+      <table class="spec">
+        <tr><td>탐구 질문</td><td class="ex-c">학생이 붙들 질문 한 문장</td></tr>
+        <tr class="ex"><td>&nbsp;↳ 예시</td><td>속력은 시간에 따라 어떻게 변할까?</td></tr>
+        <tr><td>학생이 조작할 변수</td><td class="ex-c">슬라이더·선택으로 바꿀 것</td></tr>
+        <tr class="ex"><td>&nbsp;↳ 예시</td><td>중력(지구·달·화성), 시작/다시</td></tr>
+        <tr><td>조작 후 예측·확인할 것</td><td class="ex-c">결과로 나타날 값·패턴</td></tr>
+        <tr class="ex"><td>&nbsp;↳ 예시</td><td>속력이 일정하게 증가 · 그래프가 직선 · 기울기 = 중력가속도</td></tr>
+        <tr><td>담을 규칙·공식</td><td class="ex-c">학생이 탐구에서 찾은 관계</td></tr>
+        <tr class="ex"><td>&nbsp;↳ 예시</td><td>v = g·t (등가속도)</td></tr>
+        <tr><td>검증 방법</td><td class="ex-c">모형이 맞는지 무엇과 비교할지</td></tr>
+        <tr class="ex"><td>&nbsp;↳ 예시</td><td>실제 측정한 시간–속력 값과 대조</td></tr>
+      </table>
+      <p class="stuck"><b>💡</b> 코딩 실력과 무관한, <b>가장 중요한 사고</b>의 과제예요. 여기서 만든 명세서는 여유가 될 때 '<b>새 산출물 만들기</b>'나 '<b>틀린 모형 디버깅</b>' 과제의 프롬프트로 그대로 씁니다.</p>
+      <div class="call"><span class="ico">🙋</span><div>무엇을 '조작할 변수'로 삼을지 감이 안 오시면 <b>보조강사에게 도움을 요청해주세요!</b> 같이 정해 봐요 😊 한 개만 잘 정하면 나머지는 술술 풀린답니다!</div></div>
+    </div>
+
+    <!-- T11 (신규) -->
+    <div class="task star" id="t11">
+      <div class="task-top">
+        <h3>🗃️ Supabase로 '실시간 의견 보드' 만들기 — 미니 DB 실습</h3>
+        <div class="badges"><span class="badge b-star">도전</span><span class="badge b-common">전 교과</span><span class="badge b-paid">AI 필요</span><span class="badge b-plain">30분+</span></div>
+      </div>
+      <p class="whatis"><b>이건 뭔가요?</b> 방금 쓰신 <b>🆘 SOS 게시판</b>처럼, 학생들이 글을 올리면 <b>모두에게 실시간으로 보이는</b> 페이지를 직접 만들어 봐요. 데이터가 서버(Supabase)에 저장되는 <b>진짜 DB 실습</b>이에요! (수업 의견 모으기·실시간 질문판·투표 등에 바로 활용)</p>
+      <p class="step-h">1단계 · Supabase 준비 (약 5분)</p>
+      <ol class="steps">
+        <li><a href="https://supabase.com" target="_blank" rel="noopener" style="color:var(--primary)">supabase.com</a>에서 무료 가입 → <b>New project</b> 생성.</li>
+        <li><b>SQL Editor</b>에 아래를 붙여넣고 실행합니다 (게시판 테이블 1개 + 누구나 읽기·쓰기).
+          <div class="prompt">create table board (
+  id bigint generated always as identity primary key,
+  created_at timestamptz default now(),
+  name text, message text
+);
+alter table board enable row level security;
+create policy "read"  on board for select to anon using (true);
+create policy "write" on board for insert to anon with check (true);</div>
+        </li>
+        <li><b>Project Settings → API</b>에서 <b>Project URL</b>과 <b>anon key</b>를 복사해 둡니다.</li>
+      </ol>
+      <p class="step-h">2단계 · AI로 화면 만들기</p>
+      <ol class="steps">
+        <li>🧩 프롬프트 탭의 <b>'③ Supabase 미니 앱 프롬프트'</b>를 복사해 붙여넣고, 내 <b>URL·anon key·테이블(board)</b>을 알려주면 AI가 페이지를 만들어 줘요.</li>
+        <li>받은 코드를 <code>board.html</code>로 저장소에 올리고 index.html 카드에 연결합니다.</li>
+      </ol>
+      <p class="check"><b>✅ 확인:</b> 내 페이지에서 글을 쓰면 목록에 뜨고, 새로고침해도 남아 있으면 성공이에요! 🎉 (다른 기기에서도 보이면 완벽!)</p>
+      <p class="stuck"><b>⚠️ 막힘 대비</b> · "쓰기가 안 돼요" → 대개 위 <b>정책(policy)</b> 실행 누락이에요. SQL을 다시 실행해 보세요. · "안 불러와요" → URL·anon key 오타를 확인하세요.</p>
+      <div class="call"><span class="ico">🙋</span><div>Supabase가 처음이면 화면 같이 보며 5분이면 돼요 — <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>
+    </div>
+
+    <!-- T6 -->
     <div class="task star" id="t6">
       <div class="task-top">
-        <h3>⑤ '모형 정교화하기' 수업 만들기 — 일부러 틀린 모형</h3>
-        <div class="badges"><span class="badge b-star">강력 추천</span><span class="badge b-free">설계는 AI 불필요</span><span class="badge b-paid">만들기는 토큰/편집</span><span class="badge b-plain">심화</span></div>
+        <h3>🐞 '모형 정교화하기' 수업 만들기 — 일부러 틀린 모형</h3>
+        <div class="badges"><span class="badge b-sci">과학</span><span class="badge b-star">강력 추천</span><span class="badge b-free">설계는 AI 불필요</span><span class="badge b-paid">만들기는 토큰/편집</span><span class="badge b-plain">도전</span></div>
       </div>
       <p class="whatis"><b>어떤 수업인가요?</b> 교사가 <b>일부러 과학적 오류(오개념)를 하나 심은 모형</b>을 학생에게 줍니다. 학생들은 과학자들이 합의하듯 <b>토의로 그 오류를 찾아내</b>, 무엇이 왜 틀렸는지 논증한 뒤 모형을 <b>디버깅해 올바르게</b> 고칩니다. '정답 모형'을 주는 대신 <b>틀린 모형을 고치는 과정</b>에서 개념이 단단해져요. (2022 개정 '모형의 개발·사용' + 논증·합의 실천)</p>
       <p class="goal"><b>선생님의 과제:</b> 오개념이 하나 숨은 모형 + 디버깅 토의 계획 한 줄 만들기</p>
-
       <p class="step-h">1단계 · 설계 (전원 · 토큰 0)</p>
       <p style="font-size:14px;color:#36404f;margin:0 0 8px">세 칸만 정하면 됩니다. 종이에 적어도 돼요.</p>
       <table class="spec">
@@ -536,7 +740,6 @@
         <tr><td>심을 오개념</td><td class="ex">학생이 흔히 갖는 잘못된 생각 — 예: <b>"무거운 물체가 더 빨리 떨어진다"</b> → 모형에서 질량이 크면 속력이 더 빨라지도록 만듦</td></tr>
         <tr><td>드러나는 단서 &amp; 올바른 모습</td><td class="ex">학생이 무엇을 조작·관찰하면 오류가 보이나 — 예: 질량만 바꿔도 그래프 기울기가 변함(“어? 진공에선 같아야 하는데?”). <b>올바른 모형</b>: 질량과 무관하게 기울기(g) 일정.</td></tr>
       </table>
-
       <p class="step-h">2단계 · 만들기 (두 갈래 중 택1)</p>
       <ol class="steps">
         <li><b>토큰이 있으면 — 오개념을 심어 생성.</b> 🧩 프롬프트 탭 '① 산출물 만능 프롬프트' 끝에 이 한 줄을 더합니다:
@@ -544,15 +747,16 @@
 수업에서 학생들이 오류를 찾아 고칠 거야. 올바른 버전도 따로 하나 더 만들어줘.</div>
         </li>
         <li><b>토큰이 없으면 — 제공 모형에 오류 심기(편집).</b> 패들렛에서 받은 <code>freefall.html</code> 같은 모형을 열어, 값 하나를 일부러 틀리게 바꿉니다(예: 중력을 질량에 따라 달라지게). 어느 줄을 바꿀지는 <b>보조강사에게 도움을 요청해</b> 같이 짚으면 안전해요 😊 <span style="color:var(--faint)">편집이 어려우면 1단계 설계까지만 해도 훌륭한 산출물입니다.</span></li>
-        <li>만든 '틀린 모형'을 저장소에 올리고(④의 <b>2단계 · 저장소에 올리기</b>처럼 — 새 파일/업로드 중 편한 방법으로), <b>기존 카드 하나</b>에 연결합니다.</li>
+        <li>만든 '틀린 모형'을 저장소에 올리고('<b>새 산출물 만들기</b>' 과제의 2단계처럼 — 새 파일/업로드 중 편한 방법으로), <b>기존 카드 하나</b>에 연결합니다.</li>
         <li>그 카드의 <b>'열린 결론'</b>에 이렇게 적어 두면 그대로 수업 자료가 돼요 — <i>"이 모형에는 오류가 하나 숨어 있습니다. 무엇이 왜 틀렸을까요? 모둠에서 찾아 고쳐 봅시다."</i></li>
       </ol>
       <p class="check"><b>✅ 확인:</b> 틀린 모형이 열리고, <b>'무엇이 왜 틀렸는지'를 내가 한 줄로 설명</b>하실 수 있으면 설계 완료예요! 🎉 (제출엔 '심은 오개념'을 한 줄 적어 주세요.)</p>
       <p class="stuck"><b>⚠️ 막힘 대비</b> · 오개념을 코드로 어떻게 심을지 막힘 → 2단계 갈래B로 <b>값 하나만</b> 바꾸거나, 1단계 설계까지만. · 학생이 너무 쉽게/어렵게 찾을 것 같음 → 단서(조작 변수)를 하나 늘리거나 줄여 난이도 조절.</p>
       <div class="call"><span class="ico">🙋</span><div>어느 줄을 고쳐야 오류가 <b>'그럴듯하게'</b> 생기는지가 이 과제의 가장 재미있는 지점이에요! 막히면 꼭 <b>보조강사에게 도움을 요청해주세요!</b> 같이 한 줄만 찾으면 된답니다 😊</div></div>
     </div>
-  </section>
 
+    </div><!--/task-detail-->
+  </section>
   </div><!--/view-tasks-->
 
   <div class="view" id="view-prompt" hidden>
@@ -563,7 +767,7 @@
     <div class="task">
       <div class="task-top">
         <h3>① 산출물 만능 프롬프트</h3>
-        <div class="badges"><span class="badge b-paid">AI 필요</span><span class="badge b-plain">과제 ④에서 사용</span></div>
+        <div class="badges"><span class="badge b-paid">AI 필요</span><span class="badge b-plain">'새 산출물'·'퀴즈' 등에서 사용</span></div>
       </div>
       <p class="goal"><b>🎯 쓰는 법:</b> 대괄호 [ ] 다섯 칸만 내 교과로 바꿔 붙여넣기!</p>
       <div class="prompt">아래 내용을 바탕으로 수업용 미니 웹앱을 만들어줘.
@@ -616,7 +820,7 @@
     <div class="task">
       <div class="task-top">
         <h3>② 대문(index.html) 생성 프롬프트</h3>
-        <div class="badges"><span class="badge b-paid">AI 필요</span><span class="badge b-plain">과제 ④·⑤에서 사용</span></div>
+        <div class="badges"><span class="badge b-paid">AI 필요</span><span class="badge b-plain">산출물 연결 시 사용</span></div>
       </div>
       <p class="whatis"><b>이건 뭔가요?</b> 산출물을 먼저 만들어 올린 뒤 그 <b>'파일명'</b>을 알려주며 아래를 요청하면, AI가 <b>링크(연결)까지 넣은 대문 index.html</b>을 만들어 줘요. 사람이 직접 링크를 심지 않아도 된답니다! 😊</p>
       <div class="prompt">내 탐구 산출물들을 소개하는 대문 페이지(index.html)를 만들어줘.
@@ -632,6 +836,19 @@
         <li>받은 index.html 코드를 복사해, 내 저장소에 파일명 <code>index.html</code>로 올립니다.</li>
       </ol>
       <p class="stuck"><b>💡 왜 이렇게 하나요?</b> '탐구 질문 / 사고 흔적 / 열린 결론' 제약이 들어 있어, AI가 자유롭게 만들어도 우리 아카이브 형식(정답 전시가 아니라 '사고의 흔적')이 유지돼요. · 완성 주소: <code>username.github.io/my-lab/</code></p>
+    </div>
+    <div class="task">
+      <div class="task-top">
+        <h3>③ Supabase 미니 앱 프롬프트</h3>
+        <div class="badges"><span class="badge b-paid">AI 필요</span><span class="badge b-plain">'실시간 보드' 과제에서 사용</span></div>
+      </div>
+      <p class="whatis"><b>이건 뭔가요?</b> Supabase(무료 DB)에 연결되는 <b>실시간 게시판</b> 페이지를 AI가 만들어 줘요. 내 <b>URL·anon key·테이블</b>만 알려주면 됩니다! 😊</p>
+      <div class="prompt">Supabase에 연결되는 '실시간 의견 보드' 웹앱을 하나의 .html 파일로 만들어줘.
+- Supabase 정보: URL = (여기에), anon key = (여기에), 테이블 = board (컬럼: id, created_at, name, message)
+- 기능: 이름(선택)과 내용을 입력해 올리면 board 테이블에 저장되고, 아래 목록에 최신순으로 보인다. 5초마다 자동 새로고침.
+- 저장·불러오기는 Supabase REST API(fetch)로 직접 호출(외부 라이브러리·CDN 금지). 헤더에 apikey와 Authorization: Bearer (anon key)를 사용.
+- 한국어, 큰 글씨, 반응형, 코드는 한 블록.</div>
+      <p class="stuck"><b>💡</b> 완성 후 <b>Project Settings → API</b>의 URL·anon key를 코드에 넣고, 테이블·정책(SQL)을 만들어 두어야 작동해요. (anon key는 공개용이라 페이지에 넣어도 안전합니다.)</p>
     </div>
   </section>
   </div><!--/view-prompt-->
@@ -671,7 +888,7 @@
           <ul class="what">
             <li><b>① 내 아카이브 URL</b> (username.github.io/…)</li>
             <li><b>② 오늘 한 것 한 줄 소개</b> (예: "3종 연결 완료" / "카드 우리 반 탐구로 교체")</li>
-            <li><b>③ (③·⑤ 하신 분)</b> 명세서의 '탐구 질문' 또는 '심은 오개념' 한 줄</li>
+            <li><b>③ (해당되면)</b> 명세서의 '탐구 질문' 또는 '심은 오개념' 한 줄</li>
           </ul>
           <a class="padlet-btn" id="padlet-link" href="#" target="_blank" rel="noopener">패들렛에 제출하기 →</a>
           <button class="copy" id="copy-link">패들렛 주소 복사</button>
@@ -3141,60 +3358,96 @@ function scrollToNav(){ const n=document.querySelector(".navwrap"); if(n) window
 function showTab(name){
   document.querySelectorAll(".view").forEach(v=>{ v.hidden = (v.id!=="view-"+name); });
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.view===name));
-  document.getElementById("subtabs").hidden = (name!=="tasks");
+  if(name==="tasks") closeTask();
   if(name==="sos") sosLoad(true);
   scrollToNav();
 }
-function showTask(id){
-  document.querySelectorAll("#view-tasks .task").forEach(t=>t.classList.toggle("shown", t.id===id));
-  document.querySelectorAll(".stab").forEach(s=>s.classList.toggle("active", s.dataset.task===id));
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showTab(t.dataset.view)));
+
+/* ---- 과제: 카드 메뉴 ↔ 상세 ---- */
+function openTask(id){
+  const m=document.getElementById("task-menu"), f=document.getElementById("task-filter"), d=document.getElementById("task-detail");
+  if(m) m.style.display="none"; if(f) f.style.display="none"; if(d) d.hidden=false;
+  document.querySelectorAll("#task-detail .task").forEach(t=>t.classList.toggle("shown", t.id===id));
   scrollToNav();
 }
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showTab(t.dataset.view)));
-document.querySelectorAll(".stab").forEach(s=>s.addEventListener("click",()=>showTask(s.dataset.task)));
+function closeTask(){
+  const d=document.getElementById("task-detail"); if(d) d.hidden=true;
+  const m=document.getElementById("task-menu"); if(m) m.style.display="";
+  const f=document.getElementById("task-filter"); if(f) f.style.display="";
+}
+/* 교과 필터 (all: 전체 / common: 과학 전용 제외) */
+function filterTasks(f){
+  document.querySelectorAll("#task-filter .fchip").forEach(c=>c.classList.toggle("active", c.dataset.f===f));
+  document.querySelectorAll("#task-menu .tile").forEach(t=>{ t.style.display=(f==="common"&&t.dataset.cat==="sci")?"none":""; });
+}
+document.querySelectorAll("#task-filter .fchip").forEach(c=>c.addEventListener("click",()=>filterTasks(c.dataset.f)));
+
+/* SOS 실시간 폴링 */
 setInterval(()=>{ if(SB_ON && !document.getElementById("view-sos").hidden) sosLoad(); }, 5000);
 
-/* ---- 자기진단 라우팅 ---- */
+/* ---- 자기진단 라우팅 (교과 반영 · 순위 추천) ---- */
 const TASK={
-  t1:{title:"① 제공 산출물 3종 연결하기"},
-  t2:{title:"② 카드를 내 수업 탐구로 바꾸기"},
-  t3:{title:"③ 모형 명세서 한 장 설계하기"},
-  t5:{title:"④ 새 산출물 만들어 연결하기"},
-  t6:{title:"⑤ 일부러 틀린 모형 만들기 (오개념 디버깅)"},
+  t1:{title:"제공 데모 3종 연결하기", blurb:"토큰 없이 완성형 아카이브를 손에"},
+  t2:{title:"카드를 내 수업 언어로 바꾸기", blurb:"글자만 고쳐 '우리 반' 아카이브로"},
+  t3:{title:"모형 명세서 한 장 설계하기", blurb:"코딩 없이 학생 탐구 모형을 설계"},
+  t5:{title:"새 산출물 만들기 (바이브코딩)", blurb:"AI로 인터랙티브 산출물 제작·연결"},
+  t6:{title:"일부러 틀린 모형 디버깅 수업", blurb:"오개념을 심어 '고치기' 수업으로"},
+  t7:{title:"자동 채점 퀴즈 만들기", blurb:"풀면 즉시 채점되는 우리 과목 퀴즈"},
+  t8:{title:"개념 플래시카드 앱", blurb:"누르면 뒤집히는 개념 암기 카드"},
+  t9:{title:"수업 도구 만들기(모둠·타이머·뽑기)", blurb:"내일 바로 쓸 교실 도구"},
+  t10:{title:"데이터 탐구 시각화 앱", blurb:"값을 바꾸면 그래프가 변하는 탐구"},
+  t11:{title:"Supabase 실시간 보드 만들기", blurb:"서버에 저장되는 실시간 미니 DB"},
+  t12:{title:"내 삶·업무 불편 해결 프로그램", blurb:"내가 겪는 불편을 직접 푸는 앱"},
 };
-let tok=null, goal=null;
+const NEED_AI={t5:1,t6:1,t7:1,t8:1,t9:1,t10:1,t11:1,t12:1};
+let subj=null, tok=null, goal=null;
 function press(row,btn){ row.querySelectorAll(".opt").forEach(b=>b.setAttribute("aria-pressed", b===btn?"true":"false")); }
+document.getElementById("q-subj").querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>{
+  subj=b.dataset.subj; press(document.getElementById("q-subj"),b);
+  const other=subj==="other";
+  document.querySelectorAll('#q-goal .opt[data-sci="1"]').forEach(o=>{ o.style.display=other?"none":""; if(other&&o.getAttribute("aria-pressed")==="true") o.setAttribute("aria-pressed","false"); });
+  if(other&&goal==="model") goal=null;
+  filterTasks(other?"common":"all");
+  maybe();
+}; });
 document.getElementById("q-token").querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>{ tok=b.dataset.token; press(document.getElementById("q-token"),b); maybe(); }; });
 document.getElementById("q-goal").querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>{ goal=b.dataset.goal; press(document.getElementById("q-goal"),b); maybe(); }; });
-function maybe(){ if(tok&&goal) showResult(); }
+function maybe(){ if(subj&&tok&&goal) showResult(); }
 
+function rankFor(){
+  const sci = subj==="sci";
+  switch(goal){
+    case "finish":    return ["t1","t2","t7"];
+    case "adapt":     return ["t2","t7","t1"];
+    case "teachtool": return ["t7","t8","t9"];
+    case "product":   return sci?["t5","t3","t10"]:["t5","t10","t7"];
+    case "reallife":  return ["t12","t5","t9"];
+    case "realtime":  return ["t11","t5","t10"];
+    case "model":     return ["t3","t6","t5"];
+    default:          return ["t1","t2","t7"];
+  }
+}
 function showResult(){
-  let primary, why, secondary=null;
-  if(goal==="fill"){ primary="t1"; why="오늘 만든 아카이브에 제공 산출물 3종을 모두 연결해, 눈에 보이는 완성형을 손에 쥐어요. 토큰이 전혀 필요 없어요."; }
-  else if(goal==="mine"){ primary="t2"; why="제공된 카드를 내 과목의 탐구 언어로 바꿔 '우리 반 아카이브'로 만듭니다. 글자만 고치면 돼서 안전하고, 토큰이 필요 없어요."; }
-  else if(goal==="design"){ primary="t3"; why="학생에게 시킬 산출물을 명세서 한 장으로 설계합니다. 코딩과 무관한 사고 중심 과제이고, 이 명세서가 나중에 그대로 프롬프트가 돼요."; }
-  else if(goal==="debug"){
-    if(tok==="yes"){ primary="t6"; why="일부러 오개념을 심은 모형을 만들어, 학생들이 토의로 찾아 고치는 수업을 설계합니다. 설계는 토큰 0, 만들기는 여유 있는 토큰으로 생성하면 돼요."; secondary="t3"; }
-    else{ primary="t6"; why="이 수업의 핵심인 '오개념 설계'는 토큰 없이 됩니다. 실제 모형은 패들렛의 모형을 조금 고치거나(갈래B), 오늘은 설계까지만 해도 훌륭해요. 어느 줄을 고칠지는 보조강사에게 도움을 요청하면 됩니다!"; secondary="t3"; }
+  let rank=rankFor();
+  let note="";
+  if(tok==="no" && NEED_AI[rank[0]]){
+    note="지금 토큰이 부족하면, 위 <b>🔋 토큰</b> 탭의 '새 계정으로 이어가기'를 참고하시거나 — <b>연결·다듬기·명세서</b>처럼 AI가 필요 없는 과제부터 시작해도 좋아요 😊";
+    const free = (subj==="sci") ? "t3" : "t2";
+    if(!rank.includes(free)) rank=[free].concat(rank).slice(0,3);
   }
-  else if(goal==="create"){
-    if(tok==="yes"){ primary="t5"; why="토큰 여유가 있으니, 직접 새 산출물을 만들어 아카이브에 연결해 봅니다. 먼저 ③ 명세서를 채우면 더 매끄러워요."; secondary="t3"; }
-    else{ primary="t3"; why="지금은 토큰이 부족하니, 오늘은 ③ 명세서로 '설계'까지 완성해 두세요(그대로 프롬프트가 됩니다). 토큰을 이어가려면 위 🔋 섹션의 '새 계정'을, 완성 경험이 필요하면 ①도 좋아요."; secondary="t1"; }
-  }
-  else if(goal==="slow"){ primary="t1"; why="가볍게 시작하기 좋아요 😊 제공 산출물을 연결해 완성 경험을 먼저 갖고, 익숙해지면 ② 카드를 내 수업 언어로 바꿔 보세요."; secondary="t2"; }
-
-  const p=TASK[primary];
-  let btns=`<a class="btn btn-primary" onclick="goTask('${primary}')">${p.title} 보기 →</a>`;
-  if(secondary){ btns+=`<a class="btn btn-ghost" onclick="goTask('${secondary}')">${TASK[secondary].title} 보기</a>`; }
+  let items="";
+  rank.forEach((id,i)=>{ const t=TASK[id]; if(!t) return; items+=`<li><span class="rk">${i+1}</span><a class="rk-a" onclick="goTask('${id}')">${t.title}</a><span class="rk-b">${t.blurb}</span></li>`; });
   const r=document.getElementById("result");
-  r.innerHTML=`<p class="rlabel">추천 과제</p><p class="rtitle">${p.title}</p><p class="rwhy">${why}</p><div class="rbtns">${btns}</div><div class="call" style="margin-top:14px"><span class="ico">🙋</span><div>진행하다 막히면 언제든 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>`;
+  r.innerHTML=`<p class="rlabel">추천 과제 순위</p><ol class="rrank">${items}</ol>`+(note?`<div class="rnote">💡 ${note}</div>`:"")+`<div class="call" style="margin-top:14px"><span class="ico">🙋</span><div>순위는 참고용이에요 — 끌리는 걸 골라 1시간 몰입해 보세요! 막히면 언제든 <b>보조강사에게 도움을 요청해주세요!</b> 😊</div></div>`;
   r.classList.add("show");
   document.getElementById("reset").classList.add("show");
 }
-function goTask(id){ showTab("tasks"); showTask(id); }
+function goTask(id){ showTab("tasks"); openTask(id); }
 document.getElementById("reset").onclick=()=>{
-  tok=null; goal=null;
+  subj=null; tok=null; goal=null;
   document.querySelectorAll(".opt").forEach(b=>b.setAttribute("aria-pressed","false"));
+  document.querySelectorAll('#q-goal .opt[data-sci="1"]').forEach(o=>o.style.display="");
   const r=document.getElementById("result"); r.classList.remove("show"); r.innerHTML="";
   document.getElementById("reset").classList.remove("show");
   scrollToNav();
