@@ -218,6 +218,18 @@ table.data td b{color:var(--navy)}
 .sopt .son{font-family:var(--font-round);color:var(--navy);font-size:1.02rem}
 .sopt .sod{font-size:.85rem;color:var(--ink-soft);margin-top:5px;line-height:1.5}
 
+/* ── 더 알아보기: 기능 쇼케이스 ── */
+.more{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:14px;max-width:960px;margin:18px auto 0}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;position:relative}
+.mcard .mtag{align-self:flex-start;font-size:.68rem;font-weight:800;letter-spacing:.03em;color:var(--gold-deep);background:rgba(195,154,53,.14);border-radius:999px;padding:3px 11px}
+.mcard .mhead{display:flex;align-items:center;gap:9px}
+.mcard .mic{font-size:1.5rem;line-height:1}
+.mcard .mname{font-family:var(--font-round);color:var(--navy);font-size:1.06rem}
+.mcard .mben{font-size:.9rem;color:var(--ink);line-height:1.55}
+.mcard .mcap{font-size:.8rem;color:var(--ink-soft);line-height:1.5;border-top:1px dashed var(--line);padding-top:8px}
+.mcard .mcap b{color:var(--ink)}
+.mcard .mflag{position:absolute;top:14px;right:14px;font-size:.66rem;font-weight:800;color:#fff;background:var(--red);border-radius:999px;padding:2px 9px}
+
 /* ── use lists / caution ── */
 .uselists{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:960px;margin:0 auto}
 @media(max-width:680px){.uselists{grid-template-columns:1fr}}
@@ -477,6 +489,26 @@ const DATA = {
   ]},
   nlmPrompts:['이 자료의 핵심 내용을 5개로 정리해 줘.','교사가 해야 할 일을 기한순으로 정리해 줘.','놓치기 쉬운 조건을 찾아 줘.','이 내용을 교직원 안내 메시지로 작성해 줘.','자료의 내용 중 서로 연결되는 부분을 설명해 줘.','각 답변의 근거가 어느 소스에 있는지 알려 줘.'],
   nlmStudio:[{n:'🧠 마인드맵',d:'개념 구조를 한눈에 볼 때'},{n:'🎧 오디오 개요',d:'이동 중·복습용으로 귀로 들을 때'},{n:'📑 보고서',d:'요약·FAQ·학습 가이드가 필요할 때'},{n:'🃏 플래시카드·퀴즈',d:'학생 복습·자기점검 자료가 필요할 때'}],
+  nlmMore:[
+    {tag:'소스 · 자료 넣기', ic:'▶️', n:'유튜브 영상 넣기',
+      ben:'영상 <b>URL만 붙여넣으면</b> 자막(스크립트)을 소스로 가져옵니다. 과학 유튜브 여러 개를 모아 학습지·퀴즈·FAQ로 만들 수 있습니다.',
+      cap:'⚠️ <b>자막 텍스트만</b> 읽습니다(영상 화면은 분석하지 않음). <b>공개·자막 있는 영상</b>만 되고, 인용은 자막 구절로 연결돼 재생 지점으로 바로 이동하지는 않습니다.'},
+    {tag:'연동 · 구글 드라이브', ic:'📁', n:'문서·슬라이드 자동 동기화',
+      ben:'구글 <b>문서·슬라이드·시트</b>를 드라이브에서 바로 소스로. 원본을 고치면 노트북에 <b>자동 반영</b>돼(2026년 업데이트) 다시 올릴 필요가 없습니다.',
+      cap:'⚠️ 노트북은 <b>사본</b>을 저장합니다. 원본 접근이 막히거나 삭제되면 소스도 못 씁니다. 댓글·각주는 안 들어오고, 슬라이드는 100장까지입니다.'},
+    {tag:'연동 · Gemini', ic:'✨', n:'Gemini에 노트북 연결', flag:'학교계정 확인',
+      ben:'만든 노트북을 <b>Gemini 대화에 ‘소스로 첨부’</b>해 노트북 자료에 근거한 답을 받을 수 있습니다(2026년 도입). NotebookLM 자체가 Gemini로 구동됩니다.',
+      cap:'⚠️ 노트북↔Gemini <b>심층 동기화</b>는 유료·웹 전용이라 <b>학교(Workspace)·미성년 계정은 사용 불가</b>. 학교 계정은 <b>관리자가 켜야</b> 첨부 연동이 보일 수 있습니다.'},
+    {tag:'출력 · 듣기', ic:'🎧', n:'오디오 개요 (한국어)',
+      ben:'자료를 <b>두 사람이 대화하는 팟캐스트</b>로 만들어 줍니다. <b>한국어 음성</b>을 지원해 이동 중·복습용으로 듣기 좋습니다.',
+      cap:'⚠️ 듣다가 끼어들어 질문하는 <b>인터랙티브 모드</b>와 길이 조절은 현재 <b>영어 전용</b>이라, 한국어는 ‘듣기’만 됩니다. 무료는 하루 약 3회 생성.'},
+    {tag:'출력 · 보기', ic:'🎬', n:'동영상 개요',
+      ben:'자료를 <b>내레이션이 깔린 영상</b>으로 만들어 줍니다. 슬라이드형(Explainer)은 <b>한국어 포함 약 70여 개 언어</b>를 지원해 수업 도입·복습 영상으로 좋습니다.',
+      cap:'⚠️ 화려한 애니메이션형·60초 숏은 <b>영어·만 18세 이상</b> 전용입니다. 생성에 시간이 걸려 <b>30분 이상</b> 걸리기도 합니다.'},
+    {tag:'출력 · 조사', ic:'🔎', n:'심층 조사 (Deep Research)', flag:'만 18세+',
+      ben:'주제만 주면 <b>웹을 대신 조사해 자료를 모아</b> 리포트로 정리해 줍니다. 배경 조사가 필요한 업무에 유용합니다.',
+      cap:'⚠️ <b>만 18세 이상</b> 계정 전용이라, 미성년 학생 계정에서는 보이지 않을 수 있습니다.'},
+  ],
   nlmUse:[
     {h:'🏫 교사 업무 활용', li:['여러 개의 공문·첨부파일 함께 확인하기','긴 운영계획에서 일정·준비 사항 찾기','회의자료에서 주요 결정 사항 정리하기','교육과정과 성취기준 비교하기','연수 자료·연구보고서 빠르게 탐색하기','여러 출처의 공통점·차이점 비교하기']},
     {h:'📖 수업 활용', li:['교과서·보충자료로 학생 질문에 답하기','단원별 학습 가이드 만들기','개념 마인드맵 만들기','복습용 오디오 개요 만들기','학생용 퀴즈·플래시카드 만들기','여러 자료를 비교하는 탐구 활동 구성하기']},
@@ -556,6 +588,7 @@ const DATA = {
 const TABS=[
   {id:'start', label:'시작', e:'🙂'},
   {id:'flow', label:'오늘의 흐름', e:'🗺️'},
+  {id:'saengibu', label:'생기부 사례', e:'📝'},
   {id:'tools', label:'도구 상자', e:'🎒'},
   {id:'sen', label:'SEN스쿨', e:'🏫'},
   {id:'nlm', label:'NotebookLM', e:'🎧'},
@@ -582,6 +615,7 @@ function bstepHtml(arr){return '<div class="bsteps">'+arr.map((s,i)=>'<div class
 function useHtml(arr){return '<div class="uselists">'+arr.map(u=>'<div class="ulcard"><div class="ulh">'+esc(u.h)+'</div><ul>'+u.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>').join('')+'</div>'}
 function cautionHtml(c){return '<div class="caution"><div class="cah">'+esc(c.h)+'</div><ul>'+c.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function vsHtml(v){return '<div class="vsbox"><div class="vh">'+rich(v.h)+'</div><ul>'+v.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
+function moreHtml(items){return '<div class="more">'+items.map(m=>'<div class="mcard">'+(m.flag?'<span class="mflag">'+esc(m.flag)+'</span>':'')+'<span class="mtag">'+esc(m.tag)+'</span><div class="mhead"><span class="mic">'+esc(m.ic)+'</span><span class="mname">'+esc(m.n)+'</span></div><div class="mben">'+rich(m.ben)+'</div><div class="mcap">'+rich(m.cap)+'</div></div>').join('')+'</div>'}
 function ndetailsHtml(arr){return '<div class="ndetails">'+arr.map(u=>'<div class="ndcard"><div class="ndh">'+esc(u.h)+'</div>'+u.items.map(it=>'<details class="nd"><summary>'+esc(it.k)+'</summary><div class="ndx">'+rich(it.d)+'</div></details>').join('')+'</div>').join('')+'</div>'}
 function exampleHtml(ex){let h='<div class="example"><div class="exh">📓 '+esc(ex.title)+'</div>';ex.blocks.forEach(b=>{h+='<h4>'+esc(b.h)+'</h4>';if(b.type==='quote')h+='<blockquote>'+esc(b.q)+'</blockquote>';else h+='<ul>'+b.li.map(x=>'<li>'+(b.type==='check'?'☐ ':'')+esc(x)+'</li>').join('')+'</ul>';});return h+'<div class="extag">💡 '+esc(ex.tag)+'</div></div>'}
 function comicHtml(id,src,meta){const s=(src||'').trim();
@@ -616,6 +650,38 @@ function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
   if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
   if(id==='flow') return '<div class="block">'+w+head('오늘의 흐름','80분','🗺️ 오늘 이렇게 진행합니다','탭 순서대로 따라오시면 됩니다.')+prepHtml()+flowStepsHtml()+pnoteHtml('flowNote',D.flowNote)+'</div></div>';
+  if(id==='saengibu') return '<div class="block">'+w+head('강사 사례 · 자동화란 이런 것','','📝 생기부, AI에게 맡긴 게 아니라 함께 만든 시스템','2학년 과학 4개 반 112명의 세부능력 및 특기사항을, 자료가 정리된 상태에서 <b>하루 만에</b> 초안까지 완성했습니다. 그런데 이건 “AI가 대신 써 준다”가 아니라, 정반대입니다.')+
+      '<div class="tablewrap">'+dataTable(['항목','수치'],[
+        ['작성 대상','4개 반 117명 중 <b>112명</b> (전출·미작성 5명 제외)'],
+        ['분량 차등','상 84명(680~750바이트) · 중 22명 · 하 6명'],
+        ['예시문장 은행','<b>361문장</b> (활동 8종 × 상·중·하 + 개인화)'],
+        ['소요 시간','<b>하루</b> (기존 방식이면 2~3주)'],
+      ])+'</div>'+
+      '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8;margin-top:8px"><div class="wh" style="color:var(--teal)">🔑 위임한 것과, 위임하지 않은 것</div><p>AI는 마지막 반나절만 일했습니다. 진짜 일은 1학기 내내 있었습니다 — 수행 과제지, 학생 보고서, 학기말 설문, 관찰 메모. <b>저는 데이터를 모았고, AI는 조립했습니다. AI는 작가가 아니라 조판공입니다.</b></p></div>'+
+      cmpHtml([
+        {cls:'', i:'🧑‍🏫', n:'교사만 한 일 — AI에 주면 안 되는 것', r:'학생 관찰·평가·<b>등급 판단</b>, 작성 대상 선정, 에피소드 기록, <b>AI로 쓴 학생 답변 감별</b>, 최종 확인·기재 책임', lab:'원고', todo:'1학기 내내 씀'},
+        {cls:'', i:'🤖', n:'AI가 한 일', r:'명렬표·제출명단·설문 매칭, 수행지·보고서 판독, 규칙대로 문장 조립, 학생별 개인화, 과학 오류 역검수', lab:'조판', todo:'마지막 반나절'},
+      ])+
+      head('','','⚙️ 실제 진행 5단계')+
+      bstepHtml([
+        {a:0,i:'📋',h:'규칙 합의',b:'문체·분량·금지어를 먼저 정의. 샘플 보며 계속 교정'},
+        {a:1,i:'📂',h:'자료 수집',b:'수행 과제지·학생 보고서·학기말 설문·관찰 메모'},
+        {a:2,i:'📊',h:'입력 양식',b:'엑셀 하나로 소통. 교사는 등급·활동만, AI가 문장 채움'},
+        {a:3,i:'🏦',h:'예시 은행 + 상호 검수',b:'AI가 생성 → 다시 AI가 검수 → 교사는 톤만 확인'},
+        {a:4,i:'✅',h:'일괄 생성 + 3중 검증',b:'분량·금지어·중복 자동 검사 → 과학 검수 → 나이스 양식 변환'},
+      ])+'</div></div>'+
+    '<div class="block">'+w+head('진짜 이야기','','🚨 교사 검증이 “형식”이 아니라 “실질”이었던 순간','AI 협업이 매끄럽기만 했다면 사례로 소개하지 않았을 겁니다. 세 번, 사람이 아니면 못 잡았을 일이 있었습니다.')+
+      useHtml([
+        {h:'① 과학 오개념 5건 교정',li:['AI가 학생 답변의 오개념을 그대로 문장에 옮김','“칼륨이 아르곤보다 양성자가 적다” 등을 교과 지식으로 바로잡음']},
+        {h:'② AI로 쓴 학생 답변 감별',li:['지나치게 정제된 설문을 AI 작성으로 판단해 개인화에서 제외','학생을 아는 교사만 할 수 있는 일']},
+        {h:'③ 데이터 유실 사고',li:['파일 동기화 과정에서 설문이 비어 버림','근거 추적표(실자료 없음·일부·전부)를 만들어 걸러냄']},
+      ])+
+      '<div class="vsbox" style="border-left-color:var(--blue);margin-top:6px"><div class="vh" style="color:var(--blue)">결론</div><ul><li>AI를 쓸수록 <b>교사의 검증 역량</b>이 더 중요해집니다.</li><li>자동화는 교사를 빼는 게 아니라, <b>판단하는 자리</b>로 옮깁니다.</li></ul></div>'+
+      head('','','🆓 “유료 아니어도 되나요?” — 됩니다')+
+      '<div class="vsbox" style="border-left-color:var(--teal)"><div class="vh" style="color:var(--teal)">무료 클로드로도 작동</div><ul><li>핵심 자산은 도구가 아니라 <b>규칙 프롬프트 한 장</b>. 그건 무료로도 그대로 됩니다.</li><li>무료의 현실: <b>하루 한 반</b> 페이스(사용량 제한), 엑셀 복붙은 남음. 품질은 규칙만 좋으면 큰 차이 없음.</li><li>제가 한 자동화(파일 매칭·112명 일괄·자동 검수·나이스 변환)는 유료 도구였습니다. <b>“원리는 무료로 충분, 저는 그걸 자동화한 것.”</b></li></ul></div>'+
+      cautionHtml({h:'✅ 참가 선생님께 드리는 3원칙',li:['<b>학생 이름은 넣지 마세요</b> — 번호로 작업하고 엑셀에서 결합 (교육청 생성형 AI 지침 확인)','<b>자료에 없는 건 쓰게 하지 마세요</b> — 창작 금지가 허위 기재를 막습니다','<b>최종 확인은 반드시 교사가</b> — AI 문장은 초안, 학생을 아는 건 교사뿐']})+
+      '<div class="warn-card" style="border-color:var(--blue);background:#eef4fd"><div class="wh" style="color:var(--blue)">💡 왜 이게 업무경감·자동화의 첫 사례인가</div><p>자동화의 전제는 <b>기록이 쌓이는 수업 설계</b>입니다. 활동이 명확하고 산출물이 남고 학생 목소리를 모으면, 생기부는 학기말에 ‘쓰는 것’이 아니라 ‘<b>조립되는 것</b>’이 됩니다. 업무경감이 수업을 부실하게 만드는 게 아니라, 좋은 수업 기록을 강제합니다.</p></div>'+
+      pnoteHtml('saengibuNote','[강사 사례] 오프닝 훅으로 “생기부 몇 주 걸리시죠? 저는 하루 만에” → 곧바로 “AI가 쓴 게 아닙니다” 반전. 역할분담 표의 <b>왼쪽 열(교사만 한 일)</b>을 짚으며 “AI가 못 하는 게 아니라 주면 안 되는 것”이라고 강조. 검증 3사례(특히 데이터 유실)로 “교사 검증은 실질”을 각인. 무료로도 된다는 점과 3원칙으로 착지.')+'</div></div>';
   if(id==='tools') return '<div class="block">'+w+head('먼저, 유용한 도구부터','','🎒 오늘 소개할 도구들',D.toolsSub)+toolGroupsHtml()+pnoteHtml('toolsNote',D.toolsNote)+'</div></div>'+
     '<div class="block">'+w+head('오늘의 두 도구','','🤝 NotebookLM과 Notion','경쟁이 아니라 역할이 다른 두 도구입니다.')+cmpHtml(D.cmp)+'<div class="tablewrap" style="margin-top:18px">'+dataTable(D.cmpTable.head,D.cmpTable.rows)+'</div></div></div>';
   if(id==='sen'){const s=D.sen;return '<div class="block">'+w+head('보너스 · 서울 선생님','','🏫 SEN스쿨 — 유료 AI를 무료로',s.intro)+
@@ -628,7 +694,7 @@ function panelHTML(id){
   if(id==='nlm') return '<div class="block">'+w+head('먼저 알아둘 것','5분','🔑 NotebookLM 계정 & 무료 이용 범위','실습 전에 계정·공유 문제부터 정리합니다.')+
       warnHtml(D.nlmWarn)+acctHtml()+
       '<details class="toggle"><summary>📊 무료 요금제 사용량 자세히 보기 — 무료로도 충분합니다</summary><div class="tablewrap">'+dataTable(['항목','내용'],PRICING.nlmLimits)+'</div><div class="note-under">사용량·기능은 Google 정책에 따라 변경될 수 있습니다(2026년 기준). 소스당 200MB·50만 단어 상한은 무료 전용이 아니라 전 요금제 공통입니다.</div></details>'+
-      head('','','🧩 NotebookLM으로 할 수 있는 것')+chips(D.nlmFeatures)+'<div class="note-under"><b>인포그래픽·슬라이드는 만 18세 이상만 생성</b>할 수 있어 미성년 학생 계정에서는 제한될 수 있습니다. 그 외에도 계정·언어·지역·실험 기능 제공 여부에 따라 일부 기능은 보이지 않을 수 있습니다.</div></div></div>'+
+      head('','','🧩 NotebookLM으로 할 수 있는 것')+chips(D.nlmFeatures)+'<div class="note-under"><b>일부 고급 기능(인포그래픽·슬라이드·시네마틱/숏 동영상 개요·오디오 인터랙티브·심층 조사)은 만 18세 이상</b> 계정에서만 됩니다. NotebookLM 자체는 미성년 학생도 조건부로 쓸 수 있습니다(개인 계정 최소 연령·학교 계정은 관리자 활성화 필요). 계정·언어·지역에 따라 일부 기능은 보이지 않을 수 있습니다.</div></div></div>'+
     '<div class="block">'+w+head('직접 해보기','15분','🧪 NotebookLM 실습','메뉴를 다 외우지 말고, 자료를 넣고 결과를 만들어 봅니다.')+
       btnHtml(D.nlmBtns)+stuckHtml()+bstepHtml(D.nlmSteps)+
       head('','','💬 자료에 질문하기 (눌러서 복사)')+vsHtml(D.nlmVs)+
@@ -638,7 +704,11 @@ function panelHTML(id){
       head('','','🏫 학교 업무, 이렇게 편해집니다')+useHtml([D.nlmSchool])+cautionHtml(D.nlmCaution)+
       head('','','🦖 잠깐, 모든 자료에 넣을 필요는 없습니다')+comicHtml('comic1',CONFIG.comic1,D.comic1)+
       head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 ①)')+wallHtml(2,'💬 NotebookLM을 내 업무·수업에 어떻게 쓰시겠어요?','예: 여러 공문을 한 번에 넣고 핵심 일정만 뽑아보고 싶습니다')+
-      pnoteHtml('nlmNote',D.nlmNote)+'</div></div>';
+      pnoteHtml('nlmNote',D.nlmNote)+'</div></div>'+
+    '<div class="block">'+w+head('참고 · 실습 뒤에 하나씩','','🚀 NotebookLM, 이런 것도 됩니다','유튜브·구글 드라이브·Gemini 연동까지. 오늘 다 못 해도, 카드만 눈에 익혀 두세요.')+
+      moreHtml(D.nlmMore)+
+      '<div class="note-under">계정·언어·지역·요금제와 학교(Workspace) 관리자 설정에 따라 일부 기능은 보이지 않을 수 있습니다. 기능·정책은 Google이 자주 바꾸므로 실제 화면에서 확인해 주세요. (2026년 기준)</div>'+
+      pnoteHtml('nlmMoreNote','[강사] 여기는 “참고 카드”라 실습에 시간 안 씀. 관심 있는 분께 “유튜브·드라이브·Gemini 연동은 이 카드로 정리해 뒀다”고만 안내. Gemini 심층 동기화는 학교 계정에서 대개 막혀 있으니 기대치 관리. 시간 남으면 오디오 개요(한국어) 하나 즉석 생성해 들려주기.')+'</div></div>';
   if(id==='notion') return '<div class="block">'+w+head('먼저 알아둘 것','5분','💳 Notion 무료 요금제 & 제한','실습 전에 무료로 되는 것과 안 되는 것을 정리합니다.')+
       warnHtml(D.notionWarn)+warnHtml(D.notionEdu,'var(--blue)')+
       '<div class="tablewrap">'+dataTable(['항목','내용'],PRICING.notionFree)+'</div><div class="note-under">'+rich(D.notionFreeNote)+'</div></div></div>'+
