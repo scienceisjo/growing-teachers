@@ -109,6 +109,10 @@ a.tile:hover{transform:translateY(-4px) rotate(-1deg);border-color:var(--gold);b
 .tile .te{font-size:2.1rem;line-height:1}
 .tile .tn{font-family:var(--font-round);color:var(--navy);font-size:1.02rem;margin-top:9px}
 .tile .tg{font-size:.74rem;color:var(--gold-deep);font-weight:700;margin-top:3px}
+.tile.multi{display:flex;flex-direction:column;align-items:center}
+.tlinks{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.tlink{font-family:var(--font-round);font-size:.8rem;color:var(--navy);background:#f2ecdd;border:1px solid var(--gold-soft);border-radius:9px;padding:6px 11px;text-decoration:none;transition:.15s}
+.tlink:hover{background:var(--gold-soft)}
 
 /* ── compare (두 도구) ── */
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto}
@@ -515,9 +519,13 @@ const CONFIG = {
   surveyUrl: 'https://forms.gle/qUK1SDq56igoCuSM6', surveyQR: 'survey-qr.png',
   // ▼ 교사용 유용한 도구 링크
   hubUrl: 'https://joo.is/과학탐구월드',
-  snipasteUrl: 'https://www.snipaste.com',
-  zoomitUrl: 'https://learn.microsoft.com/ko-kr/sysinternals/downloads/zoomit',
-  classGameWorldUrl: '', letterCardUrl: '',
+  pdfToolUrl: 'https://scienceisjo.github.io/pdf-tool/',
+  brainBreakUrl: 'https://scienceisjo.github.io/brain-break-lab/sonic',
+  letterCardUrl: 'https://scienceisjo.github.io/lettermaker/',
+  snipasteUrl: 'https://www.snipaste.com/download.html',        // 다운로드
+  snipasteVideo: 'https://www.youtube.com/watch?v=jxInZQbmHUA', // 사용법(한국어)
+  zoomitUrl: 'https://learn.microsoft.com/ko-kr/sysinternals/downloads/zoomit', // 다운로드
+  zoomitVideo: 'https://www.youtube.com/watch?v=1Ao6tJaT1xM',   // 사용법(한국어)
 };
 
 /* ═══ 요금제·계정 데이터 (수정 쉽게 분리 — §14) ═══ */
@@ -671,11 +679,12 @@ const DATA = {
   connectNote:'Notion과 NotebookLM 외에도 교사의 수업·업무에 쓸 수 있는 도구가 많아요. 아래에 정리해 둔 도구들을 함께 살펴볼게요. 👇',
   tools:[
     {e:'💗',n:'감정 체크인',g:'마음 열기',href:'#checkin'},
-    {e:'✂️',n:'Snipaste',g:'캡처·핀',href:CONFIG.snipasteUrl,ext:1},
-    {e:'🎮',n:'Class Game World',g:'수업 게임',href:CONFIG.classGameWorldUrl,ext:1},
-    {e:'🔍',n:'ZoomIt',g:'화면 확대·판서',href:CONFIG.zoomitUrl,ext:1},
-    {e:'💌',n:'편지 카드 만들기',g:'활동',href:CONFIG.letterCardUrl,ext:1},
-    {e:'🌍',n:'joo.is/과학탐구월드',g:'허브',href:CONFIG.hubUrl,ext:1},
+    {e:'🌍',n:'과학탐구월드',g:'수업 자료 허브',href:CONFIG.hubUrl,ext:1},
+    {e:'📄',n:'PDF 만능 도구',g:'병합·분할·변환·OCR',href:CONFIG.pdfToolUrl,ext:1},
+    {e:'⚡',n:'교실을 깨우자',g:'수업 환기 게임',href:CONFIG.brainBreakUrl,ext:1},
+    {e:'💌',n:'편지메이커',g:'응원 편지 양식',href:CONFIG.letterCardUrl,ext:1},
+    {e:'✂️',n:'Snipaste',g:'화면 캡처·핀', links:[{l:'⬇️ 다운로드',u:CONFIG.snipasteUrl},{l:'▶️ 사용법',u:CONFIG.snipasteVideo}]},
+    {e:'🔍',n:'ZoomIt',g:'화면 확대·판서', links:[{l:'⬇️ 다운로드',u:CONFIG.zoomitUrl},{l:'▶️ 사용법',u:CONFIG.zoomitVideo}]},
   ],
   /* ── 강사용 노트(?present=1) ── */
   heroNote:'[오프닝] "오늘은 철학 강의가 아니라 실습입니다. NotebookLM에 자료 넣고 질문해보고, Notion 페이지 하나를 직접 만듭니다." 상단 흐름칩으로 80분 여정 예고. 이 화면(?present=1)에서만 진행표·노트가 보입니다.',
@@ -745,9 +754,13 @@ function renderStatic(){
   $('connectNote').innerHTML=rich(DATA.connectNote);
   // tools (보존)
   $('tiles').innerHTML=DATA.tools.map(t=>{
+    const head='<span class="te">'+t.e+'</span><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div>';
+    if(t.links){
+      const btns=t.links.filter(x=>(x.u||'').trim()).map(x=>'<a class="tlink" href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.l)+'</a>').join('');
+      return '<div class="tile multi">'+head+'<div class="tlinks">'+(btns||'<span class="tg">링크 준비</span>')+'</div></div>';
+    }
     const href=(t.href||'').trim(), has=!!href;
-    const inner='<span class="te">'+t.e+'</span><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div>';
-    return has?'<a class="tile" href="'+esc(href)+'"'+(t.ext?' target="_blank" rel="noopener"':'')+'>'+inner+'</a>':'<div class="tile" style="cursor:default;opacity:.7">'+inner+'</div>';
+    return has?'<a class="tile" href="'+esc(href)+'"'+(t.ext?' target="_blank" rel="noopener"':'')+'>'+head+'</a>':'<div class="tile" style="cursor:default;opacity:.7">'+head+'</div>';
   }).join('');
   renderSurvey();
   Object.keys(DATA).filter(k=>k.endsWith('Note')).forEach(k=>pnote(k,DATA[k]));
