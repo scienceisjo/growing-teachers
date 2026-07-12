@@ -3,950 +3,485 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>교사의 업무 경감 · 자동화 전략 · 연수</title>
-
+<title>만들면서 배우는 100분 · 업무 경감·자동화 연수</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Jua&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-
 <style>
 :root{
-  --ink:#161930; --ink-soft:#5a6079;
-  --paper:#f4efe4; --card:#fffdf7;
-  --navy:#0a0e2b; --navy-2:#141a42;
-  --indigo:#3a49a3; --indigo-deep:#2a3582;
-  --gold:#c39a35; --gold-deep:#8a6c1c; --gold-soft:#e7d199;
-  --line:#e6dcc6; --line-soft:#efe7d6;
-  --shadow:0 2px 4px rgba(20,20,40,.04), 0 10px 30px rgba(20,20,40,.06);
-  --shadow-lg:0 8px 18px rgba(20,20,40,.07), 0 24px 60px rgba(20,20,40,.10);
-  --font-serif:'Noto Serif KR','Nanum Myeongjo',serif;
-  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --ink:#1a1f3a; --ink-soft:#5a6079;
+  --paper:#f3f6fb; --card:#ffffff;
+  --navy:#12183a; --gold:#c39a35; --gold-deep:#8a6c1c; --gold-soft:#e7d199;
+  --red:#e4572e; --blue:#3a6ea5; --yellow:#f6b93b; --teal:#22a699; --grape:#7b6cc4;
+  --line:#e5e9f2; --line-soft:#eef1f7;
+  --shadow:0 2px 6px rgba(20,25,60,.05),0 12px 32px rgba(20,25,60,.08);
+  --shadow-lg:0 10px 24px rgba(20,25,60,.10),0 30px 70px rgba(20,25,60,.14);
+  --font-serif:'Noto Serif KR',serif;
+  --font-round:'Jua',var(--font-sans);
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+body{font-family:var(--font-sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(228,87,46,.10), transparent 32%),
+    radial-gradient(circle at 88% 12%, rgba(58,110,165,.12), transparent 34%),
+    radial-gradient(circle at 78% 88%, rgba(246,185,59,.12), transparent 34%),
+    radial-gradient(circle at 18% 82%, rgba(34,166,153,.10), transparent 34%),
+    linear-gradient(180deg,#f6f8fc,#eef2f9);
+  background-attachment:fixed;}
 ::selection{background:var(--gold-soft);color:var(--navy)}
 a{color:inherit}
 
-/* ───── APPBAR ───── */
-.appbar{position:sticky;top:0;z-index:100;background:rgba(244,239,228,.88);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
-.topbar{max-width:1120px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px}
-.brand{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
-.brand .mark{width:24px;height:24px;flex-shrink:0}
-.brand .wm{font-family:var(--font-serif);font-weight:600;font-size:1.02rem;line-height:1}
-.brand .tag{font-size:.58rem;letter-spacing:.2em;color:var(--gold-deep);font-weight:700;display:block;margin-top:3px}
+/* ── playful game-style decor (original, IP-safe) ── */
+.decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;opacity:.16}
+.orb::after{content:"";position:absolute;left:8%;right:8%;top:calc(50% - 3px);height:6px;background:rgba(255,255,255,.7);border-radius:6px}
+.orb::before{content:"";position:absolute;left:50%;top:50%;width:16%;height:16%;transform:translate(-50%,-50%);background:#fff;border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,.12)}
+.o1{width:160px;height:160px;top:-40px;left:-30px;background:radial-gradient(circle at 35% 30%,#f19a80,var(--red))}
+.o2{width:120px;height:120px;top:24%;right:-30px;background:radial-gradient(circle at 35% 30%,#8fb6dd,var(--blue))}
+.o3{width:100px;height:100px;bottom:8%;left:6%;background:radial-gradient(circle at 35% 30%,#7fd3ca,var(--teal))}
+.o4{width:140px;height:140px;bottom:-40px;right:10%;background:radial-gradient(circle at 35% 30%,#ffd98a,var(--yellow))}
+.o5{width:80px;height:80px;top:58%;left:44%;background:radial-gradient(circle at 35% 30%,#b3a8e0,var(--grape))}
+.spark{position:absolute;color:var(--gold);opacity:.5;font-size:14px;animation:tw 3s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.7;transform:scale(1.15)}}
+
+/* ── appbar ── */
+.appbar{position:sticky;top:0;z-index:100;background:rgba(246,248,252,.82);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.topbar{max-width:1080px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand .ball{width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,var(--red) 0 46%,#fff 46% 54%,#fff 54% 100%);border:2px solid var(--navy);position:relative;flex-shrink:0}
+.brand .ball::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;transform:translate(-50%,-50%);background:#fff;border:2px solid var(--navy);border-radius:50%}
+.brand .wm{font-family:var(--font-round);font-size:1.04rem;color:var(--navy)}
 .nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav a{font-weight:600;font-size:.86rem;color:var(--ink-soft);padding:9px 12px;border-radius:9px;white-space:nowrap;text-decoration:none;transition:.16s}
-.nav a:hover{color:var(--navy);background:rgba(195,154,53,.1)}
-.nav a.active{color:var(--navy);background:rgba(195,154,53,.16)}
-.presenter-toggle{flex-shrink:0;display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:700;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;cursor:pointer;transition:.15s;font-family:inherit}
-.presenter-toggle:hover{border-color:var(--gold)}
-.presenter-toggle.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.presenter-toggle .dot{width:8px;height:8px;border-radius:50%;background:#c9bfa8;transition:.15s}
-.presenter-toggle.on .dot{background:var(--gold-soft)}
-@media(max-width:900px){.nav{display:none}}
+.nav a{font-weight:700;font-size:.84rem;color:var(--ink-soft);padding:8px 11px;border-radius:10px;white-space:nowrap;text-decoration:none;transition:.15s}
+.nav a:hover,.nav a.active{color:var(--navy);background:rgba(195,154,53,.16)}
+.p-flag{display:none;flex-shrink:0;font-size:.72rem;font-weight:800;color:#fff;background:var(--red);padding:5px 11px;border-radius:20px}
+body.presenter .p-flag{display:inline-block}
+@media(max-width:820px){.nav{display:none}}
 
-/* ───── LAYOUT ───── */
-.wrap{max-width:1120px;margin:0 auto;padding:0 26px}
-section{scroll-margin-top:80px}
-.sec-head{margin-bottom:24px;max-width:820px}
-.kicker{font-size:.72rem;letter-spacing:.26em;font-weight:800;color:var(--gold-deep);margin-bottom:8px}
-.sec-head h2{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.75rem;line-height:1.28}
-.sec-head p{color:var(--ink-soft);font-size:1rem;margin-top:9px;line-height:1.65}
-.block{padding:58px 0;border-top:1px solid var(--line-soft)}
-.block:first-of-type{border-top:none}
-.block.tint{background:linear-gradient(180deg,rgba(195,154,53,.05),transparent 42%)}
-
-/* reveal on scroll */
+/* ── layout ── */
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+section{scroll-margin-top:74px}
+.block{padding:52px 0}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 26px}
+.sec-head .kick{display:inline-block;font-family:var(--font-round);font-size:.9rem;color:#fff;background:var(--navy);padding:4px 14px;border-radius:20px;margin-bottom:12px}
+.sec-head h2{font-family:var(--font-round);font-weight:400;color:var(--navy);font-size:2rem;line-height:1.25}
+.sec-head p{color:var(--ink-soft);font-size:1.02rem;margin-top:8px}
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
 
-/* ───── HERO ───── */
-.hero{position:relative;overflow:hidden;background:radial-gradient(120% 120% at 85% -10%,#151b45 0%,var(--navy) 55%);color:#fff;padding:70px 0 60px}
-.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 12% 110%,rgba(195,154,53,.20),transparent 60%);pointer-events:none}
-.hero .wrap{position:relative;z-index:1}
-.hero .kicker{color:var(--gold-soft)}
-.hero h1{font-family:var(--font-serif);font-weight:700;font-size:2.5rem;line-height:1.2;letter-spacing:-.01em}
-.hero .lead{color:#d7dcf0;font-size:1.12rem;margin-top:16px;max-width:660px}
-.hero .lead b{color:var(--gold-soft)}
-.hero-slogan{margin-top:22px;display:inline-block;font-family:var(--font-serif);font-size:1.14rem;font-weight:600;color:#fff;border-left:3px solid var(--gold);padding:5px 0 5px 16px}
-.hero-slogan b{color:var(--gold-soft)}
-@media(max-width:560px){.hero h1{font-size:1.9rem}}
+/* ── hero ── */
+.hero{text-align:center;padding:52px 0 30px}
+.hero .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-round);font-size:.94rem;color:var(--navy);background:linear-gradient(90deg,#fff2cf,#ffe6a1);border:2px solid var(--gold);padding:7px 16px;border-radius:22px;box-shadow:var(--shadow)}
+.hero h1{font-family:var(--font-round);font-weight:400;font-size:3rem;line-height:1.12;color:var(--navy);margin-top:20px;letter-spacing:-.01em}
+.hero h1 .hl{color:var(--red)}
+.hero .lead{font-size:1.16rem;color:var(--ink-soft);margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
+.hero .lead b{color:var(--navy)}
+@media(max-width:560px){.hero h1{font-size:2.2rem}}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:26px}
+.fchip{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:8px 15px;box-shadow:var(--shadow);font-weight:700;font-size:.9rem;color:var(--navy)}
+.fchip .fe{font-size:1.05rem}
+.speaker{display:inline-flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 18px;margin-top:26px;text-decoration:none;box-shadow:var(--shadow)}
+.speaker .av{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#2b3676,#0c1130);color:var(--gold-soft);font-family:var(--font-serif);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.speaker .nm{font-family:var(--font-round);color:var(--navy);font-size:1rem}
+.speaker .ro{font-size:.78rem;color:var(--ink-soft)}
+.speaker .go{color:var(--gold-deep);font-weight:700;font-size:.82rem;margin-left:6px}
 
-.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.hm-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:11px 16px;backdrop-filter:blur(6px)}
-.hm-chip .hm-ic{font-size:1.25rem}
-.hm-chip .hm-k{font-size:.64rem;letter-spacing:.12em;color:var(--gold-soft);font-weight:800}
-.hm-chip .hm-v{font-size:.92rem;color:#eef1ff;font-weight:600}
-.speaker-card{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px 20px;margin-top:18px;backdrop-filter:blur(6px);max-width:560px;text-decoration:none;transition:.15s}
-.speaker-card:hover{border-color:rgba(231,209,153,.4)}
-.sp-avatar{flex-shrink:0;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#28316f,#070b22);color:var(--gold-soft);font-family:var(--font-serif);font-size:1.5rem;display:flex;align-items:center;justify-content:center;border:1px solid rgba(231,209,153,.35)}
-.sp-name{font-family:var(--font-serif);font-weight:700;color:#fff;font-size:1.12rem}
-.sp-name .sp-nick{font-size:.76rem;color:var(--gold-soft);font-weight:700;margin-left:7px}
-.sp-role{color:#c3c9e4;font-size:.84rem;margin-top:1px}
-.sp-go{margin-left:auto;color:var(--gold-soft);font-size:.8rem;font-weight:700;white-space:nowrap}
+/* ── check-in ── */
+.mood{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 26px;box-shadow:var(--shadow-lg);text-align:center}
+.mood .mq{font-family:var(--font-round);font-size:1.3rem;color:var(--navy)}
+.mgrid{display:flex;gap:10px;margin-top:20px;justify-content:center;flex-wrap:wrap}
+.mo{border:2px solid var(--line);background:#fbfcfe;border-radius:16px;padding:14px 14px;cursor:pointer;transition:.15s;min-width:78px}
+.mo:hover{border-color:var(--gold);transform:translateY(-3px)}
+.mo.on{border-color:transparent;background:linear-gradient(135deg,#20285e,var(--navy));color:#fff;transform:translateY(-3px)}
+.mo .e{font-size:1.9rem}
+.mo .t{font-weight:700;font-size:.82rem;margin-top:6px}
+.mnote{margin-top:16px;font-size:.98rem;color:var(--ink-soft);min-height:1.4em}
+.mnote b{color:var(--navy)}
 
-/* ───── AGENDA / TIMELINE ───── */
-.agenda{display:flex;flex-direction:column;gap:0}
-.ag-row{display:grid;grid-template-columns:100px 1fr;gap:16px;position:relative}
-.ag-time{text-align:right;padding-top:14px}
-.ag-time .ag-clock{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--navy);font-size:.8rem}
-.ag-time .ag-min{display:block;font-size:.72rem;color:var(--gold-deep);font-weight:700;margin-top:2px}
-.ag-line{position:relative}
-.ag-line::before{content:"";position:absolute;left:11px;top:0;bottom:0;width:2px;background:var(--line)}
-.ag-row:last-child .ag-line::before{bottom:auto;height:20px}
-.ag-dot{position:absolute;left:4px;top:15px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--gold);z-index:1}
-.ag-row.book .ag-dot{border-color:var(--indigo)}
-.ag-card{margin-left:34px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 18px;box-shadow:var(--shadow);margin-bottom:12px;transition:.15s}
-.ag-card:hover{border-color:var(--gold);transform:translateX(2px)}
-.ag-row.book .ag-card{background:#f2f3fb;border-color:#dfe3f5}
-.ag-label{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.02rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ag-badge{font-size:.66rem;font-weight:800;letter-spacing:.04em;color:var(--gold-deep);background:rgba(195,154,53,.14);border:1px solid rgba(195,154,53,.28);padding:2px 8px;border-radius:12px}
-.ag-row.book .ag-badge{color:var(--indigo-deep);background:rgba(58,73,163,.1);border-color:rgba(58,73,163,.22)}
-.ag-goal{color:var(--ink-soft);font-size:.9rem;margin-top:4px}
-.ag-tip{color:var(--gold-deep);font-size:.84rem;margin-top:7px;display:none;line-height:1.55;border-top:1px dashed var(--line);padding-top:7px}
-.ag-tip::before{content:"🎤 ";}
-body.presenter .ag-tip{display:block}
-@media(max-width:560px){.ag-row{grid-template-columns:64px 1fr;gap:8px}.ag-card{margin-left:26px}.ag-time .ag-clock{font-size:.7rem}}
+/* ── tool tiles ── */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;max-width:900px;margin:0 auto}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 14px;text-align:center;text-decoration:none;box-shadow:var(--shadow);transition:.16s;display:block}
+a.tile:hover{transform:translateY(-4px) rotate(-1deg);border-color:var(--gold);box-shadow:var(--shadow-lg)}
+.tile .te{font-size:2.1rem;line-height:1}
+.tile .tn{font-family:var(--font-round);color:var(--navy);font-size:1.02rem;margin-top:9px}
+.tile .tg{font-size:.74rem;color:var(--gold-deep);font-weight:700;margin-top:3px}
 
-/* ───── CHECK-IN ───── */
-.checkin{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
-@media(max-width:760px){.checkin{grid-template-columns:1fr}}
-.mood-box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
-.mood-q{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.14rem}
-.mood-sub{color:var(--ink-soft);font-size:.9rem;margin-top:6px}
-.mood-grid{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap}
-.mood{flex:1;min-width:64px;border:1px solid var(--line);background:#fbf7ec;border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:.15s;user-select:none}
-.mood:hover{border-color:var(--gold);transform:translateY(-2px)}
-.mood.on{background:linear-gradient(135deg,#1b2256,var(--navy));border-color:transparent;color:#fff;animation:blankpop .3s ease}
-.mood .m-emo{font-size:1.6rem}
-.mood .m-t{font-size:.78rem;font-weight:700;margin-top:5px}
-.mood-note{margin-top:16px;font-size:.9rem;color:var(--ink-soft);min-height:1.4em;line-height:1.6}
-.mood-note b{color:var(--navy)}
-.lead-note{background:#fbf7ec;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:14px;padding:22px 24px;font-size:1rem;line-height:1.75;color:var(--ink);height:100%}
-.lead-note .ln-k{font-size:.7rem;letter-spacing:.16em;font-weight:800;color:var(--gold-deep);margin-bottom:10px}
-.lead-note b{color:var(--navy)}
+/* ── big steps ── */
+.bsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;max-width:980px;margin:0 auto}
+.bstep{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.bstep .bn{position:absolute;top:-10px;right:-6px;font-family:var(--font-round);font-size:3.4rem;color:rgba(195,154,53,.16)}
+.bstep .bi{font-size:1.9rem}
+.bstep .bh{font-family:var(--font-round);color:var(--navy);font-size:1.16rem;margin-top:10px}
+.bstep .bb{color:var(--ink-soft);font-size:.9rem;margin-top:7px;line-height:1.55}
+.bstep .bb b{color:var(--ink)}
+.bstep.accent-red{border-top:4px solid var(--red)}
+.bstep.accent-blue{border-top:4px solid var(--blue)}
+.bstep.accent-teal{border-top:4px solid var(--teal)}
+.bstep.accent-yellow{border-top:4px solid var(--yellow)}
 
-/* ───── QUESTIONS ───── */
-.q-list{display:grid;gap:14px}
-.q-item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow);cursor:pointer;transition:.15s}
-.q-item:hover{border-color:var(--gold)}
-.q-head{display:flex;align-items:flex-start;gap:14px}
-.q-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:rgba(195,154,53,.14);color:var(--gold-deep);font-family:var(--font-serif);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.96rem}
-.q-text{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.12rem;line-height:1.55}
-.q-reveal{max-height:0;overflow:hidden;transition:max-height .45s ease;color:var(--ink-soft)}
-.q-reveal.open{max-height:320px}
-.q-reveal-inner{padding:14px 0 2px 44px;font-size:.98rem;line-height:1.66}
-.q-reveal-inner b{color:var(--gold-deep)}
-.q-hint{font-size:.78rem;color:var(--gold-deep);font-weight:700;margin-top:10px;padding-left:44px}
-.q-item.open .q-hint{display:none}
+/* ── nlm intro mini ── */
+.whystrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:820px;margin:0 auto 8px}
+@media(max-width:640px){.whystrip{grid-template-columns:1fr}}
+.why{background:var(--navy);color:#eaf0ff;border-radius:16px;padding:18px 18px;text-align:center}
+.why .wi{font-size:1.6rem}
+.why .wt{font-family:var(--font-round);color:#fff;font-size:1.02rem;margin-top:8px}
+.why .wd{font-size:.82rem;color:#b9c2e6;margin-top:5px;line-height:1.5}
 
-/* ───── GENERIC CARDS ───── */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:16px}
-.cards.three{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.cards.four{grid-template-columns:repeat(auto-fit,minmax(232px,1fr))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);transition:.16s;display:flex;flex-direction:column}
-.card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 30px -14px rgba(195,154,53,.45)}
-.card .c-ic{font-size:1.7rem;line-height:1}
-.card .c-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.1rem;margin-top:12px;line-height:1.4}
-.card .c-b{color:var(--ink-soft);font-size:.94rem;margin-top:9px;line-height:1.64}
-.card .c-b b{color:var(--ink)}
-.card .c-d{margin-top:12px;background:#fbf7ec;border:1px solid var(--line-soft);border-radius:11px;padding:11px 13px;font-size:.85rem;color:var(--ink-soft);line-height:1.6}
-.card .c-d b{color:var(--gold-deep)}
-.card .c-tag{margin-top:auto;padding-top:14px}
-.card .c-tag span{display:inline-block;font-size:.74rem;font-weight:700;color:var(--gold-deep);background:rgba(195,154,53,.12);border:1px solid rgba(195,154,53,.25);padding:4px 11px;border-radius:20px}
+/* ── live wall (supabase) ── */
+.live{max-width:900px;margin:22px auto 0;background:var(--card);border:2px dashed var(--gold);border-radius:22px;padding:24px 24px 20px;box-shadow:var(--shadow-lg)}
+.live .lq{font-family:var(--font-round);font-size:1.3rem;color:var(--navy);text-align:center}
+.live .lsub{text-align:center;color:var(--ink-soft);font-size:.9rem;margin-top:5px}
+.lform{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.lform input,.lform textarea{font-family:inherit;font-size:.96rem;border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfcfe}
+.lform input{width:120px}
+.lform textarea{flex:1;min-width:180px;resize:vertical;min-height:46px}
+.lform button{font-family:var(--font-round);font-size:1rem;color:#fff;background:linear-gradient(135deg,var(--red),#c8431f);border:none;border-radius:12px;padding:0 22px;cursor:pointer;transition:.15s}
+.lform button:hover{filter:brightness(1.08)}
+.lform button:disabled{background:#c9c2b4;cursor:default}
+.lstatus{font-size:.82rem;color:var(--ink-soft);margin-top:8px;min-height:1.1em}
+.lstatus b{color:var(--red)}
+.wall{columns:3;column-gap:12px;margin-top:16px}
+@media(max-width:760px){.wall{columns:2}}
+@media(max-width:480px){.wall{columns:1}}
+.bubble{break-inside:avoid;background:#fbfcfe;border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:12px;box-shadow:var(--shadow)}
+.bubble .bt{color:var(--ink);font-size:.92rem;line-height:1.55}
+.bubble .bm{font-size:.74rem;color:var(--gold-deep);font-weight:700;margin-top:7px}
+.bubble.mine{border-color:var(--gold);background:#fffaf0}
 
-.subhead{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.18rem;margin:36px 0 14px;display:flex;align-items:center;gap:9px}
-.subhead .sh-ic{font-size:1.12rem}
-.helper{color:var(--ink-soft);font-size:.94rem;margin:-6px 0 14px;padding-left:2px}
-.helper b{color:var(--gold-deep)}
+/* ── closing philosophy ── */
+.finale{max-width:760px;margin:0 auto;background:linear-gradient(135deg,#161d47,var(--navy));color:#fff;border-radius:26px;padding:48px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.finale::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 90% at 80% 120%,rgba(228,87,46,.28),transparent 60%)}
+.finale .fk{position:relative;font-family:var(--font-round);color:var(--gold-soft);font-size:1rem}
+.finale h2{position:relative;font-family:var(--font-round);font-weight:400;font-size:2.3rem;margin-top:12px;line-height:1.25}
+.finale h2 .hl{color:var(--yellow)}
+.finale p{position:relative;color:#d7dcf0;font-size:1.08rem;margin-top:16px;max-width:520px;margin-left:auto;margin-right:auto}
+.finale p b{color:var(--gold-soft)}
+@media(max-width:560px){.finale{padding:34px 24px}.finale h2{font-size:1.7rem}}
 
-/* ───── STEPS ───── */
-.steps{display:grid;gap:12px}
-.step{display:grid;grid-template-columns:44px 1fr;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
-.step-n{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1b2256,var(--navy));color:var(--gold-soft);font-family:var(--font-serif);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.02rem}
-.step-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.05rem}
-.step-b{color:var(--ink-soft);font-size:.94rem;margin-top:4px;line-height:1.62}
-.step-b b{color:var(--ink)}
-.step-tip{margin-top:9px;font-size:.85rem;color:var(--gold-deep);background:rgba(195,154,53,.09);border-radius:9px;padding:8px 11px;line-height:1.55}
-.step-tip::before{content:"💡 "}
+/* ── survey ── */
+.survey{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:520px){.survey{grid-template-columns:1fr;text-align:center;justify-items:center}}
+.qr{width:140px;height:140px;border:2px dashed #cdb98a;border-radius:16px;background:#fbf7ec;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--gold-deep);font-size:.74rem;font-weight:700;text-align:center;padding:12px;overflow:hidden}
+.qr img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+.survey .st{font-family:var(--font-round);color:var(--navy);font-size:1.3rem}
+.survey .sb{color:var(--ink-soft);font-size:.94rem;margin-top:6px}
+.survey .sl{display:inline-flex;align-items:center;gap:7px;margin-top:12px;text-decoration:none;font-family:var(--font-round);color:#fff;background:linear-gradient(135deg,#20285e,var(--navy));padding:11px 20px;border-radius:12px}
+.survey .su{font-size:.76rem;color:var(--gold-deep);font-family:ui-monospace,monospace;margin-top:8px;word-break:break-all}
 
-/* ───── CALLOUT ───── */
-.callout{background:linear-gradient(135deg,#1b2256,var(--navy));color:#fff;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow-lg)}
-.callout .co-k{font-size:.72rem;letter-spacing:.2em;font-weight:800;color:var(--gold-soft)}
-.callout .co-t{font-family:var(--font-serif);font-weight:700;font-size:1.26rem;margin-top:8px;line-height:1.4}
-.callout .co-b{color:#d7dcf0;font-size:1rem;margin-top:8px;line-height:1.6}
-.callout .co-b b{color:var(--gold-soft)}
-
-/* ───── DIFF BAR (LM 차별점) ───── */
-.diffbar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:linear-gradient(135deg,#1b2256,var(--navy));border-radius:18px;overflow:hidden;box-shadow:var(--shadow-lg);margin-bottom:22px}
-@media(max-width:760px){.diffbar{grid-template-columns:1fr}}
-.diff{padding:22px 22px;color:#e7ecff}
-.diff+.diff{border-left:1px solid rgba(255,255,255,.08)}
-@media(max-width:760px){.diff+.diff{border-left:none;border-top:1px solid rgba(255,255,255,.08)}}
-.diff .d-ic{font-size:1.5rem;line-height:1}
-.diff .d-h{font-family:var(--font-serif);font-weight:700;color:#fff;font-size:1.05rem;margin-top:9px;line-height:1.4}
-.diff .d-b{color:#c9d0ee;font-size:.9rem;margin-top:7px;line-height:1.6}
-.diff .d-b b{color:var(--gold-soft)}
-
-/* ───── HONEST NOTE (이건 LM 말고) ───── */
-.honest{margin-top:22px;background:#fbeee2;border:1px solid #e8cfa8;border-left:4px solid var(--gold);border-radius:16px;padding:22px 24px}
-.honest .h-k{font-size:.7rem;letter-spacing:.16em;font-weight:800;color:var(--gold-deep);margin-bottom:8px}
-.honest .h-t{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.16rem}
-.honest .h-b{color:var(--ink-soft);font-size:.96rem;margin-top:9px;line-height:1.7}
-.honest .h-b b{color:var(--ink)}
-
-/* ───── OPENING TOOLS ───── */
-.toolgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}
-.toolcard{display:flex;flex-direction:column;gap:4px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:.16s}
-a.toolcard:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 14px 30px -14px rgba(195,154,53,.5)}
-.tc-top{display:flex;align-items:center;gap:10px}
-.tc-ic{font-size:1.45rem;line-height:1}
-.tc-name{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.06rem}
-.tc-num{margin-left:auto;font-family:var(--font-serif);font-weight:700;color:var(--gold-soft);background:var(--navy);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
-.tc-desc{color:var(--ink-soft);font-size:.9rem;margin-top:4px;line-height:1.55}
-.tc-meta{margin-top:auto;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.tc-tag{font-size:.72rem;font-weight:700;color:var(--gold-deep);background:rgba(195,154,53,.12);border:1px solid rgba(195,154,53,.25);padding:3px 10px;border-radius:20px;white-space:nowrap}
-.tc-url{font-size:.72rem;color:var(--gold-deep);font-family:ui-monospace,Consolas,monospace;text-align:right;word-break:break-all}
-
-/* ───── RESOURCE BUTTONS ───── */
-.res-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.res-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:.16s}
-.res-btn:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 14px 30px -14px rgba(195,154,53,.5)}
-.rb-icon{font-size:1.5rem}
-.rb-t{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.05rem;margin-top:4px}
-.rb-u{font-size:.78rem;color:var(--gold-deep);font-family:ui-monospace,Consolas,monospace;word-break:break-all}
-
-/* ───── ACTION PANEL (QR) ───── */
-.action-panel{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
-@media(max-width:560px){.action-panel{grid-template-columns:1fr;text-align:center;justify-items:center}}
-.qr-box{width:150px;height:150px;border:2px dashed #d8c79a;border-radius:16px;background:#fbf7ec;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--gold-deep);font-size:.74rem;font-weight:700;text-align:center;padding:14px;line-height:1.4;overflow:hidden}
-.qr-box img{width:100%;height:100%;object-fit:contain;border-radius:12px}
-.ap-t{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.18rem}
-.ap-b{color:var(--ink-soft);font-size:.94rem;margin-top:7px;line-height:1.6}
-.ap-b b{color:var(--ink)}
-.ap-link{display:inline-flex;align-items:center;gap:8px;margin-top:14px;text-decoration:none;font-weight:700;font-size:.95rem;color:#fff;background:linear-gradient(135deg,#1b2256,var(--navy));padding:11px 20px;border-radius:12px;box-shadow:var(--shadow);transition:.15s}
-.ap-link:hover{transform:translateY(-2px);filter:brightness(1.1)}
-.ap-url{font-size:.78rem;color:var(--gold-deep);font-family:ui-monospace,Consolas,monospace;margin-top:8px;word-break:break-all}
-.ap-empty code{background:rgba(195,154,53,.14);padding:2px 7px;border-radius:6px;font-size:.82rem}
-
-/* ───── PRESENTER NOTES ───── */
-.pnote{display:none;margin-top:22px;background:#141a2e;color:#e7ecff;border-radius:14px;padding:18px 22px;font-size:.92rem;line-height:1.7;border:1px solid #2a3358}
-body.presenter .pnote{display:block}
-.pnote .pn-k{font-size:.7rem;letter-spacing:.16em;font-weight:800;color:var(--gold-soft);margin-bottom:8px}
+/* ── presenter-only ── */
+.pnote{display:none}
+body.presenter .pnote{display:block;margin:20px auto 0;max-width:980px;background:#12172e;color:#e7ecff;border-radius:16px;padding:20px 24px;font-size:.94rem;line-height:1.75;border:1px solid #2a3358}
+.pnote .pk{font-family:var(--font-round);color:var(--gold-soft);font-size:.98rem;margin-bottom:8px}
 .pnote b{color:var(--gold-soft)}
-.presenter-hint{text-align:center;color:var(--gold-deep);font-size:.86rem;font-weight:700;background:rgba(195,154,53,.1);border:1px dashed var(--gold);border-radius:12px;padding:10px 14px;margin-bottom:20px}
-body.presenter .presenter-hint{display:none}
-.presenter-hint b{color:var(--gold-deep)}
+.pnote .mini{color:#aeb8e0;font-size:.86rem}
+.po{display:none}
+body.presenter .po{display:block}
+.runsheet{max-width:980px;margin:0 auto}
+.runsheet table{width:100%;border-collapse:collapse;background:#12172e;color:#e7ecff;border-radius:14px;overflow:hidden;font-size:.9rem}
+.runsheet th,.runsheet td{padding:9px 12px;border-bottom:1px solid #2a3358;text-align:left;vertical-align:top}
+.runsheet th{background:#1a2144;color:var(--gold-soft);font-family:var(--font-round);font-weight:400}
+.runsheet td .g{color:#aeb8e0;font-size:.82rem}
 
-/* ───── CLOSING ───── */
-.closing{background:linear-gradient(135deg,#151b45,var(--navy));color:#fff;border-radius:22px;padding:46px 40px;box-shadow:var(--shadow-lg);text-align:center}
-.closing .kicker{color:var(--gold-soft)}
-.closing h3{font-family:var(--font-serif);font-weight:700;font-size:1.55rem;margin-bottom:12px;line-height:1.35}
-.closing p{color:#d7dcf0;font-size:1.02rem;max-width:600px;margin:0 auto;line-height:1.7}
-.closing p b{color:var(--gold-soft)}
-@media(max-width:560px){.closing{padding:34px 24px}}
-
-footer{text-align:center;color:var(--ink-soft);font-size:.84rem;padding:38px 20px}
-footer .heart{color:var(--gold-deep)}
+footer{text-align:center;color:var(--ink-soft);font-size:.82rem;padding:34px 20px;position:relative;z-index:1}
+footer .h{color:var(--red)}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
+<div class="decor" id="decor"></div>
 
-<!-- ══════════ APPBAR ══════════ -->
 <header class="appbar">
   <div class="topbar">
-    <a class="brand" href="#top">
-      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.7L5.7 21.4 8 14 2 9.4h7.6z"/></svg>
-      <span><span class="wm">업무 경감 · 자동화</span><span class="tag">교사 연수 · 조승재</span></span>
-    </a>
+    <a class="brand" href="#top"><span class="ball"></span><span class="wm">만들면서 배우는 100분</span></a>
     <nav class="nav" id="nav">
-      <a href="#tools">도구</a>
-      <a href="#agenda">흐름</a>
       <a href="#checkin">체크인</a>
-      <a href="#why">왜?</a>
-      <a href="#principles">4원리</a>
-      <a href="#speaker">강사</a>
-      <a href="#notion">노션</a>
-      <a href="#notebooklm">NotebookLM</a>
-      <a href="#mywork">자료</a>
+      <a href="#tools">도구</a>
+      <a href="#notion">노션 만들기</a>
+      <a href="#nlm">NotebookLM</a>
       <a href="#practice">실습</a>
-      <a href="#survey">마무리</a>
+      <a href="#finale">정리</a>
     </nav>
-    <button class="presenter-toggle" id="presenterToggle" onclick="togglePresenter()"><span class="dot"></span>강사 모드</button>
+    <span class="p-flag">🎤 강사용 화면</span>
   </div>
 </header>
 
 <main>
 
-<!-- ══════════ HERO ══════════ -->
-<section class="hero" id="top">
+<!-- HERO -->
+<section id="top" class="hero">
   <div class="wrap">
-    <div class="kicker">1-5 · 교사 직무 연수</div>
-    <h1>교사의 업무 경감 &amp; 자동화 전략</h1>
-    <p class="lead" id="heroLead"></p>
-    <div class="hero-slogan" id="heroSlogan"></div>
-    <div class="hero-meta" id="heroMeta"></div>
-    <a class="speaker-card" href="강사소개.html" target="_blank" rel="noopener">
-      <div class="sp-avatar">조</div>
-      <div>
-        <div class="sp-name">조승재 <span class="sp-nick">과학이조선생</span></div>
-        <div class="sp-role">해누리중학교 과학교사 · AI디지털 선도교사</div>
-      </div>
-      <span class="sp-go">강사 소개 →</span>
+    <div class="badge reveal">🎉 포켓몬 30주년 기념 에디션</div>
+    <h1 class="reveal">설명은 짧게,<br><span class="hl">직접 만들며</span> 배웁니다</h1>
+    <p class="lead reveal">노션·NotebookLM을 <b>손으로</b> 다뤄보는 100분. 끝나면 <b>'내 것' 하나</b>가 남아요.</p>
+    <div class="flow reveal" id="flow"></div>
+    <a class="speaker reveal" href="강사소개.html" target="_blank" rel="noopener">
+      <span class="av">조</span>
+      <span><span class="nm">조승재 · 과학이조선생</span><br><span class="ro">해누리중 과학 · AI디지털 선도교사</span></span>
+      <span class="go">소개 →</span>
     </a>
+    <!-- 강사 전용 진행표 -->
+    <div class="po" style="margin-top:30px">
+      <div class="runsheet" id="runsheet"></div>
+    </div>
+    <div class="pnote" id="heroNote"></div>
   </div>
 </section>
 
-<!-- ══════════ OPENING TOOLS ══════════ -->
-<section class="block" id="tools">
+<!-- CHECK-IN -->
+<section id="checkin" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker">OPENING TOOLKIT</div>
-      <h2>🎒 오늘 맛볼 유용한 도구들</h2>
-      <p>본론 들어가기 전에, 수업·업무에서 바로 써먹는 작은 도구들부터 가볍게 맛봅니다. 눌러서 바로 열어보세요.</p>
+    <div class="mood reveal">
+      <div class="mq">지금 내 업무 배터리는? 🔋</div>
+      <div class="mgrid" id="mgrid"></div>
+      <div class="mnote" id="mnote"></div>
     </div>
-    <div class="toolgrid reveal" id="tool-cards"></div>
+    <div class="pnote" id="checkinNote"></div>
   </div>
 </section>
 
-<!-- ══════════ AGENDA ══════════ -->
-<section class="block" id="agenda">
+<!-- TOOLS -->
+<section id="tools" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="agendaKicker">RUNNING SHEET · 100분</div>
-      <h2 id="agendaTitle">오늘의 흐름 · 100분 진행표</h2>
-      <p id="agendaSub"></p>
-    </div>
-    <div class="presenter-hint reveal">💡 우측 상단 <b>[강사 모드]</b>를 켜면 구간별 진행 팁·강사 노트가 함께 보여요. (발표자 전용)</div>
-    <div class="agenda reveal" id="agenda-list"></div>
+    <div class="sec-head reveal"><span class="kick">시작 도구</span><h2>🎒 오늘 맛볼 도구들</h2></div>
+    <div class="tiles reveal" id="tiles"></div>
+    <div class="pnote" id="toolsNote"></div>
   </div>
 </section>
 
-<!-- ══════════ CHECK-IN ══════════ -->
-<section class="block tint" id="checkin">
+<!-- NOTION 기초 실습 -->
+<section id="notion" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="checkinKicker">CHECK-IN · 감정 체크인 (10분)</div>
-      <h2 id="checkinTitle"></h2>
-      <p id="checkinSub"></p>
-    </div>
-    <div class="checkin reveal">
-      <div class="mood-box">
-        <div class="mood-q">지금, 나의 업무 배터리는 몇 칸쯤 남아 있나요?</div>
-        <div class="mood-sub">정답은 없어요. 눌러서 표시만 해봅니다 🙂</div>
-        <div class="mood-grid" id="moodGrid"></div>
-        <div class="mood-note" id="moodNote"></div>
+    <div class="sec-head reveal"><span class="kick">실습 ① · 20분</span><h2>📝 노션 페이지, 직접 만들기</h2><p>만들고 → 꾸미고 → 공유하고 → 웹에 게시. 한 바퀴 돌려봅니다.</p></div>
+    <div class="bsteps reveal" id="notionSteps"></div>
+    <div class="pnote" id="notionNote"></div>
+  </div>
+</section>
+
+<!-- NOTEBOOKLM 소개 + 라이브 질문 -->
+<section id="nlm" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="kick">이게 뭐예요?</span><h2>🎧 NotebookLM = 내 자료만 아는 조교</h2></div>
+    <div class="whystrip reveal" id="whystrip"></div>
+    <div class="live reveal" id="live">
+      <div class="lq" id="liveQ">💬 이걸 <u>내 업무</u>에 어떻게 쓸 수 있을까요?</div>
+      <div class="lsub">한 줄이면 충분해요. 모두의 답이 아래에 실시간으로 모입니다.</div>
+      <div class="lform">
+        <input id="liveName" maxlength="12" placeholder="이름(선택)">
+        <textarea id="liveBody" maxlength="200" placeholder="예: 매년 나가는 가정통신문 초안을 자료 넣고 뽑아보고 싶다"></textarea>
+        <button id="liveSend" onclick="submitLive()">남기기</button>
       </div>
-      <div class="lead-note" id="checkinIntro"></div>
+      <div class="lstatus" id="liveStatus"></div>
+      <div class="wall" id="wall"></div>
     </div>
-    <div class="subhead reveal"><span class="sh-ic">🧭</span>이렇게 문을 엽니다</div>
-    <div class="cards three reveal" id="checkinCards"></div>
-    <div class="pnote" id="checkinPnote"></div>
+    <div class="pnote" id="nlmNote"></div>
   </div>
 </section>
 
-<!-- ══════════ WHY ══════════ -->
-<section class="block" id="why">
+<!-- NOTEBOOKLM 실습 -->
+<section id="practice" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="whyKicker">WHAT REALLY MATTERS</div>
-      <h2 id="whyTitle">무엇이 중요한가?</h2>
-      <p id="whySub">답을 서두르지 마세요. 각 질문을 눌러, 잠깐 멈추고 함께 생각을 이어갑니다.</p>
-    </div>
-    <div class="q-list reveal" id="q-list"></div>
-    <div class="reveal" style="margin-top:24px"><div class="callout" id="whyCallout"></div></div>
-    <div class="pnote" id="whyPnote"></div>
+    <div class="sec-head reveal"><span class="kick">실습 ② · 30분</span><h2>🧪 NotebookLM 직접 써보기</h2><p>자료 넣고 → 물어보고 → 복습 카드까지. 그리고 "내 공문엔?"</p></div>
+    <div class="bsteps reveal" id="nlmSteps"></div>
+    <div class="pnote" id="practiceNote"></div>
   </div>
 </section>
 
-<!-- ══════════ PRINCIPLES ══════════ -->
-<section class="block tint" id="principles">
+<!-- FINALE (철학, 마지막) -->
+<section id="finale" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="prKicker">THE 4 PRINCIPLES</div>
-      <h2 id="prTitle">업무 경감의 4가지 원리</h2>
-      <p id="prSub"></p>
+    <div class="finale reveal">
+      <div class="fk">그래서, 오늘의 결론</div>
+      <h2>도구를 <span class="hl">늘리지</span> 마세요.<br>딱 하나면 됩니다.</h2>
+      <p>오늘 만든 것 <b>하나</b>면 충분해요. 중요한 건 무엇을 쓰느냐가 아니라, <b>무엇을 안 하느냐</b>. 나머지는 안 하셔도 됩니다.</p>
     </div>
-    <div class="cards four reveal" id="pr-cards"></div>
-    <div class="pnote" id="prPnote"></div>
+    <div class="pnote" id="finaleNote"></div>
   </div>
 </section>
 
-<!-- ══════════ SPEAKER (mini) ══════════ -->
-<section class="block" id="speaker">
+<!-- SURVEY -->
+<section id="survey" class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker">WHO AM I</div>
-      <h2>잠깐, 저는 이런 교사입니다</h2>
-      <p>도구를 파는 사람이 아니라, 저부터 <b>제 업무를 덜고 있는</b> 교사예요. 자세한 소개는 아래에서 👇</p>
-    </div>
-    <div class="res-btns reveal">
-      <a class="res-btn" href="강사소개.html" target="_blank" rel="noopener"><span class="rb-icon">👋</span><span class="rb-t">강사 소개 페이지</span><span class="rb-u">강사소개.html</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ NOTION ══════════ -->
-<section class="block tint" id="notion">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="notionKicker">CASE · NOTION</div>
-      <h2 id="notionTitle"></h2>
-      <p id="notionSub"></p>
-    </div>
-    <div class="cards reveal" id="notion-cards"></div>
-    <div class="pnote" id="notionPnote"></div>
-  </div>
-</section>
-
-<!-- ══════════ NOTEBOOKLM ══════════ -->
-<section class="block" id="notebooklm">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="nlmKicker">CASE · NOTEBOOKLM</div>
-      <h2 id="nlmTitle"></h2>
-      <p id="nlmSub"></p>
-    </div>
-    <div class="diffbar reveal" id="nlmDiffs"></div>
-    <div class="cards four reveal" id="nlm-cards"></div>
-    <div class="honest reveal" id="nlmHonest"></div>
-    <div class="pnote" id="nlmPnote"></div>
-  </div>
-</section>
-
-<!-- ══════════ MY WORK ══════════ -->
-<section class="block tint" id="mywork">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="mwKicker">MADE, NOT BOUGHT</div>
-      <h2 id="mwTitle"></h2>
-      <p id="mwSub"></p>
-    </div>
-    <div class="lead-note reveal" id="mwIntro" style="margin-bottom:20px"></div>
-    <div class="cards four reveal" id="mw-cards"></div>
-    <div class="subhead reveal"><span class="sh-ic">🌱</span>돌아보기 — 여러분 차례</div>
-    <div class="q-list reveal" id="mw-questions"></div>
-    <div class="res-btns reveal" style="margin-top:20px" id="mw-links"></div>
-    <div class="pnote" id="mwPnote"></div>
-  </div>
-</section>
-
-<!-- ══════════ PRACTICE ══════════ -->
-<section class="block" id="practice">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" id="prcKicker">HANDS-ON · 30min</div>
-      <h2 id="prcTitle"></h2>
-      <p id="prcSub"></p>
-    </div>
-    <div class="action-panel reveal" id="practiceFiles" style="margin-bottom:22px"></div>
-    <div class="subhead reveal"><span class="sh-ic">🧳</span>메인 실습 · NotebookLM 여행지 자료 실습 (약 22분)</div>
-    <div class="steps reveal" id="prc-steps"></div>
-    <div class="subhead reveal"><span class="sh-ic">📋</span>라이트 실습 · 노션 템플릿 복제 (약 5분)</div>
-    <p class="helper reveal" id="prcNotionHelper"></p>
-    <div class="steps reveal" id="prc-notion-steps"></div>
-    <div class="subhead reveal"><span class="sh-ic">🛟</span>실습 안전장치 — 이것만 지키면 안 꼬여요</div>
-    <div class="cards three reveal" id="prc-cards"></div>
-    <div class="pnote" id="prcPnote"></div>
-  </div>
-</section>
-
-<!-- ══════════ SURVEY ══════════ -->
-<section class="block tint" id="survey">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker">CLOSING · 만족도 조사 (10분)</div>
-      <h2>마무리 · 오늘 딱 하나만 챙겨가요 🙏</h2>
-      <p>오늘 가져가실 한 가지를 떠올리며, 짧게 남겨주세요. 여러분의 한 줄이 다음 연수를 더 좋게 만듭니다.</p>
-    </div>
-    <div class="action-panel reveal" id="surveyPanel"></div>
-    <div class="reveal" style="margin-top:28px"><div class="closing">
-      <div class="kicker">THANK YOU</div>
-      <h3 id="closingTitle"></h3>
-      <p id="closingBody"></p>
-    </div></div>
+    <div class="sec-head reveal"><span class="kick">마무리 · 10분</span><h2>🎁 오늘 딱 하나, 남겨주세요</h2></div>
+    <div class="survey reveal" id="surveyPanel"></div>
+    <div class="pnote" id="surveyNote"></div>
   </div>
 </section>
 
 </main>
-
-<footer>
-  made with <span class="heart">♥</span> by 과학이조선생 · 해누리중학교 조승재
-</footer>
+<footer>made with <span class="h">❤</span> 과학이조선생 · 조승재 &nbsp;·&nbsp; <span id="modeHint"></span></footer>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   ⚙️  연수 때마다 여기 CONFIG 링크만 바꾸면 됩니다
-   ═══════════════════════════════════════════════════════ */
+/* ═══ CONFIG — 연수 때 여기만 채우면 됩니다 ═══ */
 const CONFIG = {
-  // 실습용 여행지 자료 5개(수업HTML\연수_여행지자료\)를 올린 폴더/링크 — 참가자가 받아 NotebookLM에 올림.
-  practiceFileUrl: 'https://scienceisjo.github.io/growing-teachers/yeonsu/travel/',
-  practiceFileQR: '',        // QR 이미지 경로(예: images/practice-qr.png). 비우면 점선 안내.
-  // 노션 '업무/수업 관리 대시보드' 복제용 템플릿 링크 (※ '복제 허용' 설정을 켜 두어야 참가자에게 [복제] 버튼이 보임)
-  notionTemplateUrl: '',
-  // 사진 많은 '따라하기 매뉴얼' 노션 페이지 링크
-  notionManualUrl: '',
-  // 만족도 조사 링크 + QR
-  surveyUrl: '',
-  surveyQR: '',
-  // 내 자료 대표 허브 링크
+  // ▼ Supabase 라이브 응답 벽 (선생님이 만든 프로젝트 정보)
+  supabaseUrl: '',          // 예: https://xxxx.supabase.co
+  supabaseAnonKey: '',      // anon public key
+  liveTable: 'yeonsu_responses',
+  livePromptKey: 'nlm_work',
+
+  // ▼ 링크
+  surveyUrl: '', surveyQR: '',
   hubUrl: 'https://joo.is/과학탐구월드',
-  // 오프닝 '유용한 도구' 링크 (알려진 것은 채워둠, 빈 곳은 실제 주소로 교체하세요)
+  notionTemplateUrl: '',      // (선택) 복제용 템플릿
   snipasteUrl: 'https://www.snipaste.com',
   zoomitUrl: 'https://learn.microsoft.com/ko-kr/sysinternals/downloads/zoomit',
-  classGameWorldUrl: '',   // ← Class Game World 실제 주소 입력
-  letterCardUrl: '',       // ← '편지 카드 만들기' 도구/활동 링크 입력
+  classGameWorldUrl: '', letterCardUrl: '',
 };
 
-/* ═══════════════════════════════════════════════════════
-   📦  DATA — 연수 콘텐츠 (병렬 설계 + 팩트체크·타이밍·유익함 검증 결과)
-   ═══════════════════════════════════════════════════════ */
+/* ═══ 참가자용은 글씨 최소 / 강사용(?present=1)만 상세 ═══ */
 const DATA = {
-  tools: [
-    { n: '1', icon: '💗', name: '감정 체크인', tag: '마음 열기', href: '#checkin', internal: true, label: '여기서 시작 ↓',
-      desc: '오늘 나의 업무 배터리부터 확인하며 부담 없이 마음을 엽니다.' },
-    { n: '2', icon: '✂️', name: 'Snipaste', tag: '캡처·핀', href: CONFIG.snipasteUrl, label: 'snipaste.com',
-      desc: "무료 화면 캡처 + 캡처한 이미지를 화면 위에 '핀'으로 띄워두는 도구. 참고 화면을 띄워둔 채 작업할 때 최고." },
-    { n: '3', icon: '🎮', name: 'Class Game World', tag: '수업 게임', href: CONFIG.classGameWorldUrl,
-      desc: '수업용 게임·활동을 모아 쓰는 플랫폼. 형성평가·복습을 게임으로 바꿔 몰입을 확 끌어올려요.' },
-    { n: '4', icon: '🔍', name: 'ZoomIt', tag: '화면 확대·판서', href: CONFIG.zoomitUrl, label: 'microsoft · sysinternals',
-      desc: '발표 중 화면을 확대하고 그 위에 바로 그리기·타이머까지. 판서·시연에 강력한 무료 도구(Microsoft).' },
-    { n: '5', icon: '💌', name: '편지 카드 만들기', tag: '활동', href: CONFIG.letterCardUrl,
-      desc: '학생·동료에게 마음을 전하는 편지 카드를 만드는 활동. 학기 마무리·감사 인사에 좋아요.' },
-    { n: '6', icon: '🌍', name: 'joo.is/과학탐구월드', tag: '허브', href: CONFIG.hubUrl, label: 'joo.is/과학탐구월드',
-      desc: '제가 만든 수업 자료·게임·도구를 한 곳에 모은 통합 허브. 주소 하나만 기억하면 끝.' },
+  flow: [
+    {e:'💗',t:'체크인'},{e:'🎒',t:'도구'},{e:'📝',t:'노션 만들기'},
+    {e:'🎧',t:'NotebookLM'},{e:'🧪',t:'내 업무 적용'},{e:'🎁',t:'정리'}
   ],
-
-  hero: {
-    lead: '노션·노트북LM을 배우러 오셨겠지만 — 오늘 진짜 가져가실 건 <b>도구가 아니라 관점</b>입니다.',
-    slogan: '중요한 건 무엇을 <b>쓰느냐</b>가 아니라, 무엇을 <b>안 하느냐</b>입니다.',
-    meta: [
-      { ic: '⏱️', k: 'TIME', v: '100분 (1시간 40분)' },
-      { ic: '🎯', k: 'GOAL', v: '월요일에 바로 쓸 한 가지' },
-      { ic: '🧰', k: 'TOOLS', v: 'Notion · NotebookLM · AI' },
-    ],
-  },
-
-  agenda: {
-    kicker: 'RUNNING SHEET · 100분',
-    title: '오늘의 흐름 · 100분 진행표',
-    sub: '감정 체크인으로 문을 열고, 내 문서로 만든 팟캐스트를 함께 들으며 닫습니다 — 관점은 무겁게, 실습은 확실하게.',
-    rows: [
-      { time: '0:00–0:10', min: '10분', label: '감정 체크인 — 오늘 나의 업무 온도', book: true,
-        goal: "긴장을 풀고 '나만 버거운 게 아니구나'를 확인하며 마음을 엽니다.",
-        tip: '"요즘 업무, 100점 만점에 몇 점쯤 힘드세요?" 손가락·한 단어로. 강사 본인 점수를 먼저 공개하면 분위기가 풀립니다. 여기서 서두르지 마세요 — 이 10분이 뒤 80분의 신뢰를 삽니다.' },
-      { time: '0:10–0:22', min: '12분', label: '오프닝 — 무엇이 중요한가 & 4원리',
-        goal: '"무엇을 쓰느냐가 아니라 무엇을 안 하느냐" 슬로건과 4원리(제거·재사용·검색·위임)를 각인.',
-        tip: '도구 이름은 아직 꺼내지 마세요. "이 일을 아예 안 하면 무슨 일이 나나?"를 직접 물어 3~4개 답을 받으세요. 오늘 손댈 건 원리 3(검색)·4(위임)라고 예고만.' },
-      { time: '0:22–0:30', min: '8분', label: '강사 · 수업자료 · 제작물 소개',
-        goal: '"이 사람 말은 들어볼 만하다"는 신뢰. 자랑이 아니라 "여러분도 할 수 있다"의 증거.',
-        tip: '이력은 자막 한 줄, 30초로 압축. 대신 실제 제작물을 빠르게 스크롤하며 "이건 다 밤에 혼자 만든 겁니다"로 문턱을 낮추세요.' },
-      { time: '0:30–0:40', min: '10분', label: '실증 사례 ① — 판단만 내가, 문장은 위임 (생기부 자동화)',
-        goal: '원리 2·4가 며칠 걸리던 일을 어떻게 줄였는지 체감. "규칙은 내가, 반복은 AI가."',
-        tip: '세특 117명 자동화를 대표 사례로. 규칙(명사형·250자·성취기준)은 교사가 정하고 생성은 맡긴다는 "위임의 원리"를 강조. 개인정보는 클라우드에 안 올린다는 원칙도 한 줄.' },
-      { time: '0:40–0:48', min: '8분', label: "실증 사례 ② — 노션은 '사진 많은 안내문'일 뿐",
-        goal: '노션 100기능에 겁먹지 않기. "딱 필요한 만큼만" 쓰는 절제가 진짜 실력이라는 관점.',
-        tip: '롤업·관계형DB는 "이런 것도 있지만 오늘 안 씁니다" 한 문장으로 흘려보내세요. 실제 강의자료(간이염분계) 노션 페이지를 열어 "사진 많은 안내문"으로 보여주면 복제 데모의 예고편이 됩니다.' },
-      { time: '0:48–0:53', min: '5분', label: '실습 브릿지 — NotebookLM이란 & 로그인 점검',
-        goal: '원리 3(검색)의 대표 도구로 NotebookLM 소개. 접속·로그인을 "다 같이" 끝내 늘어짐 차단.',
-        tip: 'QR/단축링크 띄우고 2인 1조 확인. "구글 로그인 되시는 분 엄지 척" — 안 되면 개인 gmail. "구글 계정만 있으면 무료, 한국어도 됩니다"로 안심. 이 5분에 로그인 병목을 다 털어야 다음 25분이 안 밀립니다.' },
-      { time: '0:53–1:18', min: '25분', label: '메인 실습 — NotebookLM 여행지 자료 실습 (비교·근거 질문→소스 한정 체험)',
-        goal: '직접 공문을 올려 근거와 함께 답을 받고, 인용을 클릭해 원문을 확인하고, 없는 건 안 지어내는 걸 체험하는 "차별점 완주".',
-        tip: '①로그인·업로드(8분) ②"근거 원문과 함께 표로" 질문(6분) ③인용 칩 클릭→원문 점프(3분) ④일부러 없는 것 질문→"소스에 없음" 체험(3분) ⑤(선택)공유 질문봇(5분). "챗GPT는 근거를 못 짚어줘요"를 꼭 말로.' },
-      { time: '1:18–1:23', min: '5분', label: '클라이맥스 — 근거 추적 & 질문봇 체험',
-        goal: '"공문을 안 읽었는데 근거는 확인됐다"는 감각 + 링크 하나로 질문봇이 되는 놀라움.',
-        tip: '인용 클릭 점프를 크게 한 번 시연. 공유 질문봇은 짝이 구글 로그인해야 함 — 막히면 강사 화면으로. "이게 파일 올리는 거랑 다른 점"으로 닫기.' },
-      { time: '1:23–1:28', min: '5분', label: '라이트 데모 — 노션 템플릿 복제',
-        goal: '"밑바닥부터 안 만든다"의 실감. 복제 한 번 + 필드 하나로 나만의 대시보드가 생기는 성공 경험.',
-        tip: '미리 만든 복제 링크 배포 → 우측 상단 [복제] → 필드 하나만 수정. 새로 만들기 시도 금지. "오늘은 여기까지, 나머지는 필요할 때 검색하세요"로 원리 3 재소환.' },
-      { time: '1:28–1:30', min: '2분', label: '마무리 정리 — 무엇을 안 할 것인가',
-        goal: '오늘의 한 문장을 다시 손에 쥐기. "내일 당장 덜어낼 일 하나"를 각자 정하기.',
-        tip: '"돌아가서 딱 하나만 안 하기로 정한다면?"을 묻고 옆 짝과 한마디씩. 도구 목록이 아니라 관점 한 줄로 닫습니다. 버퍼가 남으면 여기서 질문을 더 받으세요.' },
-      { time: '1:30–1:40', min: '10분', label: '만족도 조사 & 배웅', book: true,
-        goal: '솔직한 피드백 수집 + 오늘 자료·링크 다시 챙겨가기. 후속 문의 채널 안내.',
-        tip: '설문 QR 띄우고 그 자리에서 제출까지 확인. 자료 링크를 채팅에 한 번 더 고정. "오늘 만진 것보다 안 하기로 한 것을 기억해 주세요"로 인사.' },
-    ],
-  },
-
-  checkin: {
-    title: '덜어내기 전에, 잠시 멈춤',
-    sub: '지친 마음을 먼저 꺼내 놓고, "무엇을 안 할까"라는 질문으로 걸어 들어갑니다.',
-    intro: "오늘 100분의 첫 문은 도구가 아니라 '나'로 엽니다. 새 앱 이야기는 잠시 접어두고, 지금 우리가 얼마나 지쳐 있는지부터 솔직하게 꺼내 봅니다. 지친 자리를 정확히 봐야 무엇을 덜어낼지가 보이니까요. 그리고 방금 꺼낸 그 <b>'내려놓고 싶은 일 하나'</b>는, 오늘 연수가 끝나기 전에 다시 꺼내 함께 손을 대볼 겁니다.",
-    cards: [
-      { icon: '🌡️', heading: '체크인 ① — 오늘의 나, 배터리로 말하기', tag: '약 3분 · 부담 제로',
-        body: '"자기소개는 미뤄둘게요. 딱 하나만요 — 지금 내 몸과 마음의 배터리, 몇 퍼센트인가요? 100%면 팔팔한 개학 첫날, 10%면 방전 직전이에요." 말 대신 손으로(양손=100%, 한 손=50%, 주먹=방전). 셋을 세면 동시에 들게 하고 강의실을 천천히 둘러봅니다.',
-        detail: "'말'이 아니라 '손'으로 참여시켜 초보·내향 교사의 부담을 0으로. 낮은 배터리가 많이 보이면 \"오늘 딱 맞게 오셨네요\"로 받아주세요. 이 장면 자체가 '우리는 지쳐 있다 = 덜어낼 것이 있다'의 시각적 증거입니다." },
-      { icon: '🪨', heading: '체크인 ② — 내려놓고 싶은 업무 한 가지', tag: '약 5분 · 옆사람과 한마디',
-        body: '"이 일만 없어도 숨통 트이겠다" 싶은 업무를 딱 하나 떠올려, 포스트잇(또는 채팅)에 한 줄로 적습니다. 옆사람과 2인 1조로 30초씩 그 한 가지만 나눕니다. "해결책은 찾지 마세요. 그냥 이름만 붙여 주세요."',
-        detail: "뒤 실습의 짝을 여기서 미리 맺어 둡니다. 적은 한 줄은 버리지 마시라 당부하세요 — 오늘 이 일에 실제로 손대볼 거라 예고하면 오프닝이 '관점'이 아니라 '약속'이 됩니다." },
-      { icon: '🧭', heading: '브릿지 — 지친 자리에서 오늘의 질문으로', tag: '약 1분 · 전환 멘트',
-        body: '"방금 우리가 한 일이 사실 오늘 연수의 절반이에요. 지친 곳을 봤고, 내려놓고 싶은 걸 하나 이름 붙였잖아요. 새 앱을 배우기 전에, 저는 이 질문부터 던지고 싶어요." 톤을 한 단계 낮추고 질문 세트로 넘어갑니다.',
-        detail: "감정 → 철학으로 넘어가는 경첩. 도구 이름(노션·노트북LM)을 여기서 절대 먼저 꺼내지 마세요. '무엇을 쓸까'가 아니라 '무엇을 안 할까'로 향하는 문을 여는 순간입니다." },
-    ],
-    pnote: '타이밍(정직하게): 배터리 체크인 3분 + 내려놓고 싶은 업무 5분 + 브릿지 1분 = 약 9분. 여기까지가 "첫 10분 감정 체크인" 슬롯입니다. 이어지는 질문 세트(4문항, 약 4~5분)는 "왜(업무경감의 이유)"를 여는 본론의 첫 조각이라 80분 콘텐츠 시간에서 씁니다. 이 경계를 알아야 오프닝이 늘어지지 않습니다.\n▶︎ 체크인은 반드시 "말 대신 손"으로. 돌아가며 자기소개 금지(시간 잡아먹고 긴장만 올라감).\n▶︎ 낮은 배터리가 많은 건 오히려 좋은 신호 — "오늘 제대로 오셨어요"로 받고 곧장 "덜어내기"와 연결.\n▶︎ 체크인 ②의 "내려놓고 싶은 일 한 줄"이 이 오프닝의 핵심 장치입니다. 이 한 줄이 뒤 실습에서 손댈 재료가 되고, 오프닝이 "관점 설교"로 끝나지 않게 막아 줍니다. "오늘 이 일에 함께 손대볼게요"라고 반드시 예고하세요.',
-  },
-
-  why: {
-    questions: [
-      { q: "우리는 왜 이렇게 바쁠까요? 정말 '일이 많아서'일까요, 아니면 작년에 했으니까·원래 그러니까 '안 해도 되는 일을 계속 하고 있어서'일까요?",
-        reveal: '바쁨의 상당 부분은 양이 아니라 <b>관성</b>입니다. 자동화보다 먼저 물어야 할 질문은 "이걸 어떻게 빨리 하지?"가 아니라 <b>"이걸 아예 안 하면 무슨 일이 나지?"</b>입니다. 방금 적은 그 일도, 한 달 멈추면 정말 누가 아쉬워할지 떠올려 보세요. 아무도 아쉬워하지 않는다면, 그게 가장 먼저 덜어낼 후보입니다.' },
-      { q: "새 도구를 배우면 정말 시간이 줄어들까요? 혹시 '도구를 익히고 관리하는 일'이라는 새로운 업무가 하나 더 늘어나는 건 아닐까요?",
-        reveal: "기능이 많은 도구일수록 그 자체가 또 하나의 일이 됩니다. 노션의 100가지 기능을 다 배우는 순간, 우리는 '노션 관리'라는 업무를 새로 떠안습니다. 도구는 <b>'딱 필요한 만큼만'</b> 쓸 때 나를 자유롭게 합니다." },
-      { q: '오늘 연수가 끝나고 멋진 앱 사용법 열 개가 손에 쥐어진다면, 그건 성공일까요? 아니면… 배워야 할 숙제가 열 개 더 생긴 걸까요?',
-        reveal: '오늘 저는 사용법을 한 아름 안겨 드리지 않을 겁니다. 대신 관점 하나를 심어 드리려 해요. <b>중요한 건 무엇을 쓰느냐가 아니라, 무엇을 안 하느냐입니다.</b> 이 한 문장이 오늘 연수의 척추입니다.' },
-      { q: '만약 매일 저녁, 학교를 나서는 발걸음이 지금보다 딱 30분 가벼워진다면 — 그 30분으로 여러분은 무엇을 되찾고 싶으신가요?',
-        reveal: "업무 경감의 진짜 목적은 '더 많은 일을 하기 위한 시간'이 아니라, <b>나와 아이들에게 돌려줄 시간</b>을 만드는 것입니다. 오늘 도구를 배우는 이유도 결국 여기에 있습니다. 자, 그럼 그 시간을 어떻게 되찾을지 함께 볼까요?" },
-    ],
-    callout: { k: "오늘의 한 문장", t: '중요한 건 무엇을 쓰느냐가 아니라, 무엇을 안 하느냐입니다.', b: '오늘 도구 이름은 다 잊으셔도 좋아요. 이 한 문장만 가져가셔도 충분합니다.' },
-    pnote: '질문은 슬라이드에 하나씩만 띄우고, 던진 뒤 최소 5초 침묵. 손 들어 답하게 하지 말 것 — 목표는 "정답"이 아니라 "멈칫하는 순간"입니다. reveal은 청중이 충분히 생각한 뒤 강사가 낮은 목소리로 직접 읽어 주면 울림이 큽니다.\n▶︎ 3번 질문의 reveal에서 슬로건을 오늘 처음이자 가장 힘줘서 발화하세요. 이후 80분 내내 반복 소환할 앵커입니다.\n▶︎ 4번 질문의 마지막 문장("어떻게 되찾을지 함께 볼까요?")이 본론(4원리)으로 넘어가는 다리입니다.',
-  },
-
-  principles: {
-    sub: '도구는 갈아탑니다. 원리는 남습니다. 오늘 배울 노션과 노트북LM도 몇 년 뒤엔 이름이 바뀌어 있겠지만, 이 네 가지는 그대로입니다.',
-    cards: [
-      { icon: '✂️', heading: '원리 1 · 덜어낼 것을 먼저 찾는다',
-        body: "자동화보다 '제거'가 먼저입니다. 빠르게 하는 것보다, 아예 안 하는 게 가장 빠릅니다. 매년 만들던 그 안내문, 아무도 안 읽는 그 보고 항목 — 던질 질문은 하나. \"이 일을 안 하면, 무슨 일이 나나요?\" 놀랍게도 대부분은 아무 일도 나지 않습니다.",
-        tag: '가장 빠른 자동화는, 그 일을 안 하는 것', detail: "이 원리엔 도구가 등장하지 않습니다. 그게 핵심 — 새 도구를 켜기 전에 '자동화할 가치가 있는 일인가'부터 가려내는 첫 관문입니다." },
-      { icon: '🧱', heading: '원리 2 · 한 번 만들어 계속 쓴다',
-        body: "올해 급하게 손으로 만든 걸, 내년에 또 손으로 만들고 계시진 않나요? 매뉴얼·템플릿·웹앱은 처음 한 번만 품이 듭니다. 잘 만들어두면 학기마다, 학년마다 복제해 씁니다. '오늘의 고생'을 '평생의 자산'으로 바꾸는 원리입니다.",
-        tag: '두 번 할 일이면, 템플릿으로', detail: "뒤에서 만날 예시: 노션의 '복제 가능한 대시보드'. 밑바닥부터 짜지 않고 [복제] 한 번으로 내 것이 됩니다." },
-      { icon: '🔍', heading: '원리 3 · 외우지 말고 검색하게 한다',
-        body: "교사의 머리는 창고가 아니라 작업대여야 합니다. 작년 공문, 회의록, 교육과정 문서 — 어디 뒀는지 기억하려 애쓰지 마세요. 한곳에 쌓아두고 '검색'으로 꺼내면 됩니다. 기억을 시스템에 넘기는 순간, 머리는 판단과 수업에 집중합니다.",
-        tag: '기억하지 말고, 찾을 수 있게', detail: "뒤에서 만날 예시: 노트북LM. 화려한 기능 100가지는 잊으셔도 됩니다. 본질은 하나 — '쌓고, 검색한다'." },
-      { icon: '🤖', heading: '원리 4 · 판단이 필요 없는 일은 위임한다',
-        body: "선생님만 할 수 있는 일은 '상·중·하'를 가르는 교육적 판단입니다. 그 판단을 문장으로 옮기고, 규칙에 맞춰 다듬고, 백 명분을 반복하는 일 — 여기엔 선생님의 영혼이 필요 없습니다. 판단은 사람이, 반복은 기계가.",
-        tag: '판단은 선생님이, 반복은 AI가', detail: "강사 실제 사례: 생기부 세특 자동화. 교사는 엑셀에 등급·활동만 입력하고, 나머지(명사형·250자·2022개정 성취기준)는 AI가 학생 수만큼 생성합니다." },
-    ],
-    pnote: '이 블록은 "관점" 파트입니다. 8~10분, 카드당 2분을 넘기지 마세요. body는 읽지 말고 말로 풀고, detail은 필요할 때만. 원리 1에서 한 번 멈추고 물어보세요: "올해 하신 업무 중, 안 해도 아무 일 안 났을 것 같은 일 하나만?" 3초 침묵을 견디는 게 포인트. 원리 2·3에서 뒤 실습을 살짝 예고하고, 원리 4에서 생기부 사례로 실습에 다리를 놓으세요. 마무리 한 문장: "오늘 도구 이름은 다 잊으셔도 됩니다. 이 네 질문만 남기세요."',
-  },
-
-  notion: {
-    title: '노션 — 0부터 안 만듭니다, 복제해서 내 것으로',
-    sub: '노션을 쓸 줄 알면 0부터 시작하지 않아도 돼요. 상점(템플릿 갤러리)에서 남이 잘 만든 걸 복제해, 내 상황에 맞게 한 곳만 고치면 끝입니다.',
-    cards: [
-      { icon: '🛍️', heading: '템플릿 갤러리(상점)에서 복제 (오늘 실습)', tag: '복제 한 번',
-        body: 'notion.com/templates에 무료 템플릿이 3만 개 넘게 있어요. 학급경영·주간계획·평가기록… 마음에 드는 걸 [복제]하면 구조가 통째로 내 워크스페이스로 들어옵니다. 밑바닥 설계는 안 합니다.',
-        detail: "공개 페이지 우상단 <b>[복제(Duplicate)]</b> → 저장할 워크스페이스 선택 → 사이드바에 생성. 복제본은 100% 내 것, 원본은 안 변해요. (복제 버튼이 안 보이면 제작자가 복제를 막은 것)" },
-      { icon: '📸', heading: "사진 많은 수업 안내를 '링크 하나'로", tag: '강사 실제 사례',
-        body: '실험 준비물·기기 조작법·활동 순서를 매번 인쇄하던 일. 노션 페이지에 사진을 쭉 붙여두면 이제 링크(QR) 하나면 끝. 학생도 학부모도 동료도 같은 화면을 봅니다. 저는 간이염분계 강의자료를 이렇게 공유했어요.',
-        detail: "쓴 기능은 <b>사진 붙여넣기와 텍스트</b>뿐. 관계형·롤업 전혀 안 씀. PPT보다 쉽고, 인쇄 없이 무한 재사용." },
-      { icon: '📚', heading: "흩어진 정보를 '한 곳'에 쌓고 검색", tag: '축적·검색',
-        body: "좌석표·공문 링크·상담 메모·작년 통신문이 열 군데에 흩어져 '그거 어디 있더라'로 하루를 쓰던 일. 페이지 하나에 쌓아두고, 검색창에 한 단어만 치면 바로 나와요.",
-        detail: "빠른 검색(Ctrl/⌘+P)으로 찾으면 됩니다. NotebookLM이 '내 자료만 근거로 답하는 폐쇄형'이라면, 노션은 '이미 만들어진 자산을 복제·축적하는 개방형' — 둘의 결이 이렇게 달라요." },
-    ],
-    pnote: '이 파트는 "0부터 안 만든다"가 전부입니다(약 8분). 상점에서 템플릿 복제 → 필드 하나 수정을 실제 화면으로 보여주세요. 예전 노션 강의의 슬로건("노션을 쓸 줄 알면 0부터 시작하지 않아도 됩니다")을 그대로 이어받되 한 단계 구체화: "이제는 페이지도 0부터 안 만듭니다."\n▶︎ 실습 전 참가교사 노션 로그인 확인(안 되면 복제 자체가 막힘).\n▶︎ 복제 버튼이 안 보이면 제작자가 복제를 막은 것 → 복제 검증된 템플릿만 배포.\n▶︎ 학생 개인정보 든 DB를 공개 복제·게시할 때 공유 설정 주의.\n▶︎ 보너스: edu·ac.kr 이메일로 교육용 Plus 무료 받는 법을 마지막에 흘려주면 실무 전이 마무리로 좋아요.\n▶︎ 롤업·관계형·수식은 오늘 절대 금지("이런 것도 있지만 오늘 안 씁니다" 한 줄).',
-  },
-
-  notebooklm: {
-    title: 'NotebookLM — 챗GPT에 파일 올리는 것과 뭐가 다를까?',
-    sub: "핵심은 '편리한 지점'입니다. 그냥 파일 드랍으로 되는 일이면 굳이 LM일 이유가 없어요. LM만의 차별점 3가지부터 보고 시작합니다.",
-    diffs: [
-      { icon: '🎯', h: '소스에만 근거 + 원문 인용',
-        b: "제가 넣은 자료 밖으로 잘 안 나가고(기본 강제), 답마다 근거가 된 원문을 콕 짚어 클릭 이동. 공문·규정처럼 <b>틀리면 안 되는</b> 자료에 강해요." },
-      { icon: '🔄', h: "파일 '박제'가 아니라 '연결'",
-        b: "구글 문서·시트를 소스로 연결하면 원본을 고칠 때 <b>몇 분 뒤 자동 최신화</b>. 챗GPT는 올린 그 파일에 박제돼, 원본이 바뀌어도 다시 올려야 해요." },
-      { icon: '🔗', h: '링크로 질문봇 배포',
-        b: "노트북을 링크로 공유하면 '<b>내 자료 안에서만 답하는 챗봇</b>'이 됩니다. 소스만 갈아끼우면 재배포 없이 즉시 반영. (단, 상대도 구글 로그인 필요)" },
-    ],
-    cards: [
-      { icon: '📄', heading: '공문·규정을 근거와 함께', tag: '차별점 · 근거 인용',
-        body: '긴 공문을 통째로 올린 뒤 "우리 학교가 즉시 할 일과 마감을, 근거가 된 원문 문장과 함께 표로"라고 시킵니다. 답마다 붙은 인용을 클릭하면 원문 위치로 점프 — "어디에 그렇게 써있는지" 확인이 됩니다.',
-        detail: "챗GPT도 정리는 하지만 근거를 못 짚어요. 공문은 <b>틀리면 사고</b>라, 이 근거 추적이 LM을 쓰는 이유입니다." },
-      { icon: '🔄', heading: '구글 시트로 관리 → 자동 최신화', tag: '차별점 · 자동 동기화',
-        body: '평가일정·업무정보를 <b>구글 시트/문서</b>로 관리하고 소스로 연결해두면, 시트 한 줄만 고쳐도 몇 분 뒤 LM 답이 최신값으로 바뀝니다. "한 번 연결해 계속 최신화"가 챗봇 파일드랍과 다른 지점.',
-        detail: "⚠️ 자동 최신화는 <b>구글 네이티브 파일(문서·시트·슬라이드)만</b>. 올린 PDF·붙여넣기 텍스트는 자동 갱신 안 돼요(다시 올려야 함)." },
-      { icon: '🙋', heading: '학생 전용 질문봇', tag: '차별점 · 공유',
-        body: '평가일정·수행평가 기준·자주 묻는 질문을 소스로 넣고 노트북 링크를 학생에게 배포. "수행평가 언제예요?"를 저 말고 <b>봇에게</b> 묻게 됩니다. 소스 밖은 잘 안 답하니 엉뚱한 소리도 적어요.',
-        detail: "⚠️ 학생이 질문하려면 <b>각자 구글 로그인 필요</b>(익명 불가). 학교 구글 계정이 있어야 매끄럽습니다 — 이게 1순위 실패 포인트." },
-      { icon: '🏫', heading: '교사 업무 질문봇 (쿨메신저에 링크)', tag: '차별점 · 상시 운영',
-        body: '업무 안내·자주 묻는 규정을 넣은 노트북을 <b>joo.is/학교명업무</b> 같은 단축링크로 만들어 쿨메신저 프로필에 걸어둡니다. 소스만 갱신하면 재배포 없이 계속 업그레이드.',
-        detail: "단축링크는 편의일 뿐 <b>구글 로그인 요구는 그대로</b>. 채팅 설정에 '내 자료 기준으로만 답하라'는 안내를 넣어두면 더 안전해요." },
-      { icon: '🃏', heading: '플래시카드·퀴즈로 전차시 복습', tag: '차별점 · 인용 기반 학습',
-        body: '수업 자료를 넣고 스튜디오에서 [플래시카드]·[퀴즈]를 누르면, <b>내 자료에 근거한</b> 복습 세트가 한국어로 자동 생성. 카드마다 출처가 붙고, 틀린 것만 다시 복습(진도 저장)돼요. 링크로 학생에게 공유.',
-        detail: "CSV로 내려받아 Anki에도 넣을 수 있어요. GPT에 파일 던져 만든 퀴즈와 달리 <b>출처가 붙어</b> 신뢰가 됩니다." },
-    ],
-    honest: {
-      k: '솔직 조언 · 이건 LM 말고',
-      t: '인포그래픽·PPT는 LM으로 만들지 마세요',
-      b: "LM도 인포그래픽·슬라이드를 만들긴 합니다. 그런데 <b>한글이 이미지로 렌더링되며 깨지고, 만든 뒤 글자 수정도 안 돼요.</b> 한글 시각물은 → <b>GPT로 텍스트 초안 + Canva에서 편집</b>이 훨씬 낫습니다. 꼭 LM으로 뽑겠다면 '글자 최소화'로 받아 Canva에서 다시 얹으세요.\n역할분담: <b>LM = 인용 기반 요약·질문봇·복습 산출물 / GPT·Canva = 한글 시각 디자인.</b>",
-    },
-    pnote: '이 섹션의 목표는 딱 하나 — "그냥 챗GPT에 파일 올리는 거랑 뭐가 달라요?"에 답하기. 상단 차별점 3개(근거 인용·자동 최신화·질문봇)를 먼저 각인시키고, 카드는 그 증거로 배치하세요.\n▶︎ 시연 추천: 구글 시트 한 줄 수정 → 몇 분 뒤 LM이 바뀐 값으로 답하는 대비 컷(챗GPT는 다시 올려야 함).\n▶︎ 반드시 짚을 것: (1) 자동 최신화는 구글 네이티브 파일만, (2) 질문봇은 상대도 구글 로그인 필요, (3) 소스 한정도 100% 완벽은 아님(가끔 틀림 → 근거 클릭으로 검증하는 습관).\n▶︎ 인포그래픽/PPT는 "된다/안 된다"가 아니라 "한글 품질이 약하다"로 정확히 안내(LM도 되긴 됨).\n▶︎ 개인정보 원칙: 이름·성적 든 자료는 클라우드 금지.',
-  },
-
-  mywork: {
-    title: '제가 직접 만들어 쓰는 것들',
-    sub: '거창한 개발이 아니라, 제 업무를 덜기 위해 만든 것들입니다.',
-    intro: "잠깐 제 이야기를 나눠볼게요. 여기 있는 건 자랑거리가 아니라, '이 일을 매년 다시 하기 싫어서' 만든 것들입니다. 크게 두 갈래예요 — <b>한 번 만들어 계속 쓰는 수업자료</b>, 그리고 <b>판단이 거의 필요 없는 반복 업무를 대신 맡긴 자동화</b>. \"아, 저 정도면 나도 하나쯤 옮겨오겠다\" 싶은 씨앗 하나만 챙겨가시면 오늘은 충분합니다. 🌱",
-    cards: [
-      { icon: '🌍', heading: '과학탐험월드 허브', tag: '원리2 · 재사용',
-        body: '제가 만든 수업 웹앱·게임·도구를 한곳에 모은 통합 페이지입니다. 흩어진 링크를 매번 찾지 않고, 주소 하나(joo.is/과학탐구월드)만 기억하면 됩니다.',
-        detail: '학기가 바뀌어도 자료가 쌓일 뿐, 다시 만들 일은 없습니다.' },
-      { icon: '🏋️', heading: '수업허브 · 과학헬스장', tag: '원리4 · 채점 위임',
-        body: '형성평가를 자동 채점하고 문항별 정답률까지 보여줍니다. 학생 화면에선 칭찬도장 캐릭터가 진화하고요. 채점하며 사라지던 저녁 시간을 돌려받았습니다.',
-        detail: '교사용 대시보드와 학생 화면이 하나로 연결되어 돌아갑니다.' },
-      { icon: '📝', heading: '생기부 세특 자동화', tag: '원리4 · 오늘의 핵심 증거',
-        body: '엑셀에 등급·활동·설문 응답만 입력하면, AI가 규칙(명사형 종결·250자·성취기준 반영)에 맞춰 학생별 세특 문장을 만들어 줍니다. 손으로 쓰면 며칠 걸리던 117명을 반나절로.',
-        detail: "교사는 '이 문장이 맞나'만 확인합니다. <b>쓰는 사람에서 고르는 사람으로.</b>" },
-      { icon: '🧩', heading: '작은 도구 모음', tag: '원리2 · 작게, 계속',
-        body: '빛과파동 단원 웹앱, 소리 도감, 주기율표 암기 앱, PDF 만능 도구… 거창하진 않아도 "수업 중 딱 필요한 순간"을 메우는 작은 것들입니다.',
-        detail: '매년 그대로 다시 열어 쓰면, 처음 한 번의 품이 계속 되돌아옵니다.' },
-    ],
-    questions: [
-      { q: "여러분이 매년 '똑같이 다시 만드는' 자료는 무엇인가요?",
-        reveal: "그게 바로 '<b>한 번 만들어 계속 쓸</b>' 첫 후보입니다. 처음 한 번만 품을 들이면, 다음의 나는 열기만 하면 됩니다." },
-      { q: '판단은 거의 필요 없는데 시간만 잡아먹는 반복 업무, 딱 하나만 떠올려 볼까요?',
-        reveal: "채점·정리·초안처럼 '<b>판단이 옅은</b>' 일일수록 위임이 쉽습니다. 뒤에서 그중 하나를 실제로 옮겨 보겠습니다." },
-    ],
-    pnote: '이 블록은 "자랑"이 아니라 "초대"이자 신뢰의 다리입니다. 화면엔 허브 스크린샷 한 장만 띄우고, 카드당 30초를 넘기지 마세요. 기능 설명 금물 — 각 카드에서 짚을 건 딱 하나(재사용 카드=매년 다시 안 만든다 / 위임 카드=판단 없는 일은 넘긴다). 오늘의 핵심 증거는 "생기부 세특 자동화". 여기서만 잠깐 힘주기: "며칠 → 반나절, 그리고 저는 쓰는 사람에서 고르는 사람이 됐습니다." 나머지는 빠르게, "이건 교과 불문 여러분 업무에도 옮겨간다"는 톤으로 실습에 다리를 놓으세요.',
-  },
-
-  practice: {
-    title: '직접 해봅니다: 여행지 자료로 LM의 "다른 점" 체험',
-    sub: '방학이니까 여행지 자료로 놀듯이 — 그러나 배우는 건 "챗GPT랑 뭐가 다른지"입니다. 여러 자료를 비교하고, 근거를 직접 확인하고, 없는 건 안 지어내는 걸 손으로 느껴봅니다. (실무에선 이 자리에 공문·평가기준을 넣으면 똑같아요.)',
-    steps: [
-      { n: '1', heading: '단축링크 접속 · 구글 로그인',
-        body: '화면의 QR/단축링크로 <b>notebooklm.google.com</b> → 오른쪽 위 [로그인]으로 구글 계정 입장. 무료 계정이면 충분하고 결제·카드 등록 없습니다.',
-        tip: "학교 계정이 '조직 정책'으로 막히면 개인 gmail로 바로 전환. 짝 중 한 분만 돼도 그 화면으로 함께 갑니다." },
-      { n: '2', heading: '새 노트북 + 여행지 자료 여러 개 업로드',
-        body: '[+ 새로 만들기] → [업로드]로 나눠드린 <b>여행지 자료 5개를 한꺼번에</b> 넣습니다(제주·부산·강릉·경주·여수). .md·PDF·붙여넣기 모두 됨. 왼쪽 "소스"에 5개가 뜨고 자동으로 읽기 시작해요.',
-        tip: '여러 개를 넣어야 "비교"가 됩니다. 실무에선 이 자리에 공문·평가기준을 넣으면 똑같이 돼요.' },
-      { n: '3', heading: '여러 자료를 비교하며 물어보기 (핵심)',
-        body: '질문칸에 그대로 — <b>"이 여행지들 중 초등 아이와 3박 4일 가족여행에 맞는 곳과 그 이유를, 근거가 된 원문 문장과 함께 표로 정리해줘."</b> 5개 자료를 가로질러 비교한 답이 표로 나오고, 항목마다 인용(출처) 칩이 붙습니다.',
-        tip: '"예산이 가장 적게 드는 곳은?", "비 와도 좋은 실내 위주로"처럼 바꿔가며. 핵심은 "정리"가 아니라 "근거까지" 요구하는 것.' },
-      { n: '4', heading: '인용 칩 클릭 → 원문으로 점프',
-        body: '답에 붙은 인용 칩을 눌러보세요. 공문 원문의 <b>바로 그 문장</b>으로 이동합니다. "어디에 그렇게 써있는지"가 확인되는 이 순간이 챗GPT와 다른 지점이에요.',
-        tip: '짝과 "오, 진짜 그 문장으로 가네" 한마디. 이게 오늘의 첫 성공입니다.' },
-      { n: '5', heading: '일부러 없는 걸 물어보기 (환각 체험)',
-        body: '소스에 <b>없는</b> 걸 슬쩍 물어보세요. 예: "이 자료에 겨울 스키장 정보도 있어?" LM은 대개 "소스에 없다"고 답합니다. 지어내지 않는 것 — 공문·규정처럼 틀리면 안 되는 자료에 LM을 쓰는 이유죠.',
-        tip: '가끔은 LM도 틀립니다(완벽 아님). 그래서 방금 배운 "근거 클릭"으로 검증하는 습관이 중요해요.' },
-      { n: '6', heading: '(짝 실습) 질문봇으로 공유하기',
-        body: '오른쪽 위 [공유] → "링크가 있는 모든 사용자" → 링크를 옆 짝에게 보냅니다. 짝이 그 링크로 들어가 직접 질문해보면, 방금 내 여행 자료가 <b>"질문봇"</b>이 된 걸 체험합니다.',
-        tip: '⚠️ 짝도 구글 로그인 필요. 학교 계정이 외부공유를 막았으면 이 단계는 강사 화면 시연으로 대체하세요.' },
-    ],
-    notionHelper: '노션은 <b>0부터 안 만듭니다.</b> 남이 잘 만든 걸 복제해서 내 것으로 — 템플릿 갤러리(상점)에서 [복제] 한 번이면 끝.',
-    notionSteps: [
-      { n: '1', heading: '복제 링크 / 템플릿 갤러리 열기', body: '미리 배포한 복제 링크(또는 notion.com/templates 갤러리)를 엽니다. 노션에 로그인돼 있어야 복제가 돼요.', tip: '복제 가능함이 검증된 템플릿만 배포합니다.' },
-      { n: '2', heading: '우상단 [복제] → 워크스페이스 선택', body: '오른쪽 위 [복제(Duplicate)] → 저장할 내 워크스페이스 선택. 사이드바 맨 아래에 복제본이 생깁니다. 원본은 안 건드려요.', tip: '복제 버튼이 안 보이면 제작자가 복제를 막은 것 — 다른 템플릿으로.' },
-      { n: '3', heading: '필드 하나만 내 것으로', body: "과목명·반 이름 하나만 바꿔보면 끝. '내 것이 됐다'는 감각만 확인하고 마칩니다.", tip: '오늘은 여기까지. 나머지는 필요할 때 검색해서.' },
-    ],
-    cards: [
-      { icon: '🔗', heading: '안전장치 ① 자료는 QR·단축링크로 미리', tag: '파일 찾다 낭비 금지',
-        body: 'NotebookLM 주소·실습 문서·노션 복제 링크를 QR 3개로 슬라이드 한 장에 고정해 띄웁니다. "바탕화면에서 파일 찾기"로 시간 흘리지 않고, 링크 하나로 모두가 같은 출발선에 섭니다.',
-        detail: '이 QR 슬라이드를 실습 내내 띄워두면 뒤처진 분도 언제든 다시 합류할 수 있습니다.' },
-      { icon: '👥', heading: '안전장치 ② 2인 1조로 함께', tag: '초보 옆에 지원',
-        body: '낯선 분과 익숙한 분을 한 조로 묶습니다. 한 화면을 같이 보면 막힌 분도 옆에서 바로 도움을 받아 낙오하지 않습니다.',
-        detail: "조원 한 명만 로그인·생성에 성공해도 그 화면으로 함께 실습하면 됩니다. '혼자 완벽'보다 '둘이 하나 성공'이 오늘의 목표." },
-      { icon: '🔐', heading: '안전장치 ③ 로그인·개인정보 사전 점검', tag: '가장 중요한 두 가지',
-        body: '구글 로그인은 필수입니다. 학교 계정 차단 여부를 연수 전에 확인하고, 막히면 개인 gmail을 준비합니다. 학생 개인정보가 든 자료는 어떤 경우에도 클라우드에 올리지 않습니다.',
-        detail: '오늘 실습 문서는 개인정보 없는 공용 자료로만 준비. 실제 업무엔 이름·성적을 지운 사본을 올리는 습관을 강조해 주세요.' },
-    ],
-    pnote: '[운영 배분] 총 30분. NotebookLM 여행지 자료 실습 약 22분 + 노션 복제 5분 + 정리 3분. 1~2단계(로그인·업로드)를 10분 안에 "전원 도착"시키는 게 관건 — 조별로 돌며 초록 체크를 눈으로 확인.\n[핵심 연출] 4단계 "인용 클릭 → 원문 점프"와 5단계 "없는 걸 물으니 안 지어냄"이 이 실습의 wow. "챗GPT는 근거를 못 짚어줘요"를 꼭 말로 짚으세요. 이 두 장면이 오늘 전체 메시지의 증거입니다.\n[6단계 주의] 공유 질문봇은 짝도 구글 로그인 필요 + 학교 계정이 외부공유를 막으면 안 됩니다 → 막히면 강사 화면 시연으로 대체(당황 금지).\n[노션] 복제 버튼이 안 보이는 케이스가 흔함 → 복제 검증된 템플릿만 배포. 새로 만들기 시도 금지.\n[초보자가 뒤처질 때] 전체를 세우고 기다리기 금물 → 짝에게 → 옆 조 화면에 붙기 → 개인 gmail 전환. "이 QR로 집에서 다시 됩니다"로 안심.\n[마무리] "오늘 여러분은 자료를 안 읽고, 다섯 개를 한 번에 비교했고, 근거는 직접 확인했고, 없는 건 안 지어내는 걸 봤습니다. 이게 그냥 파일 올리는 거랑 다른 점이에요." → 슬로건으로 닫고 박수 → 만족도 조사로.',
-  },
-
-  closing: {
-    title: '도구는 갈아탑니다. 되찾은 시간은 남습니다 ✨',
-    body: '오늘 배운 건 노션도 노트북LM도 아니에요. <b>무엇을 안 할지 고르는 눈</b>이죠. 그 눈 하나만 가져가셔도 오늘은 충분합니다. 함께해 주셔서 감사합니다 🙌',
-  },
+  runsheet: [
+    {t:'0:00–0:10',l:'감정 체크인',g:'배터리로 마음 열기 — 서두르지 말 것'},
+    {t:'0:10–0:18',l:'도구 맛보기(6개)',g:'클릭 몇 번씩만, 빠르게 훑기'},
+    {t:'0:18–0:38',l:'노션 기초 실습',g:'페이지 만들기→공유→웹 게시까지 전원 완주'},
+    {t:'0:38–0:48',l:'NotebookLM 소개 + 라이브 질문',g:'"내 업무에 어떻게?" 를 Supabase 벽에 모으기'},
+    {t:'0:48–1:18',l:'NotebookLM 실습',g:'소스→질문→복습 카드→"내 공문엔?"'},
+    {t:'1:18–1:28',l:'핵심 정리(도구 줄이기)',g:'철학은 여기서 딱 한 번, 임팩트 있게'},
+    {t:'1:28–1:30',l:'여유 버퍼',g:'밀리면 흡수'},
+    {t:'1:30–1:40',l:'만족도 조사',g:'그 자리에서 제출 확인'},
+  ],
+  tools: [
+    {e:'💗',n:'감정 체크인',g:'마음 열기',href:'#checkin'},
+    {e:'✂️',n:'Snipaste',g:'캡처·핀',href:CONFIG.snipasteUrl,ext:1},
+    {e:'🎮',n:'Class Game World',g:'수업 게임',href:CONFIG.classGameWorldUrl,ext:1},
+    {e:'🔍',n:'ZoomIt',g:'화면 확대·판서',href:CONFIG.zoomitUrl,ext:1},
+    {e:'💌',n:'편지 카드 만들기',g:'활동',href:CONFIG.letterCardUrl,ext:1},
+    {e:'🌍',n:'joo.is/과학탐구월드',g:'허브',href:CONFIG.hubUrl,ext:1},
+  ],
+  notionSteps: [
+    {i:'📄',a:'red',h:'① 새 페이지 만들기',b:'왼쪽 <b>+ 새 페이지</b> → 제목·이모지 지정'},
+    {i:'🖼️',a:'yellow',h:'② 내용·사진 넣기',b:'글 쓰고, 사진은 <b>드래그</b>로 툭. 슬래시(/)로 표·구분선'},
+    {i:'🤝',a:'teal',h:'③ 공유하기',b:'오른쪽 위 <b>공유</b> → 동료 초대(보기/편집)'},
+    {i:'🌐',a:'blue',h:'④ 웹에 게시',b:'<b>게시(Publish)</b> → 링크·QR로 누구나 열람'},
+  ],
+  nlmSteps: [
+    {i:'📥',a:'red',h:'① 소스 추가',b:'새 노트북 → 나눠준 <b>여행지 자료</b>(또는 공문) 업로드'},
+    {i:'💬',a:'yellow',h:'② 근거와 함께 질문',b:'"근거 문장과 함께 표로" → 인용 <b>클릭</b>하면 원문으로 점프'},
+    {i:'🃏',a:'teal',h:'③ 복습 카드 만들기',b:'스튜디오 → <b>플래시카드·퀴즈</b> 자동 생성(한국어)'},
+    {i:'🏫',a:'blue',h:'④ "내 공문엔?"',b:'이 자리에 넣을 <b>내 업무 자료</b>를 떠올려 라이브 벽에 한 줄'},
+  ],
+  whystrip: [
+    {i:'🎯',t:'내 자료만',d:'넣은 자료 밖은 잘 안 지어냄'},
+    {i:'🔗',t:'근거를 콕',d:'답의 출처를 클릭해 확인'},
+    {i:'📢',t:'링크로 질문봇',d:'평가 안내·업무 봇으로 배포'},
+  ],
+  /* ── 강사용 상세 대본 (참가자 안 보임) ── */
+  heroNote:'[오프닝 30초] "오늘은 제 설명을 최소로 줄였습니다. 대신 여러분이 직접 만듭니다. 100분 뒤엔 노션 페이지 하나, NotebookLM 노트 하나가 손에 남아요." → 화면 상단 흐름칩을 손으로 짚으며 오늘 여정 예고. \n[강사용 화면 안내] 이 화면(주소 뒤 ?present=1)에서만 진행표·대본이 보입니다. 참가자에게 뿌리는 주소엔 ?present=1 을 빼고 주세요. \n[준비물 점검] ①참가자 구글 로그인 되는지 ②노션 계정/로그인 ③Supabase 벽 링크 살아있는지 ④실습 자료 QR.',
+  checkinNote:'[3분] "말 대신 손으로" — 배터리 이모지를 각자 마음속으로 고르게 하고, 낮은 사람이 많으면 "오늘 제대로 오셨어요"로 받기. 절대 돌아가며 자기소개 금지. 이 3분이 뒤 신뢰를 삽니다. 바로 "그래서 오늘은 일을 덜 만들 겁니다"로 도구 파트에 연결.',
+  toolsNote:'[8분·빠르게] 6개를 다 깊게 설명 금지. 클릭해서 화면만 보여주고 "이런 게 있다" 수준. 특히 ZoomIt(발표 확대·판서)·Snipaste(캡처 핀)는 30초 시연이면 "오" 나옵니다. Class Game World·편지카드 링크는 CONFIG에 실제 주소 넣어야 눌러집니다. "도구는 많지만, 오늘 손댈 건 딱 둘(노션·NotebookLM)"이라고 좁혀주기.',
+  notionNote:'[20분·전원 완주 목표] 초보 교사 기준으로 천천히. 강사 화면을 크게 띄우고 한 단계씩 같이. \n① 새 페이지: 사이드바 + 버튼 → 제목·이모지. \n② 사진: 이미지 파일을 페이지로 드래그(가장 "오" 하는 부분). 슬래시 / 로 표·콜아웃도 잠깐. \n③ 공유: 우상단 [공유]에서 이메일 초대 or "링크가 있는 사람" 보기 권한. \n④ 게시: [게시(Publish to web)] → 생성된 주소를 채팅/QR로. "이제 인쇄 없이 이 링크 하나로 끝"이 핵심 메시지. \n막히는 사람은 2인 1조로. 게시까지 못 가면 ③ 공유까지만이라도 성공시키기.',
+  nlmNote:'[10분] 기능 설명은 3줄(내 자료만/근거를 콕/링크로 봇)로 아주 짧게. 그 다음 곧바로 라이브 질문으로 넘김: "이걸 여러분 업무 어디에 쓸지 한 줄씩요." → Supabase 벽에 답이 실시간으로 뜸(강사 화면에 크게 띄워 읽어주기). 좋은 답을 몇 개 소리내어 읽으면 다음 실습 동기가 확 올라갑니다. \n[준비] 연수 전 Supabase 프로젝트 만들고 CONFIG에 URL·anon key + 테이블(yeonsu_responses) 생성. 벽이 비어 있으면 강사가 먼저 예시 1~2개 남겨 마중물.',
+  practiceNote:'[30분] ①소스 추가(8): 여행지 자료 5개 한 번에(또는 공문). ②질문(8): "근거 문장과 함께 표로" → 인용 클릭해 원문 점프를 꼭 시연("챗GPT는 이걸 못 짚어요"). ③카드(8): 스튜디오에서 플래시카드/퀴즈 생성, 한국어 확인. ④내 업무(6): "이 자리에 내 어떤 공문·평가기준을 넣을까?"를 라이브 벽에 추가로 남기기 → 오늘 배운 걸 자기 업무로 연결. \n주의: 개인정보 자료 클라우드 금지 / 질문봇 공유는 상대도 구글 로그인 필요(막히면 강사 시연).',
+  finaleNote:'[10분·오늘의 착지] 여기서 처음이자 마지막으로 "철학"을 말합니다(앞에서 미리 설교하지 말 것). 4원리를 말로 풀되 슬라이드엔 한 줄만: \n1) 덜어낼 것을 먼저 찾는다(제거>자동화) 2) 한 번 만들어 계속 쓴다 3) 외우지 말고 검색하게 4) 판단 없는 일은 위임. \n마무리 멘트: "오늘 노션 페이지 하나, NotebookLM 노트 하나 만들었죠? 그거면 됩니다. 새 도구 열 개 배우지 마세요. 무엇을 안 할지 고르는 게 진짜 업무 경감입니다." → 박수 → 만족도.',
+  surveyNote:'[10분] 설문 QR을 띄우고 그 자리에서 제출까지 확인. "오늘 만든 것 하나 + 안 하기로 한 것 하나"를 적게 하면 회수율·질이 올라갑니다. 자료 링크(여행지·A4 가이드) 한 번 더 채팅 고정.',
 };
 
-/* ═══════════════════════════════════════════════════════
-   🎨  RENDER
-   ═══════════════════════════════════════════════════════ */
+/* ═══ RENDER ═══ */
+const $=id=>document.getElementById(id);
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function rich(s){return esc(s).replace(/&lt;b&gt;/g,'<b>').replace(/&lt;\/b&gt;/g,'</b>')}
-function el(id){return document.getElementById(id)}
-function setText(id,v){const e=el(id);if(e&&v!=null)e.innerHTML=rich(v)}
+function rich(s){return esc(s).replace(/&lt;b&gt;/g,'<b>').replace(/&lt;\/b&gt;/g,'</b>').replace(/&lt;u&gt;/g,'<u>').replace(/&lt;\/u&gt;/g,'</u>').replace(/\n/g,'<br>')}
+function pnote(id,t){const e=$(id);if(!e)return;e.innerHTML='<div class="pk">🎤 강사 노트</div>'+rich(t)}
 
-function cardHtml(c){
-  return '<div class="card">'+(c.icon?'<span class="c-ic">'+esc(c.icon)+'</span>':'')+
-    '<div class="c-h">'+rich(c.heading)+'</div>'+
-    '<div class="c-b">'+rich(c.body)+'</div>'+
-    (c.detail?'<div class="c-d">'+rich(c.detail)+'</div>':'')+
-    (c.tag?'<div class="c-tag"><span>'+rich(c.tag)+'</span></div>':'')+
-  '</div>';
+function renderDecor(){
+  let h='<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div><div class="orb o5"></div>';
+  const pos=[[10,20],[24,70],[40,15],[62,60],[80,30],[88,75],[15,88],[52,88],[70,10],[34,45]];
+  pos.forEach((p,i)=>h+='<span class="spark" style="left:'+p[0]+'%;top:'+p[1]+'%;animation-delay:'+(i*.3)+'s">✦</span>');
+  $('decor').innerHTML=h;
 }
-function renderCards(id,arr){const e=el(id);if(e)e.innerHTML=(arr||[]).map(cardHtml).join('')}
-function stepHtml(s){
-  return '<div class="step"><div class="step-n">'+esc(s.n||'')+'</div><div>'+
-    '<div class="step-h">'+rich(s.heading)+'</div>'+
-    '<div class="step-b">'+rich(s.body)+'</div>'+
-    (s.tip?'<div class="step-tip">'+rich(s.tip)+'</div>':'')+
-  '</div></div>';
-}
-function renderSteps(id,arr){const e=el(id);if(e)e.innerHTML=(arr||[]).map(stepHtml).join('')}
-function qHtml(q,i){
-  return '<div class="q-item" onclick="toggleQ(this)">'+
-    '<div class="q-head"><div class="q-num">'+(i+1)+'</div><div class="q-text">'+rich(q.q)+'</div></div>'+
-    (q.reveal?'<div class="q-reveal"><div class="q-reveal-inner">'+rich(q.reveal)+'</div></div><div class="q-hint">눌러서 생각 이어보기 ▾</div>':'')+
-  '</div>';
-}
-function renderQ(id,arr){const e=el(id);if(e)e.innerHTML=(arr||[]).map(qHtml).join('')}
-function toggleQ(item){const r=item.querySelector('.q-reveal');if(!r)return;const open=item.classList.toggle('open');r.classList.toggle('open',open)}
-
-function setPnote(id,txt){
-  const e=el(id); if(!e)return;
-  if(txt&&String(txt).trim()){e.innerHTML='<div class="pn-k">🎤 강사 노트</div>'+rich(txt).replace(/\n/g,'<br>')}
-  else{e.style.display='none'}
-}
-
-function renderHero(){
-  const h=DATA.hero||{};
-  setText('heroLead',h.lead); setText('heroSlogan',h.slogan);
-  el('heroMeta').innerHTML=(h.meta||[]).map(m=>
-    '<div class="hm-chip"><span class="hm-ic">'+esc(m.ic)+'</span><div><div class="hm-k">'+esc(m.k)+'</div><div class="hm-v">'+rich(m.v)+'</div></div></div>'
-  ).join('');
-}
-function renderTools(){
-  const arr=DATA.tools||[];
-  el('tool-cards').innerHTML=arr.map(t=>{
-    const href=(t.href||'').trim();
-    const has=!!href;
-    const label=has?(t.label||prettyUrl(href)):'링크 준비 중';
-    const inner=
-      '<div class="tc-top"><span class="tc-ic">'+esc(t.icon)+'</span><span class="tc-name">'+rich(t.name)+'</span><span class="tc-num">'+esc(t.n)+'</span></div>'+
-      '<div class="tc-desc">'+rich(t.desc)+'</div>'+
-      '<div class="tc-meta"><span class="tc-tag">'+rich(t.tag)+'</span><span class="tc-url"'+(has?'':' style="color:var(--ink-soft)"')+'>'+esc(label)+(has&&!t.internal?' →':'')+'</span></div>';
-    if(has) return '<a class="toolcard" href="'+esc(href)+'"'+(t.internal?'':' target="_blank" rel="noopener"')+'>'+inner+'</a>';
-    return '<div class="toolcard" style="cursor:default">'+inner+'</div>';
+function renderStatic(){
+  $('flow').innerHTML=DATA.flow.map(f=>'<span class="fchip"><span class="fe">'+f.e+'</span>'+f.t+'</span>').join('');
+  $('tiles').innerHTML=DATA.tools.map(t=>{
+    const href=(t.href||'').trim(), has=!!href;
+    const inner='<span class="te">'+t.e+'</span><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div>';
+    return has?'<a class="tile" href="'+esc(href)+'"'+(t.ext?' target="_blank" rel="noopener"':'')+'>'+inner+'</a>':'<div class="tile" style="cursor:default;opacity:.7">'+inner+'</div>';
   }).join('');
-}
-function prettyUrl(u){return String(u).replace(/^https?:\/\//,'').replace(/\/$/,'')}
-function renderAgenda(){
-  const a=DATA.agenda||{};
-  setText('agendaKicker',a.kicker); setText('agendaTitle',a.title); setText('agendaSub',a.sub);
-  el('agenda-list').innerHTML=(a.rows||[]).map(r=>
-    '<div class="ag-row'+(r.book?' book':'')+'">'+
-      '<div class="ag-time"><span class="ag-clock">'+esc(r.time||'')+'</span><span class="ag-min">'+esc(r.min||'')+'</span></div>'+
-      '<div class="ag-line"><span class="ag-dot"></span>'+
-        '<div class="ag-card">'+
-          '<div class="ag-label">'+rich(r.label)+(r.book?'<span class="ag-badge">고정</span>':'')+'</div>'+
-          (r.goal?'<div class="ag-goal">'+rich(r.goal)+'</div>':'')+
-          (r.tip?'<div class="ag-tip">'+rich(r.tip)+'</div>':'')+
-        '</div>'+
-      '</div>'+
-    '</div>'
-  ).join('');
-}
-function renderCheckin(){
-  const c=DATA.checkin||{};
-  setText('checkinTitle',c.title); setText('checkinSub',c.sub);
-  el('checkinIntro').innerHTML='<div class="ln-k">🚪 오프닝 한마디</div>'+rich(c.intro||'');
-  renderCards('checkinCards',c.cards);
-  setPnote('checkinPnote',c.pnote);
+  const bs=(arr)=>arr.map((s,i)=>'<div class="bstep accent-'+s.a+'"><span class="bn">'+(i+1)+'</span><div class="bi">'+s.i+'</div><div class="bh">'+rich(s.h)+'</div><div class="bb">'+rich(s.b)+'</div></div>').join('');
+  $('notionSteps').innerHTML=bs(DATA.notionSteps);
+  $('nlmSteps').innerHTML=bs(DATA.nlmSteps);
+  $('whystrip').innerHTML=DATA.whystrip.map(w=>'<div class="why"><div class="wi">'+w.i+'</div><div class="wt">'+esc(w.t)+'</div><div class="wd">'+esc(w.d)+'</div></div>').join('');
+  $('runsheet').innerHTML='<table><tr><th>시간</th><th>구간</th><th>강사 포인트</th></tr>'+DATA.runsheet.map(r=>'<tr><td>'+esc(r.t)+'</td><td>'+esc(r.l)+'</td><td><span class="g">'+esc(r.g)+'</span></td></tr>').join('')+'</table>';
+  // mood
   const moods=[['🔋','가득'],['🙂','보통'],['😐','반쯤'],['😴','조금'],['🪫','바닥']];
-  el('moodGrid').innerHTML=moods.map((m,i)=>'<div class="mood" data-i="'+i+'" onclick="pickMood(this)"><div class="m-emo">'+m[0]+'</div><div class="m-t">'+m[1]+'</div></div>').join('');
+  $('mgrid').innerHTML=moods.map((m,i)=>'<div class="mo" data-i="'+i+'" onclick="pickMood(this)"><div class="e">'+m[0]+'</div><div class="t">'+m[1]+'</div></div>').join('');
+  // survey
+  renderSurvey();
+  // presenter notes
+  ['heroNote','checkinNote','toolsNote','notionNote','nlmNote','practiceNote','finaleNote','surveyNote'].forEach(k=>pnote(k,DATA[k]));
 }
-function pickMood(elm){
-  document.querySelectorAll('.mood').forEach(x=>x.classList.remove('on'));
-  elm.classList.add('on');
-  const notes=[
-    '에너지가 가득하시네요! 오늘 배운 걸 바로 실험해보기 딱 좋아요 💪',
-    '좋아요. 오늘은 <b>하나만</b> 확실히 가져가 봅시다.',
-    '반쯤이면 충분해요 — 딱 <b>하나 덜어내는 법</b>만 챙겨가세요.',
-    '조금 지치셨군요. 그래서 오늘 주제가 <b>업무 경감</b>입니다 🙂',
-    '바닥이라 느끼시는 그 마음이, 오늘 우리가 바꿀 출발점이에요. 잘 오셨어요 🤍'
-  ];
-  el('moodNote').innerHTML=rich(notes[+elm.dataset.i]||'');
-}
-function renderWhy(){
-  const w=DATA.why||{};
-  renderQ('q-list',w.questions);
-  const co=w.callout;
-  el('whyCallout').innerHTML=co?('<div class="co-k">'+esc(co.k||'ONE LINE')+'</div><div class="co-t">'+rich(co.t)+'</div>'+(co.b?'<div class="co-b">'+rich(co.b)+'</div>':'')):'';
-  setPnote('whyPnote',w.pnote);
-}
-function renderPrinciples(){
-  const p=DATA.principles||{};
-  setText('prSub',p.sub); renderCards('pr-cards',p.cards); setPnote('prPnote',p.pnote);
-}
-function renderNotion(){
-  const d=DATA.notion||{};
-  setText('notionTitle',d.title); setText('notionSub',d.sub);
-  renderCards('notion-cards',d.cards); setPnote('notionPnote',d.pnote);
-}
-function renderNlm(){
-  const d=DATA.notebooklm||{};
-  setText('nlmTitle',d.title); setText('nlmSub',d.sub||d.intro);
-  el('nlmDiffs').innerHTML=(d.diffs||[]).map(x=>
-    '<div class="diff"><div class="d-ic">'+esc(x.icon)+'</div><div class="d-h">'+rich(x.h)+'</div><div class="d-b">'+rich(x.b)+'</div></div>'
-  ).join('');
-  renderCards('nlm-cards',d.cards);
-  const ho=d.honest, he=el('nlmHonest');
-  if(ho){he.innerHTML='<div class="h-k">'+esc(ho.k||'')+'</div><div class="h-t">'+rich(ho.t)+'</div><div class="h-b">'+rich(ho.b).replace(/\n/g,'<br>')+'</div>'}
-  else{he.style.display='none'}
-  setPnote('nlmPnote',d.pnote);
-}
-function renderMywork(){
-  const m=DATA.mywork||{};
-  setText('mwTitle',m.title); setText('mwSub',m.sub);
-  el('mwIntro').innerHTML='<div class="ln-k">🙋 잠깐, 제 이야기</div>'+rich(m.intro||'');
-  renderCards('mw-cards',m.cards);
-  renderQ('mw-questions',m.questions);
-  el('mw-links').innerHTML='<a class="res-btn" href="'+esc(CONFIG.hubUrl)+'" target="_blank" rel="noopener"><span class="rb-icon">🌍</span><span class="rb-t">과학탐험월드 허브 둘러보기</span><span class="rb-u">joo.is/과학탐구월드</span></a>';
-  setPnote('mwPnote',m.pnote);
-}
-function renderPractice(){
-  const p=DATA.practice||{};
-  setText('prcTitle',p.title); setText('prcSub',p.sub);
-  renderSteps('prc-steps',p.steps);
-  el('prcNotionHelper').innerHTML=rich(p.notionHelper||'');
-  renderSteps('prc-notion-steps',p.notionSteps);
-  renderCards('prc-cards',p.cards);
-  setPnote('prcPnote',p.pnote);
-  renderActionPanel('practiceFiles',{
-    qr:CONFIG.practiceFileQR, title:'📎 실습용 여행지 자료 받기',
-    body:'아래에서 <b>여행지 자료 5개</b>(제주·부산·강릉·경주·여수)를 받아 NotebookLM에 <b>한꺼번에</b> 올립니다. 모두 <b>같은 자료</b>로 시작해야 진도가 맞아요.',
-    url:CONFIG.practiceFileUrl, linkText:'여행지 자료 받기',
-    empty:'여행지 자료 폴더 링크를 <code>CONFIG.practiceFileUrl</code> 에 넣으면 QR·버튼이 표시됩니다. (자료: 수업HTML\\연수_여행지자료\\)'
-  });
-}
-function renderActionPanel(id,o){
-  const e=el(id); if(!e)return;
-  const hasUrl=(o.url||'').trim(); const qr=(o.qr||'').trim();
-  e.innerHTML=
-    '<div class="qr-box">'+(qr?'<img src="'+esc(qr)+'" alt="QR">':'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M20 20v.01M17 20h.01"/></svg><span>QR 자리</span>')+'</div>'+
-    '<div><div class="ap-t">'+rich(o.title)+'</div><div class="ap-b">'+rich(o.body)+'</div>'+
-      (hasUrl?'<a class="ap-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">'+esc(o.linkText||'열기')+' →</a><div class="ap-url">'+esc(o.url)+'</div>'
-             :'<div class="ap-b ap-empty" style="margin-top:12px;color:var(--gold-deep)">'+(o.empty||'')+'</div>')+
-    '</div>';
+function pickMood(el){
+  document.querySelectorAll('.mo').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  const n=['가득! 오늘 만든 거 바로 써먹기 딱 좋아요 💪','좋아요. 오늘은 <b>하나만</b> 확실히 챙겨가요.','반쯤이면 충분! 딱 <b>하나 덜어내는 법</b>만.','조금 지치셨군요 — 그래서 오늘 주제가 <b>업무 경감</b>이에요 🙂','바닥이라 느끼는 그 마음이 오늘의 출발점이에요. 잘 오셨어요 🤍'];
+  $('mnote').innerHTML=n[+el.dataset.i]||'';
 }
 function renderSurvey(){
-  renderActionPanel('surveyPanel',{
-    qr:CONFIG.surveyQR, title:'📝 만족도 조사 (2분)',
-    body:'오늘 딱 <b>하나</b> 가져가실 것을 떠올리며 남겨주세요.',
-    url:CONFIG.surveyUrl, linkText:'만족도 조사 열기',
-    empty:'만족도 조사 링크를 <code>CONFIG.surveyUrl</code> 에 넣으면 표시됩니다.'
-  });
-  setText('closingTitle',(DATA.closing||{}).title);
-  setText('closingBody',(DATA.closing||{}).body);
+  const has=(CONFIG.surveyUrl||'').trim(), qr=(CONFIG.surveyQR||'').trim();
+  $('surveyPanel').innerHTML=
+    '<div class="qr">'+(qr?'<img src="'+esc(qr)+'" alt="QR">':'<span>설문 QR<br>자리</span>')+'</div>'+
+    '<div><div class="st">📝 만족도 조사 (2분)</div><div class="sb">오늘 <b>만든 것 하나</b> + <b>안 하기로 한 것 하나</b>를 적어주세요.</div>'+
+    (has?'<a class="sl" href="'+esc(CONFIG.surveyUrl)+'" target="_blank" rel="noopener">설문 열기 →</a><div class="su">'+esc(CONFIG.surveyUrl)+'</div>':'<div class="su" style="color:var(--ink-soft)">CONFIG.surveyUrl 에 링크를 넣으세요</div>')+'</div>';
 }
 
-/* ───── presenter mode ───── */
-function togglePresenter(){
-  const on=document.body.classList.toggle('presenter');
-  el('presenterToggle').classList.toggle('on',on);
-  try{localStorage.setItem('yeonsu_presenter',on?'1':'0')}catch(e){}
+/* ═══ Supabase 라이브 벽 ═══ */
+let sb=null, myIds=new Set();
+function liveReady(){return CONFIG.supabaseUrl && CONFIG.supabaseAnonKey}
+function initLive(){
+  if(!liveReady()){
+    $('liveStatus').innerHTML='ℹ️ 라이브 벽은 <b>Supabase 연결 후</b> 켜집니다. (CONFIG.supabaseUrl·anonKey + 테이블 생성)';
+    $('liveSend').disabled=true;
+    $('wall').innerHTML='<div class="bubble"><div class="bt">여기에 참가자들의 "내 업무 활용 아이디어"가 실시간으로 쌓입니다.</div><div class="bm">— 예시</div></div>';
+    return;
+  }
+  function boot(){
+    try{ sb=window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey); }
+    catch(e){ $('liveStatus').textContent='연결 오류: '+e.message; return; }
+    loadWall(); setInterval(loadWall, 6000);
+    $('liveStatus').textContent='';
+  }
+  if(window.supabase) boot();
+  else{ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'; s.onload=boot; s.onerror=()=>{$('liveStatus').textContent='Supabase 로드 실패(네트워크 확인)'}; document.head.appendChild(s); }
+}
+async function loadWall(){
+  if(!sb)return;
+  const {data,error}=await sb.from(CONFIG.liveTable).select('*').eq('prompt',CONFIG.livePromptKey).order('created_at',{ascending:false}).limit(60);
+  if(error){$('liveStatus').innerHTML='읽기 오류: '+esc(error.message);return;}
+  $('wall').innerHTML=(data||[]).map(r=>
+    '<div class="bubble'+(myIds.has(r.id)?' mine':'')+'"><div class="bt">'+esc(r.body)+'</div><div class="bm">— '+esc(r.name||'익명')+'</div></div>'
+  ).join('')||'<div class="bubble"><div class="bt">첫 번째 아이디어를 남겨보세요! ✍️</div></div>';
+}
+async function submitLive(){
+  const body=$('liveBody').value.trim(); if(!body){$('liveBody').focus();return;}
+  if(!liveReady()){$('liveStatus').innerHTML='먼저 Supabase를 연결해주세요.';return;}
+  const name=$('liveName').value.trim().slice(0,12);
+  $('liveSend').disabled=true; $('liveStatus').textContent='남기는 중...';
+  const {data,error}=await sb.from(CONFIG.liveTable).insert({name,body,prompt:CONFIG.livePromptKey}).select();
+  $('liveSend').disabled=false;
+  if(error){$('liveStatus').innerHTML='저장 오류: '+esc(error.message);return;}
+  if(data&&data[0])myIds.add(data[0].id);
+  $('liveBody').value=''; $('liveStatus').innerHTML='✅ 고마워요! 화면에 떴어요.'; loadWall();
 }
 
-/* ───── scroll reveal + nav ───── */
-function initReveal(){
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.08});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+/* ═══ presenter gate (비밀 URL) ═══ */
+function initPresenter(){
+  const q=new URLSearchParams(location.search);
+  const on=q.get('present')==='1'||q.has('present')||location.hash==='#present';
+  if(on){document.body.classList.add('presenter'); $('modeHint').innerHTML='🎤 강사용 화면(참가자에겐 <code>?present=1</code> 없는 주소를 배포)';}
+  else{$('modeHint').textContent='';}
 }
-function initNav(){
-  const links=[...document.querySelectorAll('.nav a')];
-  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.remove('active'));const a=map.get(e.target.id);if(a)a.classList.add('active')}})},{rootMargin:'-45% 0px -50% 0px'});
-  document.querySelectorAll('main section[id]').forEach(s=>io.observe(s));
-}
+
+/* ═══ reveal + nav ═══ */
+function initReveal(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>io.observe(el))}
+function initNav(){const links=[...document.querySelectorAll('.nav a')],map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.remove('active'));const a=map.get(e.target.id);if(a)a.classList.add('active')}}),{rootMargin:'-45% 0px -50% 0px'});document.querySelectorAll('main section[id]').forEach(s=>io.observe(s))}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  try{if(localStorage.getItem('yeonsu_presenter')==='1'){document.body.classList.add('presenter');el('presenterToggle').classList.add('on')}}catch(e){}
-  renderHero(); renderTools(); renderAgenda(); renderCheckin(); renderWhy(); renderPrinciples();
-  renderNotion(); renderNlm(); renderMywork(); renderPractice(); renderSurvey();
-  initReveal(); initNav();
+  renderDecor(); renderStatic(); initPresenter(); initLive(); initReveal(); initNav();
 });
 </script>
 </body>
