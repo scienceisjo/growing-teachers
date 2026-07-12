@@ -160,6 +160,17 @@ table.data td b{color:var(--navy)}
 .fc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:9px 14px;font-size:.88rem;font-weight:600;color:var(--navy);box-shadow:var(--shadow);display:flex;align-items:center;gap:7px}
 .fc .fce{font-size:1rem}
 
+/* ── SEN스쿨 SenGPT 강조 박스 ── */
+.sengpt-box{max-width:920px;margin:22px auto 0;background:linear-gradient(135deg,#1a2450,var(--navy));color:#eaf0ff;border-radius:20px;padding:24px 26px;box-shadow:var(--shadow-lg)}
+.sengpt-box .sh{font-family:var(--font-round);color:#fff;font-size:1.24rem;display:flex;align-items:center;gap:8px}
+.sengpt-box .sp{color:#c9d0ee;font-size:.94rem;margin-top:8px;line-height:1.65}
+.sengpt-box .sp b{color:var(--gold-soft)}
+.sengpt-box .mlabel{font-family:var(--font-round);color:var(--gold-soft);font-size:.92rem;margin:16px 0 8px}
+.sengpt-box .mchips{display:flex;flex-wrap:wrap;gap:8px}
+.sengpt-box .mchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:8px 13px;font-size:.86rem;font-weight:600}
+.sengpt-box .mchip b{color:var(--gold-soft)}
+.sengpt-box .stip{margin-top:14px;font-size:.85rem;color:#c9d0ee;background:rgba(0,0,0,.22);border-radius:10px;padding:10px 13px;line-height:1.55}
+
 /* ── buttons ── */
 .btnrow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:0 auto 22px;max-width:720px}
 .btn-lg{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:var(--font-round);font-size:1.05rem;padding:13px 24px;border-radius:14px;box-shadow:var(--shadow);transition:.15s;cursor:pointer;border:none}
@@ -326,6 +337,7 @@ footer .h{color:var(--red)}
     <nav class="nav" id="nav" aria-label="연수 목차">
       <a href="#checkin">체크인</a>
       <a href="#intro">두 도구</a>
+      <a href="#sen">SEN스쿨</a>
       <a href="#nlm-account">NLM 계정</a>
       <a href="#nlm-practice">NLM 실습</a>
       <a href="#nlm-use">NLM 활용</a>
@@ -372,6 +384,23 @@ footer .h{color:var(--red)}
     <div class="cmp reveal" id="cmp"></div>
     <div class="tablewrap reveal" style="margin-top:18px" id="cmpTableWrap"></div>
     <div class="pnote" id="introNote"></div>
+  </div>
+</section>
+
+<!-- 1.5 SEN스쿨 (도입 보너스) -->
+<section id="sen" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="kick">보너스 · 서울 선생님</span><h2>🏫 SEN스쿨 — 유료 AI를 무료로</h2><p id="senIntro"></p></div>
+    <div class="btnrow reveal" id="senBtns"></div>
+    <div class="sec-head reveal" style="margin-top:12px"><h2 style="font-size:1.35rem">이용할 수 있는 서비스</h2></div>
+    <div class="featchips reveal" id="senServices"></div>
+    <div class="reveal"><div class="sengpt-box" id="sengptBox"></div></div>
+    <div class="sec-head reveal" style="margin-top:34px"><h2 style="font-size:1.35rem">이점과 한계, 둘 다 정확히</h2></div>
+    <div class="uselists reveal" id="senProsCons"></div>
+    <div class="sec-head reveal" style="margin-top:34px"><h2 style="font-size:1.35rem">🪪 회원가입 방법</h2><p>간편인증(휴대폰) → 나이스 인증서 등록 → 학교 관리자 승인</p></div>
+    <div class="bsteps reveal" id="senSignup"></div>
+    <div class="btnrow reveal" id="senPdfBtn" style="margin-top:18px"></div>
+    <div class="pnote" id="senNote"></div>
   </div>
 </section>
 
@@ -515,6 +544,9 @@ const CONFIG = {
   // ▼ 만화 이미지 (assets/images/에 넣으면 자동 표시)
   comic1: 'assets/images/notebooklm-comic.png',
   comic2: 'assets/images/notion-dashboard-comic.png',
+  // ▼ SEN스쿨 (서울 교수학습 플랫폼) — 공식 도메인은 senedu.kr 로 확인됨
+  senSchoolUrl: 'https://senedu.kr/',
+  senSignupPdf: 'assets/sen-school-signup-guide.pdf',
   // ▼ 만족도 조사
   surveyUrl: 'https://forms.gle/qUK1SDq56igoCuSM6', surveyQR: 'survey-qr.png',
   // ▼ 교사용 유용한 도구 링크
@@ -579,6 +611,7 @@ const DATA = {
   runsheet:[
     {t:'0:00–0:05',l:'감정 체크인',g:'아이스브레이킹 — 서두르지 말 것(기존 기능 그대로)'},
     {t:'0:05–0:10',l:'두 도구 소개',g:'역할만 짧게, 철학·문제제기 금지'},
+    {t:'(보너스)',l:'SEN스쿨 안내',g:'서울 교직원 무료 AI 창구 — 3~5분, 시간 되면 / 앱 전용 기능(Artifacts·Skills) 불가 솔직히'},
     {t:'0:10–0:20',l:'NotebookLM 계정·이용범위',g:'학교계정=공개링크 공유 "제한"(전면불가 아님) 강조'},
     {t:'0:20–0:40',l:'NotebookLM 직접 실습',g:'자료 추가→질문(복사)→Studio 하나 만들기'},
     {t:'0:40–0:50',l:'NotebookLM 활용 + 라이브 참여',g:'활용사례 소개 + 벽에 아이디어 모으기 + 만화'},
@@ -594,6 +627,46 @@ const DATA = {
     ['NotebookLM','자료 읽기, 질문하기, 요약 및 콘텐츠 생성','자료 추가, 질문, 마인드맵 또는 오디오 개요'],
     ['Notion','자료 작성, 배치, 정리, 공유','페이지 만들기, 블록 추가, 링크와 자료 정리'],
   ]},
+  sen:{
+    intro:'SEN스쿨은 서울시교육청의 <b>AI 맞춤형 교수학습 플랫폼</b>이에요. 계정 하나로 여러 AI·에듀테크를 통합해 쓰고, 특히 <b>유료급 생성형 AI를 무료로</b> 쓸 수 있어요. (오늘 쓰는 노션·NotebookLM과는 별개인 "서울 선생님의 무료 AI 창구")',
+    services:[
+      ['🤖','SenGPT (생성형 AI 비서)'],['🎨','AI 디지털아트(이미지 생성)'],['✍️','AI 생각중심 글쓰기'],
+      ['🔢','AI 수학 코스웨어'],['🔬','과학특화 AI'],['🗣️','AI 영어(수업·말하기·읽기)'],
+      ['💙','AI 사회정서학습(SEL)'],['📝','AI 서·논술형 평가'],['📊','문해력·수리력 진단'],
+      ['🔗','구글 클래스룸·웨일·미리캔버스 연동'],['🗺️','학습맵·학생정보(SIS) 연동'],
+    ],
+    sengpt:{
+      desc:'<b>SenGPT</b>는 서울 교직원 전용 생성형 AI 비서예요(2024년~ 무료, gov.wrks.ai). 문서 분석(PDF·PPT·한글·엑셀)·회의록·평가문항·생기부 초안·이미지 생성까지. 작업에 따라 <b>가장 잘 맞는 모델을 자동으로</b> 연결하는 "멀티 LLM" 방식이에요.',
+      models:[
+        '💬 대화: <b>GPT-4.1</b> (초기 GPT-4o)',
+        '🖼️ 이미지: OpenAI <b>Image-1</b> (초기 DALL·E 3)',
+        '📄 문서 보조: <b>Claude</b> 계열',
+      ],
+      tip:'⏳ 탑재 모델은 수시로 갱신돼요 — 정확한 최신 버전은 접속해서 확인하세요. (Gemini 등 추가 여부는 공개 미확인) · 생성한 이미지는 약 1시간 뒤 자동 삭제되니 미리 저장!',
+    },
+    pros:{ h:'✅ 이점', li:[
+      '<b>유료급 AI(GPT·Claude 등)를 무료로</b> 업무에 활용',
+      '교육 특화 어시스턴트(생기부·교육법령·학적) 제공',
+      '내 자료·철학을 넣은 <b>나만의 어시스턴트</b> 제작',
+      '문서·엑셀·PPT 등 파일 업무를 한 곳에서',
+      '계정 하나로 여러 에듀테크 통합 로그인',
+    ]},
+    cons:{ h:'⚠️ 한계 (분명히!)', li:[
+      '모델을 <b>챗 형태로만</b> 감싸 제공 → 원 서비스의 <b>앱 전용 기능은 못 써요</b>',
+      '예: <b>Claude의 Artifacts·Skills·Projects</b>, ChatGPT의 <b>Canvas·커스텀 GPT</b> 등',
+      '<b>서울 교직원 전용</b>(@sen.go.kr)·<b>학교 관리자 승인</b> 필요',
+      'AI 답변은 틀릴 수 있어요 → 원문·출처로 검증',
+      '학생 개인정보는 <b>익명화 후</b> 입력',
+    ]},
+    signup:[
+      {i:'🌐',a:'red',h:'senedu.kr 접속 · 회원가입',b:'우측 상단 사람 아이콘 → <b>회원가입</b>'},
+      {i:'👩‍🏫',a:'yellow',h:'교사(교직원) 선택 · 약관 동의',b:'교사 회원가입 → <b>전체 동의</b> → 다음'},
+      {i:'📱',a:'teal',h:'간편인증',b:'이름·생년월일·휴대폰 → 네이버·카카오·PASS 등으로 <b>본인인증</b>'},
+      {i:'🪪',a:'blue',h:'정보 입력 · 나이스 인증서',b:'희망 ID·소속학교 입력 + <b>교육행정(나이스) 전자서명 인증서</b> 등록'},
+      {i:'✅',a:'red',h:'완료 · 학교 승인',b:'가입 완료 → <b>학교 관리자 승인</b> 후 전체 서비스 이용'},
+    ],
+    note:'[도입 3~5분·보너스] "오늘은 노션·NotebookLM을 쓰지만, 서울 선생님이면 SEN스쿨(senedu.kr)로 GPT·Claude 같은 유료 AI도 무료로 쓸 수 있어요." SenGPT 화면 한 번 보여주고, 한계(앱 전용 기능 불가·학교 승인 필요)를 솔직히 짚기. 가입은 나중에 매뉴얼 PDF 보고 하시라 안내. ※ 도메인은 senedu.kr(주신 sendeu.kr은 오타로 보임 — 연수 전 재확인).',
+  },
   nlmWarn:{ h:'학교 계정이라면 꼭 확인!', p:'학교 계정은 <b>공유가 전면 불가</b>한 게 아니라, <b>‘링크가 있는 모든 사용자’ 방식의 공개 공유가 제한</b>됩니다.', li:[
     '학교(Workspace for Education) 계정은 <b>관리자가 NotebookLM을 활성화</b>해야 접속돼요.',
     '공개 노트북(‘링크가 있는 모든 사용자’)은 학교 계정에서 <b>비활성</b>일 수 있어요.',
@@ -762,8 +835,22 @@ function renderStatic(){
     const href=(t.href||'').trim(), has=!!href;
     return has?'<a class="tile" href="'+esc(href)+'"'+(t.ext?' target="_blank" rel="noopener"':'')+'>'+head+'</a>':'<div class="tile" style="cursor:default;opacity:.7">'+head+'</div>';
   }).join('');
-  renderSurvey();
+  renderSen(); renderSurvey();
   Object.keys(DATA).filter(k=>k.endsWith('Note')).forEach(k=>pnote(k,DATA[k]));
+}
+function renderSen(){
+  const s=DATA.sen; if(!s)return;
+  $('senIntro').innerHTML=rich(s.intro);
+  $('senBtns').innerHTML='<a class="btn-lg dark" href="'+esc(CONFIG.senSchoolUrl)+'" target="_blank" rel="noopener">🔗 SEN스쿨 바로가기 (senedu.kr)</a><a class="btn-lg ghost" href="'+esc(CONFIG.senSignupPdf)+'" target="_blank" rel="noopener">📄 회원가입 매뉴얼(PDF)</a>';
+  $('senServices').innerHTML=s.services.map(x=>'<span class="fc"><span class="fce">'+x[0]+'</span>'+esc(x[1])+'</span>').join('');
+  const g=s.sengpt;
+  $('sengptBox').innerHTML='<div class="sh">🤖 SenGPT — 최근 탑재된 생성형 AI</div><div class="sp">'+rich(g.desc)+'</div>'+
+    '<div class="mlabel">지금 쓰는 모델</div><div class="mchips">'+g.models.map(m=>'<span class="mchip">'+rich(m)+'</span>').join('')+'</div>'+
+    '<div class="stip">'+rich(g.tip)+'</div>';
+  $('senProsCons').innerHTML=useHtml([{h:s.pros.h,li:s.pros.li},{h:s.cons.h,li:s.cons.li}]);
+  $('senSignup').innerHTML=bstepHtml(s.signup);
+  $('senPdfBtn').innerHTML='<a class="btn-lg ghost" href="'+esc(CONFIG.senSignupPdf)+'" target="_blank" rel="noopener">📄 회원가입 매뉴얼 전체 보기 (PDF)</a>';
+  pnote('senNote',s.note);
 }
 function warnHtml(w,color){
   return '<div class="wh"'+(color?' style="color:'+color+'"':'')+'>⚠️ '+esc(w.h)+'</div>'+
