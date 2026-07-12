@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>실습용 여행지 자료집 · NotebookLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#161930;--ink-soft:#5a6079;--paper:#f4efe4;--card:#fffdf7;
+  --navy:#0a0e2b;--gold:#c39a35;--gold-deep:#8a6c1c;--gold-soft:#e7d199;
+  --line:#e6dcc6;--line-soft:#efe7d6;
+  --shadow:0 2px 4px rgba(20,20,40,.04),0 10px 30px rgba(20,20,40,.06);
+  --font-serif:'Noto Serif KR','Nanum Myeongjo',serif;
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px 48px}
+.hero{background:radial-gradient(120% 130% at 88% -20%,#151b45,var(--navy) 60%);color:#fff;padding:44px 0 38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(50% 80% at 8% 120%,rgba(195,154,53,.22),transparent 60%)}
+.hero .wrap{position:relative}
+.hero .k{font-size:.68rem;letter-spacing:.24em;font-weight:800;color:var(--gold-soft)}
+.hero h1{font-family:var(--font-serif);font-weight:700;font-size:1.9rem;margin-top:8px;line-height:1.25}
+.hero p{color:#d7dcf0;font-size:1rem;margin-top:12px;max-width:620px}
+.tips{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:20px 22px;margin-top:26px;box-shadow:var(--shadow)}
+.tips .tk{font-size:.72rem;letter-spacing:.14em;font-weight:800;color:var(--gold-deep);margin-bottom:10px}
+.tips ol{margin:0;padding-left:20px}
+.tips li{font-size:.94rem;color:var(--ink-soft);margin:6px 0;line-height:1.6}
+.tips li b{color:var(--ink)}
+.tips code{background:rgba(195,154,53,.14);padding:1px 6px;border-radius:5px;font-size:.9em;font-family:ui-monospace,Consolas,monospace}
+.h2{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.2rem;margin:30px 0 14px;display:flex;align-items:center;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.card .ci{font-size:1.6rem}
+.card .ch{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.08rem}
+.card .cd{color:var(--ink-soft);font-size:.86rem;line-height:1.5;flex:1}
+.btns{display:flex;gap:8px;margin-top:8px}
+.btn{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:.86rem;padding:9px 10px;border-radius:10px;transition:.15s}
+.btn.dl{color:#fff;background:linear-gradient(135deg,#1b2256,var(--navy));box-shadow:var(--shadow)}
+.btn.dl:hover{filter:brightness(1.12)}
+.btn.pv{color:var(--gold-deep);background:#fbf7ec;border:1px solid var(--line)}
+.btn.pv:hover{border-color:var(--gold)}
+.note{margin-top:26px;color:var(--ink-soft);font-size:.86rem;text-align:center;line-height:1.6}
+.note a{color:var(--gold-deep);font-weight:700}
+footer{text-align:center;color:var(--ink-soft);font-size:.8rem;padding:26px 20px 0}
+footer .heart{color:var(--gold-deep)}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="k">NOTEBOOKLM 실습 자료</div>
+  <h1>🧳 실습용 여행지 자료집</h1>
+  <p>방학 여행지 5곳의 상세 가이드입니다. 아래 자료를 <b>모두 받아</b> NotebookLM 한 노트북에 함께 올려보세요. 여러 자료를 비교·근거 인용하는 <b>LM의 진짜 강점</b>을 체험할 수 있어요.</p>
+</div></div>
+
+<div class="wrap">
+  <div class="tips">
+    <div class="tk">🎧 NotebookLM에서 이렇게 써보세요</div>
+    <ol>
+      <li>새 노트북 → <b>5개 파일을 한꺼번에</b> 업로드</li>
+      <li>비교 질문: <b>"이 여행지들 중 아이와 3박 4일 가족여행에 맞는 곳과 이유를, 근거가 된 원문 문장과 함께 표로."</b></li>
+      <li>답에 붙은 <b>인용(출처)을 클릭</b> → 원문 문장으로 점프되는지 확인 <i>(챗GPT와 다른 지점)</i></li>
+      <li>일부러 없는 걸 질문: <code>이 자료에 겨울 스키장 정보도 있어?</code> → "소스에 없다"고 답하는지 확인</li>
+      <li>(선택) 노트북을 <b>링크로 공유</b>하면 '질문봇'이 됩니다</li>
+    </ol>
+  </div>
+
+  <div class="h2">📥 자료 받기</div>
+  <div class="grid" id="grid"></div>
+
+  <p class="note">ℹ️ 가격·시간은 모두 <b>대략값(예시)</b>입니다. 실무에서는 이 자리에 <b>공문·교육과정·평가기준</b>을 넣으면 똑같이 활용돼요.<br>
+  전체 안내: <a href="00_안내.md" target="_blank" rel="noopener">00_안내.md</a></p>
+</div>
+
+<footer>made with <span class="heart">♥</span> 과학이조선생 · 조승재 · <a href="../" style="color:inherit">연수 페이지로</a></footer>
+
+<script>
+const FILES=[
+  {ic:'🌋',name:'제주도',file:'01_제주도.md',desc:'화산섬·해변·오름·올레길. 렌터카 중심의 대표 여름 휴양지.'},
+  {ic:'🌊',name:'부산',file:'02_부산.md',desc:'도시+바다. 해운대·광안리·감천문화마을, 지하철로 편하게.'},
+  {ic:'🏄',name:'강릉·속초',file:'03_강릉속초.md',desc:'동해안·경포·설악산·커피거리. 서핑과 바다 감성.'},
+  {ic:'🏛️',name:'경주',file:'04_경주.md',desc:'불국사·석굴암·대릉원·황리단길. 아이와 역사 여행.'},
+  {ic:'🌉',name:'여수',file:'05_여수.md',desc:'밤바다·해상케이블카·오동도·게장. 낭만과 미식.'},
+];
+document.getElementById('grid').innerHTML=FILES.map(f=>
+  '<div class="card"><span class="ci">'+f.ic+'</span>'+
+  '<div class="ch">'+f.name+'</div>'+
+  '<div class="cd">'+f.desc+'</div>'+
+  '<div class="btns"><a class="btn dl" href="'+f.file+'" download>다운로드</a>'+
+  '<a class="btn pv" href="'+f.file+'" target="_blank" rel="noopener">미리보기</a></div></div>'
+).join('');
+</script>
+</body>
+</html>
