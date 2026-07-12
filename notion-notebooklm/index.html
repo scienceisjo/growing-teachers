@@ -280,6 +280,9 @@ table.data td b{color:var(--navy)}
 .comic .cbtn{border:none;background:none;padding:0;cursor:zoom-in;width:100%;display:block}
 .comic img{width:100%;height:auto;border-radius:18px;box-shadow:var(--shadow-lg);border:1px solid var(--line);display:block}
 .comic .ph{width:100%;aspect-ratio:16/9;border:2px dashed #cdb98a;border-radius:18px;background:#fbf7ec;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--gold-deep);font-weight:700;font-size:.9rem;text-align:center;padding:20px}
+.comic .cbtn ~ .ph{display:none}
+.comic.noimg .cbtn{display:none}
+.comic.noimg .cbtn ~ .ph{display:flex}
 .comic figcaption{margin-top:12px;color:var(--ink-soft);font-size:.94rem;line-height:1.6}
 .comic figcaption b{color:var(--navy)}
 .modal{position:fixed;inset:0;z-index:1000;background:rgba(10,12,30,.82);display:none;align-items:center;justify-content:center;padding:24px}
@@ -386,7 +389,7 @@ const CONFIG = {
   comic1:'assets/images/notebooklm-comic.png', comic2:'assets/images/notion-dashboard-comic.png',
   senSchoolUrl:'https://senedu.kr/', senSignupPdf:'assets/sen-school-signup-guide.pdf',
   surveyUrl:'https://forms.gle/qUK1SDq56igoCuSM6', surveyQR:'survey-qr.png',
-  hubUrl:'https://joo.is/과학탐구월드',
+  hubUrl:'https://scienceisjo.github.io/scienceworld/science-exploration-world.html',
   pdfToolUrl:'https://scienceisjo.github.io/pdf-tool/',
   brainBreakUrl:'https://scienceisjo.github.io/brain-break-lab/sonic',
   letterCardUrl:'https://scienceisjo.github.io/lettermaker/',
@@ -405,12 +408,13 @@ const PRICING = {
 const DATA = {
   acts:[{e:'💗',t:'감정 체크인'},{e:'🎒',t:'유용한 도구'},{e:'🏫',t:'SEN스쿨'},{e:'🎧',t:'NotebookLM 실습'},{e:'🗂️',t:'Notion 실습'},{e:'🔗',t:'함께 쓰기'}],
   runsheet:[
-    {t:'0:00–0:05',l:'감정 체크인',g:'아이스브레이킹 — 서두르지 않기(기존 기능 그대로)'},
-    {t:'0:05–0:12',l:'유용한 도구 + 두 도구 소개',g:'도구는 가볍게, NotebookLM·Notion만 깊게'},
-    {t:'0:12–0:17',l:'SEN스쿨(보너스)',g:'무료 AI 창구 소개 — 모델은 직접 시연, 한계도 솔직히'},
-    {t:'0:17–0:47',l:'NotebookLM',g:'계정·한도(토글) → 실습 → 활용/자동화 → 라이브질문2'},
-    {t:'0:47–1:12',l:'Notion',g:'요금 → 온라인 교무수첩 실습 → 활용 → 라이브질문1'},
-    {t:'1:12–1:20',l:'함께 쓰기 + 마무리',g:'노션→PDF→NotebookLM 파이프라인 + 만족도'},
+    {t:'0:00–0:05',l:'감정 체크인(팀즈)',g:'아이스브레이킹 — 서두르지 않기'},
+    {t:'0:05–0:08',l:'오늘의 흐름 + 준비물',g:'개인 Google 계정 확인(학교·SEN 계정 X) 꼭 짚기'},
+    {t:'0:08–0:15',l:'유용한 도구 + 두 도구 소개',g:'도구는 가볍게, NotebookLM·Notion만 깊게'},
+    {t:'0:15–0:20',l:'SEN스쿨(보너스)',g:'무료 AI 창구 — 모델은 직접 시연, 한계 솔직히, 가입은 토글로'},
+    {t:'0:20–0:48',l:'NotebookLM',g:'계정 → 공문 실습 → 활용/자동화 → 라이브질문①'},
+    {t:'0:48–1:13',l:'Notion',g:'요금 → 온라인 교무수첩 → 활용 → 라이브질문②'},
+    {t:'1:13–1:20',l:'함께 쓰기 + 마무리',g:'노션→PDF→NotebookLM 파이프라인 + 만족도'},
   ],
   flow:[
     {i:'🎒',a:'yellow',h:'유용한 도구 소개',b:'수업·업무에 쓰는 도구들을 가볍게 살펴봅니다.'},
@@ -443,7 +447,7 @@ const DATA = {
     intro:'SEN스쿨은 서울시교육청의 <b>AI 맞춤형 교수학습 플랫폼</b>입니다. 계정 하나로 여러 AI·에듀테크를 통합해 이용하며, 특히 {{유료급 AI를 무료로}} 사용할 수 있습니다. (오늘 다루는 Notion·NotebookLM과는 별개인 "서울 선생님의 무료 AI 창구"입니다.)',
     services:[['🤖','SenGPT (생성형 AI 비서)'],['🎨','AI 디지털아트(이미지 생성)'],['✍️','AI 생각중심 글쓰기'],['🔢','AI 수학 코스웨어'],['🔬','과학특화 AI'],['🗣️','AI 영어(수업·말하기·읽기)'],['💙','AI 사회정서학습(SEL)'],['📝','AI 서·논술형 평가'],['📊','문해력·수리력 진단'],['🔗','구글 클래스룸·웨일·미리캔버스 연동'],['🗺️','학습맵·학생정보(SIS) 연동']],
     sengptDesc:'<b>SenGPT</b>는 서울 교직원 전용 생성형 AI 비서입니다(2024년부터 무료). 문서 분석(PDF·PPT·한글·엑셀), 회의록, 평가문항, 생기부 초안, 이미지 생성 등 다양한 업무를 지원합니다.',
-    sengptTip:'탑재된 생성형 AI 모델은 수시로 바뀌므로, 정확한 최신 모델은 <b>연수 때 SenGPT에서 직접 보여 드리겠습니다.</b> 참고로 생성한 이미지는 약 1시간 뒤 자동 삭제되니 미리 저장하시기 바랍니다.',
+    sengptTip:'탑재된 생성형 AI 모델은 수시로 바뀌므로, 정확한 최신 모델은 <b>연수 때 SenGPT에서 직접 보여 드리겠습니다.</b> 생성한 이미지·결과물은 <b>바로 저장</b>해 두시길 권합니다(일정 시간 뒤 사라질 수 있습니다).',
     pros:{h:'✅ 이점',li:['유료급 AI(GPT·Claude 등)를 {{무료로}} 업무에 활용','교육 특화 어시스턴트(생기부·교육법령·학적) 제공','내 자료·철학을 넣어 <b>나만의 어시스턴트</b> 제작','문서·엑셀·PPT 등 파일 업무를 한 곳에서','계정 하나로 여러 에듀테크 통합 로그인']},
     cons:{h:'⚠️ 한계 (분명히 알고 가기)',li:['모델을 <b>챗 형태로만</b> 감싸 제공하므로, 원 서비스의 {{앱 전용 기능은 사용 불가}}','예: Claude의 {{Artifacts·Skills·Projects}}, ChatGPT의 Canvas·커스텀 GPT 등','AI 답변은 틀릴 수 있으므로 원문·출처로 검증 필요','학생 개인정보는 <b>익명화 후</b> 입력']},
     signup:[
@@ -540,7 +544,7 @@ const DATA = {
   },
 
   heroNote:'[오프닝] "오늘은 설명을 최소화하고, 여러분이 직접 만들어 보는 시간입니다. 상단 탭 순서대로 진행합니다." 이 화면(?present=1)에서만 진행표·노트가 보입니다.',
-  checkinNote:'[5분·기존 기능 그대로] 배터리 체크인은 아이스브레이킹 용도로만. 팀즈 링크·QR로 입장 안내, 실습 자료(여행지)도 여기서 미리 받게 안내.',
+  checkinNote:'[체크인] 팀즈(Reflect)로 오늘의 마음을 가볍게 체크인. 준비물(개인 Google 계정)은 다음 ‘오늘의 흐름’ 탭에서 확인. 실습용 공문 자료는 NotebookLM 탭에서 받습니다.',
   toolsNote:'[가볍게] 도구는 클릭해 화면만 보여 주는 정도로. 오늘 깊게 다루는 것은 NotebookLM·Notion 두 가지임을 분명히.',
   senNote:'[보너스] 모델 목록은 SenGPT에 직접 들어가 시연. 한계(앱 전용 기능 불가)만 분명히 짚기.',
   nlmNote:'[NotebookLM 탭] 계정 문제 먼저 정리(학교계정=공개링크 공유 "제한"). 무료 한도는 토글로. 실습은 자료 추가→질문(출처 클릭 시연)→Studio 하나. "일반 AI와 다른 점"을 꼭 강조. 마지막 라이브질문2로 참여 유도.',
@@ -568,7 +572,7 @@ function rich(s){return esc(s).replace(/&lt;b&gt;/g,'<b>').replace(/&lt;\/b&gt;/
 let _ac=null;
 function playPop(){try{_ac=_ac||new (window.AudioContext||window.webkitAudioContext)();const t=_ac.currentTime;const o=_ac.createOscillator(),g=_ac.createGain();o.type='triangle';o.frequency.setValueAtTime(540,t);o.frequency.exponentialRampToValueAtTime(920,t+0.09);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.16,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.24);o.connect(g);g.connect(_ac.destination);o.start(t);o.stop(t+0.26);}catch(e){}}
 function revealBlank(el){if(el.classList.contains('on'))return;el.classList.add('on');el.textContent=el.dataset.a;playPop();}
-function head(kick,tm,h,p){return '<div class="sec-head"><span class="kick">'+(tm?'<span class="tm">'+esc(tm)+'</span> · ':'')+esc(kick)+'</span><h2>'+rich(h)+'</h2>'+(p?'<p>'+rich(p)+'</p>':'')+'</div>'}
+function head(kick,tm,h,p){return '<div class="sec-head">'+((kick||tm)?'<span class="kick">'+(tm?'<span class="tm">'+esc(tm)+'</span> · ':'')+esc(kick)+'</span>':'')+'<h2>'+rich(h)+'</h2>'+(p?'<p>'+rich(p)+'</p>':'')+'</div>'}
 function dataTable(hd,rows){let h='<table class="data"><thead><tr>'+hd.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>';rows.forEach(r=>{h+='<tr><th scope="row">'+rich(r[0])+'</th>'+r.slice(1).map(c=>'<td>'+rich(c)+'</td>').join('')+'</tr>';});return h+'</tbody></table>'}
 function chips(arr){return '<div class="featchips">'+arr.map(f=>'<span class="fc"><span class="fce">'+f[0]+'</span>'+esc(f[1])+'</span>').join('')+'</div>'}
 function warnHtml(w,color){return '<div class="warn-card"><div class="wh"'+(color?' style="color:'+color+'"':'')+'>⚠️ '+esc(w.h)+'</div>'+(w.p?'<p>'+rich(w.p)+'</p>':'')+(w.li?'<ul>'+w.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul>':'')+'</div>'}
@@ -580,7 +584,10 @@ function cautionHtml(c){return '<div class="caution"><div class="cah">'+esc(c.h)
 function vsHtml(v){return '<div class="vsbox"><div class="vh">'+rich(v.h)+'</div><ul>'+v.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function ndetailsHtml(arr){return '<div class="ndetails">'+arr.map(u=>'<div class="ndcard"><div class="ndh">'+esc(u.h)+'</div>'+u.items.map(it=>'<details class="nd"><summary>'+esc(it.k)+'</summary><div class="ndx">'+rich(it.d)+'</div></details>').join('')+'</div>').join('')+'</div>'}
 function exampleHtml(ex){let h='<div class="example"><div class="exh">📓 '+esc(ex.title)+'</div>';ex.blocks.forEach(b=>{h+='<h4>'+esc(b.h)+'</h4>';if(b.type==='quote')h+='<blockquote>'+esc(b.q)+'</blockquote>';else h+='<ul>'+b.li.map(x=>'<li>'+(b.type==='check'?'☐ ':'')+esc(x)+'</li>').join('')+'</ul>';});return h+'<div class="extag">💡 '+esc(ex.tag)+'</div></div>'}
-function comicHtml(id,src,meta){const s=(src||'').trim();const ph='<div class="ph">🦖 공룡 교사 만화가 들어갈 자리입니다<br><span style="font-weight:400;font-size:.82rem">assets/images/ 에 이미지를 넣으면 자동 표시됩니다</span></div>';const img=s?'<button class="cbtn" onclick="openModal(this.querySelector(\'img\'))"><img src="'+esc(s)+'" alt="'+esc(meta.alt)+'" onerror="this.closest(\'.comic\').querySelector(\'.cbtn\').outerHTML=\''+ph.replace(/'/g,"\\'")+'\'"></button>':ph;return '<details class="comic-toggle"><summary>🖼️ 공룡쌤 만화 보기 (눌러서 열기)</summary><figure class="comic" id="'+id+'">'+img+'<figcaption>'+rich(meta.cap)+'</figcaption></figure></details>'}
+function comicHtml(id,src,meta){const s=(src||'').trim();
+  const ph='<div class="ph">🦖 공룡 교사 만화가 들어갈 자리입니다<br><span style="font-weight:400;font-size:.82rem">assets/images/ 에 이미지를 넣으면 자동 표시됩니다</span></div>';
+  const inner=s?('<button class="cbtn" onclick="openModal(this.querySelector(\'img\'))"><img src="'+esc(s)+'" alt="'+esc(meta.alt)+'" onerror="this.closest(\'.comic\').classList.add(\'noimg\')"></button>'+ph):ph;
+  return '<details class="comic-toggle"><summary>🖼️ 공룡쌤 만화 보기 (눌러서 열기)</summary><figure class="comic" id="'+id+'">'+inner+'<figcaption>'+rich(meta.cap)+'</figcaption></figure></details>'}
 function toolGroupsHtml(){return DATA.toolGroups.map(g=>'<div class="toolgroup"><div class="tg-h">'+esc(g.h)+'</div><div class="tiles">'+g.tiles.map(t=>{
   const hd='<span class="te">'+t.e+'</span><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div>';
   if(t.links){const btns=t.links.filter(x=>(x.u||'').trim()).map(x=>'<a class="tlink" href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.l)+'</a>').join('');return '<div class="tile multi">'+hd+'<div class="tlinks">'+btns+'</div></div>';}
@@ -596,8 +603,9 @@ function startPanelHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUr
   '<div class="spcard"><div class="spqr" style="font-size:2.2rem">🧳</div><div class="spt">실습 자료 받기</div><div class="spd">NotebookLM에 넣을 여행지 자료</div>'+(pf?'<a class="spb" href="'+esc(pf)+'" target="_blank" rel="noopener">자료 다운로드 →</a>':'')+'</div></div>'}
 function teamsCardHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim();
   return '<div class="startpanel" style="grid-template-columns:1fr;max-width:400px"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장해 주세요.</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div></div>'}
-function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정·서울시교육청(SEN) 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
+function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정·서울시교육청(SEN) 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>뒤에 나오는 <b>SEN스쿨</b>은 이와 별개인 보너스 소개입니다(서울 선생님용 무료 AI 창구).</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
 function flowStepsHtml(){return '<div class="bsteps" style="max-width:980px">'+DATA.flow.map((f,i)=>'<div class="bstep accent-'+f.a+'"><span class="bn">'+(i+1)+'</span><div class="bi">'+f.i+'</div><div class="bh">'+esc(f.h)+'</div><div class="bb">'+rich(f.b)+'</div></div>').join('')+'</div>'}
+function stuckHtml(){return '<div class="vsbox" style="border-left-color:var(--blue);max-width:920px;margin-bottom:18px"><div class="vh" style="color:var(--blue)">🆘 막히면 이렇게 하세요</div><ul><li>로그인이 안 되면 → <b>gmail.com</b>에서 개인 계정을 새로 만들어 로그인</li><li>AI 응답이 안 뜨면 → 30초~1분 기다리기(오디오 개요는 조금 더 걸립니다)</li><li>그래도 막히면 → <b>옆 짝과 한 화면</b>을 함께 보기</li><li>정 안 되면 → <b>손을 들어</b> 주세요</li></ul></div>'}
 function surveyHtml(){const has=(CONFIG.surveyUrl||'').trim(),qr=(CONFIG.surveyQR||'').trim();
   return '<div class="survey"><div class="qr">'+(qr?'<img src="'+esc(qr)+'" alt="만족도 조사 QR 코드">':'<span>설문 QR<br>자리</span>')+'</div><div><div class="st">📝 만족도 조사 (2분)</div><div class="sb">오늘 <b>만든 것 하나</b> + <b>안 하기로 한 것 하나</b>를 적어 주세요.</div>'+(has?'<a class="sl" href="'+esc(CONFIG.surveyUrl)+'" target="_blank" rel="noopener">설문 열기 →</a><div class="su">'+esc(CONFIG.surveyUrl)+'</div>':'<div class="su" style="color:var(--ink-soft)">CONFIG.surveyUrl 에 링크를 넣으세요</div>')+'</div></div>'}
 function pnoteHtml(id,t){return '<div class="pnote" id="'+id+'"><div class="pk">🎤 강사 노트</div>'+rich(t)+'</div>'}
@@ -615,35 +623,35 @@ function panelHTML(id){
     head('','','이용할 수 있는 서비스')+chips(s.services)+
     '<div class="sengpt-box"><div class="sh">🤖 SenGPT</div><div class="sp">'+rich(s.sengptDesc)+'</div><div class="stip">'+rich(s.sengptTip)+'</div></div>'+
     head('','','이점과 한계, 둘 다 정확히')+useHtml([{h:s.pros.h,li:s.pros.li},{h:s.cons.h,li:s.cons.li}])+
-    head('','','🪪 회원가입 방법')+bstepHtml(s.signup)+btnHtml([{t:'📄 회원가입 매뉴얼 전체 보기 (PDF)',href:'senSignupPdf',cls:'ghost'}])+
+    '<details class="toggle" style="margin-top:26px"><summary>🪪 회원가입 방법 보기 — 오늘은 눈으로만, 가입은 연수 후에 (학교 승인 필요)</summary>'+bstepHtml(s.signup)+btnHtml([{t:'📄 회원가입 매뉴얼 전체 보기 (PDF)',href:'senSignupPdf',cls:'ghost'}])+'</details>'+
     pnoteHtml('senNote',s.note)+'</div></div>';}
-  if(id==='nlm') return '<div class="block">'+w+head('먼저 알아둘 것','10분','🔑 NotebookLM 계정 & 무료 이용 범위','실습 전에 계정·공유 문제부터 정리합니다.')+
+  if(id==='nlm') return '<div class="block">'+w+head('먼저 알아둘 것','5분','🔑 NotebookLM 계정 & 무료 이용 범위','실습 전에 계정·공유 문제부터 정리합니다.')+
       warnHtml(D.nlmWarn)+acctHtml()+
-      '<details class="toggle"><summary>📊 무료(Standard) 사용량 자세히 보기 — 무료로도 충분합니다</summary><div class="tablewrap">'+dataTable(['항목','내용'],PRICING.nlmLimits)+'</div><div class="note-under">사용량·기능은 Google 정책에 따라 변경될 수 있습니다(2026년 기준). 소스당 200MB·50만 단어 상한은 무료 전용이 아니라 전 요금제 공통입니다.</div></details>'+
-      head('','','🧩 NotebookLM으로 할 수 있는 것')+chips(D.nlmFeatures)+'<div class="note-under">계정·언어·지역·실험 기능 제공 여부에 따라 일부 기능은 보이지 않을 수 있습니다.</div></div></div>'+
-    '<div class="block">'+w+head('직접 해보기','20분','🧪 NotebookLM 실습','메뉴를 다 외우지 말고, 자료를 넣고 결과를 만들어 봅니다.')+
-      btnHtml(D.nlmBtns)+bstepHtml(D.nlmSteps)+
+      '<details class="toggle"><summary>📊 무료 요금제 사용량 자세히 보기 — 무료로도 충분합니다</summary><div class="tablewrap">'+dataTable(['항목','내용'],PRICING.nlmLimits)+'</div><div class="note-under">사용량·기능은 Google 정책에 따라 변경될 수 있습니다(2026년 기준). 소스당 200MB·50만 단어 상한은 무료 전용이 아니라 전 요금제 공통입니다.</div></details>'+
+      head('','','🧩 NotebookLM으로 할 수 있는 것')+chips(D.nlmFeatures)+'<div class="note-under"><b>인포그래픽·슬라이드는 만 18세 이상만 생성</b>할 수 있어 미성년 학생 계정에서는 제한될 수 있습니다. 그 외에도 계정·언어·지역·실험 기능 제공 여부에 따라 일부 기능은 보이지 않을 수 있습니다.</div></div></div>'+
+    '<div class="block">'+w+head('직접 해보기','15분','🧪 NotebookLM 실습','메뉴를 다 외우지 말고, 자료를 넣고 결과를 만들어 봅니다.')+
+      btnHtml(D.nlmBtns)+stuckHtml()+bstepHtml(D.nlmSteps)+
       head('','','💬 자료에 질문하기 (눌러서 복사)')+vsHtml(D.nlmVs)+
       '<div class="prompts" style="margin-top:16px">'+D.nlmPrompts.map((p,i)=>'<div class="pcard"><div class="ptxt" id="pt'+i+'">'+esc(p)+'</div><button class="pcopy" onclick="copyPrompt('+i+',this)">복사</button></div>').join('')+'</div>'+
       head('','','🎨 Studio 기능 하나 골라 만들기')+'<div class="studio">'+D.nlmStudio.map(s=>'<div class="sopt"><div class="son">'+esc(s.n)+'</div><div class="sod">'+esc(s.d)+'</div></div>').join('')+'</div></div></div>'+
-    '<div class="block">'+w+head('이렇게 씁니다','10분','🎓 NotebookLM, 교사 업무·수업 활용')+useHtml(D.nlmUse)+
+    '<div class="block">'+w+head('이렇게 씁니다','8분','🎓 NotebookLM, 교사 업무·수업 활용')+useHtml(D.nlmUse)+
       head('','','🏫 학교 업무, 이렇게 편해집니다')+useHtml([D.nlmSchool])+cautionHtml(D.nlmCaution)+
       head('','','🦖 잠깐, 모든 자료에 넣을 필요는 없습니다')+comicHtml('comic1',CONFIG.comic1,D.comic1)+
-      head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 2)')+wallHtml(2,'💬 NotebookLM을 내 업무·수업에 어떻게 쓰시겠어요?','예: 여러 공문을 한 번에 넣고 핵심 일정만 뽑아보고 싶습니다')+
+      head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 ①)')+wallHtml(2,'💬 NotebookLM을 내 업무·수업에 어떻게 쓰시겠어요?','예: 여러 공문을 한 번에 넣고 핵심 일정만 뽑아보고 싶습니다')+
       pnoteHtml('nlmNote',D.nlmNote)+'</div></div>';
-  if(id==='notion') return '<div class="block">'+w+head('먼저 알아둘 것','10분','💳 Notion 무료 요금제 & 제한','실습 전에 무료로 되는 것과 안 되는 것을 정리합니다.')+
+  if(id==='notion') return '<div class="block">'+w+head('먼저 알아둘 것','5분','💳 Notion 무료 요금제 & 제한','실습 전에 무료로 되는 것과 안 되는 것을 정리합니다.')+
       warnHtml(D.notionWarn)+warnHtml(D.notionEdu,'var(--blue)')+
       '<div class="tablewrap">'+dataTable(['항목','내용'],PRICING.notionFree)+'</div><div class="note-under">'+rich(D.notionFreeNote)+'</div></div></div>'+
-    '<div class="block">'+w+head('직접 해보기','15분','📝 Notion 실습 — ‘온라인 교무수첩’','복잡한 대시보드 말고, 기본 블록으로 페이지 하나를 만들어 봅니다.')+
-      btnHtml(D.notionBtns)+head('','','🔑 먼저, 노션 시작하기 (Google 계정으로)')+bstepHtml(D.notionSignup)+
+    '<div class="block">'+w+head('직접 해보기','12분','📝 Notion 실습 — ‘온라인 교무수첩’','복잡한 대시보드 말고, 기본 블록으로 페이지 하나를 만들어 봅니다.')+
+      btnHtml(D.notionBtns)+stuckHtml()+head('','','🔑 먼저, 노션 시작하기 (Google 계정으로)')+bstepHtml(D.notionSignup)+
       head('','','📓 이제 ‘온라인 교무수첩’ 만들기')+'<div class="checklist"><div class="clh">'+esc(D.notionCheck.h)+'</div>'+D.notionCheck.items.map(it=>'<label><input type="checkbox"><span>'+esc(it)+'</span></label>').join('')+'</div>'+exampleHtml(D.notionExample)+'</div></div>'+
-    '<div class="block">'+w+head('이렇게 씁니다','5분','🧰 Notion, 교사 개인·학급 활용','제목만 보면 밋밋하니, 눌러서 펼쳐 보세요.')+ndetailsHtml(D.notionUse)+
+    '<div class="block">'+w+head('이렇게 씁니다','8분','🧰 Notion, 교사 개인·학급 활용','제목만 보면 밋밋하니, 눌러서 펼쳐 보세요.')+ndetailsHtml(D.notionUse)+
       '<div class="sub-links"><div class="sl-title">🔗 노션, 이어서 파보기</div><div class="reslinks">'+D.notionLinks.map(l=>'<a class="rl" href="'+esc(l.href)+'" target="_blank" rel="noopener"><span class="re">'+l.e+'</span><div><div class="rt">'+esc(l.t)+'</div><div class="rd">'+esc(l.d)+'</div></div></a>').join('')+'</div></div>'+
       head('','','🦕 Notion을 쓸 때 주의할 점')+comicHtml('comic2',CONFIG.comic2,D.comic2)+
-      head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 1)')+wallHtml(1,'💬 Notion을 내 업무·수업에 어떻게 쓰시겠어요?','예: 자주 쓰는 링크와 문구를 한 페이지에 모아두고 싶습니다')+
+      head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 ②)')+wallHtml(1,'💬 Notion을 내 업무·수업에 어떻게 쓰시겠어요?','예: 자주 쓰는 링크와 문구를 한 페이지에 모아두고 싶습니다')+
       pnoteHtml('notionNote',D.notionNote)+'</div></div>';
   if(id==='combo'){const c=D.combo;return '<div class="block">'+w+head('진짜 꿀조합','','🔗 노션 × NotebookLM, 묶으면 이렇게 됩니다',c.sub)+cmpHtml(c.cards)+pnoteHtml('comboNote',c.note)+'</div></div>'+
-    '<div class="block">'+w+head('마무리','','🎁 오늘 딱 하나, 남겨 주세요')+surveyHtml()+'</div></div>';}
+    '<div class="block">'+w+head('마무리','','🎁 오늘 딱 하나, 남겨 주세요')+'<div class="note-under" style="margin-bottom:18px">💾 <b>오늘 만든 노트북·페이지는 사라지지 않습니다.</b> 같은 개인 Google 계정으로 로그인하면 언제든 다시 열 수 있습니다. (오디오 개요 등 생성물은 미리 저장해 두시면 좋습니다.)</div>'+surveyHtml()+'</div></div>';}
   return '';
 }
 
@@ -670,7 +678,7 @@ function initLive(){
   if(window.supabase)boot();else{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';s.onload=boot;document.head.appendChild(s);}
 }
 async function loadWall(n){if(!sb)return;const {data,error}=await sb.from(CONFIG.liveTable).select('*').eq('prompt',WALLKEY[n]).order('created_at',{ascending:false}).limit(60);if(error){const st=$('liveStatus'+n);if(st)st.textContent='읽기 오류: '+error.message;return;}const wl=$('wall'+n);if(wl)wl.innerHTML=(data||[]).map(r=>'<div class="bubble'+(myIds[n].has(r.id)?' mine':'')+'"><div class="bt">'+esc(r.body)+'</div><div class="bm">— '+esc(r.name||'익명')+'</div></div>').join('')||'<div class="bubble"><div class="bt">첫 번째 아이디어를 남겨 보세요!</div></div>';}
-async function submitLive(n){const bd=$('liveBody'+n),body=bd.value.trim();if(!body){bd.focus();return;}if(!liveReady()){$('liveStatus'+n).innerHTML='먼저 Supabase를 연결해 주세요.';return;}const name=$('liveName'+n).value.trim().slice(0,12);$('liveSend'+n).disabled=true;$('liveStatus'+n).textContent='남기는 중...';const {data,error}=await sb.from(CONFIG.liveTable).insert({name,body,prompt:WALLKEY[n]}).select();$('liveSend'+n).disabled=false;if(error){$('liveStatus'+n).innerHTML='저장 오류: '+esc(error.message);return;}if(data&&data[0])myIds[n].add(data[0].id);bd.value='';$('liveStatus'+n).innerHTML='✅ 고맙습니다! 화면에 표시되었습니다.';loadWall(n);toast('아이디어가 등록되었습니다.');}
+async function submitLive(n){const bd=$('liveBody'+n),body=bd.value.trim();if(!body){bd.focus();return;}if(!liveReady()){$('liveStatus'+n).innerHTML='먼저 Supabase를 연결해 주세요.';return;}if(!sb){$('liveStatus'+n).textContent='연결 준비 중입니다. 잠시 후 다시 시도해 주세요.';return;}const name=$('liveName'+n).value.trim().slice(0,12);$('liveSend'+n).disabled=true;$('liveStatus'+n).textContent='남기는 중...';const {data,error}=await sb.from(CONFIG.liveTable).insert({name,body,prompt:WALLKEY[n]}).select();$('liveSend'+n).disabled=false;if(error){$('liveStatus'+n).innerHTML='저장 오류: '+esc(error.message);return;}if(data&&data[0])myIds[n].add(data[0].id);bd.value='';$('liveStatus'+n).innerHTML='✅ 고맙습니다! 화면에 표시되었습니다.';loadWall(n);toast('아이디어가 등록되었습니다.');}
 
 /* ═══ 탭 전환 ═══ */
 let curTab='start';
