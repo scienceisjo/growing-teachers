@@ -358,7 +358,6 @@ footer .h{color:var(--red)}
 <section class="hero" id="top">
   <h1>교사의 업무 경감 및 자동화 전략</h1>
   <div class="sub">Notion과 NotebookLM을 직접 체험하고 교사 활용 방법 찾아보기</div>
-  <p class="lead">오늘은 <b>NotebookLM에 자료를 넣고 질문</b>하는 방법을 실습하고,<br><b>Notion으로 ‘온라인 교무수첩’</b>을 직접 만들어 봅니다.</p>
   <div class="acts" id="acts"></div>
 </section>
 
@@ -382,7 +381,7 @@ const CONFIG = {
   liveTable:'yeonsu_responses',
   teamsUrl:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.05c214d9-291b-4e02-bf7b-da198826c285.24ds-uMbgumkJlOgXBy9SiBNqoHySiffi1VcUgj00lA78jyfMUiVJ0gMar6D--rFVp-T7KtUtNzWGVR7KT7hEQ',
   teamsQR:'assets/teams-qr.png',
-  practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/travel/',
+  practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/gongmun/',
   notebooklmUrl:'https://notebooklm.google.com', notionUrl:'https://www.notion.so',
   comic1:'assets/images/notebooklm-comic.png', comic2:'assets/images/notion-dashboard-comic.png',
   senSchoolUrl:'https://senedu.kr/', senSignupPdf:'assets/sen-school-signup-guide.pdf',
@@ -413,6 +412,14 @@ const DATA = {
     {t:'0:47–1:12',l:'Notion',g:'요금 → 온라인 교무수첩 실습 → 활용 → 라이브질문1'},
     {t:'1:12–1:20',l:'함께 쓰기 + 마무리',g:'노션→PDF→NotebookLM 파이프라인 + 만족도'},
   ],
+  flow:[
+    {i:'🎒',a:'yellow',h:'유용한 도구 소개',b:'수업·업무에 쓰는 도구들을 가볍게 살펴봅니다.'},
+    {i:'🏫',a:'red',h:'SEN스쿨 (보너스)',b:'서울 선생님의 무료 AI 창구 — 이점과 한계를 함께 봅니다.'},
+    {i:'🎧',a:'blue',h:'NotebookLM',b:'계정 확인 → <b>공문 자료로 질문 실습</b> → 업무·수업 활용 → 아이디어 나누기.'},
+    {i:'🗂️',a:'teal',h:'Notion',b:'가입(Google) → <b>‘온라인 교무수첩’ 만들기</b> → 활용 → 아이디어 나누기.'},
+    {i:'🔗',a:'yellow',h:'함께 쓰기',b:'노션 정리 → PDF → NotebookLM으로 학생·학부모 질문봇 만들기.'},
+  ],
+  flowNote:'[흐름 안내 2분] 준비물(개인 Google 계정) 먼저 확인. 학교·SEN 계정은 안 됨을 분명히 하고, 탭 순서대로 진행함을 안내.',
   toolsSub:'수업과 업무에서 바로 활용하실 수 있는 도구들입니다. 오늘 깊게 다루는 것은 NotebookLM과 Notion 두 가지이며, 나머지는 가볍게 소개만 드립니다.',
   toolGroups:[
     {h:'📚 저의 수업 페이지', tiles:[{e:'🌍',n:'과학탐구월드',g:'수업 자료 허브',href:CONFIG.hubUrl,ext:1}]},
@@ -485,6 +492,11 @@ const DATA = {
   notionEdu:{h:'중·고 교사와 ‘교육용 Plus’', p:'무료 <b>Education Plus</b>는 기본적으로 <b>대학·고등교육기관</b>의 학생·교직원 대상이므로, 초·중·고 교사·학생은 {{대상이 아닙니다}}. 일반 무료 요금제 기준으로 사용합니다.', li:['학교 이메일이 있다고 무료 Plus가 자동 적용되지는 않습니다.','실제 표시되는 요금제·기능은 <b>설정 화면</b>에서 확인하시는 것이 정확합니다.']},
   notionFreeNote:'연수에서는 유료 기능이나 Notion AI를 중심으로 다루지 않습니다. <b>일반 무료 요금제에서 바로 되는 페이지·블록 기능</b>을 중심으로 실습합니다. (2명 이상 무료 워크스페이스는 블록 수 제한이 생길 수 있습니다.)',
   notionBtns:[{t:'🗂️ Notion 열기',href:'notionUrl',cls:'dark'}],
+  notionSignup:[
+    {i:'🌐',a:'red',h:'notion.so 접속',b:'브라우저에서 <b>notion.so</b>에 접속 → [무료로 사용하기]를 누릅니다'},
+    {i:'🔵',a:'blue',h:'Google 계정으로 가입',b:'[Google로 계속하기] → <b>개인 Google 계정</b>을 선택합니다 (학교·SEN 계정 아님)'},
+    {i:'🏗️',a:'teal',h:'워크스페이스 준비',b:'사용 목적을 <b>개인용</b>으로 선택하면 내 워크스페이스가 만들어집니다'},
+  ],
   notionCheck:{h:'✅ ‘온라인 교무수첩’ 만들기 — 하나씩 체크해 보세요', items:['새 페이지 만들기','페이지 제목 입력하기','아이콘 하나 선택하기','제목(헤딩) 블록 추가하기','안내 문장 입력하기','체크리스트 만들기','콜아웃 블록 추가하기','자주 쓰는 사이트 링크 하나 추가하기','이미지 한 장 추가하기','하위 페이지 하나 만들기','페이지 공유 메뉴 확인하기']},
   notionExample:{title:'온라인 교무수첩', blocks:[
     {h:'📌 오늘 할 일', type:'check', li:['공문 확인','수업 자료 준비','제출물 점검','상담·안내 처리']},
@@ -539,6 +551,7 @@ const DATA = {
 /* ═══ 탭 정의 ═══ */
 const TABS=[
   {id:'start', label:'시작', e:'🙂'},
+  {id:'flow', label:'오늘의 흐름', e:'🗺️'},
   {id:'tools', label:'도구 상자', e:'🎒'},
   {id:'sen', label:'SEN스쿨', e:'🏫'},
   {id:'nlm', label:'NotebookLM', e:'🎧'},
@@ -581,6 +594,10 @@ function moodHtml(){const moods=[['🔋','가득'],['🙂','보통'],['😐','�
 function startPanelHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim(),pf=(CONFIG.practiceFileUrl||'').trim();
   return '<div class="startpanel"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div>'+
   '<div class="spcard"><div class="spqr" style="font-size:2.2rem">🧳</div><div class="spt">실습 자료 받기</div><div class="spd">NotebookLM에 넣을 여행지 자료</div>'+(pf?'<a class="spb" href="'+esc(pf)+'" target="_blank" rel="noopener">자료 다운로드 →</a>':'')+'</div></div>'}
+function teamsCardHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim();
+  return '<div class="startpanel" style="grid-template-columns:1fr;max-width:400px"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장해 주세요.</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div></div>'}
+function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정·서울시교육청(SEN) 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
+function flowStepsHtml(){return '<div class="bsteps" style="max-width:980px">'+DATA.flow.map((f,i)=>'<div class="bstep accent-'+f.a+'"><span class="bn">'+(i+1)+'</span><div class="bi">'+f.i+'</div><div class="bh">'+esc(f.h)+'</div><div class="bb">'+rich(f.b)+'</div></div>').join('')+'</div>'}
 function surveyHtml(){const has=(CONFIG.surveyUrl||'').trim(),qr=(CONFIG.surveyQR||'').trim();
   return '<div class="survey"><div class="qr">'+(qr?'<img src="'+esc(qr)+'" alt="만족도 조사 QR 코드">':'<span>설문 QR<br>자리</span>')+'</div><div><div class="st">📝 만족도 조사 (2분)</div><div class="sb">오늘 <b>만든 것 하나</b> + <b>안 하기로 한 것 하나</b>를 적어 주세요.</div>'+(has?'<a class="sl" href="'+esc(CONFIG.surveyUrl)+'" target="_blank" rel="noopener">설문 열기 →</a><div class="su">'+esc(CONFIG.surveyUrl)+'</div>':'<div class="su" style="color:var(--ink-soft)">CONFIG.surveyUrl 에 링크를 넣으세요</div>')+'</div></div>'}
 function pnoteHtml(id,t){return '<div class="pnote" id="'+id+'"><div class="pk">🎤 강사 노트</div>'+rich(t)+'</div>'}
@@ -589,7 +606,8 @@ function runsheetHtml(){return '<div class="po" style="margin-top:24px"><div cla
 /* ═══ 탭 패널 조립 ═══ */
 function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
-  if(id==='start') return '<div class="block">'+w+head('시작','5분','💗 감정 체크인','오늘 Notion과 NotebookLM을 처음 접하는 마음은 어떠신가요?')+moodHtml()+startPanelHtml()+runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
+  if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
+  if(id==='flow') return '<div class="block">'+w+head('오늘의 흐름','80분','🗺️ 오늘 이렇게 진행합니다','탭 순서대로 따라오시면 됩니다.')+prepHtml()+flowStepsHtml()+pnoteHtml('flowNote',D.flowNote)+'</div></div>';
   if(id==='tools') return '<div class="block">'+w+head('먼저, 유용한 도구부터','','🎒 오늘 소개할 도구들',D.toolsSub)+toolGroupsHtml()+pnoteHtml('toolsNote',D.toolsNote)+'</div></div>'+
     '<div class="block">'+w+head('오늘의 두 도구','','🤝 NotebookLM과 Notion','경쟁이 아니라 역할이 다른 두 도구입니다.')+cmpHtml(D.cmp)+'<div class="tablewrap" style="margin-top:18px">'+dataTable(D.cmpTable.head,D.cmpTable.rows)+'</div></div></div>';
   if(id==='sen'){const s=D.sen;return '<div class="block">'+w+head('보너스 · 서울 선생님','','🏫 SEN스쿨 — 유료 AI를 무료로',s.intro)+
@@ -617,7 +635,8 @@ function panelHTML(id){
       warnHtml(D.notionWarn)+warnHtml(D.notionEdu,'var(--blue)')+
       '<div class="tablewrap">'+dataTable(['항목','내용'],PRICING.notionFree)+'</div><div class="note-under">'+rich(D.notionFreeNote)+'</div></div></div>'+
     '<div class="block">'+w+head('직접 해보기','15분','📝 Notion 실습 — ‘온라인 교무수첩’','복잡한 대시보드 말고, 기본 블록으로 페이지 하나를 만들어 봅니다.')+
-      btnHtml(D.notionBtns)+'<div class="checklist"><div class="clh">'+esc(D.notionCheck.h)+'</div>'+D.notionCheck.items.map(it=>'<label><input type="checkbox"><span>'+esc(it)+'</span></label>').join('')+'</div>'+exampleHtml(D.notionExample)+'</div></div>'+
+      btnHtml(D.notionBtns)+head('','','🔑 먼저, 노션 시작하기 (Google 계정으로)')+bstepHtml(D.notionSignup)+
+      head('','','📓 이제 ‘온라인 교무수첩’ 만들기')+'<div class="checklist"><div class="clh">'+esc(D.notionCheck.h)+'</div>'+D.notionCheck.items.map(it=>'<label><input type="checkbox"><span>'+esc(it)+'</span></label>').join('')+'</div>'+exampleHtml(D.notionExample)+'</div></div>'+
     '<div class="block">'+w+head('이렇게 씁니다','5분','🧰 Notion, 교사 개인·학급 활용','제목만 보면 밋밋하니, 눌러서 펼쳐 보세요.')+ndetailsHtml(D.notionUse)+
       '<div class="sub-links"><div class="sl-title">🔗 노션, 이어서 파보기</div><div class="reslinks">'+D.notionLinks.map(l=>'<a class="rl" href="'+esc(l.href)+'" target="_blank" rel="noopener"><span class="re">'+l.e+'</span><div><div class="rt">'+esc(l.t)+'</div><div class="rd">'+esc(l.d)+'</div></div></a>').join('')+'</div></div>'+
       head('','','🦕 Notion을 쓸 때 주의할 점')+comicHtml('comic2',CONFIG.comic2,D.comic2)+

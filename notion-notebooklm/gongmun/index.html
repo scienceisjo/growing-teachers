@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>실습용 학교 공문 예시 · NotebookLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--ink:#161930;--ink-soft:#5a6079;--paper:#f4efe4;--card:#fffdf7;--navy:#0a0e2b;--gold:#c39a35;--gold-deep:#8a6c1c;--line:#e6dcc6;--line-soft:#efe7d6;--shadow:0 2px 4px rgba(20,20,40,.04),0 10px 30px rgba(20,20,40,.06);--font-serif:'Noto Serif KR','Nanum Myeongjo',serif;--font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px 48px}
+.hero{background:radial-gradient(120% 130% at 88% -20%,#151b45,var(--navy) 60%);color:#fff;padding:44px 0 38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(50% 80% at 8% 120%,rgba(195,154,53,.22),transparent 60%)}
+.hero .wrap{position:relative}
+.hero .k{font-size:.68rem;letter-spacing:.24em;font-weight:800;color:#e7d199}
+.hero h1{font-family:var(--font-serif);font-weight:700;font-size:1.9rem;margin-top:8px;line-height:1.25}
+.hero p{color:#d7dcf0;font-size:1rem;margin-top:12px;max-width:620px}
+.tips{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:20px 22px;margin-top:26px;box-shadow:var(--shadow)}
+.tips .tk{font-size:.72rem;letter-spacing:.14em;font-weight:800;color:var(--gold-deep);margin-bottom:10px}
+.tips ol{margin:0;padding-left:20px}
+.tips li{font-size:.94rem;color:var(--ink-soft);margin:6px 0;line-height:1.6}
+.tips li b{color:var(--ink)}
+.tips code{background:rgba(195,154,53,.14);padding:1px 6px;border-radius:5px;font-size:.9em;font-family:ui-monospace,Consolas,monospace}
+.h2{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.2rem;margin:30px 0 14px;display:flex;align-items:center;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.card .ci{font-size:1.6rem}
+.card .ch{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.02rem;line-height:1.35}
+.card .cd{color:var(--ink-soft);font-size:.84rem;line-height:1.5;flex:1}
+.btns{display:flex;gap:8px;margin-top:8px}
+.btn{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:.86rem;padding:9px 10px;border-radius:10px;transition:.15s}
+.btn.dl{color:#fff;background:linear-gradient(135deg,#1b2256,var(--navy));box-shadow:var(--shadow)}
+.btn.dl:hover{filter:brightness(1.12)}
+.btn.pv{color:var(--gold-deep);background:#fbf7ec;border:1px solid var(--line)}
+.btn.pv:hover{border-color:var(--gold)}
+.note{margin-top:26px;color:var(--ink-soft);font-size:.86rem;text-align:center;line-height:1.6}
+.note a{color:var(--gold-deep);font-weight:700}
+footer{text-align:center;color:var(--ink-soft);font-size:.8rem;padding:26px 20px 0}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="k">NOTEBOOKLM 실습 자료</div>
+  <h1>📄 실습용 학교 공문 예시</h1>
+  <p>가상으로 만든 학교 공문 6종입니다(실제 학교·인물과 무관, 개인정보 없음). 아래 공문을 <b>모두 받아</b> NotebookLM 한 노트북에 함께 올려 보세요.</p>
+</div></div>
+<div class="wrap">
+  <div class="tips">
+    <div class="tk">🎧 NotebookLM에서 이렇게 써보세요</div>
+    <ol>
+      <li>새 노트북 → <b>공문 6개를 한꺼번에</b> 업로드</li>
+      <li>핵심 질문: <b>"이 공문들에서 제가 처리할 일과 기한만 표로 정리해 주세요. 근거가 된 문장도 함께."</b></li>
+      <li>답에 붙은 <b>인용(출처)을 클릭</b> → 원문으로 이동되는지 확인 <i>(일반 챗봇과 다른 지점)</i></li>
+      <li>좁혀 질문: <code>9월에 마감인 일만</code>, <code>담당이 학년부인 일은?</code></li>
+      <li>일부러 없는 것: <code>이 공문에 급식비 내용도 있어?</code> → "없다"고 답하는지 확인</li>
+    </ol>
+  </div>
+  <div class="h2">📥 공문 받기</div>
+  <div class="grid" id="grid"></div>
+  <p class="note">ℹ️ 모두 <b>가상 예시 공문</b>입니다. 실제 업무에는 개인정보를 지운 사본을 사용하세요.<br>전체 안내: <a href="00_안내.md" target="_blank" rel="noopener">00_안내.md</a></p>
+</div>
+<footer>해누리중학교 조승재(화학) · 업무 경감·자동화 연수 · <a href="../" style="color:inherit">연수 페이지로</a></footer>
+<script>
+const FILES=[
+  {ic:'🚌',name:'현장체험학습 안내',file:'01_현장체험학습_안내.md',desc:'수학여행 일정·인솔교사 협조·제출 기한'},
+  {ic:'🏖️',name:'방학 중 근무·연수 계획',file:'02_방학중_근무연수_계획.md',desc:'순환근무·자율연수·복무 처리'},
+  {ic:'🤝',name:'학교폭력 예방교육',file:'03_학교폭력예방교육.md',desc:'예방교육·어울림 프로그램 실시 협조'},
+  {ic:'📊',name:'수행평가·성적처리 일정',file:'04_수행평가_성적처리_일정.md',desc:'계획 제출·입력·정정·확정 일정'},
+  {ic:'💬',name:'학부모 상담주간',file:'05_학부모상담주간.md',desc:'상담주간 운영·신청 취합'},
+  {ic:'📝',name:'교원능력개발평가',file:'06_교원능력개발평가.md',desc:'평가·만족도조사 실시 안내'},
+];
+document.getElementById('grid').innerHTML=FILES.map(f=>
+  '<div class="card"><span class="ci">'+f.ic+'</span><div class="ch">'+f.name+'</div><div class="cd">'+f.desc+'</div>'+
+  '<div class="btns"><a class="btn dl" href="'+f.file+'" download>다운로드</a><a class="btn pv" href="'+f.file+'" target="_blank" rel="noopener">미리보기</a></div></div>'
+).join('');
+</script>
+</body>
+</html>
