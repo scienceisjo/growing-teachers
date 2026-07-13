@@ -747,7 +747,9 @@ function runsheetHtml(){return '<div class="po" style="margin-top:24px"><div cla
 /* ═══ 탭 패널 조립 ═══ */
 function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
-  if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
+  if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+
+      head('','','✍️ 선생님의 교과가 궁금합니다')+wallHtml(3,'선생님의 교과를 적어 주세요 ^^','예: 과학 · 수학 · 국어 · 영어 · 역사 · 체육 ...')+
+      runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
   if(id==='flow') return '<div class="block">'+w+head('오늘의 흐름','80분','🗺️ 오늘 이렇게 진행합니다','탭 순서대로 따라오시면 됩니다.')+prepHtml()+flowStepsHtml()+pnoteHtml('flowNote',D.flowNote)+'</div></div>';
   if(id==='saengibu') return '<div class="block">'+w+head('강사 사례','','📝 생기부, AI에게 맡긴 게 아니라 함께 만든 시스템','2학년 과학 4개 반 112명의 세부능력 및 특기사항을, 자료가 정리된 상태에서 <b>하루 만에</b> 초안까지 완성했습니다. 그런데 이건 “AI가 대신 써 준다”가 아니라, 정반대입니다.')+
       '<div class="tablewrap">'+dataTable(['항목','수치'],[
@@ -869,12 +871,12 @@ function openModal(img){if(!img)return;lastFocus=document.activeElement;$('modal
 function closeModal(){$('modal').classList.remove('open');$('modalImg').src='';if(lastFocus)lastFocus.focus();}
 
 /* ═══ Supabase 라이브 벽 (2개) ═══ */
-const WALLKEY={1:'notion_idea',2:'nlm_idea'};
-let sb=null; const myIds={1:new Set(),2:new Set()};
+const WALLKEY={1:'notion_idea',2:'nlm_idea',3:'subject'};
+let sb=null; const myIds={1:new Set(),2:new Set(),3:new Set()};
 function liveReady(){return CONFIG.supabaseUrl&&CONFIG.supabaseAnonKey}
 function initLive(){
-  if(!liveReady()){[1,2].forEach(n=>{const st=$('liveStatus'+n),sd=$('liveSend'+n),wl=$('wall'+n);if(st)st.innerHTML='ℹ️ 라이브 벽은 <b>Supabase 연결 후</b> 켜집니다.';if(sd)sd.disabled=true;if(wl)wl.innerHTML='<div class="bubble"><div class="bt">여기에 선생님들의 아이디어가 실시간으로 쌓입니다.</div><div class="bm">— 예시</div></div>';});return;}
-  function boot(){try{sb=window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseAnonKey);}catch(e){return;}[1,2].forEach(loadWall);setInterval(()=>[1,2].forEach(loadWall),6000);}
+  if(!liveReady()){[1,2,3].forEach(n=>{const st=$('liveStatus'+n),sd=$('liveSend'+n),wl=$('wall'+n);if(st)st.innerHTML='ℹ️ 라이브 벽은 <b>Supabase 연결 후</b> 켜집니다.';if(sd)sd.disabled=true;if(wl)wl.innerHTML='<div class="bubble"><div class="bt">여기에 선생님들의 아이디어가 실시간으로 쌓입니다.</div><div class="bm">— 예시</div></div>';});return;}
+  function boot(){try{sb=window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseAnonKey);}catch(e){return;}[1,2,3].forEach(loadWall);setInterval(()=>[1,2,3].forEach(loadWall),6000);}
   if(window.supabase)boot();else{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';s.onload=boot;document.head.appendChild(s);}
 }
 async function loadWall(n){if(!sb)return;const {data,error}=await sb.from(CONFIG.liveTable).select('*').eq('prompt',WALLKEY[n]).order('created_at',{ascending:false}).limit(60);if(error){const st=$('liveStatus'+n);if(st)st.textContent='읽기 오류: '+error.message;return;}const wl=$('wall'+n);if(wl)wl.innerHTML=(data||[]).map(r=>'<div class="bubble'+(myIds[n].has(r.id)?' mine':'')+'"><div class="bt">'+esc(r.body)+'</div><div class="bm">— '+esc(r.name||'익명')+'</div></div>').join('')||'<div class="bubble"><div class="bt">첫 번째 아이디어를 남겨 보세요!</div></div>';}
