@@ -448,7 +448,6 @@ const CONFIG = {
   practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/gongmun/',
   notebooklmUrl:'https://notebooklm.google.com', notionUrl:'https://www.notion.so',
   geminiUrl:'https://gemini.google.com/', claudeUrl:'https://claude.ai/',
-  introPhoto:'assets/images/exam-cheer-letter.jpg',
   comic1:'assets/images/notebooklm-comic.png', comic2:'assets/images/notion-dashboard-comic.png',
   senSchoolUrl:'https://senedu.kr/', senSignupPdf:'assets/sen-school-signup-guide.pdf',
   surveyUrl:'https://forms.gle/qUK1SDq56igoCuSM6', surveyQR:'survey-qr.png',
@@ -491,8 +490,7 @@ const DATA = {
 
   introName:'조승재',
   introRole:'해누리중학교 과학교사',
-  introLetter:'💌 학생들이 써 준 편지를 종합해 보면, 저는 이런 교사라고 합니다 — <b>지루하고 두렵던 과학을 ‘최애 과목’으로 바꿔 준, 열정 가득한 선생님.</b>',
-  introHumble:'아직 교직경력 <b>1년 4개월</b>의 저경력 교사입니다. 그럼에도 선생님들 앞에 서서 저의 작은 사례를 나눌 수 있어 영광입니다. 🔥',
+  introHumble:'아직 교직경력 <b>1년 4개월</b>의 저경력 교사입니다.',
   introCreds:['한국교원대학교 화학교육과 졸업 (2025.2.)','교직경력 1년 4개월','AI디지털 기반 교육혁신 선도교사','AIEDAP 마스터교원 · MIEE · MAI HERO','AI·디지털 학교로 찾아가는 컨설팅 강사·보조강사'],
   introMsg:'제가 드릴 수 있는 것은 <b>도구 사용법</b>까지입니다. 이 도구를 어디에, 어떻게 쓸지 — 그 활용의 폭은 <b>여기 계신 선생님들의 오랜 경력</b>에서 나오는 것이라, 저는 감히 따라가지 못합니다. 그래서 오늘 저는 도구 활용을 <b>기쁜 마음으로</b> 알려 드리는 데까지만 하고, 그 도구가 교실에서 어떻게 빛날지는 온전히 선생님들께 맡겨 두려 합니다. 오늘 배운 것이 연수가 끝난 뒤에도 <b>작게나마 도움</b>이 되면 좋겠습니다.',
   introNote:'[강사 소개] 저경력이지만 학생 편지로 신뢰 형성. 이력·약력은 “펼쳐보지말기” 유머로 겸손하게. 핵심 멘트는 introMsg — “도구는 제가 알려드리지만, 활용은 선생님들의 경력에서 나온다”로 청중을 존중하며 문을 엶.',
@@ -740,10 +738,9 @@ function useHtml(arr){return '<div class="uselists">'+arr.map(u=>'<div class="ul
 function cautionHtml(c){return '<div class="caution"><div class="cah">'+esc(c.h)+'</div><ul>'+c.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function vsHtml(v){return '<div class="vsbox"><div class="vh">'+rich(v.h)+'</div><ul>'+v.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function moreHtml(items){return '<div class="more">'+items.map(m=>'<div class="mcard">'+(m.flag?'<span class="mflag">'+esc(m.flag)+'</span>':'')+'<span class="mtag">'+esc(m.tag)+'</span><div class="mhead"><span class="mic">'+esc(m.ic)+'</span><span class="mname">'+esc(m.n)+'</span></div><div class="mben">'+rich(m.ben)+'</div><div class="mcap">'+rich(m.cap)+'</div></div>').join('')+'</div>'}
-function introCardHtml(){const d=DATA,ph=(CONFIG.introPhoto||'').trim();
-  const photo=ph?'<figure class="iphoto"><img src="'+esc(ph)+'" alt="시험을 앞둔 학생들에게 써 준 응원 편지" loading="lazy" onerror="this.closest(\'.iphoto\').classList.add(\'noimg\')"><div class="phf">🖼️ 시험 응원 편지 사진</div><figcaption>✍️ 시험을 앞둔 학생들에게 직접 써 준 응원 편지</figcaption></figure>':'';
+function introCardHtml(){const d=DATA;
   return '<div class="introcard"><div class="avatar">🔬</div><div class="iname">'+esc(d.introName)+'</div><div class="irole">'+esc(d.introRole)+'</div>'+
-    '<p class="iletter">'+rich(d.introLetter)+'</p><p class="ihumble">'+rich(d.introHumble)+'</p>'+photo+
+    '<p class="ihumble">'+rich(d.introHumble)+'</p>'+
     '<details class="toggle"><summary>이력 · 약력 펼쳐보지말기</summary><ul class="creds">'+d.introCreds.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></details></div>';}
 function ndetailsHtml(arr){return '<div class="ndetails">'+arr.map(u=>'<div class="ndcard"><div class="ndh">'+esc(u.h)+'</div>'+u.items.map(it=>'<details class="nd"><summary>'+esc(it.k)+'</summary><div class="ndx">'+rich(it.d)+'</div></details>').join('')+'</div>').join('')+'</div>'}
 function exampleHtml(ex){let h='<div class="example"><div class="exh">📓 '+esc(ex.title)+'</div>';ex.blocks.forEach(b=>{h+='<h4>'+esc(b.h)+'</h4>';if(b.type==='quote')h+='<blockquote>'+esc(b.q)+'</blockquote>';else h+='<ul>'+b.li.map(x=>'<li>'+(b.type==='check'?'☐ ':'')+esc(x)+'</li>').join('')+'</ul>';});return h+'<div class="extag">💡 '+esc(ex.tag)+'</div></div>'}
