@@ -447,6 +447,7 @@ const CONFIG = {
   teamsQR:'assets/teams-qr.png',
   practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/gongmun/',
   notebooklmUrl:'https://notebooklm.google.com', notionUrl:'https://www.notion.so',
+  notionExampleUrl:'https://techisl.notion.site/technologyroad',
   geminiUrl:'https://gemini.google.com/', claudeUrl:'https://claude.ai/',
   comic1:'assets/images/notebooklm-comic.png', comic2:'assets/images/notion-dashboard-comic.png',
   senSchoolUrl:'https://senedu.kr/', senSignupPdf:'assets/sen-school-signup-guide.pdf',
@@ -707,7 +708,7 @@ const DATA = {
 /* ═══ 탭 정의 ═══ */
 const TABS=[
   {id:'start', label:'시작', e:'🙂'},
-  {id:'intro', label:'강사 소개', e:'🙋'},
+  {id:'intro', label:'강사 소개', e:'🙇'},
   {id:'flow', label:'오늘의 흐름', e:'🗺️'},
   {id:'saengibu', label:'생기부 사례', e:'📝'},
   {id:'tools', label:'도구 상자', e:'🎒'},
@@ -780,7 +781,7 @@ function panelHTML(id){
   if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+
       head('','','✍️ 선생님의 교과가 궁금합니다')+wallHtml(3,'선생님의 교과를 적어 주세요 ^^','예: 과학 · 수학 · 국어 · 영어 · 역사 · 체육 ...')+
       runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
-  if(id==='intro') return '<div class="block">'+w+head('강사 소개','','🙋 오늘 함께할 강사입니다','거창하지 않지만, 진심을 담아 준비했습니다.')+
+  if(id==='intro') return '<div class="block">'+w+head('강사 소개','','🙇 만나서 반갑습니다','')+
       introCardHtml()+
       '<div class="warn-card" style="border-color:var(--grape);background:#f3f1fb;max-width:720px;margin:18px auto 0"><div class="wh" style="color:var(--grape)">💬 오늘 연수를 열며</div><p>'+rich(D.introMsg)+'</p></div>'+
       pnoteHtml('introNote',D.introNote)+'</div></div>';
@@ -866,6 +867,8 @@ function panelHTML(id){
       btnHtml(D.notionBtns)+stuckHtml()+head('','','🔑 먼저, 노션 시작하기 (Google 계정으로)')+bstepHtml(D.notionSignup)+
       head('','','📓 이제 ‘온라인 교무수첩’ 만들기')+'<div class="checklist"><div class="clh">'+esc(D.notionCheck.h)+'</div>'+D.notionCheck.items.map(it=>'<label><input type="checkbox"><span>'+esc(it)+'</span></label>').join('')+'</div>'+exampleHtml(D.notionExample)+'</div></div>'+
     '<div class="block">'+w+head('이렇게 씁니다','8분','🙋 제가 노션을 이렇게 씁니다','거창한 시스템이 아니라, 매일 쓰는 작은 방법들입니다.')+moreHtml(D.notionCases)+
+      head('','','🔗 실제 사용 예시 — 눌러서 열어 보세요')+
+      '<div class="reslinks" style="max-width:660px;margin:0 auto"><a class="rl" href="'+esc(CONFIG.notionExampleUrl)+'" target="_blank" rel="noopener"><span class="re">🧭</span><div><div class="rt">해누리중학교 기술실 오시는 길</div><div class="rd">한 번 만들어 두고 <b>페이지 링크만 공유</b>하면 되어 굉장히 편리합니다.</div></div></a></div>'+
       '<div class="sub-links"><div class="sl-title">🔗 노션, 이어서 파보기</div><div class="reslinks">'+D.notionLinks.map(l=>'<a class="rl" href="'+esc(l.href)+'" target="_blank" rel="noopener"><span class="re">'+l.e+'</span><div><div class="rt">'+esc(l.t)+'</div><div class="rd">'+esc(l.d)+'</div></div></a>').join('')+'</div></div>'+
       head('','','🦕 Notion을 쓸 때 주의할 점')+comicHtml('comic2',CONFIG.comic2,D.comic2)+
       head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 ②)')+wallHtml(1,'💬 Notion을 내 업무·수업에 어떻게 쓰시겠어요?','예: 자주 쓰는 링크와 문구를 한 페이지에 모아두고 싶습니다')+
