@@ -230,6 +230,25 @@ table.data td b{color:var(--navy)}
 .mcard .mcap b{color:var(--ink)}
 .mcard .mflag{position:absolute;top:14px;right:14px;font-size:.66rem;font-weight:800;color:#fff;background:var(--red);border-radius:999px;padding:2px 9px}
 
+/* ── 역할 카드 (생기부) ── */
+.rolegrid{display:flex;flex-direction:column;gap:8px;margin:6px 0 12px}
+.rolerow{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.rolerow .rico{font-size:1.5rem;flex-shrink:0;line-height:1}
+.rolerow .rmain{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.rolerow .rmain b{color:var(--navy);font-size:.98rem}
+.rolerow .rsub{font-size:.82rem;color:var(--ink-soft);line-height:1.45}
+.rolerow .rwhen{flex-shrink:0;font-family:var(--font-round);font-size:.82rem;color:var(--teal);background:#e3f6f3;border-radius:999px;padding:5px 12px;white-space:nowrap}
+.punch{text-align:center;font-family:var(--font-round);font-size:1.08rem;color:var(--navy);background:#fff;border:2px dashed var(--teal);border-radius:12px;padding:12px 14px}
+@media(max-width:560px){.rolerow{flex-wrap:wrap}.rolerow .rwhen{margin-left:auto}}
+
+/* ── 프롬프트 템플릿 박스 ── */
+.tplbox{max-width:920px;margin:14px auto 0;background:var(--navy);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+.tplhead{font-family:var(--font-round);color:var(--gold-soft);font-size:.96rem;margin-bottom:10px}
+.tpltxt{white-space:pre-wrap;font-family:var(--font-sans);font-size:.9rem;line-height:1.65;color:#eef1fb;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}
+.tplcopy{margin-top:12px;font-family:var(--font-round);font-size:.9rem;color:var(--navy);background:var(--gold-soft);border:none;border-radius:10px;padding:9px 18px;cursor:pointer;transition:.15s}
+.tplcopy:hover{filter:brightness(1.06)}
+.tplcopy.done{background:var(--teal);color:#fff}
+
 /* ── use lists / caution ── */
 .uselists{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:960px;margin:0 auto}
 @media(max-width:680px){.uselists{grid-template-columns:1fr}}
@@ -398,6 +417,7 @@ const CONFIG = {
   teamsQR:'assets/teams-qr.png',
   practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/gongmun/',
   notebooklmUrl:'https://notebooklm.google.com', notionUrl:'https://www.notion.so',
+  geminiUrl:'https://gemini.google.com/', claudeUrl:'https://claude.ai/',
   comic1:'assets/images/notebooklm-comic.png', comic2:'assets/images/notion-dashboard-comic.png',
   senSchoolUrl:'https://senedu.kr/', senSignupPdf:'assets/sen-school-signup-guide.pdf',
   surveyUrl:'https://forms.gle/qUK1SDq56igoCuSM6', surveyQR:'survey-qr.png',
@@ -457,7 +477,7 @@ const DATA = {
 
   sen:{
     intro:'SEN스쿨은 서울시교육청의 <b>AI 맞춤형 교수학습 플랫폼</b>입니다. 계정 하나로 여러 AI·에듀테크를 통합해 이용하며, 특히 {{유료급 AI를 무료로}} 사용할 수 있습니다. (오늘 다루는 Notion·NotebookLM과는 별개인 "서울 선생님의 무료 AI 창구"입니다.)',
-    services:[['🤖','SenGPT (생성형 AI 비서)'],['🎨','AI 디지털아트(이미지 생성)'],['✍️','AI 생각중심 글쓰기'],['🔢','AI 수학 코스웨어'],['🔬','과학특화 AI'],['🗣️','AI 영어(수업·말하기·읽기)'],['💙','AI 사회정서학습(SEL)'],['📝','AI 서·논술형 평가'],['📊','문해력·수리력 진단'],['🔗','구글 클래스룸·웨일·미리캔버스 연동'],['🗺️','학습맵·학생정보(SIS) 연동']],
+    services:[['🤖','SenGPT (생성형 AI 비서)'],['🎨','AI 디지털아트(이미지 생성)'],['✍️','AI 생각중심 글쓰기'],['🔢','AI 수학 코스웨어'],['🔬','과학특화 AI'],['🗣️','AI 영어(수업·말하기·읽기)'],['💙','AI 사회정서학습(SEL)'],['📝','AI 서·논술형 평가'],['📊','문해력·수리력 진단'],['❓','젭퀴즈(ZEP Quiz)'],['🎯','퀴즈앤(QuizN)'],['🔗','구글 클래스룸·웨일·미리캔버스 연동'],['🗺️','학습맵·학생정보(SIS) 연동']],
     sengptDesc:'<b>SenGPT</b>는 서울 교직원 전용 생성형 AI 비서입니다(2024년부터 무료). 문서 분석(PDF·PPT·한글·엑셀), 회의록, 평가문항, 생기부 초안, 이미지 생성 등 다양한 업무를 지원합니다.',
     sengptTip:'탑재된 생성형 AI 모델은 수시로 바뀌므로, 정확한 최신 모델은 <b>연수 때 SenGPT에서 직접 보여 드리겠습니다.</b> 생성한 이미지·결과물은 <b>바로 저장</b>해 두시길 권합니다(일정 시간 뒤 사라질 수 있습니다).',
     pros:{h:'✅ 이점',li:['유료급 AI(GPT·Claude 등)를 {{무료로}} 업무에 활용','교육 특화 어시스턴트(생기부·교육법령·학적) 제공','내 자료·철학을 넣어 <b>나만의 어시스턴트</b> 제작','문서·엑셀·PPT 등 파일 업무를 한 곳에서','계정 하나로 여러 에듀테크 통합 로그인']},
@@ -509,6 +529,7 @@ const DATA = {
       ben:'주제만 주면 <b>웹을 대신 조사해 자료를 모아</b> 리포트로 정리해 줍니다. 배경 조사가 필요한 업무에 유용합니다.',
       cap:'⚠️ <b>만 18세 이상</b> 계정 전용이라, 미성년 학생 계정에서는 보이지 않을 수 있습니다.'},
   ],
+  nlmTemplate:'저는 대한민국 중학교 교사입니다. 제가 반복적으로 하는 업무는 다음과 같습니다.\n\n[내 업무]  ← 이 부분을 자세히 바꿔 적어 주세요\n- 예: 중2 과학 수업 준비(교과서·학습지 제작)\n- 예: 매주 공문 확인과 처리 일정 정리\n- 예: 수행평가 채점과 피드백 작성\n- 예: 학부모 상담 내용 기록·정리\n\n이 업무들을 더 효율적으로 하기 위해 Google NotebookLM을 활용하려고 합니다. 초보자도 바로 따라 할 수 있도록 다음을 알려 주세요.\n1) 각 업무에서 NotebookLM에 넣으면 좋은 자료는 무엇인가요?\n2) 오디오 개요·마인드맵·보고서·질의응답 중 어떤 기능을 어떤 상황에 쓰면 좋을까요?\n3) 오늘 당장 따라 할 수 있는 구체적 활용 시나리오 3가지를 단계별로 제안해 주세요.',
   nlmUse:[
     {h:'🏫 교사 업무 활용', li:['여러 개의 공문·첨부파일 함께 확인하기','긴 운영계획에서 일정·준비 사항 찾기','회의자료에서 주요 결정 사항 정리하기','교육과정과 성취기준 비교하기','연수 자료·연구보고서 빠르게 탐색하기','여러 출처의 공통점·차이점 비교하기']},
     {h:'📖 수업 활용', li:['교과서·보충자료로 학생 질문에 답하기','단원별 학습 가이드 만들기','개념 마인드맵 만들기','복습용 오디오 개요 만들기','학생용 퀴즈·플래시카드 만들기','여러 자료를 비교하는 탐구 활동 구성하기']},
@@ -575,6 +596,31 @@ const DATA = {
     note:'[함께 쓰기 = 오늘의 하이라이트] 노션(정리) → PDF → NotebookLM(질문봇) 파이프라인을 실제로 보여 주면 반응이 좋습니다.',
   },
 
+  vibe:{
+    what:'코드를 직접 짜지 않고, 만들고 싶은 것을 <b>말(한국어)로 설명하면 AI가 코드를 대신 써 주는</b> 방식입니다. 2025년 2월 AI 연구자 안드레이 카파시가 이름 붙였고, 콜린스 사전이 <b>‘2025 올해의 단어’</b>로 뽑았습니다. “목표를 또렷하게 설명하고 결과를 보며 피드백하는” 일이라, 사실 선생님이 매일 하시는 일과 똑같습니다.',
+    loop:[
+      {i:'🗣️',a:'red',h:'① 설명하기',b:'“이런 걸 만들어 줘”라고 <b>평소 말로</b> 설명합니다. 코드 지식은 필요 없습니다.'},
+      {i:'👀',a:'yellow',h:'② 생성·미리보기',b:'AI가 코드를 쓰고 <b>바로 실행된 결과</b>를 보여 줍니다. 눌러 보며 확인합니다.'},
+      {i:'🔧',a:'teal',h:'③ 다듬기',b:'“글자 더 크게”, “버튼 추가”처럼 <b>고칠 점을 말</b>하면 즉시 반영됩니다. 만족할 때까지 반복.'},
+    ],
+    steps:[
+      {i:'🆕',a:'red',h:'실습 1 · Canvas 켜기',b:'<b>gemini.google.com</b> 로그인 → 입력창 아래 <b>＋(추가)</b> → <b>Canvas</b> 선택 → 만들 것을 한국어로 설명합니다'},
+      {i:'👀',a:'yellow',h:'실습 2 · 만들고 미리보기',b:'Gemini가 코드를 쓰고 <b>미리보기</b>로 바로 실행합니다. 버튼·입력을 <b>다 눌러</b> 봅니다(빈 값·0명·아주 큰 수도 넣어 테스트)'},
+      {i:'🔧',a:'teal',h:'실습 3 · 말로 고치기',b:'“<b>글자 더 크게</b>”, “<b>초기화 버튼 추가</b>”처럼 요청합니다. 특정 부분을 콕 집어 고칠 수도 있습니다'},
+    ],
+    ideas:[['🎲','이름·번호 뽑기'],['⏱️','카운트다운 타이머'],['❓','5문항 자가 퀴즈'],['🪑','자리 배치 섞기'],['🔁','모둠 편성기'],['🔢','단위 변환기(℃·길이·질량)']],
+    prompt:'한 페이지짜리 학생 이름 뽑기 앱을 만들어 줘. 큰 텍스트 상자에 반 학생 이름을 한 줄에 한 명씩 붙여넣을 수 있게 하고, ‘뽑기’ 버튼을 누르면 그중 한 명을 무작위로 골라 화면 가운데에 아주 큰 글씨로 보여 줘. 뽑힌 이름은 다시 나오지 않도록 ‘뽑은 사람 빼기’ 버튼을 넣고, 전체를 처음으로 되돌리는 ‘초기화’ 버튼도 넣어 줘. 모든 처리는 이 페이지 안에서만 이뤄지고, 어떤 정보도 저장하거나 외부로 보내지 마. 전자칠판에서 잘 보이게 글씨를 크고 색을 또렷하게 해 줘.',
+    caveats:{h:'⚠️ 딱 이것만 지키면 안전합니다', li:[
+      '<b>결과물은 반드시 직접 눌러 보고 테스트</b>하세요. 바이브 코딩의 본래 뜻은 “코드를 안 읽고 맡기는 것”이라, <b>부담 없는 소도구</b>에만 적합합니다.',
+      '<b>“에러 없이 열림 ≠ 정확함”</b> — 빈 명단, 0명, 아주 큰 수 같은 이상한 입력을 넣어 확인하세요. (예: 단위 변환은 100℃=212℉로 검산)',
+      '<b>학생 개인정보(이름＋성적·연락처)·비밀번호는 넣지 마세요.</b> 학교 계정·DB에 연결하거나 실제 정보를 담아 공개 배포하지 않습니다. <b>내 기기에서 도는 소도구</b>로만 씁니다.',
+      '<b>프로토타입일 뿐</b>입니다. 완성 제품이 아니라 빠른 시제품이라 버그가 있을 수 있습니다.',
+    ]},
+    tools:'🛠️ <b>도구</b> — <b>Gemini Canvas</b>는 무료로 되고, 학교(Workspace) 계정도 <b>관리자가 Gemini를 켜 두면</b> 쓸 수 있습니다. <b>Claude</b>의 아티팩트도 같은 방식의 좋은 선택입니다. <b>SenGPT</b>는 현재 이런 코드 미리보기(캔버스) 기능은 없어 이 실습엔 맞지 않지만, 텍스트 작업에는 훌륭합니다.',
+    age:'🔞 <b>연령·화면</b> — 앱에 라이브 AI 기능을 넣거나 공개 링크로 공유하는 것은 <b>만 18세 이상</b>만 됩니다(일반 사용·퀴즈 생성은 미성년도 가능). <b>교사 계정은 모두 사용</b>할 수 있습니다. 화면의 한국어 메뉴 이름(예: 미리보기)은 버전에 따라 다를 수 있으니 실제 화면에서 확인해 주세요.',
+    note:'[강사] “시간이 남을 경우” 보너스 탭. 코드 공포를 낮추는 게 목표 — 이름 뽑기 프롬프트를 전자칠판에서 즉석 시연(보통 1분 내 결과). “여러분도 말로 설명만 하면 된다”를 체감시키기. 두 가지만 각인: 학생 개인정보 금지 · 쓰기 전 테스트 필수. SenGPT엔 캔버스 없음(솔직히 안내), 바이브 코딩은 Gemini Canvas나 Claude로.',
+  },
+
   heroNote:'[오프닝] "오늘은 설명을 최소화하고, 여러분이 직접 만들어 보는 시간입니다. 상단 탭 순서대로 진행합니다." 이 화면(?present=1)에서만 진행표·노트가 보입니다.',
   checkinNote:'[체크인] 팀즈(Reflect)로 오늘의 마음을 가볍게 체크인. 준비물(개인 Google 계정)은 다음 ‘오늘의 흐름’ 탭에서 확인. 실습용 공문 자료는 NotebookLM 탭에서 받습니다.',
   toolsNote:'[가볍게] 도구는 클릭해 화면만 보여 주는 정도로. 오늘 깊게 다루는 것은 NotebookLM·Notion 두 가지임을 분명히.',
@@ -593,6 +639,7 @@ const TABS=[
   {id:'sen', label:'SEN스쿨', e:'🏫'},
   {id:'nlm', label:'NotebookLM', e:'🎧'},
   {id:'notion', label:'Notion', e:'🗂️'},
+  {id:'vibe', label:'바이브 코딩', e:'🧑‍💻'},
   {id:'combo', label:'함께 & 마무리', e:'🔗'},
 ];
 
@@ -637,7 +684,7 @@ function startPanelHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUr
   '<div class="spcard"><div class="spqr" style="font-size:2.2rem">🧳</div><div class="spt">실습 자료 받기</div><div class="spd">NotebookLM에 넣을 여행지 자료</div>'+(pf?'<a class="spb" href="'+esc(pf)+'" target="_blank" rel="noopener">자료 다운로드 →</a>':'')+'</div></div>'}
 function teamsCardHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim();
   return '<div class="startpanel" style="grid-template-columns:1fr;max-width:400px"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장해 주세요.</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div></div>'}
-function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정·서울시교육청(SEN) 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>뒤에 나오는 <b>SEN스쿨</b>은 이와 별개인 보너스 소개입니다(서울 선생님용 무료 AI 창구).</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
+function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>뒤에 나오는 <b>SEN스쿨</b>은 이와 별개인 보너스 소개입니다(서울 선생님용 무료 AI 창구).</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
 function flowStepsHtml(){return '<div class="bsteps" style="max-width:980px">'+DATA.flow.map((f,i)=>'<div class="bstep accent-'+f.a+'"><span class="bn">'+(i+1)+'</span><div class="bi">'+f.i+'</div><div class="bh">'+esc(f.h)+'</div><div class="bb">'+rich(f.b)+'</div></div>').join('')+'</div>'}
 function stuckHtml(){return '<div class="vsbox" style="border-left-color:var(--blue);max-width:920px;margin-bottom:18px"><div class="vh" style="color:var(--blue)">🆘 막히면 이렇게 하세요</div><ul><li>로그인이 안 되면 → <b>gmail.com</b>에서 개인 계정을 새로 만들어 로그인</li><li>AI 응답이 안 뜨면 → 30초~1분 기다리기(오디오 개요는 조금 더 걸립니다)</li><li>그래도 막히면 → <b>옆 짝과 한 화면</b>을 함께 보기</li><li>정 안 되면 → <b>손을 들어</b> 주세요</li></ul></div>'}
 function surveyHtml(){const has=(CONFIG.surveyUrl||'').trim(),qr=(CONFIG.surveyQR||'').trim();
@@ -650,14 +697,20 @@ function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
   if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
   if(id==='flow') return '<div class="block">'+w+head('오늘의 흐름','80분','🗺️ 오늘 이렇게 진행합니다','탭 순서대로 따라오시면 됩니다.')+prepHtml()+flowStepsHtml()+pnoteHtml('flowNote',D.flowNote)+'</div></div>';
-  if(id==='saengibu') return '<div class="block">'+w+head('강사 사례 · 자동화란 이런 것','','📝 생기부, AI에게 맡긴 게 아니라 함께 만든 시스템','2학년 과학 4개 반 112명의 세부능력 및 특기사항을, 자료가 정리된 상태에서 <b>하루 만에</b> 초안까지 완성했습니다. 그런데 이건 “AI가 대신 써 준다”가 아니라, 정반대입니다.')+
+  if(id==='saengibu') return '<div class="block">'+w+head('강사 사례','','📝 생기부, AI에게 맡긴 게 아니라 함께 만든 시스템','2학년 과학 4개 반 112명의 세부능력 및 특기사항을, 자료가 정리된 상태에서 <b>하루 만에</b> 초안까지 완성했습니다. 그런데 이건 “AI가 대신 써 준다”가 아니라, 정반대입니다.')+
       '<div class="tablewrap">'+dataTable(['항목','수치'],[
         ['작성 대상','4개 반 117명 중 <b>112명</b> (전출·미작성 5명 제외)'],
         ['분량 차등','상 84명(680~750바이트) · 중 22명 · 하 6명'],
         ['예시문장 은행','<b>361문장</b> (활동 8종 × 상·중·하 + 개인화)'],
         ['소요 시간','<b>하루</b> (기존 방식이면 2~3주)'],
       ])+'</div>'+
-      '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8;margin-top:8px"><div class="wh" style="color:var(--teal)">🔑 위임한 것과, 위임하지 않은 것</div><p>AI는 마지막 반나절만 일했습니다. 진짜 일은 1학기 내내 있었습니다 — 수행 과제지, 학생 보고서, 학기말 설문, 관찰 메모. <b>저는 데이터를 모았고, AI는 조립했습니다. AI는 작가가 아니라 조판공입니다.</b></p></div>'+
+      '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8;margin-top:8px"><div class="wh" style="color:var(--teal)">🔑 위임한 것과, 위임하지 않은 것</div>'+
+        '<div class="rolegrid">'+
+          '<div class="rolerow"><span class="rico">🧑‍🏫</span><div class="rmain"><b>저는 데이터를 모았습니다</b><span class="rsub">수행 과제지 · 학생 보고서 · 학기말 설문 · 관찰 메모</span></div><span class="rwhen">1학기 내내</span></div>'+
+          '<div class="rolerow"><span class="rico">🤖</span><div class="rmain"><b>AI는 그것을 조립했습니다</b><span class="rsub">모인 자료를 규칙대로 문장으로 조판</span></div><span class="rwhen">마지막 반나절</span></div>'+
+        '</div>'+
+        '<div class="punch">✍️ AI는 <b>작가</b>가 아니라 <b>조판공</b>입니다</div>'+
+      '</div>'+
       cmpHtml([
         {cls:'', i:'🧑‍🏫', n:'교사만 한 일 — AI에 주면 안 되는 것', r:'학생 관찰·평가·<b>등급 판단</b>, 작성 대상 선정, 에피소드 기록, <b>AI로 쓴 학생 답변 감별</b>, 최종 확인·기재 책임', lab:'원고', todo:'1학기 내내 씀'},
         {cls:'', i:'🤖', n:'AI가 한 일', r:'명렬표·제출명단·설문 매칭, 수행지·보고서 판독, 규칙대로 문장 조립, 학생별 개인화, 과학 오류 역검수', lab:'조판', todo:'마지막 반나절'},
@@ -699,7 +752,12 @@ function panelHTML(id){
       btnHtml(D.nlmBtns)+stuckHtml()+bstepHtml(D.nlmSteps)+
       head('','','💬 자료에 질문하기 (눌러서 복사)')+vsHtml(D.nlmVs)+
       '<div class="prompts" style="margin-top:16px">'+D.nlmPrompts.map((p,i)=>'<div class="pcard"><div class="ptxt" id="pt'+i+'">'+esc(p)+'</div><button class="pcopy" onclick="copyPrompt('+i+',this)">복사</button></div>').join('')+'</div>'+
-      head('','','🎨 Studio 기능 하나 골라 만들기')+'<div class="studio">'+D.nlmStudio.map(s=>'<div class="sopt"><div class="son">'+esc(s.n)+'</div><div class="sod">'+esc(s.d)+'</div></div>').join('')+'</div></div></div>'+
+      head('','','🎨 Studio 기능 하나 골라 만들기')+'<div class="studio">'+D.nlmStudio.map(s=>'<div class="sopt"><div class="son">'+esc(s.n)+'</div><div class="sod">'+esc(s.d)+'</div></div>').join('')+'</div>'+
+      '<div class="note-under">💡 <b>슬라이드(프레젠테이션)·인포그래픽은 다른 도구를 권합니다.</b> 슬라이드는 글자가 깨지거나 수정이 안 되는 경우가 많아 <b>Claude</b>로, 인포그래픽은 한글을 더 잘 쓰는 <b>ChatGPT</b>로 만드시는 편이 결과가 깔끔합니다.</div>'+
+      head('','','🧭 어디에 쓸지 막막하다면 — AI에게 먼저 물어보세요')+
+      '<div class="tplbox"><div class="tplhead">📋 붙여넣고 [내 업무]만 바꿔 쓰는 템플릿</div><div class="tpltxt" id="nlmTpl">'+esc(D.nlmTemplate)+'</div><button class="tplcopy" onclick="copyTemplate(this)">전체 복사</button></div>'+
+      '<div class="note-under">이렇게 물으면 “무엇을 노트북에 넣고, 어떤 기능을 쓸지” 나만의 활용 지도를 먼저 얻습니다. Gemini·ChatGPT·Claude·SenGPT 어디에 붙여넣어도 됩니다.</div>'+
+      '</div></div>'+
     '<div class="block">'+w+head('이렇게 씁니다','8분','🎓 NotebookLM, 교사 업무·수업 활용')+useHtml(D.nlmUse)+
       head('','','🏫 학교 업무, 이렇게 편해집니다')+useHtml([D.nlmSchool])+cautionHtml(D.nlmCaution)+
       head('','','🦖 잠깐, 모든 자료에 넣을 필요는 없습니다')+comicHtml('comic1',CONFIG.comic1,D.comic1)+
@@ -720,6 +778,17 @@ function panelHTML(id){
       head('','','🦕 Notion을 쓸 때 주의할 점')+comicHtml('comic2',CONFIG.comic2,D.comic2)+
       head('','','🌟 선생님의 아이디어를 뽐내 주세요! (라이브 질문 ②)')+wallHtml(1,'💬 Notion을 내 업무·수업에 어떻게 쓰시겠어요?','예: 자주 쓰는 링크와 문구를 한 페이지에 모아두고 싶습니다')+
       pnoteHtml('notionNote',D.notionNote)+'</div></div>';
+  if(id==='vibe'){const v=D.vibe;return '<div class="block">'+w+head('보너스 · 시간이 남으면','','🧑‍💻 바이브 코딩 맛보기','코드를 몰라도, 말로 설명하면 AI가 앱을 만들어 줍니다.')+
+      '<div class="warn-card" style="border-color:var(--grape);background:#f3f1fb"><div class="wh" style="color:var(--grape)">💬 바이브 코딩이란?</div><p>'+rich(v.what)+'</p></div>'+
+      bstepHtml(v.loop)+'</div></div>'+
+    '<div class="block">'+w+head('직접 해보기','','🎨 Gemini Canvas로 미니 앱 만들기','구글 Gemini의 Canvas 기능이면 무료로 됩니다.')+
+      btnHtml([{t:'✨ Gemini 열기',href:'geminiUrl',cls:'primary'}])+bstepHtml(v.steps)+
+      head('','','📋 이 프롬프트를 붙여넣어 보세요')+
+      '<div class="tplbox"><div class="tplhead">🎲 학생 이름 뽑기 앱 — Canvas에 붙여넣기</div><div class="tpltxt" id="vibeTpl">'+esc(v.prompt)+'</div><button class="tplcopy" onclick="copyTemplate(this,\'vibeTpl\')">전체 복사</button></div>'+
+      head('','','💡 이런 걸 만들 수 있어요')+chips(v.ideas)+'</div></div>'+
+    '<div class="block">'+w+head('안전 수칙','','⚠️ 안전하게 쓰는 법')+cautionHtml(v.caveats)+
+      '<div class="note-under">'+rich(v.tools)+'</div><div class="note-under">'+rich(v.age)+'</div>'+
+      pnoteHtml('vibeNote',v.note)+'</div></div>';}
   if(id==='combo'){const c=D.combo;return '<div class="block">'+w+head('진짜 꿀조합','','🔗 노션 × NotebookLM, 묶으면 이렇게 됩니다',c.sub)+cmpHtml(c.cards)+pnoteHtml('comboNote',c.note)+'</div></div>'+
     '<div class="block">'+w+head('마무리','','🎁 오늘 딱 하나, 남겨 주세요')+'<div class="note-under" style="margin-bottom:18px">💾 <b>오늘 만든 노트북·페이지는 사라지지 않습니다.</b> 같은 개인 Google 계정으로 로그인하면 언제든 다시 열 수 있습니다. (오디오 개요 등 생성물은 미리 저장해 두시면 좋습니다.)</div>'+surveyHtml()+'</div></div>';}
   return '';
@@ -734,6 +803,10 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show')
 function copyPrompt(i,btn){const txt=$('pt'+i).textContent;const done=()=>{btn.textContent='복사됨 ✓';btn.classList.add('done');toast('프롬프트를 복사했습니다.');setTimeout(()=>{btn.textContent='복사';btn.classList.remove('done')},1500);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>fb(txt,done));else fb(txt,done);
   function fb(t,cb){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);cb();}}
+function copyTemplate(btn,id){const el=$(id||'nlmTpl');if(!el)return;const txt=el.innerText;
+  const done=()=>{const o=btn.textContent;btn.textContent='복사됨 ✓';btn.classList.add('done');toast('템플릿을 복사했습니다. AI 채팅에 붙여넣으세요.');setTimeout(()=>{btn.textContent=o;btn.classList.remove('done')},1600);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>done());
+  else{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);done();}}
 let lastFocus=null;
 function openModal(img){if(!img)return;lastFocus=document.activeElement;$('modalImg').src=img.src;$('modalImg').alt=img.alt;$('modalCap').textContent=img.alt;$('modal').classList.add('open');$('mclose').focus();}
 function closeModal(){$('modal').classList.remove('open');$('modalImg').src='';if(lastFocus)lastFocus.focus();}
