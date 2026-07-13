@@ -123,6 +123,18 @@ a.tile:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:var(
 .tlinks{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;justify-content:center}
 .tlink{font-family:var(--font-round);font-size:.8rem;color:var(--navy);background:#f2ecdd;border:1px solid var(--gold-soft);border-radius:9px;padding:6px 11px;text-decoration:none;transition:.15s}
 .tlink:hover{background:var(--gold-soft)}
+.tile.feat{grid-column:1/-1;text-align:left;padding:20px 22px}
+.tile.feat .feat-hd{display:flex;align-items:center;gap:12px}
+.tile.feat .feat-hd .tn{margin-top:0}
+.tile.feat .feat-hd .tg{margin-top:2px}
+.tile.feat .feat-desc{margin-top:12px;font-size:.92rem;color:var(--ink);line-height:1.66}
+.tile.feat .feat-desc b{color:var(--navy)}
+.tile.feat .feat-ex{margin-top:12px;background:#f8faff;border:1px solid var(--line);border-radius:12px;padding:12px 15px}
+.tile.feat .fex-h{font-family:var(--font-round);color:var(--navy);font-size:.9rem;margin-bottom:7px}
+.tile.feat .feat-ex ul{margin:0;padding-left:18px}
+.tile.feat .feat-ex li{font-size:.88rem;color:var(--ink-soft);line-height:1.6;margin:4px 0}
+.tile.feat .feat-ex li b{color:var(--gold-deep)}
+.tile.feat .tlinks{justify-content:flex-start;margin-top:14px}
 
 /* ── compare ── */
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto}
@@ -427,6 +439,7 @@ const CONFIG = {
   letterCardUrl:'https://scienceisjo.github.io/lettermaker/',
   snipasteUrl:'https://www.snipaste.com/download.html', snipasteVideo:'https://www.youtube.com/watch?v=jxInZQbmHUA',
   zoomitUrl:'https://learn.microsoft.com/ko-kr/sysinternals/downloads/zoomit', zoomitVideo:'https://www.youtube.com/watch?v=1Ao6tJaT1xM',
+  everythingUrl:'https://www.voidtools.com/downloads/', everythingSite:'https://www.voidtools.com/',
 };
 
 /* ═══ 요금·계정 데이터 ═══ */
@@ -465,6 +478,10 @@ const DATA = {
       {e:'💌',n:'편지 메이커',g:'응원 편지 양식',href:CONFIG.letterCardUrl,ext:1},
     ]},
     {h:'⭐ 완전 유용한 도구', tiles:[
+      {e:'🔎',n:'Everything',g:'파일 이름으로 순식간에 찾기',
+        desc:'윈도우(Windows) 전용 <b>무료</b> 파일 검색 도구입니다. 컴퓨터 곳곳에 흩어진 파일·폴더를 <b>이름만 입력하면 즉시</b> 찾아 줍니다. 설치 파일이 작고 자원을 거의 쓰지 않으며, 파일을 새로 만들면 <b>실시간으로</b> 목록에 반영됩니다. (내용이 아니라 <b>파일·폴더 이름</b>으로 찾습니다.)',
+        ex:['<b>학습지 밀도</b> 처럼 키워드만 쳐서 예전 수업 자료 바로 찾기','<b>*.hwp</b> 또는 <b>*.pdf</b> 로 특정 형식 파일만 모아 보기','<b>체험학습 공문</b> 으로 어디에 저장했는지 잊은 공문 즉시 소환','<b>2024 생기부</b> 처럼 연도＋키워드로 지난 자료 찾기','폴더를 아무리 깊이 만들어 뒀어도 <b>탐색기보다 훨씬 빠르게</b> 도달'],
+        links:[{l:'⬇️ 다운로드',u:CONFIG.everythingUrl},{l:'🌐 공식 사이트',u:CONFIG.everythingSite}]},
       {e:'🔍',n:'ZoomIt',g:'화면 확대·판서', links:[{l:'⬇️ 다운로드',u:CONFIG.zoomitUrl},{l:'▶️ 사용법',u:CONFIG.zoomitVideo}]},
       {e:'✂️',n:'Snipaste',g:'화면 캡처·핀', links:[{l:'⬇️ 다운로드',u:CONFIG.snipasteUrl},{l:'▶️ 사용법',u:CONFIG.snipasteVideo}]},
     ]},
@@ -703,6 +720,9 @@ function comicHtml(id,src,meta){const s=(src||'').trim();
   return '<details class="comic-toggle"><summary>🖼️ 공룡쌤 만화 보기 (눌러서 열기)</summary><figure class="comic" id="'+id+'">'+inner+'<figcaption>'+rich(meta.cap)+'</figcaption></figure></details>'}
 function toolGroupsHtml(){return DATA.toolGroups.map(g=>'<div class="toolgroup"><div class="tg-h">'+esc(g.h)+'</div><div class="tiles">'+g.tiles.map(t=>{
   const hd='<span class="te">'+t.e+'</span><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div>';
+  if(t.desc){const btns=(t.links||[]).filter(x=>(x.u||'').trim()).map(x=>'<a class="tlink" href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.l)+'</a>').join('');
+    const exs=(t.ex||[]).map(x=>'<li>'+rich(x)+'</li>').join('');
+    return '<div class="tile feat"><div class="feat-hd"><span class="te">'+t.e+'</span><div><div class="tn">'+esc(t.n)+'</div><div class="tg">'+esc(t.g)+'</div></div></div><p class="feat-desc">'+rich(t.desc)+'</p>'+(exs?'<div class="feat-ex"><div class="fex-h">💡 이렇게 써 보세요</div><ul>'+exs+'</ul></div>':'')+'<div class="tlinks">'+btns+'</div></div>';}
   if(t.links){const btns=t.links.filter(x=>(x.u||'').trim()).map(x=>'<a class="tlink" href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.l)+'</a>').join('');return '<div class="tile multi">'+hd+'<div class="tlinks">'+btns+'</div></div>';}
   return '<a class="tile" href="'+esc(t.href)+'"'+(t.ext?' target="_blank" rel="noopener"':'')+'>'+hd+'</a>';
 }).join('')+'</div></div>').join('')}
