@@ -783,6 +783,11 @@ function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
   if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+
       head('','','✍️ 선생님의 교과가 궁금합니다')+wallHtml(3,'선생님의 교과를 적어 주세요 ^^','예: 과학 · 수학 · 국어 · 영어 · 역사 · 체육 ...')+
+      '<div class="warn-card" style="border-color:var(--grape);background:#f3f1fb"><div class="wh" style="color:var(--grape)">🤖 잠깐 — ‘자동화’가 뭔가요?</div>'+
+        '<p><b>자동화</b>는 반복되는 일을 <b>규칙에 따라 사람 손 없이</b> 처리하는 것입니다. 키워드로는 <b>반복 · 규칙(조건) · 자동 실행 · 일괄 처리</b>가 있습니다.</p>'+
+        '<p style="margin-top:8px">예: 설문이 들어오면 자동으로 표에 정리 · 매주 같은 안내를 정해진 시각에 자동 발송 · 파일 수십 개 이름을 규칙대로 한 번에 변경 · 조건이 맞으면 알림 자동 발송.</p>'+
+        '<p style="margin-top:10px;background:#fff;border:1px dashed var(--grape);border-radius:10px;padding:10px 13px"><b>다만 오늘은 시간 관계상 이 ‘엄밀한 의미의 자동화’까지는 다루지 않습니다.</b> 먼저 그 바탕이 되는 <b>도구(NotebookLM·Notion) 사용법</b>에 집중하고, 자동화는 그다음 단계로 남겨 둡니다.</p>'+
+      '</div>'+
       runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
   if(id==='intro') return '<div class="block">'+w+head('강사 소개','','🙇 만나서 반갑습니다','')+
       introCardHtml()+
