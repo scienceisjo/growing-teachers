@@ -408,7 +408,25 @@ body.presenter .pnote{display:block;margin:22px auto 0;max-width:980px;backgroun
 footer{text-align:center;color:var(--ink-soft);font-size:.82rem;padding:34px 20px;position:relative;z-index:1}
 footer .h{color:var(--red)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-@media print{.decor,.tabbar,.tabnav,.btnrow,.live,.modal,.toast,.pnote,.po{display:none!important}.tabpanel{display:block!important}body{background:#fff}}
+/* ── 인쇄 / 연수 원고 (?print=1) ── */
+.print-sec{display:none}
+.printmode .print-sec{display:flex;align-items:center;gap:10px;font-family:var(--font-round);color:#fff;background:var(--navy);border-radius:12px;padding:11px 18px;font-size:1.18rem;margin:0 0 16px}
+.printmode .print-sec .pse{font-size:1.35rem}
+.printmode #tabbar,.printmode .tabbar,.printmode .acts,.printmode .tabnav,.printmode #modeHint,.printmode .pcopy,.printmode .tplcopy,.printmode .lform,.printmode .lstatus,.printmode .wall,.printmode .lsub{display:none!important}
+.printmode #panels .tabpanel{display:block!important;animation:none}
+.printmode .block{box-shadow:none}
+.printmode .blank{border:none!important;background:none!important;color:var(--navy)!important;padding:0 1px!important;font-weight:800;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px;animation:none}
+@media print{
+  @page{margin:13mm}
+  html,body{background:#fff!important}
+  #tabbar,.tabbar,.acts,.tabnav,.modal,.toast,.pnote,.po,.decor,#decor,#modeHint,.pcopy,.tplcopy,.lform,.lstatus,.wall,.lsub{display:none!important}
+  #panels .tabpanel{display:block!important;animation:none}
+  a{color:inherit;text-decoration:none}
+  .mcard,.sopt,.rolerow,.cmpcard,.warn-card,.tplbox,.vsbox,.caution,.qa,.startpanel,figure.comic,.bstep,.pcard,.reslinks .rl,.sengpt-box,.sec-head{break-inside:avoid}
+  .print-sec{page-break-before:always;break-before:page}
+  #panels .tabpanel:first-child .print-sec{page-break-before:avoid;break-before:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -943,6 +961,12 @@ function showTab(id){
 /* ═══ presenter ═══ */
 function initPresenter(){const q=new URLSearchParams(location.search);if(q.get('present')==='1'||q.has('present')){document.body.classList.add('presenter');$('modeHint').innerHTML='🎤 강사용 화면(참가자에겐 <code>?present=1</code> 없는 주소를 배포)';}}
 function renderDecor(){$('decor').innerHTML='<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>';}
+function initPrint(){const q=new URLSearchParams(location.search);if(!(q.get('print')==='1'||q.has('print')))return false;
+  document.body.classList.add('printmode');
+  document.querySelectorAll('#panels .tabpanel').forEach(function(p){const t=TABS.find(function(x){return x.id===p.dataset.tab;});if(t){const h=document.createElement('div');h.className='print-sec';h.innerHTML='<span class="pse">'+t.e+'</span><span>'+esc(t.label)+'</span>';p.insertBefore(h,p.firstChild);}});
+  document.querySelectorAll('details').forEach(function(d){d.open=true;});
+  document.querySelectorAll('.blank').forEach(function(b){if(b.dataset.a)b.textContent=b.dataset.a;});
+  return true;}
 
 document.addEventListener('DOMContentLoaded',()=>{
   $('acts').innerHTML=DATA.acts.map(a=>'<span class="act">'+a.e+' '+esc(a.t)+'</span>').join('');
@@ -951,7 +975,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     '<div class="tabnav"><button id="navPrev">← 이전</button><button id="navNext" class="next">다음 →</button></div>';
   // hero presenter note
   $('panels').insertAdjacentHTML('afterbegin','');
-  renderDecor(); initPresenter(); initLive();
+  renderDecor(); initPresenter(); if(!initPrint()) initLive();
   $('mclose').addEventListener('click',closeModal);
   $('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('modal').classList.contains('open'))closeModal();});
