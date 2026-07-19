@@ -298,6 +298,10 @@ footer b{color:var(--navy)}
 .ig-tag{display:inline-block;font-weight:700;font-size:.73rem;border-radius:20px;padding:3px 12px;margin-top:11px}
 .ig-tag.ok{background:var(--green);color:#fff}
 .ig-tag.no{background:var(--red);color:#fff}
+.ig-node.db{border-color:var(--gold)}
+.ig-node.db h4{color:var(--gold-deep)}
+.keyq{border-left:4px solid var(--green);background:var(--green-soft);padding:9px 14px;border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.65;color:var(--navy);margin:12px auto 0;max-width:960px}
+.keyq b{color:var(--green-deep)}
 
 /* ── FAQ 아코디언 (삽입) ── */
 .faq{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:9px}
@@ -350,9 +354,9 @@ footer b{color:var(--navy)}
       학생 데이터를 다루는 <b>판단력</b>입니다. 오늘 두 가지를 모두 가져가시게 됩니다.</p>
     </div>
     <div class="cardgrid">
-      <div class="pcard accent"><div class="pe">🎮</div><h3>① 같이 놀기</h3><p>반응속도 대결 게임에 참여합니다. 내 기록이 <b>실시간으로 강사 화면에</b> 나타나는 걸 직접 봅니다.</p></div>
+      <div class="pcard accent"><div class="pe">🎮</div><h3>① 반응속도 게임을 통해 접하는 백엔드!</h3><p>게임 한 판에 참여하면 내 기록이 <b>실시간으로 강사 화면에</b> 모입니다. 그 뒤에 <b>백엔드</b>가 있다는 걸 몸으로 먼저 느낍니다.</p></div>
       <div class="pcard accent2"><div class="pe">🛠️</div><h3>② 직접 만들기</h3><p>Supabase로 <b>나만의 백엔드</b>를 만들고, 학생 데이터가 모이는 앱과 교사 대시보드를 연결합니다.</p></div>
-      <div class="pcard accent3"><div class="pe">🕵️</div><h3>③ 의심하기</h3><p>방금 만든 앱을 놓고 묻습니다 — <b>"이 데이터, 모아도 되는 걸까?"</b> 바이브코딩의 7가지 함정을 해부합니다.</p></div>
+      <div class="pcard accent3"><div class="pe">🕵️</div><h3>③ 의심하기</h3><p>방금 만든 앱을 놓고 묻습니다 — <b>"이 데이터, 모아도 되는 걸까?"</b> 바이브코딩의 7가지 주의사항을 해부합니다.</p></div>
       <div class="pcard accent4"><div class="pe">⚖️</div><h3>④ 판단하기</h3><p>수집 판단기로 내 아이디어를 🟢🟡🔴 판정하고, <b>학운위 에듀테크 심의</b>까지 준비합니다.</p></div>
     </div>
     <div class="pnote"><b>[시작 2분]</b> 인사 후 목표 4개만 짚고 바로 워밍업으로. "오늘은 이론 연수가 아니라 손이 바쁜 연수"임을 예고. 준비물(노트북·크롬·구글계정) 확인.</div>
@@ -370,7 +374,7 @@ footer b{color:var(--navy)}
         <tr><td><b>0:10–0:25</b></td><td>개념 — 프론트엔드와 백엔드, 웹앱이라는 식당의 구조</td><td>🧠 개념</td></tr>
         <tr><td><b>0:25–0:33</b></td><td>사례 — 강사의 실제 교실 앱 7개와 그 뒤의 백엔드</td><td>🗺️ 사례</td></tr>
         <tr><td><b>0:33–1:00</b></td><td><b>실습 — Supabase 백엔드 구축 (따라하기 매뉴얼)</b></td><td>🛠️ 실습</td></tr>
-        <tr><td><b>1:00–1:15</b></td><td>위험 — 바이브코딩의 7가지 함정 + 보안규칙(RLS) 시연</td><td>⚠️ 함정</td></tr>
+        <tr><td><b>1:00–1:15</b></td><td>위험 — 바이브코딩의 7가지 주의사항 + 보안규칙(RLS) 시연</td><td>⚠️ 주의사항</td></tr>
         <tr><td><b>1:15–1:28</b></td><td>판단 — 수집 판단기로 내 데이터 아이디어 판정하기</td><td>⚖️ 판단기</td></tr>
         <tr><td><b>1:28–1:38</b></td><td>심의 — 학교운영위원회 에듀테크 심의 준비</td><td>🏛️ 심의</td></tr>
         <tr><td><b>1:38–1:45</b></td><td>마무리 — 내가 만들고 싶은 도구 한 줄 기획서</td><td>📝 마무리</td></tr>
@@ -379,7 +383,7 @@ footer b{color:var(--navy)}
     <div class="callout blue" style="margin-top:22px"><span class="ct">🧰 오늘의 준비물</span>
       노트북(크롬 브라우저) · 구글 계정 또는 이메일 계정(Supabase 가입용) · 스마트폰(게임 참여·테스트용).
       실습 파일은 강사가 배포합니다 — <b>게임 파일(sonic.html) · 대시보드 파일 · SQL 파일</b> 세 가지입니다.</div>
-    <div class="pnote"><b>[운영]</b> 실습 27분이 생명선. 앞이 밀리면 개념 탭의 '백엔드의 식구들'을 1분 스킵. 실습이 일찍 끝난 분께는 "room 코드를 바꿔 옆 선생님 대시보드에 침투해 보라"는 미션(→ 함정 탭의 접근통제 복선).</div>
+    <div class="pnote"><b>[운영]</b> 실습 27분이 생명선. 앞이 밀리면 개념 탭의 '백엔드의 식구들'을 1분 스킵. 실습이 일찍 끝난 분께는 "room 코드를 바꿔 옆 선생님 대시보드에 침투해 보라"는 미션(→ 주의사항 탭의 접근통제 복선).</div>
   </div>
 
 </div>
@@ -416,9 +420,17 @@ footer b{color:var(--navy)}
     <div class="callout red"><span class="ct">🎯 오늘 연수가 존재하는 이유</span>
       방금 여러분의 반응속도 기록은 <b>강사 개인의 데이터베이스</b>에 실시간으로 저장되었습니다.
       여러분은 동의서에 서명한 적이 없습니다. 재미있는 게임 한 판 사이에 일어난 일입니다.<br><br>
-      학생들에게도 똑같은 일이 일어납니다. 교사가 AI로 앱을 뚝딱 만들 수 있게 된 시대 —
-      <b>데이터를 모으는 힘</b>은 쉬워졌지만, <b>지키는 책임</b>은 저절로 따라오지 않습니다.
-      오늘 우리는 그 힘과 책임을 함께 배웁니다.</div>
+      학생들에게도 똑같은 일이 일어납니다. 이제 교사가 AI로 앱을 뚝딱 만들어,
+      <b>학생에 관한 정보와 학습 데이터를 수집해 선생님이 보기 편한 형태로 저장하는 것</b>이 가능한 시대가 왔습니다.<br><br>
+      <b>그런데 '보안'은 완전히 다른 문제입니다.</b> 바이브코딩으로 급히 배포된 서비스에서 보안 사고가 끊이지 않습니다 —
+      통신사 해킹, 티빙 해킹 같은 사건만 봐도 대규모 보안은 이미 <b>개인이 감당할 수 있는 영역을 넘어섰습니다.</b><br><br>
+      그래서 오늘은 <b>"무조건 좋다, 뭐든 다 된다"</b>고 말하지 않겠습니다. 대신
+      <b>선생님과 학생 모두를 안전하게 지키는 방식으로, '선생님만의 서비스'를 만드는 법</b>을 함께 배웁니다.
+      데이터를 <b>모으는 힘</b>과 <b>지키는 책임</b>을 한 번에.</div>
+    <figure style="max-width:560px;margin:22px auto 0;text-align:center">
+      <img src="개인정보.png" alt="재미로 만든 반응속도 1위 랭킹이 실명 공개·개인정보 유출로 번지는 4컷 만화" loading="lazy" style="width:100%;display:block;border-radius:16px;box-shadow:var(--shadow-lg)">
+      <figcaption style="font-size:.86rem;color:var(--ink-soft);margin-top:9px;line-height:1.6">재미로 만든 '1위 랭킹'이 실명 공개·개인정보 유출로 번지는 건 순식간입니다 — 학생에게도 똑같이 일어날 수 있어요.</figcaption>
+    </figure>
     <div class="pnote"><b>[연출]</b> 대시보드가 신나게 차오른 직후, 3초 침묵 → 천천히 질문. "저는 여러분께 동의받지 않았습니다"에서 일부러 멈추기. 여기서 분위기가 잡히면 오늘 연수의 80%는 성공.</div>
   </div>
 
@@ -432,80 +444,200 @@ footer b{color:var(--navy)}
   <div class="block">
     <div class="sec-head">
       <span class="kick">STEP 1 <span class="tm">· 15분</span></span>
-      <h2>웹앱은 <b>식당</b>입니다</h2>
-      <p>개발자들이 쓰는 말 — 프론트엔드, 백엔드, API, 데이터베이스.
-      어렵게 들리지만 식당에 비유하면 전부 아는 이야기입니다.</p>
+      <h2>선생님이 <b>이미 사용하고 있던</b> 웹앱 구조</h2>
+      <p>프론트엔드·백엔드·API·데이터베이스 — 말은 낯설지만, 선생님들은 이미
+      <b>구글폼·구글시트·클래스룸·노션·패들렛·카훗</b>을 쓰며 이 구조를 매일 경험하고 있습니다.
+      새 지식을 처음 배운다기보다, <b>익숙한 프로그램에 개발 용어를 붙여 보는 시간</b>입니다.</p>
     </div>
-    <div class="restaurant">
-      <div class="rst front">
-        <h3>🍽️ 홀 = 프론트엔드 (Frontend)</h3>
-        <p><b>손님(학생·교사)의 눈에 보이는 모든 것.</b> 화면, 버튼, 글자, 색깔, 애니메이션.
-        HTML·CSS·자바스크립트로 만들어지며, 여러분이 지금까지 AI로 만들어 온 웹앱들이 바로 이 부분입니다.</p>
-      </div>
-      <div class="rst-arrow">▲ &nbsp;주문서가 오간다 = <b>API</b>&nbsp; ▼</div>
-      <div class="rst back">
-        <h3>🍳 주방 = 백엔드 (Backend)</h3>
-        <p><b>손님 눈에 안 보이는 모든 것.</b> 데이터를 저장하고, 계산하고, 관리하는 곳.
-        주방 안쪽의 <b>창고(데이터베이스)</b>에 재료(데이터)가 표 형태로 차곡차곡 쌓입니다.</p>
-      </div>
-    </div>
-
-    <div class="callout green" style="margin-top:26px"><span class="ct">💡 지금까지 우리가 만든 앱의 비밀</span>
-      선생님들이 지금까지 AI로 만든 웹앱은 대부분 <b>"홀만 있는 식당"</b>이었습니다.
-      데이터가 저장되는 곳이 <b>그 컴퓨터 안(localStorage)</b>뿐이라서,
-      학생 폰에 입력된 내용을 교사 컴퓨터에서 볼 수 없었습니다.<br><br>
-      <b>"학생 데이터 수집 → 교사 대시보드 확인"</b>을 하려면 모든 기기가 함께 바라보는
-      <b>주방(백엔드)</b>이 반드시 필요합니다. 오늘 우리가 넘는 한 단계가 바로 이것입니다.</div>
 
     <div class="ig">
-      <div class="ig-cap">🍽️ 위 '식당' 비유를, 오늘 <span>반응속도 게임</span>에 그대로 대입하면 —</div>
+      <div class="ig-cap">📝 <span>구글폼</span> 하나에 웹앱의 네 가지가 다 들어 있습니다</div>
       <div class="ig-flow">
-        <div class="ig-node front"><div class="ic">📱</div><h4>학생 폰 · 게임</h4><p>초록불에 탭 → 반응시간 측정<br><b>홀 = 프론트</b></p></div>
-        <div class="ig-arr">─ 전송 →<small>API · insert</small></div>
-        <div class="ig-node back"><div class="ic">🗄️</div><h4>Supabase 표</h4><p>반응시간이 <b>행</b>으로 차곡차곡 저장<br><b>주방 = 백엔드</b></p></div>
-        <div class="ig-arr">─ 읽기 →<small>API · select</small></div>
-        <div class="ig-node front"><div class="ic">📊</div><h4>교사 대시보드</h4><p>모두의 기록을 <b>실시간 그래프</b>로 확인<br><b>홀 = 프론트</b></p></div>
+        <div class="ig-node front"><div class="ic">🧑‍🎓</div><h4>학생의 구글폼 화면</h4><p>질문·입력창·선택지·제출 버튼<br><b>프론트엔드</b> · 사람이 직접 보는 화면</p></div>
+        <div class="ig-arr">→<small>제출 = 데이터 전송 요청</small></div>
+        <div class="ig-node back"><div class="ic">⚙️</div><h4>보이지 않는 처리 시스템</h4><p>제출 확인·시각 기록·형식 검사·자동 채점·저장 위치 결정<br><b>백엔드</b> · 화면 뒤 처리</p></div>
+        <div class="ig-arr">→<small>저장</small></div>
+        <div class="ig-node db"><div class="ic">📊</div><h4>구글시트 응답표</h4><p>제출시각·학번·이름·응답·점수<br><b>데이터베이스</b> · 항목별로 쌓이는 표</p></div>
+        <div class="ig-arr">→<small>불러오기</small></div>
+        <div class="ig-node front"><div class="ic">🧑‍🏫</div><h4>교사의 응답 확인 화면</h4><p>응답 목록·통계·그래프·학생별 결과<br><b>프론트엔드</b> · 교사 화면도 프론트엔드!</p></div>
       </div>
     </div>
-    <div class="pnote"><b>[강조]</b> "홀만 있는 식당" 표현에서 다들 자기 앱을 떠올리게 하기. "그동안 학생 화면에만 저장되고 선생님은 못 보셨죠?" 공감 유도. API는 '주문서' 한 마디로만 — 깊이 들어가지 않기.</div>
+    <div class="keyq"><b>기억할 점 —</b> 학생 화면만 프론트엔드가 아닙니다. <b>교사가 보는 결과 대시보드도 프론트엔드</b>입니다.</div>
+    <div class="pnote"><b>[강조]</b> "구글폼 안 써 본 분 안 계시죠?"로 시작 → 익숙함을 무기로. 제출 버튼 뒤에서 '보이지 않는 처리'가 일어난다는 점, 교사 결과 화면도 프론트엔드라는 점 두 가지만 확실히.</div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">개념 4가지</span>
+      <h2>프론트엔드 · 백엔드 · 데이터베이스 · API</h2>
+      <p>방금 구글폼에서 본 네 가지를, 익숙한 앱 예시로 하나씩 짚어 봅니다.</p>
+    </div>
+    <div class="ig-2" style="max-width:960px">
+      <div class="pcard accent2"><div class="pe">🖥️</div><h3>프론트엔드 <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">Frontend</span></h3>
+        <p><b>사람이 직접 보고 누르는 화면.</b> 화면·버튼·글자·색·그래프·애니메이션.</p>
+        <p style="font-size:.86rem">예: 구글폼 질문·제출 버튼 · 클래스룸 과제 화면 · 노션 페이지 · 패들렛 · 카훗 문제 · 반응속도 게임 · <b>교사 대시보드</b></p>
+        <p style="font-size:.86rem">HTML·CSS·자바스크립트로 만드는 부분 — 지금까지 AI로 만든 웹앱이 주로 여기입니다.</p>
+        <div class="keyq"><b>프론트엔드 = 사람이 직접 보고 조작하는 화면</b></div></div>
+      <div class="pcard accent"><div class="pe">⚙️</div><h3>백엔드 <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">Backend</span></h3>
+        <p><b>화면 뒤에서 실제 업무를 처리하는 시스템.</b> 구글폼 제출 버튼을 누르면 뒤에서 — 응답 전달받기·빠진 내용 확인·제출 시간 기록·객관식 자동 채점·저장 위치 결정·권한 확인·데이터 정리해 화면에 보내기.</p>
+        <p style="font-size:.86rem">클래스룸도 뒤에서 학생 정보·제출 여부·파일 권한·점수를 처리합니다.</p>
+        <div class="keyq"><b>백엔드 = 뒤에서 저장·계산·검사·권한을 담당하는 시스템</b><br><span style="font-size:.85em;color:var(--ink-soft)">※ 백엔드(작업 처리)와 데이터베이스(데이터 보관)는 서로 다릅니다.</span></div></div>
+      <div class="pcard accent4"><div class="pe">📇</div><h3>데이터베이스 <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">Database</span></h3>
+        <p><b>응답·기록이 쌓이는 데이터 표.</b> 예: 구글폼 응답이 쌓이는 구글시트 · 노션 데이터베이스 · 클래스룸 제출 기록 · 나이스 출결·성적 · Supabase 테이블.</p>
+        <div class="tablewrap" style="box-shadow:none;margin:10px 0 0;border-radius:12px"><table class="dt" style="font-size:.82rem"><tr><th>제출 시간</th><th>학번</th><th>이름</th><th>반응시간</th></tr><tr><td>10:21</td><td>20301</td><td>김학생</td><td>0.24초</td></tr><tr><td>10:22</td><td>20302</td><td>이학생</td><td>0.31초</td></tr></table></div>
+        <div class="keyq"><b>데이터베이스 = 여러 사람이 함께 쓰는 체계적인 데이터 표</b><br><span style="font-size:.85em;color:var(--ink-soft)">처음엔 '인터넷에 있는 체계적인 표'라고 생각하면 쉽습니다(구글시트와 완전히 같진 않아요).</span></div></div>
+      <div class="pcard accent3"><div class="pe">🔁</div><h3>API</h3>
+        <p><b>프로그램 사이에서 요청·응답을 주고받는 정해진 방법.</b> 버튼을 눌렀다고 데이터가 저절로 저장되진 않습니다 — 한 프로그램이 다른 프로그램에 "이 기록 저장해 줘", "우리 반 기록 보여 줘"처럼 <b>요청</b>해야 합니다.</p>
+        <div class="keyq"><b>API = 한 프로그램이 다른 프로그램에 일을 요청하는 정해진 방법</b><br><span style="font-size:.85em;color:var(--ink-soft)">↓ 아래에서 더 자세히 봅니다.</span></div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">API 자세히</span>
+      <h2>API — 요청과 응답을 주고받는 <b>약속</b></h2>
+      <p>API는 단순한 '연결선'이 아니라, <b>무엇을·어디에·어떤 형식으로 요청할지 정해 둔 약속</b>입니다.</p>
+    </div>
+    <div style="max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+      <div class="pcard accent2"><h3>요청 <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">Request · 부탁</span></h3><p>프론트엔드가 다른 시스템에 필요한 일을 부탁 — <b>"20301번 학생의 반응시간 0.24초를 저장해 줘."</b></p></div>
+      <div style="text-align:center;font-family:var(--font-round);color:var(--grape);font-size:.95rem">⇅ 요청과 응답이 오간다</div>
+      <div class="pcard accent"><h3>응답 <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">Response · 답</span></h3><p>백엔드가 결과를 돌려줌 — ✅ <b>"저장 완료되었습니다."</b> · ❌ <b>"학번이 없어 저장할 수 없습니다."</b></p></div>
+    </div>
+    <div class="keyq"><b>API는 일방적으로 보내는 선이 아니라, 요청과 응답이 오가는 '대화'입니다.</b> 요청에는 보통 — 어디에 · 어떤 작업 · 어떤 데이터 · 어떤 조건 · 요청 권한이 담깁니다.</div>
+
+    <h3 style="font-family:var(--font-round);font-weight:400;color:var(--navy);font-size:1.22rem;text-align:center;margin:30px 0 6px">외부 데이터를 가져오는 API — <b style="color:var(--green-deep)">기상청 데이터 탐구 수업</b></h3>
+    <div class="ig">
+      <div class="ig-flow">
+        <div class="ig-node front"><div class="ic">💻</div><h4>수업용 웹앱</h4><p>"서울의 오늘 시간별 기온·강수량을 보내 주세요"</p></div>
+        <div class="ig-arr">→<small>요청 (지역·날짜·요소·Key)</small></div>
+        <div class="ig-node back"><div class="ic">🛰️</div><h4>기상청 API</h4><p>요청 형식·지역·날짜·기상 요소·API Key 확인</p></div>
+        <div class="ig-arr">→</div>
+        <div class="ig-node db"><div class="ic">🗄️</div><h4>기상청 서버·DB</h4><p>관측 자료 검색·정리</p></div>
+        <div class="ig-arr">→<small>응답</small></div>
+        <div class="ig-node front"><div class="ic">📈</div><h4>수업용 웹앱</h4><p>표·꺾은선그래프·지도·평균·지역 비교로 표현 <span style="color:var(--ink-soft)">(예: 09:00 · 27.4℃ · 습도 68% · 풍속 2.1m/s)</span></p></div>
+      </div>
+    </div>
+    <div class="keyq"><b>기상청 API</b>는 기상청이 가진 데이터를, 수업용 웹앱이 <b>정해진 방식으로 요청해 받아오게</b> 해 줍니다. 학생·교사가 기상청 DB를 직접 여는 게 아니라, <b>공개된 API에 조건을 담아 요청</b>하는 것입니다.</div>
+
+    <div class="ig-2" style="margin-top:18px">
+      <div class="pcard accent3"><div class="pe">🔑</div><h3>API Key <span style="font-weight:400;font-size:.78em;color:var(--ink-soft)">API 사용자 확인 번호</span></h3>
+        <p><b>API</b>는 요청·응답의 창구와 규칙, <b>API Key</b>는 그 API를 이용하도록 발급받은 <b>사용자 확인 정보</b> — 둘은 다릅니다.</p>
+        <p style="font-size:.86rem">이걸로 제공자는 확인합니다: 등록된 사용자인지 · 몇 번 요청했는지 · 허용 횟수를 넘었는지 · 문제 요청이 어디서 왔는지.</p>
+        <div class="keyq"><b>API Key = API를 이용하도록 발급받은 사용자 확인표</b> <span style="font-size:.85em;color:var(--ink-soft)">(데이터베이스 비밀번호가 아닙니다)</span></div></div>
+      <div class="pcard accent"><div class="pe">🧩</div><h3>익숙한 앱에서 보는 API</h3>
+        <p style="font-size:.9rem">· <b>구글폼 → 구글시트</b>: 응답이 자동 저장되는 경험은 API 역할을 이해하기 좋은 사례<br>· <b>클래스룸 → 드라이브</b>: 제출 파일·상태 확인<br>· <b>노션 → 캘린더·자동화</b>: 일정·데이터 연결<br>· <b>수업 웹앱 → 기상청</b>: 관측 자료 가져오기<br>· <b>반응속도 게임 → Supabase</b>: 기록 저장·불러오기</p></div>
+    </div>
+    <div class="callout red" style="margin-top:14px"><span class="ct">🔒 보안 한 줄</span>
+      API Key에는 <b>웹페이지에서 써도 되는 공개 키</b>와 <b>외부에 노출하면 안 되는 비밀 키</b>가 있습니다 — 반드시 구분하세요.</div>
+    <div class="pnote"><b>[운영]</b> 기상청 API 쓰시는 분 손! → 그분 사례로 공감. API Key를 '비밀번호'로 뭉뚱그리지 말고 '사용자 확인표+사용량 관리'로. 공개/비밀 키 구분은 주의사항 탭 anon vs service_role의 복선.</div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">API 두 가지 활용</span>
+      <h2>가져오는 API <span style="color:var(--ink-soft)">vs</span> 저장하는 API</h2>
+    </div>
+    <div class="ig-2">
+      <div class="pcard accent2"><div class="pe">🌤️</div><h3>외부 데이터를 가져오는 API <span style="font-weight:400;font-size:.8em;color:var(--blue)">· 기상청 API</span></h3>
+        <p>요청: <b>"서울의 기온을 보내 줘"</b> → 기상청 데이터를 수업용 웹앱으로 받아옴.</p>
+        <p style="font-size:.88rem">· 데이터의 주인 = <b>기상청</b> · 주로 <b>조회</b> · 받아온 데이터를 표·그래프·지도로 표현</p></div>
+      <div class="pcard accent"><div class="pe">🗄️</div><h3>우리 데이터를 저장·불러오는 API <span style="font-weight:400;font-size:.8em;color:var(--green-deep)">· Supabase API</span></h3>
+        <p>요청: <b>"반응시간 0.24초 저장해 줘"</b> / <b>"저장된 기록 모두 보내 줘"</b></p>
+        <p style="font-size:.88rem">· 데이터의 주인 = <b>앱을 만든 교사</b> · <b>저장·조회</b> · 교사 대시보드에서 확인</p></div>
+    </div>
+    <div class="keyq">기상청 API는 <b>다른 기관의 데이터를 가져오고</b>, Supabase API는 <b>우리가 만든 데이터베이스에 저장하고 불러옵니다.</b></div>
+    <div class="callout blue" style="margin-top:14px"><span class="ct">✅ 꼭 기억</span>
+      <b style="font-size:1.05em">API는 데이터를 보관하는 곳이 아니라, 다른 프로그램에 데이터를 요청하거나 작업을 부탁하는 정해진 방법입니다.</b></div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">왜 백엔드가 필요한가</span>
+      <h2>혼자 기억하는 웹앱에서, <b>함께 연결되는</b> 웹앱으로</h2>
+    </div>
+    <div class="ig-2">
+      <div class="pcard accent3"><div class="pe">📴</div><h3>기존 웹앱 <span style="font-weight:400;font-size:.8em;color:var(--red)">· 내 기기 안에만 저장</span></h3>
+        <p style="font-size:.9rem">· 학생 폰·현재 브라우저의 <b>localStorage</b>에만 저장<br>· 다른 기기에서는 확인하기 어려움<br>· 학생 폰 입력을 교사 컴퓨터에서 바로 못 봄<br>· 브라우저 데이터가 삭제되면 기록이 사라질 수 있음</p></div>
+      <div class="pcard accent"><div class="pe">🌐</div><h3>백엔드 연결 웹앱 <span style="font-weight:400;font-size:.8em;color:var(--green-deep)">· 같은 DB 공유</span></h3>
+        <p style="font-size:.9rem">· 모든 학생 기기가 <b>같은 Supabase DB</b>를 바라봄<br>· 학생 기록이 한곳에 모임<br>· 교사 대시보드에서 전체 확인 가능<br>· 여러 기기가 동일한 데이터를 공유</p></div>
+    </div>
+    <div class="keyq"><b>학생 데이터 수집 → 공통 데이터베이스 저장 → 교사 대시보드 확인</b>을 하려면 백엔드가 필요합니다.</div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">오늘 만드는 앱</span>
+      <h2>반응속도 게임의 <b>데이터 여행</b></h2>
+    </div>
+    <div class="ig">
+      <div class="ig-flow">
+        <div class="ig-node front"><div class="ic">📱</div><h4>학생 반응속도 게임</h4><p>초록불 보고 탭 → 반응시간 측정<br><b>프론트엔드</b></p></div>
+        <div class="ig-arr">→<small>insert · 새 기록 저장</small></div>
+        <div class="ig-node back"><div class="ic">⚙️</div><h4>Supabase 백엔드</h4><p>요청 형식·권한 확인, 저장 작업 처리<br><b>백엔드</b></p></div>
+        <div class="ig-arr">→</div>
+        <div class="ig-node db"><div class="ic">📇</div><h4>Supabase 데이터베이스</h4><p>학급·번호/이름·반응시간·제출시각이 한 행으로<br><b>데이터베이스</b></p></div>
+        <div class="ig-arr">→<small>select · 기록 불러오기</small></div>
+        <div class="ig-node front"><div class="ic">📊</div><h4>교사 대시보드</h4><p>전체 확인·빠른 순 정렬·그래프·순위<br><b>프론트엔드</b></p></div>
+      </div>
+    </div>
+    <div class="keyq"><b>insert</b>(새 기록 저장)로 넣고 <b>select</b>(저장된 기록 불러오기)로 꺼냅니다 — API는 한 방향 선이 아니라 <b>요청과 응답</b>이 오가는 구조입니다.</div>
   </div>
 
   <div class="block">
     <div class="sec-head">
       <span class="kick">더 알아보기</span>
-      <h2>백엔드의 식구들</h2>
-      <p>백엔드라는 주방에는 여러 식구가 삽니다. 오늘 쓰는 건 이 중 <b>세 가지</b>(데이터베이스·API·호스팅)뿐이니 안심하세요.
-      나머지는 눈도장만 찍어 두시면 됩니다.</p>
+      <h2>백엔드에서 <b>할 수 있는 일</b></h2>
+      <p>오늘 쓰는 <b>세 가지</b>(데이터베이스·API·호스팅)에 집중하고, 나머지는 다음 단계로 눈도장만 찍어 두세요.</p>
     </div>
-    <div class="cardgrid" style="max-width:1000px">
-      <div class="pcard"><div class="pe">🗄️</div><h3>데이터베이스 (DB)</h3><p>창고 선반. 데이터가 <b>표(테이블)</b> 형태로 저장됩니다. 사실상 "인터넷에 있는 엑셀 시트"라고 생각하시면 됩니다. <b>★오늘 사용</b></p></div>
-      <div class="pcard"><div class="pe">📨</div><h3>API</h3><p>주문서. 프론트가 백엔드에 "이 데이터 저장해 줘(insert)", "저 데이터 보여줘(select)"라고 요청하는 정해진 창구입니다. <b>★오늘 사용</b></p></div>
-      <div class="pcard"><div class="pe">🏠</div><h3>호스팅 (Hosting)</h3><p>식당의 주소. 내 HTML 파일을 인터넷 주소로 만들어 학생들이 접속하게 해 줍니다. GitHub Pages가 대표적(무료)입니다. <b>★오늘 사용</b></p></div>
-      <div class="pcard"><div class="pe">🪪</div><h3>인증 (Auth)</h3><p>직원 출입증. 로그인을 만들어 "누가 접근할 수 있는지"를 통제합니다. 오늘은 안 쓰지만, 교사 전용 대시보드를 만들 때 다음 단계로 필요해집니다.</p></div>
-      <div class="pcard"><div class="pe">📦</div><h3>스토리지 (Storage)</h3><p>냉장 창고. 사진·소리·문서 같은 <b>파일</b>을 저장합니다. 학생 활동 사진을 모으는 앱을 만든다면 이 식구를 쓰게 됩니다.</p></div>
-      <div class="pcard"><div class="pe">⚡</div><h3>실시간 (Realtime)</h3><p>주방 모니터. 데이터가 바뀌는 순간 모든 화면에 즉시 반영해 줍니다. 오늘 대시보드가 3초마다 새로고침되는 것도 이 개념의 간단한 버전입니다.</p></div>
+    <div style="text-align:center;font-family:var(--font-round);color:var(--green-deep);font-size:1.02rem;margin:2px 0 10px">✅ 오늘 사용</div>
+    <div class="cardgrid" style="max-width:960px">
+      <div class="pcard accent"><div class="pe">📇</div><h3>데이터베이스 Database</h3><p>학생의 기록이 <b>표 형태</b>로 저장되는 곳.</p></div>
+      <div class="pcard accent"><div class="pe">🔁</div><h3>API</h3><p>프론트엔드가 데이터를 <b>저장하거나 불러오도록 요청</b>하는 방법.</p></div>
+      <div class="pcard accent"><div class="pe">🏠</div><h3>호스팅 Hosting</h3><p>HTML 웹앱을 <b>인터넷 주소로 공개</b>해 학생들이 접속하게 하는 기능. (예: GitHub Pages)</p></div>
+    </div>
+    <div style="text-align:center;font-family:var(--font-round);color:var(--ink-soft);font-size:1.02rem;margin:18px 0 10px">🔜 다음 단계</div>
+    <div class="cardgrid" style="max-width:960px">
+      <div class="pcard"><div class="pe">🪪</div><h3>인증 Auth</h3><p>로그인을 만들어 <b>누가 접근할 수 있는지</b> 통제. 교사 전용 대시보드에 필요.</p></div>
+      <div class="pcard"><div class="pe">📦</div><h3>스토리지 Storage</h3><p>사진·소리·문서와 같은 <b>파일</b> 저장.</p></div>
+      <div class="pcard"><div class="pe">⚡</div><h3>실시간 Realtime</h3><p>데이터가 바뀌는 순간 <b>연결된 화면에 변경 사항을 반영</b>. 오늘 대시보드가 일정 시간마다 데이터를 다시 불러오는 것은 이 기능을 <b>단순화한 방식</b>입니다.</p></div>
     </div>
   </div>
 
   <div class="block">
     <div class="sec-head">
       <span class="kick">오늘의 도구</span>
-      <h2><b>Supabase</b> = 빌려 쓰는 주방</h2>
-      <p>주방을 직접 짓는 건 전문 개발자의 일입니다. 우리는 <b>완성된 주방을 빌려 씁니다.</b>
-      이런 서비스를 BaaS(Backend as a Service, 서비스형 백엔드)라고 부릅니다.</p>
+      <h2><b>Supabase</b> = 웹앱의 백엔드를 <b>빌려 쓰는</b> 서비스</h2>
+      <p>백엔드를 직접 개발하고 서버를 운영하는 건 전문적인 작업입니다. 우리는 <b>이미 만들어진 백엔드를 빌려</b> 씁니다 —
+      이런 서비스를 <b>BaaS</b>(Backend as a Service · 서비스형 백엔드)라고 부릅니다.</p>
     </div>
     <div class="cardgrid">
-      <div class="pcard accent"><div class="pe">💸</div><h3>무료로 충분</h3><p>무료 요금제로 학급·학년 규모 데이터는 여유 있게 처리합니다. 카드 등록도 필요 없습니다.</p></div>
-      <div class="pcard accent"><div class="pe">📊</div><h3>표로 시작</h3><p>데이터가 <b>엑셀 시트처럼 생긴 표</b>로 보입니다. 클릭해서 열어보고, 행을 지우고, 내려받을 수 있습니다.</p></div>
-      <div class="pcard accent"><div class="pe">📡</div><h3>실시간·공유</h3><p>학생 30명의 폰과 교사 컴퓨터가 <b>같은 표 하나</b>를 바라봅니다. 데이터가 즉시 모이고 즉시 보입니다.</p></div>
-      <div class="pcard accent"><div class="pe">🔓</div><h3>내 것으로 남음</h3><p>특정 앱 빌더에 종속되지 않습니다. 오늘 배우면 앞으로 만들 <b>모든 수업 앱</b>에 계속 재사용할 수 있습니다.</p></div>
+      <div class="pcard accent"><div class="pe">💸</div><h3>무료로 시작</h3><p>무료 요금제로 <b>일반적인 학급·학년 규모의 간단한 수업 활동</b>을 시작할 수 있습니다.</p></div>
+      <div class="pcard accent"><div class="pe">📊</div><h3>표로 확인</h3><p>데이터가 <b>테이블 형태</b>로 보여, 교사가 직접 행을 확인하고 관리할 수 있습니다.</p></div>
+      <div class="pcard accent"><div class="pe">📡</div><h3>여러 기기가 공유</h3><p>학생의 스마트폰과 교사의 컴퓨터가 <b>같은 데이터베이스</b>를 바라봅니다.</p></div>
+      <div class="pcard accent"><div class="pe">🔓</div><h3>다른 웹앱에도 재사용</h3><p>특정 AI 앱 빌더의 화면에만 <b>종속되지 않고</b>, 여러 웹앱에서 연결해 사용할 수 있습니다.</p></div>
     </div>
-    <div class="callout" style="margin-top:22px"><span class="ct">🤖 Lovable 같은 AI 앱 빌더와의 관계</span>
-      요즘 화제인 Lovable 같은 AI 앱 빌더도 사실 <b>뒤에서 Supabase를 붙여서</b> 백엔드를 만들어 줍니다.
-      즉 "Lovable을 쓴다"는 것은 "Supabase를 (모른 채로) 쓴다"에 가깝습니다.
-      차이가 있다면 — 오늘 우리는 그 속을 <b>직접 들여다보고, 직접 다룬다</b>는 것입니다.
-      속을 알아야 뒤에서 배울 <b>개인정보 사고를 예방</b>할 수 있습니다.</div>
-    <div class="pnote"><b>[멘트]</b> "AI 빌더가 만들어 준 앱에서 사고가 나면, 책임은 AI가 아니라 그 앱으로 학생 데이터를 모은 교사에게 옵니다. 그래서 속을 알아야 합니다." — 이 문장이 개념 탭의 마침표.</div>
+    <div class="callout green" style="margin-top:16px"><span class="ct">🖐️ 지금 바로 체험 — '여러 기기가 공유'를 몸으로</span>
+      백문이 불여일견! 아래 <b>우리 반 학급 페이지</b>에 <b>다 같이</b> 들어가, 각자 캐릭터로 맵을 돌아다녀 보세요.
+      다른 선생님이 움직이는 게 <b>실시간으로</b> 보입니다 — 학생 30명이 같은 데이터를 공유하는 원리입니다.
+      <div class="btnrow" style="margin-top:12px"><a class="bigbtn" href="https://scienceisjo.github.io/class-tools/memory-village/?room=yeonsu" target="_blank" rel="noopener">🌳 학급 페이지 같이 들어가기 (같은 방)</a></div></div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">짚고 넘어가기</span>
+      <h2>AI 앱 빌더와 <b>백엔드</b>의 관계</h2>
+    </div>
+    <div class="callout"><span class="ct">🤖 Lovable 같은 AI 앱 빌더</span>
+      Lovable과 같은 일부 AI 앱 빌더는 <b>Supabase 같은 백엔드 서비스를 연결해</b> 로그인·데이터 저장·파일 관리 등의 기능을 구현하도록 돕습니다.
+      다만 — <b>모든 AI 앱 빌더가 반드시 Supabase를 쓰는 것은 아니고</b>, 어떤 데이터베이스·인증 설정이 사용되는지는 확인해야 합니다.<br><br>
+      <b>AI 앱 빌더가 백엔드 연결을 대신 도와주더라도, 실제 데이터가 어디에 저장되고 누가 접근할 수 있는지는 사용자가 이해해야 합니다.</b></div>
+    <div class="callout blue" style="margin-top:14px"><span class="ct">🔓 '특정 도구에 안 묶인다'가 왜 중요할까?</span>
+      앱 빌더에 갇히면 — 그 회사가 유료로 바꾸거나 서비스를 종료하면 내 앱도 같이 멈추고, 데이터·앱을 밖으로 빼내기 어렵습니다.
+      반면 표준 기술(HTML·SQL)이면 ① 회사가 사라져도 내 앱은 그대로 작동 · ② 데이터는 CSV로 언제든 <b>내가 가져감</b> · ③ 다른 서비스로 <b>자유롭게 이사</b> · ④ 배운 기술은 <b>평생 재사용</b>.</div>
+    <div class="callout green" style="margin-top:14px"><span class="ct">✅ 개념의 마침표</span>
+      <b style="font-size:1.05em">편리하게 연결하는 것보다 중요한 것은 — 데이터가 어디에 저장되고, 누가 볼 수 있는지 이해하는 것입니다.</b>
+      구조를 이해해야 <b>개인정보 노출과 권한 설정 문제를 예방</b>할 수 있습니다.</div>
+    <div class="pnote"><b>[멘트]</b> "AI 빌더가 만들어 준 앱에서 사고가 나도, 책임은 그 앱으로 학생 데이터를 모은 교사에게 옵니다. 그래서 속(저장 위치·접근 권한·공개 범위)을 알아야 합니다." — 개념 탭의 마침표.</div>
   </div>
 
   <div class="block">
@@ -514,13 +646,13 @@ footer b{color:var(--navy)}
       <h2>구글폼·패들릿 두고 <b>왜 직접</b> 만드나요?</h2>
       <p>정직하게 말씀드리면 — <b>단순 설문·의견 수합이면 구글폼이 최고</b>입니다. 코딩도 필요 없고 5분이면 끝나니까요.
       직접 만든 백엔드는 그 도구들이 <b>못 하는 한 가지</b>가 필요할 때 빛납니다.
-      바로 <b>수집과 동시에 '가공·변환·되먹임'</b>입니다.</p>
+      바로 <b>수집과 동시에 '가공·변환·반영'</b>입니다.</p>
     </div>
     <div class="tablewrap">
       <table class="dt">
         <tr><th>무엇을 원하나</th><th>구글폼</th><th>패들릿</th><th>노션</th><th>직접 만든 백엔드</th></tr>
         <tr><td><b>데이터 수집</b></td><td>⭕ 설문에 강함</td><td>⭕ 벽에 붙이기</td><td>⭕ 표·페이지</td><td>⭕ <b>활동 자체가 수집기</b></td></tr>
-        <tr><td><b>실시간 되먹임</b><br><span style="color:var(--ink-soft);font-size:.86em">넣는 즉시 화면 반영</span></td><td>❌ 응답→시트(지연)</td><td>🔺 벽 공유</td><td>🔺 문서 공유</td><td>⭕ 즉시 대시보드·랭킹</td></tr>
+        <tr><td><b>실시간 반영</b><br><span style="color:var(--ink-soft);font-size:.86em">넣는 즉시 모두의 화면에</span></td><td>❌ 응답→시트(지연)</td><td>🔺 벽 공유</td><td>🔺 문서 공유</td><td>⭕ 즉시 대시보드·랭킹</td></tr>
         <tr><td><b>수집과 동시에 가공</b><br><span style="color:var(--ink-soft);font-size:.86em">평균·등수·조건 판정</span></td><td>❌ 사람이 시트에서</td><td>❌</td><td>🔺 수식 일부</td><td>⭕ <b>앱이 자동으로</b></td></tr>
         <tr><td><b>수업 활동과 일체화</b><br><span style="color:var(--ink-soft);font-size:.86em">게임·시뮬레이션</span></td><td>❌ 설문 화면</td><td>❌</td><td>❌</td><td>⭕ 탐구 활동에 내장</td></tr>
         <tr><td><b>데이터 소유·재사용</b></td><td>🔺 구글 안에</td><td>🔺 서비스 안에</td><td>🔺 서비스 안에</td><td>⭕ 내 DB·CSV 자유</td></tr>
@@ -535,9 +667,65 @@ footer b{color:var(--navy)}
       <b>탐구 데이터는 모으는 게 끝이 아니라 '가공해서 결론을 보는 것'이 목적</b>입니다.
       pH 측정값을 받아 즉시 반 평균 곡선으로, 운동 전후 심박수를 받아 즉시 증가율로 —
       <b>수집과 분석 사이의 '사람 손일'을 없애는 것</b>, 그게 직접 만든 백엔드의 진짜 차별점입니다.</div>
+
+    <h3 style="font-family:var(--font-round);font-weight:400;color:var(--navy);font-size:1.32rem;text-align:center;margin:34px 0 6px">먼저, <b style="color:var(--green-deep)">각 도구가 잘하는 것</b>부터 (정직하게)</h3>
+    <p style="text-align:center;color:var(--ink-soft);max-width:760px;margin:0 auto 16px">경쟁이 아닙니다. 아래 도구들은 각자 자기 자리에서 훌륭합니다 — 굳이 다시 만들 필요 없는 영역이 분명히 있어요.</p>
+    <div class="cardgrid" style="max-width:1000px">
+      <div class="pcard accent2"><div class="pe">📝</div><h3>구글폼</h3><p>가장 쉽고 빠름(5분). <b>응답이 구글시트에 자동 저장</b> · 자동 요약 차트 · 채점 퀴즈. <b>최고의 순간 —</b> 단순 설문·사전점검·퀴즈·의견 수합.</p></div>
+      <div class="pcard accent2"><div class="pe">🟦</div><h3>MS Forms</h3><p>구글폼과 쌍둥이. 학교가 <b>MS365·팀즈</b>를 쓰면 계정·팀즈 통합이 매끄럽고 응답 요약이 강함. <b>최고의 순간 —</b> 팀즈 기반 학교의 설문·퀴즈.</p></div>
+      <div class="pcard accent3"><div class="pe">🧱</div><h3>패들렛</h3><p><b>실시간 협업 벽.</b> 글·사진·영상·링크를 함께 붙이고 나눔. 시각적·즉흥적. <b>최고의 순간 —</b> 브레인스토밍·의견 전시·작품 공유.</p></div>
+      <div class="pcard accent4"><div class="pe">📚</div><h3>노션</h3><p><b>구조화된 문서+DB.</b> 수식·관계형·페이지. 정리와 아카이브에 강함. <b>최고의 순간 —</b> 포트폴리오·협업 기록·자료 정리.</p></div>
+    </div>
+    <div class="callout" style="margin-top:16px"><span class="ct">✋ 그러니 이런 건 그냥 저 도구를 쓰세요</span>
+      "오늘 수업 어땠나요?" 설문 → <b>구글·MS폼</b>. 모둠 아이디어 벽 → <b>패들렛</b>. 조사 자료 정리 → <b>노션</b>.
+      직접 만들기는 저것들이 <b>'못 하는 한 가지'가 필요할 때만 꺼내는 카드</b>입니다.</div>
+
+    <h3 style="font-family:var(--font-round);font-weight:400;color:var(--navy);font-size:1.32rem;text-align:center;margin:36px 0 6px">그럼 <b style="color:var(--green-deep)">언제</b> 직접 만드나 — 과목별 예시</h3>
+    <p style="text-align:center;color:var(--ink-soft);max-width:820px;margin:0 auto 12px">공통 조건은 셋. 이 중 <b>하나라도</b> 필요하면 직접 만들 값어치가 있습니다.</p>
+    <div class="cardgrid" style="max-width:860px;margin-bottom:16px">
+      <div class="pcard accent"><div class="pe">⚡</div><h3>① 실시간 반영</h3><p>넣는 즉시 <b>반 전체 화면·그래프</b>에 표시</p></div>
+      <div class="pcard accent"><div class="pe">🔄</div><h3>② 자동 변환</h3><p>모으면서 <b>계산·집계·분류</b>까지 한 번에</p></div>
+      <div class="pcard accent"><div class="pe">🎮</div><h3>③ 활동에 내장</h3><p>설문이 아니라 <b>게임·측정 자체</b>가 수집기</p></div>
+    </div>
+    <div class="tablewrap">
+      <table class="dt">
+        <tr><th>과목</th><th>이런 수업·활동</th><th>직접 만든 도구만의 차별점 <span style="font-weight:400">(폼·패들렛은 여기서 멈춤)</span></th></tr>
+        <tr><td><b>🔬 과학</b></td><td>반응속도·pH·심박수·용해도 등 <b>측정 실험</b></td><td>조별 측정값이 <b>즉시 반 전체 그래프·평균·이상치</b>로. 운동 전후 심박수는 <b>증가율 자동 계산</b>. <span style="color:var(--ink-soft)">(폼: 숫자만 받고 교사가 나중에 그래프)</span></td></tr>
+        <tr><td><b>🔢 수학</b></td><td>주사위·동전 <b>확률 실험</b>, 실시간 개념 진단</td><td>수백 번 시행이 <b>자동 누적 → 대수의 법칙 수렴 그래프</b>. 오답이 <b>유형별 자동 분류</b>돼 "지금 60%가 이 개념 오답"을 교사 화면에 즉시. <span style="color:var(--ink-soft)">(폼: 응답 후 수동 분석)</span></td></tr>
+        <tr><td><b>📖 국어</b></td><td>낱말·문장 모으기, 토론 찬반</td><td>모은 낱말이 <b>실시간 워드클라우드·빈도</b>로, 찬반이 <b>근거 유형별 즉석 집계</b>로. <span style="color:var(--ink-soft)">(패들렛: 붙이기만, 자동 분석 없음)</span></td></tr>
+        <tr><td><b>🌏 사회</b></td><td>동네·학교 조사, 모의 선거·설문</td><td>입력이 <b>실시간 지도·차트</b>로 매핑, 투표가 <b>즉석 개표 그래프</b>로. <span style="color:var(--ink-soft)">(폼: 시트로 나온 뒤 수동 시각화)</span></td></tr>
+        <tr><td><b>🔤 영어</b></td><td>단어·표현 <b>즉답 퀴즈·배틀</b></td><td>정답률·반응시간이 <b>실시간 랭킹</b>, 자주 틀리는 표현이 <b>자동 집계</b>. 게임 자체가 데이터. <span style="color:var(--ink-soft)">(폼: 퀴즈는 되나 실시간 반영·랭킹 약함)</span></td></tr>
+        <tr><td><b>🎨 예체능</b></td><td>체력 측정, 음정 맞히기</td><td>기록이 <b>개인 향상도·반 분포로 자동</b>, 음정 점수가 <b>실시간 집계</b>. 활동이 곧 측정. <span style="color:var(--ink-soft)">(폼·패들렛: 활동 내장 불가)</span></td></tr>
+      </table>
+    </div>
+
+    <h3 style="font-family:var(--font-round);font-weight:400;color:var(--green-deep);font-size:1.28rem;text-align:center;margin:32px 0 6px">🔬 과학 실험수업 — 이런 건 <b>패들렛·구글폼으로 못 합니다</b></h3>
+    <p style="text-align:center;color:var(--ink-soft);max-width:860px;margin:0 auto 12px">공통점: <b>여러 조의 측정값이 실시간으로 하나의 그래프로 합쳐지고</b>, 측정하는 순간 <b>기울기·평균·곡선이 자동으로</b> 그려집니다. 폼은 '숫자 받기'까지, 패들렛은 '붙이기'까지 — <b>그래프·곡선·자동계산은 사람이 나중에</b> 해야 하죠.</p>
+    <div class="tablewrap">
+      <table class="dt">
+        <tr><th>단원 · 실험</th><th>학생이 하는 것 (수집)</th><th>직접 만든 도구만의 차별점</th></tr>
+        <tr><td><b>자극과 반응</b><br>반응속도</td><td>초록불에 탭, 3회 측정</td><td>3회 <b>자동 평균 → 반 히스토그램·랭킹</b> 실시간. 개인 vs 반 평균 즉시 비교</td></tr>
+        <tr><td><b>상태 변화·열</b><br>냉각·가열 곡선</td><td>30초마다 온도 입력</td><td>조별 <b>냉각곡선이 실시간으로 겹쳐</b> 그려짐 → 어는점 평평구간이 한눈에. <span style="color:var(--ink-soft)">(시간에 따라 쌓이는 곡선 = 폼·패들렛 불가)</span></td></tr>
+        <tr><td><b>용해도</b></td><td>온도별로 녹인 양 입력</td><td>점이 찍히며 <b>용해도 곡선이 자동 완성</b>, 조별 데이터 합쳐 오차↓</td></tr>
+        <tr><td><b>밀도</b></td><td>여러 물체의 질량·부피 입력</td><td>즉시 <b>질량–부피 산점도</b>, <b>기울기 = 밀도 자동</b>. 같은 물질끼리 한 직선에 모임</td></tr>
+        <tr><td><b>산과 염기·중화</b></td><td>조별 pH 측정값 입력</td><td>즉시 <b>반 평균·분포</b>, 중화점 실시간 표시, <b>이상치 자동 빨강</b></td></tr>
+        <tr><td><b>전기·옴의 법칙</b></td><td>전압–전류 측정 입력</td><td>즉시 <b>V–I 그래프</b>, <b>기울기 = 저항 자동 계산</b></td></tr>
+        <tr><td><b>빛과 소리</b><br>음정·진동수</td><td>폰 마이크로 소리 내기(활동 내장)</td><td>도레미·진동수 <b>자동 판정·집계</b>, 반 분포. <span style="color:var(--ink-soft)">(마이크 센서 활동 = 폼 불가)</span></td></tr>
+        <tr><td><b>운동과 에너지</b><br>진자 주기</td><td>진자 길이별 주기 측정</td><td>즉시 <b>길이–주기 그래프</b>, 반 데이터 합산으로 측정 오차 감소</td></tr>
+        <tr><td><b>생물</b><br>식물 생장 관찰</td><td>매일 잎 길이·개수 입력(연속)</td><td><b>생장곡선 자동 누적</b>, 조·조건(빛·물)별 비교. <span style="color:var(--ink-soft)">(여러 날 누적 = 폼·패들렛 불가)</span></td></tr>
+        <tr><td><b>지구과학</b><br>달 관측</td><td>여러 날 달 모양·고도 입력</td><td><b>위상 변화·고도 그래프 자동</b>, 반 전체 관측 합쳐 빈틈 메움</td></tr>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:14px"><span class="ct">💡 한 줄 정리</span>
+      과학 실험은 <b>"측정 → 그래프 → 결론"</b>이 핵심인데, 폼·패들렛은 '측정값 받기'에서 멈춥니다.
+      직접 만든 도구는 <b>측정하는 순간 그래프가 그려지고 여러 조가 실시간으로 합쳐져</b>, 그 자리에서 결론까지 갑니다.</div>
+
+    <div class="callout green" style="margin-top:18px"><span class="ct">🔑 그래서, 직접 만든 도구만 주는 5가지</span>
+      <b>① 자동 변환</b> 모으는 즉시 평균·등수·증가율·분류(사람 손일 0) · <b>② 실시간 반영</b> 학생 입력 → 즉시 반 전체 대시보드(학생도 결과를 봄) · <b>③ 활동에 내장</b> 설문 화면이 아니라 게임·측정 자체가 수집기 · <b>④ 완전한 소유</b> 내 DB·CSV로 자유롭게, 서비스 종속 없음 · <b>⑤ 무제한 재사용·무료</b> 한 번 배우면 모든 수업에, 항목·응답 수 제한 없이.</div>
+
     <div class="callout blue" style="margin-top:14px"><span class="ct">🧭 그래서 이렇게 고르세요</span>
       · <b>빠른 설문·의견·투표</b> → 그냥 <b>구글폼</b> 쓰세요. 오늘 배운 걸로 굳이 다시 만들 필요 없습니다.<br>
-      · <b>탐구 활동형 수집 + 실시간 되먹임 + 자동 가공 + 여러 수업에 재사용</b> → <b>직접 만든 백엔드</b>가 답입니다.<br>
+      · <b>탐구 활동형 수집 + 실시간 반영 + 자동 가공 + 여러 수업에 재사용</b> → <b>직접 만든 백엔드</b>가 답입니다.<br>
       도구를 아는 것보다 <b>"언제 무엇을 쓸지" 판단하는 것</b>이 오늘의 진짜 수확입니다.</div>
     <div class="pnote"><b>[멘트]</b> 구글폼을 깎아내리지 말 것 — "구글폼은 훌륭하다, 다만 결이 다르다"로. 과학쌤들이 가장 공감하는 지점은 'pH·심박수를 즉시 그래프로'. 각자 본인 수업 데이터 하나 떠올리게 하고 → 판단기 탭으로 연결.</div>
   </div>
@@ -655,7 +843,7 @@ footer b{color:var(--navy)}
   <span class="kw">using</span> ( true );</pre>
         <div class="termbox"><span class="tn">📖 SQL</span>데이터베이스에게 말을 거는 언어입니다. "표를 만들어라(create table)", "데이터를 넣어라(insert)", "보여달라(select)"처럼 명령합니다. 오늘은 <b>읽지 못하셔도 전혀 괜찮습니다</b> — 복붙이 정답입니다. 다만 위 주석(-- 표시)만 훑어 보세요. 무엇을 시키는지는 한글로 다 적어 두었습니다.</div>
         <div class="termbox"><span class="tn">📖 테이블(Table) · 행(Row) · 열(Column)</span>테이블은 데이터가 담기는 <b>표</b>입니다. 엑셀과 똑같이 — <b>열</b>은 항목(room, player, ms…), <b>행</b>은 기록 한 줄(학생 1명의 제출 1건)입니다. 학생 30명이 게임을 하면 행이 30개 이상 쌓입니다.</div>
-        <div class="termbox"><span class="tn">📖 RLS (Row Level Security · 행 수준 보안)</span>이 표에 <b>누가, 무엇을 할 수 있는지</b> 정하는 자물쇠 규칙입니다. 위 SQL은 "넣기는 누구나(단, 말이 되는 값만) · 읽기는 허용 · 수정·삭제는 금지"로 설정합니다. <b>바이브코딩 사고의 1위가 바로 RLS 없이 배포하는 것</b>입니다. 잠시 후 '함정' 탭에서 이게 없으면 무슨 일이 나는지 직접 보여드립니다.</div>
+        <div class="termbox"><span class="tn">📖 RLS (Row Level Security · 행 수준 보안)</span>이 표에 <b>누가, 무엇을 할 수 있는지</b> 정하는 자물쇠 규칙입니다. 위 SQL은 "넣기는 누구나(단, 말이 되는 값만) · 읽기는 허용 · 수정·삭제는 금지"로 설정합니다. <b>바이브코딩 사고의 1위가 바로 RLS 없이 배포하는 것</b>입니다. 잠시 후 '주의사항' 탭에서 이게 없으면 무슨 일이 나는지 직접 보여드립니다.</div>
         <div class="termbox"><span class="tn">📖 정책(Policy)</span>RLS 자물쇠의 세부 규칙 하나하나. "익명 사용자는 insert 가능" 같은 문장 하나가 정책 하나입니다.</div>
         <div class="warn"><b>⚠️ 자주 나는 사고:</b> SQL을 <b>일부만</b> 복사하면 오류가 납니다. 반드시 [📋 복사] 버튼으로 전체 복사하세요. 오류 메시지가 빨갛게 떠도 당황하지 말고 다시 전체 복붙 → Run.</div>
         <div class="donecheck"><b>✅ 확인:</b> <code class="inline">Success. No rows returned</code>라고 뜨면 성공입니다. ("돌려줄 데이터가 없다"는 뜻으로, 오류가 아닙니다!) 왼쪽 메뉴 <b>Table Editor</b>를 열면 <code class="inline">reaction_results</code> 표가 생긴 것을 눈으로 확인할 수 있습니다.</div>
@@ -720,19 +908,38 @@ footer b{color:var(--navy)}
       </div>
     </div>
 
-    <!-- BONUS: 데이터를 탐구로 -->
+    <!-- BONUS: 데이터 보기·분석 -->
     <div class="mstep">
-      <header><span class="sn">＋</span><h3>모은 데이터, <b>과학 탐구</b>로 잇기 (CSV 내보내기)</h3><span class="st">수업 적용 · 집에서</span></header>
+      <header><span class="sn">＋</span><h3>모은 데이터 <b>보고·분석하기</b> — Supabase에서 → 학생별 → 엑셀</h3><span class="st">수업 적용 · 집에서</span></header>
       <div class="mbody">
-        <p>수집은 시작일 뿐입니다. 과학 수업의 목적은 <b>모은 데이터로 결론을 내는 것</b> —
-        표를 <b>엑셀·구글시트로 꺼내</b> 그래프·평균·상관까지 이어 보세요. (연수 시간엔 눈으로만, 실제 적용은 집에서!)</p>
+        <p>학생 기록은 두 곳에서 봅니다 — <b>① Supabase에서 바로 훑어보기</b>(설치·다운로드 X), <b>② 엑셀·구글시트로 받아 본격 분석</b>. <b>학생별 정리</b>까지 순서대로 짚어드릴게요.</p>
+
+        <p style="margin:12px 0 4px"><b>① Supabase에서 바로 보기</b></p>
         <ol class="sub">
-          <li>Supabase 왼쪽 <b>Table Editor</b> → 내 표(<code class="inline">reaction_results</code>) 열기.</li>
-          <li>오른쪽 위 <b>[Export]</b> → <b>Export as CSV</b> 클릭 → CSV 파일이 내려받아집니다.</li>
-          <li>그 CSV를 <b>구글시트</b>(파일 → 가져오기) 또는 <b>엑셀</b>로 열기 → 이제 자유롭게 그래프·피벗·통계!</li>
+          <li>왼쪽 메뉴 <b>Table Editor</b> → 내 표(<code class="inline">reaction_results</code>) 클릭. 학생 제출이 <b>한 줄(행)씩 쌓인</b> 게 그대로 보입니다 — 엑셀 화면과 똑같아요.</li>
+          <li>열 제목을 클릭하면 <b>정렬</b>(빠른 순/느린 순), 위쪽 <b>Filter</b> 버튼으로 <b>조건 걸러보기</b>가 됩니다.</li>
         </ol>
-        <div class="tip"><b>💡 그대로 쓰는 탐구 예시:</b> 반응시간 히스토그램 · 남녀/학년 평균 비교 · 반복 측정에 따른 학습효과(회차별 감소) · 수면시간–반응속도 상관 산점도. — <b>학생이 만든 데이터로 하는 통계·탐구 수업</b>이 됩니다.</div>
-        <div class="termbox"><span class="tn">📖 CSV</span>쉼표로 칸을 나눈 표 파일. 엑셀·구글시트·파이썬 어디서나 열리는 <b>데이터의 공용어</b>입니다. "내 데이터를 내가 가져간다"의 실체가 바로 이 파일이에요.</div>
+
+        <p style="margin:12px 0 4px"><b>② 학생별로 정리하기</b> <span style="color:var(--ink-soft);font-size:.9em">(오늘 앱은 익명 라벨 <code class="inline">player</code>가 곧 '학생')</span></p>
+        <ol class="sub">
+          <li><b>쉬운 법:</b> <b>Filter</b> → <code class="inline">player</code> = <b>'1번 선수'</b> → 그 학생 기록만. 또는 <code class="inline">player</code>로 <b>정렬</b>하면 같은 학생끼리 모입니다.</li>
+          <li><b>정확한 법(SQL):</b> <b>SQL Editor</b>에 아래를 붙여넣고 Run — 학생별 <b>평균·횟수</b>까지 한 번에.</li>
+        </ol>
+<pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button><span class="cm">-- 학생(player)별 평균 반응속도·측정 횟수 (빠른 순)</span>
+<span class="kw">select</span> player, <span class="kw">count</span>(*) <span class="kw">as</span> 횟수, <span class="kw">round</span>(<span class="kw">avg</span>(ms)) <span class="kw">as</span> 평균ms
+<span class="kw">from</span> reaction_results
+<span class="kw">group by</span> player
+<span class="kw">order by</span> 평균ms;</pre>
+
+        <p style="margin:12px 0 4px"><b>③ 엑셀·구글시트로 받아 분석</b></p>
+        <ol class="sub">
+          <li>Table Editor 오른쪽 위 <b>[Export]</b> → <b>Export as CSV</b> → 파일 다운로드.</li>
+          <li>그 CSV를 <b>구글시트</b>(파일 → 가져오기)나 <b>엑셀</b>로 열기.</li>
+          <li><b>피벗 테이블</b>로 학생별 평균·최고기록을 한 표로, <b>차트</b>로 히스토그램·비교 그래프까지. (SQL이 어려우면 이 방법이 제일 편합니다.)</li>
+        </ol>
+
+        <div class="tip"><b>💡 엑셀로 꼭 받아야 하나요?</b> — <b>보기·정렬·학생별 필터</b>는 Supabase 안에서 바로 됩니다. <b>그래프·통계·피벗</b> 같은 본격 분석만 CSV로 받아 하시면 돼요. 탐구 예시: 반응시간(ms) 히스토그램 · player별 평균 비교 · 반복 회차에 따른 변화.</div>
+        <div class="termbox"><span class="tn">📖 CSV</span>쉼표로 칸을 나눈 표 파일. 엑셀·구글시트·파이썬 어디서나 열리는 <b>데이터의 공용어</b> — "내 데이터를 내가 가져간다"의 실체입니다.</div>
       </div>
     </div>
 
@@ -802,13 +1009,13 @@ footer b{color:var(--navy)}
       <details><summary><span class="qb">Q</span>anon 키가 웹페이지에 공개되는데, 위험하지 않나요?</summary>
         <div class="fa"><b>anon 키는 공개되어도 안전하도록 설계된 키</b>입니다. 이 키로 할 수 있는 일은 우리가 만든 <b>자물쇠(RLS)가 허락한 것뿐</b>이라서요 — 오늘 표는 "넣기·읽기만 허용, 수정·삭제 금지"였죠. 진짜 위험한 건 모든 규칙을 무시하는 <b>service_role 키</b>를 코드에 넣는 것입니다. AI에게 코드를 시킬 때도 "<b>anon 키만 써줘</b>"라고 꼭 말하세요.</div></details>
       <details><summary><span class="qb">Q</span>학생 데이터가 해외 서버에 저장되나요? 개인정보 문제는요?</summary>
-        <div class="fa">프로젝트를 만들 때 리전을 <b>Northeast Asia (Seoul)</b>로 고르면 데이터가 <b>국내</b>에 저장됩니다(그래서 서울 필수!). 가장 확실한 보호는 <b>애초에 개인정보가 아니게 익명으로 설계</b>하는 것 — 오늘 앱이 '1번 선수 + 반응시간'만 모은 게 그 예입니다. 실명 등을 꼭 모아야 한다면 <b>함정·심의 탭</b>의 규칙(최소수집·만 14세 미만 보호자 동의·파기 계획)을 따르세요.</div></details>
+        <div class="fa">프로젝트를 만들 때 리전을 <b>Northeast Asia (Seoul)</b>로 고르면 데이터가 <b>국내</b>에 저장됩니다(그래서 서울 필수!). 가장 확실한 보호는 <b>애초에 개인정보가 아니게 익명으로 설계</b>하는 것 — 오늘 앱이 '1번 선수 + 반응시간'만 모은 게 그 예입니다. 실명 등을 꼭 모아야 한다면 <b>주의사항·심의 탭</b>의 규칙(최소수집·만 14세 미만 보호자 동의·파기 계획)을 따르세요.</div></details>
       <details><summary><span class="qb">Q</span>실수로 표를 잘못 만들었어요. 다시 하고 싶어요.</summary>
         <div class="fa">얼마든지요. 행만 지우려면 <code>delete from reaction_results;</code>, 표째로 지우려면 <code>drop table reaction_results;</code>를 SQL Editor에서 실행하고 다시 만들면 됩니다. 프로젝트 자체를 지우고 새로 만들 수도 있어요(무료로 2개까지). <b>부담 없이 여러 번 연습해도 되는 게 실습용 백엔드의 장점</b>입니다.</div></details>
       <details><summary><span class="qb">Q</span>다음에 다른 수집 앱(관찰일지·설문 등)도 만들 수 있나요?</summary>
         <div class="fa">네, 그게 핵심입니다. <b>오늘 만든 백엔드 하나를 계속 재사용</b>합니다. AI에게 완성 코드를 보여주며 이렇게 요청하세요: "이 구조로 <b>○○ 수집 앱</b>을 만들어 줘. <b>그에 맞는 Supabase SQL(테이블+RLS)</b>도 같이. <b>anon 키만</b> 쓰고." 새 앱엔 새 표만 하나 추가하면 되고, URL·키는 같은 프로젝트면 그대로 씁니다. 단, 만들기 전에 항상 <b>판단기 탭</b>을 먼저 통과시키세요.</div></details>
       <details><summary><span class="qb">Q</span>그냥 구글폼·패들릿 쓰면 안 되나요?</summary>
-        <div class="fa">단순 설문·의견 수합이면 <b>구글폼이 오히려 낫습니다</b> — 굳이 다시 만들지 마세요. 직접 만든 백엔드는 <b>수집과 동시에 자동 가공·실시간 되먹임·수업 활동과 일체화·여러 수업 재사용</b>이 필요할 때 빛납니다. 자세한 비교는 <b>개념 탭</b>의 "구글폼·패들릿 두고 왜 직접 만드나요?"를 보세요.</div></details>
+        <div class="fa">단순 설문·의견 수합이면 <b>구글폼이 오히려 낫습니다</b> — 굳이 다시 만들지 마세요. 직접 만든 백엔드는 <b>수집과 동시에 자동 가공·실시간 반영·수업 활동과 일체화·여러 수업 재사용</b>이 필요할 때 빛납니다. 자세한 비교는 <b>개념 탭</b>의 "구글폼·패들릿 두고 왜 직접 만드나요?"를 보세요.</div></details>
     </div>
     <div class="pnote"><b>[안내]</b> 이 FAQ는 접힌 채로 두고 "궁금한 건 여기 다 있다"만 언급 → 연수 후 자가학습용. 특히 Q2(7일 일시정지)와 Q9(재사용)는 연수 후 실제로 가장 많이 부딪히는 지점.</div>
   </div>
@@ -816,7 +1023,7 @@ footer b{color:var(--navy)}
 </div>
 </div>
 
-<!-- ═══════════════ TAB 6. 함정 ═══════════════ -->
+<!-- ═══════════════ TAB 6. 주의사항 ═══════════════ -->
 <div class="tabpanel" data-tab="traps">
 <div class="wrap">
 
@@ -828,32 +1035,79 @@ footer b{color:var(--navy)}
       AI(바이브코딩)는 시키는 앱을 잘 만들어 줍니다. 문제는 — <b>절대 물어봐 주지 않는 것들</b>이 있다는 겁니다.</p>
     </div>
     <div class="trapgrid">
-      <div class="trap"><span class="no">함정 1</span><h3>🚪 보안규칙(RLS) 꺼짐</h3>
+      <div class="trap"><span class="no">주의사항 1</span><h3>🚪 보안규칙(RLS) 꺼짐</h3>
         <p>AI가 만들어 준 코드가 RLS 없이 배포되면, <b>주소만 아는 사람은 누구나</b> 표 전체를 내려받을 수 있습니다. Supabase 관련 사고 유형 1위.</p>
-        <div class="fix"><b>예방:</b> 표를 만들 땐 반드시 RLS부터. 오늘 복붙한 SQL엔 이미 들어 있었습니다.</div></div>
-      <div class="trap"><span class="no">함정 2</span><h3>✍️ 동의 없는 수집</h3>
-        <p>개인정보는 <b>정보 주체의 동의</b>가 원칙입니다. 특히 <b>만 14세 미만</b>은 법정대리인(보호자) 동의가 필요합니다 — 중학교 1~2학년 상당수가 여기 해당합니다.</p>
+        <div class="fix"><b>예방:</b> 표를 만들 땐 반드시 RLS부터. 오늘 복붙한 SQL엔 이미 들어 있었습니다. <b>직접 만들 땐 ↓ 아래 '만능 프롬프트'로 요청하세요.</b></div></div>
+      <div class="trap"><span class="no">주의사항 2</span><h3>✍️ 동의 없는 수집</h3>
+        <p>개인정보는 <b>정보 주체의 동의</b>가 원칙입니다. 특히 <b>만 14세 미만</b>은 법정대리인(보호자) 동의가 필요합니다 — 중학교 1~2학년 상당수가 여기 해당합니다. <b style="color:var(--red)">학기 초에 미리 개인정보 수집 동의를 받으셨더라도, 원칙상 학운위 에듀테크 심의를 통과해야 합니다 ㅠㅠ</b></p>
         <div class="fix"><b>예방:</b> 수집 전 가정통신문·동의서. 또는 아예 개인정보가 아니게 익명 설계.</div></div>
-      <div class="trap"><span class="no">함정 3</span><h3>🧾 과잉 수집 (최소수집 위반)</h3>
-        <p>닉네임이면 충분한데 실명·학번·연락처까지 — "혹시 몰라서" 모으는 순간 위반입니다. 목적에 필요한 <b>최소한</b>만 모아야 합니다.</p>
+      <div class="trap"><span class="no">주의사항 3</span><h3>🧾 과잉 수집 (최소수집 위반)</h3>
+        <p><b>닉네임·익명으로도 충분한 경우에는, 목적에 필요한 최소한의 정보만 모아야 합니다!</b> '혹시 몰라서' 실명·학번·연락처까지 모으는 건 최소수집 위반입니다.</p>
         <div class="fix"><b>예방:</b> 오늘 앱이 모범 사례 — '1번 선수'라는 익명 라벨과 반응시간(ms)만 수집했습니다.</div></div>
-      <div class="trap"><span class="no">함정 4</span><h3>🌏 국외 저장</h3>
+      <div class="trap"><span class="no">주의사항 4</span><h3>🌏 국외 저장</h3>
         <p>서버 위치(리전)를 확인하지 않으면 학생 데이터가 해외 서버에 저장됩니다. 공공·교육 데이터는 국내 저장이 원칙적으로 권장됩니다.</p>
-        <div class="fix"><b>예방:</b> 프로젝트 생성 때 리전 = <b>서울</b>. 오늘 다들 선택하셨습니다.</div></div>
-      <div class="trap"><span class="no">함정 5</span><h3>♾️ 파기 계획 없음</h3>
+        <div class="fix"><b>예방:</b> 프로젝트 생성 때 region = <b>서울</b>. 오늘 다들 선택하셨습니다!</div></div>
+      <div class="trap"><span class="no">주의사항 5</span><h3>♾️ 파기 계획 없음</h3>
         <p>수집엔 열심인데 <b>지우는 계획</b>이 없으면, 데이터는 영원히 쌓입니다. 목적 달성 후 지체 없이 파기하는 것까지가 수집입니다.</p>
-        <div class="fix"><b>예방:</b> "학기 말 삭제"처럼 기한을 정해 두기. 삭제 SQL 한 줄이면 됩니다 (연수 마지막에 실제로 시연).</div></div>
-      <div class="trap"><span class="no">함정 6</span><h3>🔗 접근통제 없음</h3>
-        <p>대시보드 링크가 학생에게 새면? 실습 때 "옆 선생님 room에 들어가진" 경험 — 그게 바로 이 함정의 체험판입니다.</p>
-        <div class="fix"><b>예방:</b> 대시보드 주소는 교사만. 민감해질수록 다음 단계는 교사 로그인(Auth)입니다.</div></div>
-      <div class="trap"><span class="no">함정 7</span><h3>👤 개인 계정 소유</h3>
-        <p>학생 데이터가 교사 <b>개인 계정</b>의 백엔드에 있습니다. 전보·퇴직하면 그 데이터는 누구의 것이 됩니까? 관리 책임의 공백이 생깁니다.</p>
-        <div class="fix"><b>예방:</b> 최소수집 + 짧은 보관 + 확실한 파기로 공백 자체를 줄이기. 장기 운영은 학교 차원 논의로.</div></div>
-      <div class="trap" style="border-top-color:var(--navy)"><span class="no" style="background:var(--navy)">공통 원인</span><h3>🤖 AI는 묻지 않는다</h3>
-        <p>일곱 함정의 공통점 — AI는 "동의는 받으셨나요?", "언제 지우실 건가요?"라고 <b>절대 물어봐 주지 않습니다.</b></p>
-        <div class="fix"><b>결론:</b> 물어볼 줄 아는 사람이 되는 것. 그게 오늘 연수의 목적입니다.</div></div>
+        <div class="fix"><b>예방:</b> "학기 말 삭제"처럼 기한을 정해 두기. 삭제 SQL 한 줄이면 됩니다(연수 마지막에 시연). <b>↓ 아래 '파기 프롬프트' 참고.</b></div></div>
+      <div class="trap"><span class="no">주의사항 6</span><h3>🔗 접근통제 없음</h3>
+        <p><b>대시보드 링크나 교사 대시보드 비밀번호를 학생이 알아채면 안 됩니다!</b> 실습 때 "옆 선생님 room에 들어가진" 경험 — 그게 바로 이 주의사항의 체험판입니다.</p>
+        <div class="fix"><b>예방:</b> 대시보드 주소는 교사만. 그리고 <b>비밀번호를 코드(HTML·JS)에 절대 적지 마세요</b> — 학생이 <code class="inline">Ctrl+U</code>(소스 보기)로 다 봅니다. 진짜 잠금은 <b>서버 쪽 로그인(Supabase Auth)+RLS</b>로 — 비밀번호는 서버가 검사하고 코드엔 안 남습니다. <b>↓ 아래 '③ 대시보드 잠그기' 프롬프트 참고.</b></div></div>
+      <div class="trap"><span class="no">주의사항 7</span><h3>👤 계정·비밀번호 관리</h3>
+        <p>학생 데이터가 교사 <b>개인 계정</b>의 백엔드에 있어 관리 책임의 공백이 생길 수 있습니다. 학생이 <b>로그인해서 쓰는 앱</b>이라면 학생 비밀번호도 관리 대상이 됩니다.</p>
+        <div class="fix"><b>예방:</b> 학생 가입 시 <b>평소 쓰는 비밀번호는 쓰지 않게</b> 하고 <b>메모장에 적어두게</b> 하세요. 잊어버리면 교사가 Supabase에서 확인하거나 새로 설정해 줄 수 있습니다. 최소수집·짧은 보관·확실한 파기로 공백을 줄이고, 장기 운영은 학교 차원 논의로.</div></div>
+      <div class="trap" style="border-top-color:var(--navy)"><span class="no" style="background:var(--navy)">공통 원인</span><h3>🤖 결국, 판단은 선생님 몫</h3>
+        <p>AI는 저희의 요청을 <b>대부분 들어줍니다.</b> "동의는 받으셨나요?", "언제 지우실 건가요?"라고 먼저 묻지 않아요. 그러므로 선생님께서 <b>앞의 주의사항을 바탕으로 스스로 판단</b>하셔야 합니다!</p>
+        <div class="fix"><b>그래서:</b> 앞의 주의사항이 바로 그 <b>판단 체크리스트</b>예요. 오늘 그걸 손에 쥐고 가시면 됩니다.</div></div>
     </div>
-    <div class="pnote"><b>[진행]</b> 각 함정 1분 내외. 함정 6에서 실습 미션("옆 room 침투") 회수. 함정 2의 만14세는 판단기 탭 복선. 마지막 카드 멘트는 천천히.</div>
+    <div class="pnote"><b>[진행]</b> 각 주의사항 1분 내외. 주의사항 6에서 실습 미션("옆 room 침투") 회수. 주의사항 2의 만14세는 판단기 탭 복선. 마지막 카드 멘트는 천천히.</div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">복붙용</span>
+      <h2>🤖 안전하게 만드는 <b>만능 프롬프트</b></h2>
+      <p>바이브코딩으로 앱을 만든 뒤 Supabase를 붙일 때, 아래를 AI(클로드·GPT)에게 그대로 주면 <b>RLS·최소권한·익명 설계·파기</b>가 기본으로 들어갑니다.</p>
+    </div>
+    <p style="max-width:920px;margin:0 auto 6px;font-family:var(--font-round);color:var(--navy)">① RLS 있게 <b>안전 배포</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 1 예방)</span></p>
+    <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내가 만든 이 웹앱에 Supabase로 데이터 저장 기능을 붙이려고 해.
+아래 조건을 반드시 지켜서 SQL과 연결 코드를 만들어 줘.
+
+1. 표(테이블)를 만들 때 반드시 RLS(행 수준 보안)를 켠다 — enable row level security.
+2. 정책(policy)은 '꼭 필요한 것만' 최소로:
+   학생은 넣기(insert)만, 필요하면 읽기(select)만 허용하고,
+   수정(update)·삭제(delete)는 anon 사용자에게 절대 허용하지 마.
+3. insert 정책에는 with check로 값 범위·길이 검증을 넣어
+   (예: 글자 수 1~40, 숫자 범위 제한).
+4. 웹앱 코드에는 anon(공개) 키만 쓰고, service_role(비밀) 키는 절대 넣지 마.
+5. 실명 대신 익명 라벨(번호·닉네임)을 쓰는 최소수집 구조로 제안해 줘.
+6. 끝에 "이 설정으로 주소만 아는 사람이 무엇을 할 수 있고
+   무엇을 못 하는지"를 한글로 요약해 줘.</pre>
+    <p style="max-width:920px;margin:16px auto 6px;font-family:var(--font-round);color:var(--navy)">② 데이터 <b>안전하게 파기</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 5 예방)</span></p>
+    <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내 Supabase 프로젝트에서 학생 데이터를 안전하게 파기하려고 해.
+아래를 SQL로 만들어 주고, 각 SQL이 무엇을 지우는지 한글 주석을 달아 줘.
+내 표 이름은 [여기에 표 이름]이야.
+
+1. 그 표의 모든 데이터를 지우는 SQL 한 줄.
+2. 특정 반·기간만 골라 지우는 SQL
+   (예: room = '3-2' 이거나, created_at이 특정 날짜 이전).
+3. 표 자체를 통째로 없애는 SQL (drop table).
+그리고 "되돌릴 수 없으니 실행 전 꼭 확인"이라는 주의 문구도 함께 적어 줘.</pre>
+    <p style="max-width:920px;margin:16px auto 6px;font-family:var(--font-round);color:var(--navy)">③ 교사 대시보드 <b>진짜로 잠그기</b> <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 6 예방)</span></p>
+    <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내 교사 대시보드를 Ctrl+U로 코드를 봐도 뚫리지 않게 진짜로 잠그고 싶어.
+아래대로 바꿔 줘.
+
+1. 코드(HTML·JS)에 적어둔 비밀번호(예: TEACHER_PIN) 비교 방식을 전부 없애.
+2. 대신 Supabase Auth(로그인)로 비밀번호는 '서버가' 검사하게 만들어 줘
+   (교사 계정은 Authentication 메뉴에서 미리 하나 생성).
+3. 학생 데이터 표의 읽기(select) 권한을 RLS로
+   '로그인한 사용자(authenticated)만'으로 조여 줘.
+   (학생 제출 insert는 익명 그대로 두고.)
+4. 이렇게 하면 소스를 다 봐도 비밀번호가 없고, 로그인 안 하면
+   데이터가 안 나온다는 걸 한글로 확인해 줘.</pre>
+    <div class="callout blue" style="margin-top:14px"><span class="ct">💡 쓰는 법</span>
+      웹앱 코드를 AI 채팅에 붙여넣고, 그 아래에 위 프롬프트를 이어서 보내면 됩니다. 받은 SQL은 Supabase <b>SQL Editor</b>에 붙여넣고 Run.</div>
+    <div class="pnote"><b>[멘트]</b> "AI는 안 물어보니 우리가 먼저 요구한다"의 실물. 프롬프트에 RLS·최소권한·anon만·익명·파기를 넣어두면 사고 대부분이 예방됨. 이 두 프롬프트는 연수 후에도 계속 재사용.</div>
   </div>
 
   <div class="block">
@@ -948,7 +1202,7 @@ footer b{color:var(--navy)}
         </details>
       </div>
     </div>
-    <div class="pnote"><b>[진행]</b> 다 함께 Ctrl+U→Ctrl+F 시연 → "찾으신 분?" 손들기. 탄식이 나오는 순간이 핵심. 강사 사이트라 시연해도 안전(이미 공개된 값). 주의: 이건 RLS와 <b>다른</b> 함정 — RLS는 '읽을 수 있는 데이터', 여기는 '가짜 비밀번호'. 실습 STEP에서 만든 anon 키(공개 OK)와 TEACHER_PIN(공개 금지)의 차이를 꼭 대비시킬 것.</div>
+    <div class="pnote"><b>[진행]</b> 다 함께 Ctrl+U→Ctrl+F 시연 → "찾으신 분?" 손들기. 탄식이 나오는 순간이 핵심. 강사 사이트라 시연해도 안전(이미 공개된 값). 주의: 이건 RLS와 <b>다른</b> 주의사항 — RLS는 '읽을 수 있는 데이터', 여기는 '가짜 비밀번호'. 실습 STEP에서 만든 anon 키(공개 OK)와 TEACHER_PIN(공개 금지)의 차이를 꼭 대비시킬 것.</div>
   </div>
 
   <div class="block">
@@ -1144,7 +1398,7 @@ const CONFIG={
   mapUrl  : '백엔드지도_클릭.html',
   /* 워크시트 제출(선택): yeonsu_responses 테이블 재사용. 키를 넣으면 제출 버튼이 나타납니다 */
   supaUrl : 'https://vbvtnmnodeoocbbjauap.supabase.co',
-  supaKey : '',
+  supaKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc',
   wsPrompt: 'teacher_tool_idea',
 };
 
@@ -1155,7 +1409,7 @@ const TABS=[
   {id:'concept',e:'🧠', label:'개념'},
   {id:'cases', e:'🗺️', label:'사례'},
   {id:'manual',e:'🛠️', label:'실습 매뉴얼'},
-  {id:'traps', e:'⚠️', label:'함정'},
+  {id:'traps', e:'⚠️', label:'주의사항'},
   {id:'judge', e:'⚖️', label:'판단기'},
   {id:'review',e:'🏛️', label:'심의'},
   {id:'finish',e:'📝', label:'마무리'},
