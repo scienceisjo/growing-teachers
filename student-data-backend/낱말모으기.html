@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 실시간 낱말 모으기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(160deg,#fdf1f0 0%,#eef4ff 60%,#f3f0ff 100%);min-height:100vh;color:#1f2430}
+  .wrap{max-width:640px;margin:0 auto;padding:20px 16px 8px}
+  header{text-align:center;padding:12px 0 16px}
+  header h1{font-size:1.6rem;font-weight:900;letter-spacing:-.5px}
+  header p{color:#6b7280;font-size:.9rem;margin-top:4px}
+  .card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 6px 24px rgba(120,80,120,.10);margin-bottom:16px}
+  .banner{border-radius:14px;padding:11px 14px;font-size:.84rem;line-height:1.6;margin-bottom:16px}
+  .banner.warn{background:#fff8e1;border:1.5px solid #f6c344;color:#7a5b00}
+  .qbox{background:#f4f0ff;border:1.5px solid #d8ccf2;border-radius:14px;padding:14px 16px;text-align:center;font-weight:800;font-size:1.05rem;color:#4b3b8f;margin-bottom:14px}
+  label{font-weight:700;font-size:.88rem;display:block;margin:10px 0 6px}
+  input{width:100%;padding:12px 14px;font-size:1rem;font-family:inherit;border:1.5px solid #d8dce6;border-radius:12px;outline:none}
+  input:focus{border-color:#7b6cc4}
+  .btn{width:100%;padding:14px;margin-top:16px;font-size:1.05rem;font-weight:800;font-family:inherit;color:#fff;background:#7b6cc4;border:none;border-radius:14px;cursor:pointer;transition:transform .08s}
+  .btn:active{transform:scale(.97)}
+  h2.sec{font-size:1.08rem;font-weight:900;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+  h2.sec button{font-family:inherit;font-size:.78rem;font-weight:700;border:1.5px solid #d8dce6;background:#fff;border-radius:10px;padding:5px 10px;cursor:pointer;color:#7b6cc4}
+  #cloud{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:center;min-height:120px;padding:10px 4px}
+  #cloud .w{font-weight:900;line-height:1.1;transition:font-size .3s}
+  #cloud .empty{color:#9aa3b5;font-size:.9rem;font-weight:400}
+  .rank{margin-top:6px}
+  .rank .it{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid #f0f2f7;font-size:.92rem}
+  .rank .no{font-weight:900;color:#7b6cc4;width:1.6em;text-align:center}
+  .rank .bar{height:10px;background:#e6e0f7;border-radius:6px;flex:1;overflow:hidden}
+  .rank .bar>span{display:block;height:100%;background:#7b6cc4}
+  .rank .cnt{font-weight:800;color:#7b6cc4;width:2.2em;text-align:right}
+  #msg{text-align:center;font-size:.9rem;font-weight:700;margin-top:8px;min-height:1.3em}
+  .why{background:#f2f0fb;border-radius:12px;padding:12px 14px;font-size:.85rem;line-height:1.7;color:#463b7a}
+  .why b{color:#33285f}
+  details.setup{margin-top:14px;background:#241a35;border-radius:14px;overflow:hidden;color:#e8ddf7}
+  details.setup summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:800;font-size:.9rem;color:#c9b6ff}
+  details.setup summary::-webkit-details-marker{display:none}
+  details.setup .sb{padding:0 14px 14px}
+  details.setup p{font-size:.85rem;line-height:1.6;margin:8px 2px}
+  details.setup code{background:#3a2d55;padding:1px 6px;border-radius:5px}
+  pre{background:#160f22;border:1px solid #4a3a6b;border-radius:10px;padding:12px 14px;font-family:ui-monospace,Consolas,monospace;font-size:.76rem;line-height:1.6;color:#efe7fb;overflow-x:auto;position:relative}
+  pre button{position:absolute;top:8px;right:8px;font-family:inherit;font-size:.72rem;background:#3a2d55;color:#e0d3f5;border:1px solid #5a4785;border-radius:7px;padding:4px 9px;cursor:pointer}
+  .hidden{display:none}
+  footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📖 실시간 낱말 모으기</h1>
+    <p>친구들이 낼수록 같은 낱말이 커집니다 — 자동 집계</p>
+  </header>
+
+  <div id="setupBanner" class="banner warn hidden"></div>
+
+  <!-- 입력 -->
+  <div class="card">
+    <div class="qbox" id="question">'가을' 하면 떠오르는 낱말은?</div>
+    <label>이름 (비워도 됨)</label>
+    <input type="text" id="name" placeholder="익명 가능" maxlength="12">
+    <label>낱말 / 짧은 답</label>
+    <input type="text" id="word" placeholder="한 낱말씩, 여러 번 내도 돼요" maxlength="40">
+    <button class="btn" id="submit">💬 보내기</button>
+    <div id="msg"></div>
+  </div>
+
+  <!-- 실시간 워드클라우드 -->
+  <div class="card">
+    <h2 class="sec">☁️ 우리 반 낱말 구름 <button id="refresh">↻ 새로고침</button></h2>
+    <div id="cloud"><span class="empty">아직 낱말이 없어요. 첫 낱말을 보내 보세요!</span></div>
+  </div>
+
+  <!-- 빈도 순위 -->
+  <div class="card">
+    <h2 class="sec">🏆 많이 나온 낱말 <span style="font-weight:400;font-size:.8rem;color:#8a90a0" id="total"></span></h2>
+    <div class="rank" id="rank"></div>
+  </div>
+
+  <div class="card why">
+    🆚 <b>패들렛과 다른 점</b><br>
+    패들렛은 낱말을 '붙이기'만 하고 몇 개인지는 눈으로 세야 합니다.
+    이 도구는 <b>같은 낱말을 자동으로 세어 크기·순위로</b> 바꿔 줘요 — 반 전체 생각이 한눈에 보입니다.
+  </div>
+
+  <!-- 교사용 SETUP -->
+  <details class="setup">
+    <summary>🧑‍🏫 교사용 — 처음 1회 설정 & 질문 바꾸기 (펼치기)</summary>
+    <div class="sb">
+      <p><b>① 실시간 공유 켜기:</b> 아래 SQL을 Supabase <b>SQL Editor</b>에 붙여넣고 Run. (안 하면 이 기기 안에서만 작동하는 <b>연습 모드</b>)</p>
+<pre><button onclick="copyPre(this)">📋 복사</button>create table if not exists korean_words (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  room text not null default 'demo',
+  name text,
+  word text not null
+);
+create index if not exists korean_words_room_idx
+  on korean_words(room, created_at desc);
+alter table korean_words enable row level security;
+drop policy if exists "anon insert words" on korean_words;
+create policy "anon insert words" on korean_words
+  for insert to anon
+  with check ( char_length(room) between 1 and 40
+    and char_length(word) between 1 and 40 );
+drop policy if exists "anon read words" on korean_words;
+create policy "anon read words" on korean_words
+  for select to anon using ( true );</pre>
+      <p><b>② 질문 바꾸기:</b> 주소 뒤에 <code>?q=봄 하면 떠오르는 낱말은?</code> · 반 구분은 <code>?room=3-2</code> (여러 개는 &로 연결).</p>
+      <p><b>③ 데이터 지우기:</b> SQL Editor에서 <code>delete from korean_words;</code></p>
+    </div>
+  </details>
+</div>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-07-19</span></footer>
+
+<script>
+const SUPABASE_URL = "https://vbvtnmnodeoocbbjauap.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
+const TABLE = "korean_words";
+
+const P = new URLSearchParams(location.search);
+const ROOM = (P.get("room") || "demo").slice(0,40);
+const Q = P.get("q");
+const $ = id => document.getElementById(id);
+if(Q) $("question").textContent = Q;
+
+const sb = (SUPABASE_URL.startsWith("https://") && !SUPABASE_KEY.includes("여기에")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+let mode = sb ? "cloud" : "local";
+let localRows = JSON.parse(localStorage.getItem("kw_"+ROOM) || "[]");
+
+function setBanner(){
+  const b = $("setupBanner");
+  if(mode==="local"){ b.className="banner warn"; b.innerHTML="⚠️ <b>연습 모드</b> — 이 기기 안에서만 저장됩니다. 실시간 공유를 켜려면 <b>교사용 설정</b>의 SQL을 1회 실행하세요."; b.classList.remove("hidden"); }
+  else b.classList.add("hidden");
+}
+$("submit").addEventListener("click", submit);
+$("refresh").addEventListener("click", load);
+$("word").addEventListener("keydown", e=>{ if(e.key==="Enter") submit(); });
+
+async function submit(){
+  const name = $("name").value.trim();
+  let word = $("word").value.trim();
+  if(!word){ msg("낱말을 입력하세요","#e5484d"); return; }
+  word = word.slice(0,40);
+  msg("보내는 중...","#8a90a0");
+  if(mode==="cloud"){
+    const { error } = await sb.from(TABLE).insert({ room:ROOM, name:name||null, word });
+    if(error){ mode="local"; setBanner(); saveLocal(name,word); msg("연습 모드로 저장했어요 (표 설정 필요)","#b58900"); }
+    else msg("✅ 보냈어요!","#7b6cc4");
+  } else { saveLocal(name,word); msg("✅ 보냈어요! (연습 모드)","#7b6cc4"); }
+  $("word").value=""; $("word").focus();
+  load();
+}
+function saveLocal(name,word){ localRows.push({name,word,created_at:Date.now()}); localStorage.setItem("kw_"+ROOM, JSON.stringify(localRows)); }
+function msg(t,c){ const m=$("msg"); m.textContent=t; m.style.color=c; }
+
+async function load(){
+  let rows;
+  if(mode==="cloud"){
+    const { data, error } = await sb.from(TABLE).select("word").eq("room",ROOM).limit(2000);
+    if(error){ mode="local"; setBanner(); rows=localRows; } else rows=data;
+  } else rows=localRows;
+  render(rows||[]);
+}
+
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = w => String(w).trim().replace(/\s+/g," ");
+
+function render(rows){
+  const freq = {};
+  rows.forEach(r=>{ const w=norm(r.word); if(w) freq[w]=(freq[w]||0)+1; });
+  const items = Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+  $("total").textContent = rows.length ? `· 총 ${rows.length}개 / 서로 다른 ${items.length}종` : "";
+  // 워드클라우드
+  const cloud = $("cloud");
+  if(!items.length){ cloud.innerHTML='<span class="empty">아직 낱말이 없어요. 첫 낱말을 보내 보세요!</span>'; }
+  else {
+    const max = items[0][1];
+    const cols = ["#7b6cc4","#5b7bff","#22b573","#e4572e","#c39a35","#3a6ea5"];
+    // 빈도 섞어 보이게: 순위 유지하되 표시 순서만 살짝 섞음
+    cloud.innerHTML = items.slice(0,60).map(([w,n],i)=>{
+      const size = 15 + (n/max)*30;   // 15~45px
+      const c = cols[i%cols.length];
+      return `<span class="w" style="font-size:${size.toFixed(1)}px;color:${c}" title="${n}번">${esc(w)}</span>`;
+    }).join("");
+  }
+  // 순위 (상위 10)
+  const rank = $("rank");
+  const top = items.slice(0,10), max2 = top.length?top[0][1]:1;
+  rank.innerHTML = top.map(([w,n],i)=>`<div class="it"><span class="no">${i+1}</span><span style="min-width:4em">${esc(w)}</span><span class="bar"><span style="width:${(n/max2*100).toFixed(0)}%"></span></span><span class="cnt">${n}</span></div>`).join("") || '<div style="color:#9aa3b5;font-size:.9rem;padding:8px 2px">아직 없어요.</div>';
+}
+
+window.copyPre = function(btn){ const t=btn.parentElement.innerText.replace(/^📋 복사\n?/,""); navigator.clipboard.writeText(t).then(()=>{btn.textContent="복사됨!";setTimeout(()=>btn.textContent="📋 복사",1500);}); };
+
+setBanner(); load();
+if(sb) setInterval(load, 4000);
+</script>
+</body>
+</html>
