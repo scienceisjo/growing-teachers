@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧠 우리 반 반응속도 대시보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1524; --panel:#16203526; --panel2:#1b2740; --line:#2b3a58;
+  --ink:#eaf1ff; --muted:#9fb0cf; --accent:#46c24a; --accent2:#3a8bff;
+  --gold:#ffd23f; --red:#ff5d5d; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --p1:#ff6b6b;--p2:#4da3ff;--p3:#46c24a;--p4:#ffd23f;--p5:#c58bff;--p6:#ff9e42;
+}
+@media(prefers-color-scheme:light){
+  :root{--bg:#eef3fb;--panel:#ffffff;--panel2:#f3f7ff;--line:#d7e0f0;--ink:#182338;--muted:#5b6b88;--shadow:0 8px 24px rgba(30,50,90,.12);}
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,var(--bg),color-mix(in srgb,var(--bg) 82%,#000));color:var(--ink);
+  font-family:'Jua','Do Hyeon',system-ui,sans-serif;min-height:100vh;padding:clamp(12px,2vw,26px)}
+h1,h2,h3{margin:0;font-family:'Do Hyeon',sans-serif}
+.wrap{max-width:1280px;margin:0 auto}
+/* ── 헤더 ── */
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.top h1{font-size:clamp(22px,3.4vw,40px);letter-spacing:-.5px}
+.top .rm{font-size:clamp(15px,2vw,22px);color:var(--gold)}
+.live{margin-left:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.dot{display:inline-flex;align-items:center;gap:8px;font-family:'Do Hyeon';color:var(--red);font-size:15px}
+.dot i{width:11px;height:11px;border-radius:50%;background:var(--red);animation:pulse 1.3s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.ctrl{display:flex;gap:8px;align-items:center}
+.ctrl input{background:var(--panel2);border:2px solid var(--line);color:var(--ink);border-radius:12px;
+  padding:9px 13px;font-family:'Do Hyeon';font-size:16px;width:120px}
+.btn{background:var(--accent2);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-family:'Do Hyeon';
+  font-size:16px;cursor:pointer;box-shadow:var(--shadow);transition:transform .1s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:var(--panel2);color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.upd{font-size:13px;color:var(--muted);font-family:'Do Hyeon'}
+/* ── 카드/타일 ── */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow)}
+.tile .lab{font-family:'Do Hyeon';color:var(--muted);font-size:14px;margin-bottom:4px}
+.tile .val{font-size:clamp(26px,4vw,46px);line-height:1.05;font-family:'Do Hyeon'}
+.tile .val small{font-size:.42em;color:var(--muted)}
+.tile .sub{font-size:13px;color:var(--muted);margin-top:3px;font-family:'Do Hyeon'}
+.tile.hl{background:linear-gradient(150deg,color-mix(in srgb,var(--gold) 22%,var(--panel2)),var(--panel2));border-color:var(--gold)}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:18px 20px;box-shadow:var(--shadow)}
+.panel h2{font-size:clamp(18px,2.3vw,26px);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* ── 히스토그램 ── */
+.bars{display:flex;align-items:flex-end;gap:clamp(6px,1.4vw,16px);height:clamp(180px,26vh,280px);padding-top:10px}
+.bar{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.bar .col{width:78%;max-width:70px;border-radius:10px 10px 4px 4px;
+  background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 60%,var(--accent2)));
+  box-shadow:0 4px 0 rgba(0,0,0,.15) inset;transition:height .5s cubic-bezier(.2,.9,.3,1);position:relative;min-height:2px}
+.bar .cnt{font-family:'Do Hyeon';font-size:15px;margin-bottom:5px;color:var(--ink);height:18px}
+.bar .rng{font-family:'Do Hyeon';font-size:12px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.2}
+.bar .emo{font-size:19px;margin-top:2px}
+/* ── 리더보드 ── */
+.lb{display:flex;flex-direction:column;gap:8px}
+.lb .row{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:9px 13px}
+.lb .rk{font-size:20px;width:34px;text-align:center}
+.lb .nm{flex:1;font-family:'Do Hyeon';font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .ms{font-family:'Do Hyeon';font-size:20px;color:var(--accent)}
+.lb .ms small{font-size:.6em;color:var(--muted)}
+.lb .row.gold{border-color:var(--gold);background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 16%,var(--panel)),var(--panel))}
+/* ── 동물 비교 ── */
+.animals{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.an{display:flex;flex-direction:column;align-items:center;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:8px 10px;min-width:64px;opacity:.42;filter:grayscale(.6)}
+.an.beat{opacity:1;filter:none;border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 40%,transparent)}
+.an .e{font-size:26px}.an small{font-family:'Do Hyeon';font-size:11px;color:var(--muted);text-align:center;margin-top:2px}
+.msg{margin-top:12px;font-family:'Do Hyeon';font-size:16px;line-height:1.5}
+/* ── 안내/빈 상태 ── */
+.note{background:var(--panel2);border:1px dashed var(--line);border-radius:16px;padding:20px 22px;margin-top:14px;
+  font-family:'Do Hyeon';color:var(--muted);line-height:1.7;font-size:15px}
+.note b{color:var(--ink)}
+.note code{background:var(--panel);padding:2px 8px;border-radius:6px;color:var(--gold);font-family:ui-monospace,monospace}
+.warn{border-color:var(--gold);color:var(--ink)}
+.privacy{margin-top:16px;font-size:12.5px;color:var(--muted);font-family:'Do Hyeon';text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>🧠 우리 반 반응속도 대시보드</h1>
+    <span class="rm" id="roomLabel"></span>
+    <div class="live">
+      <span class="dot" id="liveDot" style="display:none"><i></i>LIVE</span>
+      <div class="ctrl">
+        <input id="roomInput" placeholder="반 코드(예: 3-2)" >
+        <button class="btn" onclick="connect()">연결</button>
+        <button class="btn ghost" onclick="pull()">↻</button>
+      </div>
+    </div>
+  </div>
+  <div class="upd" id="updText" style="margin:-8px 0 14px"></div>
+
+  <div id="setup" style="display:none"></div>
+
+  <div id="board" style="display:none">
+    <div class="tiles">
+      <div class="tile"><div class="lab">참여 기록</div><div class="val" id="tN">0<small>개</small></div><div class="sub" id="tNsub"></div></div>
+      <div class="tile"><div class="lab">평균 반응속도</div><div class="val" id="tAvg">–<small>ms</small></div><div class="sub">낮을수록 빠름</div></div>
+      <div class="tile hl"><div class="lab">🏆 반 최고 기록</div><div class="val" id="tBest">–<small>ms</small></div><div class="sub" id="tBestWho"></div></div>
+      <div class="tile"><div class="lab">이긴 동물</div><div class="val" id="tAni">–</div><div class="sub" id="tAniSub"></div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>📊 우리 반 반응속도 분포</h2>
+        <div class="bars" id="bars"></div>
+      </div>
+      <div class="panel">
+        <h2>⚡ 빠른 순 TOP 10</h2>
+        <div class="lb" id="lb"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <h2>🐾 우리 반 대표 vs 동물의 신경 반응속도</h2>
+      <div class="animals" id="animals"></div>
+      <div class="msg" id="aniMsg"></div>
+    </div>
+  </div>
+
+  <div class="privacy">🔒 이 대시보드는 <b>반응시간(ms)</b>과 <b>익명 라벨(1번 선수 등)</b>만 다룹니다 · 실명·학번은 수집하지 않습니다(최소수집 원칙)</div>
+</div>
+
+<script>
+/* ============================================================
+   ⚙️ 설정 — Supabase 프로젝트 정보 (sonic.html 의 YEONSU 와 동일하게)
+   1) Supabase → SQL Editor 에서 reaction_results.sql 실행
+   2) Project Settings > API 의 Project URL / anon(publishable) 키를 아래에 붙여넣기
+   ============================================================ */
+const CFG={
+  url  : 'https://vbvtnmnodeoocbbjauap.supabase.co', // 연수용 프로젝트 URL
+  key  : '',                 // ← 연수용 anon/publishable 키(비우면 안내 화면)
+  table: 'reaction_results',
+};
+const ANIMALS=[{e:'🦥',n:'나무늘보',ms:680},{e:'🐢',n:'거북이',ms:450},{e:'🐘',n:'코끼리',ms:330},{e:'🐶',n:'강아지',ms:250},{e:'🐱',n:'고양이',ms:200},{e:'🐰',n:'토끼',ms:150},{e:'🐝',n:'벌',ms:70},{e:'🪰',n:'파리',ms:30}];
+const BUCKETS=[[0,150,'🦸'],[150,200,'⚡'],[200,250,'😎'],[250,300,'🙂'],[300,400,'😌'],[400,600,'🐢'],[600,99999,'💤']];
+const $=id=>document.getElementById(id);
+let ROOM='',timer=null;
+
+function headers(){const h={apikey:CFG.key};if(CFG.key.slice(0,3)!=='sb_')h.Authorization='Bearer '+CFG.key;return h;}
+function qs(){try{return new URLSearchParams(location.search).get('room')||'';}catch(e){return '';}}
+
+function connect(){
+  ROOM=($('roomInput').value||'').trim();
+  $('roomLabel').textContent=ROOM?('· '+ROOM+'반'):'· 전체 반';
+  try{const u=new URL(location.href);ROOM?u.searchParams.set('room',ROOM):u.searchParams.delete('room');history.replaceState(null,'',u);}catch(e){}
+  pull();
+  if(timer)clearInterval(timer);
+  timer=setInterval(pull,3000);   // 3초마다 자동 새로고침(실시간)
+}
+
+async function pull(){
+  if(!CFG.key){showSetup();return;}
+  let url=CFG.url+'/rest/v1/'+CFG.table+'?select=room,player,ms,mode,created_at&order=created_at.desc&limit=2000';
+  if(ROOM)url+='&room=eq.'+encodeURIComponent(ROOM);
+  try{
+    const r=await fetch(url,{headers:headers(),cache:'no-store'});
+    if(!r.ok)throw new Error(r.status);
+    render(await r.json());
+    $('liveDot').style.display='inline-flex';
+    $('updText').textContent='마지막 업데이트 '+new Date().toLocaleTimeString('ko-KR')+' · 3초마다 자동 갱신';
+  }catch(e){ showSetup('불러오지 못했어요 (오류 '+e.message+'). URL/키/테이블 이름과 인터넷 연결을 확인하세요.'); }
+}
+
+function render(rows){
+  $('setup').style.display='none';$('board').style.display='block';
+  if(!rows.length){
+    $('board').style.display='none';
+    showSetup('아직 기록이 없어요. 게임(sonic.html)에서 <code>?room='+(ROOM||'3-2')+'</code> 로 열어 반응속도 대결을 플레이하면 여기 실시간으로 나타납니다.',true);
+    return;
+  }
+  const msArr=rows.map(r=>r.ms).filter(m=>m>0);
+  const n=msArr.length, avg=Math.round(msArr.reduce((a,b)=>a+b,0)/n), best=Math.min(...msArr);
+  const bestRow=rows.find(r=>r.ms===best);
+  const roomsN=new Set(rows.map(r=>r.room)).size;
+  // 타일
+  $('tN').innerHTML=n+'<small>개</small>';
+  $('tNsub').textContent=ROOM?(ROOM+'반'):(roomsN+'개 반 합계');
+  $('tAvg').innerHTML=avg+'<small>ms</small>';
+  $('tBest').innerHTML=best+'<small>ms</small>';
+  $('tBestWho').textContent='🏅 '+(bestRow?bestRow.player:'')+(ROOM?'':' · '+(bestRow?bestRow.room+'반':''));
+  const beaten=ANIMALS.filter(a=>best<a.ms);
+  $('tAni').textContent=beaten.length+'마리';
+  $('tAniSub').textContent=beaten.length?beaten.map(a=>a.e).join(''):'아직 없음';
+  // 히스토그램
+  const counts=BUCKETS.map(b=>msArr.filter(m=>m>=b[0]&&m<b[1]).length);
+  const mx=Math.max(1,...counts);
+  $('bars').innerHTML=BUCKETS.map((b,i)=>{
+    const h=Math.round(counts[i]/mx*100);
+    const lo=b[0], hi=b[1]>=99999?'+':('–'+b[1]);
+    const rng=b[1]>=99999?(lo+'+'):(lo+'–'+b[1]);
+    return `<div class="bar"><div class="cnt">${counts[i]||''}</div>
+      <div class="col" style="height:${h}%"></div>
+      <div class="rng">${rng}<br>ms</div><div class="emo">${b[2]}</div></div>`;
+  }).join('');
+  // 리더보드 TOP10
+  const top=[...rows].sort((a,b)=>a.ms-b.ms).slice(0,10);
+  const medal=['🥇','🥈','🥉'];
+  $('lb').innerHTML=top.map((r,i)=>`<div class="row${i===0?' gold':''}">
+    <span class="rk">${medal[i]||(i+1)}</span>
+    <span class="nm">${esc(r.player||'선수')}${ROOM?'':' <span style="color:var(--muted);font-size:.8em">'+esc(r.room)+'반</span>'}</span>
+    <span class="ms">${r.ms}<small>ms</small></span></div>`).join('');
+  // 동물 비교
+  $('animals').innerHTML=ANIMALS.map(a=>`<div class="an${best<a.ms?' beat':''}">
+    <div class="e">${a.e}</div><small>${a.n}<br>${a.ms}ms</small></div>`).join('');
+  $('aniMsg').innerHTML=beaten.length
+    ? `우리 반 최고 기록 <b style="color:var(--gold)">${best}ms</b> — <b>${beaten.length}마리</b>의 동물보다 빨라요! ${beaten.map(a=>a.e).join('')} <span style="color:var(--muted)">(반응이 빠르다 = 신경 전달이 빨랐다는 뜻)</span>`
+    : `아직 동물을 못 이겼어요. 초록불에 더 집중해서 다시 도전! 🐢`;
+}
+
+function showSetup(msg,isEmpty){
+  $('board').style.display='none';
+  const s=$('setup');s.style.display='block';
+  if(!CFG.key){
+    s.innerHTML=`<div class="note warn">⚙️ <b>연결 설정이 필요해요.</b><br>
+      1) Supabase → SQL Editor 에서 <code>reaction_results.sql</code> 실행<br>
+      2) 이 파일 상단 <code>CFG.key</code> 에 anon(publishable) 키 붙여넣기<br>
+      3) 게임 <code>sonic.html</code> 의 <code>YEONSU.key</code> 에도 같은 키 넣기<br>
+      <span class="privacy" style="text-align:left;display:block;margin-top:10px">🔒 키를 넣어도 안전한 이유는 테이블의 <b>RLS 규칙</b>이 보호하기 때문 — 강의 3부에서 다룹니다.</span></div>`;
+    return;
+  }
+  s.innerHTML=`<div class="note${isEmpty?'':' warn'}">${msg||''}</div>`;
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+// 시작: URL ?room= 있으면 자동 연결
+(function init(){
+  const r=qs();if(r){$('roomInput').value=r;connect();}
+  else{ if(!CFG.key)showSetup(); else{ $('roomLabel').textContent='· 전체 반'; connect(); } }
+})();
+</script>
+</body>
+</html>
