@@ -919,6 +919,64 @@ footer b{color:var(--navy)}
       </div>
     </div>
 
+    <!-- ＋ 자유 기획 실습 (프롬프트 자동 생성 + 공유) -->
+    <div class="block">
+      <div class="sec-head">
+        <span class="kick">＋ 자유 실습</span>
+        <h2>🪄 <b>자유 기획 실습</b> — 내 앱 프롬프트 자동 만들기</h2>
+        <p>반응속도 실습이 <b>정해진 걸 따라 하기</b>였다면, 이번엔 <b>내 수업앱을 자유롭게 기획</b>합니다. 아래를 채우면 <b>만들기 프롬프트 2개(① 앱 만들기 → ② Supabase SQL)</b>가 자동 완성되고, 계획은 강사에게 공유되어 <b>강사가 대신 배포</b>해 드립니다.</p>
+      </div>
+      <div class="ws" style="max-width:760px">
+        <input id="fpTeacher" placeholder="성함 / 과목 — 예: 홍길동 · 국어" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;margin-bottom:4px">
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">① 프로그램 계획 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">이 앱으로 무엇을 하나요?</span></label>
+        <textarea id="fpPlan" placeholder="예: '가을' 하면 떠오르는 낱말을 모아 실시간 낱말 구름을 만드는 앱" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">② 수집할 데이터의 종류</label>
+        <textarea id="fpData" placeholder="예: 반 코드, 익명 닉네임, 낱말" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">③ 수집 목적</label>
+        <textarea id="fpPurpose" placeholder="예: 단원 도입에서 학생들의 배경지식·연상을 한눈에 보기" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">④ 웹앱 계획 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">화면·흐름은 어떻게?</span></label>
+        <textarea id="fpApp" placeholder="예: 입력창 하나 + 보내기 버튼, 아래에 실시간 낱말 구름과 순위" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑤ 내 Supabase Project URL <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">내 계정에서 직접 찾아 넣기</span></label>
+        <input id="fpUrl" placeholder="https://xxxx.supabase.co" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem">
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑥ 내 anon key <span style="font-weight:400;color:var(--red);font-size:.86em">공개용 키만! service_role 금지</span></label>
+        <input id="fpKey" placeholder="eyJhbG… 또는 sb_publishable_…" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem">
+        <button class="bigbtn" style="width:100%;margin-top:14px" onclick="genFreePrompts()">🪄 프롬프트 생성 &amp; 강사에게 공유</button>
+        <p class="fine" id="fpMsg"></p>
+        <div id="fpResult" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><b>STEP 1 · 앱 만들기 프롬프트</b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp1',this)">📋 복사</button></div>
+          <pre class="code" id="fp1" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow-y:auto"></pre>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><b>STEP 2 · Supabase SQL 프롬프트 <span style="color:var(--green-deep);font-size:.85em">(RLS 필수 내장)</span></b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp2',this)">📋 복사</button></div>
+          <pre class="code" id="fp2" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow-y:auto"></pre>
+        </div>
+      </div>
+      <div class="tip"><b>💡 순서:</b> ① 프롬프트 1로 <b>앱을 먼저</b> 만들고 → ② 프롬프트 2로 <b>Supabase 표(RLS 포함)</b>를 만드세요. URL·anon 키는 <b>내 Supabase에서 직접 찾아</b> 넣습니다 — 공개 키니까 <b>SQL 프롬프트에 RLS 요청이 필수로</b> 들어가 있어요.</div>
+    </div>
+    <script>
+    function _fp(id){var e=document.getElementById(id);return(e&&e.value||'').trim();}
+    function _fpor(v,ph){return v?v:ph;}
+    function genFreePrompts(){
+      var msg=document.getElementById('fpMsg');
+      if(!_fp('fpPlan')){msg.textContent='① 프로그램 계획은 꼭 적어주세요';msg.style.color='#e5484d';return;}
+      var plan=_fp('fpPlan'),data=_fpor(_fp('fpData'),'(수집 데이터를 적어주세요)'),purpose=_fpor(_fp('fpPurpose'),'(목적을 적어주세요)'),app=_fpor(_fp('fpApp'),'(웹앱 계획을 적어주세요)');
+      var url=_fpor(_fp('fpUrl'),'여기에_내_Project_URL_넣기'),key=_fpor(_fp('fpKey'),'여기에_내_anon_key_넣기');
+      var p1="너는 중학교 수업용 웹앱을 만드는 개발자야. 아래 기획대로 HTML 파일 하나짜리 웹앱을 만들어 줘.\n\n[프로그램 계획]\n"+plan+"\n\n[수집할 데이터]\n"+data+"\n\n[수집 목적]\n"+purpose+"\n\n[웹앱 계획(화면·흐름)]\n"+app+"\n\n조건:\n- 다른 파일 없이 HTML 하나로 완성하고, 코드 전체를 보여줘. 학생 스마트폰에서 보기 좋게.\n- 학생이 입력하면 Supabase에 저장하고, 저장된 내용을 화면에 실시간으로(몇 초마다 다시 불러오기) 보여줘.\n- Supabase 연결값은 아래를 그대로 사용해:\n  · Project URL: "+url+"\n  · anon key: "+key+"\n- 반드시 anon(공개) 키만 쓰고 service_role(비밀) 키는 절대 넣지 마.\n- 실명 대신 익명 라벨(번호·닉네임)을 기본으로, 목적에 필요한 최소한의 데이터만 수집해.\n- 주소 뒤 ?room= 으로 반을 구분할 수 있게 해.\n- 표(테이블) 이름은 영문 소문자로 정하고, 그 이름을 알려줘(다음 SQL 단계에서 씀).";
+      var p2="방금 만든 웹앱이 쓸 Supabase 표(테이블)와 보안 규칙(SQL)을 만들어 줘. Supabase SQL Editor에 붙여넣고 실행할 거야.\n\n[저장할 데이터]\n"+data+"\n[목적]\n"+purpose+"\n\n★ 공개되는 anon 키로 접근하는 앱이라 보안이 매우 중요해. 반드시 지켜:\n1. 표를 만들 때 RLS(행 수준 보안)를 켜 — enable row level security.\n2. 정책(policy)은 최소로: 학생(anon)은 넣기(insert)만, 필요하면 읽기(select)만 허용.\n   수정(update)·삭제(delete)는 anon에게 절대 허용하지 마.\n3. insert 정책에 with check로 값 범위·길이 검증을 넣어(예: 글자 수 1~40, 반 코드 1~40).\n4. room(반 코드)와 created_at(자동 시각) 컬럼을 넣어.\n5. 실명 등 민감정보는 담지 말고 익명 위주로.\n각 SQL이 무엇을 하는지 한글 주석을 달고,\n마지막에 '주소만 아는 사람이 무엇을 할 수 있고 무엇을 못 하는지'를 한글로 요약해 줘.";
+      document.getElementById('fp1').textContent=p1;
+      document.getElementById('fp2').textContent=p2;
+      document.getElementById('fpResult').style.display='block';
+      document.getElementById('fpResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+      msg.style.color='#8a90a0';msg.textContent='강사에게 공유 중...';
+      try{
+        var h={apikey:CONFIG.supaKey,'Content-Type':'application/json',Prefer:'return=minimal'};
+        if(CONFIG.supaKey.slice(0,3)!=='sb_')h.Authorization='Bearer '+CONFIG.supaKey;
+        fetch(CONFIG.supaUrl+'/rest/v1/teacher_plans',{method:'POST',headers:h,body:JSON.stringify({teacher:_fp('fpTeacher'),plan:plan,data_types:_fp('fpData'),purpose:_fp('fpPurpose'),app_plan:_fp('fpApp'),supa_url:_fp('fpUrl'),supa_key:_fp('fpKey'),prompt_app:p1,prompt_sql:p2})})
+          .then(function(r){if(r.ok){msg.style.color='#22b573';msg.textContent='✅ 프롬프트 완성 + 강사에게 공유 완료! 아래 2개를 복사해 쓰거나, 기다리시면 강사가 대신 배포해 드려요.';}else{msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요! (공유 저장은 teacher_plans 표 설정 후 켜집니다)';}})
+          .catch(function(){msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요! (공유 저장 실패 — 네트워크/표 확인)';});
+      }catch(e){msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요!';}
+    }
+    function fpCopy(id,btn){navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){btn.textContent='복사됨!';setTimeout(function(){btn.textContent='📋 복사';},1500);});}
+    </script>
+
     <!-- BONUS: 데이터 보기·분석 -->
     <div class="mstep">
       <header><span class="sn">＋</span><h3>모은 데이터 <b>보고·분석하기</b> — Supabase에서 → 학생별 → 엑셀</h3><span class="st">수업 적용 · 집에서</span></header>
