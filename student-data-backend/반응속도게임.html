@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ 반응속도 챌린지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(160deg,#eef4ff 0%,#f6f0ff 60%,#fff5f0 100%);min-height:100vh;color:#1f2430}
+  .wrap{max-width:520px;margin:0 auto;padding:20px 16px 8px}
+  header{text-align:center;padding:14px 0 16px}
+  header h1{font-size:1.7rem;font-weight:900;letter-spacing:-.5px}
+  header p{color:#6b7280;font-size:.9rem;margin-top:4px}
+  .card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 6px 24px rgba(80,90,160,.10);margin-bottom:16px}
+  .banner{background:#fff8e1;border:1.5px solid #f6c344;border-radius:14px;padding:11px 14px;font-size:.84rem;line-height:1.6;margin-bottom:16px;color:#7a5b00}
+  label{font-weight:700;font-size:.9rem;display:block;margin:10px 0 6px}
+  input[type=text]{width:100%;padding:12px 14px;font-size:1rem;font-family:inherit;border:1.5px solid #d8dce6;border-radius:12px;outline:none}
+  input[type=text]:focus{border-color:#5b7bff}
+  .btn{width:100%;padding:14px;margin-top:16px;font-size:1.05rem;font-weight:800;font-family:inherit;color:#fff;background:#5b7bff;border:none;border-radius:14px;cursor:pointer;transition:transform .08s}
+  .btn:active{transform:scale(.97)}
+  .btn.gray{background:#9aa3b5}
+  .round-dots{text-align:center;margin-bottom:12px;font-weight:800;color:#6b7280;letter-spacing:2px}
+  #zone{height:280px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;user-select:none;-webkit-user-select:none;text-align:center;padding:16px;font-weight:900;color:#fff;transition:background .1s}
+  #zone .big{font-size:1.7rem}#zone .sub{font-size:.9rem;font-weight:500;opacity:.9;line-height:1.5}
+  .z-idle{background:#5b7bff}.z-wait{background:#e5484d}.z-go{background:#22b573}.z-early{background:#f0883e}.z-result{background:#3b4256}
+  .final-avg{text-align:center;margin:6px 0 2px}.final-avg .num{font-size:3rem;font-weight:900;color:#5b7bff}.final-avg .unit{font-size:1.1rem;font-weight:700;color:#6b7280}
+  .tries{display:flex;justify-content:center;gap:10px;margin:10px 0}.tries span{background:#eef1f8;border-radius:10px;padding:6px 12px;font-weight:700;font-size:.9rem}
+  #saveMsg{text-align:center;font-size:.9rem;font-weight:700;margin-top:8px;min-height:1.4em}
+  .info{background:#eef7f1;border-radius:14px;padding:14px 16px;font-size:.85rem;line-height:1.7;color:#2f5d43}.info b{color:#1c4632}
+  h2.sec{font-size:1.1rem;font-weight:900;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+  h2.sec button{font-family:inherit;font-size:.8rem;font-weight:700;border:1.5px solid #d8dce6;background:#fff;border-radius:10px;padding:5px 10px;cursor:pointer;color:#5b7bff}
+  .stats{display:flex;gap:10px;margin-bottom:12px}.stats div{flex:1;background:#f4f6fb;border-radius:12px;padding:10px;text-align:center}
+  .stats .v{font-size:1.25rem;font-weight:900;color:#3b4256}.stats .k{font-size:.75rem;color:#8a90a0;margin-top:2px}
+  table.rank{width:100%;border-collapse:collapse;font-size:.92rem}
+  table.rank td{padding:8px 6px;border-bottom:1px solid #f0f2f7}
+  table.rank td.no{width:2.4em;font-weight:900;color:#8a90a0;text-align:center}
+  table.rank td.ms{text-align:right;font-weight:800;color:#5b7bff;white-space:nowrap}
+  table.rank tr.me td{background:#fff3d6}
+  .empty{text-align:center;color:#9aa3b5;padding:16px 0;font-size:.9rem}
+  .hidden{display:none}
+  footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>⚡ 반응속도 챌린지</h1>
+    <p>자극과 반응 · 초록불이 켜지면 최대한 빨리 탭!</p>
+  </header>
+
+  <div id="setupBanner" class="banner hidden"></div>
+
+  <div id="joinCard" class="card">
+    <label>반 (예: 2-3)</label>
+    <input type="text" id="room" placeholder="예: 2-3" maxlength="20">
+    <label>이름 / 닉네임</label>
+    <input type="text" id="player" placeholder="이름을 입력하세요" maxlength="14">
+    <button class="btn" id="startBtn">🚀 도전 시작!</button>
+  </div>
+
+  <div id="gameCard" class="card hidden">
+    <div class="round-dots" id="roundDots">● ○ ○ &nbsp;(1 / 3회)</div>
+    <div id="zone" class="z-idle">
+      <div class="big" id="zoneBig">탭해서 시작</div>
+      <div class="sub" id="zoneSub">빨간불에서 기다리다가<br>초록불이 되는 순간 탭!</div>
+    </div>
+  </div>
+
+  <div id="resultCard" class="card hidden">
+    <h2 class="sec">🎉 나의 결과</h2>
+    <div class="tries" id="triesRow"></div>
+    <div class="final-avg"><span class="num" id="avgNum">0</span><span class="unit"> ms (3회 평균)</span></div>
+    <div id="saveMsg"></div>
+    <button class="btn gray" id="retryBtn">🔄 다시 도전하기</button>
+  </div>
+
+  <div class="card info">
+    🧠 <b>왜 바로 반응하지 못할까?</b><br>
+    빛(자극) → 눈 → 시각 신경 → <b>뇌(판단)</b> → 운동 신경 → 손가락 근육(반응)<br>
+    신호가 이 길을 지나오는 데 시간이 걸려요. 사람의 평균 반응 시간은 약 <b>250ms(0.25초)</b>!
+  </div>
+
+  <div class="card" id="rankCard">
+    <h2 class="sec">🏆 우리 반 랭킹 <button id="refreshBtn">↻ 새로고침</button></h2>
+    <div class="stats">
+      <div><div class="v" id="statCount">-</div><div class="k">기록 수</div></div>
+      <div><div class="v" id="statAvg">-</div><div class="k">전체 평균(ms)</div></div>
+      <div><div class="v" id="statBest">-</div><div class="k">최고 기록(ms)</div></div>
+    </div>
+    <table class="rank"><tbody id="rankBody"></tbody></table>
+    <div class="empty" id="rankEmpty">아직 기록이 없어요. 첫 도전자가 되어 보세요!</div>
+  </div>
+</div>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-07-20</span></footer>
+
+<script>
+/* 연수용 백엔드 = 과학이조선생(A) · 표 reaction_results (대시보드와 짝) */
+const SUPABASE_URL = "https://vbvtnmnodeoocbbjauap.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
+const TABLE = "reaction_results";
+
+const $=id=>document.getElementById(id);
+const P=new URLSearchParams(location.search);
+if(P.get("room")) $("room").value=P.get("room").slice(0,20);
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let mode="cloud";                 // cloud 실패 시 local 폴백
+let localRows=[];
+const zone=$("zone");
+let state="idle", round=0, results=[], goTimer=null, t0=0, me={room:"",player:""}, submitting=false;
+
+function setBanner(){ const b=$("setupBanner"); if(mode==="local"){ b.innerHTML="⚠️ <b>연습 모드</b> — 표(reaction_results)가 아직 없어서 이 기기 안에서만 기록됩니다. 교사가 SETUP SQL을 1회 실행하면 실시간 공유가 켜집니다."; b.classList.remove("hidden"); } else b.classList.add("hidden"); }
+
+$("startBtn").addEventListener("click",()=>{
+  const room=$("room").value.trim(), player=$("player").value.trim();
+  if(!room||!player){ alert("반과 이름을 모두 입력해 주세요!"); return; }
+  me={room,player};
+  $("joinCard").classList.add("hidden"); $("resultCard").classList.add("hidden"); $("gameCard").classList.remove("hidden");
+  round=0; results=[]; setZone("idle","탭해서 시작","빨간불에서 기다리다가<br>초록불이 되는 순간 탭!"); updateDots();
+});
+$("retryBtn").addEventListener("click",()=>{ $("resultCard").classList.add("hidden"); $("gameCard").classList.remove("hidden"); round=0; results=[]; setZone("idle","탭해서 시작","준비되면 탭!"); updateDots(); });
+
+zone.addEventListener("pointerdown",()=>{
+  if(state==="idle"||state==="between"||state==="early") startRound();
+  else if(state==="wait") tooEarly();
+  else if(state==="go") recordTap();
+});
+function startRound(){ setZone("wait","🔴 기다리세요...","초록불이 되면 최대한 빨리 탭!"); goTimer=setTimeout(()=>{ setZone("go","🟢 지금 탭!",""); t0=performance.now(); }, 1500+Math.random()*2500); }
+function tooEarly(){ clearTimeout(goTimer); setZone("early","😅 너무 빨랐어요!","초록불이 켜진 다음에 탭!<br>탭해서 다시 도전"); }
+function recordTap(){ const ms=Math.round(performance.now()-t0); results.push(ms); round++; updateDots(); if(round<3) setZone("between",`⏱ ${ms} ms`,"탭해서 다음 라운드!"); else finish(); }
+function setZone(s,big,sub){ state=s; zone.className="z-"+((s==="between"||s==="done")?"result":s); $("zoneBig").innerHTML=big; $("zoneSub").innerHTML=sub; }
+function updateDots(){ const dots=[0,1,2].map(i=>i<round?"●":"○").join(" "); $("roundDots").textContent=`${dots}  (${Math.min(round+1,3)} / 3회)`; }
+
+async function finish(){
+  state="done";
+  const avg=Math.round(results.reduce((a,b)=>a+b,0)/results.length);
+  $("gameCard").classList.add("hidden"); $("resultCard").classList.remove("hidden");
+  $("triesRow").innerHTML=results.map((r,i)=>`<span>${i+1}회 ${r}ms</span>`).join("");
+  $("avgNum").textContent=avg;
+  const msg=$("saveMsg");
+  if(submitting) return; submitting=true;
+  msg.style.color="#8a90a0"; msg.textContent="대시보드로 전송 중...";
+  const clamped=Math.max(50,Math.min(5000,avg));
+  if(mode==="cloud"){
+    const { error } = await sb.from(TABLE).insert({ room:me.room, player:me.player, ms:clamped, mode:"neuro", rounds:3 });
+    if(error){ mode="local"; setBanner(); localRows.push({room:me.room,player:me.player,ms:clamped}); msg.style.color="#b58900"; msg.textContent="연습 모드로 저장(표 설정 필요)"; }
+    else { msg.style.color="#22b573"; msg.textContent="📡 대시보드로 전송 완료!"; }
+  } else { localRows.push({room:me.room,player:me.player,ms:clamped}); msg.style.color="#22b573"; msg.textContent="✅ 기록 완료! (연습 모드)"; }
+  submitting=false; loadRanking();
+}
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+async function loadRanking(){
+  let data;
+  if(mode==="cloud"){
+    const room=$("room").value.trim()||me.room;
+    const res=await sb.from(TABLE).select("room,player,ms").eq("room",room).order("ms",{ascending:true}).limit(300);
+    if(res.error){ mode="local"; setBanner(); data=localRows.slice(); } else data=res.data;
+  } else data=localRows.slice();
+  data=(data||[]).slice().sort((a,b)=>a.ms-b.ms);
+  $("statCount").textContent=data.length;
+  $("statAvg").textContent=data.length?Math.round(data.reduce((a,r)=>a+r.ms,0)/data.length):"-";
+  $("statBest").textContent=data.length?data[0].ms:"-";
+  $("rankEmpty").style.display=data.length?"none":"block";
+  const medal=i=>i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
+  $("rankBody").innerHTML=data.slice(0,15).map((r,i)=>{
+    const mine=r.player===me.player&&r.room===me.room;
+    return `<tr class="${mine?"me":""}"><td class="no">${medal(i)}</td><td>${esc(r.room)} ${esc(r.player)}</td><td class="ms">${r.ms} ms</td></tr>`;
+  }).join("");
+}
+$("refreshBtn").addEventListener("click",loadRanking);
+setBanner(); loadRanking(); setInterval(loadRanking,8000);
+</script>
+</body>
+</html>
