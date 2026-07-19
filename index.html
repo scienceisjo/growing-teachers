@@ -1,1849 +1,306 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말로 만드는 과학 수업 · 꼬리별 6월 워크숍</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-
-<!-- Supabase 클라이언트 (배포 사이트에서 로드됩니다) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-
+<title>Growing Teachers · 조승재의 연수·자료 허브</title>
 <style>
-:root{
-  /* ───── 배경 사진 교체 위치 ─────
-     none → url('배경사진.jpg') 로 바꾸세요. 사진을 index.html과 같은 폴더에 두고 파일명만 적으면 됩니다. */
-  --hero-photo: none;
+  :root{
+    --bg:#f5f5fb; --surface:#ffffff; --surface-2:#f7f7fc;
+    --ink:#1f1e37; --ink-soft:#565476; --ink-faint:#8b89a8;
+    --line:#e7e6f1; --line-soft:#efeef7;
+    --purple:#6b45e0; --purple-bg:#efeaff;
+    --mint:#0aa79f; --mint-bg:#daf4f1;
+    --pink:#e0408b; --pink-bg:#fbe4ef;
+    --amber:#cf8410; --amber-bg:#fbeed3;
+    --blue:#3670d8; --blue-bg:#e4edfc;
+    color-scheme:light dark;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#121124; --surface:#1c1b34; --surface-2:#232241;
+      --ink:#edecff; --ink-soft:#b0add6; --ink-faint:#807da9;
+      --line:#2c2b4f; --line-soft:#252445;
+      --purple:#a48bff; --purple-bg:#2b2557;
+      --mint:#3ad8ce; --mint-bg:#123f42;
+      --pink:#ff82bd; --pink-bg:#48203c;
+      --amber:#f4b74f; --amber-bg:#44320f;
+      --blue:#7aa8ff; --blue-bg:#1c2f58;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f5f5fb; --surface:#ffffff; --surface-2:#f7f7fc;
+    --ink:#1f1e37; --ink-soft:#565476; --ink-faint:#8b89a8;
+    --line:#e7e6f1; --line-soft:#efeef7;
+    --purple:#6b45e0; --purple-bg:#efeaff; --mint:#0aa79f; --mint-bg:#daf4f1;
+    --pink:#e0408b; --pink-bg:#fbe4ef; --amber:#cf8410; --amber-bg:#fbeed3;
+    --blue:#3670d8; --blue-bg:#e4edfc; color-scheme:light;
+  }
+  :root[data-theme="dark"]{
+    --bg:#121124; --surface:#1c1b34; --surface-2:#232241;
+    --ink:#edecff; --ink-soft:#b0add6; --ink-faint:#807da9;
+    --line:#2c2b4f; --line-soft:#252445;
+    --purple:#a48bff; --purple-bg:#2b2557; --mint:#3ad8ce; --mint-bg:#123f42;
+    --pink:#ff82bd; --pink-bg:#48203c; --amber:#f4b74f; --amber-bg:#44320f;
+    --blue:#7aa8ff; --blue-bg:#1c2f58; color-scheme:dark;
+  }
 
-  --ink:#161930; --ink-soft:#5a6079;
-  --paper:#f4efe4; --card:#fffdf7;
-  --navy:#0a0e2b; --navy-2:#141a42;
-  --indigo:#3a49a3; --indigo-deep:#2a3582;
-  --gold:#c39a35; --gold-deep:#8a6c1c; --gold-soft:#e7d199;
-  --line:#e6dcc6; --line-soft:#efe7d6;
-  --shadow:0 2px 4px rgba(20,20,40,.04), 0 10px 30px rgba(20,20,40,.06);
-  --shadow-lg:0 8px 18px rgba(20,20,40,.07), 0 24px 60px rgba(20,20,40,.10);
-  --font-serif:'Noto Serif KR','Nanum Myeongjo',serif;
-  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
-::selection{background:var(--gold-soft);color:var(--navy)}
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.6;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px;}
 
-/* ───── APPBAR (topbar + tabs) ───── */
-.appbar{position:sticky;top:0;z-index:100;background:rgba(244,239,228,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
-.topbar{max-width:1180px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px}
-.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
-.brand .mark{width:25px;height:25px;flex-shrink:0}
-.brand .wm{font-family:var(--font-serif);font-weight:600;font-size:1.02rem;line-height:1}
-.brand .tag{font-size:.6rem;letter-spacing:.26em;color:var(--gold-deep);font-weight:600;display:block;margin-top:3px}
-.mini-timer{display:none;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--navy);color:#fff;font-variant-numeric:tabular-nums;font-weight:600;font-size:.82rem;cursor:pointer;border:none}
-.mini-timer.live{display:inline-flex}
-.mini-timer .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-soft);animation:pulse 1.6s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(231,209,153,.6)}70%{box-shadow:0 0 0 7px rgba(231,209,153,0)}100%{box-shadow:0 0 0 0 rgba(231,209,153,0)}}
-.tabs{max-width:1180px;margin:0 auto;padding:0 26px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{background:none;border:none;cursor:pointer;font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--ink-soft);padding:13px 15px;border-bottom:2.5px solid transparent;white-space:nowrap;transition:.2s;margin-bottom:-1px}
-.tab:hover{color:var(--navy)}
-.tab.active{color:var(--navy);border-bottom-color:var(--gold)}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 80%,transparent);
+    backdrop-filter:saturate(1.3) blur(10px);border-bottom:1px solid var(--line-soft);}
+  .hbar{display:flex;align-items:center;gap:12px;padding:13px 0;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14.5px;letter-spacing:-.01em;}
+  .brand .dot{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:#fff;
+    background:linear-gradient(135deg,var(--purple),var(--pink));}
+  .brand .dot svg{width:14px;height:14px;}
+  .spacer{flex:1;}
+  .toggle{width:37px;height:37px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+    display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:.2s;}
+  .toggle:hover{color:var(--purple);border-color:var(--purple);transform:translateY(-1px) rotate(-8deg);}
+  .toggle svg{width:18px;height:18px;}
+  .toggle .moon{display:none;} :root[data-theme="dark"] .toggle .sun{display:none;}
+  :root[data-theme="dark"] .toggle .moon{display:block;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toggle .sun{display:none;}
+    :root:not([data-theme="light"]) .toggle .moon{display:block;}}
 
-/* ───── PANELS ───── */
-.panel{display:none}
-.panel.active{display:block;animation:panelIn .42s cubic-bezier(.2,.7,.2,1)}
-@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.wrap{max-width:1180px;margin:0 auto;padding:64px 26px}
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:76px 0 30px;}
+  .blob{position:absolute;border-radius:50%;filter:blur(66px);z-index:0;pointer-events:none;}
+  .b1{width:330px;height:330px;background:var(--purple);opacity:.5;top:-110px;right:-30px;animation:f1 15s ease-in-out infinite;}
+  .b2{width:250px;height:250px;background:var(--pink);opacity:.38;top:40px;right:190px;animation:f2 19s ease-in-out infinite;}
+  .b3{width:220px;height:220px;background:var(--mint);opacity:.32;top:-40px;left:-70px;animation:f1 17s ease-in-out infinite reverse;}
+  @keyframes f1{50%{transform:translate(-22px,24px) scale(1.07);}}
+  @keyframes f2{50%{transform:translate(18px,-18px) scale(1.1);}}
+  .hero .inner{position:relative;z-index:1;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    color:var(--purple);background:var(--purple-bg);padding:6px 14px;border-radius:999px;margin:0 0 22px;}
+  .eyebrow .live{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mint) 55%,transparent);}70%{box-shadow:0 0 0 8px transparent;}}
+  h1{font-size:clamp(33px,6.4vw,60px);line-height:1.08;margin:0 0 20px;font-weight:800;
+    letter-spacing:-.035em;text-wrap:balance;}
+  h1 .u{position:relative;white-space:nowrap;color:var(--purple);}
+  h1 .u svg{position:absolute;left:-2%;bottom:-.26em;width:104%;height:.42em;overflow:visible;}
+  h1 .u svg path{fill:none;stroke:var(--pink);stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:340;stroke-dashoffset:340;animation:draw 1.1s .35s ease forwards;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .lede{font-size:clamp(15px,2.1vw,18px);color:var(--ink-soft);max-width:52ch;margin:0 0 20px;}
+  .stat{display:flex;gap:8px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-faint);align-items:center;}
+  .stat b{color:var(--ink);font-weight:800;}
+  .stat .d{width:4px;height:4px;border-radius:50%;background:var(--ink-faint);opacity:.5;margin:0 6px;}
 
-/* ───── HERO (home) ───── */
-.hero{position:relative;min-height:clamp(400px,56vh,540px);display:flex;align-items:center;overflow:hidden;
-  background:linear-gradient(180deg,rgba(10,14,43,.55),rgba(10,14,43,.74) 55%,rgba(10,14,43,.96)),var(--hero-photo,none),radial-gradient(120% 90% at 78% 12%,#1b2256,var(--navy) 58%);
-  background-size:cover;background-position:center}
-.starfield{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:tw 4s infinite ease-in-out}
-@keyframes tw{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
-.comet{position:absolute;top:16%;left:-12%;width:220px;height:2px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(231,209,153,.55) 70%,#fff);border-radius:999px;filter:drop-shadow(0 0 6px rgba(231,209,153,.6));transform:rotate(18deg);opacity:0;animation:comet 11s ease-in 1.5s infinite}
-.comet::after{content:"";position:absolute;right:-3px;top:-2px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 12px 3px rgba(231,209,153,.8)}
-@keyframes comet{0%{opacity:0;transform:rotate(18deg) translate(0,0)}6%{opacity:1}26%{opacity:1;transform:rotate(18deg) translate(95vw,30vh)}30%,100%{opacity:0;transform:rotate(18deg) translate(95vw,30vh)}}
-.hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:56px 26px;width:100%}
-.hero-eyebrow{display:inline-block;color:var(--gold-soft);font-size:.76rem;font-weight:600;letter-spacing:.16em;margin-bottom:20px;border:1px solid rgba(231,209,153,.32);padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.03)}
-.hero h1{font-family:var(--font-serif);color:#fff;font-weight:700;font-size:clamp(2.3rem,6vw,4.2rem);line-height:1.12;letter-spacing:-.01em;text-shadow:0 2px 40px rgba(0,0,0,.4)}
-.hero h1 .accent{color:var(--gold-soft)}
-.hero .sub{color:rgba(255,255,255,.86);font-size:clamp(1rem,2vw,1.26rem);margin-top:20px;max-width:620px;line-height:1.6}
-.hero-meta{display:flex;gap:24px;flex-wrap:wrap;margin-top:34px;color:rgba(255,255,255,.7);font-size:.88rem}
-.hero-meta .mi{display:flex;align-items:center;gap:8px}
-.hero-meta b{color:#fff;font-weight:600}
-.fu{opacity:0;transform:translateY(20px);animation:fuk .9s cubic-bezier(.2,.7,.2,1) forwards}
-@keyframes fuk{to{opacity:1;transform:none}}
-.d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.32s}.d4{animation-delay:.46s}
+  /* section */
+  section{padding:30px 0 6px;}
+  .lbl{display:inline-flex;align-items:center;gap:9px;margin:0 0 6px;transform:rotate(-1.4deg);}
+  .lbl .t{font-size:13px;font-weight:800;letter-spacing:.01em;color:var(--c);
+    background:var(--cbg);padding:5px 13px;border-radius:9px;}
+  .lbl .n{font-size:12px;color:var(--ink-faint);font-weight:700;}
 
-.home-extra{padding-top:52px;padding-bottom:72px}
-.home-lead{font-family:var(--font-serif);font-size:clamp(1.15rem,2.4vw,1.5rem);color:var(--navy);line-height:1.6;max-width:780px;margin-bottom:34px}
-.home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.access-card{display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--card);border:2px solid var(--gold);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow-lg);margin-bottom:30px;flex-wrap:wrap}
-.ac-eyebrow{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.12rem;margin-bottom:8px}
-.ac-url{font-size:.92rem;color:var(--gold-deep);font-weight:700;word-break:break-all;background:#fbf7ec;border-radius:8px;padding:8px 12px;display:inline-block;max-width:100%}
-.ac-copy{margin-top:10px;display:inline-block;font-family:inherit;font-weight:700;background:var(--navy);color:var(--gold-soft);border:none;padding:9px 18px;border-radius:10px;cursor:pointer;transition:.15s}
-.ac-copy:hover{filter:brightness(1.18)}
-.ac-qr{flex:0 0 auto;background:#fff;border-radius:12px;padding:8px;line-height:0;box-shadow:var(--shadow)}
-.ac-qr img{width:150px;height:150px;display:block;image-rendering:pixelated}
-.goal-banner{background:var(--navy);border-radius:18px;padding:22px 26px;margin-bottom:34px;box-shadow:var(--shadow-lg)}
-.gb-eyebrow{font-family:var(--font-serif);font-weight:700;color:var(--gold-soft);font-size:1.05rem;margin-bottom:8px}
-.gb-text{color:#f2eee1;font-size:1.02rem;line-height:1.65}
-.gb-text b{color:#fff}
-@media(max-width:560px){.access-card{justify-content:center;text-align:center}.ac-left{order:2}.ac-qr{order:1}}
-.hcard{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;cursor:pointer;font-family:var(--font-sans);transition:.25s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:5px}
-.hcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--gold)}
-.hcard .hc-t{font-family:var(--font-serif);font-weight:600;font-size:1.18rem;color:var(--navy);display:flex;align-items:center;gap:9px}
-.hcard small{color:var(--ink-soft);font-size:.85rem}
-.hcard .arr{margin-left:auto;color:var(--gold)}
+  /* editorial list */
+  .list{margin:14px 0 0;}
+  .row{display:flex;align-items:flex-start;gap:18px;padding:20px 12px 20px 14px;
+    border-radius:14px;border-bottom:1px solid var(--line-soft);
+    transition:transform .2s cubic-bezier(.2,.7,.3,1),background .2s;}
+  .row:last-child{border-bottom:0;}
+  .row:hover{transform:translateX(8px);background:var(--surface-2);}
+  .row:focus-visible{outline:2.5px solid var(--c);outline-offset:2px;}
+  .row .rb{flex:1;min-width:0;}
+  .row h3{margin:0;font-weight:700;font-size:clamp(18px,2.5vw,22px);letter-spacing:-.02em;line-height:1.3;
+    display:inline;background-image:linear-gradient(var(--c),var(--c));background-repeat:no-repeat;
+    background-position:0 92%;background-size:0% 3px;transition:background-size .32s ease;}
+  .row:hover h3,.row:focus-visible h3{background-size:100% 3px;}
+  .row p{margin:7px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .row .meta{margin:9px 0 0;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--c);
+    text-transform:uppercase;opacity:.9;}
+  .row .arw{flex:0 0 auto;color:var(--ink-faint);margin-top:4px;transition:transform .2s,color .2s;}
+  .row .arw svg{width:22px;height:22px;display:block;}
+  .row:hover .arw{color:var(--c);transform:translate(3px,-3px);}
 
-/* ───── SECTION HEAD ───── */
-.sec-head{margin-bottom:44px;max-width:780px}
-.kicker{display:flex;align-items:center;gap:10px;color:var(--gold-deep);font-size:.74rem;font-weight:700;letter-spacing:.2em;margin-bottom:15px}
-.kicker::before{content:"";width:26px;height:1.5px;background:var(--gold)}
-.sec-head h2{font-family:var(--font-serif);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.5rem);color:var(--navy);line-height:1.22;letter-spacing:-.01em}
-.sec-head p{color:var(--ink-soft);margin-top:13px;font-size:1.02rem}
+  /* featured (first of 연수) — bigger, no box */
+  .row.feat{padding-top:6px;}
+  .row.feat h3{font-size:clamp(24px,4vw,34px);font-weight:800;background-size:100% 3px;}
+  .row.feat .lead{margin:9px 0 0;font-size:15.5px;color:var(--ink-soft);line-height:1.55;max-width:46ch;}
+  .row.feat .kick{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--c);margin:0 0 8px;}
 
-/* ───── TIMELINE ───── */
-.timeline{position:relative}
-.tl-item{display:grid;grid-template-columns:96px 30px 1fr;align-items:start;position:relative}
-.panel.active .tl-item{opacity:0;animation:fuk .55s ease forwards}
-.panel.active .tl-item:nth-child(1){animation-delay:.06s}.panel.active .tl-item:nth-child(2){animation-delay:.13s}.panel.active .tl-item:nth-child(3){animation-delay:.2s}.panel.active .tl-item:nth-child(4){animation-delay:.27s}.panel.active .tl-item:nth-child(5){animation-delay:.34s}.panel.active .tl-item:nth-child(6){animation-delay:.41s}.panel.active .tl-item:nth-child(7){animation-delay:.48s}
-.tl-time{font-variant-numeric:tabular-nums;text-align:right;padding:22px 18px 22px 0;color:var(--ink-soft);font-weight:600;font-size:.86rem;white-space:nowrap}
-.tl-axis{position:relative;display:flex;justify-content:center}
-.tl-axis::before{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--line)}
-.tl-item:first-child .tl-axis::before{top:30px}
-.tl-item:last-child .tl-axis::before{bottom:auto;height:30px}
-.tl-dot{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:var(--card);border:2.5px solid var(--indigo);margin-top:28px}
-.tl-item.lab .tl-dot{border-color:var(--gold);box-shadow:0 0 0 5px rgba(195,154,53,.14)}
-.tl-item.rest .tl-dot{border-color:var(--ink-soft);background:var(--ink-soft)}
-.tl-card{margin:13px 0 13px 18px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:.25s}
-.tl-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
-.tl-btn{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:18px 20px;display:flex;align-items:center;gap:14px;font-family:inherit}
-.tl-btn .ttl{font-family:var(--font-serif);font-weight:600;font-size:1.1rem;color:var(--navy);flex:1;line-height:1.35}
-.badge{font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:5px 10px;border-radius:999px;white-space:nowrap}
-.b-lec{background:rgba(58,73,163,.11);color:var(--indigo-deep)}
-.b-lab{background:rgba(195,154,53,.18);color:var(--gold-deep)}
-.b-rest{background:rgba(90,96,121,.12);color:var(--ink-soft)}
-.chev{color:var(--ink-soft);transition:transform .3s}
-.tl-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
-.tl-detail{max-height:0;overflow:hidden;transition:max-height .35s ease}
-.tl-detail .inner{padding:16px 20px 20px;color:var(--ink-soft);font-size:.95rem;border-top:1px solid var(--line-soft)}
+  /* 다른 작업실 — sticker chips */
+  .chips{display:flex;flex-wrap:wrap;gap:11px;margin:16px 0 0;}
+  .chip{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);
+    padding:11px 15px 11px 12px;border-radius:13px;transition:transform .18s,box-shadow .18s,border-color .18s;}
+  .chip:nth-child(2n){transform:rotate(1deg);} .chip:nth-child(3n){transform:rotate(-1.2deg);}
+  .chip:hover{transform:translateY(-4px) rotate(0);box-shadow:0 14px 24px -18px var(--c);
+    border-color:color-mix(in srgb,var(--c) 50%,var(--line));}
+  .chip:focus-visible{outline:2.5px solid var(--c);outline-offset:2px;}
+  .chip .ci{width:30px;height:30px;border-radius:9px;flex:0 0 30px;display:grid;place-items:center;
+    background:var(--cbg);color:var(--c);}
+  .chip .ci svg{width:17px;height:17px;}
+  .chip .ct{font-size:13.5px;font-weight:700;letter-spacing:-.01em;}
+  .chip .cd{font-size:11px;color:var(--ink-faint);}
 
-/* ───── LABS ───── */
-.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-.lab{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.lab::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-soft))}
-.lab-tag{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--gold-deep);margin-bottom:8px}
-.lab h3{font-family:var(--font-serif);font-weight:600;font-size:1.45rem;color:var(--navy);line-height:1.3}
-.lab .goal{color:var(--ink-soft);margin-top:10px;font-size:.96rem}
-.label{font-size:.73rem;font-weight:700;letter-spacing:.1em;color:var(--gold-deep);margin:24px 0 11px}
-.prompt-box{background:var(--navy);border-radius:12px;padding:18px 18px 16px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-.prompt-box .pl{font-size:.62rem;letter-spacing:.2em;color:var(--gold-soft);font-weight:700;display:block;margin-bottom:9px}
-.prompt-box code{color:#eef0ff;font-family:'SFMono-Regular',ui-monospace,'D2Coding',Consolas,monospace;font-size:.84rem;line-height:1.65;display:block;white-space:pre-wrap;word-break:keep-all}
-.copy-btn{position:absolute;top:13px;right:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:var(--font-sans);transition:.2s;display:flex;align-items:center;gap:5px}
-.copy-btn:hover{background:rgba(255,255,255,.16)}
-.copy-btn.done{background:var(--gold);border-color:var(--gold);color:var(--navy)}
-.note{font-size:.83rem;color:var(--ink-soft);margin-top:10px}
-ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:13px}
-ol.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start}
-ol.steps li::before{content:counter(s);flex-shrink:0;width:27px;height:27px;border-radius:50%;background:rgba(58,73,163,.1);color:var(--indigo-deep);font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;margin-top:1px}
-ol.steps li b{color:var(--navy);font-weight:600}
-ol.steps li span{color:var(--ink-soft);font-size:.94rem}
-.callout{margin-top:24px;background:rgba(195,154,53,.09);border:1px solid rgba(195,154,53,.28);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
-.callout svg{flex-shrink:0;margin-top:2px}
-.callout p{font-size:.91rem;color:var(--ink)}
-.callout b{color:var(--gold-deep)}
-.callout.strong{background:rgba(195,154,53,.14);border-color:var(--gold);border-width:1.5px}
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.role{border:1px solid var(--line);border-radius:11px;padding:13px 15px;background:#fffefb}
-.role .rn{font-weight:700;color:var(--navy);font-size:.92rem;display:flex;align-items:center;gap:7px}
-.role .rn i{width:7px;height:7px;border-radius:50%;background:var(--gold);display:inline-block}
-.role .rd{color:var(--ink-soft);font-size:.82rem;margin-top:4px;line-height:1.5}
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.tool{display:flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:#fffefb;border-radius:10px;padding:9px 14px;color:var(--navy);font-weight:600;font-size:.86rem;transition:.2s}
-.tool:hover{border-color:var(--gold);background:#fff;transform:translateY(-1px);box-shadow:var(--shadow)}
-.tool i{font-style:normal;color:var(--gold)}
+  footer{margin-top:50px;border-top:1px solid var(--line);padding:28px 0 44px;}
+  #app-credit{font-size:12.5px;color:var(--ink-faint);text-align:center;line-height:1.9;}
+  #app-credit b{color:var(--ink-soft);font-weight:700;}
+  #app-credit .sep{margin:0 8px;opacity:.5;}
 
-/* ───── CONCEPTS ───── */
-.concepts{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
-.concept{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow);transition:.25s}
-.concept:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.concept .cn{font-family:var(--font-serif);font-weight:600;font-size:1.2rem;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.concept p{color:var(--ink-soft);font-size:.93rem}
-.concept b{color:var(--gold-deep)}
-.loop{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 14px}
-.loop .step{background:rgba(58,73,163,.09);color:var(--indigo-deep);font-weight:600;font-size:.78rem;padding:5px 10px;border-radius:7px}
-.loop .step.hl{background:rgba(195,154,53,.18);color:var(--gold-deep)}
-.loop .arr{color:var(--gold);font-weight:700}
-.concept.msg{background:var(--navy);border-color:var(--navy)}
-.concept.msg .cn{color:#fff}
-.concept.msg p{color:rgba(255,255,255,.82);font-family:var(--font-serif);font-size:1.05rem;line-height:1.7}
-
-/* ───── TIMER ───── */
-.timer-wrap{background:radial-gradient(120% 120% at 80% 10%,#1b2256,var(--navy));border-radius:22px;padding:46px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:auto 1fr;gap:46px;align-items:center}
-.timer-wrap .tstar{position:absolute;background:#fff;border-radius:50%;opacity:.6;animation:tw 5s infinite}
-.dial{position:relative;width:230px;height:230px;margin:0 auto}
-.dial svg{transform:rotate(-90deg);width:100%;height:100%}
-.dial .track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:9}
-.dial .prog{fill:none;stroke:var(--gold-soft);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .5s linear}
-.dial .read{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.dial .read .t{font-family:var(--font-serif);font-variant-numeric:tabular-nums;font-size:3.1rem;font-weight:600;line-height:1}
-.dial .read .lab2{font-size:.72rem;letter-spacing:.18em;color:var(--gold-soft);margin-top:8px;font-weight:600}
-.timer-ctl{position:relative;z-index:1}
-.timer-ctl h3{font-family:var(--font-serif);font-weight:600;font-size:1.35rem;margin-bottom:6px}
-.timer-ctl .desc{color:rgba(255,255,255,.7);font-size:.92rem;margin-bottom:22px}
-.presets{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
-.preset{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:9px 15px;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-weight:600;font-size:.85rem;transition:.2s}
-.preset:hover{background:rgba(255,255,255,.15)}
-.preset.active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
-.custom{display:flex;align-items:center;gap:8px;margin-bottom:22px;color:rgba(255,255,255,.7);font-size:.85rem}
-.custom input{width:64px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:8px 10px;font-family:var(--font-sans);font-size:.9rem;text-align:center}
-.custom input:focus{outline:none;border-color:var(--gold-soft)}
-.timer-actions{display:flex;gap:11px}
-.t-btn{border:none;cursor:pointer;font-family:var(--font-sans);font-weight:700;font-size:.92rem;padding:13px 28px;border-radius:11px;transition:.2s}
-.t-start{background:var(--gold);color:var(--navy)}
-.t-start:hover{background:var(--gold-soft)}
-.t-reset{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18)}
-.t-reset:hover{background:rgba(255,255,255,.18)}
-.timer-wrap.done .dial .prog{stroke:#ff9b6b}
-.timer-wrap.done{animation:flash 1s ease 3}
-@keyframes flash{0%,100%{box-shadow:var(--shadow-lg)}50%{box-shadow:0 0 0 4px rgba(231,209,153,.5),var(--shadow-lg)}}
-
-/* ───── UPLOADS ───── */
-.setup-notice{background:var(--card);border:1.5px dashed var(--gold);border-radius:16px;padding:34px;text-align:center;box-shadow:var(--shadow)}
-.setup-notice .si{width:46px;height:46px;margin:0 auto 16px;color:var(--gold)}
-.setup-notice h3{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.25rem;margin-bottom:10px}
-.setup-notice p{color:var(--ink-soft);font-size:.94rem;max-width:520px;margin:0 auto}
-.setup-notice code{background:rgba(58,73,163,.08);color:var(--indigo-deep);padding:2px 7px;border-radius:5px;font-size:.86rem;font-family:ui-monospace,Consolas,monospace}
-.upload-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow);max-width:560px;margin-bottom:42px}
-.upload-card h3{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.3rem;margin-bottom:6px}
-.upload-card .uc-sub{color:var(--ink-soft);font-size:.9rem;margin-bottom:22px}
-.form-row{margin-bottom:16px}
-.form-row label{display:block;font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:7px}
-.form-row input[type=text],.form-row select,.form-row input[type=file]{width:100%;background:#fffefb;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-family:var(--font-sans);font-size:.92rem;color:var(--ink)}
-.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--gold)}
-.form-row input[type=file]{padding:9px 12px;cursor:pointer}
-.up-btn{background:var(--navy);color:#fff;border:none;cursor:pointer;font-family:var(--font-sans);font-weight:700;font-size:.92rem;padding:13px 30px;border-radius:11px;transition:.2s}
-.up-btn:hover{background:var(--navy-2)}
-.up-status{font-size:.88rem;color:var(--gold-deep);margin-top:12px;min-height:1.2em;font-weight:600}
-.reminder{margin-top:16px;font-size:.84rem;color:var(--ink-soft);background:rgba(195,154,53,.09);border-left:3px solid var(--gold);padding:10px 13px;border-radius:0 8px 8px 0}
-.gallery-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:14px;flex-wrap:wrap}
-.gallery-head h3{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.25rem}
-.refresh-btn{background:#fffefb;border:1px solid var(--line);border-radius:10px;padding:8px 16px;cursor:pointer;font-family:var(--font-sans);font-weight:600;font-size:.84rem;color:var(--navy);transition:.2s}
-.refresh-btn:hover{border-color:var(--gold)}
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
-.gitem{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:.25s}
-.gitem:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.gimg{aspect-ratio:4/3;background:#eee5d2;overflow:hidden}
-.gimg img{width:100%;height:100%;object-fit:cover;display:block}
-.gmeta{padding:14px 16px}
-.gbadge{font-size:.68rem;font-weight:700;padding:4px 9px;border-radius:999px;display:inline-block;margin-bottom:8px}
-.b-info{background:rgba(58,73,163,.12);color:var(--indigo-deep)}
-.b-comic{background:rgba(195,154,53,.18);color:var(--gold-deep)}
-.gtitle{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1rem;line-height:1.35}
-.gteam{color:var(--ink-soft);font-size:.82rem;margin-top:4px}
-.empty{text-align:center;color:var(--ink-soft);padding:50px 20px;font-size:.95rem}
-
-/* ───── DEPLOY ───── */
-.deploy-steps{display:flex;flex-direction:column;gap:18px;counter-reset:d}
-.dstep{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;counter-increment:d}
-.dstep .dnum{width:44px;height:44px;border-radius:12px;background:var(--navy);color:var(--gold-soft);font-family:var(--font-serif);font-weight:600;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dstep .dnum::before{content:counter(d)}
-.dstep h3{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.18rem;margin-bottom:9px}
-.dstep p{color:var(--ink-soft);font-size:.94rem}
-.dstep .sub{margin-top:11px}
-.dstep .method{border:1px solid var(--line-soft);border-radius:10px;padding:13px 15px;margin-top:10px;background:#fffefb}
-.dstep .method b{color:var(--navy)}
-.dstep code{background:rgba(58,73,163,.08);color:var(--indigo-deep);padding:2px 7px;border-radius:5px;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;word-break:break-all}
-.ui{display:inline-block;background:rgba(20,20,40,.05);border:1px solid var(--line);padding:1px 8px;border-radius:6px;font-size:.85rem;font-weight:600;color:var(--navy);white-space:nowrap}
-.tip{margin-top:14px;display:flex;gap:10px;align-items:flex-start;background:rgba(195,154,53,.1);border-left:3px solid var(--gold);padding:11px 14px;border-radius:0 9px 9px 0}
-.tip svg{flex-shrink:0;margin-top:2px}
-.tip p{font-size:.88rem;color:var(--ink)}
-.tip b{color:var(--gold-deep)}
-.tip.hotspot{background:rgba(58,73,163,.08);border-left-color:var(--indigo)}
-.tip.hotspot b{color:var(--indigo-deep)}
-.methods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.mcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
-.mtitle{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.12rem;display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.mnum{width:28px;height:28px;border-radius:8px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mhow{color:var(--ink-soft);font-size:.9rem;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line-soft)}
-.plabel,.clabel{display:block;margin-bottom:6px;font-size:.78rem;font-weight:700;letter-spacing:.05em}
-.plabel{color:#2e7d52}.clabel{color:#b5522e}
-.pros{margin-bottom:14px}
-.pros ul,.cons ul{list-style:none;display:flex;flex-direction:column;gap:5px}
-.pros li,.cons li{color:var(--ink-soft);font-size:.88rem;padding-left:16px;position:relative;line-height:1.5}
-.pros li::before{content:"+";position:absolute;left:0;color:#2e7d52;font-weight:700}
-.cons li::before{content:"–";position:absolute;left:0;color:#b5522e;font-weight:700}
-.mcard b{color:var(--navy)}
-@media(max-width:860px){.methods-grid{grid-template-columns:1fr}}
-@media(max-width:560px){.dstep{grid-template-columns:1fr;gap:14px;padding:22px}}
-
-/* ───── PHOTO ───── */
-.vsrow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
-.vsbad,.vsgood{border-radius:12px;padding:14px 16px;font-size:.9rem;color:var(--ink)}
-.vsbad{background:#fbeae7;border:1px solid #f1c9c1}
-.vsgood{background:#eaf6ee;border:1px solid #c8e6d1}
-.vlab{display:block;font-weight:700;font-size:.78rem;margin-bottom:6px}
-.vsbad .vlab{color:#b5522e}.vsgood .vlab{color:#2e7d52}
-.vsbad code,.vsgood code{display:block;margin-top:8px;background:#fff;border:1px solid var(--line);color:var(--ink-soft);padding:6px 9px;border-radius:6px;font-size:.78rem;font-family:ui-monospace,Consolas,monospace;word-break:break-all}
-.rule-list{list-style:none;margin:8px 0 2px;display:flex;flex-direction:column;gap:7px}
-.rule-list li{padding-left:22px;position:relative;font-size:.92rem;color:var(--ink-soft);line-height:1.5}
-.rule-list li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
-.rule-list b{color:var(--navy)}
-.namepair{display:flex;flex-direction:column;gap:7px;margin-top:14px}
-.namepair>span{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem}
-.namepair .bad{color:#b5522e;font-family:ui-monospace,Consolas,monospace;font-size:.84rem}
-.namepair .arr{color:var(--gold);font-weight:700}
-.namepair em{color:#94a0b0;font-style:normal;font-size:.8rem}
-.tree{font-family:ui-monospace,Consolas,monospace;font-size:.86rem;color:var(--ink);line-height:1.7}
-.tree .fname{color:var(--indigo-deep)}
-.flow-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
-.flow-chips .sep{color:var(--gold);font-weight:700}
-.dstep .prompt-box code{background:transparent;border:none;padding:0;border-radius:0;color:#eef0ff;display:block;white-space:pre-wrap;word-break:keep-all;font-size:.84rem;line-height:1.65}
-.glossary-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-top:24px}
-.glossary-box h4{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.05rem;margin-bottom:12px}
-.glossary-box dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:.9rem;align-items:start}
-.glossary-box dt{font-weight:700;color:var(--navy)}
-.glossary-box dd{color:var(--ink-soft)}
-.glossary-box code{background:rgba(58,73,163,.08);color:var(--indigo-deep);padding:2px 7px;border-radius:5px;font-family:ui-monospace,Consolas,monospace;font-size:.84rem;word-break:break-all}
-@media(max-width:560px){.vsrow{grid-template-columns:1fr}.glossary-box dl{grid-template-columns:1fr;gap:2px 0}.glossary-box dt{margin-top:8px}}
-
-/* ───── VIBE ───── */
-.sub-block{margin-bottom:34px}
-.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
-.tcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
-.tcard .tn{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.15rem}
-.tcard .tt{color:var(--gold-deep);font-size:.8rem;font-weight:700;letter-spacing:.04em;margin:3px 0 9px}
-.tcard p{color:var(--ink-soft);font-size:.9rem;line-height:1.55}
-.tcard em{display:block;margin-top:8px;color:#94a0b0;font-style:normal;font-size:.82rem}
-.steps em{font-style:normal;color:#94a0b0;font-size:.85rem}
-.steps code,.sub-block>p code{background:rgba(58,73,163,.08);color:var(--indigo-deep);padding:2px 7px;border-radius:5px;font-family:ui-monospace,Consolas,monospace;font-size:.84rem;word-break:break-all}
-.proposal{background:radial-gradient(120% 120% at 80% 10%,#1b2256,var(--navy));border-radius:22px;padding:38px;color:#fff;box-shadow:var(--shadow-lg);margin-top:10px}
-.proposal h3{font-family:var(--font-serif);font-weight:600;font-size:1.45rem;margin:8px 0 14px;line-height:1.3}
-.proposal p{color:rgba(255,255,255,.85);font-size:.97rem;line-height:1.7;margin-bottom:10px}
-.proposal b{color:var(--gold-soft)}
-@media(max-width:860px){.trio{grid-template-columns:1fr}}
-.b-sim{background:rgba(46,125,82,.15);color:#2e7d52}
-.gimg-sim{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-decoration:none;background:linear-gradient(135deg,#1b2256,var(--navy))}
-.gimg-sim .play{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem}
-.gimg-sim .open{font-size:.84rem;font-weight:700;color:var(--gold-soft)}
-.gimg-sim:hover{filter:brightness(1.14)}
-
-/* ───── ABOUT ───── */
-.teacher-card{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
-.t-avatar{flex-shrink:0;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1b2256,var(--navy));color:var(--gold-soft);font-family:var(--font-serif);font-size:1.7rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px var(--navy)}
-.t-name{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.3rem}
-.t-nick{font-size:.82rem;color:var(--gold-deep);font-weight:700;margin-left:6px}
-.t-role{color:var(--ink-soft);font-size:.92rem;margin-top:2px}
-.t-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.t-tags span{font-size:.74rem;font-weight:700;color:var(--gold-deep);background:rgba(195,154,53,.12);border:1px solid rgba(195,154,53,.25);padding:3px 9px;border-radius:20px}
-.bio-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 20px;cursor:pointer;font-family:inherit;font-size:.97rem;font-weight:700;color:var(--navy);box-shadow:var(--shadow);transition:.15s}
-.bio-toggle:hover{border-color:var(--gold)}
-.bio-toggle>span:first-child{display:flex;align-items:center;gap:9px;color:var(--navy)}
-.bio-toggle .chev{color:var(--gold);transition:transform .3s ease;font-size:.9rem}
-.bio-toggle.open .chev{transform:rotate(180deg)}
-.bio-content{max-height:0;overflow:hidden;transition:max-height .4s ease}
-.bio-content.open{max-height:900px}
-.bio-inner{background:#fbf7ec;border:1px solid var(--line);border-radius:14px;margin:8px 0 0;padding:22px}
-.bio-row{display:flex;gap:12px;align-items:baseline}
-.bio-k{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:.95rem;flex-shrink:0}
-.bio-v{color:var(--ink-soft);font-size:.93rem}
-.bio-v em{font-style:normal;color:#94a0b0;font-size:.85rem}
-.bio-sep{height:1px;background:var(--line);margin:14px 0}
-.bio-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.bio-list li{position:relative;padding-left:20px;color:var(--ink-soft);font-size:.92rem;line-height:1.5}
-.bio-list li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
-.about-block{margin-top:30px}
-.about-h{font-family:var(--font-serif);font-weight:600;color:var(--navy);font-size:1.25rem;margin-bottom:6px}
-.ab-sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:14px}
-.me-lead{font-size:1.05rem;color:var(--ink);line-height:1.6}
-.me-lead b{color:var(--navy)}
-.me-sub{color:var(--ink-soft);font-size:.93rem;margin-top:6px}
-.me-photo-row{display:flex;gap:18px;align-items:center;margin-top:6px}
-.me-photo{flex-shrink:0;width:210px}
-.me-img{width:100%;height:170px;object-fit:cover;border-radius:16px;box-shadow:var(--shadow);display:block}
-.me-photo .photo-ph{display:none}
-.me-photo.no-img .me-img{display:none}
-.me-photo.no-img .photo-ph{display:flex}
-.photo-ph{width:100%;height:170px;border:2px dashed #d8c79a;border-radius:16px;background:#fbf7ec;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--gold-deep);font-size:.82rem;font-weight:700;text-align:center;padding:18px;line-height:1.4}
-.me-photo-text{flex:1;display:flex;flex-direction:column;justify-content:center}
-.daymood{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.dm{border-radius:14px;padding:18px;text-align:center}
-.dm.good{background:#eaf6ee;border:1px solid #c8e6d1}
-.dm.bad{background:#fbeae7;border:1px solid #f1c9c1}
-.dm-emo{font-size:1.8rem}
-.dm-t{font-family:var(--font-serif);font-weight:700;margin-top:6px;font-size:1rem}
-.dm.good .dm-t{color:#2e7d52}.dm.bad .dm-t{color:#b5522e}
-.dm-d{font-size:.9rem;margin-top:3px}
-.dm.good .dm-d{color:#3a8a62}.dm.bad .dm-d{color:#bd6a4d}
-.focus-quote{margin-top:22px;background:linear-gradient(135deg,#1b2256,var(--navy));color:#fff;border-radius:16px;padding:22px 24px;font-size:1.05rem;line-height:1.6;box-shadow:var(--shadow-lg)}
-.focus-quote b{color:var(--gold-soft)}
-.res-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.res-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:.16s}
-.res-btn:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 14px 30px -14px rgba(195,154,53,.5)}
-.rb-icon{font-size:1.5rem}
-.rb-t{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.05rem;margin-top:4px}
-.rb-u{font-size:.78rem;color:var(--gold-deep);font-family:ui-monospace,Consolas,monospace;word-break:break-all}
-.letters{column-count:3;column-gap:16px}
-@media(max-width:860px){.letters{column-count:2}}
-@media(max-width:520px){.letters{column-count:1}}
-.letter{position:relative;background:#fffdf7;border:1px solid var(--line);border-radius:16px;padding:24px 20px 18px;box-shadow:var(--shadow);break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 16px;display:inline-block;width:100%}
-.letter:nth-child(odd){transform:rotate(-.6deg)}
-.letter:nth-child(even){transform:rotate(.7deg)}
-.letter .quote{position:absolute;top:4px;left:14px;font-family:var(--font-serif);font-size:2.4rem;color:var(--gold-soft);line-height:1}
-.letter blockquote{margin:14px 0 0;color:var(--ink);font-size:.95rem;line-height:1.65}
-.letter figcaption{margin-top:14px;text-align:right;font-family:var(--font-serif);color:var(--gold-deep);font-size:.9rem;font-weight:700}
-.blank{display:inline-block;cursor:pointer;border:1.5px dashed var(--gold);background:#fbf7ec;color:var(--gold-deep);font-weight:700;padding:2px 14px;border-radius:9px;font-size:.95em;user-select:none;transition:.15s;line-height:1.6}
-.blank:hover{background:#f3e9cf}
-.blank.on{border-style:solid;border-color:transparent;background:linear-gradient(135deg,#1b2256,var(--navy));color:#fff;animation:blankpop .32s ease}
-.proposal .blank.on{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#1a1f3d}
-@keyframes blankpop{0%{transform:scale(.88)}55%{transform:scale(1.1)}100%{transform:scale(1)}}
-@media(max-width:620px){.me-photo-row{flex-direction:column}.me-photo{width:100%}.daymood{grid-template-columns:1fr}.res-btns{grid-template-columns:1fr}}
-
-/* ───── SUBMIT / DASHBOARD ───── */
-.proposal code{background:rgba(255,255,255,.16);color:#fff;padding:1px 8px;border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:.86em}
-.form-row textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-family:ui-monospace,Consolas,monospace;font-size:.82rem;color:var(--ink);background:#fffefb;resize:vertical;line-height:1.5}
-.form-row textarea:focus{outline:none;border-color:var(--gold)}
-.dash-wrap{margin-top:22px;border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:var(--shadow);overflow:hidden}
-.dash-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;background:linear-gradient(135deg,#1b2256,var(--navy))}
-.dash-title{font-family:var(--font-serif);font-weight:700;color:#fff;font-size:1.1rem}
-.dash-note{color:var(--gold-soft);font-size:.82rem;margin-top:2px}
-.dash-toggle{font-family:inherit;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;padding:8px 16px;border-radius:10px;cursor:pointer;transition:.15s;white-space:nowrap}
-.dash-toggle:hover{background:rgba(255,255,255,.24)}
-.dash-gate{display:flex;align-items:center;gap:8px;padding:16px 22px;flex-wrap:wrap}
-.dash-gate input{border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.92rem}
-.dash-gate button{font-family:inherit;font-weight:700;background:var(--navy);color:#fff;border:none;padding:10px 18px;border-radius:10px;cursor:pointer}
-.dash-msg{color:#c0392b;font-size:.85rem;font-weight:700}
-.dash-body{padding:6px 22px 22px}
-.dash-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;color:var(--ink-soft);font-size:.9rem;font-weight:700}
-.dash-refresh{font-family:inherit;font-size:.84rem;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--navy);padding:7px 14px;border-radius:9px;cursor:pointer}
-.dash-empty{color:var(--ink-soft);text-align:center;padding:30px;font-size:.92rem}
-.dash-item{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;background:#fffefb}
-.di-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-.di-name{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.02rem}
-.di-title{color:var(--ink-soft);font-size:.9rem;margin-left:8px}
-.di-when{color:#9aa0b8;font-size:.78rem;white-space:nowrap;flex-shrink:0}
-.di-preview{width:100%;height:240px;border:1px solid var(--line);border-radius:10px;background:#fff;display:block}
-.di-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.di-actions button{font-family:inherit;font-size:.82rem;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--navy);padding:8px 14px;border-radius:9px;cursor:pointer;transition:.15s}
-.di-actions button:hover{border-color:var(--gold);background:#fbf7ec}
-@media(max-width:560px){.di-preview{height:200px}}
-
-/* ───── WALL ───── */
-.wall{margin-top:24px}
-.wall-head{margin-bottom:14px}
-.wall-count{font-size:.85rem;color:var(--gold-deep);font-weight:700}
-.wall-form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
-.wall-name{border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.92rem;background:#fffefb;max-width:220px}
-.wall-name:focus,.wall-text:focus{outline:none;border-color:var(--gold)}
-.wall-text{border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:.95rem;background:#fffefb;resize:vertical;line-height:1.55;color:var(--ink)}
-.wall-actions{display:flex;align-items:center;gap:12px}
-.wall-btn{font-family:inherit;font-weight:700;background:var(--navy);color:var(--gold-soft);border:none;padding:11px 22px;border-radius:11px;cursor:pointer;transition:.15s}
-.wall-btn:hover{filter:brightness(1.18)}
-.wall-status{font-size:.85rem;color:var(--gold-deep);font-weight:700}
-.wall-list{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.wall-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);padding:24px;font-size:.92rem}
-.wall-card{background:#fffdf7;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:16px 16px 14px;box-shadow:var(--shadow)}
-.wall-card .wc-text{color:var(--ink);font-size:.95rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
-.wall-card .wc-meta{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.wall-card .wc-name{font-family:var(--font-serif);color:var(--gold-deep);font-weight:700;font-size:.88rem}
-.wall-card .wc-when{color:#9aa0b8;font-size:.74rem;white-space:nowrap}
-@media(max-width:560px){.wall-list{grid-template-columns:1fr}}
-
-/* ───── MODEL BOX ───── */
-.model-box{margin-top:22px;background:#fbf7ec;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:20px 22px}
-.mb-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:14px}
-.mb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.mb-t{font-weight:800;color:var(--gold-deep);font-size:.86rem;margin-bottom:8px;letter-spacing:.02em}
-.mb-col .rule-list li{font-size:.88rem}
-@media(max-width:720px){.mb-grid{grid-template-columns:1fr;gap:16px}}
-
-/* ───── IMAGE TOOLS ───── */
-.imgtools{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
-.it-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
-.it-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;box-shadow:var(--shadow)}
-.it-card.hot{border:2px solid var(--gold);background:#fffdf5}
-.it-h{font-family:var(--font-serif);font-weight:700;color:var(--navy);font-size:1.02rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.it-m{font-size:.78rem;color:var(--gold-deep);font-weight:700;margin:3px 0 9px}
-.it-pick{font-size:.66rem;background:var(--gold);color:#fff;padding:2px 9px;border-radius:20px;letter-spacing:.02em}
-.it-card .rule-list li{font-size:.85rem}
-.why-gpt{margin-top:16px;background:var(--navy);border-radius:14px;padding:18px 20px}
-.why-gpt .it-h{color:var(--gold-soft)}
-.why-gpt .rule-list li{color:#e9e5d7;font-size:.9rem}
-.why-note{margin-top:12px;color:var(--gold-soft);font-size:.86rem;line-height:1.55;background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px}
-@media(max-width:720px){.it-grid{grid-template-columns:1fr}}
-
-/* ───── DEV LOG (코딩 일지) ───── */
-.devlog{display:flex;flex-direction:column;gap:14px;margin-top:6px}
-.dl-entry{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:14px 16px}
-.dl-row{display:flex;gap:9px;font-size:.9rem;line-height:1.55;padding:3px 0;color:var(--ink)}
-.dl-tag{flex:0 0 auto;font-weight:800;font-size:.72rem;padding:2px 8px;border-radius:6px;align-self:flex-start;margin-top:2px;white-space:nowrap}
-.t-ask{background:#e9ecff;color:#3a49a3}
-.t-res{background:#fdeaea;color:#b3261e}
-.t-next{background:#e7f6ec;color:#1f7a3d}
-
-/* ───── VIBE SUB-TABS ───── */
-.vtabs{position:sticky;top:88px;z-index:50;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;padding:10px 12px;background:rgba(244,239,228,.92);backdrop-filter:saturate(1.3) blur(8px);-webkit-backdrop-filter:saturate(1.3) blur(8px);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
-.vtab{font-family:inherit;font-weight:700;font-size:.92rem;color:var(--ink-soft);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;transition:.15s;white-space:nowrap}
-.vtab:hover{border-color:var(--gold-soft);color:var(--navy)}
-.vtab.active{background:var(--navy);color:var(--gold-soft);border-color:var(--navy)}
-.vsub{display:none}
-.vsub.active{display:block;animation:vfade .25s ease}
-@keyframes vfade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-@media(max-width:560px){.vtab{font-size:.84rem;padding:7px 13px}}
-
-/* ───── STUDENT WORKS + LETTERS PHOTO ───── */
-.student-works{margin-top:30px;padding:22px 24px;background:#fbf7ec;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:16px}
-.sw-group{margin-top:14px}
-.sw-topic{font-weight:800;color:var(--navy);font-size:.95rem;margin-bottom:8px}
-.sw-links{display:flex;flex-wrap:wrap;gap:10px}
-.sw-btn{font-family:inherit;font-weight:700;font-size:.9rem;color:var(--gold-deep);background:var(--card);border:1.5px solid var(--gold-soft);border-radius:10px;padding:9px 16px;text-decoration:none;transition:.15s}
-.sw-btn:hover{background:var(--navy);color:var(--gold-soft);border-color:var(--navy)}
-.letters-photo{margin:0 0 20px;text-align:center}
-.letters-photo img{max-width:400px;width:100%;border-radius:14px;box-shadow:var(--shadow-lg);border:1px solid var(--line)}
-.letters-photo figcaption{margin-top:8px;font-size:.85rem;color:var(--ink-soft)}
-
-/* ───── VIBE EXTRAS (cheatsheet · debug · diary) ───── */
-.tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:6px}
-.tipcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow)}
-.tipcard .tch{font-weight:800;color:var(--navy);font-size:.92rem;margin-bottom:5px}
-.tipcard .tcp{color:var(--ink-soft);font-size:.85rem;line-height:1.55}
-.tipcard .tcp b{color:var(--gold-deep)}
-@media(max-width:640px){.tip-grid{grid-template-columns:1fr}}
-.dbg{margin-top:6px;display:flex;flex-direction:column;gap:8px;font-size:.92rem;color:var(--ink);line-height:1.5}
-.dbg .x{color:#b23b3b;font-weight:800;margin-right:4px}
-.dbg .o{color:#2f8a52;font-weight:800;margin-right:4px}
-.dbg-key{margin-top:14px;background:var(--navy);border-radius:12px;padding:14px 16px;color:#e9e5d7;font-size:.9rem;line-height:1.6}
-.dbg-key b{color:var(--gold-soft)}
-.diary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px}
-.dentry{background:#fffdf7;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:13px;padding:15px 17px;box-shadow:var(--shadow)}
-.dentry p{margin:0 0 6px;font-size:.88rem;line-height:1.5;color:var(--ink)}
-.de-k{display:inline-block;min-width:58px;font-weight:800;font-size:.76rem;color:var(--gold-deep)}
-.de-l{margin-top:8px!important;padding-top:8px;border-top:1px dashed var(--line);font-weight:700;color:var(--navy)}
-@media(max-width:640px){.diary{grid-template-columns:1fr}}
-
-/* ───── FOOTER ───── */
-footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:50px 26px;position:relative;overflow:hidden}
-footer .fstar{position:absolute;background:#fff;border-radius:50%;opacity:.5;animation:tw 6s infinite}
-footer .fmark{width:30px;height:30px;margin:0 auto 16px;position:relative;z-index:1}
-footer .fw{font-family:var(--font-serif);color:#fff;font-size:1.12rem;font-weight:600;position:relative;z-index:1}
-footer .fs{font-size:.82rem;margin-top:8px;position:relative;z-index:1}
-footer .fmsg{color:var(--gold-soft);font-size:.84rem;margin-top:16px;font-family:var(--font-serif);position:relative;z-index:1}
-
-@media(max-width:860px){.lab-grid,.concepts,.home-cards{grid-template-columns:1fr}.timer-wrap{grid-template-columns:1fr;gap:30px;padding:34px}}
-@media(max-width:560px){.wrap{padding:48px 20px}.hero-inner{padding:44px 20px}.tl-item{grid-template-columns:62px 26px 1fr}.tl-time{padding:22px 10px 22px 0;font-size:.78rem;white-space:normal}.lab,.upload-card{padding:24px}.roles{grid-template-columns:1fr}.brand .tag{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto;transition:none!important;}
+    h1 .u svg path{stroke-dashoffset:0;}
+  }
+  @media(max-width:520px){
+    .hero{padding-top:54px;} .row{gap:12px;padding-left:8px;padding-right:8px;}
+    .lbl{transform:none;}
+  }
 </style>
-</head>
-<body>
 
-<!-- ============ APPBAR ============ -->
-<div class="appbar">
-  <div class="topbar">
-    <div class="brand" onclick="switchTab('home')">
-      <svg class="mark" viewBox="0 0 32 32" fill="none">
-        <circle cx="22" cy="10" r="4.5" fill="#c39a35"/>
-        <path d="M19 13 L5 27" stroke="#3a49a3" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M22 14.5 L11.5 25" stroke="#c39a35" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
-        <circle cx="9" cy="6" r="1" fill="#c39a35"/><circle cx="28" cy="22" r="1" fill="#3a49a3"/>
-      </svg>
-      <span><span class="wm">꼬리별</span><span class="tag">JUNE WORKSHOP</span></span>
-    </div>
-    <button class="mini-timer" id="miniTimer" onclick="switchTab('timer')"><span class="dot"></span><span id="miniTime">00:00</span></button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18 18 6M9 6h9v9"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 8.5A2 2 0 0 0 6.7 21h10.6a2 2 0 0 0 1.7-3.5L14 9V3"/><path d="M7.5 15h9"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/></symbol>
+  <symbol id="i-game" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 11h.01M18 13h.01"/><rect x="2" y="6" width="20" height="12" rx="5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13a9 9 0 0 1 18 0"/><path d="M12 13l4-3"/><circle cx="12" cy="13" r="1.5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+</defs></svg>
+
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="#top"><span class="dot"><svg><use href="#i-spark"/></svg></span>Growing Teachers</a>
+    <span class="spacer"></span>
+    <button class="toggle" id="themeBtn" aria-label="라이트·다크 전환">
+      <span class="sun"><svg><use href="#i-sun"/></svg></span>
+      <span class="moon"><svg><use href="#i-moon"/></svg></span>
+    </button>
   </div>
-  <nav class="tabs" id="tabs">
-    <button class="tab active" data-tab="home">홈</button>
-    <button class="tab" data-tab="about">강사 소개</button>
-    <button class="tab" data-tab="flow">흐름</button>
-    <button class="tab" data-tab="vibe">바이브코딩</button>
-    <button class="tab" data-tab="labs">실습</button>
-    <button class="tab" data-tab="deploy">배포</button>
-    <button class="tab" data-tab="submit">과제 제출</button>
-    <button class="tab" data-tab="timer">타이머</button>
-    <button class="tab" data-tab="uploads">결과물</button>
-  </nav>
+</header>
+
+<a id="top"></a>
+<div class="hero">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <div class="wrap inner">
+    <span class="eyebrow"><span class="live"></span>조승재 · 해누리중학교 과학교사</span>
+    <h1>수업 밖에서 만든 것들,<br><span class="u">여기 다 모았어요<svg viewBox="0 0 300 12" preserveAspectRatio="none"><path d="M3 8C60 3 110 3 150 6s90 4 147 1"/></svg></span></h1>
+    <p class="lede">과학 교사로서 진행한 연수·워크숍과, 교실 밖 업무를 돕는 도구·안내들. 필요한 걸 콕 집어 바로 열어보세요.</p>
+    <div class="stat"><b>6</b>&nbsp;연수·워크숍<span class="d"></span><b>3</b>&nbsp;도구·안내<span class="d"></span><b>4</b>&nbsp;다른 작업실</div>
+  </div>
 </div>
 
-<main>
-<!-- ============ HOME ============ -->
-<section class="panel active" id="tab-home">
-  <div class="hero">
-    <div class="starfield" id="stars"></div>
-    <div class="comet"></div>
-    <div class="hero-inner">
-      <span class="hero-eyebrow fu d1">2026학년도 교간형 전문적 학습공동체 · 꼬리별 · 6월 워크숍</span>
-      <h1 class="fu d2">말로 만드는<br><span class="accent">과학 수업</span></h1>
-      <p class="sub fu d3">AI를 활용한 수업 콘텐츠 개발 역량 강화<br>선생님의 언어가 무엇이든 만드는 마법 주문이 됩니다 🪄</p>
-      <div class="hero-meta fu d4">
-        <span class="mi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e7d199" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2026년 6월 · <b>2시간</b></span>
-        <span class="mi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e7d199" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>신규 교사 대상</span>
-        <!-- 진행자 이름은 자유롭게 수정하세요 -->
-        <span class="mi" onclick="switchTab('about')" style="cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e7d199" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.7L5.7 21.4 8 14 2 9.4h7.6z"/></svg>강사 · <b>해누리중학교 조승재</b> ›</span>
-      </div>
-    </div>
-  </div>
-  <div class="wrap home-extra">
-    <div class="access-card">
-      <div class="ac-left">
-        <div class="ac-eyebrow">📱 각자 기기로 지금 접속하세요!</div>
-        <div class="ac-url" id="acUrl">주소를 불러오는 중…</div>
-        <button class="ac-copy" id="acCopy">주소 복사</button>
-      </div>
-      <div class="ac-qr" id="acQr"></div>
-    </div>
+<div class="wrap">
 
-    <p class="home-lead">오늘은 직접 만들어요! 🛠️ 말로 만드는 과학 시뮬레이터, ChatGPT·Canva 인포그래픽·만화까지 — 보지 말고 손으로! ㅎㅎ</p>
-
-    <div class="goal-banner">
-      <div class="gb-eyebrow">🎯 오늘 가져가실 단 하나</div>
-      <p class="gb-text"><b>내 수업 콘텐츠를 직접 만드는 힘!</b> 선생님만의 설명을 뒷받침하는 <b>나만의 자료</b>, 그리고 우리 반 아이들과의 이야기를 녹인 <b>만화</b>로 아이들을 학습 속으로 쏙 끌어들이기 ✨</p>
+  <!-- 연수 -->
+  <section style="--c:var(--purple);--cbg:var(--purple-bg)">
+    <div class="lbl"><span class="t">연수 · 워크숍</span><span class="n">여섯 자리</span></div>
+    <div class="list">
+      <a class="row feat" href="https://scienceisjo.github.io/growing-teachers/kkoribyeol.html">
+        <div class="rb">
+          <span class="kick">대표 워크숍</span>
+          <h3>말로 만드는 과학 수업</h3>
+          <p class="lead">발문과 대화로 학생의 사고를 여는 과학 수업 설계. 꼬리별 워크숍에서 나눈 이야기.</p>
+        </div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/growing-teachers/lessondesignquiz.html">
+        <div class="rb"><h3>모두가 답하는 교실</h3>
+          <p>전원이 참여하는 수업 설계 훈련</p><div class="meta">평가혁신 직무연수</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/growing-teachers/notion-notebooklm/">
+        <div class="rb"><h3>업무경감 · 자동화</h3>
+          <p>Notion·NotebookLM으로 공문·자료를 가볍게</p><div class="meta">실습형 연수</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/growing-teachers/student-data-backend/">
+        <div class="rb"><h3>학생 데이터, 모으기 전에</h3>
+          <p>데이터를 모으기 전 꼭 짚어야 할 백엔드·개인정보·수집 설계</p><div class="meta">백엔드 교원연수</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/growing-teachers/share.html">
+        <div class="rb"><h3>AI 디지털 영재교육</h3>
+          <p>역량중심 영재 수업을 나눈 발표 자료</p><div class="meta">보조강사 사례나눔</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/growing-teachers/personaltask.html">
+        <div class="rb"><h3>내 아카이브 키우기</h3>
+          <p>연수 뒤에도 내 자료를 계속 키워가는 법</p><div class="meta">확장 과제</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
     </div>
+  </section>
 
-    <div class="home-cards">
-      <button class="hcard" onclick="switchTab('flow')">
-        <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>오늘의 흐름<span class="arr">→</span></span>
-        <small>2시간 · 7단계로 한눈에! ⏱️</small>
-      </button>
-      <button class="hcard" onclick="switchTab('labs')">
-        <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a2 2 0 0 0 2.8 2.8l6-6a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.1-2.1z"/></svg>실습 가이드<span class="arr">→</span></span>
-        <small>시뮬레이션 · 인포그래픽 · 만화 🎨</small>
-      </button>
-      <button class="hcard" onclick="switchTab('uploads')">
-        <span class="hc-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>결과물 올리기<span class="arr">→</span></span>
-        <small>모둠 결과물 갤러리 🖼️</small>
-      </button>
-      <button class="hcard" onclick="window.open('student-data-backend/','_blank')">
-        <span class="hc-t">🗄️ 학생 데이터·백엔드 연수<span class="arr">→</span></span>
-        <small>데이터 수집 · Supabase · 개인정보 안전 🔒 (다른 연수)</small>
-      </button>
+  <!-- 도구 -->
+  <section style="--c:var(--mint);--cbg:var(--mint-bg)">
+    <div class="lbl"><span class="t">교사 업무 도구</span><span class="n">두 자리</span></div>
+    <div class="list">
+      <a class="row" href="https://scienceisjo.github.io/less-work-more-joy/standard-item-checker.html">
+        <div class="rb"><h3>문항 검토소</h3>
+          <p>성취기준으로 평가 문항의 선행 여부를 빠르게 점검</p><div class="meta">점검 도구</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="row" href="https://scienceisjo.github.io/class-tools/pdf-tool/">
+        <div class="rb"><h3>PDF 만능 도구</h3>
+          <p>병합·분할·변환 등 11가지. 설치 없이 브라우저에서 오프라인으로</p><div class="meta">유틸리티</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ ABOUT ============ -->
-<section class="panel" id="tab-about">
+  <!-- 안내 -->
+  <section style="--c:var(--amber);--cbg:var(--amber-bg)">
+    <div class="lbl"><span class="t">안내 · 매뉴얼</span><span class="n">한 자리</span></div>
+    <div class="list">
+      <a class="row" href="https://scienceisjo.github.io/githubmanual/forstudent.html">
+        <div class="rb"><h3>GitHub Pages 게시 따라하기</h3>
+          <p>내가 만든 걸 인터넷에 올리는 법. 학생·동료도 따라 하기 쉽게</p><div class="meta">따라하기 안내</div></div>
+        <span class="arw"><svg><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 다른 작업실 -->
+  <section style="--c:var(--pink);--cbg:var(--pink-bg)">
+    <div class="lbl"><span class="t">내 다른 작업실</span><span class="n">바로가기</span></div>
+    <div class="chips">
+      <a class="chip" style="--c:var(--blue);--cbg:var(--blue-bg)" href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html">
+        <span class="ci"><svg><use href="#i-flask"/></svg></span>
+        <span><span class="ct">과학탐험월드</span><br><span class="cd">과학 수업 산출물 허브</span></span>
+      </a>
+      <a class="chip" style="--c:var(--pink);--cbg:var(--pink-bg)" href="https://scienceisjo.github.io/class-tools/">
+        <span class="ci"><svg><use href="#i-grid"/></svg></span>
+        <span><span class="ct">학급 운영 도구모음</span><br><span class="cd">임원선거·롤링페이퍼 등</span></span>
+      </a>
+      <a class="chip" style="--c:var(--purple);--cbg:var(--purple-bg)" href="https://brain-break-lab.vercel.app/sonic.html">
+        <span class="ci"><svg><use href="#i-game"/></svg></span>
+        <span><span class="ct">교실 게임 월드</span><br><span class="cd">전자칠판 미니게임</span></span>
+      </a>
+      <a class="chip" style="--c:var(--mint);--cbg:var(--mint-bg)" href="https://scienceisjo.github.io/scienceclassjo/">
+        <span class="ci"><svg><use href="#i-gauge"/></svg></span>
+        <span><span class="ct">승재쌤의 과학실</span><br><span class="cd">교사 수업 대시보드</span></span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
   <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">ABOUT</div>
-      <h2>강사 소개</h2>
-      <p>오늘 함께할 해누리중학교 조승재입니다! 😊 반갑습니다!</p>
-    </div>
-
-    <div class="teacher-card">
-      <div class="t-avatar">조</div>
-      <div class="t-info">
-        <div class="t-name">조승재 <span class="t-nick">과학이조선생</span></div>
-        <div class="t-role">해누리중학교 과학교사</div>
-        <div class="t-tags"><span>AI·디지털 교육</span><span>바이브코딩</span><span>과학 시뮬레이션</span><span>센서 활용 수업</span></div>
-      </div>
-    </div>
-
-    <button class="bio-toggle" onclick="toggleBio(this)" aria-expanded="false">
-      <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 약력 · 이력 펼쳐보기</span>
-      <span class="chev">▾</span>
-    </button>
-    <div class="bio-content" id="bioContent">
-      <div class="bio-inner">
-        <div class="bio-row"><span class="bio-k">학력</span><span class="bio-v">한국교원대학교 화학교육과 졸업 <em>(2025.2)</em></span></div>
-        <div class="bio-sep"></div>
-        <div class="bio-k" style="margin-bottom:10px">이력 · 활동</div>
-        <ul class="bio-list">
-          <li>2025–2026 AI디지털 기반 교육혁신 선도교사</li>
-          <li>2025–2026 AIEDAP 마스터교원</li>
-          <li>2025–2026 MIEE (Microsoft Innovative Educator Expert)</li>
-          <li>2026 MAI HERO</li>
-          <li>2026 AI 에듀테크 선도교사</li>
-          <li>AI·디지털 학교로 찾아가는 컨설팅 강사·보조강사</li>
-          <li>서울시 학교 간 AI·디지털 활용 교육 · 센서 활용 교육</li>
-          <li>미래엔–에듀테크 수업 해커톤 2위</li>
-          <li>지능형 과학실 운영</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="about-block">
-      <h3 class="about-h">저는 이런 교사입니다</h3>
-      <div class="me-photo-row">
-        <div class="me-photo">
-          <img class="me-img" src="images/teacher-students.jpg" alt="학생들과 함께한 사진" onerror="this.closest('.me-photo').classList.add('no-img')">
-          <div class="photo-ph">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 5l1.5-2h5L16 5"/></svg>
-            <span>학생들과의 사진을<br>여기에 넣어요</span>
-          </div>
-        </div>
-        <div class="me-photo-text">
-          <p class="me-lead">학생에게 <b>마음을 많이 주고, 많이 받는</b> 교사예요 🥰</p>
-          <p class="me-sub">그 주고받은 마음이 다음 수업의 힘이 돼요!</p>
-        </div>
-      </div>
-
-      <p class="me-lead" style="margin-top:26px">그리고 무엇보다 <b>수업이 중요한</b> 교사랍니다 😊</p>
-      <p class="ab-sub" style="margin:10px 0 0">아래 칸을 눌러보세요 👇</p>
-      <div class="daymood">
-        <div class="dm good"><div class="dm-emo">😀</div><div class="dm-t">수업이 잘 된 날</div><div class="dm-d"><span class="blank" onclick="revealBlank(this)" data-a="엄청 기쁩니다!">눌러보기</span></div></div>
-        <div class="dm bad"><div class="dm-emo">😞</div><div class="dm-t">수업이 잘 안 된 날</div><div class="dm-d"><span class="blank" onclick="revealBlank(this)" data-a="힘이 쭉 빠지죠…">눌러보기</span></div></div>
-      </div>
-
-      <div class="focus-quote">수업을 위한 노력은 많지만 — 오늘의 초점은 <b>‘AI·디지털로 수업 자료 만들기’</b>예요! ✨</div>
-    </div>
-
-    <div class="about-block">
-      <h3 class="about-h">제가 만든 자료 둘러보기 🔍</h3>
-      <p class="ab-sub">누르면 실제 자료로 바로 이동해요! 👉</p>
-      <div class="res-btns">
-        <a class="res-btn" href="https://joo.is/과학탐구월드" target="_blank" rel="noopener"><span class="rb-icon">🔬</span><span class="rb-t">과학탐구월드</span><span class="rb-u">joo.is/과학탐구월드</span></a>
-        <a class="res-btn" href="https://joo.is/교실을깨우자" target="_blank" rel="noopener"><span class="rb-icon">⚡</span><span class="rb-t">교실을 깨우자</span><span class="rb-u">joo.is/교실을깨우자</span></a>
-        <a class="res-btn" href="https://joo.is/해누리오락실" target="_blank" rel="noopener"><span class="rb-icon">🎮</span><span class="rb-t">해누리 오락실</span><span class="rb-u">joo.is/해누리오락실</span></a>
-      </div>
-    </div>
-
-    <div class="about-block">
-      <h3 class="about-h">아이들이 보낸 편지</h3>
-      <p class="ab-sub">과학 시간을 함께한 아이들이 직접 남겨준 한마디예요 💌</p>
-      <figure class="letters-photo">
-        <img src="images/student-letters.jpg" alt="학생들이 직접 써준 편지와 카드" onerror="this.closest('.letters-photo').style.display='none'">
-        <figcaption>실제로 받아온 편지·카드들이에요 💌🥹</figcaption>
-      </figure>
-      <div class="letters">
-        <figure class="letter"><div class="quote">“</div><blockquote>저는 사실 거의 모든 내용을 선행했었거든요. 그래서 그냥 수업 때 적당히 대답하고 지낼려고 했는데 선생님의 수업을 듣고 조금 생각이 바뀌었어요. 선생님이 열정적으로 어떻게든 저희를 즐겁게 가르치르고 하시는 것이 눈에 너무 잘 보이더라구요. 그 이후 항상 선생님의 수업이 궁금해졌어요. 매주 실험이나 영상으로 진행하니 재밌고 미쳐 이해하지 못했던 부분을 배울 수 있어 좋았어요. 항상 재미있는 수업 해주셔서 감사했습니다.</blockquote><figcaption>— OO이</figcaption></figure>
-        <figure class="letter"><div class="quote">“</div><blockquote>힘 단원을 배우고 나서는 세상 모든 물체들에게 화살표가 그려지더라구요. 너무 지나친 것 같지만 실제러 그랬습니다… 가능하다면 다른 힘에 대해서도 배워보고 싶어요. 전에 숏폼을 내리는데 장력에 관한 영상이 뜨더라구요. 장력도 배워보고 싶어요. 자석의 밀어내는 힘도 궁금합니다아</blockquote><figcaption>— OO이</figcaption></figure>
-        <figure class="letter"><div class="quote">“</div><blockquote>선생님! 항상 재밌게 수업해주셔서 감사해요. 덕분에 과학이랑은 하나도 맞지 않다고 생각했던 제가 드디어 과학에 흥미를 느끼게 되었어요. 과학을 공부하면서 저의 문제해결능력? 도 늘었다고 생각하고 과학이 너무 재미있어졌어요. 그냥 제 최애 과목이에요. 항상 과학이 저의 큰 걸림돌이었는데 사람 한 명 살려주셔서 감사해요!!!</blockquote><figcaption>— OO이</figcaption></figure>
-        <figure class="letter"><div class="quote">“</div><blockquote>저는 원래 흥미 있는 단원이 아니면 과학은 집중을 안했고.. 점수차가 좀 있었거든요? 근데 선생님께서 직접 학습지 및 플래폼도 만들어주시고, 항상 적극적으로, 이해를 도우려고 하시고 실험 영상같은 것도 많이 제작해주셔서 저의 과학 성적에 많이 도움이 된 것 같아요!! 정말 두렵고, 지루하기만 했던 과목인 과학이 선생님덕분에 더 흥미롭고, 기대되는 과목으로 변화한 것 같아요 정말 선생님께서 저의 최애 선생님이십니당 정말 선생님과 헤어지고 선생님께서 다른 학년을 가르치신다는게 너무너도 질투날 정도에요!! 이번에 과학 콘서트에 선생님과 같이 참여한 것도 너무나도 좋은 경험이었던 것 같아요  항상 진심으로, 최선을 다해서 과학이란 과목을 가르쳐주셔서 감사합니다</blockquote><figcaption>— OO이</figcaption></figure>
-        <figure class="letter"><div class="quote">“</div><blockquote>항상 1학년 모든 반 학생들을 위해 수업을 열심히 준비해주셔서 정말 감사합니다. 과학A 디지털 교과서에 선생님께서 적어주신 모든 것을 빠짐 없이 꼼꼼히 다 보고 활동도 다 하려고 하고 주신 자료와 실험실 링크도 다 보고 들어갔는데 선생님께서 수업에 얼마나 진심이셨는지 알게 되어 정말 감동이었습니다… 선생님께서 만들어주신 노래 다 외워서 이번 기말 때 정말 도움이 되었어요오… 이렇게 열심히 준비해주시는데 스트레스를 받지 않는다는 선생님이 정말 존경스러웠고 배우고 싶었습니다. 정말 늘 감사하고 2학년 때도 저희 가르쳐주세요!!! 정말 선생님 수업이 가장 이해도 잘되고 재밌는 것 같아요! 항상 감사하고 사랑합니다🩵</blockquote><figcaption>— OO이</figcaption></figure>
-      </div>
-    </div>
-
-    <div class="proposal">
-      <div class="kicker" style="color:var(--gold-soft)">MESSAGE</div>
-      <h3>저경력 교사의 강점은 무엇일까?</h3>
-      <p>경력의 강점이 있다면, <b>젊음의 강점</b>도 있어요! 예를 들면 — ‘공감’·‘밈’을 살린 <b>만화</b>(흥미를 끄는!), <b>최신 유행·학생 관심사</b> 빠르게 파악 같은 것들이요.</p>
-      <p>그리고 제가 생각하는 <b>제 강점</b>은…? <span class="blank" onclick="revealBlank(this)" data-a="자취 · 미혼 · 친구 없음 → 시간이 아주 많음 ㅋㅋㅋ">눌러보기</span></p>
-      <p><b>여러분 생각은요?</b> 아이들이 ‘어, 이거 내 얘기네’ 하고 웃게 만들 아이디어를 <b>아래에 남겨주세요</b> — 적는 순간 모두에게 바로 공유돼요!</p>
-    </div>
-
-    <div class="wall">
-      <div class="wall-head">
-        <h3 class="about-h">우리가 더 잘할 수 있는 것 <span class="wall-count" id="wallCount"></span></h3>
-        <p class="ab-sub">한 줄이면 충분해요. 적는 순간 이 페이지를 보는 모두에게 공유됩니다.</p>
-      </div>
-      <div class="wall-form" id="wallForm">
-        <input type="text" id="wName" class="wall-name" placeholder="이름(선택)" maxlength="20">
-        <textarea id="wText" class="wall-text" rows="2" placeholder="예: 최신 유행·학생 관심사 파악, 밈 한 컷으로 개념 정리…" maxlength="200"></textarea>
-        <div class="wall-actions"><button class="wall-btn" id="wBtn">남기기</button><span class="wall-status" id="wStatus"></span></div>
-      </div>
-      <div class="wall-list" id="wallList">
-        <p class="wall-empty" id="wallEmpty">아직 글이 없어요. 첫 아이디어를 남겨보세요!</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ FLOW ============ -->
-<section class="panel" id="tab-flow">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">TODAY'S FLOW</div>
-      <h2>오늘의 흐름</h2>
-      <p>강의 짧게 · 실습 길게! ⏱️ 실습 75분 / 강의·정리 35분. 항목을 누르면 펼쳐져요 👇</p>
-    </div>
-    <div class="timeline" id="timeline"></div>
-  </div>
-</section>
-
-<!-- ============ LABS ============ -->
-<section class="panel" id="tab-labs">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">HANDS-ON</div>
-      <h2>실습 가이드</h2>
-      <p>실습 A 개인 · 실습 B 모둠! 프롬프트는 복사해서 바로 쓰세요 ✨</p>
-    </div>
-
-    <div class="proposal" style="margin-bottom:36px">
-      <div class="kicker" style="color:var(--gold-soft)">WHY · 오늘 실습의 목적</div>
-      <h3>모형을 ‘만들어보는’ 경험 → 그 주체를 학생에게 넘기기 위해</h3>
-      <p>오늘 우리가 직접 시뮬레이터(= 과학 <b>모형</b>)를 만들어보는 건, 결국 <b>이 경험의 주체를 학생에게 이전하기 위해서</b>예요. 교사가 먼저 모형 제작을 겪어봐야, 학생이 ‘모형의 소비자’가 아니라 <b>‘모형의 제작자’</b>가 되는 수업을 설계할 수 있거든요.</p>
-      <p><b>2022 개정 교육과정</b>의 ‘과정·기능’을 보면 — <b>‘모형을 만들어(또는 이용하여) 현상을 설명하거나 예측하기’</b>가 곳곳에 들어 있어요. 저는 <b>바이브코딩을 통한 모형 제작</b>이야말로 학생이 이 과정·기능을 가장 잘 경험하고 습득할 수 있는 방법이라고 생각해요.</p>
-      <p>‘말로 표현 → 구현 → 확인·수정’을 반복하는 동안, 학생은 자연스럽게 <b>표현하고, 예측하고, 다시 조정</b>하게 되니까요 ✨</p>
-    </div>
-
-    <div class="lab-grid">
-      <!-- 실습 A -->
-      <div class="lab">
-        <div class="lab-tag">실습 A · 개인 · 45분</div>
-        <h3>당장 가까운 수업에서 쓸<br>과학 시뮬레이터 만들기</h3>
-        <p class="goal">내 <b>다음 수업에 바로 쓸</b> 시뮬레이터를 직접 개발! 🛠️ 과학 원리를 <b>말로 표현</b> → Gemini·Claude가 <b>시뮬레이션으로 구현</b> → 확인·수정 🔧</p>
-        <div class="label">과정 — 말로 표현 → 구현 → 수정</div>
-        <ol class="steps">
-          <li><span><b>원리 고르기</b> — 다음 수업에서 다룰 개념 하나.</span></li>
-          <li><span><b>말로 표현</b> — 무엇이 / 어떻게 변하는지 일상어로.</span></li>
-          <li><span><b>구현 요청</b> — 끝에 “HTML 한 파일로 만들어줘”.</span></li>
-          <li><span><b>확인·수정</b> — 원리와 다른 점은 대화로 고치기.</span></li>
-          <li><span><b>(여유되면) 배포</b> — 링크로 공유.</span></li>
-        </ol>
-        <div class="label">시작 프롬프트 — 빈칸만 채우기</div>
-        <div class="prompt-box">
-          <span class="pl">COPY &amp; PASTE</span>
-          <button class="copy-btn" data-copy="promptA"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-          <code id="promptA">‘[다룰 과학 원리]’를 보여주는 시뮬레이션을 만들어줘. [무엇]이 [어떻게] 변하는지 슬라이더나 버튼으로 조절하게 해줘. HTML 한 파일로 만들어줘.</code>
-        </div>
-        <p class="note">예) 온도 슬라이더 → 입자 빨라지기 · 거리 → 중력 세기 · 농도 → 확산 속도 😎</p>
-
-        <div class="model-box">
-          <div class="mb-h">왜 직접 만들어 보나요? — 과학교육론의 ‘모형(Model)’ 🧩</div>
-          <div class="mb-grid">
-            <div class="mb-col">
-              <div class="mb-t">모형의 특징</div>
-              <ul class="rule-list">
-                <li>실제를 <b>단순화</b>한 표상 — 전부가 아닌 핵심만</li>
-                <li><b>예측·설명</b>의 도구</li>
-                <li><b>한계</b>가 있음 — 다 담지 못함</li>
-                <li><b>잠정적</b> — 계속 수정·발전</li>
-                <li>여러 모형이 <b>공존</b> 가능</li>
-              </ul>
-            </div>
-            <div class="mb-col">
-              <div class="mb-t">왜 중요한가</div>
-              <ul class="rule-list">
-                <li>과학의 핵심 = 모형 <b>만들고·쓰고·고치기</b></li>
-                <li>개념을 ‘받기’ → ‘<b>구성하기</b>’로</li>
-                <li>가치 = <b>표현·예측·재조정의 과정</b></li>
-              </ul>
-            </div>
-            <div class="mb-col">
-              <div class="mb-t">학생이 ‘주체’</div>
-              <ul class="rule-list">
-                <li>모형의 <b>소비자 → 제작자</b></li>
-                <li>만들고 고치며 개념·한계 <b>스스로</b> 점검</li>
-                <li>그래서 → <b>교사가 먼저</b> 경험 (= 오늘)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="tools">
-          <a class="tool" href="https://gemini.google.com" target="_blank" rel="noopener"><i>✦</i>Gemini</a>
-          <a class="tool" href="https://claude.ai" target="_blank" rel="noopener"><i>✦</i>Claude</a>
-        </div>
-      </div>
-
-      <!-- 실습 B -->
-      <div class="lab">
-        <div class="lab-tag">실습 B · 모둠 · 30분</div>
-        <h3>ChatGPT + Canva로<br>인포그래픽 · 만화</h3>
-        <p class="goal">과학 개념을 담은 <b>인포그래픽 설명자료</b> 또는 <b>만화</b> 제작 → 결과물 탭 업로드! 🎨</p>
-        <p class="note" style="margin-top:8px">💡 특히 <b>만화</b>는 우리 반 <b>일화·공감·밈</b>을 녹이면 아이들이 “어, 내 얘기네!” 하고 학습에 쏙 빠져들어요 ㅎㅎ</p>
-
-        <div class="callout strong">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-          <p><b>핵심 원칙 — AI에게 다 맡기지 마세요.</b> 틀·배경·그림만 부탁하고 <b>글자(텍스트)는 빼고</b> 요청하세요. 글자가 많아지면 (특히 한글이) 깨집니다. 완성 글씨는 반드시 <b>Canva에서 직접</b> 넣습니다.</p>
-        </div>
-
-        <div class="label">만드는 4단계</div>
-        <ol class="steps">
-          <li><span><b>아이디어·문구 회의</b> — AI와 함께 개념·구성·들어갈 문구를 정합니다.</span></li>
-          <li><span><b>ChatGPT로 틀만 생성</b> — 배경·일러스트·레이아웃만. 말풍선·텍스트 칸은 <b>비워서</b> 요청.</span></li>
-          <li><span><b>Canva로 글씨 직접 넣기</b> — 생성한 이미지를 Canva에 올려 텍스트를 직접 타이핑합니다.</span></li>
-          <li><span><b>결과물 탭에 업로드</b> — 완성본을 올려 모둠끼리 서로 소개합니다.</span></li>
-        </ol>
-
-        <div class="label">시작 프롬프트 — '글자 없이, 틀만'</div>
-        <div class="prompt-box">
-          <span class="pl">COPY &amp; PASTE</span>
-          <button class="copy-btn" data-copy="promptB"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-          <code id="promptB">중학교 과학 '(개념)'을 설명하는 인포그래픽을 만들어줘. 단, 글자(텍스트)는 절대 넣지 말고 배경·아이콘·일러스트와 빈 공간만 단정하게 구성해줘. 교육용 스타일로.</code>
-        </div>
-        <p class="note">만화는 → “4컷 구도·그림만, 말풍선은 빈 칸으로”! 💬</p>
-
-        <div class="label">모둠 역할 (3~4인)</div>
-        <div class="roles">
-          <div class="role"><div class="rn"><i></i>기획·문구</div><div class="rd">개념·구성과 들어갈 텍스트를 정함</div></div>
-          <div class="role"><div class="rn"><i></i>ChatGPT 드라이버</div><div class="rd">틀·그림 생성(글자 없이). 계정=모둠 예산</div></div>
-          <div class="role"><div class="rn"><i></i>Canva 편집</div><div class="rd">글씨를 직접 넣고 일관성 점검</div></div>
-          <div class="role"><div class="rn"><i></i>소개</div><div class="rd">완성 후 다른 모둠에 개념 설명</div></div>
-        </div>
-
-        <div class="tools">
-          <a class="tool" href="https://chatgpt.com" target="_blank" rel="noopener"><i>✦</i>ChatGPT</a>
-          <a class="tool" href="https://www.canva.com" target="_blank" rel="noopener"><i>✦</i>Canva</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="student-works">
-      <div class="label">🌟 해누리 학생들이 직접 만든 작품</div>
-      <p class="note">학생이 ‘모형의 주체’가 된 진짜 결과물이에요! 바이브코딩으로 직접 만들고 고쳤어요 ㅎㅎ</p>
-      <div class="sw-group">
-        <div class="sw-topic">🔮 플로팅 홀로그램 만들기</div>
-        <div class="sw-links">
-          <a class="sw-btn" href="https://qkralsco.github.io/3Dholo/" target="_blank" rel="noopener">작품 1 →</a>
-          <a class="sw-btn" href="https://202610825-tech.github.io/ghffhrmfoa/" target="_blank" rel="noopener">작품 2 →</a>
-        </div>
-      </div>
-      <div class="sw-group">
-        <div class="sw-topic">🌡️ 열평형 시뮬레이션</div>
-        <div class="sw-links">
-          <a class="sw-btn" href="https://202610311haenuri.github.io/-/" target="_blank" rel="noopener">작품 1 →</a>
-          <a class="sw-btn" href="https://yujinnoh0903.github.io/Thermal-Equilibrium-simulation-science/" target="_blank" rel="noopener">작품 2 →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="imgtools">
-      <div class="label">🎨 이미지 생성, 플랫폼마다 ‘엔진’이 달라요!</div>
-      <p class="note">같은 “이미지 만들어줘”라도 도구마다 모델이 달라요. 대표만 콕 집어볼게요 ㅎㅎ</p>
-      <div class="it-grid">
-        <div class="it-card">
-          <div class="it-h">🟢 Gemini</div>
-          <div class="it-m">엔진 = Nano Banana 🍌</div>
-          <ul class="rule-list">
-            <li>구글 Gemini 안에서 바로 생성·편집</li>
-            <li>대화로 고치기 · 캐릭터·사물 <b>일관성</b> 강함</li>
-            <li>Pro/최신 버전은 <b>한글 등 다국어 글자</b>도 꽤 정확 → 인포그래픽·다이어그램 굿</li>
-            <li>빠르고, 무료로도 접근 쉬움</li>
-          </ul>
-        </div>
-        <div class="it-card hot">
-          <div class="it-h">🔵 ChatGPT <span class="it-pick">제 선택!</span></div>
-          <div class="it-m">엔진 = ChatGPT Images 2.0 (gpt-image-2)</div>
-          <ul class="rule-list">
-            <li><b>한글 글자 렌더링</b>이 특히 좋아졌어요</li>
-            <li>‘생각’하고 그림 — 레이아웃 먼저 계획 후 생성</li>
-            <li>대화 맥락 그대로 → 여러 번 고치기 자연스러움</li>
-            <li>늘 쓰던 챗 안에서 한 번에!</li>
-          </ul>
-        </div>
-        <div class="it-card">
-          <div class="it-h">🟣 그 외</div>
-          <div class="it-m">Midjourney · Adobe Firefly 등</div>
-          <ul class="rule-list">
-            <li>Midjourney — 예술적·감성 비주얼 끝판왕 🎭</li>
-            <li>Adobe Firefly — 상업적 안전(저작권)·디자인 툴 연동</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="why-gpt">
-        <div class="it-h">💙 그래도 제가 ChatGPT를 쓰는 이유</div>
-        <ul class="rule-list">
-          <li><b>여러 도구를 다 써본 뒤 내린 결론 — 가장 나았어요!</b> 직접 비교해보고 솔직하게 고른 거예요</li>
-          <li><b>그림체를 학습시켜서</b> 그릴 때 가장 좋은 결과가 나왔어요 — 원하는 그림 톤을 먼저 익히게 한 뒤 그리면 일관성이 확 올라가요 🎨</li>
-          <li>한글 글자를 비교적 잘 써줘서 만화 말풍선·인포 초안에 편해요</li>
-          <li>“이건 이렇게 바꿔줘” 대화로 고치는 흐름이 자연스러워요</li>
-        </ul>
-        <p class="why-note">💡 그래도 글자가 많거나 또박또박해야 하면 <b>최종 글씨는 Canva</b>가 제일 안전해요! (실습 B 원칙 그대로 😊)</p>
-      </div>
+    <div id="app-credit">
+      <b>Growing Teachers</b> · 조승재의 연수·자료 허브<br>
+      © 2026 조승재 · 해누리중학교 <span class="sep">|</span> 최종 업데이트: 2026-07-18
     </div>
   </div>
-</section>
-
-<!-- ============ VIBE CODING ============ -->
-<section class="panel" id="tab-vibe">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">VIBE CODING</div>
-      <h2>바이브코딩 하는 법</h2>
-      <p>코드 작성 X · 말로 시키기 O! 🗣️ 오늘은 <b>과학 시뮬레이션</b>!</p>
-    </div>
-
-    <div class="vtabs" id="vtabs">
-      <button class="vtab active" data-v="basic">🚀 기본</button>
-      <button class="vtab" data-v="prompts">🧰 프롬프트 모음</button>
-      <button class="vtab" data-v="tips">🔧 막힐 때·꿀팁</button>
-      <button class="vtab" data-v="level">🏆 레벨업 &amp; 저장</button>
-      <button class="vtab" data-v="photo">📷 사진 넣기</button>
-    </div>
-
-    <div class="vsub active" id="vsub-basic">
-    <div class="sub-block">
-      <div class="label">① 이렇게 시킵니다 — 프롬프트부터 받아내기</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">바로 “만들어줘”라고 하지 말고, <b style="color:var(--navy)">먼저 “프롬프트를 어떻게 쓸까?”라고 물어보세요!</b> AI가 훨씬 좋은 프롬프트를 대신 써줘요. 그다음 <b style="color:var(--navy)">Canvas(캔버스) 기능을 켜고</b> 그 프롬프트를 보내면 끝! ㅎㅎ</p>
-      <div class="prompt-box" style="margin-top:12px">
-        <span class="pl">1단계 · Gemini에 붙여넣기 (프롬프트부터 받기)</span>
-        <button class="copy-btn" data-copy="vibePrompt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="vibePrompt">‘[하고 싶은 것 — 예: 온도를 올리면 입자가 빨라지는 것]’을 만들고 싶어. 이걸 만들려면 프롬프트를 어떻게 쓰면 좋을까? 중학생용으로 직관적이게, HTML 한 파일로 만들 수 있는 프롬프트를 써줘.</code>
-      </div>
-      <p class="note">→ <b>2단계</b>: AI가 정리해준 프롬프트가 나오면, Gemini 입력창의 <b>✏️ Canvas</b> 기능을 켠 뒤 <b>그 프롬프트를 그대로 보내기!</b> Canvas로 만들면 결과를 바로 보고 고치기 편해요 🎨</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">② HTML · CSS · JavaScript, 딱 이만큼만</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">직접 짤 필요 X · 이름만 알면 콕 집어 요청 가능! 😊</p>
-      <div class="trio">
-        <div class="tcard"><div class="tn">HTML</div><div class="tt">뼈대 · 구조</div><p>무엇이 있는지 — 제목, 버튼, 글, 입력칸.<em>건물의 골조</em></p></div>
-        <div class="tcard"><div class="tn">CSS</div><div class="tt">꾸미기 · 디자인</div><p>어떻게 보이는지 — 색, 크기, 배치, 글꼴.<em>페인트와 인테리어</em></p></div>
-        <div class="tcard"><div class="tn">JavaScript</div><div class="tt">기능 · 움직임</div><p>어떻게 작동하는지 — 클릭 반응, 계산, 애니메이션.<em>전기와 배관</em></p></div>
-      </div>
-      <p class="note">요청 예 — “버튼(HTML) 색 파랗게(CSS)” · “누르면 입자가 움직이게(JS)”! 👍</p>
-    </div>
-    </div>
-
-    <div class="vsub" id="vsub-prompts">
-    <div class="sub-block">
-      <div class="label">③ 자주 쓰는 ‘재료 프롬프트’ 🧰</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">과학쌤들이 자주 쓰는 조각들이에요. 복사해서 <b>빈칸([ ])만</b> 채우고, 필요한 걸 이어 붙이세요!</p>
-      <div class="prompt-box" style="margin-top:12px">
-        <span class="pl">① 기본 시뮬레이터 골격</span>
-        <button class="copy-btn" data-copy="pBase"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pBase">중학교 과학 ‘[개념]’ 시뮬레이터를 만들어줘. [무엇]을 슬라이더로 조절하면 [무엇]이 실시간으로 변하게. 중학생용으로 직관적이고 깔끔하게, 모바일에서도 잘 보이게, HTML 한 파일로.</code>
-      </div>
-      <div class="prompt-box">
-        <span class="pl">② 그래프·수치 보여주기</span>
-        <button class="copy-btn" data-copy="pGraph"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pGraph">화면에 현재 값(숫자)과, 값이 바뀌면 따라 움직이는 실시간 그래프도 함께 넣어줘.</code>
-      </div>
-      <div class="prompt-box">
-        <span class="pl">③ 단계별 애니메이션 + 버튼</span>
-        <button class="copy-btn" data-copy="pAnim"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pAnim">‘재생’ 버튼을 누르면 [과정]이 단계별 애니메이션으로 진행되고, ‘일시정지’와 ‘처음으로’ 버튼도 넣어줘.</code>
-      </div>
-      <div class="prompt-box">
-        <span class="pl">④ 확인 퀴즈</span>
-        <button class="copy-btn" data-copy="pQuiz"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pQuiz">마지막에 객관식 퀴즈 3문제를 넣어줘. 답을 고르면 정답 여부를 바로 표시하고 짧은 해설도 보여줘.</code>
-      </div>
-      <div class="label" style="margin-top:18px">이런 말도 뒤에 덧붙이면 좋아요 ✨</div>
-      <ul class="rule-list">
-        <li><b>모바일에서도 안 깨지게</b> (반응형으로)</li>
-        <li>색은 <b>[파스텔 / 우주 / 네온]</b>으로 통일, 글씨·버튼 크게</li>
-        <li><b>‘처음으로’ 리셋 버튼</b> 추가 · 다크 모드로</li>
-        <li>정답 맞히면 <b>축하 효과(반짝/소리)</b> 넣어줘</li>
-      </ul>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">④ 슬라이더·버튼 같은 ‘조작 장치’ 넣기 🎛️</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">학생이 <b>직접 만져봐야</b> 학습이 일어나요! 시뮬레이션에 장치를 넣는 말들:</p>
-      <ul class="rule-list">
-        <li><b>슬라이더</b> — “온도를 0~100으로 조절하는 슬라이더”</li>
-        <li><b>버튼</b> — “‘시작’·‘정지’·‘초기화’ 버튼”</li>
-        <li><b>체크박스·토글</b> — “‘힘 화살표 표시’ 켜고 끄기”</li>
-        <li><b>드롭다운</b> — “물질 선택(물·기름·공기)”</li>
-        <li><b>입력칸</b> — “질량을 숫자로 직접 입력”</li>
-        <li><b>실시간 표시</b> — “지금 값을 화면 위에 큰 숫자로”</li>
-      </ul>
-      <div class="prompt-box" style="margin-top:14px">
-        <span class="pl">장치 추가 프롬프트</span>
-        <button class="copy-btn" data-copy="pCtrl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pCtrl">여기에 [무엇]을 조절하는 슬라이더와 ‘처음으로 되돌리기’ 버튼을 추가해줘. 슬라이더를 움직이면 결과가 실시간으로 바뀌게.</code>
-      </div>
-      <p class="note">슬라이더가 너무 민감/둔하면 → “슬라이더 범위를 0~50으로, 한 칸을 0.5씩 움직이게 바꿔줘” 🎚️</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑤ 시뮬레이션 말고도 — 수업에서 쓸 수 있는 것들 🎒</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">바이브코딩은 시뮬만이 아니에요! <b>수업 자료 전반</b>을 만들 수 있어요:</p>
-      <ul class="rule-list">
-        <li><b>인터랙티브 학습지</b> — 빈칸 채우면 정답 즉시 확인</li>
-        <li><b>형성평가 퀴즈</b> — 점수·해설 자동 채점</li>
-        <li><b>플래시카드 · 용어 암기</b> — 뒤집기·랜덤·즐겨찾기</li>
-        <li><b>개념 카드뉴스 · 단원 요약</b></li>
-        <li><b>가상 실험 · 실험 안내서</b> — 절차를 따라가며</li>
-        <li><b>골든벨 · OX · 매칭 게임</b> — 수업 활동용</li>
-        <li><b>모둠 뽑기 · 랜덤 발표자 · 타이머</b> — 수업 운영 도구</li>
-        <li><b>자기점검 체크리스트 · 탐구 보고서 양식</b></li>
-      </ul>
-      <div class="prompt-box" style="margin-top:14px">
-        <span class="pl">예) 인터랙티브 학습지</span>
-        <button class="copy-btn" data-copy="pWork"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pWork">중학교 과학 ‘[단원]’ 인터랙티브 학습지를 만들어줘. 빈칸을 채우면 정답 여부가 바로 표시되고, 다 풀면 점수가 나오게. 깔끔한 교육용 디자인, HTML 한 파일로.</code>
-      </div>
-      <div class="prompt-box">
-        <span class="pl">예) 용어 플래시카드</span>
-        <button class="copy-btn" data-copy="pCard"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pCard">‘[주제]’ 용어 암기 플래시카드를 만들어줘. 카드를 누르면 뒤집혀 뜻이 보이고, ‘다음’ 버튼과 랜덤 섞기 기능도 넣어줘.</code>
-      </div>
-      <p class="note">수업 흐름(도입-전개-정리)을 통째로도! → “오늘 ‘[단원]’ 수업용 학습 페이지를 만들어줘” 📄</p>
-    </div>
-    </div>
-
-    <div class="vsub" id="vsub-tips">
-    <div class="sub-block">
-      <div class="label">⑥ 안 될 때 — 디버깅 6수 🔧</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">AI가 만든 게 가끔 이상하게 동작해요. 당황 말고 이렇게! 😎</p>
-      <ul class="rule-list">
-        <li><b>본 대로 말하기</b> — “버튼 눌러도 반응이 없어” / “입자가 화면 밖으로 사라져”처럼 증상 그대로.</li>
-        <li><b>에러 메시지 복붙</b> — <code>F12</code> → <b>Console</b> 탭 → 빨간 글자를 복사해 “이 오류 고쳐줘”.</li>
-        <li><b>오류 화면을 캡처해서 첨부</b> — 글로 설명하기 애매하면 그냥 보여주세요! 깨진 화면이나 콘솔의 빨간 오류를 <b>스크린샷</b>으로 찍어 Gemini·ChatGPT 입력창에 <b>이미지로 끌어다 붙이고</b> “이 화면처럼 이상해, 고쳐줘”라고 하면 돼요. (캡처: 윈도우 <code>Win+Shift+S</code> · 맥 <code>⌘+Shift+4</code>)</li>
-        <li><b>한 번에 하나씩</b> — 여러 군데 동시에 고치지 말기. 뭐가 문제였는지 보여요.</li>
-        <li><b>체크포인트</b> — 잘 되던 코드는 따로 저장! 망가지면 거기서 다시.</li>
-        <li><b>막히면 새로</b> — “처음부터 다시, 이번엔 [이것]만 신경 써서”. 대화가 꼬였을 때 효과 만점.</li>
-      </ul>
-      <div class="prompt-box" style="margin-top:14px">
-        <span class="pl">디버깅 프롬프트</span>
-        <button class="copy-btn" data-copy="pDebug"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pDebug">방금 코드에서 [증상]이 생겨. (콘솔 오류: [여기에 붙여넣기]) 이 부분만 고쳐줘, 나머지는 그대로 둬.</code>
-      </div>
-      <p class="note">“<b>이 부분만 고쳐줘, 나머지는 그대로 둬</b>” — 이 한 마디가 멀쩡한 코드 안 망가지게 지켜줘요! 🛡️</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑦ 토큰 아끼는 법 💰</div>
-      <ul class="rule-list">
-        <li><b>한 번에 몰아서</b> — 고칠 것 여러 개를 한 메시지에. 잦은 왕복 = 토큰 낭비.</li>
-        <li><b>짧고 분명하게</b> — 핵심만. 군더더기도 토큰.</li>
-        <li><b>새 작업 = 새 채팅</b> — 긴 대화는 앞 내용까지 매번 재읽음. 주제 바뀌면 새로.</li>
-        <li><b>완성 즉시 저장</b> — 메모장에 두면 다시 만들 일 X (아래 ⑫).</li>
-        <li><b>이미지 생성은 특히 비쌈</b> — 만들기 전 계획부터 (실습 B).</li>
-      </ul>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑧ 교사 OO의 ‘바이브 코딩 일지’ 📓</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">한 번에 완벽하게 나오지 않아요. <b>요청 → 결과 → 다음엔</b>의 반복이 핵심! (실제로 이렇게 늘어요 ㅎㅎ)</p>
-      <div class="devlog">
-        <div class="dl-entry">
-          <div class="dl-row dl-ask"><span class="dl-tag t-ask">요청</span><span>“입자가 움직이는 거 만들어줘”</span></div>
-          <div class="dl-row dl-res"><span class="dl-tag t-res">결과</span><span>점들이 그냥 둥둥 떠다니기만 함. 온도 개념이 없어 수업에 못 씀 😅</span></div>
-          <div class="dl-row dl-next"><span class="dl-tag t-next">다음엔</span><span>“<b>온도 슬라이더</b>를 올리면 <b>입자 속도가 빨라지게</b>” — 조작 장치와 인과를 콕 집어서!</span></div>
-        </div>
-        <div class="dl-entry">
-          <div class="dl-row dl-ask"><span class="dl-tag t-ask">요청</span><span>“예쁘게 만들어줘”</span></div>
-          <div class="dl-row dl-res"><span class="dl-tag t-res">결과</span><span>알록달록 정신없고 글씨도 제각각… 😵</span></div>
-          <div class="dl-row dl-next"><span class="dl-tag t-next">다음엔</span><span>“배경은 <b>짙은 남색</b>, 포인트는 <b>노랑 하나</b>로, <b>글씨 크게</b>” — 구체적으로!</span></div>
-        </div>
-        <div class="dl-entry">
-          <div class="dl-row dl-ask"><span class="dl-tag t-ask">요청</span><span>한 번에 “그래프 넣고, 색 바꾸고, 버튼 추가하고, 모바일 대응까지!”</span></div>
-          <div class="dl-row dl-res"><span class="dl-tag t-res">결과</span><span>일부만 반영되고 그래프가 깨짐 😨</span></div>
-          <div class="dl-row dl-next"><span class="dl-tag t-next">다음엔</span><span>큰 것부터 <b>하나씩</b> — “먼저 그래프만 제대로 만들어줘”.</span></div>
-        </div>
-        <div class="dl-entry">
-          <div class="dl-row dl-ask"><span class="dl-tag t-ask">요청</span><span>긴 대화 끝에 “이것도 바꿔줘”</span></div>
-          <div class="dl-row dl-res"><span class="dl-tag t-res">결과</span><span>멀쩡하던 부분까지 갑자기 엉뚱하게 바뀜 😱</span></div>
-          <div class="dl-row dl-next"><span class="dl-tag t-next">다음엔</span><span>잘 되던 버전 <b>저장</b> → <b>새 채팅</b>에 그 코드 붙여넣고 이어가기.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">💡 꿀팁 — 막막하면 ‘프롬프트부터’ 달라고 하기</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">뭐라고 시켜야 할지 막막할 때! 만들 것을 말하고 <b>프롬프트 자체를 대신 써달라</b>고 하세요. 그걸 받아서 보내면 결과가 훨씬 좋아져요 😊</p>
-      <div class="prompt-box" style="margin-top:12px">
-        <span class="pl">프롬프트 요청하기</span>
-        <button class="copy-btn" data-copy="pAskPrompt"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pAskPrompt">‘[만들고 싶은 것]’을 바이브코딩으로 만들 거야. 이걸 만들기 위한 프롬프트를 대신 써줘. (중학교 과학 수업용, HTML 한 파일)</code>
-      </div>
-      <p class="note">기본 탭 ①의 ‘프롬프트부터 받아내기’와 같은 방법이에요 — 막힐 때마다 꺼내 쓰세요! 🪄</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">🎨 꿀팁 — 디자인은 ‘이미지로’ 보여주기</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">원하는 분위기를 글로 설명하기 어렵죠? <b>참고 이미지를 첨부</b>하면 한 방에 통해요!</p>
-      <ul class="rule-list">
-        <li><b>기존 플랫폼·사이트 화면</b> — 마음에 드는 사이트나 앱 화면을 캡처해 “이런 느낌·배치로 만들어줘”</li>
-        <li><b>실험 장면 사진</b> — 실제 실험·교구 사진을 주고 “이 장면을 시뮬레이션으로 옮겨줘”</li>
-      </ul>
-      <div class="prompt-box" style="margin-top:12px">
-        <span class="pl">이미지 첨부 + 프롬프트</span>
-        <button class="copy-btn" data-copy="pImgDesign"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pImgDesign">(이미지 첨부) 이 화면 같은 느낌·색감·배치로 만들어줘. 다만 내용은 ‘[내가 다룰 개념]’으로 바꿔서. HTML 한 파일로.</code>
-      </div>
-      <p class="note">Gemini·ChatGPT 입력창에 이미지를 <b>끌어다 붙이면</b> 끝! 📎</p>
-    </div>
-    </div>
-
-    <div class="vsub" id="vsub-level">
-    <div class="sub-block">
-      <div class="label">⑨ 여러 개를 하나로 — 탭 허브 만들기 (SPA) 🗂️</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">시뮬을 하나하나 따로 만든 뒤, <b>버튼이나 탭으로 묶어</b> 한 페이지(허브)로! <em>(사실 지금 보고 계신 이 사이트도 그렇게 만들어졌어요 😎)</em></p>
-      <ul class="rule-list">
-        <li><b>버튼 링크식</b> — 각각 GitHub Pages로 배포 → 허브 페이지에 <b>버튼으로 링크</b>를 모아두기.</li>
-        <li><b>탭 전환식(SPA)</b> — 한 파일 안에서 <b>탭을 눌러 화면 전환</b>. ‘학습목표’ → ‘시뮬레이션’ → ‘정리’ 수업 흐름 그대로!</li>
-      </ul>
-      <div class="prompt-box" style="margin-top:14px">
-        <span class="pl">탭 허브 프롬프트</span>
-        <button class="copy-btn" data-copy="pHub"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pHub">탭으로 화면을 전환하는 학습 페이지를 만들어줘. 탭은 ‘학습목표’ · ‘시뮬레이션’ · ‘정리 퀴즈’ 세 개. 탭을 누르면 그 내용만 보이게. HTML 한 파일로.</code>
-      </div>
-      <p class="note">이미 만든 시뮬이 있으면 → “이 시뮬을 <b>‘시뮬레이션’ 탭 안에</b> 넣어줘”라고 이어서 요청! 🧩</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑩ 게이미피케이션 & 보상 — 업적카드·상장 🏆</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">‘재미’와 ‘동기’를 더해요! 탐험·퀴즈 같은 미션을 깨면 보상을 주는 식으로 👇</p>
-      <ul class="rule-list">
-        <li><b>포인트·점수</b> — 활동마다 적립</li>
-        <li><b>진행 바·도장판</b> — 탭/미션 완료 도장</li>
-        <li><b>배지·업적</b> — 특정 미션 달성 시 획득</li>
-        <li><b>업적 카드 · 상장</b> — 전부 완료 시 <b>이름 박힌</b> 카드(캡처·인쇄 가능)</li>
-        <li><b>레벨·등급</b> — 점수에 따라 승급</li>
-        <li><b>효과음·축하 애니메이션</b> — 정답·완료 순간</li>
-        <li><b>반 리더보드</b> — (백엔드 연동 시) 순위 표시 <em>(우리 결과물 갤러리처럼)</em></li>
-      </ul>
-      <div class="prompt-box" style="margin-top:14px">
-        <span class="pl">업적 카드 프롬프트</span>
-        <button class="copy-btn" data-copy="pGame"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pGame">탐험·퀴즈 등 모든 미션을 완료하면 학생 이름이 박힌 ‘업적 카드(상장)’가 나타나게 해줘. 완료 날짜와 칭찬 문구도 넣고, 캡처·저장하기 쉽게. 미션을 하나 깰 때마다 도장이 찍히는 진행 바도 함께 보여줘.</code>
-      </div>
-      <p class="note">완성한 업적카드는 <b>캡처해서 제출</b>하거나 교실 게시판에 붙여 자랑! 🎉</p>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑪ 학생 진행상황 저장 — 중간에 꺼져도 OK 🔐</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">미션·업적이 <b>중간에 날아가지 않게!</b> 입장할 때 <b>학번·이름</b>을 받고, 같은 기기에서 다시 들어오면 이어서 진행되게 해요. (브라우저에 저장하는 <code>localStorage</code> 방식)</p>
-      <div class="prompt-box" style="margin-top:12px">
-        <span class="pl">진행 저장 프롬프트</span>
-        <button class="copy-btn" data-copy="pSave"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-        <code id="pSave">학생이 처음 들어올 때 학번과 이름을 입력받고, 진행 상황(완료한 미션·점수·획득한 배지)을 localStorage에 저장해줘. 같은 기기에서 다시 열면 이어서 진행되게. ‘처음부터 다시’ 버튼도 넣어줘.</code>
-      </div>
-      <ul class="rule-list" style="margin-top:12px">
-        <li><b>같은 기기·같은 브라우저</b>에서만 유지 — 시크릿창·다른 기기는 별개예요(학생들에게 미리 안내!).</li>
-        <li>여러 기기에서 <b>한곳에 모으려면</b> → Supabase 같은 백엔드 필요 (우리 결과물·리더보드처럼).</li>
-        <li>캐시를 지우면 사라질 수 있으니, 중요하면 <b>업적카드를 캡처/제출</b>로도 남기기.</li>
-      </ul>
-    </div>
-
-    <div class="sub-block">
-      <div class="label">⑫ 내 코드 저장하기 (배포용) 💾</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">완성한 코드는 이렇게 저장하면 사라지지 않아요! <b style="color:var(--navy)">이 연수에서는 이 파일을 저에게 주시면 제가 대신 배포해드려요 ㅎㅎ</b> 😊</p>
-      <ol class="steps" style="margin-top:12px">
-        <li><span>Gemini 코드블록 오른쪽 위 <b>복사</b> 버튼으로 전체 복사.</span></li>
-        <li><span>메모장(윈도우)이나 텍스트 편집기(맥)를 열고 <b>붙여넣기</b>.</span></li>
-        <li><span><b>저장</b>할 때 파일 이름 끝을 <code>.html</code>로 — 예: <code>my-sim.html</code> <em>(윈도우 메모장은 '파일 형식: 모든 파일'로 두고 저장)</em></span></li>
-        <li><span>그 <code>.html</code> 파일을 더블클릭하면 브라우저에서 바로 작동 확인!</span></li>
-        <li><span>이 파일을 <b>저에게 제출</b> → 제가 배포해서 결과물 갤러리에 올려드릴게요! 🚀</span></li>
-      </ol>
-    </div>
-
-    <div class="proposal">
-      <div class="kicker" style="color:var(--gold-soft)">제안 &amp; 결론</div>
-      <h3>처음부터 다 만들지 말고 — 참고하고, 다듬어 쓰세요! 😉</h3>
-      <p>맨바닥부터 다 만들면 벅차요 😅 → <b>공유된 레퍼런스 참고</b>가 훨씬 쉬워요! 재과만처럼 자료 공유된 곳에서:</p>
-      <p style="margin-left:2px;line-height:1.9">· <code>Ctrl + U</code> — <b>코드 보기</b>로 그 페이지의 코드를 통째로 열고<br>· <code>Ctrl + F</code> — <b>검색</b>으로 원하는 부분만 콕 찾아 읽은 뒤<br>· 그 코드를 복붙해서 <b>선생님의 설명 방식대로</b> 고쳐 쓰면 됩니다.</p>
-      <p><b>🍯 꿀팁!</b> AI에게 “맨 아래에 <b>제작 : (선생님 성함)</b> 넣어줘”라고 해보세요. 학생들이 우와~ 하고 감탄하고 😆 그 감탄이 ‘과학 시간은 들어야 할 시간’이라는 마음으로 이어지더라고요 ㅎㅎ</p>
-      <p>그리고 <b>꼬리별 선생님들끼리 전공별 과학 시뮬레이션 제작</b> — 완전 추천이에요! 🌠</p>
-    </div>
-    </div>
-
-    <div class="vsub" id="vsub-photo">
-    <div class="sub-block">
-      <div class="label">📷 웹앱에 사진 넣기</div>
-      <p style="color:var(--ink-soft);font-size:.95rem">AI로 만든 시뮬레이션이나 페이지에 사진을 넣는 법! 이름 짓기 → 올리기 → AI에게 "코드에 넣어줘" → 확인, 이 순서면 끝 ㅎㅎ</p>
-    </div>
-
-    <div class="callout strong">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <p><b>딱 하나만 기억하세요.</b> AI는 편하라고 사진을 코드 안에 글자로 통째로 박기도 해요(이걸 base64라고 해요). 그러면 파일이 무거워지고 업로드가 막힙니다. 정석은 <b>사진은 파일로 따로 두고, 코드엔 주소만</b> 적는 것!</p>
-    </div>
-    <div class="vsrow">
-      <div class="vsbad"><span class="vlab">✗ 이렇게 (X)</span>코드 안에 사진을 글자로 박기<code>src="data:image/png;base64,iVBOR…(엄청 긴 글자)"</code></div>
-      <div class="vsgood"><span class="vlab">✓ 이렇게 (O)</span>파일은 따로, 코드엔 주소만<code>src="images/diffusion.jpg"</code></div>
-    </div>
-
-    <div class="deploy-steps" style="margin-top:32px">
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>사진 이름 잘 짓기 <span style="font-size:.68rem;color:var(--gold-deep);font-weight:700">제일 중요</span></h3>
-          <p>이름만 잘 지어도 문제의 절반이 사라져요. 아래 규칙대로 파일 이름을 바꿔주세요.</p>
-          <ul class="rule-list">
-            <li><b>영어 소문자 + 숫자 + 하이픈(-)</b>만 사용 (한글·공백·특수문자 X)</li>
-            <li>띄어쓰기는 <b>하이픈(-)</b>으로 — 빈칸은 주소에서 깨질 수 있어요</li>
-            <li><b>뜻이 담긴 이름</b>으로 — 나중에 알아보기 쉽게</li>
-            <li><b>확장자</b>는 소문자로 — JPG면 <code>.jpg</code>, PNG면 <code>.png</code></li>
-          </ul>
-          <div class="namepair">
-            <span><span class="bad">✗ 확산실험.jpg</span> <em>(한글)</em> <span class="arr">→</span> <code>diffusion.jpg</code></span>
-            <span><span class="bad">✗ my photo.JPG</span> <em>(빈칸·대문자)</em> <span class="arr">→</span> <code>my-photo.jpg</code></span>
-            <span><span class="bad">✗ IMG_2931.jpg</span> <em>(뜻 없음)</em> <span class="arr">→</span> <code>cell-diagram.jpg</code></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3><code>images</code> 폴더에 모으기</h3>
-          <p>컴퓨터에 <b>images</b>라는 폴더를 만들고, 이름 지은 사진들을 그 안에 넣어요.</p>
-          <div class="method"><div class="tree">📁 images<br>&nbsp;&nbsp;┣ <span class="fname">diffusion.jpg</span><br>&nbsp;&nbsp;┗ <span class="fname">cell-diagram.jpg</span></div></div>
-          <p style="color:var(--ink-soft);font-size:.9rem;margin-top:10px">이 <code>images</code> 폴더는 곧 HTML 파일과 <b>같은 위치</b>에 올라갑니다.</p>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>GitHub에 폴더째 올리기</h3>
-          <p>앱이 올라가 있는 저장소에서 순서대로:</p>
-          <div class="flow-chips">
-            <span class="ui">&lt;&gt; Code</span><span class="sep">→</span>
-            <span class="ui">Add file</span><span class="sep">→</span>
-            <span class="ui">Upload files</span><span class="sep">→</span>
-            <span class="ui">images 폴더 끌어다 놓기</span><span class="sep">→</span>
-            <span class="ui">Commit changes</span>
-          </div>
-          <p style="color:var(--ink-soft);font-size:.9rem;margin-top:12px">파일 하나씩이 아니라 <b>images 폴더 자체</b>를 통째로 드래그하면 구조 그대로 올라가요.</p>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>AI에게 "코드에 넣어줘" 요청하기 <span style="font-size:.68rem;color:var(--gold-deep);font-weight:700">핵심</span></h3>
-          <p>코드에는 사진을 부르는 <b>한 줄</b>이 필요해요. 직접 안 쳐도 AI에게 부탁하면 됩니다. 그 한 줄은 이렇게 생겼어요:</p>
-          <div class="prompt-box"><span class="pl">코드에 들어갈 한 줄</span><code>&lt;img src="images/diffusion.jpg" alt="확산 실험 사진"&gt;</code></div>
-          <p style="font-size:.9rem;color:var(--ink-soft);margin-top:10px"><b style="color:var(--navy)">src</b> = 사진이 있는 주소 · <b style="color:var(--navy)">alt</b> = 안 뜰 때 보이는 설명 글. AI에게는 <b style="color:var(--navy)">① 어떤 파일을 ② 어느 위치에</b> 넣을지 알려주면 돼요. 위치는 <b style="color:var(--navy)">그 자리 주변 글자</b>를 같이 알려주면 정확히 찾습니다.</p>
-
-          <div class="prompt-box" style="margin-top:14px">
-            <span class="pl">① 새 사진 넣기</span>
-            <button class="copy-btn" data-copy="photoPrompt1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-            <code id="photoPrompt1">images 폴더에 diffusion.jpg를 올렸어. '확산이 일어나는 모습' 문장 바로 아래에 &lt;img src="images/diffusion.jpg" alt="확산 실험 사진"&gt; 가 보이도록 넣어줘. base64로 박지 말고 이 경로 그대로 써줘.</code>
-          </div>
-          <div class="prompt-box">
-            <span class="pl">② 빈 칸·깨진 사진 채우기</span>
-            <button class="copy-btn" data-copy="photoPrompt2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-            <code id="photoPrompt2">'확산 실험 사진'이라고 적힌 이미지의 주소를 images/diffusion.jpg 로 바꿔줘. base64 말고 이 파일 경로를 쓰도록 해줘.</code>
-          </div>
-          <div class="prompt-box">
-            <span class="pl">③ 만능 틀 (빈칸만 채우기)</span>
-            <button class="copy-btn" data-copy="photoPrompt3"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>복사</button>
-            <code id="photoPrompt3">images 폴더에 [파일이름.jpg] 를 올렸어. [넣고 싶은 위치 — 그 근처 문장이나 제목] 에 &lt;img src="images/[파일이름.jpg]" alt="[사진 설명]"&gt; 를 넣어줘. base64 말고 이 경로로 해줘.</code>
-          </div>
-
-          <div class="callout">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-            <p>AI가 또 base64로 넣으려 하면 — <b>"base64 말고 images/ 경로로 넣어줘"</b>라고 한 번 더 못 박으세요. 그래도 길게 박으면 "그 긴 data:image 부분을 <code>images/파일이름.jpg</code>로 바꿔줘"라고 하면 됩니다.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>확인하고, 안 보이면 점검하기</h3>
-          <p>AI가 고친 HTML을 GitHub에 올리고(덮어쓰기) 사이트를 <b>새로고침</b>하세요. 보통 1~2분, 안 바뀌면 <b>강력 새로고침</b>(Ctrl/⌘+Shift+R).</p>
-          <p style="margin-top:8px">그래도 안 뜬다면 거의 이 셋 중 하나예요:</p>
-          <ul class="rule-list">
-            <li><b>이름·대소문자·확장자</b> — GitHub은 대소문자를 구분해요. 코드의 <code>diffusion.jpg</code>와 올린 파일 이름이 <b>글자 하나까지 똑같아야</b> 해요.</li>
-            <li><b>위치</b> — <code>images</code> 폴더가 HTML 파일과 <b>같은 위치</b>(보통 저장소 최상위)에 있나요?</li>
-            <li><b>캐시</b> — 1~2분 기다렸다가 강력 새로고침했나요?</li>
-          </ul>
-          <p style="margin-top:12px"><b style="color:var(--navy)">가장 빠른 점검</b> — 주소창에 사진 주소를 직접 쳐보세요:</p>
-          <div class="prompt-box"><span class="pl">주소창에 직접 입력</span><code>https://(내아이디).github.io/(저장소이름)/images/diffusion.jpg</code></div>
-          <ul class="rule-list" style="margin-top:10px">
-            <li>사진이 <b>뜨면</b> → 파일·경로 OK. 앱은 새로고침만 하면 돼요.</li>
-            <li><b>404</b>(없음)가 뜨면 → 파일이 없거나 이름·위치가 다른 것. 1단계를 다시 확인.</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="glossary-box">
-      <h4>미니 용어 사전</h4>
-      <dl>
-        <dt>src</dt><dd>사진이 있는 주소(경로). <code>images/diffusion.jpg</code>처럼 적어요.</dd>
-        <dt>alt</dt><dd>사진이 안 뜰 때 보이는 설명 글(화면 낭독기에도 읽혀요).</dd>
-        <dt>images/…</dt><dd>HTML과 같은 위치의 images 폴더 안 파일이라는 뜻(상대경로).</dd>
-        <dt>commit</dt><dd>바꾼 내용을 GitHub에 저장(반영)하는 것.</dd>
-        <dt>repository</dt><dd>프로젝트 파일이 모여 있는 곳(레포·저장소).</dd>
-      </dl>
-    </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ DEPLOY ============ -->
-<section class="panel" id="tab-deploy">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">DEPLOY</div>
-      <h2>GitHub Pages로 배포하기</h2>
-      <p>여러분이 만든 시뮬레이션(HTML 파일)을 인터넷에 올려 링크로 공유합니다. 처음이어도 5분이면 됩니다.</p>
-    </div>
-    <div class="callout strong" style="margin-bottom:24px">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
-      <p><b>이 연수에서는</b> 코드를 메모장에 저장해서 <b>저에게 주시면 제가 배포해드려요!</b> 😊 (바이브코딩 탭 ④ 참고) 아래 단계는 <b>나중에 직접 또는 학생과 함께</b> 배포할 때 보세요 👇</p>
-    </div>
-
-    <div class="glossary-box" style="margin-top:0;margin-bottom:24px">
-      <h4>GitHub, 이 단어만 알면 돼</h4>
-      <dl>
-        <dt>repository</dt><dd>저장소(레포). 코드 파일을 모아두는 공간 — 프로젝트마다 하나 만들어 그 안에 파일을 올려요.</dd>
-        <dt>Upload files</dt><dd>내 <code>.html</code> 파일을 저장소에 올리는 메뉴. (<code>Add file → Upload files</code>)</dd>
-        <dt>Commit changes</dt><dd>바꾼 내용을 저장소에 “확정 저장”하는 버튼. 파일을 올리거나 고친 뒤 <b>꼭 눌러야</b> 반영돼요.</dd>
-        <dt>Branch · main</dt><dd>코드의 작업 줄기. 기본 <code>main</code> 하나면 충분 — 배포도 main 기준이에요.</dd>
-        <dt>Public</dt><dd>공개 설정. GitHub Pages로 사이트가 보이려면 <b>Public</b>이어야 합니다.</dd>
-        <dt>GitHub Pages</dt><dd>저장소의 HTML을 무료 웹사이트로 만들어 주는 기능. (<code>Settings → Pages</code>에서 켜기)</dd>
-      </dl>
-      <p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft)">한 줄 요약 — <b style="color:var(--navy)">저장소(Public) 만들기 → Upload files로 올리기 → Commit changes → Settings의 Pages 켜기.</b></p>
-    </div>
-
-    <div class="deploy-steps">
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>GitHub 가입하기</h3>
-          <p><span class="ui">github.com</span> 접속 → <span class="ui">Sign up</span> → 이메일·비밀번호·사용자 이름(username)을 입력하고 가입합니다.</p>
-          <div class="tip hotspot">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3a49a3" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
-            <p><b>핫스팟 팁.</b> 같은 와이파이(같은 AP)로 여러 명이 동시에 가입을 시도하면 가입이 제한될 수 있습니다. 핫스팟이 가능하신 분은 휴대폰 핫스팟으로 가입하세요.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>새 레포지토리(저장소) 만들기</h3>
-          <p>오른쪽 위 <span class="ui">+</span> → <span class="ui">New repository</span> 를 누릅니다.</p>
-          <div class="method">
-            <p><b>Repository name</b>에 영문 이름(예: <code>my-science-sim</code>)을 적고, <b>Public</b>을 선택한 뒤 <span class="ui">Create repository</span>.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>파일 올리기 — 두 방법 중 하나</h3>
-          <div class="tip" style="margin-bottom:6px">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            <p><b>‘Add file’이 안 보이면?</b> 저장소를 막 만들면 가운데(<span class="ui">Code</span> 탭)에 <span class="ui">creating a new file</span> · <span class="ui">uploading an existing file</span> 링크가 떠요. <b>uploading an existing file</b>이 곧 아래 ‘방법 A’입니다.</p>
-          </div>
-          <div class="method">
-            <p><b>방법 A · 파일 업로드</b><br><span class="ui">Add file</span> → <span class="ui">Upload files</span> → 만든 HTML 파일을 끌어다 놓고(이미지가 있으면 같이) → 아래 <span class="ui">Commit changes</span>.</p>
-          </div>
-          <div class="method">
-            <p><b>방법 B · 코드 붙여넣기</b><br><span class="ui">Add file</span> → <span class="ui">Create new file</span> → 파일 이름을 <code>index.html</code> 로 → 코드 전체를 붙여넣고 → <span class="ui">Commit changes</span>.</p>
-          </div>
-          <div class="tip">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c39a35" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
-            <p>파일 이름을 <code>index.html</code> 로 하면 주소가 깔끔해집니다.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>GitHub Pages 켜기</h3>
-          <p>레포의 <span class="ui">Settings</span> → 왼쪽 메뉴 <span class="ui">Pages</span>.</p>
-          <div class="method">
-            <p>Source를 <b>Deploy from a branch</b>로, Branch는 <code>main</code> · 폴더는 <code>/ (root)</code> 로 두고 <span class="ui">Save</span>.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="dstep">
-        <div class="dnum"></div>
-        <div>
-          <h3>주소 확인하고 공유하기</h3>
-          <p>1~2분 기다리면 Pages 화면 위쪽에 주소가 나타납니다:</p>
-          <div class="method"><p><code>https://(사용자명).github.io/(레포이름)/</code></p></div>
-          <p class="sub">이 주소가 여러분 작품의 링크입니다. 수정하고 싶으면 파일을 다시 올려 <span class="ui">Commit</span>하면 1분 안에 자동으로 반영됩니다.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="sec-head" style="margin-top:64px">
-      <div class="kicker">COLLECT</div>
-      <h2>학생 결과물 받는 세 가지 방법</h2>
-      <p>학생이 만든 시뮬레이션을 어떻게 수합할지 — 상황에 맞게 고르세요.</p>
-    </div>
-    <div class="methods-grid">
-      <div class="mcard">
-        <div class="mtitle"><span class="mnum">1</span>링크로 배포</div>
-        <p class="mhow">학생이 GitHub Pages로 올려 링크를 제출합니다(위 5단계).</p>
-        <div class="pros"><span class="plabel">장점</span><ul><li>작동하는 결과물을 그대로 체험·공유</li><li>PC·모바일 어디서나 열리고 포트폴리오로 남음</li></ul></div>
-        <div class="cons"><span class="clabel">단점</span><ul><li>학생마다 가입·배포가 필요해 진입장벽이 큼</li><li>세 방법 중 시간이 가장 많이 듦</li></ul></div>
-      </div>
-      <div class="mcard">
-        <div class="mtitle"><span class="mnum">2</span>코드를 메모장으로</div>
-        <p class="mhow">HTML 코드 전체를 메모장(.txt)이나 .html 파일로 저장해 제출합니다.</p>
-        <div class="pros"><span class="plabel">장점</span><ul><li>가장 간단하고 빠름, 가입·인터넷 불필요</li><li>원본 코드가 남아 수정·평가가 쉬움</li></ul></div>
-        <div class="cons"><span class="clabel">단점</span><ul><li>작동을 보려면 교사가 파일을 직접 열어야 함</li><li>복사 과정에서 코드 누락·오류가 생길 수 있음</li></ul></div>
-      </div>
-      <div class="mcard">
-        <div class="mtitle"><span class="mnum">3</span>화면 녹화본</div>
-        <p class="mhow">시뮬레이션을 조작하는 화면을 녹화해 영상으로 제출합니다.</p>
-        <div class="pros"><span class="plabel">장점</span><ul><li>만들고 조작하는 <b>과정</b>과 설명을 함께 담음</li><li>실행 환경 없이 바로 확인, 가입 불필요</li></ul></div>
-        <div class="cons"><span class="clabel">단점</span><ul><li>작동하는 결과물 자체는 남지 않음</li><li>영상 용량이 크고 녹화에 학생 시간이 듦</li></ul></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SUBMIT ============ -->
-<section class="panel" id="tab-submit">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">SUBMIT</div>
-      <h2>코드 제출</h2>
-      <p>배포 안 해도 OK! 메모장에 저장한 <b>HTML 코드</b>를 올리면 제가 확인할게요 ㅎㅎ 📩</p>
-    </div>
-
-    <div class="setup-notice" id="submitSetupNotice" style="display:none">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a6c1c" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <div id="submitNoticeMsg"><b>Supabase 설정이 필요해요.</b> 맨 위 <code>SUPABASE_URL</code>·<code>SUPABASE_KEY</code>에 값을 붙여넣고, 준비된 SQL을 실행하면 됩니다.</div>
-    </div>
-
-    <div id="submitArea">
-      <div class="upload-card">
-        <p class="uc-sub">파일(<code>.html</code>)을 올리거나, 코드를 붙여넣어 제출하세요. 둘 중 하나만!</p>
-        <div class="form-row"><label>성함</label><input type="text" id="sName" placeholder="예: 조승재"></div>
-        <div class="form-row"><label>제목 · 주제 <span style="color:var(--ink-soft);font-weight:400">(선택)</span></label><input type="text" id="sTitle" placeholder="예: 입자 운동 시뮬레이션"></div>
-        <div class="form-row"><label>HTML 파일</label><input type="file" id="sFile" accept=".html,.htm,text/html"></div>
-        <div class="form-row"><label>또는 코드 붙여넣기</label><textarea id="sCode" rows="6" placeholder="&lt;!DOCTYPE html&gt; ... 코드 전체를 붙여넣어도 돼요"></textarea></div>
-        <button class="up-btn" id="submitBtn">제출하기</button>
-        <div class="up-status" id="submitStatus"></div>
-        <p class="reminder">※ 파일을 선택하면 아래 칸에 코드가 자동으로 불러와져요.</p>
-      </div>
-
-      <div class="dash-wrap">
-        <div class="dash-head">
-          <div><div class="dash-title">강사용 대시보드 🔒</div><div class="dash-note">제출된 코드는 저만 볼 수 있어요</div></div>
-          <button class="dash-toggle" id="dashToggle">열기 ›</button>
-        </div>
-        <div class="dash-gate" id="dashGate" style="display:none">
-          <input type="password" id="dashPin" placeholder="강사 PIN">
-          <button id="dashEnter">확인</button>
-          <span class="dash-msg" id="dashMsg"></span>
-        </div>
-        <div class="dash-body" id="dashBody" style="display:none">
-          <div class="dash-bar"><span id="dashCount"></span><button class="dash-refresh" id="dashRefresh">새로고침</button></div>
-          <div id="dashList"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ TIMER ============ -->
-<section class="panel" id="tab-timer">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">FACILITATION</div>
-      <h2>진행 타이머</h2>
-      <p>실습과 휴식 시간을 함께 지킵니다. 시작하면 상단 바에도 남은 시간이 표시됩니다.</p>
-    </div>
-    <div class="timer-wrap" id="timerWrap">
-      <div class="dial">
-        <svg viewBox="0 0 240 240"><circle class="track" cx="120" cy="120" r="108"/><circle class="prog" id="progRing" cx="120" cy="120" r="108" stroke-dasharray="678.58" stroke-dashoffset="0"/></svg>
-        <div class="read"><div class="t" id="timerDisplay">30:00</div><div class="lab2" id="timerLabel">실습 A</div></div>
-      </div>
-      <div class="timer-ctl">
-        <h3>지금 무엇을 하고 있나요?</h3>
-        <p class="desc">프리셋을 고르거나 직접 분을 입력하세요.</p>
-        <div class="presets" id="presets">
-          <button class="preset active" data-min="30" data-label="실습 A">실습 A · 30분</button>
-          <button class="preset" data-min="30" data-label="실습 B">실습 B · 30분</button>
-          <button class="preset" data-min="8" data-label="휴식">휴식 · 8분</button>
-        </div>
-        <div class="custom">직접 설정 · <input type="number" id="customMin" min="1" max="180" placeholder="분"> <button class="preset" id="setCustom">설정</button></div>
-        <div class="timer-actions"><button class="t-btn t-start" id="startBtn">시작</button><button class="t-btn t-reset" id="resetBtn">초기화</button></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ UPLOADS ============ -->
-<section class="panel" id="tab-uploads">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">SUBMIT</div>
-      <h2>결과물 제출</h2>
-      <p>완성한 결과물을 노션 양식으로 제출해 주세요! 📤</p>
-    </div>
-
-    <div class="upload-card" style="text-align:center">
-      <h3>📤 결과물 제출하기</h3>
-      <p class="uc-sub">아래 버튼을 누르면 제출 양식(노션)이 열려요. 시뮬레이션 링크 · 인포그래픽 · 만화 모두 여기서 제출!</p>
-      <a class="up-btn" id="notionLink" href="#" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">📝 노션 양식으로 제출하기</a>
-      <p class="reminder" id="notionHint">※ 시뮬레이션은 제가 배포해드린 링크를, 인포그래픽·만화는 Canva 완성본을 제출해 주세요 🎨</p>
-    </div>
-  </div>
-</section>
-</main>
-
-<!-- ============ FOOTER ============ -->
-<footer id="foot">
-  <svg class="fmark" viewBox="0 0 32 32" fill="none"><circle cx="22" cy="10" r="4.5" fill="#c39a35"/><path d="M19 13 L5 27" stroke="#5b6bd6" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="6" r="1" fill="#c39a35"/></svg>
-  <div class="fw">말로 만드는 과학 수업</div>
-  <div class="fs">2026학년도 교간형 전문적 학습공동체 꼬리별 · 6월 워크숍</div>
-  <div class="fmsg">— 가치는 결과물이 아니라 과정에 있다 —</div>
 </footer>
 
 <script>
-/* ═══════════ Supabase 연동 — 선생님이 채우세요 ═══════════ */
-const SUPABASE_URL = 'https://hmzklbrksfdhzsgwzfyg.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtemtsYnJrc2ZkaHpzZ3d6ZnlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTY4NDcsImV4cCI6MjA5NTA5Mjg0N30.LuTEeJyu-mtkNzUTNaA8IigmdtWPWXS2ucVgXDeevPA';
-const BUCKET       = 'kkb-submissions';      // Storage 버킷 이름 (public)
-const TABLE        = 'kkb_submissions';      // 결과물 갤러리 테이블
-const CODE_TABLE   = 'kkb_code_submissions'; // 코드 제출(과제) 테이블
-const DASH_PIN     = '1234';        // 강사 대시보드 PIN — 꼭 바꿔서 쓰세요
-const IDEAS_TABLE  = 'kkb_ideas';            // 공유 보드(아이디어) 테이블
-
-/* ───── 결과물 제출: 노션 양식 링크 — 여기에 붙여넣으세요! ───── */
-const NOTION_FORM_URL = 'https://dune-dedication-a42.notion.site/37653abf288e8062a7b1c88968037d20?pvs=105';   // ← 예: 'https://notion.so/...' (노션 결과물 제출 양식 링크)
-/* ════════════════════════════════════════════════════════ */
-
-/* ───── 탭 전환 ───── */
-const TABS=['home','about','flow','vibe','labs','deploy','submit','timer','uploads'];
-function switchTab(name){
-  if(!TABS.includes(name))name='home';
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  const btn=document.querySelector('.tab[data-tab="'+name+'"]'); if(btn)btn.classList.add('active');
-  window.scrollTo({top:0,behavior:'auto'});
-  if(history.replaceState)history.replaceState(null,'','#'+name);
-}
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
-function toggleBio(btn){var c=document.getElementById('bioContent');btn.classList.toggle('open');var on=c.classList.toggle('open');btn.setAttribute('aria-expanded',on);if(on)playPop();}
-function revealBlank(el){if(el.classList.contains('on'))return;el.classList.add('on');el.textContent=el.dataset.a;playPop();}
-function playPop(){try{var ac=new(window.AudioContext||window.webkitAudioContext)();function note(freq,start,dur,vol){var o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.setValueAtTime(freq,ac.currentTime+start);g.gain.setValueAtTime(.0001,ac.currentTime+start);g.gain.exponentialRampToValueAtTime(vol,ac.currentTime+start+.015);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+start+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+start);o.stop(ac.currentTime+start+dur+.02);}note(740,0,.12,.28);note(1180,.07,.14,.2);}catch(e){}}
-
-/* ───── 별 ───── */
-function makeStars(el,n,maxR){for(let i=0;i<n;i++){const s=document.createElement('span');s.className=el.dataset.cls||'star';const r=Math.random()*maxR+0.6;s.style.width=s.style.height=r+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*4)+'s';s.style.animationDuration=(3+Math.random()*3)+'s';el.appendChild(s);}}
-const sf=document.getElementById('stars');sf.dataset.cls='star';makeStars(sf,42,1.9);
-const tw0=document.getElementById('timerWrap');tw0.dataset.cls='tstar';makeStars(tw0,14,1.6);
-const ft=document.getElementById('foot');ft.dataset.cls='fstar';makeStars(ft,18,1.6);
-
-/* ───── 타임라인 ───── */
-const FLOW=[
-  {t:'0–15분',mode:'lec',badge:'강의+시연',cls:'',title:'오프닝 · 사례 👀',d:'제가 만든 것들 쭉 보여드려요 — ‘이걸 직접?’ 싶은 것부터, 하나는 만든 과정까지! 가볍게 출발 ㅎㅎ'},
-  {t:'15–27분',mode:'lec',badge:'강의',cls:'',title:'기초 다지기 🧱',d:'바이브코딩 · 토큰 · 모델별 사용량 · 무엇을 만들 수 있나! 실습 전 핵심만 쏙쏙 ✨'},
-  {t:'27–72분',mode:'lab',badge:'실습',cls:'lab',title:'실습 A · 수업에서 쓸 과학 시뮬레이터 개발 🛠️',d:'다음 수업에 바로 쓸 시뮬레이터 직접 개발! 과학 원리 ‘말로 표현’ → Gemini·Claude로 ‘구현’ → 확인·수정 🔧 왜 직접? 과학교육론의 ‘모형’ 때문!'},
-  {t:'72–80분',mode:'rest',badge:'휴식',cls:'rest',title:'휴식 ☕',d:'8분 · 잠깐 쉬어가요!'},
-  {t:'80–110분',mode:'lab',badge:'실습',cls:'lab',title:'실습 B · ChatGPT + Canva 시각자료 🎨',d:'인포그래픽·만화! ChatGPT로 틀·그림만(글자 X) → Canva에서 글씨 직접 → 결과물 탭 업로드 📤'},
-  {t:'110–120분',mode:'lec',badge:'정리+Q&A',cls:'',title:'마무리 · 모형의 개발과 활용 🎯',d:'정리 — 모형의 개발·활용 · 학생이 직접 만들고 고치는 수업 · 사용량·저작권·Q&A!<br><a href="#" onclick="switchTab(&#39;labs&#39;);return false" style="display:inline-block;margin-top:8px;color:#3a49a3;font-weight:700;text-decoration:underline">🌟 해누리 학생들이 만든 작품 보기 →</a>'}
-];
-const bc={lec:'b-lec',lab:'b-lab',rest:'b-rest'};
-const tl=document.getElementById('timeline');
-FLOW.forEach(f=>{const it=document.createElement('div');it.className='tl-item '+f.cls;it.innerHTML=`<div class="tl-time">${f.t}</div><div class="tl-axis"><div class="tl-dot"></div></div><div class="tl-card"><button class="tl-btn" aria-expanded="false"><span class="badge ${bc[f.mode]}">${f.badge}</span><span class="ttl">${f.title}</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="tl-detail"><div class="inner">${f.d}</div></div></div>`;tl.appendChild(it);});
-tl.querySelectorAll('.tl-btn').forEach(btn=>btn.addEventListener('click',()=>{const open=btn.getAttribute('aria-expanded')==='true';const det=btn.nextElementSibling;btn.setAttribute('aria-expanded',!open);det.style.maxHeight=open?null:det.scrollHeight+'px';}));
-
-/* ───── 복사 ───── */
-document.querySelectorAll('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{const txt=document.getElementById(btn.dataset.copy).innerText;try{await navigator.clipboard.writeText(txt);}catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}const o=btn.innerHTML;btn.classList.add('done');btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>복사됨';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=o;},1900);}));
-
-/* ───── 타이머 ───── */
-let total=30*60,remain=total,tick=null,running=false;const RING=678.58;
-const disp=document.getElementById('timerDisplay'),lbl=document.getElementById('timerLabel'),ring=document.getElementById('progRing'),startBtn=document.getElementById('startBtn'),resetBtn=document.getElementById('resetBtn'),wrap=document.getElementById('timerWrap'),mini=document.getElementById('miniTimer'),miniT=document.getElementById('miniTime');
-function fmt(s){const m=Math.floor(s/60),x=s%60;return String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
-function render(){disp.textContent=fmt(remain);miniT.textContent=fmt(remain);ring.style.strokeDashoffset=RING*(1-remain/total);}
-function stopT(){clearInterval(tick);running=false;startBtn.textContent='시작';mini.classList.remove('live');}
-function startT(){if(running||remain<=0)return;running=true;startBtn.textContent='일시정지';wrap.classList.remove('done');mini.classList.add('live');tick=setInterval(()=>{remain--;render();if(remain<=0){clearInterval(tick);running=false;startBtn.textContent='시작';wrap.classList.add('done');mini.classList.remove('live');beep();}},1000);}
-function beep(){try{const ac=new(window.AudioContext||window.webkitAudioContext)();[0,.25,.5].forEach(d=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.001,ac.currentTime+d);g.gain.exponentialRampToValueAtTime(.25,ac.currentTime+d+.03);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d+.22);o.start(ac.currentTime+d);o.stop(ac.currentTime+d+.24);});}catch(e){}}
-function setTimer(min,label){stopT();total=min*60;remain=total;if(label)lbl.textContent=label;wrap.classList.remove('done');render();}
-startBtn.addEventListener('click',()=>{running?stopT():startT();});
-resetBtn.addEventListener('click',()=>{stopT();remain=total;wrap.classList.remove('done');render();});
-document.querySelectorAll('#presets .preset').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('#presets .preset').forEach(x=>x.classList.remove('active'));p.classList.add('active');setTimer(parseInt(p.dataset.min),p.dataset.label);}));
-document.getElementById('setCustom').addEventListener('click',()=>{const v=parseInt(document.getElementById('customMin').value);if(v>0&&v<=180){document.querySelectorAll('#presets .preset').forEach(x=>x.classList.remove('active'));setTimer(v,'직접 설정');}});
-render();
-
-/* ───── Supabase 업로드/갤러리 ───── */
-let sb=null;
-const configured = SUPABASE_URL && SUPABASE_KEY && typeof window.supabase!=='undefined';
-let CONFIG_HINT='Supabase 설정이 필요해요.';
-if(!SUPABASE_URL || !SUPABASE_KEY){
-  CONFIG_HINT='⚠️ SUPABASE_URL / SUPABASE_KEY가 비어 있어요! index.html 맨 위 두 줄에 값을 붙여넣어야 해요. (SQL 실행만으론 작동 안 해요. ★새 버전을 받으면 이 두 줄이 빈 칸으로 초기화되니 다시 붙여넣어 주세요!)';
-}else if(typeof window.supabase==='undefined'){
-  CONFIG_HINT='⚠️ supabase 라이브러리를 못 불러왔어요. 인터넷 연결 · 광고 차단(uBlock 등) · 학교 방화벽을 확인해 주세요.';
-}
-if(!configured)console.warn('[꼬리별 허브] Supabase 미연동:', CONFIG_HINT);
-function vtrim(id){return document.getElementById(id).value.trim();}
-function toggleUpType(){
-  const sim=document.getElementById('fType').value==='시뮬레이션';
-  document.getElementById('rowUrl').style.display=sim?'block':'none';
-  document.getElementById('rowFile').style.display=sim?'none':'block';
-}
-function initUploads(){
-  var nl=document.getElementById('notionLink'),nh=document.getElementById('notionHint');
-  if(!nl)return;
-  if(NOTION_FORM_URL && NOTION_FORM_URL.trim()){
-    nl.href=NOTION_FORM_URL.trim();
-  }else{
-    nl.removeAttribute('href');
-    nl.style.opacity='.5';nl.style.pointerEvents='none';nl.style.cursor='not-allowed';
-    if(nh)nh.innerHTML='⚠️ 아직 노션 링크가 비어 있어요. 스크립트 맨 위 <b>NOTION_FORM_URL</b> 에 제출 양식 링크를 붙여넣어 주세요!';
-  }
-}
-async function loadGallery(){
-  const g=document.getElementById('gallery'),empty=document.getElementById('galleryEmpty'),cnt=document.getElementById('count');
-  const {data,error}=await sb.from(TABLE).select('*').order('created_at',{ascending:false});
-  if(error){console.error(error);return;}
-  cnt.textContent=data.length?'('+data.length+')':'';
-  empty.style.display=data.length?'none':'block';
-  g.innerHTML=data.map(function(r){
-    var badge=r.type==='만화'?'b-comic':(r.type==='시뮬레이션'?'b-sim':'b-info');
-    var title=r.title?escapeHtml(r.title):'(제목 없음)';
-    var team=r.team?escapeHtml(r.team):'';
-    var media=r.url
-      ? '<a class="gimg gimg-sim" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener"><span class="play">▶</span><span class="open">열어보기</span></a>'
-      : '<div class="gimg"><img src="'+(r.image_url||'')+'" alt="" loading="lazy"></div>';
-    return '<div class="gitem">'+media+'<div class="gmeta"><span class="gbadge '+badge+'">'+(r.type||'')+'</span><div class="gtitle">'+title+'</div><div class="gteam">'+team+'</div></div></div>';
-  }).join('');
-}
-function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-async function uploadSubmission(){
-  const team=vtrim('fTeam'),type=document.getElementById('fType').value,title=vtrim('fTitle'),status=document.getElementById('uploadStatus');
-  if(!team){status.textContent='모둠 이름을 입력해 주세요.';return;}
-  if(type==='시뮬레이션'){
-    const url=vtrim('fUrl');
-    if(!url){status.textContent='시뮬레이션 링크(배포 주소)를 입력해 주세요.';return;}
-    status.textContent='등록 중…';
-    const ins=await sb.from(TABLE).insert({team,type,title,url});
-    if(ins.error){status.textContent='저장 실패: '+ins.error.message;return;}
-    status.textContent='완료! 갤러리에 추가되었습니다.';
-    document.getElementById('fTitle').value='';document.getElementById('fUrl').value='';
-    loadGallery();setTimeout(()=>status.textContent='',2600);
-    return;
-  }
-  const file=document.getElementById('fFile').files[0];
-  if(!file){status.textContent='이미지 파일을 선택해 주세요.';return;}
-  status.textContent='업로드 중…';
-  const path=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-  const up=await sb.storage.from(BUCKET).upload(path,file,{upsert:false});
-  if(up.error){status.textContent='업로드 실패: '+up.error.message;return;}
-  const pub=sb.storage.from(BUCKET).getPublicUrl(path);
-  const ins=await sb.from(TABLE).insert({team,type,title,image_url:pub.data.publicUrl});
-  if(ins.error){status.textContent='저장 실패: '+ins.error.message;return;}
-  status.textContent='완료! 갤러리에 추가되었습니다.';
-  document.getElementById('fTitle').value='';document.getElementById('fFile').value='';
-  loadGallery();setTimeout(()=>status.textContent='',2600);
-}
-initUploads();
-
-/* ───── 코드 제출 / 강사 대시보드 ───── */
-function escapeAttr(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function initSubmit(){
-  var notice=document.getElementById('submitSetupNotice'),area=document.getElementById('submitArea');
-  if(!configured){if(notice)notice.style.display='block';if(area)area.style.display='none';var sm2=document.getElementById('submitNoticeMsg');if(sm2)sm2.textContent=CONFIG_HINT;return;}
-  if(notice)notice.style.display='none';if(area)area.style.display='block';
-  if(!sb)sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-  document.getElementById('sFile').addEventListener('change',function(e){
-    var f=e.target.files[0]; if(!f)return;
-    var rd=new FileReader(); rd.onload=function(){document.getElementById('sCode').value=rd.result;}; rd.readAsText(f);
-  });
-  document.getElementById('submitBtn').addEventListener('click',submitCode);
-  document.getElementById('dashToggle').addEventListener('click',function(){
-    var g=document.getElementById('dashGate'),b=document.getElementById('dashBody');
-    if(b.style.display!=='none')return;
-    g.style.display=g.style.display==='none'?'flex':'none';
-  });
-  document.getElementById('dashEnter').addEventListener('click',function(){
-    var pin=document.getElementById('dashPin').value.trim();
-    if(pin===DASH_PIN){
-      document.getElementById('dashGate').style.display='none';
-      document.getElementById('dashBody').style.display='block';
-      document.getElementById('dashToggle').textContent='열림';
-      loadDash();
-      try{sb.channel('codesubs').on('postgres_changes',{event:'INSERT',schema:'public',table:CODE_TABLE},function(){if(document.getElementById('dashBody').style.display!=='none')loadDash();}).subscribe();}catch(e){}
-    } else { document.getElementById('dashMsg').textContent='PIN이 맞지 않아요.'; }
-  });
-  document.getElementById('dashRefresh').addEventListener('click',loadDash);
-}
-async function submitCode(){
-  var name=vtrim('sName'),title=vtrim('sTitle'),code=document.getElementById('sCode').value.trim(),status=document.getElementById('submitStatus');
-  if(!name){status.textContent='성함을 입력해 주세요.';return;}
-  if(!code){status.textContent='HTML 파일을 올리거나 코드를 붙여넣어 주세요.';return;}
-  status.textContent='제출 중…';
-  var ins=await sb.from(CODE_TABLE).insert({teacher:name,title:title,html:code});
-  if(ins.error){status.textContent='제출 실패: '+ins.error.message;return;}
-  status.textContent='제출 완료! 제가 확인할게요 ㅎㅎ 감사합니다 🙌';
-  document.getElementById('sTitle').value='';document.getElementById('sCode').value='';document.getElementById('sFile').value='';
-  setTimeout(function(){status.textContent='';},3200);
-}
-async function loadDash(){
-  var list=document.getElementById('dashList'),cnt=document.getElementById('dashCount');
-  var res=await sb.from(CODE_TABLE).select('*').order('created_at',{ascending:false});
-  if(res.error){list.innerHTML='<p class="dash-empty">불러오기 실패: '+escapeHtml(res.error.message)+'</p>';cnt.textContent='';return;}
-  var data=res.data||[];
-  cnt.textContent=data.length+'건 제출';
-  if(!data.length){list.innerHTML='<p class="dash-empty">아직 제출된 코드가 없어요.</p>';return;}
-  list.innerHTML=data.map(function(r){
-    var when=r.created_at?new Date(r.created_at).toLocaleString('ko-KR'):'';
-    var id='cs_'+r.id;
-    return '<div class="dash-item"><div class="di-head"><div><span class="di-name">'+escapeHtml(r.teacher||'(이름 없음)')+'</span><span class="di-title">'+escapeHtml(r.title||'')+'</span></div><span class="di-when">'+escapeHtml(when)+'</span></div>'
-      +'<iframe class="di-preview" sandbox="allow-scripts" srcdoc="'+escapeAttr(r.html||'')+'"></iframe>'
-      +'<div class="di-actions"><button onclick="openCode(\''+id+'\')">새 탭에서 열기</button><button onclick="copyCode(\''+id+'\')">코드 복사</button></div>'
-      +'<textarea id="'+id+'" style="display:none">'+escapeHtml(r.html||'')+'</textarea></div>';
-  }).join('');
-}
-function openCode(id){try{var html=document.getElementById(id).value;var blob=new Blob([html],{type:'text/html'});window.open(URL.createObjectURL(blob),'_blank');}catch(e){}}
-function copyCode(id){var t=document.getElementById(id);var html=t.value;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(html);}else{t.style.display='block';t.select();document.execCommand('copy');t.style.display='none';}}
-initSubmit();
-
-/* ───── 공유 보드(아이디어 월) ───── */
-function initWall(){
-  var form=document.getElementById('wallForm'),empty=document.getElementById('wallEmpty');
-  if(!configured){ if(form)form.style.display='none'; if(empty)empty.textContent=CONFIG_HINT; return; }
-  if(!sb)sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-  document.getElementById('wBtn').addEventListener('click',submitIdea);
-  loadWall();
-  try{sb.channel('ideas').on('postgres_changes',{event:'INSERT',schema:'public',table:IDEAS_TABLE},function(){loadWall();}).subscribe();}catch(e){}
-}
-async function submitIdea(){
-  var name=vtrim('wName'),text=document.getElementById('wText').value.trim(),status=document.getElementById('wStatus');
-  if(!text){status.textContent='내용을 적어주세요.';return;}
-  status.textContent='올리는 중…';
-  var ins=await sb.from(IDEAS_TABLE).insert({name:name||'익명',content:text});
-  if(ins.error){status.textContent='실패: '+ins.error.message;return;}
-  document.getElementById('wText').value='';
-  status.textContent='공유됐어요! 🙌';
-  loadWall();
-  setTimeout(function(){status.textContent='';},2600);
-}
-async function loadWall(){
-  var listEl=document.getElementById('wallList'),cnt=document.getElementById('wallCount');
-  var res=await sb.from(IDEAS_TABLE).select('*').order('created_at',{ascending:false});
-  if(res.error){return;}
-  var data=res.data||[];
-  cnt.textContent=data.length?'('+data.length+')':'';
-  if(!data.length){listEl.innerHTML='<p class="wall-empty">아직 글이 없어요. 첫 아이디어를 남겨보세요!</p>';return;}
-  listEl.innerHTML=data.map(function(r){
-    var when=r.created_at?new Date(r.created_at).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}):'';
-    return '<div class="wall-card"><div class="wc-text">'+escapeHtml(r.content||'')+'</div><div class="wc-meta"><span class="wc-name">— '+escapeHtml(r.name||'익명')+'</span><span class="wc-when">'+escapeHtml(when)+'</span></div></div>';
-  }).join('');
-}
-initWall();
-
-/* ───── 바이브 서브탭 ───── */
-function switchVibe(name){
-  document.querySelectorAll('.vsub').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.vtab').forEach(b=>b.classList.remove('active'));
-  var panel=document.getElementById('vsub-'+name); if(panel)panel.classList.add('active');
-  var btn=document.querySelector('.vtab[data-v="'+name+'"]'); if(btn)btn.classList.add('active');
-  var bar=document.getElementById('vtabs'),ab=document.querySelector('.appbar');
-  if(bar){var off=(ab?ab.offsetHeight:80)+8;var y=bar.getBoundingClientRect().top+window.scrollY-off;window.scrollTo({top:y,behavior:'smooth'});}
-}
-document.querySelectorAll('.vtab').forEach(b=>b.addEventListener('click',()=>switchVibe(b.dataset.v)));
-(function(){var ab=document.querySelector('.appbar'),v=document.getElementById('vtabs');function st(){if(ab&&v)v.style.top=ab.offsetHeight+'px';}st();window.addEventListener('resize',st);})();
-
-/* ───── 접속 안내 (QR + 주소) ───── */
-(function(){
-  var urlEl=document.getElementById('acUrl'),qrEl=document.getElementById('acQr'),copyBtn=document.getElementById('acCopy');
-  if(!urlEl)return;
-  var url=location.href.split('#')[0];
-  if(location.protocol==='file:'){
-    urlEl.textContent='배포(GitHub Pages) 후 이 자리에 접속 주소와 QR이 자동으로 나타나요!';
-    if(qrEl)qrEl.style.display='none'; if(copyBtn)copyBtn.style.display='none'; return;
-  }
-  urlEl.textContent=url;
-  try{
-    if(typeof qrcode!=='undefined'){var qr=qrcode(0,'M');qr.addData(url);qr.make();qrEl.innerHTML=qr.createImgTag(6,4);}
-    else if(qrEl){qrEl.style.display='none';}
-  }catch(e){if(qrEl)qrEl.style.display='none';}
-  if(copyBtn)copyBtn.addEventListener('click',function(){
-    try{navigator.clipboard.writeText(url);}catch(e){}
-    copyBtn.textContent='복사됨!';setTimeout(function(){copyBtn.textContent='주소 복사';},1500);
-  });
-})();
-
-/* ───── 초기 탭 ───── */
-switchTab((location.hash||'').replace('#','')||'home');
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('themeBtn');
+    try{var s=localStorage.getItem('gt-theme'); if(s)root.setAttribute('data-theme',s);}catch(e){}
+    btn.addEventListener('click',function(){
+      var cur=root.getAttribute('data-theme');
+      if(!cur){cur=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}
+      var next=cur==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next);
+      try{localStorage.setItem('gt-theme',next);}catch(e){}
+    });
+  })();
 </script>
-<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-07-17</span></footer>
-</body>
-</html>
