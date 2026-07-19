@@ -182,6 +182,30 @@ code.inline{font-family:ui-monospace,Consolas,monospace;background:#eef1f7;borde
 .trap .fix{margin-top:9px;font-size:.87rem;background:var(--green-soft);border-radius:9px;padding:8px 11px}
 .trap .fix b{color:var(--green-deep)}
 
+/* hack demo */
+.hack{max-width:920px;margin:0 auto;background:#0d251b;border:1px solid #1c4d38;border-radius:var(--r);padding:24px 26px;box-shadow:var(--shadow-lg);color:#d9f2e4}
+.hack .ht{font-family:var(--font-round);color:#7dfcc0;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.hack .hsub{color:#9fc7b4;font-size:.95rem;margin-top:6px;line-height:1.6}
+.hack .steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+@media(max-width:720px){.hack .steps4{grid-template-columns:repeat(2,1fr)}}
+.hack .hstep{background:#0f3325;border:1px solid #1c4d38;border-radius:16px;padding:14px 12px;text-align:center}
+.hack .hstep .kbd{display:inline-block;background:#08150f;border:1px solid #2b6b4d;border-bottom-width:3px;border-radius:8px;padding:4px 10px;font-family:ui-monospace,monospace;font-size:.95rem;color:#7dfcc0}
+.hack .hstep p{font-size:.82rem;color:#bfe0d1;margin-top:8px;line-height:1.45}
+.hack .hstep .num2{font-family:var(--font-round);color:#3ECF8E;font-size:.85rem}
+.hack .hbtnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.hack .hbtn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-round);font-size:1rem;text-decoration:none;border-radius:99px;padding:12px 22px;cursor:pointer;border:none}
+.hack .hbtn.go{background:#ff5d5d;color:#fff;box-shadow:0 8px 22px rgba(255,93,93,.3)}
+.hack .hbtn.rev{background:#0f3325;color:#7dfcc0;border:1px solid #2b6b4d}
+.hack .reveal{margin-top:16px;background:#08150f;border:1px dashed #ff5d5d;border-radius:14px;padding:16px 18px;display:none}
+.hack .reveal.on{display:block;animation:fadein .3s}
+.hack .reveal pre{font-family:ui-monospace,monospace;font-size:.86rem;color:#e6f5ec;overflow-x:auto;line-height:1.7}
+.hack .reveal .found{background:#ff5d5d;color:#fff;padding:1px 6px;border-radius:5px;font-weight:700}
+.hack .reveal .why{color:#ffd9d0;font-size:.92rem;margin-top:12px;line-height:1.7}
+.hack .reveal .why b{color:#fff}
+.hack .hfix{margin-top:14px;background:#0f3325;border:1px solid #2b6b4d;border-radius:14px;padding:14px 18px;font-size:.92rem;color:#cfeadd;line-height:1.7}
+.hack .hfix b{color:#7dfcc0}
+.hack .hfix code{background:#08150f;border:1px solid #2b6b4d;color:#ffd23f;padding:1px 7px;border-radius:6px;font-family:ui-monospace,monospace;font-size:.88em}
+
 /* judge */
 .judge{max-width:760px;margin:0 auto;background:var(--card);border:2px solid var(--line);border-radius:calc(var(--r) + 4px);padding:30px 32px;box-shadow:var(--shadow-lg);text-align:center}
 .judge .qn{font-family:var(--font-round);color:var(--green-deep);font-size:.9rem;margin-bottom:10px}
@@ -675,6 +699,48 @@ footer b{color:var(--navy)}
         <div class="fix"><b>결론:</b> 물어볼 줄 아는 사람이 되는 것. 그게 오늘 연수의 목적입니다.</div></div>
     </div>
     <div class="pnote"><b>[진행]</b> 각 함정 1분 내외. 함정 6에서 실습 미션("옆 room 침투") 회수. 함정 2의 만14세는 판단기 탭 복선. 마지막 카드 멘트는 천천히.</div>
+  </div>
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">🔓 직접 해보는 해킹 <span class="tm">· 5분</span></span>
+      <h2>교사 대시보드 비밀번호를 <b>5초 만에</b> 훔쳐 보세요</h2>
+      <p>바이브코딩으로 교사 대시보드를 만들 때 가장 흔한 실수 —
+      비밀번호를 <b>프론트엔드 코드에 그냥 적어두는 것</b>입니다.
+      정말 위험한지, 강사가 실제로 만든 과제 수합 사이트에서 <b>직접 훔쳐봅시다.</b></p>
+    </div>
+    <div class="hack">
+      <div class="ht">🕵️ 지금 다 함께, 실습</div>
+      <p class="hsub">아래 사이트는 강사가 만든 <b>진짜 과제 제출 사이트</b>입니다. 교사 대시보드가 비밀번호로 잠겨 있죠. 그 비밀번호를 찾아보세요.</p>
+      <div class="steps4">
+        <div class="hstep"><div class="num2">STEP 1</div><div style="margin:8px 0"><a href="https://scienceisjo.github.io/assignmentmanual/#home" target="_blank" rel="noopener" class="kbd" style="text-decoration:none">🔗 사이트 열기</a></div><p>새 탭으로 사이트를 엽니다</p></div>
+        <div class="hstep"><div class="num2">STEP 2</div><div style="margin:8px 0"><span class="kbd">Ctrl + U</span></div><p>페이지 소스 보기<br>(Mac: ⌥⌘U)</p></div>
+        <div class="hstep"><div class="num2">STEP 3</div><div style="margin:8px 0"><span class="kbd">Ctrl + F</span></div><p>소스 안에서 찾기 열기</p></div>
+        <div class="hstep"><div class="num2">STEP 4</div><div style="margin:8px 0"><span class="kbd">TEACHER_PIN</span></div><p>입력하면… 눈앞에 비밀번호가!</p></div>
+      </div>
+      <div class="hbtnrow">
+        <a class="hbtn go" href="https://scienceisjo.github.io/assignmentmanual/#home" target="_blank" rel="noopener">🔗 사이트 열고 직접 찾기</a>
+        <button class="hbtn rev" onclick="document.getElementById('hackReveal').classList.toggle('on')">🙈 정답 · 원리 보기</button>
+      </div>
+      <div class="reveal" id="hackReveal">
+        <div style="color:#9fc7b4;font-size:.86rem;margin-bottom:8px">소스 코드에 이렇게 적혀 있습니다 — 누구나, 지금 이 순간 볼 수 있습니다:</div>
+        <pre>const CONFIG = {
+  ...
+  TEACHER_PIN:  <span class="found">"teacher1234"</span>,  <span style="color:#79a893">// ⬅️ 교사 대시보드 비밀번호</span>
+  ...
+};</pre>
+        <div class="why">😱 <b>비밀번호가 아니라 "비밀번호 그림"이었습니다.</b>
+        프론트엔드(HTML·JS) 코드는 사용자 브라우저로 그대로 전달됩니다 —
+        즉 <b>화면에 보이는 모든 앱의 코드는 전부 사용자 것</b>입니다.
+        <span class="found">Ctrl+U</span> 한 번, <span class="found">F12</span> 한 번이면 끝.
+        여기에 학생 성적·상담기록이 있는 대시보드였다면, <b>학생 누구나 열어볼 수 있었습니다.</b></div>
+        <div class="hfix">🛠️ <b>그럼 어떻게 해야 하나요?</b> — 진짜 자물쇠는 <b>서버(백엔드)</b>에 있어야 합니다.<br>
+        · 교사 확인은 <b>Supabase Auth(로그인)</b>로 — 비밀번호는 서버가 검사하고, 코드에는 남지 않습니다.<br>
+        · 데이터 접근은 <b>RLS</b>로 — "로그인한 교사만 읽기" 규칙을 서버가 강제합니다.<br>
+        · 헷갈리지 마세요: <code>anon 키</code>는 공개돼도 됩니다(자물쇠=RLS가 지킴). 하지만 <code>TEACHER_PIN</code> 같은 <b>진짜 비밀</b>은 프론트엔드에 두면 안 됩니다.</div>
+      </div>
+    </div>
+    <div class="pnote"><b>[진행]</b> 다 함께 Ctrl+U→Ctrl+F 시연 → "찾으신 분?" 손들기. 탄식이 나오는 순간이 핵심. 강사 사이트라 시연해도 안전(이미 공개된 값). 주의: 이건 RLS와 <b>다른</b> 함정 — RLS는 '읽을 수 있는 데이터', 여기는 '가짜 비밀번호'. 실습 STEP에서 만든 anon 키(공개 OK)와 TEACHER_PIN(공개 금지)의 차이를 꼭 대비시킬 것.</div>
   </div>
 
   <div class="block">
