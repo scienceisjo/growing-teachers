@@ -986,13 +986,13 @@ footer b{color:var(--navy)}
         <button class="bigbtn" style="width:100%;margin-top:14px" onclick="genFreePrompts()">🪄 프롬프트 생성 &amp; 강사에게 공유</button>
         <p class="fine" id="fpMsg"></p>
         <div id="fpResult" style="display:none">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><b>STEP 1 · 앱 만들기 프롬프트</b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp1',this)">📋 복사</button></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><b>프롬프트 ① · 앱 만들기 <span style="color:var(--ink-soft);font-size:.85em">(B-2에서 사용)</span></b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp1',this)">📋 복사</button></div>
           <pre class="code" id="fp1" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow-y:auto"></pre>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><b>STEP 2 · Supabase SQL 프롬프트 <span style="color:var(--green-deep);font-size:.85em">(RLS 필수 내장)</span></b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp2',this)">📋 복사</button></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><b>프롬프트 ② · Supabase 표 만들기 <span style="color:var(--green-deep);font-size:.85em">(RLS 필수 · B-3에서 사용)</span></b><button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="fpCopy('fp2',this)">📋 복사</button></div>
           <pre class="code" id="fp2" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow-y:auto"></pre>
         </div>
       </div>
-      <div class="tip"><b>💡 순서:</b> ① 프롬프트 1로 <b>앱을 먼저</b> 만들고 → ② 프롬프트 2로 <b>Supabase 표(RLS 포함)</b>를 만드세요. URL·anon 키는 <b>내 Supabase에서 직접 찾아</b> 넣습니다 — 공개 키니까 <b>SQL 프롬프트에 RLS 요청이 필수로</b> 들어가 있어요.</div>
+      <div class="tip"><b>💡 순서:</b> 아래 두 프롬프트가 나오면 → <b>B-2</b>에서 프롬프트 ①로 <b>앱을 먼저</b> 만들고 → <b>B-3</b>에서 프롬프트 ②로 <b>Supabase 표(RLS 포함)</b>를 만드세요. URL·anon 키는 <b>공통 실습에서 찾아 둔 내 것</b>이 이미 프롬프트에 채워져 있어요 — 공개 키라서 <b>SQL 프롬프트에 RLS 요청이 필수로</b> 들어가 있습니다.</div>
       <div style="max-width:760px;margin:18px auto 0">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
           <b style="font-family:var(--font-round);color:var(--navy);font-size:1.06rem">📋 우리 연수 · 제출된 계획서</b>
@@ -1048,7 +1048,7 @@ footer b{color:var(--navy)}
     <div class="mstep">
       <header><span class="sn snb">B-2</span><h3>프롬프트 ①로 <b>앱 만들기</b> — AI에게 시키기</h3><span class="st">약 6분</span></header>
       <div class="mbody">
-        <p>위에서 만든 <b>STEP 1 · 앱 만들기 프롬프트</b>를 <b>[📋 복사]</b> 하세요. 이 프롬프트 안에는 이미 내 <b>Project URL·anon 키·반응형·익명 최소수집·service_role 금지</b>가 다 채워져 있습니다.</p>
+        <p>B-1에서 만든 <b>프롬프트 ① · 앱 만들기</b>를 <b>[📋 복사]</b> 하세요. 이 프롬프트 안에는 이미 내 <b>Project URL·anon 키·반응형·익명 최소수집·service_role 금지</b>가 다 채워져 있습니다.</p>
         <ol class="sub">
           <li><b>Claude</b>(claude.ai) 또는 <b>ChatGPT</b>를 새 대화로 엽니다.</li>
           <li>복사한 프롬프트를 <b>붙여넣고</b> 전송 → AI가 <b>HTML 코드 한 덩어리</b>를 만들어 줍니다.</li>
@@ -1065,7 +1065,7 @@ footer b{color:var(--navy)}
     <div class="mstep">
       <header><span class="sn snb">B-3</span><h3>프롬프트 ②로 <b>표(테이블) 만들기</b> — RLS까지 한 번에</h3><span class="st">약 5분</span></header>
       <div class="mbody">
-        <p>위에서 만든 <b>STEP 2 · Supabase SQL 프롬프트</b>를 <b>[📋 복사]</b> 하세요. 이 프롬프트에는 <b>RLS 켜기·최소권한·값 검증</b>이 필수로 들어 있어, 나온 SQL이 <b>안전한 표</b>를 만들어 줍니다.</p>
+        <p>B-1에서 만든 <b>프롬프트 ② · Supabase 표 만들기</b>를 <b>[📋 복사]</b> 하세요. 이 프롬프트에는 <b>RLS 켜기·최소권한·값 검증</b>이 필수로 들어 있어, 나온 SQL이 <b>안전한 표</b>를 만들어 줍니다.</p>
         <ol class="sub">
           <li>복사한 프롬프트를 <b>같은 AI 대화</b>(B-2에서 쓰던 창)에 붙여넣고 전송 → AI가 <b>SQL 코드</b>를 만들어 줍니다. <span style="color:var(--ink-soft)">앱이 쓸 표 이름을 AI가 B-2에서 정했으니 이어서 하면 일치해요.</span></li>
           <li>나온 <b>SQL 전체를 복사</b>.</li>
