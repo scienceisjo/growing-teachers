@@ -39,8 +39,8 @@ a{color:inherit}
 /* ── top strip + hero ── */
 .topstrip{max-width:1120px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:2}
 .brand{display:flex;align-items:center;gap:9px;text-decoration:none}
-.brand .ball{width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,var(--green) 0 46%,#fff 46% 54%,#fff 54% 100%);border:2px solid var(--navy);position:relative;flex-shrink:0}
-.brand .ball::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;transform:translate(-50%,-50%);background:#fff;border:2px solid var(--navy);border-radius:50%}
+.brand .ball{width:26px;height:26px;border-radius:8px;background:var(--green-soft);border:2px solid var(--navy);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1}
+.brand .ball::after{content:"🧪"}
 .brand .wm{font-family:var(--font-round);font-size:1rem;color:var(--navy)}
 .p-flag{display:none;font-size:.72rem;font-weight:800;color:#fff;background:var(--red);padding:5px 11px;border-radius:20px}
 body.presenter .p-flag{display:inline-block}
@@ -205,6 +205,25 @@ code.inline{font-family:ui-monospace,Consolas,monospace;background:#eef1f7;borde
 .hack .hfix{margin-top:14px;background:#0f3325;border:1px solid #2b6b4d;border-radius:14px;padding:14px 18px;font-size:.92rem;color:#cfeadd;line-height:1.7}
 .hack .hfix b{color:#7dfcc0}
 .hack .hfix code{background:#08150f;border:1px solid #2b6b4d;color:#ffd23f;padding:1px 7px;border-radius:6px;font-family:ui-monospace,monospace;font-size:.88em}
+/* 해결 실습(따라하기) */
+.solve{margin-top:14px;background:#0b1f17;border:1px solid #1c4d38;border-radius:16px;overflow:hidden}
+.solve>summary{cursor:pointer;list-style:none;padding:15px 18px;font-family:var(--font-round);color:#7dfcc0;font-size:1.05rem;display:flex;align-items:center;gap:9px;background:#0f3325}
+.solve>summary::-webkit-details-marker{display:none}
+.solve>summary::after{content:"▾ 펼쳐서 따라하기";margin-left:auto;font-size:.8rem;color:#9fc7b4;font-family:var(--font-sans)}
+.solve[open]>summary::after{content:"▴ 접기"}
+.solve .sbody{padding:18px 20px;color:#d9f2e4}
+.solve .sbody>p{font-size:.93rem;line-height:1.7;margin-bottom:12px}
+.solve .sbody>p b{color:#7dfcc0}
+.solve .sstep{border-left:3px solid #2b6b4d;padding:2px 0 2px 16px;margin:0 0 16px 4px}
+.solve .sstep h4{font-family:var(--font-round);color:#fff;font-weight:400;font-size:1.02rem}
+.solve .sstep p{font-size:.9rem;color:#bfe0d1;margin-top:5px;line-height:1.65}
+.solve .sstep p b{color:#ffd23f}
+.solve pre{background:#08150f;border:1px solid #2b6b4d;border-radius:12px;padding:14px 16px;margin-top:10px;font-family:ui-monospace,Consolas,monospace;font-size:.8rem;line-height:1.65;color:#e6f5ec;overflow-x:auto;position:relative}
+.solve pre .c{color:#79a893}.solve pre .k{color:#7dfcc0}.solve pre .s{color:#ffd28a}.solve pre .d{color:#ff9d9d;text-decoration:line-through}
+.solve .scopy{position:absolute;top:9px;right:9px;font-family:var(--font-sans);font-size:.72rem;background:#173d2e;color:#cde6d9;border:1px solid #2e6b4f;border-radius:7px;padding:4px 9px;cursor:pointer}
+.solve .win{margin-top:6px;background:#0f3325;border:1px solid #3ECF8E;border-radius:12px;padding:13px 16px;font-size:.9rem;color:#d9f2e4;line-height:1.7}
+.solve .win b{color:#7dfcc0}
+.solve .lvl{display:inline-block;font-family:var(--font-sans);font-weight:700;font-size:.72rem;background:#ffd23f;color:#3a2e00;border-radius:20px;padding:2px 10px;margin-left:6px}
 
 /* judge */
 .judge{max-width:760px;margin:0 auto;background:var(--card);border:2px solid var(--line);border-radius:calc(var(--r) + 4px);padding:30px 32px;box-shadow:var(--shadow-lg);text-align:center}
@@ -738,6 +757,59 @@ footer b{color:var(--navy)}
         · 교사 확인은 <b>Supabase Auth(로그인)</b>로 — 비밀번호는 서버가 검사하고, 코드에는 남지 않습니다.<br>
         · 데이터 접근은 <b>RLS</b>로 — "로그인한 교사만 읽기" 규칙을 서버가 강제합니다.<br>
         · 헷갈리지 마세요: <code>anon 키</code>는 공개돼도 됩니다(자물쇠=RLS가 지킴). 하지만 <code>TEACHER_PIN</code> 같은 <b>진짜 비밀</b>은 프론트엔드에 두면 안 됩니다.</div>
+
+        <details class="solve">
+          <summary>🛠️ 해결까지 직접 해보기 — 교사 대시보드를 '진짜로' 잠그기 <span class="lvl">심화 · 따라하기</span></summary>
+          <div class="sbody">
+            <p><b>핵심 한 줄:</b> 비밀번호를 코드에서 <b>지우고</b>, '로그인(Auth)'과 'RLS'로 <b>서버가</b> 지키게 만듭니다.
+            아래 3단계를 그대로 따라 하면, Ctrl+U로 코드를 다 봐도 비밀번호가 없고, 키를 복사해도 <b>로그인하지 않으면 학생 데이터가 안 나옵니다.</b></p>
+
+            <div class="sstep">
+              <h4>STEP 1 · 교사 계정 하나 만들기 (Supabase Auth)</h4>
+              <p>Supabase 프로젝트 → 왼쪽 <b>Authentication</b> → <b>Users</b> → <b>[Add user]</b> → <b>Create new user</b>.
+              교사용 이메일과 비밀번호를 입력해 계정을 하나 만듭니다. <b>이 비밀번호는 서버에만 저장되고, 코드에는 절대 적지 않습니다.</b></p>
+            </div>
+
+            <div class="sstep">
+              <h4>STEP 2 · 대시보드의 '가짜 비번 검사'를 '진짜 로그인'으로 교체</h4>
+              <p>대시보드 HTML에서 <b>TEACHER_PIN을 비교하던 코드를 지우고</b>, 아래처럼 Supabase 로그인으로 바꿉니다.
+              <br>(먼저 &lt;head&gt;에 supabase-js 한 줄을 추가하세요.)</p>
+<pre><button class="scopy" onclick="solveCopy(this)">📋 복사</button><span class="c">&lt;!-- head 안에 한 줄 추가 --&gt;</span>
+&lt;script src=<span class="s">"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"</span>&gt;&lt;/script&gt;
+
+<span class="c">// ── 대시보드 스크립트 ──</span>
+<span class="k">const</span> sb = supabase.createClient(URL, ANON_KEY); <span class="c">// 내 프로젝트 URL·anon 키</span>
+
+<span class="d">// ❌ 삭제: if (input === "teacher1234") { 대시보드 열기 }</span>
+
+<span class="c">// ✅ 교체: 서버에 로그인 요청 (비번은 서버가 검사)</span>
+<span class="k">async function</span> teacherLogin(email, password) {
+  <span class="k">const</span> { data, error } = <span class="k">await</span> sb.auth.signInWithPassword({ email, password });
+  <span class="k">if</span> (error) <span class="k">return</span> alert(<span class="s">"로그인 실패"</span>);
+  openDashboard(); <span class="c">// 로그인 성공 시에만 대시보드 표시</span>
+}</pre>
+            </div>
+
+            <div class="sstep">
+              <h4>STEP 3 · 데이터 표 규칙(RLS)을 '로그인한 사람만 읽기'로 조이기</h4>
+              <p>학생 제출 표의 읽기(select) 권한을 <b>익명(anon) → 로그인 사용자(authenticated)</b>로 바꿉니다.
+              Supabase <b>SQL Editor</b>에 붙여넣고 Run. <b>제출(insert)은 학생이 로그인 없이 해야 하므로 anon 그대로 둡니다.</b></p>
+<pre><button class="scopy" onclick="solveCopy(this)">📋 복사</button><span class="c">-- 읽기: 로그인한 교사만 허용</span>
+<span class="k">drop policy if exists</span> "anon can read" <span class="k">on</span> public.submissions;
+<span class="k">create policy</span> "teacher read" <span class="k">on</span> public.submissions
+  <span class="k">for select to</span> authenticated <span class="k">using</span> ( true );
+
+<span class="c">-- 제출(넣기)은 학생용으로 anon 유지 (있으면 그대로 두세요)</span>
+<span class="k">create policy if not exists</span> "anon can insert" <span class="k">on</span> public.submissions
+  <span class="k">for insert to</span> anon <span class="k">with check</span> ( true );</pre>
+            </div>
+
+            <div class="win">✅ <b>이제 무슨 일이 생기나:</b> Ctrl+U로 소스를 다 봐도 <b>비밀번호가 없습니다</b>(서버에만 있음).
+            누가 anon 키를 복사해 <code>?select=*</code>를 때려도, <b>로그인하지 않았으니 authenticated가 아니라서 학생 데이터가 한 줄도 안 나옵니다.</b>
+            자물쇠가 그림에서 <b>진짜 자물쇠</b>가 되었습니다. 🔒</div>
+            <p style="margin-top:12px;font-size:.85rem;color:#9fc7b4">💡 연수 중에는 개념·시연까지만 하고, 이 3단계는 <b>선도학교 심화 과제</b>로 각자 따라 하시면 됩니다. 막히면 강사에게!</p>
+          </div>
+        </details>
       </div>
     </div>
     <div class="pnote"><b>[진행]</b> 다 함께 Ctrl+U→Ctrl+F 시연 → "찾으신 분?" 손들기. 탄식이 나오는 순간이 핵심. 강사 사이트라 시연해도 안전(이미 공개된 값). 주의: 이건 RLS와 <b>다른</b> 함정 — RLS는 '읽을 수 있는 데이터', 여기는 '가짜 비밀번호'. 실습 STEP에서 만든 anon 키(공개 OK)와 TEACHER_PIN(공개 금지)의 차이를 꼭 대비시킬 것.</div>
@@ -989,6 +1061,10 @@ function copySql(){
   navigator.clipboard.writeText(t).then(()=>toast('SQL 전체가 복사되었습니다 — SQL Editor에 붙여넣고 Run!'));
 }
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2600);}
+function solveCopy(btn){
+  const t=btn.parentElement.innerText.replace(/^📋 복사\n?/,'');
+  navigator.clipboard.writeText(t).then(()=>toast('복사되었습니다 — 붙여넣어 사용하세요!'));
+}
 
 /* ═══ 수집 판단기 ═══ */
 const JQ={
