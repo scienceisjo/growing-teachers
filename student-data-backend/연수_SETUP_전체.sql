@@ -83,7 +83,10 @@ alter table teacher_plans enable row level security;
 drop policy if exists "anon insert plans" on teacher_plans;
 create policy "anon insert plans" on teacher_plans for insert to anon
   with check ( char_length(coalesce(plan,'')) <= 5000 );
--- 읽기 정책 없음 = anon은 읽을 수 없음(의도적). 관리자만 대시보드에서 열람.
+-- 읽기: 강의 중 제출된 계획서를 모든 참여 교사가 실시간으로 보게 anon select 허용.
+--   (화면에는 계획 내용만 표시하고 키는 안 보여줌. anon 키는 원래 공개용이라 공유 OK)
+drop policy if exists "anon read plans" on teacher_plans;
+create policy "anon read plans" on teacher_plans for select to anon using ( true );
 
 
 -- ═══════════════════════════════════════════════════════════════
