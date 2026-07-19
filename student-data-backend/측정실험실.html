@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔬 우리 반 측정 실험실</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(160deg,#eaf6ee 0%,#eef4ff 60%,#f6f0ff 100%);min-height:100vh;color:#1f2430}
+  .wrap{max-width:640px;margin:0 auto;padding:20px 16px 8px}
+  header{text-align:center;padding:12px 0 16px}
+  header h1{font-size:1.6rem;font-weight:900;letter-spacing:-.5px}
+  header p{color:#6b7280;font-size:.9rem;margin-top:4px}
+  .card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 6px 24px rgba(60,120,90,.10);margin-bottom:16px}
+  .banner{border-radius:14px;padding:11px 14px;font-size:.84rem;line-height:1.6;margin-bottom:16px}
+  .banner.warn{background:#fff8e1;border:1.5px solid #f6c344;color:#7a5b00}
+  .banner.ok{background:#e7f6ec;border:1.5px solid #57c07f;color:#1c6b3d}
+  label{font-weight:700;font-size:.88rem;display:block;margin:10px 0 6px}
+  input{width:100%;padding:12px 14px;font-size:1rem;font-family:inherit;border:1.5px solid #d8dce6;border-radius:12px;outline:none}
+  input:focus{border-color:#22b573}
+  .row{display:flex;gap:10px}.row>div{flex:1}
+  .btn{width:100%;padding:14px;margin-top:16px;font-size:1.05rem;font-weight:800;font-family:inherit;color:#fff;background:#22b573;border:none;border-radius:14px;cursor:pointer;transition:transform .08s}
+  .btn:active{transform:scale(.97)}
+  .btn.blue{background:#5b7bff}
+  h2.sec{font-size:1.08rem;font-weight:900;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+  h2.sec button{font-family:inherit;font-size:.78rem;font-weight:700;border:1.5px solid #d8dce6;background:#fff;border-radius:10px;padding:5px 10px;cursor:pointer;color:#22b573}
+  .sub{color:#6b7280;font-size:.82rem;margin-bottom:12px}
+  canvas{width:100%;height:300px;display:block;background:#fbfdfb;border-radius:12px;border:1px solid #e8efe9}
+  .stats{display:flex;gap:10px;margin-top:12px}
+  .stats div{flex:1;background:#f2f9f5;border-radius:12px;padding:10px;text-align:center}
+  .stats .v{font-size:1.25rem;font-weight:900;color:#177a54}
+  .stats .k{font-size:.72rem;color:#8a90a0;margin-top:2px}
+  .list{margin-top:12px;max-height:150px;overflow-y:auto;font-size:.9rem}
+  .list .it{display:flex;justify-content:space-between;padding:6px 4px;border-bottom:1px solid #f0f2f7}
+  .list .it b{color:#177a54}
+  #msg{text-align:center;font-size:.9rem;font-weight:700;margin-top:8px;min-height:1.3em}
+  .why{background:#eef7f1;border-radius:12px;padding:12px 14px;font-size:.85rem;line-height:1.7;color:#2f5d43;margin-top:4px}
+  .why b{color:#1c4632}
+  details.setup{margin-top:14px;background:#0d251b;border-radius:14px;overflow:hidden;color:#d9f2e4}
+  details.setup summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:800;font-size:.9rem;color:#7dfcc0}
+  details.setup summary::-webkit-details-marker{display:none}
+  details.setup .sb{padding:0 14px 14px}
+  details.setup p{font-size:.85rem;line-height:1.6;margin:8px 2px}
+  pre{background:#08150f;border:1px solid #2b6b4d;border-radius:10px;padding:12px 14px;font-family:ui-monospace,Consolas,monospace;font-size:.76rem;line-height:1.6;color:#e6f5ec;overflow-x:auto;position:relative}
+  pre button{position:absolute;top:8px;right:8px;font-family:inherit;font-size:.72rem;background:#173d2e;color:#cde6d9;border:1px solid #2e6b4f;border-radius:7px;padding:4px 9px;cursor:pointer}
+  .hidden{display:none}
+  footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🔬 우리 반 측정 실험실</h1>
+    <p id="subtitle">조별 측정값을 넣으면 반 전체 그래프가 실시간으로 완성됩니다</p>
+  </header>
+
+  <div id="setupBanner" class="banner warn hidden"></div>
+
+  <!-- 입력 -->
+  <div class="card">
+    <label>조 (예: 1조)</label>
+    <input type="text" id="team" placeholder="예: 1조" maxlength="12">
+    <div class="row">
+      <div><label id="xLabel">부피 (mL)</label><input type="number" id="x" step="any" inputmode="decimal" placeholder="숫자"></div>
+      <div><label id="yLabel">질량 (g)</label><input type="number" id="y" step="any" inputmode="decimal" placeholder="숫자"></div>
+    </div>
+    <button class="btn" id="submit">📈 측정값 기록하기</button>
+    <div id="msg"></div>
+  </div>
+
+  <!-- 실시간 그래프 -->
+  <div class="card">
+    <h2 class="sec">📊 우리 반 실시간 그래프 <button id="refresh">↻ 새로고침</button></h2>
+    <div class="sub" id="axisNote">가로 = 부피(mL) · 세로 = 질량(g)</div>
+    <canvas id="chart"></canvas>
+    <div class="stats">
+      <div><div class="v" id="stN">-</div><div class="k">측정 수</div></div>
+      <div><div class="v" id="stX">-</div><div class="k" id="stXk">부피 평균</div></div>
+      <div><div class="v" id="stY">-</div><div class="k" id="stYk">질량 평균</div></div>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="card why">
+    🆚 <b>구글폼·패들렛과 다른 점</b><br>
+    구글폼은 숫자를 '받기'만 하고, 그래프는 나중에 선생님이 직접 그려야 합니다.
+    이 도구는 <b>여러 조가 넣을수록 하나의 그래프가 실시간으로 자동 완성</b>돼요 — 그 자리에서 경향을 함께 봅니다.
+  </div>
+
+  <!-- 교사용 SETUP -->
+  <details class="setup">
+    <summary>🧑‍🏫 교사용 — 처음 1회 설정 & 축 바꾸기 (펼치기)</summary>
+    <div class="sb">
+      <p><b>① 실시간 공유 켜기:</b> 아래 SQL을 Supabase의 <b>SQL Editor</b>에 붙여넣고 Run 하면, 모든 기기가 같은 데이터를 실시간으로 공유합니다. (안 하면 이 기기 안에서만 작동하는 <b>연습 모드</b>)</p>
+<pre><button onclick="copyPre(this)">📋 복사</button>create table if not exists science_measure (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  room text not null default 'demo',
+  team text,
+  x double precision not null,
+  y double precision not null
+);
+create index if not exists science_measure_room_idx
+  on science_measure(room, created_at desc);
+alter table science_measure enable row level security;
+drop policy if exists "anon insert science" on science_measure;
+create policy "anon insert science" on science_measure
+  for insert to anon
+  with check ( char_length(room) between 1 and 40
+    and x between -1000000 and 1000000
+    and y between -1000000 and 1000000 );
+drop policy if exists "anon read science" on science_measure;
+create policy "anon read science" on science_measure
+  for select to anon using ( true );</pre>
+      <p><b>② 실험에 맞게 축 바꾸기:</b> 주소 뒤에 붙이세요 —
+      <br><code>?x=온도(℃)&y=녹은 양(g)</code> · <code>?x=전압(V)&y=전류(A)</code> 처럼.
+      반 구분은 <code>?room=3-2</code> (여러 항목은 &로 연결).</p>
+      <p><b>③ 데이터 지우기:</b> SQL Editor에서 <code>delete from science_measure;</code></p>
+    </div>
+  </details>
+</div>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-07-19</span></footer>
+
+<script>
+/* ===== 설정 (선생님이 바꿀 곳은 URL 파라미터로) ===== */
+const SUPABASE_URL = "https://vbvtnmnodeoocbbjauap.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
+const TABLE = "science_measure";
+
+const P = new URLSearchParams(location.search);
+const ROOM = (P.get("room") || "demo").slice(0, 40);
+const XL = P.get("x") || "부피 (mL)";
+const YL = P.get("y") || "질량 (g)";
+
+const $ = id => document.getElementById(id);
+$("xLabel").textContent = XL; $("yLabel").textContent = YL;
+$("stXk").textContent = XL.replace(/\s*\(.*\)/,"") + " 평균";
+$("stYk").textContent = YL.replace(/\s*\(.*\)/,"") + " 평균";
+$("axisNote").textContent = `가로 = ${XL} · 세로 = ${YL}`;
+
+const sb = (SUPABASE_URL.startsWith("https://") && !SUPABASE_KEY.includes("여기에")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+let mode = sb ? "cloud" : "local";   // cloud 실패 시 local로 폴백
+let localRows = JSON.parse(localStorage.getItem("sm_"+ROOM) || "[]");
+
+function setBanner(){
+  const b = $("setupBanner");
+  if(mode === "local"){
+    b.className = "banner warn";
+    b.innerHTML = "⚠️ <b>연습 모드</b> — 이 기기 안에서만 저장됩니다. 실시간 공유를 켜려면 아래 <b>교사용 설정</b>의 SQL을 1회 실행하세요.";
+    b.classList.remove("hidden");
+  } else b.classList.add("hidden");
+}
+
+$("submit").addEventListener("click", submit);
+$("refresh").addEventListener("click", load);
+
+async function submit(){
+  const team = $("team").value.trim();
+  const x = parseFloat($("x").value), y = parseFloat($("y").value);
+  if(!team){ msg("조 이름을 입력하세요","#e5484d"); return; }
+  if(!isFinite(x) || !isFinite(y)){ msg("숫자 두 개를 모두 입력하세요","#e5484d"); return; }
+  msg("기록 중...","#8a90a0");
+  if(mode === "cloud"){
+    const { error } = await sb.from(TABLE).insert({ room:ROOM, team, x, y });
+    if(error){ mode = "local"; setBanner(); saveLocal(team,x,y); msg("연습 모드로 저장했어요 (표 설정 필요)","#b58900"); }
+    else { msg("✅ 기록 완료!","#22b573"); }
+  } else { saveLocal(team,x,y); msg("✅ 기록 완료! (연습 모드)","#22b573"); }
+  $("x").value = ""; $("y").value = ""; $("x").focus();
+  load();
+}
+function saveLocal(team,x,y){ localRows.push({team,x,y,created_at:Date.now()}); localStorage.setItem("sm_"+ROOM, JSON.stringify(localRows)); }
+function msg(t,c){ const m=$("msg"); m.textContent=t; m.style.color=c; }
+
+async function load(){
+  let rows;
+  if(mode === "cloud"){
+    const { data, error } = await sb.from(TABLE).select("team,x,y,created_at").eq("room",ROOM).order("created_at",{ascending:false}).limit(300);
+    if(error){ mode="local"; setBanner(); rows = localRows; } else rows = data;
+  } else rows = localRows;
+  render(rows || []);
+}
+
+function render(rows){
+  $("stN").textContent = rows.length;
+  if(rows.length){
+    const ax = rows.reduce((s,r)=>s+(+r.x),0)/rows.length;
+    const ay = rows.reduce((s,r)=>s+(+r.y),0)/rows.length;
+    $("stX").textContent = round(ax); $("stY").textContent = round(ay);
+  } else { $("stX").textContent="-"; $("stY").textContent="-"; }
+  drawScatter(rows);
+  $("list").innerHTML = rows.slice(0,20).map(r=>`<div class="it"><span><b>${esc(r.team||"?")}</b></span><span>${round(+r.x)} , ${round(+r.y)}</span></div>`).join("");
+}
+const round = n => Math.abs(n)>=100 ? Math.round(n) : Math.round(n*100)/100;
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function drawScatter(rows){
+  const c = $("chart"), dpr = window.devicePixelRatio||1;
+  const W = c.clientWidth, H = 300;
+  c.width = W*dpr; c.height = H*dpr;
+  const g = c.getContext("2d"); g.scale(dpr,dpr);
+  g.clearRect(0,0,W,H);
+  const pad = {l:44,r:14,t:14,b:32};
+  const plotW = W-pad.l-pad.r, plotH = H-pad.t-pad.b;
+  if(!rows.length){ g.fillStyle="#9aa3b5"; g.font="14px 'Noto Sans KR'"; g.textAlign="center"; g.fillText("측정값을 넣으면 여기에 점이 찍힙니다",W/2,H/2); return; }
+  let xs=rows.map(r=>+r.x), ys=rows.map(r=>+r.y);
+  let xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys);
+  if(xmin===xmax){xmin-=1;xmax+=1;} if(ymin===ymax){ymin-=1;ymax+=1;}
+  const px=v=>pad.l+(v-xmin)/(xmax-xmin)*plotW, py=v=>pad.t+plotH-(v-ymin)/(ymax-ymin)*plotH;
+  // 축·격자
+  g.strokeStyle="#e3e9e3"; g.lineWidth=1; g.fillStyle="#8a90a0"; g.font="11px 'Noto Sans KR'";
+  for(let i=0;i<=4;i++){
+    const gx=pad.l+plotW*i/4, gy=pad.t+plotH*i/4;
+    g.beginPath();g.moveTo(gx,pad.t);g.lineTo(gx,pad.t+plotH);g.stroke();
+    g.beginPath();g.moveTo(pad.l,gy);g.lineTo(pad.l+plotW,gy);g.stroke();
+    g.textAlign="center"; g.fillText(round(xmin+(xmax-xmin)*i/4), gx, H-12);
+    g.textAlign="right"; g.fillText(round(ymax-(ymax-ymin)*i/4), pad.l-6, gy+4);
+  }
+  // 점
+  rows.forEach(r=>{ g.beginPath(); g.arc(px(+r.x),py(+r.y),5,0,7); g.fillStyle="rgba(34,181,115,.75)"; g.fill(); g.strokeStyle="#177a54"; g.lineWidth=1.2; g.stroke(); });
+}
+
+window.copyPre = function(btn){ const t=btn.parentElement.innerText.replace(/^📋 복사\n?/,""); navigator.clipboard.writeText(t).then(()=>{btn.textContent="복사됨!";setTimeout(()=>btn.textContent="📋 복사",1500);}); };
+
+setBanner(); load();
+if(sb) setInterval(load, 4000);   // 4초마다 실시간 갱신
+window.addEventListener("resize", ()=>load());
+</script>
+</body>
+</html>
