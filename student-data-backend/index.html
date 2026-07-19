@@ -302,6 +302,12 @@ footer b{color:var(--navy)}
 .ig-node.db h4{color:var(--gold-deep)}
 .keyq{border-left:4px solid var(--green);background:var(--green-soft);padding:9px 14px;border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.65;color:var(--navy);margin:12px auto 0;max-width:960px}
 .keyq b{color:var(--green-deep)}
+.pgen{max-width:960px;margin:8px auto 0;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.pgen>summary{cursor:pointer;list-style:none;padding:13px 18px;font-family:var(--font-round);color:var(--navy);font-size:1rem;background:var(--green-soft)}
+.pgen>summary::-webkit-details-marker{display:none}
+.pgen>summary::after{content:"▾ 펼치기";float:right;font-size:.82rem;color:var(--ink-soft);font-family:var(--font-sans)}
+.pgen[open]>summary::after{content:"▴ 접기"}
+.pgbody{padding:14px 18px}
 
 /* ── FAQ 아코디언 (삽입) ── */
 .faq{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:9px}
@@ -676,7 +682,7 @@ footer b{color:var(--navy)}
       <div class="pcard accent3"><div class="pe">🧱</div><h3>패들렛</h3><p><b>실시간 협업 벽.</b> 글·사진·영상·링크를 함께 붙이고 나눔. 시각적·즉흥적. <b>최고의 순간 —</b> 브레인스토밍·의견 전시·작품 공유.</p></div>
       <div class="pcard accent4"><div class="pe">📚</div><h3>노션</h3><p><b>구조화된 문서+DB.</b> 수식·관계형·페이지. 정리와 아카이브에 강함. <b>최고의 순간 —</b> 포트폴리오·협업 기록·자료 정리.</p></div>
     </div>
-    <div class="callout" style="margin-top:16px"><span class="ct">✋ 그러니 이런 건 그냥 저 도구를 쓰세요</span>
+    <div class="callout" style="margin-top:16px"><span class="ct">✋ 이런 건 기존 도구가 딱이에요</span>
       "오늘 수업 어땠나요?" 설문 → <b>구글·MS폼</b>. 모둠 아이디어 벽 → <b>패들렛</b>. 조사 자료 정리 → <b>노션</b>.
       직접 만들기는 저것들이 <b>'못 하는 한 가지'가 필요할 때만 꺼내는 카드</b>입니다.</div>
 
@@ -720,13 +726,13 @@ footer b{color:var(--navy)}
       과학 실험은 <b>"측정 → 그래프 → 결론"</b>이 핵심인데, 폼·패들렛은 '측정값 받기'에서 멈춥니다.
       직접 만든 도구는 <b>측정하는 순간 그래프가 그려지고 여러 조가 실시간으로 합쳐져</b>, 그 자리에서 결론까지 갑니다.</div>
 
-    <div class="callout green" style="margin-top:18px"><span class="ct">🔑 그래서, 직접 만든 도구만 주는 5가지</span>
+    <div class="callout green" style="margin-top:18px"><span class="ct">🔑 직접 만든 도구를 사용했을 때의 이점 5가지는 아래와 같습니다!</span>
       <b>① 자동 변환</b> 모으는 즉시 평균·등수·증가율·분류(사람 손일 0) · <b>② 실시간 반영</b> 학생 입력 → 즉시 반 전체 대시보드(학생도 결과를 봄) · <b>③ 활동에 내장</b> 설문 화면이 아니라 게임·측정 자체가 수집기 · <b>④ 완전한 소유</b> 내 DB·CSV로 자유롭게, 서비스 종속 없음 · <b>⑤ 무제한 재사용·무료</b> 한 번 배우면 모든 수업에, 항목·응답 수 제한 없이.</div>
 
-    <div class="callout blue" style="margin-top:14px"><span class="ct">🧭 그래서 이렇게 고르세요</span>
-      · <b>빠른 설문·의견·투표</b> → 그냥 <b>구글폼</b> 쓰세요. 오늘 배운 걸로 굳이 다시 만들 필요 없습니다.<br>
-      · <b>탐구 활동형 수집 + 실시간 반영 + 자동 가공 + 여러 수업에 재사용</b> → <b>직접 만든 백엔드</b>가 답입니다.<br>
-      도구를 아는 것보다 <b>"언제 무엇을 쓸지" 판단하는 것</b>이 오늘의 진짜 수확입니다.</div>
+    <div class="callout blue" style="margin-top:14px"><span class="ct">🧭 이렇게 고르세요!^^</span>
+      · <b>빠른 설문·의견·투표</b> → <b>구글폼과 같은 기존 도구</b> 사용을 추천드립니다 ㅎㅎ<br>
+      · <b>탐구 활동형 수집 + 실시간 반영 + 자동 가공 + 여러 수업에 재사용</b> → <b>직접 만든 백엔드</b>가 유리할 수 있습니다!<br>
+      도구를 아는 것보다 <b>"언제 무엇을 쓸지" 판단</b>하시는 것을 권유드립니다!</div>
     <div class="pnote"><b>[멘트]</b> 구글폼을 깎아내리지 말 것 — "구글폼은 훌륭하다, 다만 결이 다르다"로. 과학쌤들이 가장 공감하는 지점은 'pH·심박수를 즉시 그래프로'. 각자 본인 수업 데이터 하나 떠올리게 하고 → 데이터 판사 탭으로 연결.</div>
   </div>
 
@@ -1067,47 +1073,278 @@ footer b{color:var(--navy)}
     <div class="sec-head">
       <span class="kick">복붙용</span>
       <h2>🤖 안전하게 만드는 <b>만능 프롬프트</b></h2>
-      <p>바이브코딩으로 앱을 만든 뒤 Supabase를 붙일 때, 아래를 AI(클로드·GPT)에게 그대로 주면 <b>RLS·최소권한·익명 설계·파기</b>가 기본으로 들어갑니다.</p>
+      <p>바이브코딩으로 앱을 만든 뒤 Supabase를 붙일 때, 아래를 AI(클로드·GPT)에게 <b>웹앱 코드와 함께</b> 주면 <b>RLS·최소권한·익명 설계·파기</b>가 기본으로 들어갑니다.</p>
     </div>
-    <p style="max-width:920px;margin:0 auto 6px;font-family:var(--font-round);color:var(--navy)">① RLS 있게 <b>안전 배포</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 1 예방)</span></p>
+
+    <div class="callout red" style="text-align:center"><span class="ct" style="justify-content:center">🔒 핵심 한 문장</span>
+      <b style="font-size:1.15em">화면을 <u>숨기는</u> 것과 데이터를 <u>잠그는</u> 것은 다릅니다.</b></div>
+
+    <p style="max-width:920px;margin:20px auto 6px;font-family:var(--font-round);color:var(--navy)">① RLS 있게 <b>안전 배포</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 1 예방)</span></p>
     <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내가 만든 이 웹앱에 Supabase로 데이터 저장 기능을 붙이려고 해.
+현재 웹앱의 코드와 데이터 구조를 먼저 확인한 뒤,
 아래 조건을 반드시 지켜서 SQL과 연결 코드를 만들어 줘.
 
-1. 표(테이블)를 만들 때 반드시 RLS(행 수준 보안)를 켠다 — enable row level security.
-2. 정책(policy)은 '꼭 필요한 것만' 최소로:
-   학생은 넣기(insert)만, 필요하면 읽기(select)만 허용하고,
-   수정(update)·삭제(delete)는 anon 사용자에게 절대 허용하지 마.
-3. insert 정책에는 with check로 값 범위·길이 검증을 넣어
-   (예: 글자 수 1~40, 숫자 범위 제한).
-4. 웹앱 코드에는 anon(공개) 키만 쓰고, service_role(비밀) 키는 절대 넣지 마.
-5. 실명 대신 익명 라벨(번호·닉네임)을 쓰는 최소수집 구조로 제안해 줘.
-6. 끝에 "이 설정으로 주소만 아는 사람이 무엇을 할 수 있고
-   무엇을 못 하는지"를 한글로 요약해 줘.</pre>
-    <p style="max-width:920px;margin:16px auto 6px;font-family:var(--font-round);color:var(--navy)">② 데이터 <b>안전하게 파기</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 5 예방)</span></p>
+1. 테이블을 만들거나 사용하는 경우 반드시 RLS를 활성화해.
+   alter table ... enable row level security;
+
+2. 기존 RLS 정책도 전부 확인해.
+   anon 또는 public에 불필요한 select, update, delete 권한이 있다면
+   어떤 정책이 위험한지 먼저 설명하고 제거 또는 교체해.
+
+3. 학생에게는 수업에 꼭 필요한 최소 권한만 허용해. 기본 원칙:
+   - 학생 제출: anon insert 허용
+   - 학생 조회: 수업상 꼭 필요한 경우에만 select 허용
+   - 학생 수정: anon update 금지
+   - 학생 삭제: anon delete 금지
+
+4. insert 정책에는 with check를 사용해 입력값의 길이·범위를
+   데이터베이스에서도 검사해. 예:
+   - 이름/닉네임 길이 1~20자
+   - 답변 길이 1~500자
+   - 점수는 허용된 숫자 범위만
+   - 반, 번호 등은 정해진 형식만
+   HTML의 maxlength나 JavaScript 검사만 믿지 말고,
+   RLS의 with check 또는 데이터베이스 constraint에서도 검사해.
+
+5. 학생이 로그인하지 않고 제출하는 구조라면
+   PostgreSQL의 anon 역할에 insert만 허용해.
+   Supabase Auth의 Anonymous Sign-In 기능은 사용하지 마.
+   Anonymous Sign-In으로 생성된 사용자는 데이터베이스에서
+   authenticated 역할로 처리될 수 있으므로 둘을 혼동하지 마.
+
+6. 학생 제출 코드에서는 특별한 이유가 없다면
+   .insert(...).select() 를 쓰지 말고 .insert(...) 만 사용해.
+   학생에게 select 권한이 없으면
+   insert 후 반환 데이터를 읽다가 오류가 날 수 있어.
+
+7. 프런트엔드에는 Supabase URL과 publishable key 또는 anon key만 사용해.
+   service_role key, secret key, sb_secret 키는
+   HTML, JavaScript, GitHub 저장소, 브라우저 코드에 절대 넣지 마.
+
+8. 실명 대신 번호, 모둠명, 임시 닉네임 등
+   수업에 필요한 최소한의 정보만 수집하는 구조를 제안해.
+
+9. 테이블명·열 이름은 예시를 임의로 만들지 말고
+   현재 웹앱과 Supabase 구조에서 실제 쓰는 이름을 확인해 적용해.
+
+10. 마지막에 다음을 한글로 정리해.
+   - 주소만 아는 학생이 할 수 있는 것 / 할 수 없는 것
+   - 로그인하지 않은 사람이 읽을 수 있는 데이터
+   - 프런트엔드에 노출되어도 되는 키 / 절대 노출하면 안 되는 키
+   - 교사가 Supabase에서 직접 실행해야 하는 SQL</pre>
+
+    <p style="max-width:920px;margin:18px auto 6px;font-family:var(--font-round);color:var(--navy)">② 데이터 <b>안전하게 파기</b>하기 <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 5 예방)</span></p>
     <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내 Supabase 프로젝트에서 학생 데이터를 안전하게 파기하려고 해.
-아래를 SQL로 만들어 주고, 각 SQL이 무엇을 지우는지 한글 주석을 달아 줘.
-내 표 이름은 [여기에 표 이름]이야.
+내 테이블 이름은 [여기에 실제 테이블 이름]이야.
+현재 테이블 구조를 먼저 확인한 뒤, 아래 SQL을 각각 만들어 주고
+각 SQL 위에 무엇을 지우는 명령인지 한글 주석을 달아 줘.
 
-1. 그 표의 모든 데이터를 지우는 SQL 한 줄.
-2. 특정 반·기간만 골라 지우는 SQL
-   (예: room = '3-2' 이거나, created_at이 특정 날짜 이전).
-3. 표 자체를 통째로 없애는 SQL (drop table).
-그리고 "되돌릴 수 없으니 실행 전 꼭 확인"이라는 주의 문구도 함께 적어 줘.</pre>
-    <p style="max-width:920px;margin:16px auto 6px;font-family:var(--font-round);color:var(--navy)">③ 교사 대시보드 <b>진짜로 잠그기</b> <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 6 예방)</span></p>
-    <pre class="code"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>내 교사 대시보드를 Ctrl+U로 코드를 봐도 뚫리지 않게 진짜로 잠그고 싶어.
-아래대로 바꿔 줘.
+1. 해당 테이블의 모든 행을 지우는 SQL
+2. 특정 반만 골라 지우는 SQL           (예: room = '3-2')
+3. 특정 날짜 이전의 데이터만 지우는 SQL (예: created_at이 특정 날짜 이전)
+4. 특정 반이면서 특정 날짜 이전인 데이터만 지우는 SQL
+5. 테이블의 데이터와 구조를 모두 없애는 drop table SQL
+6. 실행 전 삭제될 행 개수를 확인하는 select count(*) SQL
+7. 실제 삭제 전 어떤 데이터가 대상인지 확인하는 select 미리보기 SQL
 
-1. 코드(HTML·JS)에 적어둔 비밀번호(예: TEACHER_PIN) 비교 방식을 전부 없애.
-2. 대신 Supabase Auth(로그인)로 비밀번호는 '서버가' 검사하게 만들어 줘
-   (교사 계정은 Authentication 메뉴에서 미리 하나 생성).
-3. 학생 데이터 표의 읽기(select) 권한을 RLS로
-   '로그인한 사용자(authenticated)만'으로 조여 줘.
-   (학생 제출 insert는 익명 그대로 두고.)
-4. 이렇게 하면 소스를 다 봐도 비밀번호가 없고, 로그인 안 하면
-   데이터가 안 나온다는 걸 한글로 확인해 줘.</pre>
-    <div class="callout blue" style="margin-top:14px"><span class="ct">💡 쓰는 법</span>
-      웹앱 코드를 AI 채팅에 붙여넣고, 그 아래에 위 프롬프트를 이어서 보내면 됩니다. 받은 SQL은 Supabase <b>SQL Editor</b>에 붙여넣고 Run.</div>
-    <div class="pnote"><b>[멘트]</b> "AI는 안 물어보니 우리가 먼저 요구한다"의 실물. 프롬프트에 RLS·최소권한·anon만·익명·파기를 넣어두면 사고 대부분이 예방됨. 이 두 프롬프트는 연수 후에도 계속 재사용.</div>
+다음 주의사항도 함께 적어 줘.
+- 삭제 SQL은 되돌리기 어려우므로 먼저 select로 대상을 확인한다.
+- 테이블명·열 이름은 실제 구조를 확인해서 작성한다.
+- drop table은 데이터뿐 아니라 테이블 구조도 제거한다.
+- 백업이 필요하면 삭제 전에 CSV 등으로 내보낸다.
+- 내가 명확히 요청하지 않은 다른 테이블은 절대 삭제하지 않는다.</pre>
+    <div class="callout red" style="margin-top:10px"><span class="ct">⚠️ 삭제 전 반드시</span>
+      삭제 SQL은 되돌리기 어렵습니다. 반드시 <b>SELECT로 삭제 대상을 먼저 확인한 뒤</b> 실행하세요.</div>
+
+    <p style="max-width:920px;margin:18px auto 6px;font-family:var(--font-round);color:var(--navy)">③ 교사 대시보드 <b>진짜로 잠그기</b> <span style="font-size:.85em;color:var(--ink-soft)">(주의사항 6 예방)</span></p>
+    <div class="callout blue"><span class="ct">왜 ③이 필요한가</span>
+      화면만 숨기면 잠금이 아닙니다. HTML·JavaScript에 적힌 비밀번호를 비교하면 <b>Ctrl+U</b>나 개발자 도구에서 비밀번호를 찾을 수 있어요.
+      Supabase Auth로 비밀번호를 <b>서버가</b> 확인하게 하고, RLS에서 <b>지정한 교사 계정의 UID까지 검사</b>해야 로그인하지 않은 사람이 데이터 요청을 직접 보내도 차단됩니다.<br>
+      <span style="color:var(--red)">⚠️ <code class="inline">to authenticated using (true)</code> 만으로는 부족합니다 — 이건 <b>로그인한 모든 사용자</b>가 읽게 됩니다. 반드시 <code class="inline">auth.uid() = 교사UID</code>까지 비교해야 합니다.</span></div>
+    <details class="pgen"><summary>③ 대시보드 잠그기 프롬프트 — 펼쳐서 복사</summary>
+    <pre class="code" style="margin-top:8px"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>현재 웹앱의 교사 대시보드를 브라우저 소스를 전부 확인해도 뚫리지 않도록
+Supabase Auth와 RLS를 사용한 구조로 변경해 줘.
+단순히 로그인 화면을 보여 주거나 JavaScript로 대시보드를 숨기는 것에서 끝내지 말고,
+데이터베이스에서 실제 읽기 요청을 차단해야 해.
+현재 프로젝트의 전체 코드를 먼저 확인한 뒤 아래 조건을 적용해.
+
+## 1. 기존 클라이언트 비밀번호 방식 완전 삭제
+HTML·JavaScript 전체에서 다음을 찾아 제거해.
+- TEACHER_PIN / ADMIN_PASSWORD / DASHBOARD_PASSWORD
+- 코드에 직접 적힌 비밀번호 문자열
+- 입력값과 고정 문자열을 비교하는 코드
+- 암호화/해시한 값을 브라우저에서 비교하는 코드
+- URL 파라미터만으로 관리자 여부를 판단하는 코드
+- localStorage의 isTeacher, isAdmin 값만으로 권한을 판단하는 코드
+- 숨겨진 관리자 버튼·특정 키 입력만으로 잠금 해제하는 코드
+브라우저 코드 어디에도 실제 비밀번호(정답)가 남아 있으면 안 돼.
+
+## 2. Supabase Auth 로그인 적용
+교사 로그인 화면: 이메일·비밀번호 입력, 로그인/로그아웃 버튼, 진행 상태, 실패 안내, 현재 로그인 상태.
+로그인은 supabase.auth.signInWithPassword({ email, password }) 사용.
+페이지 진입 시 세션 확인 + 로그인 상태 변화 감지:
+- supabase.auth.getSession()
+- supabase.auth.onAuthStateChange(...)
+- supabase.auth.signOut()
+현재 쓰는 supabase-js 버전에 맞게 적용해.
+회원가입 버튼을 만들지 말고 supabase.auth.signUp()도 쓰지 마.
+교사 계정은 Dashboard의 Authentication → Users에서 미리 만든 계정만 사용.
+localStorage에 isTeacher=true 같은 값을 저장해 권한 판정하지 마.
+
+## 3. 로그인 전에는 학생 데이터를 요청하지 않기
+로그인 안 한 상태에서는 대시보드·학생 데이터 표를 보여 주지 마.
+화면만 숨기고 백그라운드에서 미리 불러오지도 마.
+학생 데이터 select 요청은 교사 로그인 세션 확인 후에만 실행.
+로그아웃하면: 화면의 학생 데이터 제거, 대시보드 숨김, 로그인 화면 표시,
+교사 전용 실시간 구독 해제, 더 이상 select 요청 안 보냄.
+
+## 4. RLS로 지정된 교사 UID만 조회 허용
+학생 데이터가 저장되는 실제 테이블명을 확인해(예시명 그대로 쓰지 마).
+그 테이블 RLS 활성화 + 기존 select 정책 전부 확인.
+anon/public 또는 모든 authenticated가 읽게 만든 정책이 있으면 제거/교체.
+교사 UID를 사용하는 select 정책 작성:
+
+alter table public.[실제_테이블명] enable row level security;
+
+create policy "designated teacher can read"
+on public.[실제_테이블명]
+for select
+to authenticated
+using ( (select auth.uid()) = '[교사 계정 UID]' );
+
+중요:
+- to authenticated using (true) 로 만들지 마.
+- authenticated는 교사 역할이 아니라 로그인한 모든 사용자를 뜻해.
+- 반드시 auth.uid()와 지정한 교사 UID를 비교해.
+- 실제 교사 UID를 어디에 붙여 넣는지 설명해.
+- 충돌·중복되는 기존 select 정책이 있는지 확인하고, 위험한 정책을 남기지 마
+  (허용 정책 하나만 남아도 OR처럼 작동할 수 있음).
+
+## 5. 학생의 익명 제출은 유지
+학생은 로그인 없이 기존 제출 화면에서 제출할 수 있어야 해.
+학생 제출은 anon 역할에 insert만 허용:
+
+create policy "anonymous students can submit"
+on public.[실제_테이블명]
+for insert
+to anon
+with check ( [현재 열 구조에 맞는 값 검증 조건] );
+
+학생에게 select/update/delete 권한은 주지 마.
+학생 제출 코드가 .insert(data).select() 라면
+select 권한이 없어도 작동하도록 .insert(data) 로 바꿔.
+단, 반환값이 꼭 필요한 구조면 무조건 지우지 말고 안전한 대안을 제시해.
+
+## 6. 프런트엔드 키 점검
+정상: Supabase URL, publishable key, anon key.
+절대 포함 금지: service_role key, secret key, sb_secret 키,
+데이터베이스 비밀번호, 교사 로그인 비밀번호.
+HTML·JavaScript·환경 파일·GitHub 저장소를 모두 점검.
+정적 사이트의 환경변수도 빌드 후 브라우저 코드에 포함될 수 있으니
+'환경변수'라는 이유만으로 비밀이라 판단하지 마.
+
+## 7. 회원가입 기능 차단
+회원가입 UI를 만들지 마. 교사 계정은 Dashboard에서 관리자가 미리 생성.
+Authentication 설정에서 'Allow new users to sign up'이 켜져 있는지 확인 안내.
+교사 전용 프로젝트면 이 설정을 꺼 기존 계정만 로그인하도록 권장.
+Anonymous Sign-In도 학생의 로그인 없는 제출과 혼동하지 마
+(학생 제출엔 별도 Auth 계정 없이 anon insert 정책 사용).
+
+## 8. 보안 테스트 (직접 확인 절차 작성)
+1) Ctrl+U에서 기존 비밀번호 문자열이 검색되지 않는지
+2) 개발자도구 Sources에 TEACHER_PIN/ADMIN_PASSWORD 값이 없는지
+3) 로그아웃 상태에서 학생 데이터 select가 거부되는지
+4) 로그인 화면을 CSS/개발자도구로 강제로 숨겨도 데이터가 안 불려오는지
+5) 지정 교사 계정으로 로그인하면 학생 데이터가 정상 조회되는지
+6) 다른 Auth 계정으로 로그인하면 조회가 거부되는지
+7) 로그인 안 한 학생은 insert가 되는지
+8) 로그인 안 한 학생은 select/update/delete가 안 되는지
+9) 프런트엔드에 service_role/secret 키가 없는지
+10) 로그아웃 직후 화면의 학생 데이터가 지워지는지
+
+## 9. 최종 설명 (비전공 교사용, 한글)
+- 이전 방식이 왜 Ctrl+U에 취약했는지
+- Supabase Auth에서는 비밀번호를 누가 검사하는지
+- 프런트엔드에 실제 비밀번호가 없어지는 이유
+- 로그인 화면을 숨기는 것과 데이터 권한을 막는 것의 차이
+- authenticated만 허용하는 것이 왜 충분하지 않은지
+- auth.uid()가 무엇인지 / RLS가 요청을 어떻게 막는지
+- 공개용 키가 보여도 되는 이유 / 절대 공개 금지 키
+마지막에 다음 문장을 명확히 포함해:
+"변경 후에는 브라우저 소스를 전부 확인해도 교사의 실제 비밀번호가 코드에 존재하지 않습니다.
+또한 지정된 교사 계정으로 로그인하지 않은 요청은 화면을 조작하거나 Supabase에 직접
+select 요청을 보내더라도 데이터베이스의 RLS 정책에 의해 학생 데이터를 받을 수 없습니다."
+
+## 10. 결과물 제시 순서
+1) 수정한 파일 목록 2) 삭제한 기존 비밀번호 코드 3) 새 Auth 로그인 코드
+4) SQL Editor에서 실행할 전체 SQL 5) 교사 UID 붙여 넣을 위치
+6) Dashboard에서 할 설정 7) 보안 테스트 결과/방법
+실제 테이블명·구조가 있으면 예시 이름 대신 실제 이름을 사용해.</pre>
+    </details>
+
+    <details class="pgen"><summary>④ 교사 로그인 계정 만들기 — 실습 매뉴얼 (펼치기)</summary>
+    <div class="pgbody">
+      <p style="color:var(--ink-soft);font-size:.92rem;margin:6px 2px 12px">비밀번호를 코드에 적는 대신, <b>Supabase Authentication에 교사 계정을 미리</b> 만듭니다.</p>
+
+      <p style="font-family:var(--font-round);color:var(--navy);margin:8px 2px 2px">1단계 · Authentication → Users 열기</p>
+      <ol class="sub"><li>Supabase Dashboard 접속 → 웹앱이 연결된 <b>프로젝트 선택</b></li><li>왼쪽 메뉴 <b>Authentication</b> → <b>Users</b></li></ol>
+      <div class="tip">여기 표시되는 사용자는 이 <b>프로젝트의 로그인 계정</b>입니다. Table Editor의 학생 데이터와는 <b>별개 영역</b>이에요.</div>
+
+      <p style="font-family:var(--font-round);color:var(--navy);margin:12px 2px 2px">2단계 · 교사 계정 만들기 <span style="font-size:.85em;color:var(--ink-soft)">(버전에 따라 버튼명이 다를 수 있어요)</span></p>
+      <p style="font-size:.9rem;margin:2px 2px"><b>방법 A — Create new user가 보이면:</b></p>
+      <ol class="sub"><li><b>Add user</b> → <b>Create new user</b></li><li>교사 이메일 입력 → 안전한 비밀번호 입력 → 계정 생성</li></ol>
+      <p style="font-size:.9rem;margin:6px 2px"><b>방법 B — Send invitation을 쓰면:</b></p>
+      <ol class="sub"><li><b>Add user</b> → <b>Send invitation</b> → 교사 이메일 입력 → <b>Invite user</b></li><li>받은 메일의 초대 링크를 열어 계정·비밀번호 설정 완료</li></ol>
+      <div class="warn">초대 메일은 프로젝트의 <b>Site URL·Redirect URL</b> 설정에 따라 이동 주소가 달라질 수 있어요. 링크가 안 열리면 Authentication의 <b>URL Configuration</b>을 먼저 확인하세요. <b>service_role/secret 키로 프런트엔드에서 계정을 만드는 방식은 쓰지 마세요.</b></div>
+
+      <p style="font-family:var(--font-round);color:var(--navy);margin:12px 2px 2px">3단계 · 교사 UID 복사하기 ⭐</p>
+      <ol class="sub"><li>Users에서 방금 만든 계정 선택 → 상세에서 <b>User UID(또는 ID)</b> 찾기</li><li>UUID 형식 값 복사 <span style="color:var(--ink-soft)">예: 12345678-abcd-1234-abcd-1234567890ab</span></li></ol>
+      <div class="tip">이 <b>UID는 비밀번호가 아닙니다.</b> 로그인한 사용자가 <b>허용된 교사 계정과 같은 사람인지 RLS에서 비교</b>하기 위한 고유 식별자예요.</div>
+<pre class="code" style="margin-top:8px"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>create policy "designated teacher can read"
+on public.student_submissions
+for select
+to authenticated
+using ( (select auth.uid()) = '여기에-복사한-교사-UID' );</pre>
+      <div class="warn">⚠️ 위 <code class="inline">student_submissions</code>는 예시입니다. <b>자신이 만든 테이블 이름</b>으로 바꾸고, <code class="inline">여기에-복사한-교사-UID</code>에는 Users에서 복사한 <b>실제 UID</b>를 넣으세요.</div>
+
+      <p style="font-family:var(--font-round);color:var(--navy);margin:12px 2px 2px">4단계 · 일반 회원가입 막기</p>
+      <ol class="sub"><li>Authentication 설정에서 <b>Allow new users to sign up</b> 항목 찾기</li><li>교사 전용 프로젝트면 <b>회원가입 허용 끄기</b> → 기존 계정 로그인 확인</li></ol>
+      <div class="tip">화면 버전에 따라 위치·명칭이 다를 수 있어요. Authentication 설정에서 <b>'Allow new users to sign up'</b>을 찾아 꺼 주세요. 회원가입을 꺼도 <b>이미 만든 계정은 계속 로그인</b>됩니다.</div>
+
+      <p style="font-family:var(--font-round);color:var(--navy);margin:12px 2px 2px">5단계 · 로그인 테스트 ✅</p>
+      <div class="donecheck">□ 틀린 비밀번호는 로그인 실패<br>□ 올바른 교사 이메일·비밀번호는 로그인 성공<br>□ 로그인 전에는 학생 데이터가 안 보임<br>□ 로그인 후에는 학생 데이터가 보임<br>□ 로그아웃하면 학생 데이터가 즉시 사라짐<br>□ Ctrl+U에서 교사 비밀번호가 검색 안 됨<br>□ 개발자도구로 화면을 강제로 열어도 로그인 안 했으면 데이터가 안 불려옴</div>
+    </div>
+    </details>
+
+    <details class="pgen"><summary>🤔 교사 계정은 웹앱마다 새로 만들어야 할까? (펼치기)</summary>
+    <div class="pgbody">
+      <div class="tip"><b>Supabase Authentication 계정은 웹앱 단위가 아니라 Supabase 프로젝트 단위</b>로 관리됩니다.</div>
+<pre class="code" style="margin-top:8px">Supabase 프로젝트: science-class-apps
+Authentication
+└─ teacher@example.com  (고유 UID 1개)
+연결된 웹앱
+├─ 반응속도 게임   ├─ 질문 수집 앱
+├─ 염분 탐구 앱    └─ 설문 결과 대시보드</pre>
+      <p style="font-size:.92rem;margin:8px 2px;line-height:1.7">네 웹앱이 <b>같은 프로젝트 URL·키</b>를 쓰면 Authentication 사용자 목록을 함께 씁니다 — 즉 한 프로젝트의 교사 계정으로 그 프로젝트에 연결된 여러 웹앱에 로그인할 수 있어요. 단, <b>로그인할 수 있다는 것과 모든 테이블을 읽을 수 있다는 것은 다릅니다.</b> 어떤 테이블을 읽는지는 <b>각 테이블의 RLS 정책</b>이 결정합니다.</p>
+      <div class="cardgrid" style="max-width:1000px;margin-top:6px">
+        <div class="pcard accent"><div class="pe">1️⃣</div><h3>교사 계정 하나를 여러 앱에</h3><p>계정 1개 → 여러 앱에서 같은 이메일·비번, 각 테이블 select 정책에 같은 교사 UID. <b>계정 관리 단순 · 연수 실습에 추천.</b></p></div>
+        <div class="pcard accent2"><div class="pe">2️⃣</div><h3>같은 프로젝트, 앱마다 계정 다르게</h3><p>반응속도=UID A, 염분=UID B… 각 테이블 RLS에 해당 UID만. 계정 목록은 <b>같은 프로젝트에서 함께 관리</b>, RLS로 앱별 접근을 논리적으로 분리.</p></div>
+        <div class="pcard accent4"><div class="pe">3️⃣</div><h3>완전 분리 = 프로젝트도 분리</h3><p>앱 A→프로젝트 A, 앱 B→프로젝트 B. 사용자·DB·테이블·RLS·URL·키가 <b>전부 별개</b>. A에서 만든 계정은 B에 없음.</p></div>
+      </div>
+      <div class="callout green" style="margin-top:14px"><span class="ct">🎯 연수 권장 기본 구조</span>
+        Supabase 프로젝트 1개 + 교사 계정 1개 + 웹앱별 학생 데이터 테이블 분리 + 각 테이블 select 정책에 같은 교사 UID + 학생은 로그인 없이 anon insert만.<br>
+        <b style="font-size:1.05em">한 줄 요약 — 계정은 프로젝트가 공유하고, 데이터 접근 권한은 테이블별 RLS가 결정합니다.</b></div>
+    </div>
+    </details>
+
+    <div class="callout blue" style="margin-top:16px"><span class="ct">💡 쓰는 법</span>
+      1. 수정하려는 웹앱의 <b>전체 코드를 AI 채팅에 제공</b> · 2. 그 아래에 필요한 프롬프트를 복사해 이어서 보내기 · 3. AI가 <b>현재 코드의 실제 테이블명·열 이름</b>을 확인했는지 점검 · 4. 받은 SQL은 바로 실행하지 말고 <b>테이블명·정책명·교사 UID</b>를 먼저 확인 · 5. Supabase <b>SQL Editor</b>에 붙여넣고 Run · 6. Auth를 쓰면 Authentication → Users에서 교사 계정 만들고 그 <b>UID를 RLS 정책에</b> 넣기 · 7. 로그아웃/교사 로그인/학생 익명 제출을 각각 테스트.</div>
+    <div class="callout" style="margin-top:10px"><span class="ct">✅ AI가 준 SQL도 직접 확인 (4가지)</span>
+      ① anon select 정책이 남아 있지 않은가? ② <code class="inline">authenticated using(true)</code>로 열어 두지 않았는가? ③ 실제 교사 UID를 넣었는가? ④ secret/service_role 키가 프런트엔드에 없는가?</div>
+
+    <div class="callout green" style="text-align:center;margin-top:14px"><span class="ct" style="justify-content:center">📌 요약</span>
+      <b style="font-size:1.1em">Ctrl+U에서 코드가 보여도 괜찮으려면 — 비밀번호는 <u>코드에 없어야</u> 하고, 데이터 권한은 <u>RLS가 막아야</u> 합니다.</b></div>
+    <div class="pnote"><b>[멘트]</b> ③의 핵심: <code>to authenticated using(true)</code>는 '로그인한 아무나'라 위험 → 반드시 auth.uid()=교사UID. ④ 실습은 UID 복사 위치만 확실히. 세 프롬프트는 연수 후에도 재사용.</div>
   </div>
 
   <div class="block">
@@ -1383,7 +1620,6 @@ footer b{color:var(--navy)}
       <textarea id="wsText" placeholder="예) 실험 전-후 개념 변화를 익명 코드로 수집해서, 단원 마무리 피드백 대시보드로 확인한다 (데이터 판사: 🟢)"></textarea>
       <div class="btnrow" style="margin-top:14px">
         <button class="bigbtn b3" onclick="wsCopy()">📋 복사하기</button>
-        <button class="bigbtn" id="wsSend" onclick="wsSubmit()" style="display:none">📡 강사에게 제출</button>
       </div>
       <p class="fine" id="wsMsg"></p>
     </div>
