@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제가 만든 웹앱 (feat. 백엔드) — 클릭 지도</title>
+<style>
+  :root{--hi:#3ECF8E;--hi2:#2bb376;--edge:#1b7f57;}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#eef3ef;font-family:'Pretendard','Malgun Gothic',system-ui,sans-serif}
+  .stage{position:relative;max-width:1680px;margin:0 auto;}
+  .stage img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+  /* 클릭 영역 (투명 링크) */
+  .hot{position:absolute;display:block;border-radius:18px;text-decoration:none;
+       transition:box-shadow .12s, background .12s, transform .12s;}
+  .hot:hover{background:rgba(62,207,142,.16);box-shadow:0 0 0 3px var(--hi),0 12px 30px rgba(0,0,0,.12);transform:translateY(-2px)}
+  .hot:focus-visible{outline:none;box-shadow:0 0 0 3px var(--hi)}
+  .hot .go{position:absolute;top:8px;right:10px;background:var(--hi);color:#08351f;font-weight:700;
+           font-size:13px;padding:3px 9px;border-radius:999px;opacity:0;transition:opacity .12s;white-space:nowrap}
+  .hot:hover .go{opacity:1}
+  .hot.db:hover{background:rgba(62,207,142,.10)}
+  /* 보정 모드: 영역 윤곽 + 번호 표시 */
+  body.show .hot{background:rgba(62,207,142,.14);box-shadow:0 0 0 2px var(--edge)}
+  body.show .hot .num{position:absolute;left:8px;top:6px;background:var(--edge);color:#fff;font-weight:700;
+       font-size:14px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .hot .num{display:none}
+  body.show .hot .num{display:flex}
+  /* 컨트롤 바 */
+  .bar{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:50;display:flex;gap:8px;
+       background:#0f2a20e6;padding:8px 10px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.3);backdrop-filter:blur(6px)}
+  .bar button{background:#173d2e;color:#dfffbe;border:1px solid #2e6b4f;border-radius:10px;padding:8px 13px;
+       font-size:14px;font-family:inherit;cursor:pointer}
+  .bar button:hover{background:#1f5540}
+  .bar button.on{background:var(--hi);color:#08351f;border-color:var(--hi);font-weight:700}
+  .bar .hint{color:#bfe9d3;font-size:13px;align-self:center;padding:0 4px}
+  .miss{max-width:760px;margin:40px auto;padding:22px 26px;background:#fff;border:1px dashed #b9c9bf;border-radius:14px;
+        color:#334;line-height:1.7;font-size:15px}
+  .miss code{background:#eef3ef;padding:2px 7px;border-radius:6px;color:#1b7f57}
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <img id="bg" src="백엔드지도.png" alt="제가 만든 웹앱 백엔드 지도"
+       onerror="document.getElementById('missing').style.display='block';this.style.display='none'">
+  <!-- 클릭 영역은 JS가 생성 -->
+</div>
+
+<div id="missing" class="miss" style="display:none">
+  🖼️ <b>이미지를 찾을 수 없어요.</b><br>
+  ChatGPT로 만든 인포그래픽 이미지를 <code>백엔드지도.png</code> 라는 이름으로<br>
+  이 HTML과 <b>같은 폴더</b>(수업HTML)에 저장해 주세요. 그럼 자동으로 나타납니다.
+</div>
+
+<div class="bar">
+  <button id="tgl" onclick="toggleEdit()">🎯 클릭영역 보기</button>
+  <span class="hint">카드 위에 마우스를 올리면 앱으로 이동해요 · 클릭 → 새 탭</span>
+</div>
+
+<script>
+/* 각 앱의 클릭 영역 — 이미지 대비 %(left,top,width,height). 안 맞으면 여기 숫자만 조정 */
+const APPS=[
+  {n:'브레인브레이크랩', url:'https://scienceisjo.github.io/brain-break-lab/sonic.html',            x:2.7,  y:24.4, w:22.9, h:17.9},
+  {n:'롤링페이퍼',       url:'https://scienceisjo.github.io/class-tools/rolling-paper/',             x:26.8, y:24.4, w:20.5, h:17.9},
+  {n:'추억의 숲',        url:'https://scienceisjo.github.io/class-tools/memory-village/',            x:48.3, y:24.4, w:25.5, h:17.9},
+  {n:'질문 과수원',      url:'https://scienceisjo.github.io/questionuri/',                           x:74.5, y:24.4, w:22.8, h:17.9},
+  {n:'수업허브',         url:'https://scienceisjo.github.io/scienceclassjo/',                        x:12.8, y:46.2, w:22.9, h:16.8},
+  {n:'해누리 알리미',    url:'https://scienceisjo.github.io/s-alimi/notice_admin.html',              x:36.3, y:46.2, w:23.2, h:16.8},
+  {n:'지진 매뉴얼',      url:'https://scienceisjo.github.io/Miraen/earthquake_manual_collab.html',   x:60.3, y:46.2, w:23.0, h:16.8},
+  {n:'Supabase 소개',    url:'https://supabase.com/', db:true,                                       x:19.0, y:71.7, w:64.3, h:21.8},
+];
+const stage=document.getElementById('stage');
+APPS.forEach((a,i)=>{
+  const el=document.createElement('a');
+  el.className='hot'+(a.db?' db':'');
+  el.href=a.url; el.target='_blank'; el.rel='noopener'; el.title=a.n+' 열기';
+  el.style.left=a.x+'%'; el.style.top=a.y+'%'; el.style.width=a.w+'%'; el.style.height=a.h+'%';
+  el.innerHTML='<span class="num">'+(i+1)+'</span><span class="go">'+(a.db?'supabase.com ↗':'열기 ↗')+'</span>';
+  stage.appendChild(el);
+});
+function toggleEdit(){document.body.classList.toggle('show');document.getElementById('tgl').classList.toggle('on');}
+</script>
+</body>
+</html>
