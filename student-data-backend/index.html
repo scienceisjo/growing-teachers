@@ -340,6 +340,23 @@ footer b{color:var(--navy)}
 .dlbtn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 12px;font-size:.82rem;border:1px solid var(--line);background:#fff;border-radius:9px;cursor:pointer;font-family:inherit;color:var(--navy)}
 .dlbtn:hover{background:var(--green-soft);border-color:#c4e9d6}
 .pmini{font-size:.78rem;color:var(--ink-soft);margin-top:2px}
+/* 사전 설문 */
+.svq{margin:15px 0 0}
+.svq>b{display:block;font-size:.97rem;color:var(--navy);margin-bottom:8px}
+.svq>b .qn{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;background:var(--navy);color:#fff;border-radius:50%;font-family:var(--font-round);font-size:.8rem;margin-right:7px}
+.svopts{display:flex;flex-wrap:wrap;gap:8px;padding-left:29px}
+.svopt{position:relative}
+.svopt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.svopt span{display:inline-block;padding:8px 15px;border:2px solid var(--line);border-radius:999px;font-size:.9rem;cursor:pointer;background:#fff;transition:.12s;user-select:none}
+.svopt input:checked+span{background:var(--green-soft);border-color:var(--green);color:var(--green-deep);font-weight:700}
+.svopt input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
+.svbar{display:flex;align-items:center;gap:9px;margin:6px 0;font-size:.88rem}
+.svbar .lb{flex:0 0 38%;max-width:38%;color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.svbar .track{flex:1;background:#eef1f7;border-radius:7px;height:18px;overflow:hidden}
+.svbar .fill{height:100%;min-width:2px;background:linear-gradient(90deg,var(--green),var(--mint));border-radius:7px;transition:width .4s}
+.svbar .ct2{flex:0 0 auto;color:var(--navy);font-weight:700;min-width:34px}
+.svgrp{margin:10px 0 4px}
+.svgrp>.gt{font-family:var(--font-round);color:var(--navy);font-size:.97rem;margin-bottom:5px}
 
 /* ── FAQ 아코디언 (삽입) ── */
 .faq{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:9px}
@@ -399,6 +416,142 @@ footer b{color:var(--navy)}
     </div>
     <div class="pnote"><b>[시작 2분]</b> 인사 후 목표 4개만 짚고 바로 워밍업으로. "오늘은 이론 연수가 아니라 손이 바쁜 연수"임을 예고. 준비물(노트북·크롬·구글계정) 확인.</div>
   </div>
+
+  <!-- 사전 설문 -->
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">먼저 · 사전 설문</span>
+      <h2>📋 시작 전, <b>딱 1분 설문</b></h2>
+      <p>오늘 눈높이를 맞추기 위한 <b>익명 설문</b>입니다. 정답이 없으니 편하게 골라 주세요. 제출하면 <b>결과가 바로 아래에 실시간 막대그래프</b>로 그려집니다 — 우리 모임이 지금 어디쯤 있는지 함께 봅니다.</p>
+    </div>
+    <div class="pnote">강사: 눈높이 파악 + 아이스브레이킹용. "대부분 처음이시네요, 딱 맞게 갈게요" 같은 멘트로 연결. 결과 막대는 제출할 때마다 갱신(6초 폴링). 이 설문 자체가 <b>오늘 만들 '데이터 수집 웹앱'의 실제 예시</b>이기도 합니다 — 실습 때 "방금 그 설문이 바로 이 구조예요"로 회수하면 좋아요.</div>
+    <div class="ws" style="max-width:760px">
+      <input id="svTeacher" placeholder="성함 / 과목 (선택 — 익명으로 두셔도 돼요)" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem">
+      <div class="svq"><b><span class="qn">1</span>바이브 코딩(AI에게 시켜서 코드·웹앱 만들기) 경험은?</b>
+        <div class="svopts">
+          <label class="svopt"><input type="radio" name="q_vibe" value="오늘 처음"><span>오늘 처음 들어봐요</span></label>
+          <label class="svopt"><input type="radio" name="q_vibe" value="들어만 봄"><span>들어는 봤어요</span></label>
+          <label class="svopt"><input type="radio" name="q_vibe" value="몇 번 해봄"><span>몇 번 해봤어요</span></label>
+          <label class="svopt"><input type="radio" name="q_vibe" value="자주 씀"><span>자주 써요</span></label>
+        </div>
+      </div>
+      <div class="svq"><b><span class="qn">2</span>직접 웹앱·도구를 만들어 본 경험은?</b>
+        <div class="svopts">
+          <label class="svopt"><input type="radio" name="q_build" value="없음"><span>없어요</span></label>
+          <label class="svopt"><input type="radio" name="q_build" value="HTML 조금"><span>HTML·코드 조금 다뤄봤어요</span></label>
+          <label class="svopt"><input type="radio" name="q_build" value="AI로 만들어봄"><span>AI로 앱 만들어봤어요</span></label>
+          <label class="svopt"><input type="radio" name="q_build" value="배포까지"><span>배포(공개)까지 해봤어요</span></label>
+        </div>
+      </div>
+      <div class="svq"><b><span class="qn">3</span>Supabase·백엔드·데이터베이스(DB)를 아는 정도는?</b>
+        <div class="svopts">
+          <label class="svopt"><input type="radio" name="q_backend" value="처음"><span>처음 들어봐요</span></label>
+          <label class="svopt"><input type="radio" name="q_backend" value="이름만"><span>이름만 들어봤어요</span></label>
+          <label class="svopt"><input type="radio" name="q_backend" value="개념은 앎"><span>개념은 대충 알아요</span></label>
+          <label class="svopt"><input type="radio" name="q_backend" value="써봤음"><span>직접 써본 적 있어요</span></label>
+        </div>
+      </div>
+      <div class="svq"><b><span class="qn">4</span>코딩·AI 도구를 다루는 자신감은? <span style="font-weight:400;color:var(--ink-soft);font-size:.85em">(1 낮음 ~ 5 높음)</span></b>
+        <div class="svopts">
+          <label class="svopt"><input type="radio" name="q_conf" value="1"><span>1</span></label>
+          <label class="svopt"><input type="radio" name="q_conf" value="2"><span>2</span></label>
+          <label class="svopt"><input type="radio" name="q_conf" value="3"><span>3</span></label>
+          <label class="svopt"><input type="radio" name="q_conf" value="4"><span>4</span></label>
+          <label class="svopt"><input type="radio" name="q_conf" value="5"><span>5</span></label>
+        </div>
+      </div>
+      <div class="svq"><b><span class="qn">5</span>오늘 특히 배우고 싶은 것은? <span style="font-weight:400;color:var(--ink-soft);font-size:.85em">(여러 개 선택 가능)</span></b>
+        <div class="svopts">
+          <label class="svopt"><input type="checkbox" name="q_want" value="데이터 수집·저장"><span>데이터 수집·저장</span></label>
+          <label class="svopt"><input type="checkbox" name="q_want" value="실시간 대시보드"><span>실시간 대시보드</span></label>
+          <label class="svopt"><input type="checkbox" name="q_want" value="보안·개인정보"><span>보안·개인정보</span></label>
+          <label class="svopt"><input type="checkbox" name="q_want" value="배포(호스팅)"><span>배포(호스팅)</span></label>
+          <label class="svopt"><input type="checkbox" name="q_want" value="나만의 앱 기획"><span>나만의 앱 기획</span></label>
+        </div>
+      </div>
+      <div class="svq"><b><span class="qn">6</span>가장 궁금한 점 · 오늘의 기대 <span style="font-weight:400;color:var(--ink-soft);font-size:.85em">(선택)</span></b>
+        <div style="padding-left:29px"><textarea id="svCurious" placeholder="예: 개인정보 유출 없이 안전하게 모으는 법이 궁금해요" style="width:100%;min-height:48px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea></div>
+      </div>
+      <button class="bigbtn" style="width:100%;margin-top:16px" onclick="submitSurvey()">📩 제출하고 결과 보기</button>
+      <p class="fine" id="svMsg"></p>
+    </div>
+
+    <div style="max-width:760px;margin:22px auto 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <b style="font-family:var(--font-round);color:var(--navy);font-size:1.08rem">📊 실시간 설문 결과</b>
+        <button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="loadSurvey()">↻ 새로고침</button>
+      </div>
+      <div style="color:var(--ink-soft);font-size:.85rem;margin-bottom:8px">제출하면 여기에 <b>모두의 응답이 실시간</b>으로 모여 막대그래프가 됩니다.</div>
+      <div id="svResult"><div style="color:#9aa3b5;font-size:.9rem;padding:14px 2px;text-align:center">아직 응답이 없어요. 첫 응답을 남겨 보세요!</div></div>
+    </div>
+  </div>
+  <script>
+  var SVQDEF=[
+    {key:'vibe',   label:'① 바이브 코딩 경험', opts:['오늘 처음','들어만 봄','몇 번 해봄','자주 씀']},
+    {key:'build',  label:'② 웹앱 제작 경험',   opts:['없음','HTML 조금','AI로 만들어봄','배포까지']},
+    {key:'backend',label:'③ Supabase·DB 지식', opts:['처음','이름만','개념은 앎','써봤음']}
+  ];
+  var SVWANT=['데이터 수집·저장','실시간 대시보드','보안·개인정보','배포(호스팅)','나만의 앱 기획'];
+  function _svesc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function _svChecked(name){var el=document.querySelector('input[name="'+name+'"]:checked');return el?el.value:'';}
+  function submitSurvey(){
+    var msg=document.getElementById('svMsg');
+    var vibe=_svChecked('q_vibe'),build=_svChecked('q_build'),backend=_svChecked('q_backend'),conf=_svChecked('q_conf');
+    if(!vibe||!build||!backend){msg.style.color='#e5484d';msg.textContent='1~3번은 하나씩 골라 주세요 🙂';return;}
+    var wants=Array.prototype.map.call(document.querySelectorAll('input[name="q_want"]:checked'),function(e){return e.value;}).join(', ');
+    var teacher=(document.getElementById('svTeacher').value||'').trim();
+    var curious=(document.getElementById('svCurious').value||'').trim();
+    var payload={teacher:teacher,vibe:vibe,build:build,backend:backend,confidence:conf?parseInt(conf,10):null,wants:wants,curious:curious};
+    msg.style.color='#8a90a0';msg.textContent='제출 중...';
+    try{
+      var h={apikey:CONFIG.supaKey,'Content-Type':'application/json',Prefer:'return=minimal'};
+      if(CONFIG.supaKey.slice(0,3)!=='sb_')h.Authorization='Bearer '+CONFIG.supaKey;
+      fetch(CONFIG.supaUrl+'/rest/v1/pre_survey',{method:'POST',headers:h,body:JSON.stringify(payload)})
+        .then(function(r){if(r.ok){msg.style.color='#22b573';msg.textContent='✅ 제출 완료! 아래 실시간 결과에 반영됐어요. 고맙습니다 🙌';loadSurvey();}
+          else{msg.style.color='#b58900';msg.textContent='표(pre_survey) 설정 후 결과 저장이 켜집니다. (연수_SETUP_전체.sql 실행 필요)';}})
+        .catch(function(){msg.style.color='#b58900';msg.textContent='네트워크 문제로 저장 실패 — 잠시 후 다시 시도해 주세요.';});
+    }catch(e){msg.style.color='#b58900';msg.textContent='저장에 실패했어요.';}
+  }
+  function _svbar(label,count,total){
+    var pct=total?Math.round(count/total*100):0;
+    return '<div class="svbar"><div class="lb">'+_svesc(label)+'</div><div class="track"><div class="fill" style="width:'+pct+'%"></div></div><div class="ct2">'+count+'명·'+pct+'%</div></div>';
+  }
+  function loadSurvey(){
+    try{
+      var h={apikey:CONFIG.supaKey}; if(CONFIG.supaKey.slice(0,3)!=='sb_')h.Authorization='Bearer '+CONFIG.supaKey;
+      fetch(CONFIG.supaUrl+'/rest/v1/pre_survey?select=vibe,build,backend,confidence,wants,curious,created_at&order=created_at.desc&limit=300',{headers:h})
+        .then(function(r){return r.ok?r.json():[];})
+        .then(function(rows){
+          var box=document.getElementById('svResult'); if(!box)return;
+          if(!rows.length){box.innerHTML='<div style="color:#9aa3b5;font-size:.9rem;padding:14px 2px;text-align:center">아직 응답이 없어요. 첫 응답을 남겨 보세요!</div>';return;}
+          var n=rows.length,html='<div style="font-size:.82rem;color:var(--ink-soft);text-align:right;margin-bottom:6px">총 '+n+'명 응답 · 실시간</div>';
+          SVQDEF.forEach(function(q){
+            var counts={}; q.opts.forEach(function(o){counts[o]=0;});
+            rows.forEach(function(r){ if(r[q.key]&&counts.hasOwnProperty(r[q.key])) counts[r[q.key]]++; });
+            html+='<div class="svgrp"><div class="gt">'+q.label+'</div>';
+            q.opts.forEach(function(o){ html+=_svbar(o,counts[o],n); });
+            html+='</div>';
+          });
+          var cs=rows.map(function(r){return r.confidence;}).filter(function(v){return typeof v==='number';});
+          if(cs.length){
+            var avg=(cs.reduce(function(a,b){return a+b;},0)/cs.length).toFixed(1);
+            html+='<div class="svgrp"><div class="gt">④ 자신감(1~5) — 평균 <b style="color:var(--green-deep)">'+avg+'점</b></div>';
+            for(var v=1;v<=5;v++){ var c=cs.filter(function(x){return x===v;}).length; html+=_svbar(v+'점',c,cs.length); }
+            html+='</div>';
+          }
+          var wc={}; SVWANT.forEach(function(o){wc[o]=0;});
+          rows.forEach(function(r){ (r.wants||'').split(',').forEach(function(w){ w=w.trim(); if(wc.hasOwnProperty(w)) wc[w]++; }); });
+          html+='<div class="svgrp"><div class="gt">⑤ 배우고 싶은 것(복수)</div>';
+          SVWANT.forEach(function(o){ html+=_svbar(o,wc[o],n); });
+          html+='</div>';
+          var cur=rows.filter(function(r){return (r.curious||'').trim();}).slice(0,8);
+          if(cur.length){ html+='<div class="svgrp"><div class="gt">⑥ 궁금한 점 · 기대</div>'+cur.map(function(r){return '<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:6px;font-size:.9rem">'+_svesc(r.curious)+'</div>';}).join('')+'</div>'; }
+          box.innerHTML=html;
+        }).catch(function(){});
+    }catch(e){}
+  }
+  window.addEventListener('load',function(){ if(typeof CONFIG!=='undefined'&&CONFIG.supaKey){ loadSurvey(); setInterval(loadSurvey,6000); } });
+  </script>
 
   <div class="block">
     <div class="sec-head">
