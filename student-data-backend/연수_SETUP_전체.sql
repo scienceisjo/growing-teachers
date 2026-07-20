@@ -1,7 +1,7 @@
 -- ═══════════════════════════════════════════════════════════════
 --  「학생 데이터, 모으기 전에」 연수 — 전체 백엔드 SETUP (한 번에)
 --  Supabase(과학이조선생 A) → SQL Editor에 통째로 붙여넣고 Run 하세요.
---  표 4개: 반응속도 게임 · 과학 측정앱 · 국어 낱말앱 · 기획 공유앱
+--  표 5개: 반응속도 게임 · 과학 측정앱 · 국어 낱말앱 · 기획 공유앱 · 시작 사전설문
 --  모두 RLS(행 수준 보안) 켬 + 최소권한(anon insert/select만, 수정·삭제 금지)
 -- ═══════════════════════════════════════════════════════════════
 
@@ -87,6 +87,30 @@ create policy "anon insert plans" on teacher_plans for insert to anon
 --   (화면에는 계획 내용만 표시하고 키는 안 보여줌. anon 키는 원래 공개용이라 공유 OK)
 drop policy if exists "anon read plans" on teacher_plans;
 create policy "anon read plans" on teacher_plans for select to anon using ( true );
+
+
+-- ⑤ 시작 사전 설문 (pre_survey) ────────────────────────────────
+--    연수 시작 탭의 '1분 설문'(바이브코딩 경험·사전지식) 응답을 담고,
+--    같은 화면에 실시간 막대그래프로 보여주기 위한 표.
+--    ★ 넣기(insert) + 읽기(select) 둘 다 anon 허용(익명 집계 표시용).
+create table if not exists pre_survey (
+  id          uuid primary key default gen_random_uuid(),
+  created_at  timestamptz not null default now(),
+  teacher     text,        -- 성함/과목(선택·익명 가능)
+  vibe        text,        -- 바이브코딩 경험
+  build       text,        -- 웹앱 제작 경험
+  backend     text,        -- Supabase·백엔드·DB 지식 정도
+  confidence  int,         -- 코딩/AI 자신감(1~5)
+  wants       text,        -- 배우고 싶은 것(복수, 콤마로 연결)
+  curious     text         -- 궁금한 점/기대(선택)
+);
+create index if not exists pre_survey_created_idx on pre_survey(created_at desc);
+alter table pre_survey enable row level security;
+drop policy if exists "anon insert survey" on pre_survey;
+create policy "anon insert survey" on pre_survey for insert to anon
+  with check ( confidence is null or confidence between 1 and 5 );
+drop policy if exists "anon read survey" on pre_survey;
+create policy "anon read survey" on pre_survey for select to anon using ( true );
 
 
 -- ═══════════════════════════════════════════════════════════════
