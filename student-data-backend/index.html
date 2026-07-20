@@ -327,6 +327,19 @@ footer b{color:var(--navy)}
 .bnode small{color:var(--ink-soft);font-size:.8rem;line-height:1.35;margin-top:1px}
 .barrow{align-self:center;color:var(--grape);font-weight:800;font-size:1.2rem}
 @media(max-width:640px){.barrow{display:none}.bnode{flex:1 1 100%}}
+.planhelp{max-width:760px;margin:0 auto 14px;background:#fbf7ec;border:1px solid #f0e2b6;border-radius:16px;padding:14px 16px;font-size:.92rem}
+.planhelp>b{color:var(--navy)}
+.phcols{display:flex;gap:10px;margin:10px 0 8px;flex-wrap:wrap}
+.phex{flex:1 1 220px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.phex.ok{border-color:#c4e9d6;background:var(--green-soft)}
+.phex .pht{display:block;font-family:var(--font-round);font-size:.82rem;color:var(--red);margin-bottom:4px}
+.phex.ok .pht{color:var(--green-deep)}
+.phex p{margin:0;font-size:.9rem;line-height:1.5}
+.phchk{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 11px;font-size:.86rem;color:var(--ink-soft)}
+.phchk b{color:var(--navy)}
+.dlbtn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 12px;font-size:.82rem;border:1px solid var(--line);background:#fff;border-radius:9px;cursor:pointer;font-family:inherit;color:var(--navy)}
+.dlbtn:hover{background:var(--green-soft);border-color:#c4e9d6}
+.pmini{font-size:.78rem;color:var(--ink-soft);margin-top:2px}
 
 /* ── FAQ 아코디언 (삽입) ── */
 .faq{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:9px}
@@ -966,22 +979,37 @@ footer b{color:var(--navy)}
       <div class="sec-head">
         <span class="kick">B-1 · 내 앱 기획하기</span>
         <h2>🪄 <b>아이디어 적고</b> 만들기 프롬프트 자동 받기</h2>
-        <p>반응속도 실습이 <b>정해진 걸 따라 하기</b>였다면, 이번엔 <b>내 수업앱을 자유롭게 기획</b>합니다. 아래 6칸을 채우고 버튼을 누르면 <b>프롬프트 2개(① 앱 만들기 → ② Supabase 표 만들기)</b>가 자동 완성되고, 계획은 <b>강사 화면과 참여 선생님 모두에게 공유</b>됩니다. 완성한 앱은 <b>강사가 대신 배포</b>해 드려요.</p>
+        <p>반응속도 실습이 <b>정해진 걸 따라 하기</b>였다면, 이번엔 <b>내 수업앱을 자유롭게 기획</b>합니다. 아래 항목을 <b>촘촘히 채울수록</b> AI가 <b>바로 쓸 수 있는 앱</b>을 만들어 줍니다. 버튼을 누르면 <b>프롬프트 2개(① 앱 만들기 → ② Supabase 표 만들기)</b>가 자동 완성되고, 계획은 <b>강사 화면과 참여 선생님 모두에게 공유</b>됩니다. 완성한 앱은 <b>강사가 대신 배포</b>해 드려요.</p>
       </div>
       <div class="tip" style="margin-top:0"><b>💡 뭘 만들지 막막하다면?</b> 이런 것들이 쉽고 좋아요 — <b>익명 한 줄 설문</b>(오늘 기분·이해도), <b>낱말·생각 모으기</b>(단원 도입 브레인스토밍), <b>조별 측정값 모으기</b>(실험 결과 실시간 그래프), <b>퀴즈 정답 모으기</b>(즉석 통계). 공통점: <b>실명 없이</b>, <b>짧게</b>, <b>한 화면</b>에서.</div>
+
+      <!-- 계획 도우미: 촘촘하게 채우는 법 + 예시 -->
+      <div class="planhelp">
+        <b>🧭 촘촘하게 계획하는 법</b> — 두루뭉술하게 적으면 AI도 두루뭉술한 앱을 만듭니다. 아래처럼 <b>구체적으로</b> 적어 주세요.
+        <div class="phcols">
+          <div class="phex"><span class="pht">이렇게 두루뭉술 ✕</span><p>"학생들 의견 모으는 앱"</p></div>
+          <div class="phex ok"><span class="pht">이렇게 촘촘하게 ✓</span><p>"중2 과학 <b>밀도 단원 도입</b>에서, <b>모둠별</b>로 물체가 <b>뜰지/가라앉을지 예측</b>을 모아 <b>실시간 막대그래프</b>로 보여주는 앱. 실명 없이 <b>모둠 번호</b>만."</p></div>
+        </div>
+        <div class="phchk">채울 때 스스로 묻기 — <b>언제</b>(수업 어느 장면) · <b>누가</b>(학년·모둠/개인) · <b>무엇을</b>(정확히 어떤 값) · <b>왜</b>(모아서 뭘 볼지) · <b>어떻게 보여줄지</b>(그래프·목록·구름·순위·평균) · <b>최소·익명</b>(실명 빼기)</div>
+      </div>
+
       <div class="ws" style="max-width:760px">
-        <input id="fpTeacher" placeholder="성함 / 과목 — 예: 홍길동 · 국어" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;margin-bottom:4px">
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">① 프로그램 계획 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">이 앱으로 무엇을 하나요?</span></label>
-        <textarea id="fpPlan" placeholder="예: '가을' 하면 떠오르는 낱말을 모아 실시간 낱말 구름을 만드는 앱" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">② 수집할 데이터의 종류</label>
-        <textarea id="fpData" placeholder="예: 반 코드, 익명 닉네임, 낱말" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">③ 수집 목적</label>
-        <textarea id="fpPurpose" placeholder="예: 단원 도입에서 학생들의 배경지식·연상을 한눈에 보기" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">④ 웹앱 계획 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">화면·흐름은 어떻게?</span></label>
-        <textarea id="fpApp" placeholder="예: 입력창 하나 + 보내기 버튼, 아래에 실시간 낱말 구름과 순위" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑤ 내 Supabase Project URL <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">내 계정에서 직접 찾아 넣기</span></label>
+        <input id="fpTeacher" placeholder="성함 / 과목 — 예: 홍길동 · 과학" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;margin-bottom:4px">
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">① 대상·상황 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">어떤 수업, 어느 장면에서 쓰나요?</span></label>
+        <textarea id="fpTarget" placeholder="예: 중2 과학 · 밀도 단원 도입 · 4인 모둠 활동" style="width:100%;min-height:44px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">② 프로그램 한 줄 소개 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">이 앱으로 무엇을 하나요? <b style="color:var(--red)">*필수</b></span></label>
+        <textarea id="fpPlan" placeholder="예: 물체가 물에 뜰지 가라앉을지 모둠별 예측을 모아 실시간 그래프로 보기" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">③ 수집할 데이터 + 형태 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">항목마다 형태(숫자·짧은 글·선택지)까지</span></label>
+        <textarea id="fpData" placeholder="예: 반 코드(짧은 글), 모둠 번호(짧은 글), 예측(뜬다/가라앉는다 중 선택)" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">④ 수집 목적·활용 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">모아서 무엇을 보여주고, 수업에 어떻게?</span></label>
+        <textarea id="fpPurpose" placeholder="예: 예측 분포를 즉석 그래프로 보여주고, 실험 후 실제 결과와 비교" style="width:100%;min-height:50px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑤ 입력 화면 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">학생이 무엇을 어떻게 넣나요?</span></label>
+        <textarea id="fpInput" placeholder="예: 모둠 번호를 고르고, 예측을 버튼으로 선택 → [보내기]" style="width:100%;min-height:44px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑥ 결과 화면·시각화 <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">모인 데이터를 어떻게 보여주나요?</span></label>
+        <textarea id="fpOutput" placeholder="예: 아래에 예측별 인원을 실시간 막대그래프 + 총 참여 수 표시" style="width:100%;min-height:44px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑦ 내 Supabase Project URL <span style="font-weight:400;color:var(--ink-soft);font-size:.86em">공통 실습에서 찾아 둔 내 것</span></label>
         <input id="fpUrl" placeholder="https://xxxx.supabase.co" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem">
-        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑥ 내 anon key <span style="font-weight:400;color:var(--red);font-size:.86em">공개용 키만! service_role 금지</span></label>
+        <label style="font-weight:700;font-size:.9rem;display:block;margin:10px 0 4px">⑧ 내 anon key <span style="font-weight:400;color:var(--red);font-size:.86em">공개용 키만! service_role 금지</span></label>
         <input id="fpKey" placeholder="eyJhbG… 또는 sb_publishable_…" style="width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem">
         <button class="bigbtn" style="width:100%;margin-top:14px" onclick="genFreePrompts()">🪄 프롬프트 생성 &amp; 강사에게 공유</button>
         <p class="fine" id="fpMsg"></p>
@@ -998,7 +1026,7 @@ footer b{color:var(--navy)}
           <b style="font-family:var(--font-round);color:var(--navy);font-size:1.06rem">📋 우리 연수 · 제출된 계획서</b>
           <button class="bigbtn b3" style="padding:5px 12px;font-size:.82rem" onclick="loadPlans()">↻ 새로고침</button>
         </div>
-        <div style="color:var(--ink-soft);font-size:.85rem;margin-bottom:8px">위 <b>[프롬프트 생성 &amp; 강사에게 공유]</b>를 누르면 여기에 <b>실시간으로</b> 올라와, 참여하신 <b>모든 선생님이 함께</b> 봅니다.</div>
+        <div style="color:var(--ink-soft);font-size:.85rem;margin-bottom:8px">위 <b>[프롬프트 생성 &amp; 강사에게 공유]</b>를 누르면 여기에 <b>실시간으로</b> 올라와, 참여하신 <b>모든 선생님이 함께</b> 봅니다. 각 계획의 <b>[⬇️ 프롬프트 받기]</b>로 <b>누구나 내려받아</b> 참고할 수 있어요.</div>
         <div id="planBoard"><div style="color:#9aa3b5;font-size:.9rem;padding:14px 2px;text-align:center">아직 제출된 계획이 없어요. 첫 계획을 제출해 보세요!</div></div>
       </div>
     </div>
@@ -1008,9 +1036,17 @@ footer b{color:var(--navy)}
     function genFreePrompts(){
       var msg=document.getElementById('fpMsg');
       if(!_fp('fpPlan')){msg.textContent='① 프로그램 계획은 꼭 적어주세요';msg.style.color='#e5484d';return;}
-      var plan=_fp('fpPlan'),data=_fpor(_fp('fpData'),'(수집 데이터를 적어주세요)'),purpose=_fpor(_fp('fpPurpose'),'(목적을 적어주세요)'),app=_fpor(_fp('fpApp'),'(웹앱 계획을 적어주세요)');
+      var target=_fpor(_fp('fpTarget'),''),plan=_fp('fpPlan'),data=_fpor(_fp('fpData'),'(수집 데이터를 적어주세요)'),purpose=_fpor(_fp('fpPurpose'),'(목적을 적어주세요)'),input=_fpor(_fp('fpInput'),''),output=_fpor(_fp('fpOutput'),'');
       var url=_fpor(_fp('fpUrl'),'여기에_내_Project_URL_넣기'),key=_fpor(_fp('fpKey'),'여기에_내_anon_key_넣기');
-      var p1="너는 중학교 수업용 웹앱을 만드는 개발자야. 아래 기획대로 HTML 파일 하나짜리 웹앱을 만들어 줘.\n\n[프로그램 계획]\n"+plan+"\n\n[수집할 데이터]\n"+data+"\n\n[수집 목적]\n"+purpose+"\n\n[웹앱 계획(화면·흐름)]\n"+app+"\n\n조건:\n- 다른 파일 없이 HTML 하나로 완성하고, 코드 전체를 보여줘. 스마트폰·태블릿·노트북 등 기기 화면 크기에 따라 화면 비율이 자동으로 바뀌는 반응형(responsive)으로 만들고.\n- 학생이 입력하면 Supabase에 저장하고, 저장된 내용을 화면에 실시간으로(몇 초마다 다시 불러오기) 보여줘.\n- Supabase 연결값은 아래를 그대로 사용해:\n  · Project URL: "+url+"\n  · anon key: "+key+"\n- 반드시 anon(공개) 키만 쓰고 service_role(비밀) 키는 절대 넣지 마.\n- 실명 대신 익명 라벨(번호·닉네임)을 기본으로, 목적에 필요한 최소한의 데이터만 수집해.\n- 주소 뒤 ?room= 으로 반을 구분할 수 있게 해.\n- 표(테이블) 이름은 영문 소문자로 정하고, 그 이름을 알려줘(다음 SQL 단계에서 씀).";
+      var appPlan=(target?'[대상·상황] '+target+'\n':'')+(input?'[입력 화면] '+input+'\n':'')+(output?'[결과 화면] '+output:'');
+      var p1="너는 중학교 수업용 웹앱을 만드는 개발자야. 아래 기획대로 HTML 파일 하나짜리 웹앱을 만들어 줘."
+        +(target?"\n\n[대상·상황]\n"+target:"")
+        +"\n\n[프로그램 계획]\n"+plan
+        +"\n\n[수집할 데이터(항목·형태)]\n"+data
+        +"\n\n[수집 목적·활용]\n"+purpose
+        +(input?"\n\n[입력 화면 — 학생이 넣는 방식]\n"+input:"")
+        +(output?"\n\n[결과 화면 — 모인 데이터 시각화]\n"+output:"")
+        +"\n\n조건:\n- 다른 파일 없이 HTML 하나로 완성하고, 코드 전체를 보여줘. 스마트폰·태블릿·노트북 등 기기 화면 크기에 따라 화면 비율이 자동으로 바뀌는 반응형(responsive)으로 만들고.\n- 학생이 입력하면 Supabase에 저장하고, 저장된 내용을 화면에 실시간으로(몇 초마다 다시 불러오기) 보여줘.\n- Supabase 연결값은 아래를 그대로 사용해:\n  · Project URL: "+url+"\n  · anon key: "+key+"\n- 반드시 anon(공개) 키만 쓰고 service_role(비밀) 키는 절대 넣지 마.\n- 실명 대신 익명 라벨(번호·닉네임)을 기본으로, 목적에 필요한 최소한의 데이터만 수집해.\n- 주소 뒤 ?room= 으로 반을 구분할 수 있게 해.\n- 표(테이블) 이름은 영문 소문자로 정하고, 그 이름을 알려줘(다음 SQL 단계에서 씀).";
       var p2="방금 만든 웹앱이 쓸 Supabase 표(테이블)와 보안 규칙(SQL)을 만들어 줘. Supabase SQL Editor에 붙여넣고 실행할 거야.\n\n[저장할 데이터]\n"+data+"\n[목적]\n"+purpose+"\n\n★ 공개되는 anon 키로 접근하는 앱이라 보안이 매우 중요해. 반드시 지켜:\n1. 표를 만들 때 RLS(행 수준 보안)를 켜 — enable row level security.\n2. 정책(policy)은 최소로: 학생(anon)은 넣기(insert)만, 필요하면 읽기(select)만 허용.\n   수정(update)·삭제(delete)는 anon에게 절대 허용하지 마.\n3. insert 정책에 with check로 값 범위·길이 검증을 넣어(예: 글자 수 1~40, 반 코드 1~40).\n4. room(반 코드)와 created_at(자동 시각) 컬럼을 넣어.\n5. 실명 등 민감정보는 담지 말고 익명 위주로.\n각 SQL이 무엇을 하는지 한글 주석을 달고,\n마지막에 '주소만 아는 사람이 무엇을 할 수 있고 무엇을 못 하는지'를 한글로 요약해 줘.";
       document.getElementById('fp1').textContent=p1;
       document.getElementById('fp2').textContent=p2;
@@ -1020,26 +1056,40 @@ footer b{color:var(--navy)}
       try{
         var h={apikey:CONFIG.supaKey,'Content-Type':'application/json',Prefer:'return=minimal'};
         if(CONFIG.supaKey.slice(0,3)!=='sb_')h.Authorization='Bearer '+CONFIG.supaKey;
-        fetch(CONFIG.supaUrl+'/rest/v1/teacher_plans',{method:'POST',headers:h,body:JSON.stringify({teacher:_fp('fpTeacher'),plan:plan,data_types:_fp('fpData'),purpose:_fp('fpPurpose'),app_plan:_fp('fpApp'),supa_url:_fp('fpUrl'),supa_key:_fp('fpKey'),prompt_app:p1,prompt_sql:p2})})
+        fetch(CONFIG.supaUrl+'/rest/v1/teacher_plans',{method:'POST',headers:h,body:JSON.stringify({teacher:_fp('fpTeacher'),plan:plan,data_types:_fp('fpData'),purpose:_fp('fpPurpose'),app_plan:appPlan,supa_url:_fp('fpUrl'),supa_key:_fp('fpKey'),prompt_app:p1,prompt_sql:p2})})
           .then(function(r){if(r.ok){msg.style.color='#22b573';msg.textContent='✅ 제출 완료! 아래 [제출된 계획서] 보드에 올라가 모두가 함께 봅니다. 프롬프트 2개는 복사해 쓰세요.';loadPlans();}else{msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요! (공유 저장은 teacher_plans 표 설정 후 켜집니다)';}})
           .catch(function(){msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요! (공유 저장 실패 — 네트워크/표 확인)';});
       }catch(e){msg.style.color='#b58900';msg.textContent='프롬프트는 완성됐어요!';}
     }
     function fpCopy(id,btn){navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){btn.textContent='복사됨!';setTimeout(function(){btn.textContent='📋 복사';},1500);});}
     function _fesc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+    var _plans=[];
     function loadPlans(){
       try{
         var h={apikey:CONFIG.supaKey}; if(CONFIG.supaKey.slice(0,3)!=='sb_')h.Authorization='Bearer '+CONFIG.supaKey;
-        fetch(CONFIG.supaUrl+'/rest/v1/teacher_plans?select=teacher,plan,purpose,created_at&order=created_at.desc&limit=60',{headers:h})
+        fetch(CONFIG.supaUrl+'/rest/v1/teacher_plans?select=teacher,plan,purpose,prompt_app,prompt_sql,created_at&order=created_at.desc&limit=60',{headers:h})
           .then(function(r){return r.ok?r.json():[];})
           .then(function(rows){
+            _plans=rows||[];
             var b=document.getElementById('planBoard'); if(!b)return;
-            if(!rows.length){b.innerHTML='<div style="color:#9aa3b5;font-size:.9rem;padding:14px 2px;text-align:center">아직 제출된 계획이 없어요. 첫 계획을 제출해 보세요!</div>';return;}
-            b.innerHTML='<div style="font-size:.82rem;color:var(--ink-soft);text-align:right;margin-bottom:4px">총 '+rows.length+'건 · 최신순</div>'+rows.map(function(r){
-              return '<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:8px;box-shadow:var(--shadow)"><b style="color:var(--green-deep)">'+_fesc(r.teacher||'익명 선생님')+'</b>'+(r.purpose?' <span style="color:var(--ink-soft);font-size:.85rem">· '+_fesc(r.purpose)+'</span>':'')+'<div style="margin-top:4px;font-size:.93rem;line-height:1.55">'+_fesc(r.plan||'')+'</div></div>';
+            if(!_plans.length){b.innerHTML='<div style="color:#9aa3b5;font-size:.9rem;padding:14px 2px;text-align:center">아직 제출된 계획이 없어요. 첫 계획을 제출해 보세요!</div>';return;}
+            b.innerHTML='<div style="font-size:.82rem;color:var(--ink-soft);text-align:right;margin-bottom:4px">총 '+_plans.length+'건 · 최신순</div>'+_plans.map(function(r,i){
+              var dl=(r.prompt_app||r.prompt_sql)?'<button class="dlbtn" onclick="dlPlan('+i+')">⬇️ 프롬프트 받기</button>':'<div class="pmini">프롬프트 저장 전이라 아직 받을 수 없어요</div>';
+              return '<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:8px;box-shadow:var(--shadow)"><b style="color:var(--green-deep)">'+_fesc(r.teacher||'익명 선생님')+'</b>'+(r.purpose?' <span style="color:var(--ink-soft);font-size:.85rem">· '+_fesc(r.purpose)+'</span>':'')+'<div style="margin-top:4px;font-size:.93rem;line-height:1.55">'+_fesc(r.plan||'')+'</div>'+dl+'</div>';
             }).join('');
           }).catch(function(){});
       }catch(e){}
+    }
+    function dlPlan(i){
+      var r=_plans[i]; if(!r)return;
+      var t='['+(r.teacher||'익명 선생님')+'의 수업앱 계획]\n\n■ 프로그램 계획\n'+(r.plan||'')+'\n\n■ 수집 목적\n'+(r.purpose||'')
+        +'\n\n※ 아래 프롬프트에 적힌 Project URL·anon 키는 ‘제출자 본인’ 것입니다. 내가 직접 만들 땐 반드시 내 Supabase 값으로 바꿔 쓰세요.'
+        +'\n\n============================\n① 앱 만들기 프롬프트 (AI에 붙여넣기)\n============================\n'+(r.prompt_app||'(저장된 프롬프트 없음)')
+        +'\n\n============================\n② Supabase 표 만들기 프롬프트 (SQL Editor에 붙여넣기)\n============================\n'+(r.prompt_sql||'(저장된 프롬프트 없음)')+'\n';
+      var name=(r.teacher||'계획').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_').slice(0,40);
+      var blob=new Blob([t],{type:'text/plain;charset=utf-8'});
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'_수업앱_프롬프트.txt';
+      document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},120);
     }
     window.addEventListener('load',function(){ if(typeof CONFIG!=='undefined'&&CONFIG.supaKey){ loadPlans(); setInterval(loadPlans,6000); } });
     </script>
