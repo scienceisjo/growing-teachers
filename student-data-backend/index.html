@@ -1258,6 +1258,177 @@ footer b{color:var(--navy)}
 </div>
 </div>
 
+<!-- ═══════════════ TAB. Supabase 이것만은 알자 ═══════════════ -->
+<div class="tabpanel" data-tab="supabase">
+<div class="wrap">
+
+  <div class="block">
+    <div class="sec-head">
+      <span class="kick">참고 · 관리</span>
+      <h2>🗄️ Supabase, <b>이것만은 알자!</b></h2>
+      <p>Supabase에 처음 들어가면 낯선 영어 용어가 가득합니다. 하지만 <b>내가 만든 웹앱의 데이터를 관리</b>하는 데 필요한 건 생각보다 적어요. 이 탭에는 <b>선생님이 실제로 눌러야 하는 메뉴·용어·기능</b>만 모았습니다. 처음부터 다 외울 필요 없이, <b>필요할 때 여기로 돌아와</b> 찾아 쓰세요.</p>
+    </div>
+    <div class="pnote">강사 노트: 이 탭은 빠르게 훑되 <b>④ Project URL·ID 찾기</b>, <b>⑤ CSV 내보내기</b>, <b>service_role 경고</b> 세 가지는 꼭 짚어주세요. 나머지는 "필요할 때 보는 사전"으로 안내.</div>
+    <div class="callout green"><b>🧭 딱 4곳만 기억하세요.</b> <b>Table Editor</b>(데이터 보기) · <b>SQL Editor</b>(조회·삭제·내보내기) · <b>Project Settings ⚙️</b>(주소·키) · 그리고 <b>service_role 키는 절대 안 건드리기</b>. 이 네 가지면 내 웹앱 데이터 관리는 충분합니다.</div>
+  </div>
+
+  <!-- ① 메뉴 지도 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">① 메뉴 지도</span><h2>왼쪽 메뉴, <b>뭘 눌러야 하나?</b></h2><p>왼쪽에 메뉴가 많지만, 데이터 관리에 쓰는 건 몇 개뿐입니다.</p></div>
+    <div class="tablewrap">
+      <table class="dt">
+        <tr><th>메뉴</th><th>하는 일</th><th>언제 / 중요도</th></tr>
+        <tr><td><b>Table Editor</b><br>표 편집기</td><td>내 표(데이터)를 <b>눈으로 보기</b> · 정렬 · 필터 · 잘못된 행 삭제</td><td>⭐⭐⭐ 가장 자주</td></tr>
+        <tr><td><b>SQL Editor</b><br>SQL 편집기</td><td>표 만들기 · 보안규칙(RLS) · <b>조회·개수·삭제</b> · <b>CSV 내보내기</b></td><td>⭐⭐⭐ 자주</td></tr>
+        <tr><td><b>Project Settings ⚙️</b><br>프로젝트 설정</td><td><b>주소(URL)·키·리전</b>·프로젝트 정보 확인</td><td>⭐⭐ 처음·키 찾을 때</td></tr>
+        <tr><td><b>Authentication</b><br>인증</td><td>교사 <b>로그인 대시보드</b>를 만들 때 사용자·정책 관리</td><td>⭐ 필요할 때만</td></tr>
+        <tr><td>Database / Storage / Edge Functions / Realtime / Reports / Advisors</td><td>표 구조 심화 · 파일저장 · 서버함수 · 고급 설정 · 통계</td><td>지금은 <b>패스</b> 🙆</td></tr>
+      </table>
+    </div>
+    <div class="tip"><b>💡</b> 헷갈릴 땐 <b>Table Editor로 보고, SQL Editor로 다룬다</b>고 기억하세요.</div>
+  </div>
+
+  <!-- ② 용어 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">② 용어</span><h2>꼭 아는 <b>용어 빠른 사전</b></h2><p>이 정도만 알면 대화가 통합니다.</p></div>
+    <div class="tablewrap">
+      <table class="dt">
+        <tr><th>용어</th><th>쉽게 말하면</th></tr>
+        <tr><td><b>Project</b> 프로젝트</td><td>내 <b>백엔드 하나</b>. 표·키·주소가 이 안에 다 들어있음.</td></tr>
+        <tr><td><b>Table</b> 표</td><td>데이터가 담기는 <b>엑셀 시트</b> 같은 것.</td></tr>
+        <tr><td><b>Row / Column</b> 행 / 열</td><td>행 = 기록 한 줄(학생 한 명의 제출), 열 = 항목(반·닉네임·값).</td></tr>
+        <tr><td><b>id · created_at</b></td><td>자동으로 붙는 <b>고유번호</b>와 <b>저장된 시각</b>. 건드릴 필요 없음.</td></tr>
+        <tr><td><b>Project URL</b> 주소</td><td>내 백엔드의 인터넷 <b>주소</b>. <code class="inline">https://…supabase.co</code></td></tr>
+        <tr><td><b>anon key</b> (= publishable)</td><td>웹앱에 넣는 <b>공개용 열쇠</b>. 노출돼도 안전하게 설계됨.</td></tr>
+        <tr><td><b>service_role</b> (= secret) 🚨</td><td>모든 규칙을 무시하는 <b>마스터키</b>. <b>절대 웹·AI에 넣지 마세요.</b></td></tr>
+        <tr><td><b>RLS</b> 행 수준 보안</td><td>표에 거는 <b>자물쇠</b>. 켜야 남이 함부로 못 읽고·못 지움.</td></tr>
+        <tr><td><b>Policy</b> 정책</td><td>자물쇠의 세부 규칙("익명은 넣기만 가능" 같은 문장).</td></tr>
+        <tr><td><b>SQL · Query · Run</b></td><td>표에 내리는 <b>명령문</b>을 <b>적고</b> <b>실행(Run)</b>하는 것.</td></tr>
+        <tr><td><b>Region</b> 리전</td><td>데이터가 저장되는 <b>물리적 위치</b>. 한국은 <b>Seoul</b> 권장.</td></tr>
+        <tr><td><b>Pause</b> 일시정지</td><td>무료 프로젝트가 <b>7일 미사용</b> 시 잠깐 멈춤(데이터는 보존).</td></tr>
+      </table>
+    </div>
+    <div class="termbox"><span class="tn">📖 꼭 구분! anon vs service_role</span><b>anon(공개) 키</b>는 웹앱에 넣어도 되는 손님 열쇠, <b>service_role(비밀) 키</b>는 전부 열리는 마스터키입니다. 웹페이지·AI 프롬프트·깃허브에는 <b>언제나 anon만</b>. service_role은 <b>어디에도 붙여넣지 않기.</b></div>
+  </div>
+
+  <!-- ③ 주소·ID -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">③ 주소·ID</span><h2>내 백엔드 <b>주소(Project URL)와 PROJECT ID</b> 찾기</h2><p>주소는 <b>항상 같은 모양</b>이라, PROJECT ID만 알면 직접 만들 수 있습니다.</p></div>
+    <div class="ig ig-2">
+      <div class="pcard accent2"><div class="pe">🏠</div><h3>주소는 이 모양</h3><p>내 백엔드 주소는 늘 이렇게 생겼습니다</p><div class="ig-mono">https://{PROJECT_ID}.supabase.co</div><p class="ig-where">💡 <b>{PROJECT_ID}</b> 자리에 내 프로젝트 ID를 끼우면 끝</p></div>
+      <div class="pcard accent"><div class="pe">🔎</div><h3>PROJECT ID 찾는 법</h3><p><b>방법 1</b> — 대시보드에서 <b>브라우저 주소창</b>을 보세요:<br><code class="inline">…/project/<b>abcd1234…</b></code> 의 <b>project/ 뒤 문자열</b>이 ID.<br><b>방법 2</b> — <b>⚙️ Project Settings → General → Project ID</b>(= Reference ID) 옆 복사.</p></div>
+    </div>
+    <div class="tip"><b>💡 왜 이 방법?</b> <b>Data API</b> 화면에는 전체 주소가 바로 안 보이고 다른 항목만 있을 수 있어요. 그럴 땐 위처럼 <b>ID를 찾아 형식에 끼워</b> 직접 만드는 게 확실합니다. 예) ID가 <code class="inline">abcd1234efgh</code> → 주소는 <code class="inline">https://abcd1234efgh.supabase.co</code></div>
+    <div class="warn"><b>🔑 anon 키 위치:</b> <b>⚙️ Project Settings → API Keys</b> → <b>anon</b>(또는 <b>publishable</b>) 값 복사. 바로 옆 <b>service_role / secret</b>은 <b>복사 금지!</b></div>
+  </div>
+
+  <!-- ④ 데이터 보기 -->
+  <div class="mstep">
+    <header><span class="sn">👀</span><h3>데이터 <b>보고·고치고·지우기</b> — Table Editor</h3><span class="st">가장 자주</span></header>
+    <div class="mbody">
+      <p>내 웹앱이 모은 데이터를 <b>표</b>로 직접 봅니다.</p>
+      <ol class="sub">
+        <li>왼쪽 <b>Table Editor</b> → 내 표 이름 클릭. 행(row)이 학생 제출 하나하나입니다.</li>
+        <li><b>정렬</b>: <code class="inline">created_at</code> 열 머리 클릭 → 최신순/오래된순.</li>
+        <li><b>필터</b>: 상단 <b>Filter</b> → 예 <code class="inline">room = 3-2</code> → 특정 반만 보기.</li>
+        <li><b>행 삭제</b>(잘못된·테스트 데이터): 행 왼쪽 <b>체크박스</b> 선택 → <b>Delete</b>. (또는 아래 SQL 사용)</li>
+        <li><b>셀 수정</b>: 칸을 더블클릭해 직접 고칠 수 있지만, <b>수업 데이터는 되도록 원본 유지</b>를 권장.</li>
+      </ol>
+      <div class="tip"><b>💡</b> 표가 안 보이면 새로고침(↻). 방금 학생이 넣은 게 몇 초 뒤 나타나기도 합니다.</div>
+    </div>
+  </div>
+
+  <!-- ⑤ CSV 내보내기 -->
+  <div class="mstep">
+    <header><span class="sn">⬇️</span><h3><b>CSV로 내려받기</b> — 엑셀에서 열기 · 백업</h3><span class="st">필수 기능</span></header>
+    <div class="mbody">
+      <div class="callout blue"><b>결론부터!</b> Supabase는 <b>CSV로 내려받기가 됩니다.</b> <b>.xlsx(엑셀 파일)로 바로는 안 되지만</b>, 받은 CSV를 <b>엑셀에서 열면</b> 그대로 표가 됩니다.</div>
+      <p><b>방법 A — Table Editor에서 (클릭만)</b></p>
+      <ol class="sub">
+        <li>왼쪽 표 목록에서 <b>표 이름 위에 마우스</b>를 올리면 나오는 <b>⋯(점 3개)</b> 클릭.</li>
+        <li><b>Export data</b> → <b>Export table as CSV</b> 선택 → 파일이 내려받아집니다. <span style="color:var(--ink-soft)">(버전에 따라 표 화면 오른쪽 위 <b>Export</b> 버튼일 수도 있어요.)</span></li>
+      </ol>
+      <p><b>방법 B — SQL Editor에서 (가장 확실)</b></p>
+      <ol class="sub">
+        <li>SQL Editor에서 아래를 실행:</li>
+      </ol>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- 표이름 자리에 내 표 이름(예: reaction_results)을 넣으세요</span>
+select * from 표이름;</pre>
+      <ol class="sub" start="2">
+        <li>결과 표 <b>오른쪽 위</b>의 <b>다운로드(↓) 아이콘 → Download CSV / Export to CSV</b> 클릭.</li>
+      </ol>
+      <p><b>엑셀에서 열기</b></p>
+      <ol class="sub">
+        <li>받은 <code class="inline">.csv</code>를 더블클릭(엑셀이 열림) — 끝.</li>
+        <li>혹시 <b>한글이 깨지면</b>: 엑셀 → <b>데이터</b> → <b>텍스트/CSV 가져오기</b> → 파일 원본을 <b>65001: 유니코드(UTF-8)</b>로 선택 → 불러오기.</li>
+      </ol>
+      <div class="callout green"><b>🗂️ 백업 팁:</b> 학기 중 가끔 CSV로 받아 두면, 내 컴퓨터에 <b>사본</b>이 남습니다. 프로젝트 문제·실수 삭제에 대비하는 가장 쉬운 방법이에요.</div>
+    </div>
+  </div>
+
+  <!-- ⑥ SQL 레시피 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">⑥ 레시피</span><h2>자주 쓰는 <b>SQL 한 줄</b> — 복붙용</h2><p><b>SQL Editor</b>에 붙여넣고 <b>Run</b>. <code class="inline">표이름</code>만 내 것으로 바꾸면 됩니다.</p></div>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ① 지금까지 몇 건 모였나 (개수 세기)</span>
+select count(*) from 표이름;</pre>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ② 특정 반만, 최신순으로 보기</span>
+select * from 표이름
+where room = '3-2'
+order by created_at desc;</pre>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ③ 오늘 들어온 것만 보기</span>
+select * from 표이름
+where created_at >= current_date;</pre>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ④ 표에 어떤 열이 있는지 살짝 엿보기</span>
+select * from 표이름 limit 5;</pre>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ⑤ 특정 반 / 테스트 데이터만 지우기 (되돌리기 불가!)</span>
+delete from 표이름 where room = 'yeonsu';</pre>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- ⑥ 표 통째로 비우기 (⚠️ 전부 삭제 · 먼저 count·CSV부터!)</span>
+delete from 표이름;</pre>
+    <div class="warn"><b>⚠️ delete는 되돌릴 수 없습니다.</b> 지우기 전에 <b>①로 개수를 세고</b>, 필요하면 <b>⑤ CSV로 먼저 백업</b>하세요. <code class="inline">where</code> 없는 <code class="inline">delete</code>는 <b>표 전체</b>가 지워집니다.</div>
+  </div>
+
+  <!-- ⑦ 보안 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">⑦ 보안</span><h2>관리자가 <b>꼭 지킬 것</b></h2><p>학생 데이터를 다루는 이상, 이 세 가지는 습관으로.</p></div>
+    <div class="ig ig-2">
+      <div class="pcard accent"><div class="pe">🔑</div><h3>키 구분</h3><p><b>anon</b>만 웹·AI·깃허브에. <b>service_role</b>은 어디에도 넣지 않기.</p></div>
+      <div class="pcard accent2"><div class="pe">🔒</div><h3>RLS 켜기</h3><p>표마다 <b>RLS(자물쇠)</b>가 켜져 있는지 확인. 꺼져 있으면 누구나 읽고 지울 수 있음.</p></div>
+    </div>
+    <p style="max-width:860px;margin:14px auto 0"><b>RLS가 켜졌는지 확인</b>하려면 Table Editor의 표 이름 옆 <b>자물쇠 표시</b>를 보거나, SQL로:</p>
+<pre class="code"><button class="copybtn" onclick="sbCopy(this)">📋 복사</button><span class="cm">-- true 면 RLS 켜짐 / false 면 꺼짐(위험)</span>
+select relname, relrowsecurity
+from pg_class where relname = '표이름';</pre>
+    <div class="tip"><b>💡 최소·익명 원칙:</b> 실명 대신 번호·닉네임, 목적에 필요한 <b>최소한</b>만 모으기. 자세한 판단은 <b>⚠️ 주의사항</b>·<b>⚖️ 데이터 판사</b> 탭 참고.</div>
+  </div>
+
+  <!-- ⑧ 유지 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">⑧ 유지</span><h2>프로젝트 <b>살아있게</b> 두기 — 무료 요금제</h2><p>무료로 충분하지만, 한 가지만 알아두세요.</p></div>
+    <div class="callout blue"><b>⏸️ 7일 미사용 → 자동 일시정지(Pause).</b> 무료 프로젝트는 일주일간 접속·요청이 없으면 잠깐 멈춥니다. <b>데이터는 사라지지 않고</b>, 대시보드에서 <b>Restore(재개)</b>를 누르면 다시 살아납니다. <b>수업에 쓰기 하루 전, 미리 한 번 열어</b> 깨워두면 안전합니다.</div>
+    <div class="tip"><b>💡</b> 무료 요금제도 수업용 데이터 수집엔 충분합니다. 용량이 아주 커지는 일은 드물어요(텍스트·숫자 위주라 가벼움).</div>
+  </div>
+
+  <!-- ⑨ 안심 -->
+  <div class="block">
+    <div class="sec-head"><span class="kick">⑨ 안심</span><h2>지금은 <b>몰라도 되는 것들</b></h2><p>메뉴에 있어도 당장 안 눌러도 됩니다.</p></div>
+    <div class="callout green"><b>🙆 이건 나중에!</b> <b>Storage</b>(파일 저장) · <b>Edge Functions</b>(서버 함수) · <b>Realtime 설정</b> · <b>Reports/Advisors</b>(통계·권고) · <b>Database</b> 세부는 <b>내 웹앱 데이터 관리</b>엔 지금 필요 없습니다. 필요해지는 날, 그때 배워도 늦지 않아요. 오늘은 <b>①~⑧</b>이면 충분합니다. 👍</div>
+  </div>
+
+  <script>
+  function sbCopy(btn){
+    var pre=btn.closest('pre'); if(!pre)return;
+    var c=pre.cloneNode(true); var b=c.querySelector('button'); if(b)b.remove();
+    var txt=c.textContent.replace(/^\n+/,'').replace(/\s+$/,'');
+    navigator.clipboard.writeText(txt).then(function(){
+      var old=btn.textContent; btn.textContent='복사됨!';
+      setTimeout(function(){btn.textContent=old;},1200);
+    });
+  }
+  </script>
+
+</div>
+</div>
+
 <!-- ═══════════════ TAB 6. 주의사항 ═══════════════ -->
 <div class="tabpanel" data-tab="traps">
 <div class="wrap">
@@ -1509,6 +1680,87 @@ select 요청을 보내더라도 데이터베이스의 RLS 정책에 의해 학�
 4) SQL Editor에서 실행할 전체 SQL 5) 교사 UID 붙여 넣을 위치
 6) Dashboard에서 할 설정 7) 보안 테스트 결과/방법
 실제 테이블명·구조가 있으면 예시 이름 대신 실제 이름을 사용해.</pre>
+    </details>
+
+    <p style="max-width:920px;margin:22px auto 6px;font-family:var(--font-round);color:var(--navy)">③ <b>간단 버전</b> — 로그인 없이 <b>‘서버 비밀번호(PIN)’</b>로 잠그기 <span style="font-size:.85em;color:var(--ink-soft)">(계정 만들기가 부담스러울 때)</span></p>
+    <div class="callout blue"><span class="ct">③ Auth vs ③ 간단버전 — 뭘 쓸까?</span>
+      로그인 계정(Auth)까지 만드는 위 방식이 <b>가장 안전</b>합니다(민감한 학생 데이터엔 이걸 권장). 다만 계정 관리가 부담이거나, <b>학급 활동용 가벼운 앱</b>(예: 반 게시판·투표)에서 “학생이 관리자 기능을 못 건드리게”가 목적이라면 — <b>로그인 없이</b> 비밀번호를 <b>Supabase 함수 안</b>에만 두는 방법이 있어요.<br>
+      핵심은 같습니다: <b>비밀번호를 코드에 안 적고 서버가 검사</b>. 삭제·설정 같은 관리 작업은 <b>비번을 받는 서버 함수(RPC)</b>로만 되게 하고, RLS로 직접 수정·삭제를 막습니다.<br>
+      <span style="color:var(--red)">⚠️ 단, 짧은 PIN(4자리)은 자동 대입으로 뚫릴 수 있어요 — <b>8자 이상 영문+숫자</b>로. 진짜 민감한 데이터엔 위 Auth 방식을 쓰세요.</span></div>
+    <div class="callout blue"><span class="ct">🔍 학생이 서버 함수 속 비번을 찾을 수 있나요?</span>
+      <b>‘읽어서 찾는’ 건 막혀 있습니다:</b>
+      ① <code class="inline">revoke execute ... from anon</code> 을 걸어 학생(anon 키)은 <code class="inline">teacher_pin()</code> 함수를 <b>호출조차 못 함</b>
+      ② 함수 원문은 데이터베이스 <b>시스템 영역</b>이라 REST API로 <b>안 열림</b>(공개되는 건 <code class="inline">public</code> 표뿐)
+      ③ 원문을 보려면 <b>관리자(SQL Editor) 권한</b>이 필요한데 학생에겐 <b>anon 키밖에</b> 없음.<br>
+      <span style="color:var(--red)">⚠️ 딱 하나 남는 길 — <b>찍어서 맞히기(자동 대입).</b></span> <code class="inline">check_pin</code>이 ‘맞다/틀리다’를 알려주니, <code class="inline">9182</code>(4자리)라면 0000~9999를 전부 넣어볼 수 있어요. <b>→ 비번을 길게(8자↑ 영문+숫자, 예: <code class="inline">sci9182forest</code>)</b> 쓰면 경우의 수가 수천억이라 자동 대입도 <b>사실상 불가능</b>합니다.</div>
+    <details class="pgen"><summary>③ 간단버전 — 서버 비밀번호(PIN) 프롬프트 — 펼쳐서 복사</summary>
+    <pre class="code" style="margin-top:8px"><button class="copybtn" onclick="solveCopy(this)">📋 복사</button>현재 웹앱의 '교사 전용 기능(예: 글 삭제, 전체 지우기, 공지·설정 저장 등)'을,
+브라우저 소스를 전부 봐도 비밀번호가 드러나지 않도록
+Supabase 서버가 비밀번호를 검사하는 구조로 바꿔 줘.
+로그인(Auth) 계정까지는 만들지 않는 '가벼운 서버 비밀번호(PIN)' 방식이야.
+먼저 전체 코드를 확인한 뒤 아래를 적용해.
+
+## 1. 클라이언트 비밀번호 완전 제거
+HTML·JS에서 코드에 직접 적힌 비밀번호 문자열, 입력값과 고정 문자열 비교,
+브라우저에서 해시를 비교하는 코드, URL·localStorage 값만으로 관리자 판정하는 코드를
+모두 제거해. 브라우저 코드 어디에도 실제 비밀번호가 남으면 안 돼.
+(인터넷이 끊긴 로컬 단독 테스트용 임시 값은 온라인에선 안 쓰이도록 분리해도 됨.)
+
+## 2. 비밀번호를 '서버 함수'에만 저장
+Supabase에 아래 함수를 만들어. 실제 비밀번호는 이 함수 안에만 있고 앱 코드엔 없어.
+
+create or replace function public.teacher_pin()
+returns text language sql immutable security definer set search_path=public as $$
+  select 'CHANGE-THIS-PIN'::text;
+$$;
+revoke execute on function public.teacher_pin() from anon, authenticated, public;
+
+→ 나는 SQL Editor에서 'CHANGE-THIS-PIN'을 내 비밀번호로 바꿔 실행할 거야.
+이 파일에는 실제 비번을 절대 쓰지 말고, 길게(8자 이상 영문+숫자) 쓰라고 안내해 줘.
+
+## 3. 비번 확인 + 관리 기능을 '비번을 받는 서버 함수(RPC)'로
+- 잠금 해제 확인용:
+  create or replace function public.check_pin(p text)
+  returns boolean language sql security definer set search_path=public as $$
+    select p = public.teacher_pin();
+  $$;
+- 관리 작업마다 pin을 받아 검사하는 security definer 함수로 만들어. 예:
+  create or replace function public.admin_delete(p text, row_id text)
+  returns boolean language plpgsql security definer set search_path=public as $$
+  begin
+    if p &lt;&gt; public.teacher_pin() then return false; end if;
+    delete from public.[실제_테이블명] where id = row_id;
+    return true;
+  end $$;
+  내 앱의 실제 관리 기능(삭제/전체지우기/설정·공지 저장 등)을 파악해 각각 함수로 만들어.
+- 각 함수에 grant execute ... to anon (검사는 함수 안에서 하니까 안전).
+
+## 4. RLS로 '직접 수정·삭제'는 막기
+학생 데이터 테이블 RLS 켜고: select=허용, insert=필요한 값 검증만 허용,
+update/delete 정책은 아예 두지 마(=anon이 직접 수정·삭제 못 함).
+관리 작업은 오직 3의 서버 함수로만 되게 해(security definer라 owner 권한으로 RLS를 통과함).
+공감/좋아요처럼 값 하나만 바꾸는 것도 update 정책 대신 security definer 함수로.
+
+## 5. 클라이언트 배선
+- '교사 모드' 버튼 → 비번 입력 → check_pin(입력값) RPC로 서버 확인 →
+  맞으면 관리 UI를 보여 주고, 입력한 비번을 메모리에 보관해 이후 admin 함수 호출에 넘김.
+- 삭제·설정 등은 admin 함수 RPC 호출(입력 비번 전달). 실패하면 '비밀번호를 확인하세요' 안내.
+- 소스 어디에도 실제 비번이 없어야 함. (교사 모드 UI를 숨기는 건 '보조'일 뿐, 진짜 차단은 서버 함수)
+
+## 6. 정직한 한계 설명 + 테스트
+- 이 방식은 '소스에 비번이 없고, 직접 삭제·설정은 서버가 비번으로 막는' 가벼운 잠금이야.
+  4자리 같은 짧은 PIN은 자동 대입으로 뚫릴 수 있으니 반드시 길게 쓰라고 안내.
+- 진짜 민감한 학생 데이터라면 '로그인(Auth)+RLS(auth.uid() 비교)' 방식이 더 안전하다고 함께 안내.
+- 테스트 절차를 적어 줘:
+  1) Ctrl+U/F12에서 비밀번호 문자열이 검색 안 되는지
+  2) 틀린 비번으론 삭제·설정이 안 되는지
+  3) 맞는 비번으론 삭제·설정이 되는지
+  4) 비번 없이 직접 API로 delete를 보내도 RLS로 차단되는지
+
+## 7. 결과물 제시 순서
+1) 수정한 파일 목록 2) 제거한 비밀번호 코드 3) SQL 전체(teacher_pin·check_pin·admin_* 함수 + RLS)
+4) 비번 바꿀 위치 5) 클라이언트 배선 6) 테스트 방법.
+예시 테이블명 대신 실제 이름을 사용해.</pre>
     </details>
 
     <details class="pgen"><summary>④ 교사 로그인 계정 만들기 — 실습 매뉴얼 (펼치기)</summary>
@@ -1908,6 +2160,7 @@ const TABS=[
   {id:'concept',e:'🧠', label:'개념'},
   {id:'cases', e:'🗺️', label:'사례'},
   {id:'manual',e:'🛠️', label:'실습 매뉴얼'},
+  {id:'supabase',e:'🗄️', label:'Supabase 필수'},
   {id:'traps', e:'⚠️', label:'주의사항'},
   {id:'judge', e:'⚖️', label:'데이터 판사'},
   {id:'review',e:'🏛️', label:'심의'},
