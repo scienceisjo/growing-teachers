@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>사례 발표 — 해누리 질문과수원 | 탐구 질문 중심 수업·평가 설계</title>
+<meta name="theme-color" content="#3D8B4F">
+<meta property="og:title" content="사례 발표 — 해누리 질문과수원">
+<meta property="og:description" content="교사가 직접 만든 질문 엔진 · 질문 중심 과학수업 설계 연수 사례">
+<meta property="og:image" content="https://scienceisjo.github.io/questionuri/assets/og-image.jpg">
+<link rel="icon" href="https://scienceisjo.github.io/questionuri/assets/favicon.png">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FBF8EF; --paper2:#F3EEDF; --ink:#20344B; --ink2:#4A5D72; --mute:#8A93A0;
+    --leaf:#5CB86E; --leaf-d:#3D8B4F; --leaf-dd:#2C6B3A; --gold:#E8B23A; --gold-l:#FCEE7B;
+    --navy:#1F3A5F; --red:#D9534F; --line:rgba(31,58,95,.12);
+    --sh:0 10px 40px rgba(31,58,95,.13);
+    --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,'Malgun Gothic',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:var(--font); color:var(--ink); background:var(--navy);
+    overflow:hidden; -webkit-font-smoothing:antialiased;
+  }
+  .deck{position:fixed;inset:0}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;
+    padding:clamp(28px,5.2vw,80px) clamp(28px,6vw,110px);
+    background:
+      radial-gradient(120% 90% at 12% 0%,#FFFDF4 0%,transparent 55%),
+      radial-gradient(120% 90% at 95% 8%,#EAF6EC 0%,transparent 52%),
+      linear-gradient(160deg,var(--paper) 0%,var(--paper2) 100%);
+    animation:fade .45s ease;
+  }
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .slide::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:9px;
+    background:linear-gradient(180deg,var(--leaf),var(--leaf-d) 55%,var(--gold));
+  }
+
+  /* 공통 타이포 */
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:clamp(13px,1.5vw,17px);font-weight:800;
+    color:var(--leaf-d);letter-spacing:.04em;margin-bottom:14px}
+  .kicker .dot{width:9px;height:9px;border-radius:50%;background:var(--gold)}
+  h1{font-size:clamp(30px,5.4vw,68px);line-height:1.14;font-weight:900;letter-spacing:-.01em}
+  h2{font-size:clamp(26px,4.2vw,52px);line-height:1.16;font-weight:900;letter-spacing:-.01em}
+  .lead{font-size:clamp(17px,2.1vw,27px);line-height:1.5;color:var(--ink2);font-weight:600}
+  .big{color:var(--leaf-d)}
+  .navy{color:var(--navy)}
+  .fill{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+  .center{align-items:center;text-align:center}
+  em.hl{font-style:normal;background:linear-gradient(transparent 62%,rgba(252,238,123,.75) 62%);padding:0 3px;font-weight:800;color:var(--ink)}
+  .quote{font-size:clamp(20px,2.8vw,38px);line-height:1.4;font-weight:800;color:var(--navy)}
+  .cite{margin-top:16px;font-size:clamp(14px,1.5vw,19px);color:var(--mute);font-weight:700}
+
+  /* 카드/그리드 */
+  .grid{display:grid;gap:clamp(12px,1.6vw,22px)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:clamp(16px,2vw,30px);
+    box-shadow:0 4px 18px rgba(31,58,95,.06)}
+  .card .ic{font-size:clamp(30px,3.4vw,48px);line-height:1}
+  .card h3{font-size:clamp(17px,1.9vw,25px);font-weight:900;margin:10px 0 6px;color:var(--navy)}
+  .card p{font-size:clamp(13.5px,1.45vw,18px);line-height:1.5;color:var(--ink2);font-weight:500}
+  .card.leaf{border-left:5px solid var(--leaf)}
+  .card.gold{border-left:5px solid var(--gold)}
+  .card.navy{border-left:5px solid var(--navy)}
+
+  .pill{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line);
+    border-radius:999px;padding:9px 16px;font-weight:800;font-size:clamp(13px,1.4vw,18px);color:var(--ink)}
+  .pill.g{background:rgba(92,184,110,.12);border-color:rgba(61,139,79,.4);color:var(--leaf-dd)}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;background:var(--leaf-d);color:#fff;text-decoration:none;
+    font-weight:900;font-size:clamp(15px,1.7vw,21px);padding:13px 24px;border-radius:14px;box-shadow:var(--sh);
+    transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .url{font-family:ui-monospace,Menlo,monospace;font-weight:800;color:var(--navy);
+    background:rgba(31,58,95,.06);padding:5px 12px;border-radius:9px;font-size:clamp(13px,1.5vw,20px);display:inline-block}
+
+  /* 표(정혜승 매핑) */
+  table.map{width:100%;border-collapse:collapse;font-size:clamp(13px,1.5vw,20px)}
+  table.map th,table.map td{text-align:left;padding:clamp(8px,1vw,14px) 14px;border-bottom:1px solid var(--line)}
+  table.map th{color:var(--mute);font-weight:800;font-size:.86em}
+  table.map td:first-child{font-weight:800;color:var(--navy)}
+  .tag{font-weight:900;padding:3px 11px;border-radius:8px;font-size:.9em;white-space:nowrap}
+  .t-ok{background:rgba(92,184,110,.16);color:var(--leaf-dd)}
+  .t-gap{background:rgba(217,83,79,.13);color:var(--red)}
+  .t-fix{background:rgba(232,178,58,.18);color:#8a5a00}
+
+  /* 성장 3단계 */
+  .growth{display:flex;align-items:flex-end;justify-content:center;gap:clamp(18px,4vw,64px);margin-top:10px}
+  .tree{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .tree .emo{line-height:.9}
+  .tree .lv{font-weight:900;color:var(--navy);font-size:clamp(15px,1.7vw,22px)}
+  .tree .cap{color:var(--ink2);font-weight:700;font-size:clamp(12px,1.3vw,16px)}
+  .t1 .emo{font-size:clamp(40px,6vw,88px)} .t2 .emo{font-size:clamp(64px,10vw,150px)} .t3 .emo{font-size:clamp(90px,15vw,230px)}
+
+  .foot{margin-top:auto;padding-top:16px;display:flex;justify-content:space-between;align-items:center;
+    color:var(--mute);font-size:clamp(11px,1.2vw,15px);font-weight:700}
+
+  /* 진행 UI */
+  #bar{position:fixed;left:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--leaf),var(--gold));
+    z-index:50;transition:width .35s ease;box-shadow:0 0 10px rgba(92,184,110,.5)}
+  #ui{position:fixed;right:18px;bottom:16px;z-index:60;display:flex;align-items:center;gap:10px}
+  #ui button{width:44px;height:44px;border-radius:12px;border:none;background:rgba(255,255,255,.92);
+    color:var(--navy);font-size:20px;font-weight:900;cursor:pointer;box-shadow:var(--sh);transition:transform .12s}
+  #ui button:hover{transform:translateY(-2px)}
+  #cnt{background:rgba(31,58,95,.9);color:#fff;font-weight:900;padding:10px 14px;border-radius:12px;
+    font-size:15px;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+  .hint{position:fixed;left:18px;bottom:18px;z-index:60;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:700}
+  @media (max-width:640px){.hint{display:none}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+
+  /* 인쇄 = 전체 슬라이드 세로 나열 */
+  @media print{
+    body{overflow:visible;background:#fff}
+    .deck{position:static}
+    .slide{display:flex!important;position:relative;inset:auto;height:100vh;page-break-after:always;animation:none}
+    #ui,#bar,.hint{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 표지 -->
+  <section class="slide active">
+    <div class="fill">
+      <div class="kicker"><span class="dot"></span> 질문 중심 과학수업 설계 · 사례 발표</div>
+      <h1>물음표로 들어온 아이가,<br><span class="big">마침표</span>가 되어 나가지 않게.</h1>
+      <p class="lead" style="margin-top:22px">교사가 직접 만든 <em class="hl">질문 엔진</em> — 🌳 해누리 질문과수원</p>
+      <div style="margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <span class="pill g">🍎 궁금함을 심으면 나무에 열매(질문)가 열립니다</span>
+      </div>
+    </div>
+    <div class="foot"><span>조승재 · 해누리중학교 과학</span><span>탐구 질문 중심 수업·평가 설계 연수</span></div>
+  </section>
+
+  <!-- 2 문제의식 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 왜 만들었나</div>
+    <div class="fill">
+      <h2>"질문하라고 하면,<br>학생이 <span class="big">정말</span> 질문하나요?"</h2>
+      <p class="lead" style="margin-top:26px">
+        의미 있는 질문은 <em class="hl">'하라'고 해서 저절로 만들어지지 않는다.</em><br>
+        무엇을·어떻게 질문할지 <b class="navy">모르는 학생</b>에게는 교육과 지원이 필요하다.
+      </p>
+      <p class="cite">— 정혜승 외(2024), 학생 질문교육 내용체계</p>
+      <div style="margin-top:30px" class="pill">➜ 지속·즐겁게·구조적으로 질문하게 할 <b>&nbsp;'장치'&nbsp;</b> 가 필요했습니다</div>
+    </div>
+  </section>
+
+  <!-- 3 소개 + 데모 링크 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 그래서 만들었습니다</div>
+    <div class="fill center">
+      <div style="font-size:clamp(56px,9vw,130px);line-height:1">🌳</div>
+      <h2 style="margin-top:6px">해누리 질문과수원</h2>
+      <p class="lead" style="margin-top:16px;max-width:22ch">질문을 <em class="hl">심고</em>, 자가체크로 <em class="hl">다듬고</em>, 나무를 <em class="hl">키우는</em> 웹앱</p>
+      <div style="margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <a class="btn" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">👀 지금 게스트로 열어보기 <span aria-hidden="true">↗</span></a>
+        <span class="url">scienceisjo.github.io/questionuri</span>
+        <span style="color:var(--mute);font-weight:700;font-size:clamp(12px,1.3vw,16px)">가입 없이 "둘러보기"로 즉시 체험 — 연수장 폰으로 열어보세요</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 성장 데모 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 데모 · 성장이 눈에 보인다</div>
+    <div class="fill">
+      <h2>질문 하나 = 열매 하나.<br><span class="big">1년</span> 하면 이렇게 자랍니다.</h2>
+      <div class="growth">
+        <div class="tree t1"><div class="emo">🌱</div><div class="lv">Lv.2</div><div class="cap">🌱 시작 · 질문 2개</div></div>
+        <div class="tree t2"><div class="emo">🌳</div><div class="lv">Lv.5</div><div class="cap">🌿 보통 · 질문 8개</div></div>
+        <div class="tree t3"><div class="emo">📖</div><div class="lv">Lv.10</div><div class="cap">🏆 질문왕 · 질문 18개</div></div>
+      </div>
+      <p class="lead center" style="margin-top:20px">게스트 모드 상단 버튼으로 <em class="hl">세 학생을 즉석 전환</em>하며 보여주면 됩니다</p>
+    </div>
+  </section>
+
+  <!-- 5 장치1 질문생성 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 핵심 장치 ① · 질문 생성</div>
+    <div class="fill">
+      <h2>막막한 학생에게 <span class="big">비계</span>를 준다</h2>
+      <div class="grid g2" style="margin-top:26px">
+        <div class="card leaf"><div class="ic">🎯</div><h3>좋은 질문 7가지 특성</h3><p>정답이 하나가 아니다 · 깊게 생각하게 한다 · 또 다른 질문을 낳는다… 학생이 스스로 점검(자가체크).</p></div>
+        <div class="card leaf"><div class="ic">✏️</div><h3>문장 시작틀</h3><p>"왜 ~", "만약 ~라면", "어떻게 ~", "~이 없다면?" — 첫 문장을 대신 깔아 준다.</p></div>
+      </div>
+      <p class="lead" style="margin-top:22px">➜ 정혜승 체계의 <em class="hl">'생산(명료하게 질문하기)'</em> 영역</p>
+    </div>
+  </section>
+
+  <!-- 6 장치2 힌트요정 (하이라이트) -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 핵심 장치 ② · 교사의 반응</div>
+    <div class="fill center">
+      <div style="font-size:clamp(50px,8vw,120px);line-height:1">🧚</div>
+      <h2 style="margin-top:6px">막히면, <span class="big">답이 아니라 '힌트'</span></h2>
+      <div class="card gold" style="max-width:24ch;margin-top:24px;text-align:left">
+        <p style="font-size:clamp(15px,1.8vw,23px);line-height:1.5;color:var(--navy);font-weight:700">
+          "정답을 알려주는 피드백보다<br><em class="hl">다시 생각하게 하는 피드백</em>이 교육적이다."</p>
+        <p style="margin-top:10px;color:var(--mute);font-weight:800;font-size:clamp(12px,1.3vw,16px)">— 연수 자료 「질문이 수업이 될 때」</p>
+      </div>
+      <p class="lead" style="margin-top:22px">💡 힌트 요정은 <b class="navy">이 원칙을 그대로 코드로</b> 구현합니다</p>
+    </div>
+  </section>
+
+  <!-- 7 장치3 수업열기/닫기 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 핵심 장치 ③ · 질문의 변화</div>
+    <div class="fill">
+      <h2>처음 질문 <span class="big">↔</span> 나중 질문</h2>
+      <div class="grid g2" style="margin-top:24px">
+        <div class="card navy"><div class="ic">🌅</div><h3>수업 열기 (before)</h3><p>"오늘 배울 것에서 무엇이 궁금한가?" — 수업 도입에 학생 질문을 인용.</p></div>
+        <div class="card navy"><div class="ic">🌇</div><h3>수업 닫기 (after)</h3><p>"배우고 나니 새로 생긴 궁금증은?" — 같은 나무에 나란히 쌓인다.</p></div>
+      </div>
+      <p class="lead" style="margin-top:22px">📈 "내 질문의 변화" 리포트로 <em class="hl">성장을 눈으로</em> 본다 — 연수가 강조한 <b class="navy">처음↔나중 비교</b>의 구현</p>
+    </div>
+  </section>
+
+  <!-- 8 정혜승 매핑 (정직) -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 정직한 자가진단 · 정혜승 8영역</div>
+    <div class="fill">
+      <h2 style="font-size:clamp(22px,3.4vw,42px)">"만능"이라 말하지 않습니다</h2>
+      <table class="map" style="margin-top:16px">
+        <tr><th>영역</th><th>질문과수원</th><th></th></tr>
+        <tr><td>지식 · 생산 · 활용 · 태도</td><td>7가지·문장틀·자가체크·성장·익명</td><td><span class="tag t-ok">강점</span></td></tr>
+        <tr><td>해결 (답의 출처 판단)</td><td>→ 오늘 개선 ①</td><td><span class="tag t-fix">공백→보강</span></td></tr>
+        <tr><td>평가 (탐구가능하게 수정)</td><td>→ 오늘 개선 ②</td><td><span class="tag t-fix">공백→보강</span></td></tr>
+        <tr><td>유형 (수렴/확산·비판·창의)</td><td>→ 오늘 개선 ③</td><td><span class="tag t-fix">공백→보강</span></td></tr>
+      </table>
+      <p class="lead" style="margin-top:18px">공백을 <em class="hl">인정</em>하는 것이 — 전문가 청중에게 가장 설득력 있습니다</p>
+    </div>
+  </section>
+
+  <!-- 9 개선 3종 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 공백을 이렇게 메웠습니다</div>
+    <div class="fill">
+      <h2>연수에서 배운 걸 <span class="big">바로 앱에</span></h2>
+      <div class="grid g3" style="margin-top:24px">
+        <div class="card leaf"><div class="ic">🔎</div><h3>① 답의 출처 판단</h3><p>질문 심을 때 "이 답, 어디서 찾을까?" 교과서/실험/검색/선생님/친구/더생각.</p></div>
+        <div class="card leaf"><div class="ic">🔬</div><h3>② 질문 정교화</h3><p>꼬리질문에 "탐구가능하게 좁히기" — 무엇을 바꾸고 볼까 / 어디·언제로 좁히면.</p></div>
+        <div class="card leaf"><div class="ic">🏷️</div><h3>③ 질문 유형 태그</h3><p>사실·확인 / 추론·설명 / 비판·판단 / 상상·창의 자동 분류 칩.</p></div>
+      </div>
+      <p class="lead center" style="margin-top:22px"><span class="tag t-gap">공백 🔴</span> &nbsp;➜&nbsp; <span class="tag t-ok">보강 🟢</span></p>
+    </div>
+  </section>
+
+  <!-- 10 바이브코딩 이중사례 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 이중 사례</div>
+    <div class="fill center">
+      <div style="font-size:clamp(48px,8vw,110px)">🛠️</div>
+      <h2 style="margin-top:6px">이 앱, <span class="big">자연어로</span> AI와 함께 만들었습니다</h2>
+      <div class="grid g2" style="margin-top:24px;max-width:900px;width:100%">
+        <div class="card gold"><h3>① 질문교육 도구</h3><p>무엇을 만들었나 — 학생이 질문을 기르는 나무.</p></div>
+        <div class="card gold"><h3>② 교사의 바이브코딩</h3><p>어떻게 만들었나 — 코딩 몰라도 교수적 판단으로.</p></div>
+      </div>
+      <p class="lead" style="margin-top:22px">➜ <em class="hl">두 겹의 사례</em>가 됩니다</p>
+    </div>
+  </section>
+
+  <!-- 11 교실 적용 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 교실 적용 루틴</div>
+    <div class="fill">
+      <h2>매 차시 <span class="big">5분</span>이면 굴러갑니다</h2>
+      <div class="grid g3" style="margin-top:24px">
+        <div class="card"><div class="ic">🌅</div><h3>수업 시작 5분</h3><p>수업 열기 — 오늘 궁금한 것 심기.</p></div>
+        <div class="card"><div class="ic">🗣️</div><h3>수업 중</h3><p>교사가 학생 질문을 <b>소리 내어 인용</b>.</p></div>
+        <div class="card"><div class="ic">🌇</div><h3>수업 끝 5분</h3><p>수업 닫기 — 새로 생긴 궁금증.</p></div>
+      </div>
+      <p class="lead" style="margin-top:22px">📼 주말 영상 과제(거꾸로 수업)도 지원 — 영상 보고 <em class="hl">질문 2개</em> 만들어 오기</p>
+    </div>
+  </section>
+
+  <!-- 12 포지셔닝/한계 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 정직한 포지셔닝 · 한계</div>
+    <div class="fill">
+      <h2>프로젝트 그릇이 아니라,<br><span class="big">교과 질문 엔진</span>입니다</h2>
+      <div class="grid g3" style="margin-top:24px">
+        <div class="card navy"><h3>개인 단위</h3><p>모둠 프로젝트는 별도 도구로. 이건 매 차시 질문 엔진.</p></div>
+        <div class="card navy"><h3>개수 경쟁?</h3><p>→ '이달의 좋은 질문'(공감+교사 별표)으로 전환.</p></div>
+        <div class="card navy"><h3>개인정보</h3><p>익명 · 이름 마스킹(3-2 홍○○) · 행수준 보안.</p></div>
+      </div>
+      <p class="lead" style="margin-top:22px">무리하게 키우지 않고 <em class="hl">역할을 분명히</em> — 그래서 지속가능합니다</p>
+    </div>
+  </section>
+
+  <!-- 13 함께쓰기 -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> 함께 쓰실 수 있어요</div>
+    <div class="fill center">
+      <h2>학교명 <span class="big">3줄</span>만 바꾸면 됩니다</h2>
+      <p class="lead" style="margin-top:18px">오픈소스 · 무료 · 별도 서버 준비 없이</p>
+      <div style="margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <a class="btn" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">🌳 질문과수원 열기 <span aria-hidden="true">↗</span></a>
+        <span class="url">github.com/scienceisjo/questionuri</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 마무리 -->
+  <section class="slide">
+    <div class="fill center">
+      <div class="kicker" style="justify-content:center"><span class="dot"></span> 마무리</div>
+      <p class="quote">"AI는 답을 빠르게 만들지만,<br>교육은 학생이 <em class="hl">더 좋은 질문</em>을 품게 하는 일입니다."</p>
+      <p class="lead" style="margin-top:26px">질문은 배움을 시작하고 · 탐구는 배움을 확장하며 · 평가는 <span class="big">다음 질문</span>을 만든다</p>
+      <div style="margin-top:30px" class="pill g">🌳 질문과수원 &nbsp;·&nbsp; scienceisjo.github.io/questionuri</div>
+      <p style="margin-top:22px;color:var(--mute);font-weight:800">감사합니다 — 조승재 · 해누리중학교</p>
+    </div>
+  </section>
+
+</div>
+
+<div id="bar"></div>
+<div class="hint">← → 또는 스페이스로 이동 · <b>F</b> 전체화면 · <b>P</b> 인쇄</div>
+<div id="ui">
+  <button id="prev" aria-label="이전">‹</button>
+  <span id="cnt">1 / 14</span>
+  <button id="next" aria-label="다음">›</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var n=slides.length, i=0;
+  var bar=document.getElementById('bar'), cnt=document.getElementById('cnt');
+  function go(x){
+    i=Math.max(0,Math.min(n-1,x));
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i);});
+    bar.style.width=((i+1)/n*100)+'%';
+    cnt.textContent=(i+1)+' / '+n;
+    history.replaceState(null,'','#'+(i+1));
+  }
+  document.getElementById('next').onclick=function(){go(i+1)};
+  document.getElementById('prev').onclick=function(){go(i-1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+    else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(n-1);}
+    else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); }
+    else if(e.key==='p'||e.key==='P'){ window.print(); }
+  });
+  // 클릭(좌/우 반쪽) — 버튼/링크 위는 제외
+  document.getElementById('deck').addEventListener('click',function(e){
+    if(e.target.closest('a,button')) return;
+    go(e.clientX < window.innerWidth*0.35 ? i-1 : i+1);
+  });
+  // 터치 스와이프
+  var sx=null;
+  addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+  addEventListener('touchend',function(e){ if(sx==null)return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50)go(dx<0?i+1:i-1); sx=null;},{passive:true});
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  go(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
