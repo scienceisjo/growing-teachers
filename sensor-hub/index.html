@@ -157,6 +157,45 @@ th{background:var(--card);color:var(--teal);font-family:var(--font-display);font
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
 
+/* ══ 허브 ══ */
+.hub{max-width:1180px;margin:0 auto;padding:4px 22px 44px}
+.hubsec{margin-top:26px}
+.hubsec>h2{font-family:var(--font-display);font-weight:600;font-size:1rem;letter-spacing:.03em;color:var(--teal);padding-bottom:8px;border-bottom:1.5px solid var(--deep);margin-bottom:13px}
+.hubgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,232px),1fr));gap:10px}
+.hubcard{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 16px;cursor:pointer;font-family:inherit;color:var(--ink);transition:.14s;text-decoration:none;box-shadow:var(--shadow)}
+.hubcard:hover{border-color:var(--coral);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.hubcard .hn{font-family:var(--font-mono);font-size:.74rem;font-weight:600;color:var(--coral);letter-spacing:.02em}
+.hubcard .ht{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--deep);letter-spacing:-.01em;line-height:1.3}
+.hubcard .hd{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
+.hubcard.ref .hn{color:var(--teal);opacity:.65}
+.hubcard.out{border-top:2px solid var(--teal);border-radius:0 0 var(--r) var(--r)}
+.hubcard.out .hn{color:var(--teal)}
+.hubcard.out .ht::after{content:" \2197";font-size:.82em;opacity:.5}
+.huball{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.huball .hint{font-size:.88rem;color:var(--ink-soft)}
+
+.hubbtn{flex-shrink:0;font-family:var(--font-display);font-weight:600;font-size:.85rem;color:#fff;background:var(--deep);
+  border:none;border-radius:6px;padding:7px 13px;margin:6px 10px 6px 0;cursor:pointer;transition:.14s}
+.hubbtn:hover{background:var(--coral)}
+.tabbar-row{max-width:1180px;margin:0 auto;padding:0 14px;display:flex;align-items:center}
+.secfoot{max-width:1180px;margin:0 auto;padding:20px 22px 40px;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.secfoot .pbtn{font-size:.9rem;padding:9px 16px}
+
+/* 보기 모드 — 허브 / 한 절만 / 전체 */
+/* 표제부는 허브에서만 — 절을 볼 때는 화면을 내줍니다 */
+body:not([data-view="hub"]) .hero{display:none}
+body[data-view="hub"] .tabbar,
+body[data-view="hub"] #panels,
+body[data-view="hub"] .secfoot,
+body[data-view="hub"] .totop{display:none}
+body:not([data-view="hub"]) .hub{display:none}
+body[data-view="one"] .tabpanel{display:none}
+body[data-view="one"] .tabpanel.on{display:block;border-top:none;padding-top:24px}
+body[data-view="all"] .secfoot{display:none}
+body[data-view="all"] .hubbtn::after{content:" · 전체 보기 중";font-weight:500;opacity:.8}
+@media print{.hub,.secfoot,.hubbtn{display:none!important}.tabpanel{display:block!important;border-top:1px solid var(--line)!important}}
+
 /* ══ 용어 풀이 ══ */
 .term{font:inherit;font-weight:700;color:var(--deep);background:none;border:none;border-bottom:2px dotted var(--coral);padding:0;cursor:pointer}
 .term:hover{color:var(--coral-deep)}
@@ -433,8 +472,16 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
   </div>
 </div>
 
-<nav class="tabbar"><div class="tabbar-in" id="tabbar"></div></nav>
+<section class="hub" id="hub"></section>
+
+<nav class="tabbar"><div class="tabbar-row"><button class="hubbtn" id="toHub">← 허브</button><div class="tabbar-in" id="tabbar"></div></div></nav>
 <main class="wrap" id="panels"></main>
+
+<div class="secfoot" id="secfoot">
+  <button class="pbtn" data-nav="prev">◀ 이전</button>
+  <button class="pbtn" data-nav="hub">허브로</button>
+  <button class="pbtn" data-nav="next">다음 ▶</button>
+</div>
 
 <button class="totop" id="toTop">↑ 맨 위로</button>
 
@@ -1830,8 +1877,10 @@ TABS.forEach((t,i)=>{
   b.dataset.go=t.id;
   b.innerHTML=`<span class="tn${st?'':' ref'}">${st?nn(st):'—'}</span>${t.name}`;
   b.addEventListener('click',()=>{
-    const el=panels.querySelector('.tabpanel[data-tab="'+t.id+'"]');
-    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    if(document.body.dataset.view==='all'){
+      const el=panels.querySelector('.tabpanel[data-tab="'+t.id+'"]');
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    } else setView('one', t.id);
   });
   tabbar.appendChild(b);
 
@@ -1850,16 +1899,115 @@ function mark(id){
   chips.forEach(c=>c.classList.toggle('active', c.dataset.go===id));
   const on=tabbar.querySelector('.tab.active');
   if(on && tabbar.scrollWidth>tabbar.clientWidth){
-    const l=on.offsetLeft-tabbar.clientWidth/2+on.offsetWidth/2;
+    /* 이름이 긴 절은 가운데 맞추면 앞글자가 잘립니다 — 그럴 땐 왼쪽에 붙입니다 */
+    const wide=on.offsetWidth>tabbar.clientWidth*0.6;
+    const l=wide? on.offsetLeft-10 : on.offsetLeft-tabbar.clientWidth/2+on.offsetWidth/2;
     tabbar.scrollTo({left:Math.max(0,l),behavior:'smooth'});
   }
 }
+/* ═══════════════ 허브 ═══════════════ */
+/* 절마다 한 줄 설명 — 허브 단추에 붙습니다 */
+const HUBD = {
+  setup:'사이언스# · EZ·ON 열고 자료집 받기',
+  today:'만화 4컷으로 여는 질문',
+  why:'교육과정과 교과서가 센서를 어디에 적어 두었나',
+  lose:'센서가 가져간 자리에 무엇을 넣을 것인가 — 오늘의 중심',
+  gain:'센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷',
+  ports:'A · D · I2C · UART를 왜 갈라 꽂나',
+  g1:'중1 실험 카드와 매뉴얼 쪽수',
+  g2:'중2 실험 카드와 매뉴얼 쪽수',
+  g3:'중3 실험 카드와 매뉴얼 쪽수',
+  share:'오늘 가져가실 것',
+  mykit:'가져온 센서로 되는 실험 · 실험 수업 요령',
+  axis:'축 바꾸기 · 축 변환 · 요약값 뽑기',
+  textbook:'교과서 5종이 실제로 실은 탐구 대조표',
+  basics:'센서 19종을 하나씩 — 기초 측정법',
+  links:'이지메이커 · 사이언스큐브 · 지능형 과학실 링크',
+  kit:'오늘 가져온 센서 목록과 수량',
+  smartlab:'방과 플랫폼의 차이'
+};
+const OUTLINKS = [
+  {k:'구매', t:'센서 구매 가이드', u:'https://scienceisjo.github.io/teacher-toolkit/sensor-guide/',
+   d:'무엇을 얼마나 사야 하나 — 예산과 우선순위까지'},
+  {k:'수업', t:'MBL 수업허브', u:'https://scienceisjo.github.io/mblclasshub/',
+   d:'모둠 데이터를 반 전체로 모을 때. 참여코드로 들어옵니다'},
+  {k:'교육과정', t:'과학 나선 교육과정 지도', u:'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/',
+   d:'초3~고3 108단원 노선도. 앞뒤로 무엇과 이어지는지'},
+  {k:'학생용', t:'해누리와 승재쌤이 함께하는 과학 시간', u:'https://joo.is/%EC%8A%B9%EC%9E%AC%EC%8C%A4%EA%B3%BC%ED%95%99',
+   d:'학생이 들어오는 입구 — 학습지·평가·질문나무·도장판'},
+  {k:'연수', t:'조승재의 연수 자료실', u:'https://scienceisjo.github.io/growing-teachers/',
+   d:'오늘 말고 다른 연수 자료도 여기 있습니다'}
+];
+
+const hubEl=document.getElementById('hub'), secfoot=document.getElementById('secfoot');
+
+function hubCard(t){
+  const st=STEP[t.id];
+  return '<button class="hubcard'+(st?'':' ref')+'" data-go="'+t.id+'">'
+    +'<span class="hn">'+(st?nn(st)+' · '+t.min+'분':'자료')+'</span>'
+    +'<span class="ht">'+t.name+'</span>'
+    +'<span class="hd">'+(HUBD[t.id]||'')+'</span></button>';
+}
+function buildHub(){
+  const run=TABS.filter(t=>STEP[t.id]), ref=TABS.filter(t=>!STEP[t.id]);
+  hubEl.innerHTML=
+     '<div class="hubsec"><h2>연수 진행 · 순서대로</h2><div class="hubgrid">'+run.map(hubCard).join('')+'</div></div>'
+    +'<div class="hubsec"><h2>찾아보는 자료</h2><div class="hubgrid">'+ref.map(hubCard).join('')+'</div></div>'
+    +'<div class="hubsec"><h2>다른 자료실</h2><div class="hubgrid">'+OUTLINKS.map(function(l){
+        return '<a class="hubcard out" href="'+l.u+'" target="_blank" rel="noopener">'
+          +'<span class="hn">'+l.k+'</span><span class="ht">'+l.t+'</span><span class="hd">'+l.d+'</span></a>';
+      }).join('')+'</div></div>'
+    +'<div class="huball"><button class="btn ghost" data-go="__all">전체를 한 페이지로 펼치기</button>'
+    +'<span class="hint">Ctrl+F 로 자료실 전체를 한 번에 훑으실 때</span></div>';
+}
+buildHub();
+
+/* 보기 모드 — hub(단추판) · one(한 절만) · all(전부 한 페이지) */
+function setView(mode, id){
+  document.body.dataset.view=mode;
+  if(mode==='one'){
+    secs.forEach(el=>el.classList.toggle('on', el.dataset.tab===id));
+    mark(id);
+    const i=TABS.findIndex(t=>t.id===id);
+    secfoot.querySelector('[data-nav="prev"]').disabled = i<=0;
+    secfoot.querySelector('[data-nav="next"]').disabled = i>=TABS.length-1;
+    try{ history.replaceState(null,'','#sec-'+id); }catch(e){}
+  }else{
+    secs.forEach(el=>el.classList.remove('on'));
+    try{ history.replaceState(null,'', location.pathname+location.search); }catch(e){}
+  }
+  window.scrollTo(0,0);
+}
+
+hubEl.addEventListener('click',function(e){
+  const b=e.target.closest('[data-go]'); if(!b) return;
+  if(b.dataset.go==='__all') setView('all');
+  else setView('one', b.dataset.go);
+});
+document.getElementById('toHub').addEventListener('click',()=>setView('hub'));
+secfoot.addEventListener('click',function(e){
+  const b=e.target.closest('[data-nav]'); if(!b) return;
+  if(b.dataset.nav==='hub') return setView('hub');
+  const cur=document.querySelector('.tabpanel.on');
+  const i=TABS.findIndex(t=>t.id===(cur&&cur.dataset.tab));
+  const j=i+(b.dataset.nav==='next'?1:-1);
+  if(TABS[j]) setView('one', TABS[j].id);
+});
+
+/* 주소에 #sec-xxx 가 붙어 있으면 그 절로 바로 들어갑니다 */
+(function(){
+  const h=(location.hash||'').replace('#sec-','');
+  if(h && TABS.some(t=>t.id===h)) setView('one', h);
+  else setView('hub');
+})();
+
 if('IntersectionObserver' in window){
   const seen=new Map();
   const io=new IntersectionObserver(es=>{
     es.forEach(e=>seen.set(e.target.dataset.tab, e.intersectionRatio));
     let best=null, r=-1;
     seen.forEach((v,k)=>{ if(v>r){ r=v; best=k; } });
+    if(document.body.dataset.view!=='all') return;
     if(best && r>0) mark(best);
   }, {rootMargin:'-66px 0px -55% 0px', threshold:[0,.15,.4,.75,1]});
   secs.forEach(el=>io.observe(el));
