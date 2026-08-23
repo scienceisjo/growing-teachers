@@ -216,6 +216,13 @@ td b{color:var(--deep)}
 .oxc.open .tap{display:none}
 
 .tree{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin:16px 0}
+details.fold{margin-top:2px}
+details.fold summary{cursor:pointer;list-style:none;font-size:.84rem;font-weight:800;color:var(--teal);
+  background:var(--teal-soft);border-radius:99px;padding:6px 14px;display:inline-block;user-select:none}
+details.fold summary::-webkit-details-marker{display:none}
+details.fold summary::after{content:" 펼치기 ▾"}
+details.fold[open] summary::after{content:" 접기 ▴"}
+details.fold[open] summary{margin-bottom:10px}
 details.more{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;background:var(--paper)}
 details.more summary{cursor:pointer;font-weight:800;color:var(--teal);font-size:.93rem}
 details.more[open] summary{margin-bottom:8px}
@@ -582,10 +589,10 @@ function expCard(e){
     <h4>${e.title}</h4><div class="std">${e.std}</div></div>
     <div class="body">
       <div class="row"><span class="k">센서</span><span class="v">${e.sensor} · ${e.sw}</span></div>
+      <details class="fold"><summary>준비물 · 절차 · TIP</summary>
       <div class="row"><span class="k">준비물</span><span class="v">${e.prep}</span></div>
-      <div class="row"><span class="k">절차</span><span class="v"></span></div>
       <ol>${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
-      <div class="tip">${e.tip}</div>
+      <div class="tip">${e.tip}</div></details>
     </div></article>`;
 }
 
@@ -603,18 +610,15 @@ const PANEL = {
 
 /* ───── 오늘 ───── */
 today: head('📋 여는 활동','시작하기 전에 <b>3분만</b> 해 보시겠습니다',
-  '설명은 그다음에 하겠습니다.')
-+ `<div class="callout gold"><b>지금 나눠 드린 것</b> — 온도계 하나, 뜨거운 물 한 컵, 초시계, 그리고 빈 표 한 장.
-<br><b>30초마다 온도를 읽어서 표에 적어 주십시오.</b> 3분간 하겠습니다. 시작하십시오.</div>
+  '')
++ `<div class="callout gold"><b>온도계 · 뜨거운 물 · 초시계 · 빈 표</b><br><b>30초마다 온도를 읽어 적어 주십시오. 3분간.</b></div>
 
 <div class="punch">
   <div class="q">방금 그 3분 동안<br>선생님께서는 <b>물을 보고 계셨습니까,<br>표를 보고 계셨습니까.</b></div>
   <div class="cap">오늘 두 시간은 이 질문에서 출발합니다</div>
 </div>
 
-<div class="callout"><b>그리고 하나 더 말씀드립니다.</b> 방금 제가 선생님들께 한 것이, <b>제가 학생들에게 하는 것</b>입니다.
-센서를 먼저 주지 않고 먼저 막히게 두는 것 — 오늘 「초대하는 법」 탭의 1번입니다.
-불편을 겪은 사람만이 도구를 반갑니다.</div>
+<div class="callout"><b>방금 제가 한 것이, 제가 학생에게 하는 것입니다.</b> 센서를 먼저 주지 않고 <b>먼저 막히게 두기</b> — 「초대하는 법」 1번.</div>
 
 <div class="tablewrap"><table>
 <tr><th>시간</th><th>블록</th><th>하는 일</th></tr>
@@ -629,8 +633,7 @@ today: head('📋 여는 활동','시작하기 전에 <b>3분만</b> 해 보시�
 <tr><td><b>95–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
 </table></div>
 
-<div class="callout ok"><b>오늘 실습은 선생님이 고르십니다.</b> 맡고 계신 학년 탭을 열어 실험 하나를 고르시면 됩니다.
-센서는 제가 다 가져왔고, 카드마다 <b>몇 모둠이 동시에 가능한지</b>까지 적어 두었습니다.</div>
+<div class="callout ok"><b>실습은 고르십니다.</b> 맡으신 학년 절에서 하나. 센서는 다 가져왔고 <b>동시 가능 모둠 수</b>까지 적어 두었습니다.</div>
 
 <div class="script">"시작하기 전에 3분만 뭘 좀 해 보시겠습니다. 온도계로 30초마다 온도를 읽어서 적어 주십시오. …… 네, 3분 됐습니다.<br><br>
 하나만 여쭙겠습니다. <b>지금 물을 보고 계셨습니까, 표를 보고 계셨습니까?</b><br><br>
@@ -643,7 +646,7 @@ today: head('📋 여는 활동','시작하기 전에 <b>3분만</b> 해 보시�
 
 /* ───── 왜 ───── */
 why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
-  '"편해서"라고 답하면 이 연수는 실패합니다. 교육과정 문서를 펴 놓고 시작하겠습니다.')
+  '교육과정 문서를 펴 놓고 시작합니다')
 + `<div class="punch">
   <div class="q">센서 수업은 <b>해도 되는 것</b>이 아니라<br><b>교육과정이 하라고 적어 둔 것</b>입니다.</div>
   <div class="cap">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정</div>
@@ -651,26 +654,14 @@ why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:28px 0 6px;text-align:center">근거 넷 — 모두 원문 그대로입니다</h3>
 
-<div class="callout"><b>① 내용 체계의 「과정⋅기능」에 이름이 박혀 있습니다</b>
-<br>중학교 1~3학년 <b>물질</b> 영역 과정⋅기능 내용 요소 —
-<br>"수학적 사고와 <b>디지털 탐구 도구 활용하기</b>"
-<br><br>지식⋅이해도 가치⋅태도도 아닌 <b>과정⋅기능 내용 요소 그 자체</b>입니다. 가르쳐야 할 기능 목록에 들어 있다는 뜻입니다.</div>
+<div class="callout"><b>① 과정⋅기능 내용 요소에 이름이 있습니다</b><br>"수학적 사고와 <b>디지털 탐구 도구 활용하기</b>" <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 물질 영역</span><br>지식⋅이해도 가치⋅태도도 아닌 <b>가르쳐야 할 기능</b>입니다.</div>
 
-<div class="callout"><b>② 교수⋅학습 방향이 지능형 과학실과 실시간 측정을 지목합니다</b>
-<br>"지능정보기술 등 첨단 과학기술 기반의 과학 교육이 이루어질 수 있도록 <b>지능형 과학실을 활용한 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 실행한다</b>."
-<br>"‘과학’ 관련 탐구 활동에서 <b>다양한 센서나 기기 등 디지털 탐구 도구를 활용하여 실시간으로 자료를 측정</b>하거나 (…) 자료를 수집하고 처리하는 기회를 제공한다."
-<br><br>지금 우리가 앉아 있는 이 방이 그 문장에 적힌 장소입니다. 그리고 이 연수의 정식 부제도 <b>"지능형 과학실에서 AI·센서·데이터로 완성하는 K-STEM 클래스"</b>입니다. <b>🏫 지능형 과학실</b> 탭에서 따로 다룹니다.</div>
+<div class="callout"><b>② 교수⋅학습 방향</b><br>"<b>지능형 과학실을 활용한</b> 탐구 실험⋅실습 중심 … 수립하여 실행한다"<br>"센서나 기기 등 디지털 탐구 도구를 활용하여 <b>실시간으로 자료를 측정</b>"</div>
+<div class="note">지금 우리가 앉아 있는 이 방이 그 문장에 적힌 장소입니다. 🏫 탭에서 따로 다룹니다.</div>
 
-<div class="callout"><b>③ 「탐구 활동」에 센서가 이름으로 등장합니다</b>
-<br>중학교 1~3학년 <b>(3) 열</b> 단원의 탐구 활동 —
-<br>"열화상 카메라를 이용하여 물체에서 열의 전도 비교하기"
-<br>"<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>"
-<br><br>오늘 중1 탭에 있는 <b>「물과 식용유의 비열 비교」가 바로 이것</b>입니다. 우리가 고른 게 아니라 교육과정이 적어 둔 탐구 활동입니다.</div>
+<div class="callout"><b>③ 탐구 활동에 센서가 이름으로</b> <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 (3) 열</span><br>"<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>"<br>중1 절의 그 실험은 <b>우리가 고른 게 아닙니다.</b></div>
 
-<div class="callout warn"><b>④ 그리고 어떤 곳은 "할 수 있다"가 아니라 "하도록 한다"입니다</b>
-<br>(3) 열 · 성취기준 적용 시 고려 사항 —
-<br>"온도를 측정하거나 열의 전도를 관찰하는 활동에서 <b>온도 센서 등 디지털 탐구 도구를 활용하도록 한다.</b>"
-<br><br>다른 항목들은 대개 "활용할 수 있다"입니다. 열 단원만 <b>어조가 다릅니다.</b></div>
+<div class="callout warn"><b>④ 열 단원만 어조가 다릅니다</b><br>"온도 센서 등 디지털 탐구 도구를 <b>활용하도록 한다</b>" — 다른 데는 대개 "할 수 있다"</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 12px;text-align:center">단원마다 무엇을 쓰라고 적혀 있나</h3>
 <div class="tablewrap"><table>
@@ -683,13 +674,10 @@ why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
 <tr><td><b>별과 우주</b> (중2)</td><td>"디지털 탐구 도구를 활용하여 우리은하를 구성하는 천체의 종류와 특징을 비교⋅분석"</td><td>△ 조도 5</td></tr>
 </table></div>
 
-<div class="callout ok"><b>모둠 데이터를 모으는 것도 적혀 있습니다.</b>
-<br>"탐구 활동 수행 시, 의사소통과 협업 능력을 키우기 위해 <b>여러 모둠의 데이터를 공유</b>할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b> 등을 활용하여 디지털 소양 교육과 연계하여 지도한다."
-<br><br>오늘 뒤에서 보실 수업허브가 하는 일이 정확히 이 문장이고, <b>지능형 과학실 ON의 「탐구과정 공유」</b>도 같은 자리를 겨냥합니다.</div>
+<div class="callout ok"><b>모둠 데이터 공유도 적혀 있습니다</b> — "여러 모둠의 데이터를 공유 … <b>공유 플랫폼</b> 등을 활용"</div>
 
-<div class="callout warn"><b>다만 교육과정은 이 말도 함께 적어 두었습니다.</b>
-<br>"학교 및 학생의 디지털 활용 수준 등을 고려하여 <b>디지털 격차가 발생하지 않도록 유의한다.</b>"
-<br><br>기기가 모자라면 모둠마다 다른 변인을 맡기고 결과를 합치는 식으로 설계해야 합니다. 오늘 실험 카드에 <b>동시 가능 모둠 수</b>를 적어 둔 이유이기도 합니다.</div>
+<div class="callout warn"><b>균형</b> — "학교 및 학생의 디지털 활용 수준을 고려하여 <b>디지털 격차가 발생하지 않도록 유의한다</b>"</div>
+<div class="note">기기가 모자라면 모둠마다 다른 변인을 맡기고 결과를 합치는 식으로 설계해야 합니다. 실험 카드에 <b>동시 가능 모둠 수</b>를 적어 둔 이유입니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 12px;text-align:center">그러면 도구는 무엇을 해 주는가</h3>
 
@@ -703,25 +691,25 @@ why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 14px;text-align:center">디지털 도구의 다섯 가지 역할</h3>
 <div class="cardgrid">
-  <div class="pcard"><div class="num">1</div><h3>데이터 수집의 정밀성</h3><p>실시간으로 수집·시각화하여 <b>현상과 표상의 관계</b>를 즉각 파악하게 합니다.</p></div>
-  <div class="pcard"><div class="num">2</div><h3>추상적 개념의 시각화</h3><p>원자·전자기장처럼 직접 볼 수 없는 것을 가시화합니다.</p></div>
-  <div class="pcard"><div class="num">3</div><h3>위험·고비용 실험의 대안</h3><p>학교에서 할 수 없던 실험을 안전하게 수행합니다.</p></div>
-  <div class="pcard"><div class="num">4</div><h3>협력적 탐구와 공유</h3><p>실시간 데이터 공유로 집단 지성을 활용합니다.</p></div>
-  <div class="pcard"><div class="num">5</div><h3>개인화된 학습</h3><p>학생 개개인의 수준과 속도에 맞춘 피드백을 제공합니다.</p></div>
+  <div class="pcard"><div class="num">1</div><h3>데이터 수집의 정밀성</h3><p>실시간 수집·시각화로 <b>현상과 표상의 관계</b>를 즉각 파악</p></div>
+  <div class="pcard"><div class="num">2</div><h3>추상적 개념의 시각화</h3><p>원자·전자기장처럼 <b>직접 볼 수 없는 것</b>을 가시화</p></div>
+  <div class="pcard"><div class="num">3</div><h3>위험·고비용 실험의 대안</h3><p>학교에서 못 하던 실험을 <b>안전하게</b></p></div>
+  <div class="pcard"><div class="num">4</div><h3>협력적 탐구와 공유</h3><p>실시간 공유로 <b>집단 지성</b> 활용</p></div>
+  <div class="pcard"><div class="num">5</div><h3>개인화된 학습</h3><p>수준과 속도에 맞춘 <b>피드백</b></p></div>
 </div>
 
-<div class="callout warn"><b>그런데 같은 연구가 이렇게 덧붙입니다.</b> — "효과는 <b>기술 자체보다 교육과정·교수전략과의 연계</b>에 달려 있다." 센서를 샀다고 수업이 좋아지지 않습니다. 오늘 우리가 이야기할 것은 그 연계입니다.</div>
+<div class="callout warn"><b>그런데</b> — "효과는 <b>기술 자체보다 교육과정·교수전략과의 연계</b>에 달려 있다"<br>센서를 샀다고 수업이 좋아지지 않습니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 14px;text-align:center">네 가지 어포던스</h3>
 <p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">도구가 학습자에게 주는 <b>행위 가능성</b></p>
 <div class="cardgrid">
-  <div class="pcard"><h3>① 실시간성</h3><p>수집 즉시 확인하여 <b>현상과 데이터의 연결</b>을 강화합니다.</p></div>
-  <div class="pcard"><h3>② 자동성</h3><p>측정의 번거로움을 줄여 탐구의 본질에 집중하게 합니다.</p></div>
-  <div class="pcard"><h3>③ 시각화</h3><p>패턴과 경향성을 직관적으로 파악합니다.</p></div>
-  <div class="pcard"><h3>④ 공유·협력</h3><p>학생 간 과학적 의사소통을 촉진합니다.</p></div>
+  <div class="pcard"><h3>① 실시간성</h3><p>수집 즉시 확인 → <b>현상과 데이터의 연결</b></p></div>
+  <div class="pcard"><h3>② 자동성</h3><p>측정의 번거로움을 줄여 <b>탐구의 본질</b>에 집중</p></div>
+  <div class="pcard"><h3>③ 시각화</h3><p>패턴과 경향성을 <b>직관적으로</b></p></div>
+  <div class="pcard"><h3>④ 공유·협력</h3><p>학생 간 <b>과학적 의사소통</b> 촉진</p></div>
 </div>
 
-<div class="callout gold"><b>②번을 다시 보십시오.</b> "측정의 번거로움을 줄여 준다"— 그런데 그 <b>번거로움의 이름이 자료 수집</b>입니다. 그리고 자료 수집은 우리 교육과정의 <b>탐구 기능</b> 중 하나입니다. 다음 장에서 이 문제를 정면으로 보겠습니다.</div>
+<div class="callout gold"><b>②번을 보십시오</b> — "측정의 번거로움을 줄여 준다"<br>그 <b>번거로움의 이름이 자료 수집</b>이고, 그건 <b>탐구 기능</b>입니다. → 다음 절</div>
 
 <div class="script">"오늘 제가 센서를 잔뜩 들고 왔지만, 첫 질문은 '이걸 왜 쓰냐'입니다.<br><br>
 저는 이 질문에 <b>교육과정 문서로</b> 답을 드리겠습니다. 별책 9 펴 보시면, 중학교 물질 영역 <b>과정⋅기능 내용 요소</b>에 '수학적 사고와 <b>디지털 탐구 도구 활용하기</b>'가 적혀 있습니다. 가치⋅태도가 아니라 <b>가르쳐야 할 기능</b> 목록입니다.<br><br>
@@ -733,19 +721,17 @@ why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
 
 /* ───── 지능형 과학실 ON ───── */
 smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이 방</b> 이야기입니다',
-  '공간은 이미 있습니다. 그 위에 얹힌 플랫폼이 하나 더 있는데, 대부분 모르고 지나갑니다.')
+  '공간은 이미 있습니다. 그 위의 플랫폼이 하나 더')
 + `
 <div class="punch">
   <div class="q">이 연수의 정식 부제가 무엇인지 아십니까.<br><b>"지능형 과학실에서 AI·센서·데이터로<br>완성하는 K-STEM 클래스"</b>입니다.</div>
   <div class="cap">2026 찾아가는 디지털 과학 수업 역량 강화 연수 · 서울특별시교육청 창의미래교육과</div>
 </div>
 
-<div class="callout"><b>교육과정도 이 방을 콕 집어 말합니다.</b>
-<br>"지능정보기술 등 첨단 과학기술 기반의 과학 교육이 이루어질 수 있도록 <b>지능형 과학실을 활용한 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 실행한다.</b>"
-<br><span style="font-size:.88rem;color:var(--ink-soft)">— 교육부 고시 제2022-33호 [별책 9] 과학과 교육과정 · 교수⋅학습 방향</span>
-<br><br>연수 장소가 <b>신청 학교의 지능형 과학실</b>로 정해져 있는 것도 그래서입니다.</div>
+<div class="callout"><b>교육과정이 이 방을 지목합니다</b><br>"<b>지능형 과학실을 활용한</b> 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 <b>실행한다</b>" <span style="font-size:.86rem;color:var(--ink-soft)">별책 9 · 교수⋅학습 방향</span></div>
+<div class="note">연수 장소가 <b>신청 학교의 지능형 과학실</b>로 정해져 있는 것도 그래서입니다. 이 연수의 정식 부제도 "지능형 과학실에서 AI·센서·데이터로 완성하는 K-STEM 클래스"입니다.</div>
 
-<div class="callout ok"><b>업체 프로그램 안에 이미 버튼이 있습니다.</b> 사이언스큐브 <b>Science# for Web</b>의 툴바 맨 아래가 <b>「Science-On에 업로드」</b>입니다. 지능형 과학실에서 만든 <b>모둠 아이디를 입력해 연결</b>한 뒤 누르면 측정값이 그대로 넘어갑니다. 이지메이커 EZ·ON도 상단에 <b>「지능형 과학실」</b> 칸이 있습니다. <b>🔗 자료실</b> 탭에 두 프로그램 매뉴얼과 ON 포털 주소를 모아 두었습니다.</div>
+<div class="callout ok"><b>업체가 이미 ON을 향해 있습니다</b><br>Science# for Web 툴바 → <b>「Science-On에 업로드」</b> · EZ·ON 상단 → <b>「지능형 과학실」</b></div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 6px;text-align:center">먼저 갈라 봅시다 — <b style="color:var(--coral-deep)">방</b>과 <b style="color:var(--coral-deep)">플랫폼</b>은 다릅니다</h3>
 
@@ -767,18 +753,15 @@ smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 12px;text-align:center">ON이 교사에게 주는 것</h3>
 
 <div class="cardgrid">
-  <div class="pcard"><h3>📊 데이터 센터</h3><p>데이터 공유 · <b>학생 포트폴리오</b> · 대시보드 · 보고서 현황 · 퀴즈·설문 현황 · 공동탐구 현황 · <b>과학학습 종합역량 진단</b></p></div>
-  <div class="pcard"><h3>🔬 탐구수업</h3><p>탐구 개설 → 학생·학급·<b>센서 관리</b> → 탐구 개요 → <b>데이터 수집</b> → <b>데이터 분석</b> → 보고서 양식·관리·<b>평가</b> → 퀴즈·설문 → 토론방 → <b>탐구과정 공유</b></p></div>
-  <div class="pcard"><h3>🌏 공동탐구</h3><p>기초·심화·자유탐구 + <b>오픈API 센서 연동</b>. 다른 학교와 같은 주제로 데이터를 모아 비교합니다</p></div>
-  <div class="pcard"><h3>📚 학습자료실·커뮤니티</h3><p>자료 등록·검색·북마크, 질문방, 교사 커뮤니티, 모델학교 운영(컨설팅·수업공개)</p></div>
+  <div class="pcard"><h3>📊 데이터 센터</h3><p>데이터 공유 · <b>학생 포트폴리오</b> · 대시보드 · 보고서·퀴즈·공동탐구 현황 · <b>종합역량 진단</b></p></div>
+  <div class="pcard"><h3>🔬 탐구수업</h3><p>개설 → 학생·학급·<b>센서 관리</b> → <b>데이터 수집·분석</b> → 보고서·<b>평가</b> → 토론방 → <b>탐구과정 공유</b></p></div>
+  <div class="pcard"><h3>🌏 공동탐구</h3><p>기초·심화·자유 + <b>오픈API 센서 연동.</b> 다른 학교와 같은 주제로</p></div>
+  <div class="pcard"><h3>📚 학습자료실·커뮤니티</h3><p>자료 등록·검색·북마크 · 질문방 · 모델학교 운영</p></div>
 </div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">센서와 ON은 <b style="color:var(--coral-deep)">어디서 만나나</b></h3>
 
-<div class="callout ok"><b>업체들이 이미 ON을 향해 만들고 있습니다.</b>
-<br>사이언스큐브 무선센서 카탈로그 표지에 이렇게 적혀 있습니다 —
-<br>"※ 본 제품은 <b>지능형과학실 ON의 오픈 API를 준수하여</b> 개발하였습니다."
-<br><br>이지메이커 EZ·ON도 마찬가지입니다. 상단 메뉴가 <b>홈 · 가이드 · 블록 코딩 · 데이터 분석 · 실험 보고서 · 「지능형 과학실」</b> 여섯 개인데, 마지막 칸이 바로 그것입니다.</div>
+<div class="callout ok"><b>큐브 카탈로그 표지</b> — "본 제품은 <b>지능형과학실 ON의 오픈 API를 준수하여</b> 개발하였습니다"</div>
 
 <div class="tablewrap"><table>
 <tr><th>연결하는 길</th><th>어떻게</th><th>언제 쓰나</th></tr>
@@ -787,25 +770,22 @@ smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이
 <tr><td><b>오픈 API 연동</b></td><td>업체 프로그램이 ON 규격에 맞춰 값을 보냄</td><td>공동탐구에서 씁니다</td></tr>
 </table></div>
 
-<div class="callout"><b>공동탐구의 오픈API 센서 연동 화면은 이렇게 생겼습니다.</b>
-<br><b>장소</b>(학교·운동장·가정·도심공원·바닷가·강가·논 또는 밭·시내 중 선택) · <b>측정날짜</b>(2026-02-02 형식) ·
-<b>측정시간</b>(13:15 형식) · <b>기온(℃)</b>
-<br><br>센서에서 들어온 값을 <b>행 단위로 고치고 추가하고 지울 수</b> 있습니다. 그다음 [선택 데이터저장]을 누르면 공동탐구 활동에 반영됩니다.
-<br><span style="font-size:.9rem">— 즉 <b>기계가 준 값을 사람이 검토한 뒤 넘기는 구조</b>입니다. 「무엇을 잃는가」에서 말씀드린 <b>"어느 점을 버릴지 정하기"</b>가 여기 그대로 들어 있습니다.</span></div>
+<div class="callout"><b>오픈API 연동 화면 입력값</b><br>장소 · 측정날짜 · 측정시간 · 기온<br><b>행을 고치고 지운 뒤 [선택 데이터저장]</b> — 기계 값을 <b>사람이 검토해</b> 넘깁니다</div>
+<div class="note">「무엇을 잃는가」의 <b>"어느 점을 버릴지 정하기"</b>가 여기 그대로 구현돼 있습니다. 장소는 학교·운동장·가정·도심공원·바닷가·강가·논밭·시내 중 선택, 날짜는 2026-02-02, 시간은 13:15 형식입니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">한 차시가 이렇게 흐릅니다</h3>
 
 <div class="moves">
   <div class="move"><div class="n">1</div><div><h4>탐구를 개설합니다</h4>
-    <p>탐구 개요를 쓰고 학급·모둠·센서를 등록합니다. 탐구 시간표에 걸어 두면 학생이 <b>학생 모드로 입장</b>합니다.</p></div></div>
+    <p>탐구 개요 · 학급·모둠·센서 등록 → 학생은 <b>학생 모드</b>로 입장</p></div></div>
   <div class="move"><div class="n">2</div><div><h4>모둠이 데이터를 올립니다</h4>
-    <p>센서로 잰 값이 모둠별로 쌓입니다. 교사 화면에서 <b>모둠을 눌러 그 모둠 자료만</b> 볼 수 있고, 언제 수집했는지도 남습니다.</p></div></div>
+    <p>모둠별로 쌓이고, 교사 화면에서 <b>모둠을 눌러</b> 확인</p></div></div>
   <div class="move"><div class="n">3</div><div><h4>보고서를 받습니다</h4>
-    <p>교사가 만든 <b>보고서 양식</b>에 학생이 채워 냅니다. 한 번 출제된 양식은 수정이 잠깁니다.</p></div></div>
+    <p>교사가 만든 <b>보고서 양식</b>에 채워 냄. 출제되면 양식 잠김</p></div></div>
   <div class="move"><div class="n">4</div><div><h4>평가하고 되돌려 줍니다</h4>
-    <p>보고서 평가 · 퀴즈 · 설문 · 토론방. 결과는 <b>학생 포트폴리오</b>와 <b>과학학습 종합역량 진단</b>에 쌓입니다.</p></div></div>
+    <p>평가 · 퀴즈 · 설문 · 토론방 → <b>포트폴리오 · 역량 진단</b>에 축적</p></div></div>
   <div class="move"><div class="n">5</div><div><h4>탐구 과정을 공유합니다</h4>
-    <p>어느 모둠 자료를 학급에 공개할지 <b>체크로 고릅니다.</b> 잘된 것만이 아니라 <b>어긋난 것도 같이</b> 걸어 두면 그게 수업이 됩니다.</p></div></div>
+    <p>공개할 모둠을 <b>체크로</b> 고릅니다. <b>어긋난 것도 같이</b> 걸어 두면 수업이 됩니다.</p></div></div>
 </div>
 
 <div class="punch">
@@ -814,26 +794,14 @@ smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">그런데 왜 안 쓸까요</h3>
 
-<div class="callout warn"><b>솔직하게 말씀드리겠습니다. 첫 진입 비용이 있습니다.</b>
-<br>· 교사 회원가입 → 학교 승인 → 학급 개설 → 학생 계정 → 탐구 개설 — <b>여기까지 가야 첫 수업이 됩니다</b>
-<br>· 매뉴얼이 교사용만 <b>273쪽</b>입니다. 학생용 197쪽, 탐구수업용 164쪽까지 하면 634쪽입니다
-<br>· 그래서 "센서 켜서 그래프 보는 것"보다 <b>훨씬 무겁게</b> 느껴집니다</div>
+<div class="callout warn"><b>왜 안 쓰나 — 첫 진입 비용</b><br>교사 가입 → 학교 승인 → 학급 개설 → 학생 계정 → 탐구 개설<br>매뉴얼 <b>교사 273쪽 · 학생 197 · 탐구수업 164</b></div>
+<div class="note">"센서 켜서 그래프 보는 것"보다 훨씬 무겁게 느껴집니다. 써 보셨다는 분께는 <b>어디서 멈추셨는지</b> 물으세요 — 대개 <b>학생 계정 만들기</b>입니다.</div>
 
-<div class="callout ok"><b>그래서 순서를 권합니다.</b>
-<br><b>1단계</b> — 센서로 그래프만 봅니다. ON 없이. (오늘 실습이 여기입니다)
-<br><b>2단계</b> — 모둠 데이터를 한 화면에 모읍니다. 구글 시트든 수업허브든 가벼운 것으로.
-<br><b>3단계</b> — 익숙해지면 그 흐름을 <b>ON으로 옮깁니다.</b> 포트폴리오와 역량 진단이 필요해지는 시점이 옵니다.
-<br><br>ON부터 시작하면 대개 1차시에서 멈춥니다. <b>센서가 먼저이고 ON은 그다음입니다.</b></div>
+<div class="callout ok"><b>순서</b> ① 센서로 그래프만 → ② 가벼운 도구로 모둠 데이터 → ③ 익숙해지면 ON<br><b>ON부터 시작하면 1차시에서 멈춥니다.</b></div>
 
-<div class="callout gold"><b>다만 이것만은 기억해 두십시오.</b> 학교가 <b>모델학교</b>로 지정되었거나 성과 보고가 필요하시면 이야기가 달라집니다.
-ON에는 <b>대시보드·보고서 현황·공동탐구 현황·역량 진단</b>이 다 들어 있어서, 따로 정리하지 않아도 <b>그 자체가 실적 자료</b>가 됩니다.
-그럴 때는 처음부터 ON으로 가시는 게 맞습니다.</div>
+<div class="callout gold"><b>단, 모델학교면 반대입니다.</b> 대시보드·보고서 현황·역량 진단이 <b>그 자체로 실적</b> — 처음부터 ON으로.</div>
 
-<div class="callout"><b>매뉴얼은 이렇게 나뉘어 있습니다.</b>
-<br>· <b>교사용</b> 273쪽 — 데이터 센터 · 탐구수업 · 공동탐구 · 학습자료실 · 학교관리
-<br>· <b>학생용</b> 197쪽
-<br>· <b>탐구수업 매뉴얼</b> 164쪽
-<br>전부 화면을 하나씩 짚는 사용설명서라, <b>처음부터 읽지 마시고</b> 필요한 메뉴만 찾아보시는 게 낫습니다.</div>
+<div class="callout"><b>매뉴얼</b> 교사 273쪽 · 학생 197쪽 · 탐구수업 164쪽 — <b>처음부터 읽지 말고</b> 필요한 메뉴만</div>
 
 <div class="script">"오늘 이 방이 지능형 과학실입니다. 그런데 지능형 과학실이라는 말에는 두 가지가 섞여 있습니다. <b>방하고, 플랫폼</b>입니다.<br><br>
 방은 다 갖고 계십니다. 전자칠판 있고 무선 되고 센서 있고요. 그런데 <b>ON은 안 쓰시는 분이 훨씬 많습니다.</b><br><br>
@@ -849,20 +817,15 @@ ON에는 <b>대시보드·보고서 현황·공동탐구 현황·역량 진단</
 
 /* ───── 잃는 것 ───── */
 lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요',
-  '막연히 "탐구를 안 하게 된다"고 걱정하는 대신, 이름을 붙여서 세어 보겠습니다.')
+  '걱정하지 말고 이름 붙여 세어 봅시다')
 + `<div class="punch">
   <div class="q">온도계를 30초마다 읽어 적던 학생은<br>그 30초 동안 <b>탐구 기능을 연습하고</b> 있었습니다.<br>그 기능의 <b>이름이 무엇입니까.</b></div>
   <div class="cap">이름을 붙일 수 있어야 무엇을 잃었는지 셀 수 있습니다</div>
 </div>
 
-<div class="callout"><b>교육과정이 이렇게 적어 놓았습니다.</b> 중학교 1~3학년 <b>물질</b> 영역 과정⋅기능 —
-<br><br>"변인 간의 관계를 이끌어내기 위해 <b>자료를 수집</b>하고 이를 <b>그래프로 변환</b>하여 <b>해석</b>하기"
-<br><br>한 줄 안에 <b>수집 · 변환 · 해석</b> 셋이 나란히 있습니다. 센서는 앞의 둘을 가져가고 <b>해석만 남깁니다.</b>
-운동과 에너지 영역에도 같은 문장이 있습니다.</div>
+<div class="callout"><b>원문</b> — "변인 간의 관계를 이끌어내기 위해 <b>자료를 수집</b>하고 이를 <b>그래프로 변환</b>하여 <b>해석</b>하기"<br>한 줄에 셋. 센서는 <b>앞의 둘을 가져가고 해석만 남깁니다.</b></div>
 
-<div class="callout gold"><b>그리고 교육과정은 기초 탐구 기능의 이름을 그대로 부릅니다.</b>
-<br>"<b>관찰, 측정, 분류, 예상, 추리</b> 등을 통해 자료를 수집하고 비교⋅분석하기" — 물질·생명 영역 과정⋅기능
-<br><br>여섯 중 다섯이 문서에 그대로 있습니다. 나머지 하나인 <b>의사소통</b>은 "협력적 소통하기"라는 이름으로 따로 있습니다.</div>
+<div class="callout gold"><b>원문이 기능 이름을 그대로 부릅니다</b> — "<b>관찰, 측정, 분류, 예상, 추리</b> 등을 통해…"<br>기초 6 중 5개. 의사소통은 "협력적 소통하기"로 따로.</div>
 
 <p style="text-align:center;color:var(--ink-soft);margin:26px 0 4px">그래서 세어 봅시다 — 과학 탐구 기능은 흔히 <b>기초 6가지</b>와 <b>통합 7가지</b>로 나눕니다</p>
 <div class="fnwrap">
@@ -895,30 +858,21 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
   <div class="q">센서가 가져가는 것은 <b>딱 두 개</b>입니다.<br><b>측정</b>과 <b>자료 변환.</b><br>나머지 열한 개는 그대로 있고,<br>그중 일곱 개는 <b>센서가 있어야 제대로 됩니다.</b></div>
 </div>
 
-<div class="callout warn"><b>그래도 그 둘은 진짜로 잃습니다.</b> 인정하고 시작합시다.
-<br>· <b>측정</b> — "관찰을 수치로 나타내는 과정". 눈금을 읽어 숫자로 옮기는 그 일을 센서가 통째로 합니다.
-<br>· <b>자료 변환</b> — "측정하여 얻은 자료를 표나 그래프로 나타내는 과정". 소프트웨어가 켜자마자 그려 줍니다.
-<br>이지메이커 사례집의 실험 목적에도 <b>"자료를 그래프로 변환, 해석하여…"</b>가 그대로 적혀 있습니다. 변환은 분명히 우리가 가르쳐야 할 기능입니다.</div>
+<div class="callout warn"><b>잃는 둘</b><br><b>측정</b> — 눈금을 읽어 숫자로 옮기는 일<br><b>자료 변환</b> — 표·그래프로 만드는 일</div>
 
-<div class="callout ok"><b>그런데 관찰의 정의를 보십시오.</b>
-<br>"직접 오감을 이용하거나 <b>현미경처럼 감각을 확장시키는 도구를 사용해</b> 자료와 정보를 얻는 기능"
-<br><br>센서는 관찰을 방해하는 물건이 아니라 <b>관찰의 정의 안에 이미 들어와 있는 도구</b>입니다. 현미경과 같은 자리입니다.
-아무도 "현미경을 쓰면 관찰 능력이 떨어진다"고 하지 않습니다. 온도계로 30초마다 적을 때 학생의 고개는 공책에 있었지만,
-센서를 꽂으면 고개가 들립니다. <b>측정을 내주고 관찰을 돌려받는 거래</b>입니다.</div>
+<div class="callout ok"><b>관찰의 정의</b> — "현미경처럼 <b>감각을 확장시키는 도구</b>를 사용해 자료를 얻는 기능"<br>센서는 <b>관찰의 정의 안에 이미 있습니다.</b> → <b>측정을 내주고 관찰을 돌려받는 거래</b></div>
+<div class="note">아무도 "현미경을 쓰면 관찰 능력이 떨어진다"고 하지 않습니다. 온도계로 30초마다 적을 때 학생의 고개는 공책에 있었지만, 센서를 꽂으면 고개가 들립니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 6px;text-align:center">대책 — 없앤 게 아니라 <b style="color:var(--coral-deep)">옮긴다</b></h3>
 <p style="text-align:center;color:var(--ink-soft);margin-bottom:16px">잃은 <b>측정</b>과 <b>자료 변환</b>을 어느 기능으로 되돌려 놓을 것인가</p>
 
 <div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>눈금을 읽어 적는 일</b><br>손의 일. 30초마다 반복.</p></div>
+  <div class="box from"><div class="lb">사라진 것</div><p><b>눈금을 읽어 적기</b></p></div>
   <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>수동 수집 모드</b><br>부피·거리는 <b>센서가 못 잽니다.</b> 학생이 눈금을 읽어 직접 넣습니다. 자동으로 두면 x축이 시간밖에 안 되니, 부피–압력 그래프는 아예 나오지 않습니다.<br><span class="fnlab">되살아나는 기능 · 측정 + 변인 통제</span></p></div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>수동 수집 모드</b><br>부피·거리는 <b>센서가 못 잽니다.</b> 학생이 읽어 직접 넣습니다.<br><span class="fnlab">되살아나는 기능 · 측정 + 변인 통제</span></p></div>
 </div>
 
-<div class="callout gold"><b>그래서 다행인 것 하나 — 센서는 종속변인만 잽니다.</b>
-<br>조작변인은 여전히 사람이 읽어서 넣어야 합니다. 자료 수집이 <b>통째로 없어지는 게 아니라 절반만</b> 없어집니다.
-<br>남은 절반 — 조작변인을 무엇으로 할지 정하고, 그 값을 읽고, 짝지어 기록하는 일 — 이 그대로 학생 몫이고,
-<b>그게 사실 변인 통제의 핵심</b>입니다.</div>
+<div class="callout gold"><b>센서는 종속변인만 잽니다.</b> 조작변인은 여전히 사람이 읽어 넣습니다.<br>자료 수집은 <b>절반만</b> 사라지고, <b>남은 절반이 곧 변인 통제</b>입니다.</div>
 
 <div class="tablewrap"><table>
 <tr><th>실험</th><th>센서가 재는 것 <span style="font-weight:400">(종속변인)</span></th><th>사람이 넣는 것 <span style="font-weight:400">(조작변인)</span></th></tr>
@@ -928,35 +882,35 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 <tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원 개수</b></td></tr>
 </table></div>
 
-<div class="callout warn"><b>다만 자료집을 오해하지는 맙시다.</b> 자료집이 수동 수집을 지정한 것은 탐구 기능을 살리려는 교육적 장치가 아니라 <b>센서가 그 변인을 못 재기 때문</b>입니다. 실제로 불꽃색 실험에서는 "시간 순서대로 측정한다면 수동 측정을 굳이 하지 않아도 된다"고 적어 두었습니다. <b>기능을 살리는 것은 자료집이 아니라 우리가 할 일</b>입니다.</div>
+<div class="callout warn"><b>주의</b> — 자료집이 수동 수집을 지정한 건 <b>교육적 장치가 아니라 센서가 그 변인을 못 재기 때문</b>입니다. (불꽃색 편: "시간 순서대로면 수동 측정을 굳이 하지 않아도 된다")<br><b>기능을 살리는 건 자료집이 아니라 우리 일입니다.</b></div>
 
 <div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>모눈종이에 점 찍고 선 잇기</b><br>자료의 변환.</p></div>
+  <div class="box from"><div class="lb">사라진 것</div><p><b>모눈종이에 점 찍고 선 잇기</b></p></div>
   <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어떤 축으로 볼지 학생이 정하기</b><br>시간–압력으로 나온 그래프를 그대로 두지 않습니다. x축을 부피로, 1/V로, 1/r²로 <b>바꾸는 판단</b>을 학생이 합니다. 변환이 손의 일에서 <b>판단의 일</b>로 올라갑니다.<br><span class="fnlab">되살아나는 기능 · 자료 변환 + 자료 해석</span></p></div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어떤 축으로 볼지 학생이 정하기</b><br>부피로, 1/V로, 1/r²로. <b>손의 일 → 판단의 일</b><br><span class="fnlab">되살아나는 기능 · 자료 변환 + 자료 해석</span></p></div>
 </div>
 
 <div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>측정하며 예측하기</b><br>적는 동안 자연스레 하던 생각.</p></div>
+  <div class="box from"><div class="lb">사라진 것</div><p><b>측정하며 예측하기</b></p></div>
   <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>측정 전에 그래프를 먼저 그리기</b><br>예상 곡선을 손으로 그린 뒤 실제와 겹칩니다. 예측을 측정 앞으로 옮기면 측정이 <b>내 예측을 확인하는 일</b>이 됩니다.<br><span class="fnlab">되살아나는 기능 · 예상 + 가설 설정</span></p></div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>측정 전에 그래프 먼저 그리기</b><br>측정이 <b>내 예측을 확인하는 일</b>이 됩니다.<br><span class="fnlab">되살아나는 기능 · 예상 + 가설 설정</span></p></div>
 </div>
 
 <div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>어느 값을 적을지 고르던 일</b><br>측정의 판단.</p></div>
+  <div class="box from"><div class="lb">사라진 것</div><p><b>어느 값을 적을지 고르기</b></p></div>
   <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어느 점을 버릴지 정하기</b><br>자동 수집은 점을 수백 개 만듭니다. 초기 요동 구간을 자를지, 어디부터 안정 구간으로 볼지는 <b>사람이 정합니다.</b><br><span class="fnlab">되살아나는 기능 · 자료 해석 + 추리</span></p></div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어느 점을 버릴지 정하기</b><br>초기 요동을 자를지는 <b>사람이 정합니다.</b><br><span class="fnlab">되살아나는 기능 · 자료 해석 + 추리</span></p></div>
 </div>
 
 <div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>자료가 어디서 왔는지 아는 감각</b></p></div>
+  <div class="box from"><div class="lb">사라진 것</div><p><b>자료의 출처 감각</b></p></div>
   <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>원자료(CSV)를 열어 보기</b><br>그래프만 보면 숫자가 하늘에서 옵니다. 한 번은 표를 열어 몇 개의 점으로 이 선이 그려졌는지 세어 보게 합니다.<br><span class="fnlab">되살아나는 기능 · 측정</span></p></div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>원자료(CSV) 열어 보기</b><br>몇 개의 점으로 그려졌는지 세어 보게.<br><span class="fnlab">되살아나는 기능 · 측정</span></p></div>
 </div>
 
-<div class="callout ok"><b>한 번은 손으로 합니다.</b> 가장 확실한 대책입니다. 첫 차시는 온도계와 모눈종이로, 다음 차시부터 센서로. 수집과 변환을 몸으로 겪은 학생만이 그래프가 무슨 뜻인지 압니다. <b>센서는 아날로그를 대체하는 게 아니라 그 다음에 옵니다.</b></div>
+<div class="callout ok"><b>가장 확실한 대책 — 한 번은 손으로.</b> 첫 차시는 온도계와 모눈종이, 다음 차시부터 센서.<br><b>센서는 아날로그의 대체가 아니라 그다음입니다.</b></div>
 
-<div class="callout gold"><b>데이터를 먼저 보는 탐구도 있습니다 (ESDA)</b> — 가설을 먼저 세우는 대신 <b>데이터를 먼저 수집·탐색한 뒤 문제를 도출</b>하는 방식입니다. 가설부터 세우라는 부담을 낮춰 자기주도적 탐구를 촉진합니다. 센서가 수집을 빠르게 해 준 덕분에 <b>가능해진 순서</b>이기도 합니다.</div>
+<div class="callout gold"><b>ESDA</b> — 가설보다 <b>데이터를 먼저</b> 탐색한 뒤 문제를 도출. 센서가 수집을 빠르게 해 준 덕에 가능해진 순서.</div>
 
 <div class="script">"센서 수업의 단점을 물으면 다들 '기계가 안 될까 봐요'라고 하십니다. 저는 다르게 봅니다.<br><br>
 <b>학생이 할 일을 기계가 가져갑니다.</b> 그런데 막연히 걱정만 하지 말고 <b>세어 봅시다.</b> 탐구 기능이 기초 여섯, 통합 일곱 해서 열셋인데, 센서가 가져가는 건 <b>측정하고 자료 변환, 딱 둘</b>입니다. 열한 개는 그대로 있고 그중 일곱은 오히려 센서가 있어야 제대로 됩니다.<br><br>그리고 <b>관찰</b>의 정의를 한번 보십시오. "현미경처럼 <b>감각을 확장시키는 도구를 사용해</b> 자료를 얻는 기능"이라고 되어 있습니다. 센서가 바로 그겁니다. 아무도 현미경 쓰면 관찰력 떨어진다고 안 하지 않습니까. <b>측정을 내주고 관찰을 돌려받는 거래</b>입니다.<br><br>
@@ -969,16 +923,16 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 
 /* ───── 학생이 얻는 것 ───── */
 gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻습니까',
-  '교사가 편해지는 이야기는 빼겠습니다. 학생 쪽에서만 보겠습니다.')
+  '교사 편의 말고, 학생 쪽에서만')
 + `<div class="cardgrid">
-  <div class="pcard"><h3>① 감각이 닿지 않는 곳을 본다</h3><p>사람 손으로는 "빡빡하다"까지가 끝입니다. 1초 사이의 압력 변화, 잎이 5분 동안 삼킨 이산화탄소, 마찰력이 최대가 되는 <b>바로 그 순간</b>은 감각으로 잡히지 않습니다.</p></div>
-  <div class="pcard"><h3>② 느낌이 숫자가 되는 경험</h3><p>손이 느낀 "빡빡함"이 <b>1.003 기압</b>이 됩니다. 정성에서 정량으로 넘어가는 이행을 몸으로 겪습니다. 이건 과학이라는 학문의 본질적 이행이기도 합니다.</p></div>
-  <div class="pcard"><h3>③ 기록자에서 관찰자로 돌아온다</h3><p>온도계를 읽어 적는 학생은 <b>현상을 못 봅니다.</b> 고개가 공책에 가 있으니까요. 센서가 읽는 동안 학생은 그래프가 자라는 것을 봅니다. "어, 왜 여기서 평평해지지?"가 <b>실험 도중에</b> 나옵니다. <br><span class="fnlab">기초 탐구 기능 · 관찰</span></p></div>
-  <div class="pcard"><h3>④ 실패해도 데이터가 남는다</h3><p>기존 실험은 실패하면 아무것도 없습니다. "선생님 안 돼요"로 끝납니다. 센서는 실패한 그래프를 남기고, <b>그 그래프가 왜 실패했는지 말해 줍니다.</b> 실패가 분석 대상이 됩니다.</p></div>
-  <div class="pcard"><h3>⑤ 자기 데이터를 갖는다</h3><p>교과서에 실린 남의 숫자가 아니라 <b>우리 모둠이 만든 숫자</b>입니다. 그래서 틀리면 억울해하고 맞으면 자랑합니다. 소유감이 곧 동기입니다.</p></div>
-  <div class="pcard"><h3>⑥ 재현성을 경험한다</h3><p>한 모둠의 결과는 우연일 수 있습니다. 그런데 일곱 모둠이 같은 경향이면 <b>법칙</b>이 됩니다. 과학이 왜 여러 번 재는지를 반 전체 그래프 한 장이 설명합니다.</p></div>
-  <div class="pcard"><h3>⑦ 오차를 정면으로 만난다</h3><p>교과서는 P×V가 일정하다고 하는데 내 데이터는 5.015에서 5.510까지 흩어집니다. <b>이 간극이 진짜 질문</b>이 됩니다. 밀폐가 샜나, 손이 데웠나, 눈금을 잘못 읽었나.</p></div>
-  <div class="pcard"><h3>⑧ 도구를 판단하는 사람이 된다</h3><p>센서도 틀립니다. 영점이 어긋나고 배터리 열이 온도값을 흔듭니다. <b>기계의 값을 의심해 본 학생</b>만이 디지털 시대의 자료를 읽을 수 있습니다.</p></div>
+  <div class="pcard"><h3>① 감각이 닿지 않는 곳을 본다</h3><p>손으로는 "빡빡하다"가 끝. 1초 사이의 압력, 마찰력이 <b>최대가 되는 그 순간</b>은 감각에 안 잡힙니다.</p></div>
+  <div class="pcard"><h3>② 느낌이 숫자가 되는 경험</h3><p>"빡빡함"이 <b>1.003 기압</b>이 됩니다. 정성 → 정량, 과학의 본질적 이행.</p></div>
+  <div class="pcard"><h3>③ 기록자에서 관찰자로 돌아온다</h3><p>읽어 적는 학생은 <b>고개가 공책에</b> 있습니다. 센서를 꽂으면 고개가 들리고 <b>실험 도중에</b> 질문이 나옵니다.</p></div>
+  <div class="pcard"><h3>④ 실패해도 데이터가 남는다</h3><p>기존 실험은 "안 돼요"로 끝. 센서는 <b>실패한 그래프</b>를 남깁니다 — 실패가 <b>분석 대상</b>이 됩니다.</p></div>
+  <div class="pcard"><h3>⑤ 자기 데이터를 갖는다</h3><p>교과서의 남의 숫자가 아니라 <b>우리 모둠이 만든 숫자.</b> 소유감이 곧 동기입니다.</p></div>
+  <div class="pcard"><h3>⑥ 재현성을 경험한다</h3><p>한 모둠은 우연, <b>일곱 모둠이 같으면 법칙.</b> 왜 여러 번 재는지를 그래프 한 장이 설명합니다.</p></div>
+  <div class="pcard"><h3>⑦ 오차를 정면으로 만난다</h3><p>교과서는 일정하다는데 내 데이터는 흩어집니다. <b>그 간극이 진짜 질문</b>입니다.</p></div>
+  <div class="pcard"><h3>⑧ 도구를 판단하는 사람이 된다</h3><p>센서도 틀립니다. <b>기계 값을 의심해 본 학생</b>만이 디지털 자료를 읽습니다.</p></div>
 </div>
 
 <div class="punch">
@@ -995,48 +949,48 @@ gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻습니까',
 
 /* ───── 초대 ───── */
 invite: head('🙋 네 번째 질문','학생을 어떻게 <b>초대</b>할 것인가',
-  '시켜서 하는 것과 하고 싶어서 하는 것은 다릅니다. 여덟 가지 방법을 준비했습니다.')
+  '시켜서 하는 것과 하고 싶어서 하는 것')
 + `<div class="callout"><b>초대는 "이거 쓰면 편해"가 아닙니다.</b> "네가 지금 궁금해하는 걸 <b>이걸로만 알 수 있어</b>"여야 합니다. 그러려면 궁금함이 먼저 있어야 하고, 그 궁금함이 <b>맨손으로는 안 풀려야</b> 합니다.</div>
 
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
     <h4>먼저 맨손으로 하게 하고, 막히게 둔다</h4>
-    <p>센서를 먼저 주면 "선생님이 시킨 일"이 됩니다. 온도계로 30초마다 읽어 적게 해 보세요. 3분이면 학생이 먼저 말합니다 — "이거 언제까지 해요?" <b>그때 꺼냅니다.</b> 불편을 겪은 사람만이 도구를 반깁니다.</p>
+    <p>센서를 먼저 주면 <b>시킨 일</b>이 됩니다. 불편을 겪은 사람만 도구를 반깁니다.</p>
     <div class="say">"이거 계속 이렇게 할까? 아니면 다른 방법 찾아볼까?"</div></div></div>
 
   <div class="move"><div class="n">2</div><div>
     <h4>감각으로 느끼게 한 뒤, 그 감각을 배신한다</h4>
-    <p>주사기를 손으로 눌러 "빡빡하다"를 느끼게 합니다. 그리고 묻습니다 — "몇 배 빡빡해?" 답을 못 합니다. <b>자기 감각의 한계를 자기가 발견한 다음</b>에 센서가 들어갑니다.</p>
+    <p>손으로 "빡빡하다"를 느낀 뒤 <b>"몇 배?"</b>에 막히게 합니다.</p>
     <div class="say">"방금 느낀 그 빡빡함, 숫자로 말해 볼 수 있어?"</div></div></div>
 
   <div class="move"><div class="n">3</div><div>
     <h4>예측 그래프를 먼저 그리게 한다</h4>
-    <p>측정 전에 빈 축에 예상 곡선을 손으로 그려 두게 합니다. 그러면 측정이 <b>"내 예측이 맞는지 확인하는 일"</b>이 됩니다. 남의 실험이 내 실험이 되는 가장 싼 방법입니다.</p>
+    <p>측정이 <b>내 예측을 확인하는 일</b>이 됩니다.</p>
     <div class="say">"시작하기 전에, 그래프가 어떤 모양일 것 같은지 먼저 그려 보자."</div></div></div>
 
   <div class="move"><div class="n">4</div><div>
     <h4>틀릴 수 있는 자리를 준다</h4>
-    <p>"정답이 나와야 하는 실험"은 초대가 아니라 <b>검사</b>입니다. 예상과 다른 그래프가 나왔을 때 혼내지 않고 물어보면, 학생은 자기 데이터를 <b>변호하러</b> 옵니다.</p>
+    <p>정답이 나와야 하는 실험은 초대가 아니라 <b>검사</b>입니다.</p>
     <div class="say">"예상이랑 다르게 나왔네. 왜 그럴까? 네 생각엔 뭐가 문제였을 것 같아?"</div></div></div>
 
   <div class="move"><div class="n">5</div><div>
     <h4>데이터에 이름을 붙여 준다</h4>
-    <p>"3모둠"이 아니라 그 모둠이 지은 이름으로 부릅니다. 반 전체 그래프에서 <b>자기 점을 찾게</b> 합니다. 자기 점이 화면에 있으면 수업에서 도망가지 않습니다.</p>
+    <p>반 전체 그래프에서 <b>자기 점을 찾게</b> 합니다.</p>
     <div class="say">"이 점이 누구 거지? 이 위에 있는 건 어느 모둠이야?"</div></div></div>
 
   <div class="move"><div class="n">6</div><div>
     <h4>못 하는 것도 알려 준다</h4>
-    <p>"센서로도 이건 안 돼"를 말해 주면 학생은 도구를 맹신하지 않고 <b>도구를 판단하는 사람</b>이 됩니다. 이게 디지털 리터러시의 시작입니다. 오늘 우리가 못 하는 실험 목록을 각 학년 탭 아래에 남겨 둔 이유이기도 합니다.</p>
+    <p><b>도구를 판단하는 사람</b>이 됩니다 — 디지털 리터러시의 시작.</p>
     <div class="say">"이 센서는 이건 못 재. 그럼 이건 어떻게 알아낼 수 있을까?"</div></div></div>
 
   <div class="move"><div class="n">7</div><div>
     <h4>역할을 준다 — 조립하는 사람</h4>
-    <p>센서를 꽂는 자리가 곧 개념일 때가 있습니다. 전류는 회로를 끊고 <b>직렬</b>로, 전압은 저항 양끝에 <b>병렬</b>로. 이때 조립은 심부름이 아니라 <b>사고</b>입니다. 조립을 대신해 주지 마세요.</p>
+    <p>꽂는 자리가 곧 개념. <b>조립을 대신해 주지 마세요.</b></p>
     <div class="say">"이 센서를 어디에 넣어야 할까? 왜 거기야?"</div></div></div>
 
   <div class="move"><div class="n">8</div><div>
     <h4>왜 하는지 먼저 말해 준다</h4>
-    <p>가장 단순하고 가장 자주 빠뜨리는 것입니다. "오늘 왜 이걸 하는지" 한 문장으로 말해 주면 학생은 목적지를 아는 채로 걷습니다. <b>질문하는 수업에서 질문의 이유를 설명하는 것과 같습니다.</b></p>
+    <p>가장 단순하고 <b>가장 자주 빠뜨리는 것</b>입니다.</p>
     <div class="say">"오늘 이걸 하는 이유는, 우리가 지난 시간에 못 풀었던 그 질문 때문이야."</div></div></div>
 </div>
 
@@ -1053,7 +1007,7 @@ invite: head('🙋 네 번째 질문','학생을 어떻게 <b>초대</b>할 것�
 
 /* ───── 내 센서 · 무엇을 할 수 있나 ───── */
 mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로 할 수 있는 실험',
-  '다 같이 한 가지를 하지 않습니다. 맡고 계신 학년에 맞는 것을 직접 고르십시오.')
+  '다 같이 한 가지를 하지 않습니다')
 + `
 <div class="punch">
   <div class="q">센서 <b>10종 51개</b>와 보드 16개를 가져왔습니다.<br>이걸로 되는 실험이 <b>28가지</b>입니다.<br><b>고르시면 매뉴얼을 펴 드리겠습니다.</b></div>
@@ -1066,18 +1020,10 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 </div>
 <div class="exps" id="kList"></div>
 
-<div class="callout gold" style="margin-top:20px"><b>매뉴얼 약칭</b>
-<br><b>EZ</b> — 이지메이커 수업사례집(중학교, 111쪽) · 실험당 3쪽. 절차가 간결합니다
-<br><b>CB</b> — 같은 실험 <b>250쪽판</b> · 실험당 8쪽. <b>사진과 화면이 훨씬 자세합니다</b>
-<br><b>SB</b> — 서울시교육청 『2026 교구 및 디지털 도구 활용 과학 교수학습자료』 10사례. 학생 활동지가 붙어 있습니다
-<br><b>BASE</b> — 『기초 측정 방법』 센서 19종. 그 센서를 처음 만질 때 보는 것</div>
+<div class="callout gold" style="margin-top:20px"><b>매뉴얼 약칭</b><br><b>EZ</b> 이지 사례집 111쪽(간결) · <b>CB</b> 250쪽판(사진 多, <b>실습 땐 이걸</b>)<br><b>SB</b> 서울 10사례(학생 활동지) · <b>BASE</b> 기초 측정 19종</div>
 
-<div class="callout warn"><b>수량이 곧 모둠 수입니다.</b>
-<br>· <b>7~8모둠</b> — 공기압 계열, 옴의 법칙 계열 (이지메이커라 넉넉합니다)
-<br>· <b>4모둠</b> — 온도·압력·힘·조도·CO₂ (대여한 무선 센서가 종류별 4개씩)
-<br>· <b>2모둠</b> — 온도를 <b>2개씩</b> 쓰는 것(비열·열평형·냉각곡선·온실효과)
-<br>· <b>1모둠</b> — 수권의 층상 구조(원래 5개 필요)
-<br><br>온도 계열을 두 분 이상 고르시면 <b>온습도 센서를 공기 온도 실험에 투입</b>해 조를 늘리십시오. 다만 액체에는 담그지 마십시오.</div>
+<div class="callout warn"><b>수량 = 모둠 수</b><br><b>7~8모둠</b> 공기압·옴 계열 · <b>4모둠</b> 온도·압력·힘·조도·CO₂<br><b>2모둠</b> 온도 2개 쓰는 것 · <b>1모둠</b> 수권 층상 구조</div>
+<div class="note">온도 계열을 두 분 이상 고르시면 <b>온습도 센서를 공기 온도 실험에 투입</b>해 조를 늘리십시오. 다만 액체에는 담그지 마십시오.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">실험 <b style="color:var(--coral-deep)">돌리는</b> 요령</h3>
 <p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">영서중 최효석 선생님 연수 자료에서 가져왔습니다. 사소해 보이는데 실제로 수업을 가릅니다.</p>
@@ -1085,34 +1031,31 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
     <h4>책상 위를 먼저 비웁니다</h4>
-    <p>실험 전에 <b>물통이나 다른 물건은 앞에 제출</b>하게 합니다. 센서와 물이 같은 책상에 있으면 사고는 반드시 납니다.</p>
+    <p>물통 등 앞에 제출. <b>센서와 물이 한 책상에 있으면 사고는 납니다.</b></p>
     <div class="say">"실험 시작 전에 책상 위에 물통 있는 사람, 앞으로 가져다 놓으세요."</div></div></div>
 
   <div class="move"><div class="n">2</div><div>
     <h4>준비물을 미리 나눠 주지 않습니다</h4>
-    <p>바구니에 담아 각 테이블에 미리 놓아 두면 <b>학생들이 교사 말을 안 듣고 준비물만 봅니다.</b> 설명이 끝난 뒤 <b>중앙 테이블에서 모둠별로 받아 가게</b> 하십시오.</p>
+    <p>미리 놓으면 <b>교사 말을 안 듣습니다.</b> 설명 뒤 중앙 테이블에서 모둠별 수령.</p>
     <div class="say">"설명 다 들은 모둠부터 앞에 와서 가져가세요."</div></div></div>
 
   <div class="move"><div class="n">3</div><div>
     <h4>받아 갈 때 개수를 세게 합니다</h4>
-    <p>가져갈 때 무엇을 몇 개 받았는지 <b>학생이 직접 확인</b>하게 하고, <b>처음 상태와 나중 상태가 같도록</b> 기억하라고 일러 둡니다. 반납이 훨씬 빨라집니다.</p>
+    <p><b>처음 = 나중</b>으로 기억시키면 반납이 빨라집니다.</p>
     <div class="say">"지금 받은 그대로 돌려놓는 겁니다. 뭘 몇 개 받았는지 한 번 세어 보세요."</div></div></div>
 
   <div class="move"><div class="n">4</div><div>
     <h4>시뮬레이션을 먼저 보여 줍니다</h4>
-    <p>실험을 시작하기 전에 <b>어떻게 될지를 한 번 보고</b> 들어갑니다. 무엇을 봐야 할지 모른 채 시작하면 학생은 장비만 만지다 끝납니다.</p>
+    <p>무엇을 볼지 모르면 <b>장비만 만지다 끝납니다.</b></p>
     <div class="say">"이제 어떤 그림이 나올지 먼저 보고 시작하겠습니다."</div></div></div>
 
   <div class="move"><div class="n">5</div><div>
     <h4>예비 세트를 앞에 꺼내 둡니다</h4>
-    <p>고장난 걸 고치느라 시간을 쓰지 마십시오. <b>통째로 바꿔 주는 게 빠릅니다.</b> 예비가 보이면 학생도 조작을 겁내지 않습니다.</p>
+    <p>고치지 말고 <b>통째로 교체.</b> 예비가 보이면 조작을 겁내지 않습니다.</p>
     <div class="say">"안 되면 손들지 말고 그냥 앞에 것으로 바꿔 가세요."</div></div></div>
 </div>
 
-<div class="callout"><b>연결이 안 되는 세 가지 흔한 이유</b> — 이것만 확인하시면 대부분 해결됩니다.
-<br>① <b>보드 전원이 꺼져 있다</b>(이지메이커는 PWR에 빨간불이 들어와야 합니다)
-<br>② <b>케이블이 끝까지 안 들어갔다</b>("딸깍" 소리가 날 때까지)
-<br>③ <b>센서의 악어집게가 보드에 닿았다</b> — 이러면 값이 아예 안 들어옵니다</div>
+<div class="callout"><b>흔한 세 가지</b> ① 보드 전원 꺼짐(PWR 빨간불) ② 케이블 덜 들어감("딸깍") ③ <b>악어집게가 보드에 닿음</b></div>
 
 <div class="script">"오늘은 제가 하나 정해 드리지 않겠습니다. <b>선생님들이 고르십시오.</b><br><br>
 센서 열 종류 쉰한 개하고 보드 열여섯 개를 가져왔고, 이걸로 되는 실험이 스물여덟 가지입니다. 맡고 계신 학년 보시고 마음에 드는 걸 고르시면, 제가 그 매뉴얼을 펴 드리겠습니다.<br><br>
@@ -1125,25 +1068,23 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 
 /* ───── 축을 바꾸면 보인다 ───── */
 axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것이 보입니다',
-  '센서 수업의 진짜 알맹이는 측정이 아니라 여기 있습니다.')
+  '알맹이는 측정이 아니라 여기')
 + `
 <div class="punch">
   <div class="q">센서는 언제나 <b>시간축</b>으로 줍니다.<br>그런데 우리가 알고 싶은 건 대개 <b>시간이 아닙니다.</b></div>
   <div class="cap">이 간극을 메우는 일이 「자료 변환」이고, 교육과정의 통합 탐구 기능입니다</div>
 </div>
 
-<div class="callout"><b>교육과정에 이렇게 적혀 있습니다.</b>
-<br>"변인 간의 관계를 이끌어내기 위해 자료를 수집하고 이를 <b>그래프로 변환하여 해석하기</b>"
-<br><span style="font-size:.88rem;color:var(--ink-soft)">— 별책 9, 중학교 1~3학년 물질 영역 과정⋅기능</span>
-<br><br>그리고 이지메이커 자료집도 같은 말을 합니다 — "x축을 단순히 거리로 설정한 경우와 거리의 제곱으로 설정한 경우를 <b>모두 시도해 보도록 하여</b> 학생들이 다양한 방식으로 데이터를 해석해 볼 수 있도록 한다."</div>
+<div class="callout"><b>교육과정 원문</b> — "자료를 수집하고 이를 <b>그래프로 변환하여 해석하기</b>" <span style="font-size:.86rem;color:var(--ink-soft)">별책 9 · 과정⋅기능</span></div>
+<div class="note">이지메이커 자료집도 같은 말을 합니다 — "x축을 거리로 설정한 경우와 거리의 제곱으로 설정한 경우를 <b>모두 시도해 보도록 하여</b> 다양한 방식으로 데이터를 해석해 볼 수 있도록 한다." 자료집이 이미 "학생이 골라 보게 하라"고 적어 두었다는 점을 말씀하시면 좋습니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 10px;text-align:center">왜 <b style="color:var(--coral-deep)">직선</b>을 만들려고 할까요</h3>
 <p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">이걸 먼저 학생과 공유해야 "축을 바꿔 보자"가 심부름이 아니라 목표가 됩니다.</p>
 
 <div class="cardgrid">
-  <div class="pcard"><div class="num">1</div><h3>어긋난 점이 보입니다</h3><p>사람 눈은 <b>직선에서 벗어난 점</b>은 잘 찾지만, 휜 곡선에서 벗어난 점은 못 찾습니다. 직선으로 만들면 <b>이상한 측정이 드러납니다.</b></p></div>
-  <div class="pcard"><div class="num">2</div><h3>기울기가 이름을 갖습니다</h3><p>직선이 되면 <b>기울기와 절편이 각각 물리량</b>이 됩니다. 옴의 법칙에서 기울기의 역수는 저항이고, 역제곱에서 절편은 배경 조도입니다.</p></div>
-  <div class="pcard"><div class="num">3</div><h3>재보지 않은 곳을 말할 수 있습니다</h3><p>직선이면 <b>사이와 바깥을 예측</b>할 수 있습니다. 곡선은 눈대중으로 이어 붙이기 어렵습니다.</p></div>
+  <div class="pcard"><div class="num">1</div><h3>어긋난 점이 보입니다</h3><p>사람 눈은 <b>직선에서 벗어난 점</b>만 잘 찾습니다. 이상한 측정이 드러납니다.</p></div>
+  <div class="pcard"><div class="num">2</div><h3>기울기가 이름을 갖습니다</h3><p><b>기울기와 절편이 각각 물리량</b>이 됩니다 — 저항, 배경 조도.</p></div>
+  <div class="pcard"><div class="num">3</div><h3>재보지 않은 곳을 말할 수 있습니다</h3><p>직선이면 <b>사이와 바깥을 예측</b>할 수 있습니다.</p></div>
 </div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 10px;text-align:center">바꾸는 방법은 <b style="color:var(--coral-deep)">세 가지</b>입니다</h3>
@@ -1157,9 +1098,8 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
     <p style="font-size:.92rem;color:var(--ink-soft);text-align:center">한 그래프에서 <b>수 하나</b>(봉우리·기울기)를 뽑아<br><br>그것을 <b>새 그래프의 점</b>으로 씁니다.<br><br><b>마찰력·광합성</b>이 대표입니다.</p></div>
 </div>
 
-<div class="callout ok"><b>③번이 특히 중요합니다.</b> 그래프 하나가 곧 결론인 실험은 많지 않습니다.
-대개는 <b>그래프 여러 장에서 수를 하나씩 뽑아</b> 마지막 그래프를 만듭니다.
-그런데 학생들은 첫 그래프를 결과라고 생각하고 거기서 멈춥니다. <b>"이 그래프에서 우리가 쓸 숫자는 몇 개일까?"</b>가 좋은 발문입니다.</div>
+<div class="callout ok"><b>③이 가장 안 가르쳐집니다.</b> 학생은 <b>첫 그래프를 결과로 알고 멈춥니다.</b></div>
+<div class="note">그래프 하나가 곧 결론인 실험은 많지 않습니다. 대개 그래프 여러 장에서 수를 하나씩 뽑아 마지막 그래프를 만듭니다. 발문: <b>"이 그래프에서 우리가 쓸 숫자는 몇 개일까?"</b></div>
 
 <div class="filters" style="margin:26px 0 16px">
   <button class="fbtn on" data-k="all">전체</button>
@@ -1174,41 +1114,35 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
     <h4>먼저 곡선을 보여 주고 불편하게 만듭니다</h4>
-    <p>바로 변환을 시키면 심부름이 됩니다. <b>원래 그래프를 먼저 그리게</b> 하고, 그걸로 뭘 말할 수 있는지 물어보십시오. 잘 안 됩니다. 그때 시작합니다.</p>
+    <p>바로 시키면 심부름. <b>막히고 나서</b> 시작합니다.</p>
     <div class="say">"이 그래프로 '두 배가 되면 어떻게 된다'고 말할 수 있어?"</div></div></div>
   <div class="move"><div class="n">2</div><div>
     <h4>후보를 여러 개 그려 보게 합니다</h4>
-    <p>정답 하나를 알려 주지 마십시오. <b>x, 1/x, x² 을 다 그려 보게</b> 하고 <b>어느 것이 가장 곧은지 고르게</b> 합니다. 고르는 것이 곧 판단입니다.</p>
+    <p>x · 1/x · x² 를 다 그려 보고 <b>고르게</b>. 고르는 것이 판단입니다.</p>
     <div class="say">"세 가지로 다 그려 보고, 어느 게 제일 곧은지 정해 보자."</div></div></div>
   <div class="move"><div class="n">3</div><div>
     <h4>틀린 변환도 지우지 않습니다</h4>
-    <p>"x²로 해봤더니 더 휘었다"도 <b>결과</b>입니다. 남겨 두고 왜 그런지 이야기하십시오. 지워 버리면 정답만 남고 과정은 사라집니다.</p>
+    <p>"더 휘었다"도 <b>결과</b>입니다. 지우면 정답만 남습니다.</p>
     <div class="say">"이건 왜 더 휘었을까? 이것도 알아낸 거야."</div></div></div>
   <div class="move"><div class="n">4</div><div>
     <h4>기울기에 이름을 붙이게 합니다</h4>
-    <p>직선이 나왔으면 끝이 아닙니다. <b>"이 기울기는 무엇이지?"</b>를 물으십시오. 단위를 따져 보면 학생이 스스로 알아냅니다.</p>
+    <p><b>단위를 따져 보면</b> 학생이 스스로 알아냅니다.</p>
     <div class="say">"기울기 단위가 뭐가 되지? 그럼 이건 뭘 뜻할까?"</div></div></div>
   <div class="move"><div class="n">5</div><div>
     <h4>절편을 묻습니다</h4>
-    <p>0을 지나야 할 것 같은데 안 지날 때가 있습니다. <b>그 어긋남이 정보</b>입니다 — 배경 조도, 접촉 저항, 영점 오차.</p>
+    <p>0을 안 지나는 <b>그 어긋남이 정보</b> — 배경 조도 · 접촉 저항.</p>
     <div class="say">"왜 원점을 안 지나갈까? 이게 뭘 말해 주는 걸까?"</div></div></div>
 </div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">교사가 알아 두어야 할 것 셋</h3>
 
-<div class="callout warn"><b>① 변환하면 오차도 함께 변환됩니다.</b>
-<br>1/V로 바꾸면 <b>부피가 작은 쪽</b>의 오차가 크게 부풀려집니다. 그래서 양 끝 점이 유난히 튀어 보일 수 있습니다.
-중학교에서 깊게 다룰 필요는 없지만, 학생이 "왜 여기만 이상해요?"라고 물으면 <b>변환 때문일 수 있다</b>는 걸 알고 계셔야 합니다.</div>
+<div class="callout warn"><b>① 오차도 같이 변환됩니다</b> — 1/V는 <b>작은 V에서 증폭</b>. 양 끝 점이 튑니다.</div>
+<div class="note">중학교에서 깊게 다룰 필요는 없습니다. 다만 학생이 "왜 여기만 이상해요?"라고 물으면 <b>변환 때문일 수 있다</b>는 걸 알고 계셔야 합니다.</div>
 
-<div class="callout warn"><b>② 변환한 뒤에는 원본으로 되돌릴 수 없습니다.</b>
-<br>사이언스큐브 자료집이 명시적으로 경고합니다 — <b>변환 전에 반드시 저장하십시오.</b>
-그리고 학생에게도 <b>원본 CSV를 먼저 내려받게</b> 하는 습관을 들이면 좋습니다.</div>
+<div class="callout warn"><b>② 변환하면 원본 복구 불가</b> — <b>변환 전에 저장.</b> 학생도 원본 CSV 먼저 내려받게.</div>
 
-<div class="callout warn"><b>③ 이지메이커 자료집의 역제곱 설명은 한 군데가 헷갈립니다.</b>
-<br>"x축이 <b>거리의 제곱</b>으로 설정한 그래프"라고 되어 있는데, <b>r²을 가로축에 두면 직선이 되지 않습니다.</b> 직선이 되려면 <b>1/r²</b>이어야 합니다.
-<br>같은 자료집이 옆에서 계산한 <b>「밝기 × 거리²가 일정하다」</b>는 맞습니다 — 같은 사실을 확인하는 다른 방법입니다.
-<br>서울시교육청 자료집 쪽이 정확합니다 — X축을 <b>1/r²</b>로 바꾸라고 되어 있습니다.
-<br><br><b>연수에서 이 대목을 짚으시면 좋습니다.</b> 자료집도 틀릴 수 있고, 그걸 확인하는 게 우리 일이라는 이야기가 됩니다.</div>
+<div class="callout warn"><b>③ 이지 자료집 역제곱 표현 주의</b><br>"거리의 제곱"으로는 직선 ✗ · <b>1/r²</b> 이어야 ○<br>「밝기 × 거리² 일정」은 ○ · 서울 자료집이 정확(n=−2)</div>
+<div class="note">연수에서 짚으시면 좋은 대목입니다. 다만 <b>자료집을 비난하는 말투가 되지 않게</b> — "확인해 보는 게 우리 일"로 마무리하십시오.</div>
 
 <div class="script">"저는 센서 수업의 알맹이가 <b>측정이 아니라 여기</b>라고 생각합니다.<br><br>
 센서는 항상 시간축으로 줍니다. 그런데 우리가 알고 싶은 건 시간이 아니거든요. 옴의 법칙에서 알고 싶은 건 전압과 전류의 관계지 시간이 아닙니다. <b>그러니까 시간축을 버려야 합니다.</b><br><br>
@@ -1222,7 +1156,7 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
 
 /* ───── 교과서가 지정한 탐구 ───── */
 textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이미 적혀 있습니다',
-  '2022 개정 중등 교과서에 수록된 센서 탐구를 출판사별로 대조한 표입니다.')
+  '출판사별 수록 탐구 대조표')
 + `
 <div class="punch">
   <div class="q">교육과정 문서가 "하라"고 적어 두었고,<br><b>교과서가 어느 센서로 무엇을 할지까지</b> 적어 두었습니다.</div>
@@ -1254,7 +1188,7 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
   <td><b>[압력]</b><br>기체 압력과 부피 관계</td></tr>
 </table></div>
 
-<div class="callout ok"><b>3. 열은 다섯 출판사가 전부 온도 센서를 씁니다.</b> 어느 교과서를 쓰시든 <b>열평형과 비열</b>은 온도 센서 탐구로 실려 있습니다. 오늘 중1 탭의 「물과 식용유의 비열 비교」가 바로 그것이고, <b>교육과정 별책9의 탐구 활동에도</b> "온도 센서를 이용하여 여러 가지 액체의 비열 비교하기"로 적혀 있습니다.</div>
+<div class="callout ok"><b>3. 열 — 다섯 출판사 전부 온도 센서.</b> 어느 교과서든 열평형·비열은 센서 탐구로 실려 있습니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 10px;text-align:center">중학교 과학 2</h3>
 <div class="tablewrap"><table>
@@ -1276,7 +1210,7 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
   <td>—</td></tr>
 </table></div>
 
-<div class="callout"><b>과학 2는 온도가 네 곳 전부, 광합성 CO₂가 세 곳입니다.</b> 그리고 <b>옴의 법칙</b>은 천재·YBM 두 곳에 전압·전류 센서 탐구로 실려 있습니다 — 오늘 중2 탭의 그 실험입니다.</div>
+<div class="callout"><b>과학2</b> — 온도 네 곳 전부 · 광합성 CO₂ 세 곳 · <b>옴의 법칙 천재·YBM</b></div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 10px;text-align:center">고등학교 <span style="font-size:.9rem;color:var(--ink-soft)">(참고)</span></h3>
 <div class="tablewrap"><table>
@@ -1288,7 +1222,7 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
 <tr><td>화학 반응의 세계 · 1. 산·염기 평형</td><td><b>[pH]</b></td><td>중화 적정 과정에서 pH 변화 · 산염기 수용액의 pH 측정 · 물과 완충용액의 pH 변화</td></tr>
 </table></div>
 
-<div class="callout gold"><b>고등까지 이어집니다.</b> 중학교에서 압력·온도로 시작한 것이 「역학과 에너지」에서 다시 나오고, 중학교에 없던 <b>pH</b>가 고등 화학의 주력이 됩니다. 중학교에서 pH 센서를 사 두면 영재·심화 과정에서 그대로 쓰입니다.</div>
+<div class="callout gold"><b>고등 연결</b> — 중학 압력·온도가 「역학과 에너지」에서 다시. 중학에 없던 <b>pH</b>가 고등 화학의 주력.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 12px;text-align:center">그래서 무엇을 먼저 사야 하나</h3>
 <div class="kv">
@@ -1297,7 +1231,7 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
   <div class="item"><div class="k">3위</div><div class="v">CO₂</div></div>
   <div class="item"><div class="k">4위</div><div class="v">전압·전류</div></div>
 </div>
-<div class="callout ok" style="margin-bottom:0"><b>세 근거가 같은 답을 가리킵니다.</b> 교육과정 별책9의 탐구 활동, 서울시교육청 자료집 10사례, 그리고 이 교과서 수록표 — <b>셋 다 온도가 1위, 압력이 2위</b>입니다. 다음에 하나만 사신다면 온도입니다.</div>
+<div class="callout ok" style="margin-bottom:0"><b>세 근거가 같은 답</b> — 별책9 탐구활동 · 서울 자료집 10사례 · 교과서 수록표 → <b>온도 1위, 압력 2위</b></div>
 
 <div class="script">"센서를 왜 써야 하냐고 물으시면, 저는 세 개를 순서대로 보여 드립니다.<br><br>
 첫째, <b>교육과정 문서</b>입니다. 과정·기능 내용 요소에 '디지털 탐구 도구 활용하기'가 적혀 있습니다.<br><br>
@@ -1311,11 +1245,9 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
 
 /* ───── 센서 하나씩 익히기 ───── */
 basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
-  '19종을 각각 교실에서 무엇을 재며 시작할지, 설정값과 함정까지 정리했습니다.')
+  '19종 · 무엇을 재며 시작할지')
 + `
-<div class="callout"><b>이 자료의 좋은 점은 "무엇을 잴까"가 아니라 "왜 궁금할까"로 시작한다는 것입니다.</b>
-온도 센서 편은 이렇게 엽니다 — <b>"여름에 운동장에서 놀다가 교실에 들어오면 왜 시원하게 느껴질까요?"</b>
-「초대하는 법」에서 말씀드린 것이 이미 자료에 들어 있습니다.</div>
+<div class="callout"><b>각 편이 질문으로 시작합니다.</b> 온도 편 — "여름에 운동장에서 놀다가 교실에 들어오면 왜 시원할까요?"<br><b>수업 첫마디가 열아홉 개 들어 있습니다.</b></div>
 
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
   <input type="search" id="sQ" placeholder="센서 이름·측정 대상으로 찾기 (예: 온도, 주사기, 전도도)"
@@ -1324,20 +1256,10 @@ basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
 </div>
 <div class="exps" id="sList"></div>
 
-<div class="callout gold" style="margin-top:22px"><b>이 자료는 원래 다른 프로그램용이지만, 센서와 하드웨어는 같습니다.</b>
-준비물란에 <b>"EZMAKER 나노보드, EZMAKER 배터리"</b>라고 적혀 있습니다. 즉 <b>우리가 가진 그 센서</b>입니다.
-그래서 위 카드의 도입 질문·주의사항·해석 질문은 그대로 쓰시고, <b>연결과 수집은 아래 EZ·ON 절차</b>로 하시면 됩니다.</div>
+<div class="callout gold" style="margin-top:22px"><b>하드웨어는 같은 EZMAKER 센서입니다.</b> 질문·주의·해석은 그대로, <b>연결만 EZ·ON으로.</b></div>
 
-<div class="callout"><b>EZ·ON으로 연결하는 순서</b>
-<br>① 센서를 보드의 <b>표시된 포트</b>에 꽂고 (센서 기판에 Ⓐ·Ⓓ·I2C·UART가 인쇄되어 있습니다)
-<br>② 보드를 USB로 연결하고 <b>보드 전원을 켭니다</b> (PWR에 빨간불)
-<br>③ <code>ezon.ai</code> → [시작하기] → <b>구글 또는 웨일 계정</b>으로 로그인
-<br>④ [+ 프로젝트 만들기] → 이름·썸네일 입력 → 보드는 <b>[EZMAKER v1]</b> 선택 (메인보드·미니보드 모두)
-<br>⑤ 상단 <b>[블록 코딩]</b> → 쓰는 센서 메뉴에서 <b>[예제 코드 열기]</b> → 블록이 자동으로 채워집니다
-<br>⑥ <b>[업로드]</b> → 상단 <b>[데이터 분석]</b> → <b>[보드 연결]</b>을 한 번 더 누른 뒤 [수집 시작]
-<br><br>⚠️ <b>블록을 직접 짜지 마십시오.</b> [예제 코드 열기]면 충분하고, 연수에서 코딩을 시키면 시간이 다 갑니다.
-<br>⚠️ 태블릿은 웹이 아니라 <b>플레이스토어의 ezon 앱</b>으로 해야 코드가 올라갑니다.
-<br>⚠️ 시리얼포트 에러가 나면 <b>CH341 드라이버</b>를 설치하십시오 (haict.kr 자료실 · <b>UNINSTALL 먼저, 그다음 INSTALL</b>).</div>
+<div class="callout"><b>EZ·ON 연결 순서</b><br>① 표시된 포트에 센서 → ② USB + <b>보드 전원 ON</b> → ③ <code>ezon.ai</code> 로그인(구글·웨일)<br>④ 프로젝트 만들기 · 보드 <b>[EZMAKER v1]</b> → ⑤ 블록 코딩 → <b>[예제 코드 열기]</b><br>⑥ 업로드 → 데이터 분석 → <b>[보드 연결] 한 번 더</b> → 수집</div>
+<div class="note">⚠️ <b>블록을 직접 짜게 하지 마십시오.</b> [예제 코드 열기]면 충분하고, 연수에서 코딩을 시키면 시간이 다 갑니다.<br>⚠️ 태블릿은 웹이 아니라 <b>플레이스토어 ezon 앱</b>으로 해야 코드가 올라갑니다.<br>⚠️ 시리얼포트 에러는 <b>CH341 드라이버</b> — UNINSTALL 먼저, 그다음 INSTALL.</div>
 
 <div class="script">"이 19장은 제가 만든 게 아니라 자료집에 있는 겁니다. 다른 프로그램용 자료인데, <b>센서가 같아서</b> 그대로 씁니다. 그런데 제가 이걸 왜 넣었냐면, <b>첫 문장이 다 질문이거든요.</b><br><br>
 온도 편은 '여름에 운동장에서 놀다가 교실 들어오면 왜 시원할까요'로 시작합니다. 밝기 편은 '등잔 밑이 어둡다는 게 정말일까요'로 시작하고요.<br><br>
@@ -1350,7 +1272,7 @@ basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
 
 /* ───── 센서는 어떻게 전달하나 ───── */
 ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전달할까',
-  '실습 전에 12분만. 포트 이름을 외우는 시간이 아니라, 왜 저기에 꽂는지 이해하는 시간입니다.')
+  '포트 이름이 아니라 왜 저기에 꽂는지')
 + `
 <div class="qz" id="qzPort">
   <div class="qh">온도는 0 아니면 1이 아닌데,<br>왜 <b>온습도 센서는 D 포트</b>에 꽂을까요?</div>
@@ -1372,10 +1294,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
   </div>
 </div>
 
-<div class="callout"><b>같은 온도라도 전달하는 길은 두 가지입니다.</b>
-<br>· <b>전압의 크기</b>로 넘긴다 → 보드의 <b>A 포트</b>가 받습니다
-<br>· <b>0과 1의 데이터</b>로 바꿔서 넘긴다 → <b>D · I2C · UART</b>가 받습니다
-<br><br>즉 <b>측정하는 물리량</b>과 <b>전달하는 신호</b>는 별개입니다. 지금부터 하나씩 보겠습니다.</div>
+<div class="callout"><b>같은 온도, 두 갈래 길</b><br>전압의 크기로 → <b>A</b> · 0과 1의 데이터로 → <b>D · I2C · UART</b><br><b>측정하는 물리량</b>과 <b>전달하는 신호</b>는 별개입니다.</div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 6px;text-align:center">A 포트 — <b style="color:var(--coral-deep)">전압의 크기</b>로 전달</h3>
 <p style="text-align:center;color:var(--ink-soft);margin-bottom:12px">밝기 센서를 예로 들겠습니다. 슬라이더를 움직여 보십시오.</p>
@@ -1394,15 +1313,14 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
     <div class="st"><div class="lb">④ 보드 ADC</div><div class="vl">0~1023</div></div>
     <div class="st"><div class="lb">⑤ 컴퓨터가 읽는 수</div><div class="vl c" id="fN">184</div></div>
   </div>
-  <div class="callout ok" style="margin-bottom:0"><b>센서는 숫자를 보내지 않습니다.</b> 전압을 보낼 뿐이고, <b>숫자로 바꾸는 일은 보드가</b> 합니다. 그 변환기를 ADC라고 부릅니다.</div>
+  <div class="callout ok" style="margin-bottom:0"><b>센서는 전압만 보냅니다.</b> 숫자로 바꾸는 건 보드 — 그 변환기가 <b>ADC</b>.</div>
 </div>
 
-<div class="callout gold"><b>0~1023이라는 숫자는 어디서 왔을까요.</b> 이지온 블록을 열면 "밝기 센서 A0 — <b>아날로그 값(0~1023)</b>"과 "<b>전압 값(0.0~5.0V)</b>" 두 가지가 있습니다. 0~5V를 1024단계로 나눠 읽는다는 뜻입니다. <b>연속적인 전압을 계단으로 끊어 읽는 것</b>이고, 그 계단이 촘촘할수록 정밀합니다.</div>
+<div class="callout gold"><b>0~1023의 출처</b> — 이지온 블록에 "아날로그 값(0~1023)"과 "전압 값(0.0~5.0V)". <b>0~5V를 1024단계로.</b></div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">D 포트 — 여기서 오해가 생깁니다</h3>
 
-<div class="callout warn"><b>D는 "0과 1만 측정하는 센서"가 아닙니다.</b>
-<br>D는 <b>일반 디지털 핀으로 신호나 데이터를 주고받는 포트</b>입니다. 여기에 아주 다른 두 종류가 함께 꽂힙니다.</div>
+<div class="callout warn"><b>D ≠ "0과 1만 재는 센서"</b><br>D는 <b>일반 디지털 핀</b>으로 주고받는 포트. 성격이 다른 둘이 함께 꽂힙니다.</div>
 
 <div class="versus" style="grid-template-columns:1fr 1fr">
   <div class="vs-card cube">
@@ -1431,10 +1349,10 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
   </div>
   <div class="pulse"><svg id="dhtSvg" viewBox="0 0 600 46" preserveAspectRatio="none" role="img" aria-label="데이터선을 따라 HIGH와 LOW가 번갈아 지나가는 모습"><path id="dhtPath" d="M0 36 L600 36" fill="none" stroke="#12706f" stroke-width="3"/></svg></div>
   <div class="bits" id="dhtBits"></div>
-  <div class="callout" style="margin-bottom:0"><b>전선에서 순간순간 오가는 것은 HIGH와 LOW뿐입니다.</b> 그런데 그 HIGH/LOW를 <b>여러 개 이어 붙이면</b> 27이나 63 같은 수를 표현할 수 있습니다. 모스 부호가 점과 선만으로 모든 글자를 적는 것과 같습니다.</div>
+  <div class="callout" style="margin-bottom:0"><b>선에는 HIGH/LOW뿐.</b> 이어 붙이면 27도 63도 됩니다 — <b>모스 부호</b>처럼.</div>
 </div>
 
-<div class="callout gold"><b>정확히 말하면</b> — 온습도 센서(DHT11 계열)는 I2C나 UART 같은 표준 통신이 아니라 <b>데이터선 하나를 쓰는 자체 방식</b>으로 주고받습니다. 실제로는 습도·온도의 정수부와 소수부, 검사용 값까지 40비트를 보냅니다. 위 그림은 이해를 돕기 위해 정수부만 줄여 그린 것입니다.</div>
+<div class="callout gold"><b>정확히는</b> — 온습도 센서는 I2C·UART가 아니라 <b>데이터선 하나를 쓰는 자체 방식</b>입니다. 실제로는 40비트(위 그림은 줄인 것).</div>
 
 <div class="qz" id="qzWhy">
   <div class="qh">그럼 <b>둘 다 디지털인데</b> 왜 포트가 다를까요?</div>
@@ -1452,7 +1370,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
       <div class="pcard"><h3>I2C</h3><p>"모두가 쓰는 <b>표준 규칙</b>으로 말하고, 장치마다 <b>주소</b>가 있습니다."</p></div>
       <div class="pcard"><h3>UART</h3><p>"<b>보내는 길(TX)</b>과 <b>받는 길(RX)</b>을 따로 두고 순서대로 전달합니다."</p></div>
     </div>
-    <div class="callout ok" style="margin-bottom:0">셋 다 <b>디지털</b>입니다. 다른 것은 <b>말하는 규칙</b>입니다. 그래서 꽂는 자리가 다릅니다.</div>
+    <div class="callout ok" style="margin-bottom:0">셋 다 <b>디지털</b>. 다른 건 <b>말하는 규칙</b>이고, 그래서 꽂는 자리가 다릅니다.</div>
   </div>
 </div>
 
@@ -1468,7 +1386,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
     <div><span style="font-size:.8rem;font-weight:800;color:var(--teal)">SDA · 데이터</span>
       <svg viewBox="0 0 600 30" preserveAspectRatio="none" style="width:100%;height:30px"><path id="sdaPath" d="M0 24 L600 24" fill="none" stroke="#12706f" stroke-width="3"/></svg></div>
   </div>
-  <div class="callout" style="margin:12px 0 0">박자 선이 따로 있어서 <b>"지금 읽어라"</b>를 정확히 맞출 수 있습니다. 그래서 선이 두 개입니다.</div>
+  <div class="callout" style="margin:12px 0 0">박자 선이 따로 있어 <b>"지금 읽어라"</b>를 맞춥니다. 그래서 선이 둘.</div>
 </div>
 
 <div class="lab">
@@ -1487,7 +1405,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
     <div class="dev" data-d="2"><div class="ad">채널 2</div><div class="nm">센서 C</div><div class="rd">—</div></div>
     <div class="dev" data-d="3"><div class="ad">채널 3</div><div class="nm">센서 D</div><div class="rd">—</div></div>
   </div>
-  <div class="callout ok" style="margin-bottom:0"><b>I2C 포트가 하나라고 센서를 하나만 쓸 수 있다는 뜻이 아닙니다.</b> 주소(채널)가 서로 다르면 같은 두 선에서 구별할 수 있습니다. 다만 제품마다 쓸 수 있는 주소 수와 전원 한계가 달라서, <b>무한정 붙일 수 있는 것은 아닙니다.</b></div>
+  <div class="callout ok" style="margin-bottom:0"><b>I2C 포트 1개 ≠ 센서 1개.</b> 주소가 다르면 같은 두 선에서 구별됩니다.<br>다만 주소 수·전원 한계가 있어 <b>무한정은 아닙니다.</b></div>
 </div>
 
 <div class="qz" id="qzCh">
@@ -1499,8 +1417,8 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
       <span class="fb"></span></button>
   </div>
   <div class="rev">
-    <div class="callout warn" style="margin-top:14px"><b>전류 센서 한 개는 자기가 연결된 그 한 자리의 전류만 잽니다.</b> "4채널"은 센서를 <b>네 개까지 서로 다른 이름표로 구별해</b> 한 시스템에서 함께 쓸 수 있다는 뜻입니다.</div>
-    <div class="callout">채널 번호가 제품 내부에서 주소와 정확히 어떻게 대응하는지는 <b>해당 센서의 공식 사양을 확인</b>하십시오. 이 화면은 개념을 설명하기 위한 것입니다.</div>
+    <div class="callout warn" style="margin-top:14px"><b>센서 1개는 자기 자리만</b> 잽니다. "4채널" = 센서를 <b>네 개까지 이름표로 구별</b>해 함께 쓴다는 뜻.</div>
+    <div class="callout">채널↔주소 대응은 <b>공식 사양 확인.</b> 이 화면은 개념 설명입니다.</div>
   </div>
 </div>
 
@@ -1545,7 +1463,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
     </svg>
   </figure>
   <div class="punch" style="margin:6px 0 0;padding:18px"><div class="q" id="parEq">측정을 눌러 보십시오</div></div>
-  <div class="callout warn" style="margin-bottom:0"><b>전류 센서는 반드시 회로에 직렬로</b> 넣습니다. 배선을 끊고 그 자리에 끼우는 것입니다. 저항 양끝에 물리면 그건 단락입니다.</div>
+  <div class="callout warn" style="margin-bottom:0"><b>전류 센서는 직렬.</b> 배선을 끊고 그 자리에. 저항 양끝에 물리면 <b>단락</b>입니다.</div>
 </div>
 
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">UART — <b style="color:var(--coral-deep)">보내는 길</b>과 <b style="color:var(--coral-deep)">받는 길</b></h3>
@@ -1634,7 +1552,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
 <h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">오개념 점검 — 눌러서 뒤집어 보십시오</h3>
 <div class="ox" id="oxWrap"></div>
 
-<div class="callout ok" style="margin-top:24px"><b>이지메이커 보드에서 확인하는 법은 아주 쉽습니다.</b> 센서 기판에 <b>ⒶⒹ·I2C·UART가 인쇄되어 있습니다.</b> 적힌 대로 꽂으면 됩니다. 그리고 아날로그와 디지털은 <b>0~4번 중 아무 번호에 꽂아도 상관없습니다</b> — 다만 <b>코드에서 고른 번호와 실제로 꽂은 번호가 같아야</b> 합니다.</div>
+<div class="callout ok" style="margin-top:24px"><b>센서 기판에 ⒶⒹ·I2C·UART가 인쇄</b>돼 있습니다. 적힌 대로 꽂으면 됩니다.<br>A·D는 <b>0~4 아무 번호나</b> — 단 <b>코드의 번호와 같아야</b> 합니다.</div>
 
 <div class="script">"포트 이름을 외우실 필요는 없습니다. 센서에 다 적혀 있으니까요.<br><br>
 제가 이걸 12분이나 쓰는 이유는 따로 있습니다. 학생이 <b>'선생님, 온도는 0이나 1이 아닌데 왜 D예요?'</b>라고 물을 때, 그게 아주 좋은 질문이거든요. 그때 '그냥 그런 거야'라고 답하면 그 질문이 죽습니다.<br><br>
@@ -1653,7 +1571,7 @@ g3: gradePanel(3),
 
 /* ───── 나눔과 닫기 ───── */
 share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 하시겠습니까',
-  '오늘 하신 실험 하나를 실제 수업으로 옮기는 자리입니다.')
+  '오늘 한 실험을 실제 수업으로')
 + `<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:6px 0 14px;text-align:center">한 분씩 세 문장만</h3>
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
@@ -1700,7 +1618,7 @@ share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 하시�
 
 /* ───── 링크 자료실 ───── */
 links: head('🔗 자료실','필요할 때 <b>여기서 꺼내</b> 쓰십시오',
-  '중학교 과학 수업에 실제로 쓰이는 것만 골랐습니다. 주소를 외우실 필요 없습니다.')
+  '중학교 수업에 실제로 쓰이는 것만')
 + `
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;align-items:center">
   <input type="search" id="lQ" placeholder="찾기 (예: 드라이버, 크롬북, 카탈로그, 지능형, 코딩)"
@@ -1710,27 +1628,12 @@ links: head('🔗 자료실','필요할 때 <b>여기서 꺼내</b> 쓰십시오
 
 <div id="lList"></div>
 
-<div class="callout ok" style="margin-top:24px"><b>Science# for Web을 쓰실 때 미리 아셔야 할 것</b> <span style="font-size:.85rem;color:var(--ink-soft)">(사이언스샵 for Web 매뉴얼 K2025.12 기준)</span>
-<br>· 지원 기기 — <b>크롬북(Chrome)</b> · Windows(Chrome·Edge) · Android(Chrome) · <b>iOS는 Safari가 아니라 Bluefy</b> 브라우저
-<br>· <b>무선 센서용</b>입니다. 블루투스 또는 USB로 붙습니다
-<br>· <b>동시 4대까지</b> 권장. 센서 하나는 <b>한 기기에만</b> 붙습니다 (여러 기기 동시 연결 불가)
-<br>· ⚠️ <b>센서의 블루투스 모드를 반드시 Mobile로</b> 바꿔 두어야 합니다
-<br>· ⚠️ <b>보고서와 실험 콘텐츠는 들어 있지 않습니다.</b> 자료실에서 따로 받으셔야 합니다
-<br>· 수집은 <b>자동 / 수동</b> 두 가지. 수동일 때 X축을 <b>자동 증가수 · 숫자 입력 · 텍스트 입력</b> 중에 고릅니다
- — 보일의 법칙에서 부피를 직접 넣는 그 방식이 여기 있습니다
-<br>· 간격 1~100Hz · 실험 시간 10~1000초 · 저장은 <b>jpg 이미지</b>와 <b>CSV</b>
-<br>· 툴바에 <b>그래프 분석 · 시간 마커 · 영역 선택 · 표 형식 보기</b>가 있습니다</div>
+<div class="callout ok" style="margin-top:24px"><b>Science# for Web</b> — 크롬북·Windows·Android / <b>iOS는 Bluefy</b><br><b>무선 센서용 · 동시 4대</b> · 센서 하나는 한 기기에만<br>⚠️ <b>블루투스 모드 Mobile</b> · ⚠️ <b>보고서·실험 콘텐츠 미수록</b>(자료실에서 따로)<br>수집 자동/<b>수동</b>(X축 숫자 입력) · 1~100Hz · 10~1000초 · jpg·<b>CSV</b></div>
+<div class="note">툴바: 화면맞추기 · 그래프 분석 · 시간 마커 · 영역 선택 · 표 형식 보기 · 차트 설정.<br>수동 수집의 "숫자 입력"이 보일의 법칙에서 부피를 직접 넣는 그 방식입니다.</div>
 
-<div class="callout gold"><b>그리고 툴바 맨 아래에 「Science-On에 업로드」가 있습니다.</b>
-<br>지능형 과학실에서 만든 <b>모둠 아이디를 입력해 연결</b>한 뒤 [데이터 업로드]를 누르면 측정값이 그대로 넘어갑니다.
-<br>🏫 <b>지능형 과학실</b> 탭에서 말씀드린 <b>"모둠코드로 직접 연결"</b>이 바로 이 버튼입니다.</div>
+<div class="callout gold"><b>툴바 맨 아래 = 「Science-On에 업로드」</b><br>지능형 과학실의 <b>모둠 아이디</b> 입력 → 연결 → [데이터 업로드]</div>
 
-<div class="callout warn"><b>연결이 안 될 때 순서</b>
-<br>① <b>보드 전원</b>이 켜져 있는지 (이지메이커는 PWR에 빨간불)
-<br>② 센서를 <b>표시된 포트</b>에 꽂았는지, 케이블이 <b>끝까지</b> 들어갔는지
-<br>③ 큐브 무선이면 <b>블루투스 모드가 Mobile</b>인지, 충전이 되어 있는지
-<br>④ 이지 유선이면 <b>CH341 드라이버</b> — 아래 목록에서 받으십시오 (<b>UNINSTALL 먼저, 그다음 INSTALL</b>)
-<br>⑤ 그래도 안 되면 <b>다른 브라우저</b>로. Chrome·Edge가 가장 안정적입니다</div>
+<div class="callout warn"><b>연결 안 될 때</b> ① 보드 전원(PWR 빨간불) ② 케이블 끝까지 ③ 블루투스 Mobile·충전<br>④ <b>CH341 드라이버</b>(UNINSTALL→INSTALL) ⑤ Chrome·Edge로 바꾸기</div>
 
 <div class="script">"주소를 다 적어 드릴 테니 외우지 마십시오. 이 페이지를 링크로 드리겠습니다.<br><br>
 딱 두 개만 기억하시면 됩니다. <b>이지메이커는 ezon.ai, 큐브는 on.sciencecube.com</b>입니다. 나머지는 필요할 때 여기서 찾으시면 됩니다.<br><br>
@@ -1742,7 +1645,7 @@ links: head('🔗 자료실','필요할 때 <b>여기서 꺼내</b> 쓰십시오
 
 /* ───── 오늘의 센서 ───── */
 kit: head('🧰 오늘의 센서','가져온 것과 <b>못 가져온 것</b>',
-  '실험을 고르실 때 "몇 모둠이 동시에 가능한가"를 먼저 보십시오.')
+  '몇 모둠이 동시에 가능한지를 먼저')
 + `<div class="kv">
   <div class="item"><div class="k">이지 공기압</div><div class="v c">8</div></div>
   <div class="item"><div class="k">이지 전압</div><div class="v c">8</div></div>
@@ -1985,12 +1888,13 @@ function initBasics(){
       +'<div class="body">'
       +(s.hook?'<div class="tip" style="background:var(--coral-soft);color:#7d3319;margin:0 0 11px">'
         +'<b style="display:block;font-size:.76rem;letter-spacing:.3px;margin-bottom:3px">이렇게 엽니다</b>'+s.hook+'</div>':'')
-      +'<div class="row"><span class="k">설정</span><span class="v">'+s.set+' · 수집 주기 '+s.cyc+'</span></div>'
-      +(s.tips.length?'<div class="row"><span class="k">주의</span><span class="v"></span></div><ol>'
-        +s.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol>':'')
+      +'<details class="fold"><summary>설정 · 주의 · 해석</summary>'
+      +'<div class="row"><span class="k">설정</span><span class="v">'+s.set+' · '+s.cyc+'</span></div>'
+      +(s.tips.length?'<ol>'+s.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol>':'')
       +(s.q.length?'<div class="row" style="margin-top:9px"><span class="k">해석</span><span class="v">'
         +s.q.join('<br>')+'</span></div>':'')
       +(s.read?'<div class="tip">읽을거리 · '+s.read+'</div>':'')
+      +'</details>'
       +'</div></article>';
   }
   function draw(){
@@ -2082,7 +1986,6 @@ function initLinks(){
     return '<li style="padding:12px 0;border-bottom:1px dashed var(--line)">'
       +'<a href="'+it.u+'" target="_blank" rel="noopener" style="font-weight:800;color:var(--deep);text-decoration:none;border-bottom:2px solid var(--coral-soft)">'+it.t+' ↗</a>'
       +'<div style="font-size:.9rem;color:var(--ink-soft);margin-top:3px">'+it.d+'</div>'
-      +'<code style="display:inline-block;margin-top:5px;font-size:.78rem;background:var(--paper);color:var(--ink-soft);padding:2px 8px;border-radius:6px;word-break:break-all">'+it.u.replace(/^https?:\/\//,'')+'</code>'
       +'</li>';
   }
   function draw(){
@@ -2275,9 +2178,10 @@ function initAxis(){
       +'<div class="shift" style="margin:0 0 12px"><div class="box from"><div class="lb">센서가 주는 것</div><p>'+a.raw+'</p></div>'
       +'<div class="arrow">→</div>'
       +'<div class="box to"><div class="lb">우리가 만들 것</div><p>'+a.to+'</p></div></div>'
-      +'<div class="row"><span class="k">왜</span><span class="v">'+a.why+'</span></div>'
       +'<div class="row"><span class="k">읽기</span><span class="v">'+a.read+'</span></div>'
-      +'<div class="tip">'+a.tip+'</div>'
+      +'<details class="fold"><summary>왜 · 수업 팁</summary>'
+      +'<div class="row"><span class="k">왜</span><span class="v">'+a.why+'</span></div>'
+      +'<div class="tip">'+a.tip+'</div></details>'
       +'</div></article>';
   }
   function draw(){
