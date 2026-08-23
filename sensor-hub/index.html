@@ -153,6 +153,39 @@ th{background:var(--card);color:var(--teal);font-family:var(--font-display);font
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
 
+/* ══ 용어 풀이 ══ */
+.term{font:inherit;font-weight:700;color:var(--deep);background:none;border:none;border-bottom:2px dotted var(--coral);padding:0;cursor:pointer}
+.term:hover{color:var(--coral-deep)}
+.term::after{content:"?";font-size:.66em;vertical-align:super;color:var(--coral);margin-left:1px;font-weight:800}
+.term[aria-expanded="true"]{color:var(--coral-deep);border-bottom-style:solid}
+.termdef{display:none;background:var(--card);border:1px solid var(--line);border-top:2px solid var(--coral);border-radius:0 0 var(--r) var(--r);padding:14px 18px;margin:-6px 0 16px;font-size:.95rem;color:var(--ink);box-shadow:var(--shadow)}
+.termdef.on{display:block;animation:fadein .25s ease}
+.termdef b{color:var(--deep)}
+
+/* ══ 도구 비교 그림 ══ */
+.pipeline{margin:18px 0 6px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px 14px;box-shadow:var(--shadow)}
+.pipe .pl{font-family:var(--font-display);font-weight:600;font-size:.78rem;letter-spacing:.04em;color:#fff;background:var(--ink-soft);border-radius:4px;padding:4px 9px;margin-right:5px}
+.pipe.digi{margin-top:12px}
+.pipe.digi .pl{background:var(--teal)}
+.pb{font-size:.9rem;font-weight:600;color:var(--deep);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 12px;white-space:nowrap}
+.pb.hand{background:var(--coral-soft);border-color:#eec4b7;color:var(--coral-deep)}
+.pb.auto{background:var(--teal-soft);border-color:#c2d9e9}
+.pa{width:16px;height:1.5px;background:#c3cdd6;flex-shrink:0;position:relative}
+.pa::after{content:"";position:absolute;right:-1px;top:-3px;border-left:6px solid #c3cdd6;border-top:3.5px solid transparent;border-bottom:3.5px solid transparent}
+.pgrp{display:flex;align-items:center;gap:6px;border:1.5px dashed var(--coral);border-radius:8px;padding:8px 10px 22px;position:relative}
+.pgrp::after{content:attr(data-cap);position:absolute;left:8px;right:8px;bottom:5px;text-align:center;font-size:.72rem;font-weight:700;color:var(--coral-deep);white-space:nowrap}
+.pipe.digi .pgrp{border-color:var(--teal)}
+.pipe.digi .pgrp::after{color:var(--teal)}
+.pcap{font-size:.91rem;color:var(--ink-soft);margin:8px 0 0;padding-left:2px}
+.pipeline figcaption{font-size:.94rem;color:var(--ink);margin-top:14px;padding-top:12px;border-top:1.5px solid var(--deep)}
+.pipeline figcaption b{color:var(--coral-deep)}
+@media(max-width:700px){
+  .pb{font-size:.83rem;padding:6px 9px}
+  .pgrp{flex-wrap:wrap;padding-bottom:26px}
+  .pgrp::after{white-space:normal;line-height:1.3}
+}
+
 /* ══ 본문 중간 제목 ══ */
 .subh{font-family:var(--font-display);font-weight:600;color:var(--deep);font-size:clamp(1.12rem,2vw,1.3rem);
   line-height:1.35;letter-spacing:-.015em;margin:34px 0 10px;padding-top:13px;border-top:1.5px solid var(--deep);text-wrap:balance}
@@ -398,8 +431,8 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 <button class="totop" id="toTop">↑ 맨 위로</button>
 
 <script>
-/* ═══════════════ 탭 ═══════════════ */
-/* min = 그 블록에 배정한 분 · tkey = 타이머를 공유하는 묶음(학년 탭 셋은 같은 45분을 씁니다) */
+/* ═══════════════ 절 ═══════════════ */
+/* min = 그 블록에 배정한 분 · tkey = 타이머를 공유하는 묶음(학년 절 셋은 같은 45분을 씁니다) */
 const TABS = [
   {id:'setup', em:'', name:'출발 준비',      min:5},
   {id:'today', em:'📋', name:'오늘',            min:8},
@@ -775,21 +808,28 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 
 <div class="callout"><b>우리 학생들도 실험 시간 내내 이렇게 하고 있습니다.</b> 읽고 · 적고 · 옮겨 그리고.</div>
 
-<details class="fold" style="margin:18px 0"><summary>연수 FLOW CHART</summary>
+<details class="fold" style="margin:18px 0"><summary>송례중 FLOW CHART</summary>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
-<tr><td><b>0–8</b></td><td>여는 활동</td><td>온도계로 3분간 받아 적기 → "무엇을 보고 계셨습니까"</td></tr>
-<tr><td><b>8–20</b></td><td>왜 디지털 도구인가</td><td>교육과정의 요구와 도구의 다섯 가지 역할</td></tr>
-<tr><td><b>20–38</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
-<tr><td><b>38–44</b></td><td>학생이 얻는 것</td><td>교사가 편한 이야기 말고, 학생 쪽에서만</td></tr>
-<tr><td><b>44–50</b></td><td>초대하는 법</td><td>시켜서 하는 것과 하고 싶어서 하는 것</td></tr>
-<tr style="background:var(--gold-soft)"><td><b>선택</b></td><td>지능형 과학실</td><td>학교가 <b>ON을 쓰거나 모델학교</b>일 때 10분. 방과 플랫폼의 차이부터<br><span style="font-size:.86rem;color:var(--ink-soft)">센서 실습 뒤에 붙이는 것이 자연스럽습니다</span></td></tr>
-<tr style="background:var(--gold-soft)"><td><b>선택</b></td><td>센서는 어떻게 전달하나</td><td><b>이지메이커를 처음 쓰는 학교에서만</b> 12분. A·D·I2C·UART를 왜 갈라 꽂는지<br><span style="font-size:.86rem;color:var(--ink-soft)">넣으실 경우 나눔을 25 → 13분으로 줄이십시오</span></td></tr>
-<tr><td><b>50–95</b></td><td><b>내 학년 실험 직접 하기</b></td><td>맡고 계신 학년의 실험을 하나 골라 매뉴얼대로 <b>45분</b></td></tr>
-<tr><td><b>95–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
+<tr><td><b>0–5</b></td><td>출발 준비</td><td>사이언스# · EZ·ON 열고 자료집 받기</td></tr>
+<tr><td><b>5–12</b></td><td>여는 활동</td><td>만화 4컷 → "무엇을 보고 있었을까요"</td></tr>
+<tr><td><b>12–24</b></td><td>왜 디지털 도구인가</td><td>교육과정과 교과서가 센서를 어디에 적어 두었는지</td></tr>
+<tr><td><b>24–42</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
+<tr><td><b>42–48</b></td><td>학생이 얻는 것</td><td>교사가 편한 이야기 말고, 학생 쪽에서만</td></tr>
+<tr><td><b>48–54</b></td><td>초대하는 법</td><td>시켜서 하는 것과 하고 싶어서 하는 것</td></tr>
+<tr><td><b>54–66</b></td><td>센서는 어떻게 전달하나</td><td>이지메이커 A · D · I2C · UART를 왜 갈라 꽂는지</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>66–100</b></td><td><b>공통 실험</b> · 이지메이커</td><td>① 기체의 압력과 부피(보일의 법칙) &nbsp; ② 옴의 법칙</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>100–112</b></td><td>보유 센서 실습</td><td>시간이 남으면 가져온 센서로 원하시는 실험을</td></tr>
+<tr><td><b>112–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
 </table></div></details>
 
-<div class="callout ok"><b>실습은 고르십니다.</b> 맡으신 학년 절에서 하나. 센서는 다 가져왔고 <b>동시 가능 모둠 수</b>까지 적어 두었습니다.</div>
+<details class="fold" style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
+<div class="tablewrap"><table>
+<tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
+<tr><td colspan="3" style="text-align:center;color:var(--ink-soft);padding:26px 14px">준비 중입니다</td></tr>
+</table></div></details>
+
+<div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 해 보십니다.</div>
 
 
 `,
@@ -802,28 +842,52 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
   <div class="cap">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정</div>
 </div>
 
-<h3 class="subh">근거 넷 — 모두 원문 그대로입니다</h3>
+<h3 class="subh">근거 4가지</h3>
+<p>모두 별책 9 원문 그대로입니다.</p>
 
-<div class="callout"><b>① 과정⋅기능 내용 요소에 이름이 있습니다</b><br>"수학적 사고와 <b>디지털 탐구 도구 활용하기</b>" <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 물질 영역</span><br>지식⋅이해도 가치⋅태도도 아닌 <b>가르쳐야 할 기능</b>입니다.</div>
+<div class="callout"><b>① 과정⋅기능 내용 요소에 이름이 있습니다</b><br>"수학적 사고와 <b>디지털 탐구 도구 활용하기</b>" <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 물질 영역</span></div>
 
 <div class="callout"><b>② 교수⋅학습 방향</b><br>"<b>지능형 과학실을 활용한</b> 탐구 실험⋅실습 중심 … 수립하여 실행한다"<br>"센서나 기기 등 디지털 탐구 도구를 활용하여 <b>실시간으로 자료를 측정</b>"</div>
 
-<div class="callout"><b>③ 탐구 활동에 센서가 이름으로</b> <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 (3) 열</span><br>"<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>"<br>중1 절의 그 실험은 <b>우리가 고른 게 아닙니다.</b></div>
+<div class="callout"><b>③ 탐구 활동에 센서가 이름으로</b> <span style="font-size:.86rem;color:var(--ink-soft)">중1~3 (3) 열</span><br>"<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>"</div>
 
-<div class="callout warn"><b>④ 열 단원만 어조가 다릅니다</b><br>"온도 센서 등 디지털 탐구 도구를 <b>활용하도록 한다</b>" — 다른 데는 대개 "할 수 있다"</div>
+<div class="callout warn"><b>④ 그중에서도 유독 세게 적어 둔 단원이 있습니다</b> <span style="font-size:.86rem;color:var(--ink-soft)">(3) 열</span><br>"온도 센서 등 디지털 탐구 도구를 <b>활용하도록 한다</b>"<br>다른 단원은 대개 "활용할 수 있다"입니다.</div>
 
 <h3 class="subh">단원마다 무엇을 쓰라고 적혀 있나</h3>
+<p>괄호 안 숫자는 별책 9의 <b>영역 번호</b>입니다. 중학교 과학은 <b>1~3학년군</b>으로 제시되어 있어 교육과정 문서에는 학년 배정이 없습니다 — 몇 학년에서 배우는지는 교과서 편성에 따라 다릅니다.</p>
 <div class="tablewrap"><table>
-<tr><th>단원</th><th>교육과정 원문</th><th>오늘 되나</th></tr>
-<tr><td><b>열</b> (중1)</td><td>"온도 센서 등 디지털 탐구 도구를 활용하도록 한다"<br>탐구 활동 · 온도 센서로 여러 액체의 비열 비교</td><td>✅ 온도 4</td></tr>
-<tr><td><b>식물과 에너지</b> (중2)</td><td>"광합성 실험은 디지털 탐구 도구를 이용하여 데이터를 얻고 이를 해석하여 문제를 해결하는 디지털 기반 탐구 활동을 할 수 있다"</td><td>✅ CO₂ 4</td></tr>
-<tr><td><b>전기와 자기</b> (중2)</td><td>"전기 회로 실험에서 디지털 탐구 도구나 가상 실험을 활용할 수 있다"</td><td>✅ 전압·전류 7</td></tr>
-<tr><td><b>빛과 파동</b> (중2)</td><td>탐구 활동 · "디지털 탐구 도구를 이용하여 소리의 진폭, 진동수, 파형 탐구하기"</td><td>❌ 소리 센서 없음</td></tr>
-<tr><td><b>운동과 에너지</b> (중3)</td><td>"사진기나 <b>운동 센서</b> 등 다양한 디지털 탐구 도구를 활용할 수 있도록 한다"</td><td>❌ 초음파 없음</td></tr>
-<tr><td><b>별과 우주</b> (중2)</td><td>"디지털 탐구 도구를 활용하여 우리은하를 구성하는 천체의 종류와 특징을 비교⋅분석"</td><td>△ 조도 5</td></tr>
-</table></div>
+<tr><th>영역</th><th>어디에</th><th>교육과정 원문</th></tr>
 
-<div class="callout ok"><b>모둠 데이터 공유도 적혀 있습니다</b> — "여러 모둠의 데이터를 공유 … <b>공유 플랫폼</b> 등을 활용"</div>
+<tr><td><b>(3) 열</b></td><td>고려사항<br>탐구 활동</td>
+<td>"온도를 측정하거나 열의 전도를 관찰하는 활동에서 <b>온도 센서 등 디지털 탐구 도구를 활용하도록 한다</b>"<br>
+"<b>온도 센서를 이용하여</b> 여러 가지 액체의 비열 비교하기"</td></tr>
+
+<tr><td><b>(6) 기체의 성질</b></td><td>고려사항</td>
+<td>"여러 모둠의 데이터를 공유하여 탐구 활동을 수행할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b>을 활용할 수 있다"<br>
+"데이터를 수집하거나 시각화할 때 <b>다양한 센서와 소프트웨어를 활용</b>하여 디지털 소양을 함양하도록 지도한다"</td></tr>
+
+<tr><td><b>(10) 빛과 파동</b></td><td>탐구 활동</td>
+<td>"<b>디지털 탐구 도구를 이용하여</b> 소리의 진폭, 진동수, 파형 탐구하기"</td></tr>
+
+<tr><td><b>(12) 식물과 에너지</b></td><td>고려사항</td>
+<td>"광합성 실험은 <b>디지털 탐구 도구를 이용하여 데이터를 얻고 이를 해석</b>하여 문제를 해결하는 디지털 기반 탐구 활동을 할 수 있다"</td></tr>
+
+<tr><td><b>(14) 전기와 자기</b></td><td>고려사항</td>
+<td>"<b>전기 회로 실험에서 디지털 탐구 도구나 가상 실험을 활용할 수 있다</b>"</td></tr>
+
+<tr><td><b>(15) 별과 우주</b></td><td>고려사항</td>
+<td>"<b>디지털 탐구 도구를 활용하여</b> 우리은하를 구성하는 천체의 종류와 특징을 비교⋅분석하는 수업을 전개할 수 있다"</td></tr>
+
+<tr><td><b>(16) 화학 반응의 규칙성</b></td><td>고려사항</td>
+<td>"여러 모둠의 데이터를 공유할 수 있으며, 데이터 공유 시 <b>공유 플랫폼 등을 활용</b>하여 디지털 소양 교육과 연계하여 지도한다"</td></tr>
+
+<tr><td><b>(19) 운동과 에너지</b></td><td>고려사항</td>
+<td>"운동에 대한 기록과 자료의 해석⋅분석에 <b>사진기나 운동 센서 등 다양한 디지털 탐구 도구를 활용</b>할 수 있도록 한다"</td></tr>
+</table></div>
+<p class="src-note">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정 · 공통 교육과정 「과학」 — 각 영역의 <b>성취기준 적용 시 고려사항</b>과 <b>탐구 활동</b>에서 그대로 옮겼습니다.</p>
+
+<div class="callout ok"><b>모둠 데이터 공유도 적혀 있습니다</b> — "여러 모둠의 데이터를 공유 … <b>공유 플랫폼</b> 등을 활용"<br>
+<span style="display:block;margin-top:8px">예 · <b>지능형 과학실 ON</b> · 이미 쓰고 계신 <b>패들렛</b> · <b>구글 클래스룸</b>(EZ·ON은 실시간 값을 <b>구글 시트로 바로 전송</b>할 수 있습니다)</span></div>
 
 <div class="callout warn"><b>균형</b> — "학교 및 학생의 디지털 활용 수준을 고려하여 <b>디지털 격차가 발생하지 않도록 유의한다</b>"</div>
 
@@ -832,10 +896,38 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
 <div class="tablewrap"><table>
 <tr><th>구분</th><th>전통적 탐구도구</th><th>디지털 탐구도구</th></tr>
 <tr><td><b>성격</b></td><td>관찰과 제시 중심</td><td>탐구 과정의 재정의</td></tr>
-<tr><td><b>도구</b></td><td>아날로그 측정도구, 광학현미경, 물리적 실험장치</td><td>디지털 센서·데이터로거, 시뮬레이션, 가상실험실</td></tr>
+<tr><td><b>도구</b></td><td>아날로그 측정도구, 광학현미경, 물리적 실험장치</td><td>디지털 센서·<button class="term" type="button" data-def="logger">데이터로거</button>, 시뮬레이션, 가상실험실</td></tr>
 <tr><td><b>자료</b></td><td>정보 검색과 제시 중심의 자료 제공자</td><td>실시간 수집과 그래프 시각화</td></tr>
 <tr><td><b>한계</b></td><td>미시·거시 현상의 시각화에 한계<br>위험·고비용 실험은 학교에서 곤란</td><td>추상적 개념의 가시화와 다중 표상<br>협력적 탐구와 데이터 공유</td></tr>
 </table></div>
+
+<div class="termdef" id="def-logger"><b>데이터로거</b>란, 센서가 읽은 값을 <b>정해진 간격으로 자동 저장</b>하는 장치입니다. 사람이 시계를 보며 받아 적던 일을 대신합니다.<br>
+따로 사서 쓰는 물건이 아니라 <b>이미 갖고 계신 장비 안에 들어 있습니다</b> — 이지메이커 보드, 사이언스큐브 무선 센서가 그 역할을 합니다. 그래서 노트북과 끊겨도 값이 쌓이고(SD카드·센서 내부), 다시 연결하면 그동안의 기록이 한꺼번에 올라옵니다.</div>
+
+<figure class="pipeline">
+  <div class="pipe">
+    <span class="pl">전통적</span>
+    <span class="pb">현상</span><i class="pa"></i>
+    <span class="pb">아날로그 계기</span><i class="pa"></i>
+    <span class="pgrp" data-cap="학생 시간의 대부분이 여기">
+      <span class="pb hand">손으로 기록</span><i class="pa"></i><span class="pb hand">표</span><i class="pa"></i><span class="pb hand">손으로 작도</span>
+    </span>
+    <i class="pa"></i><span class="pb">그래프</span>
+  </div>
+  <p class="pcap">미시와 거시는 눈에 안 보이고, 위험하거나 비싼 실험은 학교에서 시작조차 못 합니다.</p>
+
+  <div class="pipe digi">
+    <span class="pl">디지털</span>
+    <span class="pb">현상</span><i class="pa"></i>
+    <span class="pgrp" data-cap="자동 · 실시간 — 사람 손이 빠집니다">
+      <span class="pb auto">센서 + 데이터로거</span>
+    </span>
+    <i class="pa"></i><span class="pb">그래프</span>
+  </div>
+  <p class="pcap">여기에 시뮬레이션과 가상 실험이 붙어 못 하던 실험을 대신하고, 모둠 데이터를 한 그래프에 겹쳐 볼 수 있습니다.</p>
+
+  <figcaption>같은 현상에서 그래프까지 가는 길 — 가운데 <b>세 칸이 통째로 빠집니다.</b> 오늘 이야기는 <b>그 빈자리에 무엇을 넣을 것인가</b>입니다.</figcaption>
+</figure>
 
 <h3 class="subh">디지털 도구의 다섯 가지 역할</h3>
 <div class="cardgrid">
@@ -2034,7 +2126,7 @@ const LINKS = [
   {t:'안드로이드 센서 연결 방법', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26312/', d:'태블릿으로 하실 때', tag:'안드로이드 태블릿 연결'}
  ]},
  {g:'사이언스큐브 — 센서와 수업', items:[
-  {t:'⭐ 무선센서 카탈로그 Ver 9.0', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26290/', d:'센서 35종 + 2022개정 교과서 수록 탐구 대조표. 📚 탭의 그 표가 여기서 나왔습니다', tag:'카탈로그 교과서 수록 가격 센서목록'},
+  {t:'⭐ 무선센서 카탈로그 Ver 9.0', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26290/', d:'센서 35종 + 2022개정 교과서 수록 탐구 대조표. 「교과서가 지정한 탐구」 절의 그 표가 여기서 나왔습니다', tag:'카탈로그 교과서 수록 가격 센서목록'},
   {t:'무선센서 사용설명서 (2025.10)', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/99/', d:'센서별 사용법·측정 범위·주의사항', tag:'센서 설명서 사용법 범위'},
   {t:'동영상 설명서 — 사용법 기초', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/25973/', d:'영상 2편. 글보다 빠릅니다', tag:'동영상 영상 유튜브 기초'},
   {t:'└ 사용법 기초 (1)', u:'https://youtu.be/brB2OwXyEQg', d:'유튜브', tag:'동영상 유튜브 기초1'},
@@ -2272,6 +2364,16 @@ function initAxis(){
     });
   });
   draw();
+}
+
+function initTerms(){
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('.term'); if(!b) return;
+    var d=document.getElementById('def-'+b.dataset.def); if(!d) return;
+    var on=d.classList.toggle('on');
+    b.setAttribute('aria-expanded',on?'true':'false');
+    if(on) d.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
 }
 
 function initSetup(){
@@ -2547,6 +2649,7 @@ function initPorts(){
   });
 }
 
+initTerms();
 initSetup();
 initPorts();
 initBasics();
