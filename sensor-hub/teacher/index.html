@@ -55,8 +55,7 @@ a{color:var(--teal)}
 
 .topstrip{max-width:1180px;margin:0 auto;padding:14px 22px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:2}
 .brand{display:flex;align-items:center;gap:9px;text-decoration:none}
-.brand .ball{width:26px;height:26px;border-radius:4px;background:var(--deep);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
-.brand .ball::after{content:"";width:12px;height:8px;border-left:2px solid var(--coral);border-bottom:2px solid var(--coral)}
+.brand .ball{width:30px;height:30px;border-radius:50%;display:block;background:var(--card);border:1px solid var(--line)}
 .brand .wm{font-family:var(--font-display);font-weight:600;font-size:.95rem;color:var(--deep);letter-spacing:-.01em}
 .tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .pbtn{font-family:var(--font-display);font-weight:500;font-size:.83rem;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:7px 13px;cursor:pointer;transition:.14s}
@@ -154,6 +153,15 @@ th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line-soft)
 th{background:var(--card);color:var(--teal);font-family:var(--font-display);font-weight:600;font-size:.8rem;letter-spacing:.04em;white-space:nowrap;border-bottom:1.5px solid var(--deep)}
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
+
+/* ══ 학교별로 갈리는 것 ══ */
+[data-school-only]{display:none}
+body[data-school="songrye"] [data-school-only~="songrye"],
+body[data-school="wiresol"] [data-school-only~="wiresol"]{display:block}
+.schoolbar{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;background:var(--deep);color:#fff;border-radius:var(--r);padding:14px 20px;margin:2px 0 20px}
+.schoolbar .sl{font-family:var(--font-display);font-weight:600;font-size:.78rem;letter-spacing:.05em;color:#9db6cc}
+.schoolbar .sn{font-family:var(--font-display);font-weight:600;font-size:1.16rem;color:#fff}
+.schoolbar .sd{font-size:.9rem;color:#c3d6e6}
 
 /* ══ 그림 ══ */
 .fig{margin:10px 0 22px}
@@ -452,8 +460,9 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 <body>
 
 <div class="topstrip">
-  <a class="brand" href="#"><span class="ball"></span><span class="wm">해누리중 조승재</span><span class="p-flag" style="display:inline-block;font-family:var(--font-display);font-size:.74rem;font-weight:600;letter-spacing:.04em;color:#fff;background:var(--red);padding:4px 9px;border-radius:4px;margin-left:9px">강사용</span></a>
+  <a class="brand" href="#"><img class="ball" src="../img/haenuri-logo.webp" width="96" height="96" alt="해누리중학교 교표" decoding="async"><span class="wm">해누리중 조승재</span><span class="p-flag" style="display:inline-block;font-family:var(--font-display);font-size:.74rem;font-weight:600;letter-spacing:.04em;color:#fff;background:var(--red);padding:4px 9px;border-radius:4px;margin-left:9px">강사용</span></a>
   <div class="tools">
+    <select class="mins" id="school" title="연수 학교"><option value="songrye">송례중</option><option value="wiresol">위례솔중</option></select>
     <select class="mins" id="mins" title="타이머 분"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option><option value="20" selected>20분</option><option value="30">30분</option><option value="45">45분</option></select>
     <span class="clock" id="clock">20:00</span>
     <button class="pbtn" id="btnStart">▶ 시작</button>
@@ -467,7 +476,7 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
     <span class="school">2026 찾아가는 디지털 과학 수업 역량 강화 연수 · 서울특별시교육청</span>
     <h1>수집을 대신해 준 만큼,<br><b>어디에 쓸 것인가</b></h1>
     <div class="sub">디지털 탐구도구로 하는 과학 수업</div>
-    <p class="lead">해누리중학교 <b>조승재</b> · 센서가 읽고 적는 일을 가져갔습니다. 그 자리에 무엇을 놓을지가 오늘 이야기입니다.</p>
+    <p class="lead">해누리중학교 <b>조승재</b></p>
     <svg class="trace" viewBox="0 0 1000 74" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0,66 C120,65 190,62 262,51 C334,40 382,18 470,10 C580,1 760,5 1000,6"
             fill="none" stroke="var(--coral)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
@@ -498,8 +507,9 @@ const TABS = [
   {id:'why',   em:'🔭', name:'왜 디지털 도구인가', min:12},
   {id:'lose',  em:'⚖️', name:'무엇을 잃는가',    min:18},
   {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
-  {id:'mykit', em:'🧪', name:'내 센서로 할 수 있는 것', min:0},
+  {id:'mykit', em:'🧪', name:'오늘 가져온 센서로 할 수 있는 것', min:0},
   {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
+  {id:'axislab',em:'🛠', name:'축 바꾸기 — 어디를 누르나', min:0},
   {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
   {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
   {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:12},
@@ -884,7 +894,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 
 <div class="callout"><b>우리 학생들도 실험 시간 내내 이렇게 하고 있습니다.</b> 읽고 · 적고 · 옮겨 그리고.</div>
 
-<details class="fold" style="margin:18px 0"><summary>송례중 FLOW CHART</summary>
+<details class="fold" data-school-only="songrye" open style="margin:18px 0"><summary>송례중 FLOW CHART</summary>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
 <tr><td><b>0–5</b></td><td>출발 준비</td><td>사이언스# · EZ·ON 열고 자료집 받기</td></tr>
@@ -898,7 +908,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><td><b>108–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
 </table></div></details>
 
-<details class="fold" style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
+<details class="fold" data-school-only="wiresol" open style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
 <tr><td colspan="3" style="text-align:center;color:var(--ink-soft);padding:26px 14px">준비 중입니다</td></tr>
@@ -1444,6 +1454,117 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
 <div class="note"><b>이 절이 오늘의 중심입니다.</b> 실습 시간을 줄여서라도 여기는 확보하세요.<br><br>
 전부 설명하지 마시고 <b>선생님들이 고르신 실험의 카드만</b> 열어서 같이 보십시오. 자기 실험이면 훨씬 잘 듣습니다.<br><br>
 마지막 카드(냉각 곡선 로그 변환)는 <b>중학교에서는 하지 마십시오.</b> 고등 연결용 언급으로만.</div>`,
+
+
+/* ───── 축 바꾸기 실습 ───── */
+axislab: head('🛠 실습','축을 바꾸려면 <b>어디를 누를까요</b>',
+  '두 프로그램이 서로 다른 자리에서, 서로 다른 때에 축을 정합니다')
++ `<div class="callout warn"><b>가장 큰 차이 한 가지</b><br>
+<b>Science#</b> 는 <b>수집을 시작하기 전에</b> 축을 정합니다. 시작하고 나면 못 바꿉니다.<br>
+<b>EZ·ON</b> 은 <b>수집한 뒤에도</b> 센서끼리 축을 바꿔 볼 수 있습니다.<br>
+그래서 큐브로 보일의 법칙을 하실 때는 <b>실험 설정을 먼저 손봐야</b> 합니다.</div>
+
+<h3 class="subh">EZ·ON <b>이지메이커</b></h3>
+<p>모드가 셋인데, 축을 정하는 자리가 모드마다 다릅니다.</p>
+<div class="tablewrap"><table>
+<tr><th>모드</th><th>무엇을 하나</th><th>가로축</th></tr>
+<tr><td><b>기본 모드</b></td><td>보드 연결 확인, 간단한 그래프·막대·게이지</td><td>시간 고정</td></tr>
+<tr><td><b>분석 모드</b></td><td>많은 양을 실시간으로 보며 수집</td><td>시간 고정</td></tr>
+<tr><td><b>수동 모드</b> <span class="bd n8">축을 정할 수 있음</span></td><td>사람이 넣는 값과 센서 값을 짝지어 수집</td><td><b>사람이 정함</b></td></tr>
+</table></div>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>사람이 넣는 값을 가로축으로 — 수동 모드</h4>
+    <p>보일의 법칙처럼 <b>센서가 못 재는 변인</b>이 가로축일 때입니다.</p>
+    <ol style="margin:8px 0 0 18px;color:var(--ink)">
+      <li>보드와 센서를 연결하고 EZ·ON 을 엽니다</li>
+      <li><b>수동 모드</b>로 바꿉니다</li>
+      <li><b>수동 입력 항목</b>을 <b>부피</b>, <b>센서 측정 항목</b>을 <b>압력(공기압)</b> 으로 지정합니다</li>
+      <li>주사기 눈금을 하나 맞출 때마다 부피를 입력하고 수집을 누릅니다</li>
+      <li>가로축이 시간이 아니라 <b>부피</b>인 그래프가 그려집니다</li>
+    </ol>
+    <div class="say">"EZON의 '수동 모드'에서 수동 입력 부분을 '부피', 센서 측정 부분을 '압력' 혹은 '공기압'으로 지정한다." — 자료집 원문</div></div></div>
+
+  <div class="move"><div class="n">2</div><div>
+    <h4>센서 값끼리 짝지어 보기 — 오른쪽 아래 X축 탭</h4>
+    <p>옴의 법칙(전압–전류), 온도–이산화탄소처럼 <b>둘 다 센서가 재는</b> 경우입니다.</p>
+    <ol style="margin:8px 0 0 18px;color:var(--ink)">
+      <li>기본 모드나 분석 모드로 <b>먼저 수집</b>합니다</li>
+      <li>수집이 끝나면 <b>수동 모드로 바꿉니다</b></li>
+      <li><b>오른쪽 아래 X축 탭</b>에서 가로축에 놓을 센서를 고릅니다</li>
+      <li>필요하면 <b>X축·Y축 라벨</b> 설정도 같이 바꿉니다</li>
+    </ol>
+    <div class="say">"일반 모드 혹은 분석 모드로 수집을 하고 나서, 수동 모드로 바꾼 뒤 두 센서의 상관관계를 알아볼 수 있다. [x축 부분 탭을 바꾸면 된다.]" — 자료집 원문</div></div></div>
+
+  <div class="move"><div class="n">3</div><div>
+    <h4>계산한 값을 축으로 — 시트로 빼서</h4>
+    <p><b>1/V · 1/r² · log</b> 처럼 값을 계산해 만든 축은 EZ·ON 안에서 못 만듭니다. 오늘 말한 <b>축 변환</b>이 이 자리입니다.</p>
+    <ol style="margin:8px 0 0 18px;color:var(--ink)">
+      <li><b>데이터 분석 탭</b>에서 값을 확인합니다</li>
+      <li><b>실시간 데이터를 엑셀로 전송</b> 기능을 씁니다 <span style="font-size:.86rem;color:var(--ink-soft)">(자료실 절에 링크가 있습니다)</span></li>
+      <li>시트에 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=1/B2</code> 같은 열을 하나 더 만듭니다</li>
+      <li>그 열을 가로축으로 놓고 다시 그립니다</li>
+    </ol>
+    <div class="say">"이 열은 우리가 만든 겁니다. 센서가 준 게 아니에요."</div></div></div>
+</div>
+
+<h3 class="subh">Science# for Web <b>사이언스큐브</b></h3>
+<p>큐브는 <b>수집을 시작하기 전에</b> 축을 정합니다.</p>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>사람이 넣는 값을 가로축으로 — 수동수집</h4>
+    <ol style="margin:8px 0 0 18px;color:var(--ink)">
+      <li>오른쪽 위 <b>메뉴 단추</b> → <b>실험 설정</b></li>
+      <li><b>데이터 수집방법</b>을 <b>수동수집</b>으로 바꿉니다<br>
+        <span style="font-size:.9rem;color:var(--ink-soft)">자동수집은 시간에 따라 모읍니다 — 가로축이 시간으로 고정됩니다</span></li>
+      <li><b>X축 데이터 타입</b>을 고릅니다
+        <div class="tablewrap" style="margin:9px 0 0;box-shadow:none"><table style="min-width:0">
+        <tr><th>고르는 것</th><th>이럴 때</th></tr>
+        <tr><td>자동 증가수 (1,2,3…)</td><td>몇 번째인지만 세면 될 때</td></tr>
+        <tr><td><b>숫자 입력</b></td><td><b>부피·거리·질량처럼 값을 직접 넣을 때 ← 대부분 이것</b></td></tr>
+        <tr><td>텍스트 입력</td><td>단열재 종류처럼 이름이 축일 때</td></tr>
+        </table></div></li>
+      <li>값을 하나 맞출 때마다 숫자를 넣고 <b>수집</b> 버튼을 누릅니다</li>
+    </ol>
+    <div class="say">"그래프가 그려지기 시작하면 이미 늦어. 시작 전에 정하는 거야."</div></div></div>
+
+  <div class="move"><div class="n">2</div><div>
+    <h4>이미 시간축으로 모았다면 — 표로 보고 CSV로</h4>
+    <ol style="margin:8px 0 0 18px;color:var(--ink)">
+      <li>툴바 <b>표 형식으로 보기</b> — X·Y 값이 표로 나옵니다</li>
+      <li>툴바 <b>차트를 CSV로 저장</b></li>
+      <li>시트에서 원하는 축으로 다시 그립니다</li>
+    </ol>
+    <div class="say">"센서가 준 건 시간이랑 압력 두 줄이야. 세 번째 줄은 우리가 만드는 거고."</div></div></div>
+
+  <div class="move"><div class="n">3</div><div>
+    <h4>모둠 데이터를 한 그래프에 겹치기 — 차트 합치기</h4>
+    <p>일곱 모둠 곡선을 겹쳐 놓아야 <b>"한 모둠은 우연, 일곱이 같으면 법칙"</b> 이 보입니다.</p>
+    <p style="margin-top:6px">사이언스큐브 자료실의 <b>「차트 합치기·분리하기」</b> 문서를 보십시오 — 자료실 절에 링크가 있습니다.</p>
+    <div class="say">"자기 모둠 선이 어느 건지 찾아봐."</div></div></div>
+</div>
+
+<h3 class="subh">오늘 <b>해 보실 것</b></h3>
+<div class="tablewrap"><table>
+<tr><th>실험</th><th>센서가 주는 축</th><th>우리가 만들 축</th><th>어디서 바꾸나</th></tr>
+<tr><td><b>보일의 법칙</b></td><td>시간 – 압력</td><td>부피 – 압력 → 1/부피 – 압력</td><td>EZ·ON <b>수동 모드</b><br>1/부피는 <b>시트에서</b></td></tr>
+<tr><td><b>옴의 법칙</b></td><td>시간 – 전압, 시간 – 전류</td><td>전압 – 전류</td><td>EZ·ON <b>수집 후 X축 탭</b></td></tr>
+<tr><td><b>거리에 따른 빛의 세기</b></td><td>시간 – 조도</td><td>거리 – 조도 → 1/거리² – 조도</td><td>큐브 <b>수동수집 · 숫자 입력</b><br>1/거리²은 <b>시트에서</b></td></tr>
+<tr><td><b>비열 비교</b></td><td>시간 – 온도 ×2</td><td>두 곡선의 <b>기울기</b></td><td>축은 그대로. <b>기울기만 읽습니다</b></td></tr>
+</table></div>
+
+<div class="callout warn"><b>바꾸기 전에 원본을 저장하십시오.</b> 변환하고 나면 되돌릴 수 없습니다. 학생에게도 <b>원본 CSV를 먼저 내려받게</b> 하십시오.</div>
+
+<div class="script">"자, 여기가 오늘 제일 실용적인 부분입니다. 축을 바꾸자고 말은 했는데, <b>그래서 어느 단추를 누르냐</b>는 거죠.<br><br>
+<b>두 프로그램이 다릅니다.</b> 큐브는 <b>시작하기 전에</b> 정해야 합니다. 실험 설정 들어가서 수동수집으로 바꾸고, X축 데이터 타입을 숫자 입력으로 해 놓아야 합니다. 시작 버튼 누르고 나면 못 바꿉니다.<br><br>
+이지온은 좀 낫습니다. <b>수집을 다 하고 나서도</b> 수동 모드로 바꾸면 오른쪽 아래에 X축 탭이 있어서 거기서 고를 수 있습니다.<br><br>
+그런데 <b>둘 다 못 하는 게 하나</b> 있습니다. <b>1/V 같은 걸 계산해서 축으로 쓰는 것</b>. 그건 시트로 빼야 합니다. 그리고 저는 그게 오히려 좋다고 봅니다. <b>그 열은 학생이 만드는 거니까요.</b> 센서가 준 게 아니라."</div>
+
+<div class="note"><b>이 절은 실습 직전에 여십시오.</b> 앞에서 이론으로 축 이야기를 하고, 손을 대기 직전에 여기를 펴시면 됩니다.<br><br>
+<b>큐브 쓰시는 분께는 먼저 경고하십시오.</b> "실험 설정부터 보세요"라고 안 하면 그냥 시작 누르시고, 시간축으로 다 모으신 뒤에 다시 하셔야 합니다.<br><br>
+표 마지막 줄(비열)을 꼭 짚으세요. <b>축을 안 바꾸는 실험도 있다</b>는 걸 보여 줘야 "무조건 바꿔야 하나"라는 오해가 안 생깁니다.</div>`,
 
 /* ───── 교과서가 지정한 탐구 ───── */
 textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이미 적혀 있습니다',
@@ -2022,8 +2143,9 @@ const HUBD = {
   g2:'중2 실험 카드와 매뉴얼 쪽수',
   g3:'중3 실험 카드와 매뉴얼 쪽수',
   share:'오늘 가져가실 것',
-  mykit:'가져온 센서로 되는 실험 · 실험 수업 요령',
+  mykit:'오늘 가져온 센서로 되는 실험 · 실험 수업 요령',
   axis:'축 바꾸기 · 축 변환 · 요약값 뽑기',
+  axislab:'EZ·ON 과 Science# 에서 실제로 어느 단추를 누르나',
   textbook:'교과서 5종이 실제로 실은 탐구 대조표',
   basics:'센서 19종을 하나씩 — 기초 측정법',
   links:'이지메이커 · 사이언스큐브 · 지능형 과학실 링크',
@@ -2045,6 +2167,23 @@ const OUTLINKS = [
 
 const hubEl=document.getElementById('hub'), secfoot=document.getElementById('secfoot');
 
+/* ═══ 학교 ═══ */
+const SCHOOLS={
+  songrye:{name:'송례중학교', when:'8월 24일(월)', note:'이지메이커 공통 실험 둘 — 보일의 법칙 · 옴의 법칙'},
+  wiresol:{name:'위례솔중학교', when:'8월 26일(수)', note:'준비 중입니다'}
+};
+const schoolSel=document.getElementById('school');
+function setSchool(id){
+  if(!SCHOOLS[id]) id='songrye';
+  document.body.dataset.school=id;
+  schoolSel.value=id;
+  try{ localStorage.setItem('dt_school',id); }catch(e){}
+  const bar=hubEl.querySelector('.schoolbar');
+  if(bar) bar.innerHTML='<span class="sl">오늘 연수</span><span class="sn">'+SCHOOLS[id].name
+    +'</span><span class="sd">'+SCHOOLS[id].when+' · '+SCHOOLS[id].note+'</span>';
+}
+schoolSel.addEventListener('change',()=>setSchool(schoolSel.value));
+
 function hubCard(t){
   const st=STEP[t.id];
   return '<button class="hubcard'+(st?'':' ref')+'" data-go="'+t.id+'">'
@@ -2055,7 +2194,8 @@ function hubCard(t){
 function buildHub(){
   const run=TABS.filter(t=>STEP[t.id]), ref=TABS.filter(t=>!STEP[t.id]);
   hubEl.innerHTML=
-     '<div class="hubsec"><h2>연수 진행 · 순서대로</h2><div class="hubgrid">'+run.map(hubCard).join('')+'</div></div>'
+     '<div class="schoolbar"></div>'
+    +'<div class="hubsec"><h2>연수 진행 · 순서대로</h2><div class="hubgrid">'+run.map(hubCard).join('')+'</div></div>'
     +'<div class="hubsec"><h2>찾아보는 자료</h2><div class="hubgrid">'+ref.map(hubCard).join('')+'</div></div>'
     +'<div class="hubsec"><h2>다른 자료실</h2><div class="hubgrid">'+OUTLINKS.map(function(l){
         return '<a class="hubcard out" href="'+l.u+'" target="_blank" rel="noopener">'
@@ -2065,6 +2205,7 @@ function buildHub(){
     +'<span class="hint">Ctrl+F 로 자료실 전체를 한 번에 훑으실 때</span></div>';
 }
 buildHub();
+(function(){ let v='songrye'; try{ v=localStorage.getItem('dt_school')||'songrye'; }catch(e){} setSchool(v); })();
 
 /* 보기 모드 — hub(단추판) · one(한 절만) · all(전부 한 페이지) */
 function setView(mode, id){
