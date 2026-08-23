@@ -22,7 +22,7 @@
   /* ── 계측 기록지 ──
      짜임은 계기 잉크 남색으로 세우고, 강조는 리드선 빨강 한 색만 씁니다.
      초록·노랑·빨강은 의미 표시(맞음·주의·틀림) 전용이라 강조색으로 쓰지 않습니다. */
-  --ink:#0f1a22; --ink-soft:#55666f;
+  --ink:#0f1a22; --ink-soft:#41525d;
   --paper:#eef1f4; --card:#ffffff;
   --deep:#0e3050; --teal:#1a5b8a; --teal-soft:#e3edf5;
   --coral:#c2452a; --coral-deep:#9c3116; --coral-soft:#fae9e3;
@@ -30,7 +30,7 @@
   --green:#1c7a4d; --green-soft:#e1f0e8;
   --red:#b32d1c; --red-soft:#fbe7e4;
   --line:#d5dee6; --line-soft:#e7edf2;
-  --grid:rgba(14,48,80,.055); --grid5:rgba(14,48,80,.10);
+  --grid:rgba(14,48,80,.075);
   --shadow:0 1px 2px rgba(14,48,80,.05);
   --shadow-lg:0 10px 26px rgba(14,48,80,.10);
   --r:10px;
@@ -44,11 +44,9 @@ html{scroll-behavior:smooth}
 body{font-family:var(--font-sans);color:var(--ink);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;
   background-color:var(--paper);
   background-image:
-    linear-gradient(var(--grid5) 1px,transparent 1px),
-    linear-gradient(90deg,var(--grid5) 1px,transparent 1px),
     linear-gradient(var(--grid) 1px,transparent 1px),
     linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  background-size:120px 120px;
   background-attachment:fixed;}
 .mono,.num,.tn,.secno,.clock,td .u{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
 ::selection{background:var(--coral);color:#fff}
@@ -127,8 +125,8 @@ body.presenter .pbtn.p-toggle{background:var(--red);color:#fff;border-color:var(
 .pcard .num{font-family:var(--font-mono);font-weight:600;font-size:1.45rem;color:var(--coral);line-height:1;margin-bottom:7px}
 .punch{background:var(--deep);color:#fff;border-radius:var(--r);padding:26px 30px;margin:20px 0;text-align:left;max-width:none;position:relative;overflow:hidden}
 .punch::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-  background-size:24px 24px}
+  background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:72px 72px}
 .punch .q{font-family:var(--font-display);font-weight:500;font-size:clamp(1.08rem,2.3vw,1.45rem);line-height:1.5;position:relative;text-wrap:balance}
 .punch .q b{color:#ffb59b;font-weight:600}
 .punch .cap{font-family:var(--font-display);font-weight:500;color:#9db6cc;font-size:.8rem;margin-top:13px;letter-spacing:.03em;position:relative}
@@ -220,7 +218,7 @@ body[data-view="all"] .hubbtn::after{content:" · 전체 보기 중";font-weight
 .pgrp::after{content:attr(data-cap);position:absolute;left:8px;right:8px;bottom:5px;text-align:center;font-size:.72rem;font-weight:700;color:var(--coral-deep);white-space:nowrap}
 .pipe.digi .pgrp{border-color:var(--teal)}
 .pipe.digi .pgrp::after{color:var(--teal)}
-.pcap{font-size:.91rem;color:var(--ink-soft);margin:8px 0 0;padding-left:2px}
+.pcap{font-size:.93rem;color:var(--ink);margin:8px 0 0;padding-left:2px}
 .pipeline figcaption{font-size:.94rem;color:var(--ink);margin-top:14px;padding-top:12px;border-top:1.5px solid var(--deep)}
 .pipeline figcaption b{color:var(--coral-deep)}
 @media(max-width:700px){
@@ -233,7 +231,7 @@ body[data-view="all"] .hubbtn::after{content:" · 전체 보기 중";font-weight
 .subh{font-family:var(--font-display);font-weight:600;color:var(--deep);font-size:clamp(1.12rem,2vw,1.3rem);
   line-height:1.35;letter-spacing:-.015em;margin:34px 0 10px;padding-top:13px;border-top:1.5px solid var(--deep);text-wrap:balance}
 .subh b{color:var(--coral);font-weight:600}
-.subh+p{color:var(--ink-soft);font-size:.97rem;margin:-4px 0 12px;max-width:62ch}
+.subh+p{color:var(--ink);font-size:.97rem;margin:-4px 0 12px;max-width:62ch}
 
 /* ══ 출발 준비 — 체크하며 내려가는 목록 ══ */
 .startlist{border-top:1.5px solid var(--deep);margin:4px 0}
@@ -442,7 +440,7 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 .kv .item .k{font-size:.8rem;color:var(--ink-soft)}
 .kv .item .v{font-family:var(--font-display);font-weight:600;font-size:1.35rem;color:var(--deep);line-height:1.25}
 .kv .item .v.c{color:var(--coral)}
-.src-note{font-size:.86rem;color:var(--ink-soft);margin-top:22px;padding-top:12px;border-top:1px solid var(--line);line-height:1.7;max-width:70ch}
+.src-note{font-size:.88rem;color:var(--ink-soft);margin-top:22px;padding-top:12px;border-top:1px solid var(--line);line-height:1.7;max-width:70ch}
 </style>
 </head>
 <body>
