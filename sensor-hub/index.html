@@ -118,6 +118,10 @@ body.presenter .pbtn.p-toggle{background:var(--red);color:#fff;border-color:var(
 .cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:19px 18px;box-shadow:var(--shadow);transition:.15s}
 .pcard:hover{border-color:var(--teal)}
+.pcard.only{background:var(--coral-soft);border-color:#eec4b7;border-top:2px solid var(--coral);border-radius:0 0 var(--r) var(--r)}
+.pcard.only h3{color:var(--coral-deep)}
+.pcard.only p{color:#7d3319}
+.pcard.only p b{color:#5e230f}
 .pcard h3{font-family:var(--font-display);font-weight:600;color:var(--deep);font-size:1.05rem;margin-bottom:7px;letter-spacing:-.01em}
 .pcard p{color:var(--ink-soft);font-size:.94rem}
 .pcard .num{font-family:var(--font-mono);font-weight:600;font-size:1.45rem;color:var(--coral);line-height:1;margin-bottom:7px}
@@ -213,6 +217,10 @@ td b{color:var(--deep)}
 .ulink::after{content:"\2197";opacity:.45}
 .ulink.dl::after{content:"\2193";opacity:.6}
 .ulink b{font-family:var(--font-sans);font-weight:600;font-size:.84rem;letter-spacing:0}
+.packlist{list-style:none;margin:10px 0 0;padding:0;border-top:1px solid var(--line)}
+.packlist li{padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:.9rem;color:var(--ink-soft);line-height:1.55}
+.packlist li b{display:inline-block;min-width:46px;font-family:var(--font-mono);font-size:.8rem;font-weight:600;color:var(--coral);margin-right:6px}
+.packnote{font-size:.88rem;color:var(--ink-soft);background:var(--paper);border:1px dashed var(--line);border-radius:6px;padding:8px 12px}
 .here{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;background:var(--deep);color:#fff;border-radius:var(--r);padding:16px 20px;margin:2px 0 18px}
 .here .hl{font-family:var(--font-display);font-weight:600;font-size:.78rem;letter-spacing:.05em;color:#9db6cc}
 .here .hu{font-family:var(--font-mono);font-size:.98rem;font-weight:500;color:#fff;word-break:break-all}
@@ -432,23 +440,22 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 
 <script>
 /* ═══════════════ 절 ═══════════════ */
-/* min = 그 블록에 배정한 분 · tkey = 타이머를 공유하는 묶음(학년 절 셋은 같은 45분을 씁니다) */
+/* min = 그 블록에 배정한 분 · tkey = 타이머를 공유하는 묶음(학년 절 셋은 같은 36분을 씁니다) */
 const TABS = [
   {id:'setup', em:'', name:'출발 준비',      min:5},
-  {id:'today', em:'📋', name:'오늘',            min:8},
+  {id:'today', em:'📋', name:'오늘',            min:7},
   {id:'why',   em:'🔭', name:'왜 디지털 도구인가', min:12},
   {id:'lose',  em:'⚖️', name:'무엇을 잃는가',    min:18},
   {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
-  {id:'invite',em:'🙋', name:'초대하는 법',      min:6},
   {id:'mykit', em:'🧪', name:'내 센서로 할 수 있는 것', min:0},
   {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
   {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
   {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
   {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:12},
-  {id:'g1',    em:'1️⃣', name:'중1 실험',        min:45, tkey:'lab'},
-  {id:'g2',    em:'2️⃣', name:'중2 실험',        min:45, tkey:'lab'},
-  {id:'g3',    em:'3️⃣', name:'중3 실험',        min:45, tkey:'lab'},
-  {id:'share', em:'🤝', name:'나눔과 닫기',      min:25},
+  {id:'g1',    em:'1️⃣', name:'중1 실험',        min:36, tkey:'lab'},
+  {id:'g2',    em:'2️⃣', name:'중2 실험',        min:36, tkey:'lab'},
+  {id:'g3',    em:'3️⃣', name:'중3 실험',        min:36, tkey:'lab'},
+  {id:'share', em:'🤝', name:'나눔과 닫기',      min:12},
   {id:'links', em:'🔗', name:'자료실 · 링크',   min:0},
   {id:'kit',   em:'🧰', name:'오늘의 센서',      min:0},
   {id:'smartlab',em:'🏫', name:'지능형 과학실', min:0},
@@ -586,9 +593,9 @@ const EXPS = [
 {g:2,ok:1,n:2,unit:'식물과 에너지',title:'빛의 세기에 따른 광합성량',std:'9과12-01',
  sensor:'CO₂ + 조도 + 온도 (세 개 동시)',sw:'SPARKvue + Science#',src:'SB 07',
  prep:'시금치, 밀폐 용기, LED 광원 3개, 얼음팩(선택)',
- steps:['CO₂·조도·온도 센서를 한 용기에 함께 넣는다','광원을 1개만 켜고 10분 측정한다',
-        '광원을 2개, 3개로 늘리며 반복한다','CO₂ 감소량을 광원 개수별로 비교한다'],
- tip:'세 센서의 역할이 다릅니다 — CO₂는 종속변인, 조도는 조작변인이 실제로 달라졌는지 확인, 온도는 통제변인이 지켜졌는지 확인. 변인 통제를 말이 아니라 센서 배치로 가르치는 자리입니다. 45분에 3회가 어려우면 모둠마다 광원 개수를 나눠 맡고 기울기만 모으세요.'},
+ steps:['CO₂·조도·온도 센서를 한 용기에 함께 넣는다','광원 하나로 10분 측정한다 — 이때 <b>조도 센서 값을 함께 적어 둔다</b>',
+        '광원을 늘리거나 거리를 좁혀 <b>빛의 세기를 바꿔</b> 가며 반복한다','가로축에 <b>조도</b>, 세로축에 CO₂가 줄어든 <b>기울기</b>를 놓고 비교한다'],
+ tip:'세 센서의 역할이 다릅니다 — CO₂는 종속변인, 조도는 조작변인이 실제로 달라졌는지 확인, 온도는 통제변인이 지켜졌는지 확인. 변인 통제를 말이 아니라 센서 배치로 가르치는 자리입니다. 45분에 3회가 어려우면 모둠마다 다른 빛의 세기를 맡고 (조도, 기울기) 점 하나씩만 모으세요.'},
 
 {g:2,ok:1,n:2,unit:'물질의 특성',title:'온도에 따른 기체의 용해도',std:'9과08-01',
  sensor:'온도 + CO₂ (두 개 동시)',sw:'SPARKvue + Science#',src:'EZ 20',
@@ -779,6 +786,21 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
   </div>
 </div>
 
+<div class="startrow" data-k="pack">
+  <div><span class="no">05</span><span class="chk" role="checkbox" tabindex="0" aria-checked="false" aria-label="5번 완료 표시"></span></div>
+  <div class="st-body">
+    <h4>매뉴얼 모음집 받기</h4>
+    <p class="sd">실험 카드에 <b>EZ · CB · SB · BASE</b> 라고 붙어 있는 네 권입니다. 오늘 고르시는 실험의 절차가 전부 여기 들어 있습니다.</p>
+    <ul class="packlist">
+      <li><b>EZ</b> 『피지컬 컴퓨팅 활용 AI융합과학교육의 실제 — 이지메이커 활용 과학실험 사례』 영서중 최효석 · 실험 30건 · 111쪽판. 간결해서 쪽 찾기가 빠릅니다</li>
+      <li><b>CB</b> 위와 같은 30건의 <b>클래스보드판</b> · 250쪽. 사진이 훨씬 많아 <b>실습 때는 이걸 펴시는 편이 낫습니다</b></li>
+      <li><b>SB</b> 『2026 교구 및 디지털 도구 활용 과학 교수학습자료(중등 과학)』 서울특별시교육청 창의미래교육과 · 2026. 7. · 사례 10건. 학생 활동지가 그대로 들어 있습니다</li>
+      <li><b>BASE</b> 『기초 – 측정 방법』 클래스보드 · 무선판/유선판 각 1권 · 센서 19종, 센서당 4쪽. 센서 하나를 처음 잡을 때</li>
+    </ul>
+    <div class="urls" id="packUrls"><span class="packnote">받으실 곳은 연수 시작할 때 화면에 띄워 드리겠습니다.</span></div>
+  </div>
+</div>
+
 </div>
 
 <div class="callout warn"><b>보드가 안 잡히면 드라이버부터입니다.</b> 이지메이커 보드를 꽂았는데 시리얼 포트 오류가 나면 CH341 드라이버 문제입니다. <b>UNINSTALL을 먼저 누르고, 그다음 INSTALL</b>입니다. 순서를 바꾸면 그대로입니다.<br>
@@ -815,12 +837,11 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><td><b>5–12</b></td><td>여는 활동</td><td>만화 4컷 → "무엇을 보고 있었을까요"</td></tr>
 <tr><td><b>12–24</b></td><td>왜 디지털 도구인가</td><td>교육과정과 교과서가 센서를 어디에 적어 두었는지</td></tr>
 <tr><td><b>24–42</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
-<tr><td><b>42–48</b></td><td>학생이 얻는 것</td><td>교사가 편한 이야기 말고, 학생 쪽에서만</td></tr>
-<tr><td><b>48–54</b></td><td>초대하는 법</td><td>시켜서 하는 것과 하고 싶어서 하는 것</td></tr>
-<tr><td><b>54–66</b></td><td>센서는 어떻게 전달하나</td><td>이지메이커 A · D · I2C · UART를 왜 갈라 꽂는지</td></tr>
-<tr style="background:var(--teal-soft)"><td><b>66–100</b></td><td><b>공통 실험</b> · 이지메이커</td><td>① 기체의 압력과 부피(보일의 법칙) &nbsp; ② 옴의 법칙</td></tr>
-<tr style="background:var(--teal-soft)"><td><b>100–112</b></td><td>보유 센서 실습</td><td>시간이 남으면 가져온 센서로 원하시는 실험을</td></tr>
-<tr><td><b>112–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
+<tr><td><b>42–48</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
+<tr><td><b>48–60</b></td><td>센서는 어떻게 전달하나</td><td>이지메이커 A · D · I2C · UART를 왜 갈라 꽂는지</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>60–96</b></td><td><b>공통 실험</b> · 이지메이커</td><td>① 기체의 압력과 부피(보일의 법칙) &nbsp; ② 옴의 법칙</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>96–108</b></td><td>보유 센서 실습</td><td>가져온 센서로 원하시는 실험을</td></tr>
+<tr><td><b>108–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
 </table></div></details>
 
 <details class="fold" style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
@@ -1108,12 +1129,47 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 <tr><td>보일의 법칙</td><td>압력</td><td><b>부피</b> — 주사기 눈금을 읽어서</td></tr>
 <tr><td>거리에 따른 빛의 세기</td><td>조도</td><td><b>거리</b> — 자를 보고</td></tr>
 <tr><td>마찰력에 영향을 주는 요인</td><td>힘</td><td><b>나무토막 개수</b></td></tr>
-<tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원 개수</b></td></tr>
+<tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원까지의 거리</b> — 자로 재서</td></tr>
 </table></div>
 
 <div class="callout ok"><b>가장 확실한 대책 — 한 번은 손으로.</b> 첫 차시는 온도계와 모눈종이, 다음 차시부터 센서.<br><b>센서는 아날로그의 대체가 아니라 그다음입니다.</b></div>
 
-<div class="callout gold"><b>ESDA</b> — 가설보다 <b>데이터를 먼저</b> 탐색한 뒤 문제를 도출. 센서가 수집을 빠르게 해 준 덕에 가능해진 순서.</div>
+<div class="callout gold"><b>ESDA</b> — 가설보다 <b>데이터를 먼저</b> 탐색한 뒤 문제를 도출. 센서가 수집을 빠르게 해 준 덕에 가능해진 순서.
+<details class="fold" style="margin-top:11px"><summary>자세히</summary>
+
+<p style="margin-bottom:10px"><b>순서가 뒤집힙니다.</b></p>
+<div class="pipeline" style="margin:0 0 14px">
+  <div class="pipe">
+    <span class="pl">지금까지</span>
+    <span class="pb">가설</span><i class="pa"></i><span class="pb">실험 설계</span><i class="pa"></i><span class="pb">측정</span><i class="pa"></i><span class="pb">검증</span>
+  </div>
+  <div class="pipe digi">
+    <span class="pl">ESDA</span>
+    <span class="pb auto">일단 측정</span><i class="pa"></i><span class="pb auto">그래프에서 이상한 데 찾기</span><i class="pa"></i>
+    <span class="pgrp" data-cap="여기서 질문이 태어납니다"><span class="pb">문제 도출</span></span>
+    <i class="pa"></i><span class="pb">통제하고 다시 측정</span>
+  </div>
+</div>
+
+<p style="margin-bottom:10px"><b>왜 이제야 가능해졌을까요.</b> 손으로 적던 시절에는 데이터 한 벌을 얻는 데 한 차시가 걸렸습니다. "일단 재 보고 생각하자"를 할 수가 없었습니다. 센서는 5분이면 곡선 한 장을 줍니다. <b>데이터가 질문보다 먼저 도착할 수 있게 된 것</b>이 이 순서를 만들었습니다. 가설을 세우지 않고 자료부터 살펴보는 방식 자체는 통계학의 <b>탐색적 자료 분석(EDA)</b>에서 온 것입니다.</p>
+
+<p style="margin-bottom:6px"><b>수업에서는 이렇게 굴러갑니다.</b></p>
+<ol style="margin:0 0 12px 18px;color:var(--ink-soft)">
+  <li>가설 없이 그냥 재게 합니다 — "이 물, 5분만 그냥 재 볼까?"</li>
+  <li>그래프에서 <b>이상한 데</b>를 찾게 합니다 — "여기 왜 평평해지지?"</li>
+  <li>그 이상한 데가 <b>오늘의 질문</b>이 됩니다.</li>
+  <li>그때부터 변인을 통제하고 다시 잽니다. <b>이 4단계를 빼면 안 됩니다.</b></li>
+</ol>
+
+<p style="margin-bottom:10px"><b>얻는 것.</b> 실험이 <b>학생이 만든 질문</b>에서 시작됩니다. 교과서가 준 질문이 아니라요. "왜 여기서 평평해져요?"를 학생이 먼저 물으면, 열평형은 그날 배워야 할 내용이 아니라 <b>알아내고 싶은 것</b>이 됩니다.</p>
+
+<div class="callout warn" style="margin:0 0 10px"><b>조심할 것 셋</b><br>
+· <b>매 차시 이렇게 하지 마십시오.</b> 시간이 훨씬 듭니다. 단원에 한 번이면 충분합니다.<br>
+· <b>아무거나 재게 두는 것이 아닙니다.</b> 무엇을 잴지는 정해 주고, <b>무엇을 물을지</b>를 학생이 정하게 하는 것입니다.<br>
+· <b>"패턴이 보이니까 법칙"으로 끝내면 안 됩니다.</b> 반드시 4단계(통제하고 다시 측정)로 데려가십시오. 그러지 않으면 그냥 인상비평이 됩니다.</div>
+
+<p><b>어느 실험이 맞을까요.</b> 그래프에 <b>눈에 띄는 특징</b>이 있는 것들입니다 — 열평형(왜 평평해지나) · 냉각 곡선(왜 계단이 생기나) · 광합성(왜 처음엔 안 줄어드나) · 끓는점(왜 100℃에서 멈추나).</p>
+</details></div>
 
 
 `,
@@ -1121,74 +1177,26 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 /* ───── 학생이 얻는 것 ───── */
 gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻을까요',
   '교사 편의 말고, 학생 쪽에서만')
-+ `<div class="cardgrid">
-  <div class="pcard"><h3>① 감각이 닿지 않는 곳을 본다</h3><p>손으로는 "빡빡하다"가 끝. 1초 사이의 압력, 마찰력이 <b>최대가 되는 그 순간</b>은 감각에 안 잡힙니다.</p></div>
-  <div class="pcard"><h3>② 느낌이 숫자가 되는 경험</h3><p>"빡빡함"이 <b>1.003 기압</b>이 됩니다. 정성 → 정량, 과학의 본질적 이행.</p></div>
-  <div class="pcard"><h3>③ 기록자에서 관찰자로 돌아온다</h3><p>읽어 적는 학생은 <b>고개가 공책에</b> 있습니다. 센서를 꽂으면 고개가 들리고 <b>실험 도중에</b> 질문이 나옵니다.</p></div>
-  <div class="pcard"><h3>④ 실패해도 데이터가 남는다</h3><p>기존 실험은 "안 돼요"로 끝. 센서는 <b>실패한 그래프</b>를 남깁니다 — 실패가 <b>분석 대상</b>이 됩니다.</p></div>
-  <div class="pcard"><h3>⑤ 자기 데이터를 갖는다</h3><p>교과서의 남의 숫자가 아니라 <b>우리 모둠이 만든 숫자.</b> 소유감이 곧 동기입니다.</p></div>
-  <div class="pcard"><h3>⑥ 재현성을 경험한다</h3><p>한 모둠은 우연, <b>일곱 모둠이 같으면 법칙.</b> 왜 여러 번 재는지를 그래프 한 장이 설명합니다.</p></div>
-  <div class="pcard"><h3>⑦ 오차를 정면으로 만난다</h3><p>교과서는 일정하다는데 내 데이터는 흩어집니다. <b>그 간극이 진짜 질문</b>입니다.</p></div>
-  <div class="pcard"><h3>⑧ 도구를 판단하는 사람이 된다</h3><p>센서도 틀립니다. <b>기계 값을 의심해 본 학생</b>만이 디지털 자료를 읽습니다.</p></div>
++ `<h3 class="subh" style="margin-top:6px">센서가 <b>있어야만</b> 되는 것</h3>
+<div class="cardgrid">
+  <div class="pcard only"><h3>감각이 닿지 않는 곳을 본다</h3><p>손으로는 "빡빡하다"가 끝. 1초 사이의 압력, 마찰력이 <b>최대가 되는 그 순간</b>은 감각에 안 잡힙니다.</p></div>
+  <div class="pcard only"><h3>기록자에서 관찰자로 돌아온다</h3><p>읽어 적는 학생은 <b>고개가 공책에</b> 있습니다. 센서를 꽂으면 고개가 들리고 <b>실험 도중에</b> 질문이 나옵니다.</p></div>
+  <div class="pcard only"><h3>실패해도 데이터가 남는다</h3><p>기존 실험은 "안 돼요"로 끝. 센서는 <b>실패한 그래프</b>를 남깁니다 — 실패가 <b>분석 대상</b>이 됩니다.</p></div>
+  <div class="pcard only"><h3>도구를 판단하는 사람이 된다</h3><p>센서도 틀립니다. <b>기계 값을 의심해 본 학생</b>만이 디지털 자료를 읽습니다.</p></div>
+</div>
+
+<h3 class="subh">센서가 <b>더 잘되게</b> 해 주는 것</h3>
+<p>맨손으로도 되지만, 센서를 쓰면 훨씬 쉽게 닿습니다.</p>
+<div class="cardgrid">
+  <div class="pcard"><h3>느낌이 숫자가 되는 경험</h3><p>"빡빡함"이 <b>1.003 기압</b>이 됩니다. 정성 → 정량, 과학의 본질적 이행.</p></div>
+  <div class="pcard"><h3>자기 데이터를 갖는다</h3><p>교과서의 남의 숫자가 아니라 <b>우리 모둠이 만든 숫자.</b> 소유감이 곧 동기입니다.</p></div>
+  <div class="pcard"><h3>재현성을 경험한다</h3><p>한 모둠은 우연, <b>일곱 모둠이 같으면 법칙.</b> 왜 여러 번 재는지를 그래프 한 장이 설명합니다.</p></div>
+  <div class="pcard"><h3>오차를 정면으로 만난다</h3><p>교과서는 일정하다는데 내 데이터는 흩어집니다. <b>그 간극이 진짜 질문</b>입니다.</p></div>
 </div>
 
 <div class="punch">
-  <div class="q">가장 큰 것은 ③번이라고 생각합니다.<br><b>센서는 학생을 받아 적는 사람에서<br>보는 사람으로 되돌려 놓습니다.</b></div>
+  <div class="q">가장 큰 것은 <b>기록자에서 관찰자로</b>라고 생각합니다.<br><b>센서는 학생을 받아 적는 사람에서<br>보는 사람으로 되돌려 놓습니다.</b></div>
   <div class="cap">우리가 실험을 시키는 이유가 원래 그것이었습니다</div>
-</div>
-
-
-`,
-
-/* ───── 초대 ───── */
-invite: head('🙋 네 번째 질문','학생을 어떻게 <b>초대</b>할 것인가',
-  '시켜서 하는 것과 하고 싶어서 하는 것')
-+ `<div class="callout"><b>초대는 "이거 쓰면 편해"가 아닙니다.</b> "네가 지금 궁금해하는 걸 <b>이걸로만 알 수 있어</b>"여야 합니다. 그러려면 궁금함이 먼저 있어야 하고, 그 궁금함이 <b>맨손으로는 안 풀려야</b> 합니다.</div>
-
-<div class="moves">
-  <div class="move"><div class="n">1</div><div>
-    <h4>먼저 맨손으로 하게 하고, 막히게 둔다</h4>
-    <p>센서를 먼저 주면 <b>시킨 일</b>이 됩니다. 불편을 겪은 사람만 도구를 반깁니다.</p>
-    <div class="say">"이거 계속 이렇게 할까? 아니면 다른 방법 찾아볼까?"</div></div></div>
-
-  <div class="move"><div class="n">2</div><div>
-    <h4>감각으로 느끼게 한 뒤, 그 감각을 배신한다</h4>
-    <p>손으로 "빡빡하다"를 느낀 뒤 <b>"몇 배?"</b>에 막히게 합니다.</p>
-    <div class="say">"방금 느낀 그 빡빡함, 숫자로 말해 볼 수 있어?"</div></div></div>
-
-  <div class="move"><div class="n">3</div><div>
-    <h4>예측 그래프를 먼저 그리게 한다</h4>
-    <p>측정이 <b>내 예측을 확인하는 일</b>이 됩니다.</p>
-    <div class="say">"시작하기 전에, 그래프가 어떤 모양일 것 같은지 먼저 그려 보자."</div></div></div>
-
-  <div class="move"><div class="n">4</div><div>
-    <h4>틀릴 수 있는 자리를 준다</h4>
-    <p>정답이 나와야 하는 실험은 초대가 아니라 <b>검사</b>입니다.</p>
-    <div class="say">"예상이랑 다르게 나왔네. 왜 그럴까? 네 생각엔 뭐가 문제였을 것 같아?"</div></div></div>
-
-  <div class="move"><div class="n">5</div><div>
-    <h4>데이터에 이름을 붙여 준다</h4>
-    <p>반 전체 그래프에서 <b>자기 점을 찾게</b> 합니다.</p>
-    <div class="say">"이 점이 누구 거지? 이 위에 있는 건 어느 모둠이야?"</div></div></div>
-
-  <div class="move"><div class="n">6</div><div>
-    <h4>못 하는 것도 알려 준다</h4>
-    <p><b>도구를 판단하는 사람</b>이 됩니다 — 디지털 리터러시의 시작.</p>
-    <div class="say">"이 센서는 이건 못 재. 그럼 이건 어떻게 알아낼 수 있을까?"</div></div></div>
-
-  <div class="move"><div class="n">7</div><div>
-    <h4>역할을 준다 — 조립하는 사람</h4>
-    <p>꽂는 자리가 곧 개념. <b>조립을 대신해 주지 마세요.</b></p>
-    <div class="say">"이 센서를 어디에 넣어야 할까? 왜 거기야?"</div></div></div>
-
-  <div class="move"><div class="n">8</div><div>
-    <h4>왜 하는지 먼저 말해 준다</h4>
-    <p>가장 단순하고 <b>가장 자주 빠뜨리는 것</b>입니다.</p>
-    <div class="say">"오늘 이걸 하는 이유는, 우리가 지난 시간에 못 풀었던 그 질문 때문이야."</div></div></div>
-</div>
-
-<div class="punch">
-  <div class="q">여덟 개를 다 하실 필요는 없습니다.<br><b>1번과 3번만으로도 수업이 달라집니다.</b><br>막히게 두고, 예측을 먼저 그리게 하십시오.</div>
 </div>
 
 
@@ -1198,10 +1206,6 @@ invite: head('🙋 네 번째 질문','학생을 어떻게 <b>초대</b>할 것�
 mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로 할 수 있는 실험',
   '종류별 2개씩 — 그래서 각자 다른 실험을 고릅니다')
 + `
-<div class="punch">
-  <div class="q">센서 <b>10종을 두 개씩</b> 가져왔습니다.<br>되는 실험은 <b>27가지</b>, 다만 <b>한 실험에 두 조까지</b>입니다.<br><b>고르시면 매뉴얼을 펴 드리겠습니다.</b></div>
-</div>
-
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
   <input type="search" id="kQ" placeholder="센서나 실험 이름으로 찾기 (예: 온도, 보일, 광합성, 옴)"
     style="flex:1;min-width:220px;padding:11px 16px;border:2px solid var(--line);border-radius:4px;font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card)">
@@ -1209,13 +1213,19 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 </div>
 <div class="exps" id="kList"></div>
 
-<div class="callout gold" style="margin-top:20px"><b>매뉴얼 약칭</b><br><b>EZ</b> 이지 사례집 111쪽(간결) · <b>CB</b> 250쪽판(사진 多, <b>실습 땐 이걸</b>)<br><b>SB</b> 서울 10사례(학생 활동지) · <b>BASE</b> 기초 측정 19종</div>
+<div class="callout gold" style="margin-top:20px"><b>실험 카드에 붙은 약칭 넷 — 원본은 이것입니다</b>
+<div class="tablewrap" style="margin:10px 0 0;box-shadow:none"><table style="min-width:0">
+<tr><th>약칭</th><th>원본</th><th>쓸모</th></tr>
+<tr><td><b>EZ</b></td><td>『피지컬 컴퓨팅 활용 AI융합과학교육의 실제 — 이지메이커 활용 과학실험 사례』<br>영서중 최효석 · 실험 30건 · 111쪽판</td><td>간결. 쪽수 찾기 빠름</td></tr>
+<tr><td><b>CB</b></td><td>위와 같은 30건의 <b>클래스보드판</b> · 250쪽</td><td><b>사진이 훨씬 많음. 실습 땐 이걸</b></td></tr>
+<tr><td><b>SB</b></td><td>『2026 교구 및 디지털 도구 활용 과학 교수학습자료(중등 과학)』<br>서울특별시교육청 창의미래교육과 · 2026. 7. · 사례 10건</td><td>학생 활동지가 그대로 들어 있음</td></tr>
+<tr><td><b>BASE</b></td><td>『기초 – 측정 방법』 클래스보드 · 무선판/유선판 각 1권<br>센서 19종 · 센서당 4쪽</td><td>센서 하나를 처음 잡을 때</td></tr>
+</table></div></div>
 
 <div class="callout gold"><b>가방 사정으로 센서를 종류별 두 개씩만 챙겨 왔습니다.</b> 넉넉히 못 가져와 죄송합니다.<br>고르신 실험이 겹치면 <b>그 실험은 함께 하시면서 데이터를 나눠 주십시오.</b> 오히려 모둠 비교가 됩니다.</div>
 <div class="callout warn"><b>한 실험에 두 조까지입니다</b><br>센서 1개 쓰는 실험 → <b>2조</b> · 센서 <b>2개</b> 쓰는 실험 → <b>1조</b><br>온도 2개가 필요한 것: 비열 · 열평형 · 냉각곡선 비교 · 온실효과 · 종이색 복사<br><b>그래서 각자 다른 실험을 고르시는 게 맞습니다.</b> 6~7명이면 3~4가지를 나눠 맡으면 딱 맞습니다.</div>
 
-<h3 class="subh">실험 <b style="color:var(--coral-deep)">돌리는</b> 요령</h3>
-<p style="color:var(--ink-soft);margin-bottom:14px">영서중 최효석 선생님 연수 자료에서 가져왔습니다. 사소해 보이는데 실제로 수업을 가릅니다.</p>
+<h3 class="subh">실험 <b>수업</b> 요령</h3>
 
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
@@ -1229,24 +1239,16 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
     <div class="say">"설명 다 들은 모둠부터 앞에 와서 가져가세요."</div></div></div>
 
   <div class="move"><div class="n">3</div><div>
-    <h4>받아 갈 때 개수를 세게 합니다</h4>
-    <p><b>처음 = 나중</b>으로 기억시키면 반납이 빨라집니다.</p>
-    <div class="say">"지금 받은 그대로 돌려놓는 겁니다. 뭘 몇 개 받았는지 한 번 세어 보세요."</div></div></div>
+    <h4>준비물 체크리스트를 함께 나눠 줍니다</h4>
+    <p>받을 때 체크리스트로 확인하고, <b>반납할 때 체크리스트와 함께</b> 받습니다.</p>
+    <div class="say">"체크리스트에 적힌 대로 다 있는지 보고 가져가세요. 반납할 때 이 종이도 같이 냅니다."</div></div></div>
 
   <div class="move"><div class="n">4</div><div>
-    <h4>시뮬레이션을 먼저 보여 줍니다</h4>
-    <p>무엇을 볼지 모르면 <b>장비만 만지다 끝납니다.</b></p>
-    <div class="say">"이제 어떤 그림이 나올지 먼저 보고 시작하겠습니다."</div></div></div>
-
-  <div class="move"><div class="n">5</div><div>
-    <h4>예비 세트를 앞에 꺼내 둡니다</h4>
-    <p>고치지 말고 <b>통째로 교체.</b> 예비가 보이면 조작을 겁내지 않습니다.</p>
-    <div class="say">"안 되면 손들지 말고 그냥 앞에 것으로 바꿔 가세요."</div></div></div>
+    <h4>자주 나는 오류와 대처를 미리 나눠 줍니다</h4>
+    <p>질문은 <b>매뉴얼대로 해 보고 그래도 안 될 때</b>. 이 한 줄이 교사 한 명으로 일곱 모둠을 감당하게 합니다.</p>
+    <div class="say">"안 되면 먼저 이 종이를 보세요. 여기 있는 걸 다 해 보고도 안 되면 그때 손 드는 겁니다."</div></div></div>
 </div>
 
-<div class="callout gold"><b>센서를 종류별 2개씩만 가져왔습니다.</b> 다 챙기면 가방이 터집니다.<br>그래서 <b>같은 실험은 두 조까지</b>이고, 그게 오히려 <b>각자 다른 실험을 고르는 오늘 방식</b>에 맞습니다.</div>
-<div class="callout"><b>영점, 세 가지만 기억하시면 됩니다</b><br>· <b>큐브 무선</b> — 전원 <b>2번 연속</b>. 또는 Science# 센서 화면에서 영점 설정<br>· <b>이지 공기압</b> — <b>마개를 연 상태</b>가 대기압 기준. 닫고 시작하면 값이 어긋납니다<br>· <b>온도</b> — 영점 개념이 없습니다. 대신 <b>두 개를 쓸 땐 편차를 먼저</b> 확인하십시오</div>
-<div class="callout"><b>흔한 세 가지</b> ① 보드 전원 꺼짐(PWR 빨간불) ② 케이블 덜 들어감("딸깍") ③ <b>악어집게가 보드에 닿음</b></div>
 
 
 `,
@@ -1267,8 +1269,8 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
 
 <div class="cardgrid">
   <div class="pcard"><div class="num">1</div><h3>어긋난 점이 보입니다</h3><p>사람 눈은 <b>직선에서 벗어난 점</b>만 잘 찾습니다. 이상한 측정이 드러납니다.</p></div>
-  <div class="pcard"><div class="num">2</div><h3>기울기가 이름을 갖습니다</h3><p><b>기울기와 절편이 각각 물리량</b>이 됩니다 — 저항, 배경 조도.</p></div>
-  <div class="pcard"><div class="num">3</div><h3>재보지 않은 곳을 말할 수 있습니다</h3><p>직선이면 <b>사이와 바깥을 예측</b>할 수 있습니다.</p></div>
+  <div class="pcard"><div class="num">2</div><h3>기울기가 이름을 갖습니다</h3><p>기울기 자체가 <b>물리량</b>이 됩니다 — 시간–CO₂ 기울기는 <b>광합성률</b>, 시간–온도 기울기는 <b>온도 상승률</b>(비열 비교의 근거), 전압–전류 기울기의 역수는 <b>저항</b>.</p></div>
+  <div class="pcard"><div class="num">3</div><h3>재보지 않은 곳을 말할 수 있습니다</h3><p>직선이면 잰 점 <b>사이를 메우고(내삽)</b>, 잰 범위 <b>바깥까지 뻗어(외삽)</b> 말할 수 있습니다.</p></div>
 </div>
 
 <h3 class="subh">바꾸는 방법은 <b style="color:var(--coral-deep)">세 가지</b>입니다</h3>
@@ -1302,7 +1304,7 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
   <div class="move"><div class="n">2</div><div>
     <h4>후보를 여러 개 그려 보게 합니다</h4>
     <p>x · 1/x · x² 를 다 그려 보고 <b>고르게</b>. 고르는 것이 판단입니다.</p>
-    <div class="say">"세 가지로 다 그려 보고, 어느 게 제일 곧은지 정해 보자."</div></div></div>
+    <div class="say">"세 가지로 다 그려 보고, 어느 게 <b>우리 데이터를 제일 잘 설명하는지</b> 골라 보자. 셋 다 안 곧으면 그것도 답이야 — 우리가 아직 못 찾은 관계라는 뜻이니까."</div></div></div>
   <div class="move"><div class="n">3</div><div>
     <h4>틀린 변환도 지우지 않습니다</h4>
     <p>"더 휘었다"도 <b>결과</b>입니다. 지우면 정답만 남습니다.</p>
@@ -1317,13 +1319,11 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
     <div class="say">"왜 원점을 안 지나갈까? 이게 뭘 말해 주는 걸까?"</div></div></div>
 </div>
 
-<h3 class="subh">교사가 알아 두어야 할 것 셋</h3>
+<h3 class="subh">교사가 알아 두어야 할 것 둘</h3>
 
 <div class="callout warn"><b>① 오차도 같이 변환됩니다</b> — 1/V는 <b>작은 V에서 증폭</b>. 양 끝 점이 튑니다.</div>
 
 <div class="callout warn"><b>② 변환하면 원본 복구 불가</b> — <b>변환 전에 저장.</b> 학생도 원본 CSV 먼저 내려받게.</div>
-
-<div class="callout warn"><b>③ 이지 자료집 역제곱 표현 주의</b><br>"거리의 제곱"으로는 직선 ✗ · <b>1/r²</b> 이어야 ○<br>「밝기 × 거리² 일정」은 ○ · 서울 자료집이 정확(n=−2)</div>
 
 
 `,
@@ -1395,8 +1395,6 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
 <tr><td>화학 · 4. 역동적인 화학 반응</td><td><b>[pH]</b></td><td>pH 측정</td></tr>
 <tr><td>화학 반응의 세계 · 1. 산·염기 평형</td><td><b>[pH]</b></td><td>중화 적정 과정에서 pH 변화 · 산염기 수용액의 pH 측정 · 물과 완충용액의 pH 변화</td></tr>
 </table></div>
-
-<div class="callout gold"><b>고등 연결</b> — 중학 압력·온도가 「역학과 에너지」에서 다시. 중학에 없던 <b>pH</b>가 고등 화학의 주력.</div>
 
 <h3 class="subh">그래서 무엇을 먼저 사야 하나</h3>
 <div class="kv">
@@ -1655,7 +1653,7 @@ ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전
   </details>
 </div>
 
-<h3 class="subh">정리 — 외우지 말고 <b style="color:var(--coral-deep)">판단</b>하십시오</h3>
+<h3 class="subh">정리</h3>
 
 <div class="tablewrap"><table>
 <tr><th>포트</th><th>스스로 물을 질문</th><th>보드로 전달되는 방식</th><th>이지메이커에서</th></tr>
@@ -1723,39 +1721,8 @@ g2: gradePanel(2),
 g3: gradePanel(3),
 
 /* ───── 나눔과 닫기 ───── */
-share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 해 볼까요',
-  '오늘 한 실험을 실제 수업으로')
-+ `<h3 class="subh">한 분씩 세 문장만</h3>
-<div class="moves">
-  <div class="move"><div class="n">1</div><div>
-    <h4>오늘 하신 실험은 무엇이었나요</h4>
-    <p>학년과 단원, 그리고 어느 차시에 넣으실 수 있는지까지.</p>
-    <div class="say">"저는 중2 ○○ 단원의 △△ 실험을 했고, □월쯤 나갑니다."</div></div></div>
-  <div class="move"><div class="n">2</div><div>
-    <h4>막힌 데는 어디였나요</h4>
-    <p>연결이었는지, 센서 개수였는지, 준비물이었는지. <b>막힌 곳이 곧 다음에 살 것</b>입니다.</p>
-    <div class="say">"저는 여기서 걸렸습니다 — 그래서 이게 필요할 것 같습니다."</div></div></div>
-  <div class="move"><div class="n">3</div><div>
-    <h4>초대하는 법 여덟 가지 중 하나만 고르신다면</h4>
-    <p>내일 당장 해 보실 수 있는 것 하나. <b>여덟 개를 다 하실 필요가 없습니다.</b></p>
-    <div class="say">"저는 ○번을 해 보겠습니다."</div></div></div>
-</div>
-
-<div class="punch">
-  <div class="q">오늘 가져가실 것은 센서가 아니라<br><b>한 실험과 한 문장</b>입니다.</div>
-  <div class="cap">그 하나가 다음 학기에 두 개가 됩니다</div>
-</div>
-
-<div class="tablewrap"><table>
-<tr><th>이런 학교라면</th><th>먼저 하실 것</th></tr>
-<tr><td><b>센서가 아직 없다</b></td><td>온도부터 사십시오. 자료집 실험의 절반이 온도입니다. 그다음이 압력(주사기)입니다</td></tr>
-<tr><td><b>있는데 안 쓴다</b></td><td>충전과 페어링부터 확인하세요. 안 쓰는 이유의 대부분이 "켜지는지 모르겠어서"입니다</td></tr>
-<tr><td><b>모둠 수가 부족하다</b></td><td>모둠마다 <b>다른 변인</b>을 맡기고 결과를 합치세요. 단열재 비교가 그 구조입니다</td></tr>
-<tr><td><b>크롬북·웨일북 학교다</b></td><td>세 회사 다 브라우저로 열립니다. 설치를 기다리지 마세요</td></tr>
-<tr><td><b>지능형 과학실 ON을 써야 한다</b></td><td>센서부터 익히고 그다음에 옮기십시오. 단 <b>모델학교</b>이시면 반대입니다 — 처음부터 ON으로 가야 실적이 남습니다</td></tr>
-</table></div>
-
-<ul style="list-style:none;margin:16px 0">
+share: head('🤝 마지막','가져가실 것','')
++ `<ul style="list-style:none;margin:16px 0">
   <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">오늘 자료</b> · 이 페이지를 그대로 나눠 드립니다</li>
   <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">MBL 수업허브</b> · <code style="background:var(--teal-soft);padding:3px 9px;border-radius:7px">scienceisjo.github.io/mblclasshub</code> — 모둠 데이터를 반 전체로 모을 때</li>
   <li style="padding:11px 0"><b style="color:var(--deep)">문의</b> · 해누리중학교 조승재</li>
@@ -2181,8 +2148,8 @@ const MYKIT = [
    {t:'전압과 전류의 관계 (옴의 법칙)', g:2, man:'EZ p.81 · CB p.184 · SB 사례 08 · BASE p.56'},
    {t:'저항과 전류의 관계', g:2, man:'EZ p.77 · CB p.176'}
   ]},
- {v:'이지', n:'보드', q:2, port:'—', groups:2,
-  exps:[{t:'이지메이커 센서의 받침대', g:0, man:'보드 1개에 센서 여러 개를 동시에 — 그래서 옴의 법칙도 보드 2개로 두 조'}]},
+ {v:'이지', n:'보드', q:6, port:'—', groups:6,
+  exps:[{t:'이지메이커 센서의 받침대', g:0, man:'실험 하나에 보드 하나. <b>6개를 챙겨 가므로 보드가 모자랄 일은 없습니다</b> — 조 수를 정하는 것은 센서 개수입니다. 보드 하나에 센서 여러 개를 함께 꽂을 수도 있습니다(옴의 법칙은 전압+전류 두 개를 한 보드에).'}]},
  {v:'큐브', n:'온도', q:2, port:'무선', groups:2,
   exps:[
    {t:'물과 식용유의 비열 비교', g:1, man:'EZ p.24 · CB p.58 · SB 사례 01 · 교육과정 탐구활동에 명시'},
@@ -2245,9 +2212,13 @@ const AXIS = [
   read:'기울기 = PV값(그 기체의 양과 온도가 정해 주는 상수)', g:1,
   tip:'먼저 부피–압력으로 그려 곡선을 보게 하십시오. "이 곡선을 곧게 펴려면 가로축을 어떻게 바꿔야 할까?"가 이 실험의 진짜 질문입니다.'},
  {kind:'trans', t:'거리에 따른 빛의 세기', raw:'거리 – 조도', to:'<b>1/거리² – 조도</b>',
-  why:'빛의 세기는 거리의 제곱에 반비례합니다. 1/r²을 가로축에 두어야 직선이 됩니다.',
+  why:'빛의 세기는 거리의 제곱에 반비례합니다. 이론대로라면 1/r²을 가로축에 두었을 때 직선이 됩니다.',
   read:'기울기 = 광원의 세기 · <b>절편 = 배경 조도</b>(주변광·반사광)', g:2,
-  tip:'⚠️ 가로축을 <b>거리의 제곱(r²)</b>으로 두면 직선이 되지 <b>않습니다.</b> 반드시 <b>1/r²</b>입니다. 한편 「조도 × 거리²」를 계산해 <b>일정한지</b> 보는 방법도 같은 사실을 확인하는 다른 길입니다.'},
+  tip:'<b>그런데 1/r²로 그려도 잘 안 곧아집니다.</b> 세 가지 때문입니다.<br>'
+     +'① <b>거리의 기준점</b> — 자의 0이 전구 안쪽 필라멘트나 LED 칩과 어긋나 있습니다. 실제 거리는 r = 잰 거리 + α 인데 잰 거리만으로 계산하면 휩니다.<br>'
+     +'② <b>점광원이 아닙니다</b> — 전구·LED는 크기가 있어서 가까운 거리에서 역제곱이 깨집니다.<br>'
+     +'③ <b>배경광</b> — 암실이 아니면 조도에 상수가 더해져 절편이 생깁니다.<br><br>'
+     +'그래서 <b>「조도 × 거리²」가 일정한지</b> 보는 방법을 함께 씁니다. 직선을 맞출 필요가 없어서 <b>측정점마다 따로</b> 확인되고, <b>어느 거리부터 어긋나는지</b>가 표에서 바로 보입니다. 그 어긋나는 구간이 왜 생겼는지 묻는 것이 이 실험에서 제일 좋은 질문입니다.'},
  {kind:'axis', t:'옴의 법칙', raw:'시간 – 전압, 시간 – 전류', to:'<b>전압 – 전류</b>',
   why:'센서는 늘 시간축으로 줍니다. 그런데 우리가 알고 싶은 건 시간이 아니라 두 측정값 사이의 관계입니다.',
   read:'<b>기울기의 역수 = 저항</b> (자료집 실측: 기울기 0.0658 → 15.2Ω, 이론값 15Ω)', g:2,
@@ -2256,10 +2227,10 @@ const AXIS = [
   why:'힘–시간 그래프의 <b>봉우리 하나</b>가 곧 최대 정지 마찰력입니다. 그 값 하나만 뽑아 새 그래프의 점으로 씁니다.',
   read:'기울기 = 마찰 계수와 관련 · 사포와 도화지의 기울기 차이', g:1,
   tip:'"그래프 전체가 아니라 <b>한 점만</b> 필요할 때가 있다"를 배우는 자리입니다. 어느 점을 뽑을지 학생이 정하게 하십시오.'},
- {kind:'summ', t:'빛의 세기와 광합성량', raw:'시간 – CO₂ 농도', to:'<b>광원 개수 – 기울기</b>',
-  why:'CO₂가 줄어드는 <b>속도(기울기)</b>가 광합성률입니다. 각 조건의 기울기를 뽑아 새 축에 놓습니다.',
-  read:'기울기의 절댓값 = 광합성률 · 광원이 늘면 어떻게 되는가', g:2,
-  tip:'45분에 3회가 어려우면 모둠마다 광원 개수를 나눠 맡고 <b>기울기만 모으십시오.</b> 반 전체가 한 그래프를 완성합니다.'},
+ {kind:'summ', t:'빛의 세기와 광합성량', raw:'시간 – CO₂ 농도', to:'<b>빛의 세기(조도) – 기울기</b>',
+  why:'CO₂가 줄어드는 <b>속도(기울기)</b>가 광합성률입니다. 각 조건의 기울기를 뽑아 새 축에 놓습니다. 이때 가로축은 <b>광원 개수가 아니라 조도 센서가 실제로 잰 빛의 세기</b>여야 합니다 — 광원을 늘리는 건 세기를 바꾸는 수단일 뿐이고, 개수와 조도가 비례하지도 않습니다.',
+  read:'기울기의 절댓값 = 광합성률 · 빛이 세지면 어떻게 되는가', g:2,
+  tip:'세기를 바꾸는 방법은 여러 가지입니다 — 광원 개수를 늘려도 되고, <b>거리를 좁히거나 종이를 겹쳐</b> 줄여도 됩니다. 어느 쪽이든 가로축에 놓는 값은 <b>조도 센서가 읽은 숫자</b>입니다.<br>45분에 3회가 어려우면 모둠마다 다른 세기를 맡고 <b>(조도, 기울기) 점 하나씩만</b> 모으십시오. 반 전체가 한 그래프를 완성합니다.'},
  {kind:'summ', t:'물과 식용유의 비열', raw:'시간 – 온도 ×2', to:'<b>두 곡선의 기울기 비교</b>',
   why:'같은 열을 주었을 때 <b>덜 오르는 쪽</b>이 비열이 큽니다. 최종 온도가 아니라 기울기를 읽어야 합니다.',
   read:'기울기가 작다 = 비열이 크다', g:1,
@@ -2357,8 +2328,15 @@ function initTerms(){
   });
 }
 
+/* 매뉴얼 모음집 공유 주소 — 정해지면 이 한 줄만 채우십시오 */
+const PACK_URL='';
+
 function initSetup(){
   var P=document.querySelector('.tabpanel[data-tab="setup"]'); if(!P) return;
+  var pk=P.querySelector('#packUrls');
+  if(pk && PACK_URL){
+    pk.innerHTML='<a class="ulink dl" href="'+PACK_URL+'" target="_blank" rel="noopener"><b>매뉴얼 모음집 내려받기</b></a>';
+  }
   var KEY='dt_setup', got={};
   try{ got=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
   P.querySelectorAll('.startrow').forEach(function(r){
