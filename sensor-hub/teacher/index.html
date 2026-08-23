@@ -437,7 +437,6 @@ const TABS = [
   {id:'setup', em:'', name:'출발 준비',      min:5},
   {id:'today', em:'📋', name:'오늘',            min:8},
   {id:'why',   em:'🔭', name:'왜 디지털 도구인가', min:12},
-  {id:'smartlab',em:'🏫', name:'지능형 과학실', min:0},
   {id:'lose',  em:'⚖️', name:'무엇을 잃는가',    min:18},
   {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
   {id:'invite',em:'🙋', name:'초대하는 법',      min:6},
@@ -452,6 +451,7 @@ const TABS = [
   {id:'share', em:'🤝', name:'나눔과 닫기',      min:25},
   {id:'links', em:'🔗', name:'자료실 · 링크',   min:0},
   {id:'kit',   em:'🧰', name:'오늘의 센서',      min:0},
+  {id:'smartlab',em:'🏫', name:'지능형 과학실', min:0},
 ];
 
 /* ═══════════════ 실험 데이터 ═══════════════
@@ -954,8 +954,6 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
   <div class="pcard"><div class="num">5</div><h3>개인화된 학습</h3><p>수준과 속도에 맞춘 <b>피드백</b></p></div>
 </div>
 
-<div class="callout warn"><b>그런데</b> — "효과는 <b>기술 자체보다 교육과정·교수전략과의 연계</b>에 달려 있다"<br>센서를 샀다고 수업이 좋아지지 않습니다.</div>
-
 <h3 class="subh">네 가지 어포던스</h3>
 <p style="color:var(--ink-soft);margin-bottom:14px">도구가 학습자에게 주는 <b>행위 가능성</b></p>
 <div class="cardgrid">
@@ -965,7 +963,7 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
   <div class="pcard"><h3>④ 공유·협력</h3><p>학생 간 <b>과학적 의사소통</b> 촉진</p></div>
 </div>
 
-<div class="callout gold"><b>②번을 보십시오</b> — "측정의 번거로움을 줄여 준다"<br>그 <b>번거로움의 이름이 자료 수집</b>이고, 그건 <b>탐구 기능</b>입니다. → 다음 절</div>
+<div class="note"><b>여기서 ②번을 되짚으십시오.</b> "측정의 번거로움을 줄여 준다" — 그 <b>번거로움의 이름이 자료 수집</b>이고, 그건 <b>탐구 기능</b>입니다. 다음 절로 넘어가는 다리입니다.</div>
 
 <div class="script">"오늘 제가 센서를 잔뜩 들고 왔지만, 첫 질문은 '이걸 왜 쓰냐'입니다.<br><br>
 저는 이 질문에 <b>교육과정 문서로</b> 답을 드리겠습니다. 별책 9 펴 보시면, 중학교 물질 영역 <b>과정⋅기능 내용 요소</b>에 '수학적 사고와 <b>디지털 탐구 도구 활용하기</b>'가 적혀 있습니다. 가치⋅태도가 아니라 <b>가르쳐야 할 기능</b> 목록입니다.<br><br>
@@ -1072,10 +1070,9 @@ smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이
 매뉴얼 634쪽을 다 보여주지 마세요. 겁만 줍니다.</div>`,
 
 /* ───── 잃는 것 ───── */
-lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요',
-  '걱정하지 말고 이름 붙여 세어 봅시다')
+lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요','')
 + `<div class="punch">
-  <div class="q">온도계를 30초마다 읽어 적던 학생은<br>그 30초 동안 <b>탐구 기능을 연습하고</b> 있었습니다.<br>그 기능의 <b>이름이 무엇입니까.</b></div>
+  <div class="q">온도계를 30초마다 읽어 적던 학생은<br>그 30초 동안 <b>탐구 기능을 연습하고</b> 있었습니다.<br>그 기능의 <b>이름은 무엇일까요?</b></div>
   <div class="cap">이름을 붙일 수 있어야 무엇을 잃었는지 셀 수 있습니다</div>
 </div>
 
@@ -1119,26 +1116,8 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 <div class="callout ok"><b>관찰의 정의</b> — "현미경처럼 <b>감각을 확장시키는 도구</b>를 사용해 자료를 얻는 기능"<br>센서는 <b>관찰의 정의 안에 이미 있습니다.</b> → <b>측정을 내주고 관찰을 돌려받는 거래</b></div>
 <div class="note">아무도 "현미경을 쓰면 관찰 능력이 떨어진다"고 하지 않습니다. 온도계로 30초마다 적을 때 학생의 고개는 공책에 있었지만, 센서를 꽂으면 고개가 들립니다.</div>
 
-<h3 class="subh">대책 — 없앤 게 아니라 <b style="color:var(--coral-deep)">옮긴다</b></h3>
-<p style="color:var(--ink-soft);margin-bottom:16px">잃은 <b>측정</b>과 <b>자료 변환</b>을 어느 기능으로 되돌려 놓을 것인가</p>
-
-<div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>눈금을 읽어 적기</b></p></div>
-  <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>수동 수집 모드</b><br>부피·거리는 <b>센서가 못 잽니다.</b> 학생이 읽어 직접 넣습니다.<br><span class="fnlab">되살아나는 기능 · 측정 + 변인 통제</span></p></div>
-</div>
-
-<div class="callout gold"><b>센서는 종속변인만 잽니다.</b> 조작변인은 여전히 사람이 읽어 넣습니다.<br>자료 수집은 <b>절반만</b> 사라지고, <b>남은 절반이 곧 변인 통제</b>입니다.</div>
-
-<div class="tablewrap"><table>
-<tr><th>실험</th><th>센서가 재는 것 <span style="font-weight:400">(종속변인)</span></th><th>사람이 넣는 것 <span style="font-weight:400">(조작변인)</span></th></tr>
-<tr><td>보일의 법칙</td><td>압력</td><td><b>부피</b> — 주사기 눈금을 읽어서</td></tr>
-<tr><td>거리에 따른 빛의 세기</td><td>조도</td><td><b>거리</b> — 자를 보고</td></tr>
-<tr><td>마찰력에 영향을 주는 요인</td><td>힘</td><td><b>나무토막 개수</b></td></tr>
-<tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원 개수</b></td></tr>
-</table></div>
-
-<div class="callout warn"><b>주의</b> — 자료집이 수동 수집을 지정한 건 <b>교육적 장치가 아니라 센서가 그 변인을 못 재기 때문</b>입니다. (불꽃색 편: "시간 순서대로면 수동 측정을 굳이 하지 않아도 된다")<br><b>기능을 살리는 건 자료집이 아니라 우리 일입니다.</b></div>
+<h3 class="subh">그럼 그 자리에 <b>무엇을 넣을까요</b></h3>
+<p>손의 일이 빠진 만큼, 판단의 일을 넣습니다.</p>
 
 <div class="shift">
   <div class="box from"><div class="lb">사라진 것</div><p><b>모눈종이에 점 찍고 선 잇기</b></p></div>
@@ -1158,11 +1137,14 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
   <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어느 점을 버릴지 정하기</b><br>초기 요동을 자를지는 <b>사람이 정합니다.</b><br><span class="fnlab">되살아나는 기능 · 자료 해석 + 추리</span></p></div>
 </div>
 
-<div class="shift">
-  <div class="box from"><div class="lb">사라진 것</div><p><b>자료의 출처 감각</b></p></div>
-  <div class="arrow">→</div>
-  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>원자료(CSV) 열어 보기</b><br>몇 개의 점으로 그려졌는지 세어 보게.<br><span class="fnlab">되살아나는 기능 · 측정</span></p></div>
-</div>
+<h3 class="subh">센서가 재는 것과, <b>사람이 넣는 것</b></h3>
+<div class="tablewrap"><table>
+<tr><th>실험</th><th>센서가 재는 것 <span style="font-weight:400">(종속변인)</span></th><th>사람이 넣는 것 <span style="font-weight:400">(조작변인)</span></th></tr>
+<tr><td>보일의 법칙</td><td>압력</td><td><b>부피</b> — 주사기 눈금을 읽어서</td></tr>
+<tr><td>거리에 따른 빛의 세기</td><td>조도</td><td><b>거리</b> — 자를 보고</td></tr>
+<tr><td>마찰력에 영향을 주는 요인</td><td>힘</td><td><b>나무토막 개수</b></td></tr>
+<tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원 개수</b></td></tr>
+</table></div>
 
 <div class="callout ok"><b>가장 확실한 대책 — 한 번은 손으로.</b> 첫 차시는 온도계와 모눈종이, 다음 차시부터 센서.<br><b>센서는 아날로그의 대체가 아니라 그다음입니다.</b></div>
 
@@ -1175,10 +1157,10 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 그리고 하나만 지켜 주십시오. <b>한 번은 손으로 하게 하세요.</b> 그 다음에 센서를 주십시오."</div>
 
 <div class="note">이 절이 오늘의 <b>중심</b>입니다. 다른 데서 시간을 줄여서라도 여기는 20분을 확보하세요.<br><br>
-선생님들이 가장 많이 공감하시는 지점이고, "그래서 나는 안 쓴다"고 하시던 분이 마음을 여는 자리이기도 합니다. 다섯 개 화살표를 다 설명하지 말고 <b>두세 개만 깊게</b> 하셔도 됩니다.</div>`,
+선생님들이 가장 많이 공감하시는 지점이고, "그래서 나는 안 쓴다"고 하시던 분이 마음을 여는 자리이기도 합니다. 화살표 셋을 다 설명하지 말고 <b>한두 개만 깊게</b> 하셔도 됩니다.</div>`,
 
 /* ───── 학생이 얻는 것 ───── */
-gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻습니까',
+gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻을까요',
   '교사 편의 말고, 학생 쪽에서만')
 + `<div class="cardgrid">
   <div class="pcard"><h3>① 감각이 닿지 않는 곳을 본다</h3><p>손으로는 "빡빡하다"가 끝. 1초 사이의 압력, 마찰력이 <b>최대가 되는 그 순간</b>은 감각에 안 잡힙니다.</p></div>
@@ -1831,16 +1813,16 @@ g2: gradePanel(2),
 g3: gradePanel(3),
 
 /* ───── 나눔과 닫기 ───── */
-share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 하시겠습니까',
+share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 해 볼까요',
   '오늘 한 실험을 실제 수업으로')
 + `<h3 class="subh">한 분씩 세 문장만</h3>
 <div class="moves">
   <div class="move"><div class="n">1</div><div>
-    <h4>오늘 하신 실험은 무엇이었습니까</h4>
+    <h4>오늘 하신 실험은 무엇이었나요</h4>
     <p>학년과 단원, 그리고 어느 차시에 넣으실 수 있는지까지.</p>
     <div class="say">"저는 중2 ○○ 단원의 △△ 실험을 했고, □월쯤 나갑니다."</div></div></div>
   <div class="move"><div class="n">2</div><div>
-    <h4>막힌 데는 어디였습니까</h4>
+    <h4>막힌 데는 어디였나요</h4>
     <p>연결이었는지, 센서 개수였는지, 준비물이었는지. <b>막힌 곳이 곧 다음에 살 것</b>입니다.</p>
     <div class="say">"저는 여기서 걸렸습니다 — 그래서 이게 필요할 것 같습니다."</div></div></div>
   <div class="move"><div class="n">3</div><div>
