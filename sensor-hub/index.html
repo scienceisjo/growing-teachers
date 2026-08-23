@@ -154,6 +154,28 @@ th{background:var(--card);color:var(--teal);font-family:var(--font-display);font
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
 
+/* ══ 만족도 조사 ══ */
+.survey{display:grid;grid-template-columns:154px 1fr;gap:24px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-top:2px solid var(--coral);
+  border-radius:0 0 var(--r) var(--r);padding:22px 24px;margin:2px 0 26px;box-shadow:var(--shadow)}
+.survey .qr{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px}
+.survey .qr svg{display:block;width:100%;height:auto;shape-rendering:crispEdges}
+.survey .ql{font-family:var(--font-display);font-weight:600;font-size:.78rem;letter-spacing:.05em;color:var(--coral);margin-bottom:5px}
+.survey h4{font-family:var(--font-display);font-weight:600;font-size:1.22rem;color:var(--deep);letter-spacing:-.01em;margin-bottom:5px;line-height:1.35}
+.survey p{font-size:.95rem;color:var(--ink-soft);margin-bottom:12px}
+@media(max-width:560px){.survey{grid-template-columns:1fr;justify-items:start;gap:16px}.survey .qr{width:168px}}
+
+/* ══ 닫는 편지 ══ */
+.letter{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:30px 34px;box-shadow:var(--shadow);max-width:68ch;line-height:1.88}
+.letter p{margin-bottom:16px;color:var(--ink)}
+.letter p:last-child{margin-bottom:0}
+.letter b{color:var(--deep)}
+.letter .to{font-family:var(--font-display);font-weight:600;font-size:1.12rem;color:var(--deep);margin-bottom:18px}
+.letter .from{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--deep);
+  text-align:right;margin-top:24px;padding-top:17px;border-top:1.5px solid var(--deep)}
+@media(max-width:600px){.letter{padding:22px 20px;line-height:1.8}}
+
 /* ══ 학교별로 갈리는 것 ══ */
 [data-school-only]{display:none}
 body[data-school="songrye"] [data-school-only~="songrye"],
@@ -1891,8 +1913,46 @@ g2: gradePanel(2),
 g3: gradePanel(3),
 
 /* ───── 나눔과 닫기 ───── */
-share: head('🤝 마지막','가져가실 것','')
-+ `<ul style="list-style:none;margin:16px 0">
+share: head('🤝 마지막','오늘 함께해 주셔서 <b>고맙습니다</b>','')
++ `<div class="survey">
+  <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" role="img" aria-label="연수 만족도 조사 설문 QR 코드"><path stroke="#0e3050" d="M2 2.5h7m1 0h8m4 0h2m1 0h3m1 0h2m1 0h7m-37 1h1m5 0h1m1 0h1m5 0h2m1 0h1m2 0h2m1 0h3m1 0h2m1 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m1 0h2m4 0h2m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m2 0h2m1 0h1m6 0h3m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m2 0h2m4 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m1 0h1m3 0h7m1 0h1m4 0h4m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h1m2 0h1m1 0h2m1 0h2m1 0h2m4 0h1m2 0h1m-27 1h3m1 0h1m1 0h7m1 0h2m2 0h4m2 0h1m1 0h4m2 0h3m-35 1h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h4m1 0h1m2 0h5m1 0h1m-33 1h8m1 0h1m3 0h3m5 0h4m1 0h1m1 0h2m1 0h2m-37 1h1m1 0h1m2 0h1m2 0h1m1 0h1m2 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h2m2 0h4m1 0h1m-35 1h3m2 0h1m2 0h3m3 0h3m2 0h1m1 0h1m1 0h7m1 0h1m1 0h3m-37 1h1m3 0h2m7 0h1m2 0h1m3 0h1m2 0h1m1 0h1m2 0h2m1 0h1m1 0h2m-34 1h4m1 0h2m1 0h1m1 0h2m1 0h2m2 0h2m3 0h2m1 0h2m1 0h5m1 0h2m-36 1h1m2 0h1m4 0h2m3 0h4m1 0h3m2 0h1m1 0h4m1 0h1m-32 1h1m3 0h3m2 0h1m1 0h4m2 0h3m1 0h1m3 0h3m1 0h2m1 0h1m1 0h1m1 0h1m-37 1h1m1 0h4m1 0h3m2 0h2m1 0h1m2 0h1m2 0h3m7 0h1m2 0h1m-31 1h1m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m4 0h1m2 0h3m1 0h1m1 0h1m2 0h2m-33 1h2m1 0h4m1 0h1m2 0h1m2 0h4m1 0h2m2 0h2m2 0h2m2 0h1m-34 1h2m2 0h1m3 0h3m2 0h2m1 0h5m1 0h1m1 0h2m2 0h3m1 0h1m1 0h1m-36 1h1m1 0h2m3 0h1m5 0h4m2 0h2m2 0h1m4 0h1m1 0h1m-32 1h3m1 0h3m7 0h3m2 0h1m3 0h2m2 0h1m2 0h1m4 0h2m-35 1h3m4 0h1m3 0h1m1 0h4m1 0h1m3 0h1m1 0h1m2 0h3m1 0h1m1 0h2m-37 1h2m1 0h4m1 0h3m1 0h2m1 0h1m1 0h7m6 0h1m3 0h1m-35 1h1m3 0h2m1 0h1m1 0h3m1 0h1m1 0h2m1 0h4m2 0h1m1 0h5m2 0h4m-37 1h1m1 0h5m3 0h2m7 0h1m5 0h2m3 0h1m4 0h2m-37 1h1m6 0h1m4 0h4m3 0h1m4 0h1m3 0h2m3 0h1m-34 1h1m1 0h1m1 0h4m1 0h3m1 0h1m1 0h4m1 0h1m1 0h1m2 0h2m1 0h6m1 0h2m-29 1h1m1 0h1m1 0h1m2 0h3m1 0h1m2 0h3m3 0h1m3 0h1m2 0h1m-36 1h7m2 0h4m2 0h1m1 0h1m7 0h2m1 0h1m1 0h1m1 0h2m1 0h2m-37 1h1m5 0h1m3 0h1m1 0h5m3 0h1m2 0h1m3 0h2m3 0h1m2 0h1m-36 1h1m1 0h3m1 0h1m1 0h2m2 0h1m3 0h2m1 0h3m2 0h2m1 0h6m1 0h2m-36 1h1m1 0h3m1 0h1m1 0h5m1 0h2m1 0h3m2 0h1m3 0h2m2 0h1m2 0h1m-34 1h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m4 0h8m1 0h1m2 0h1m1 0h1m-37 1h1m5 0h1m2 0h3m1 0h1m1 0h2m2 0h1m1 0h3m3 0h3m1 0h3m2 0h1m-37 1h7m4 0h1m1 0h1m1 0h1m2 0h6m1 0h1m4 0h2m1 0h4"/></svg></div>
+  <div>
+    <div class="ql">연수 만족도 조사</div>
+    <h4>오늘 어떠셨는지 한 줄 남겨 주십시오</h4>
+    <p>2분이면 됩니다. 다음 학교에서 더 나은 연수를 하는 데 쓰겠습니다.</p>
+    <a class="ulink" href='https://forms.gle/Mf6WE7Gb84zdF79h9' target="_blank" rel="noopener">forms.gle/Mf6WE7Gb84zdF79h9</a>
+  </div>
+</div>
+
+<div class="letter">
+<div class="to">선생님께</div>
+
+<p>귀한 시간 내주셔서 감사합니다. 선생님들의 열정에 많은 감화를 받고 돌아갑니다.</p>
+
+<p>가시기 전에 몇 마디만 남기고 싶습니다.</p>
+
+<p>이 연수를 준비하면서 제일 오래 붙들고 있었던 건 사실 센서가 아니었습니다. <b>"그래서 뭘 가르치지?"</b> 하는 물음이었습니다. 센서를 꽂으면 그래프가 저절로 그려지는데, 그러면 학생은 그 시간에 무엇을 하나. 그게 안 풀려서 한동안 미뤄 두었습니다.</p>
+
+<p>답은 결국 교육과정 문서에 있었습니다. 별책 9를 처음부터 끝까지 뒤졌습니다. 어느 단원에 센서가 이름으로 적혀 있는지, 어떤 어조로 적혀 있는지를 한 줄씩 맞춰 봤습니다. 오늘 보신 그 표가 그렇게 나온 것입니다. 어디서 옮겨 온 게 아니라 원문에서 직접 뽑았습니다. 그래도 틀린 데가 있을 수 있으니 보시다가 이상하면 꼭 알려 주십시오.</p>
+
+<p>교과서도 다섯 종을 펼쳐 놓고 어느 탐구가 실제로 실렸는지 세어 봤고, 이지메이커 사례집 서른 건과 서울시교육청 자료집 열 건, 기초 측정 열아홉 종을 다 읽었습니다. 읽다 보니 자료집끼리 어긋나는 데도 나왔고, <b>온도 센서 두 개의 편차</b>처럼 어느 매뉴얼에도 안 적혀 있는 함정도 보였습니다. 그런 것들을 자료실에 적어 두었습니다.</p>
+
+<p>솔직히 말씀드리면 이 자료를 저 혼자 만든 건 아닙니다. <b>AI와 며칠을 붙어 앉아</b> PDF를 뜯고, 표를 맞춰 보고, 틀린 걸 서로 잡아 가며 만들었습니다. 몇 번은 AI가 그럴듯하게 지어낸 걸 제가 원문을 찾아 잡아냈고, 몇 번은 제가 놓친 걸 AI가 짚어 줬습니다.</p>
+
+<p>그러다 보니 오늘 드린 이야기를 제가 먼저 겪은 셈이 되었습니다. <b>도구가 일을 대신해 준 만큼, 사람이 판단할 자리가 커진다는 것</b> 말입니다. 자료를 찾고 옮겨 적는 일은 줄었는데, <b>무엇이 맞는지 정하는 일</b>은 오히려 늘었습니다. 학생들에게 일어나는 일도 그것과 같다고 생각합니다.</p>
+
+<p>가방 이야기도 하나 하겠습니다. 센서를 종류별로 두 개씩밖에 못 가져왔습니다. 더 넣고 싶었는데 가방이 감당을 못 했습니다. 겹치신 분들께는 함께 하시게 해서 죄송했는데, 지나고 보니 오히려 모둠끼리 값을 비교하게 되어 다행이었습니다.</p>
+
+<p><b>오늘 다 못 하신 게 있어도 괜찮습니다.</b> 저도 처음 센서를 잡았을 때 연결이 안 돼서 한 차시를 통째로 날렸습니다. 그다음 시간에는 됐고, 그다음 학기에 두 번 했고, 지금은 그냥 합니다. 오늘 해 보신 그 실험 <b>하나만</b> 이번 학기에 실제로 해 보시면 됩니다. 그 하나가 다음 학기에 둘이 됩니다.</p>
+
+<p>자료실은 계속 고쳐 나가겠습니다. <b>링크는 그대로 두겠습니다.</b> 쓰시다가 막히시면 언제든 연락 주십시오. 학교 사정과 맡으신 학년만 알려 주시면 어느 실험부터 하시면 좋을지 같이 찾아 드리겠습니다.</p>
+
+<p>다시 한번, 오늘 함께해 주셔서 감사합니다.</p>
+
+<div class="from">해누리중학교 조승재 드림</div>
+</div>
+
+<ul style="list-style:none;margin:16px 0">
   <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">오늘 자료</b> · 이 페이지를 그대로 나눠 드립니다</li>
   <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">MBL 수업허브</b> · <code style="background:var(--teal-soft);padding:3px 9px;border-radius:7px">scienceisjo.github.io/mblclasshub</code> — 모둠 데이터를 반 전체로 모을 때</li>
   <li style="padding:11px 0"><b style="color:var(--deep)">문의</b> · 해누리중학교 조승재</li>
@@ -2620,7 +2680,7 @@ function initTerms(){
 }
 
 /* 매뉴얼 모음집 공유 주소 — 정해지면 이 한 줄만 채우십시오 */
-const PACK_URL='https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=qc56hN';
+const PACK_URL='https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=HKK13h';
 
 function initSetup(){
   var P=document.querySelector('.tabpanel[data-tab="setup"]'); if(!P) return;
