@@ -1,0 +1,2554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>센서 수업 자료실 · 해누리중 조승재</title>
+<script>
+(function(){try{
+  var iw=window.innerWidth, sw=screen.width;
+  if(sw>=1600 && sw/iw>1.15){
+    var m=document.querySelector('meta[name=viewport]');
+    if(m) m.setAttribute('content','width='+sw+', user-scalable=no, viewport-fit=cover');
+  }
+}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#16232a; --ink-soft:#587079;
+  --paper:#f2f6f6; --card:#ffffff;
+  --deep:#0d3b40; --teal:#12706f; --teal-soft:#dff0ee;
+  --coral:#e2653f; --coral-deep:#b8441f; --coral-soft:#fdeae2;
+  --gold:#d69b2b; --gold-soft:#fcf1d9;
+  --green:#2f9e63; --green-soft:#e4f5eb;
+  --red:#d3402c; --red-soft:#fdeceb;
+  --line:#dfe7e7; --line-soft:#edf3f3;
+  --shadow:0 2px 6px rgba(13,45,50,.05),0 10px 30px rgba(13,45,50,.08);
+  --shadow-lg:0 10px 24px rgba(13,45,50,.10),0 30px 70px rgba(13,45,50,.14);
+  --r:22px;
+  --font-round:'Jua',sans-serif;
+  --font-sans:'Pretendard','Noto Sans KR',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);color:var(--ink);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:
+    radial-gradient(circle at 88% 3%, rgba(18,112,111,.11), transparent 32%),
+    radial-gradient(circle at 4% 92%, rgba(226,101,63,.09), transparent 30%),
+    var(--paper);
+  background-attachment:fixed;}
+::selection{background:var(--coral);color:#fff}
+a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:6px}
+
+.topstrip{max-width:1180px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:2}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand .ball{width:28px;height:28px;border-radius:9px;background:var(--teal-soft);border:2px solid var(--deep);display:flex;align-items:center;justify-content:center;font-size:15px}
+.brand .ball::after{content:"🔭"}
+.brand .wm{font-family:var(--font-round);font-size:1rem;color:var(--deep)}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pbtn{font-family:var(--font-round);font-size:.85rem;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer;transition:.15s}
+.pbtn:hover{border-color:var(--coral)}
+body.presenter .pbtn.p-toggle{background:var(--red);color:#fff;border-color:var(--red)}
+.clock{font-family:var(--font-round);font-size:1.05rem;color:var(--deep);background:var(--card);border:2px solid var(--line);border-radius:20px;padding:5px 16px;min-width:104px;text-align:center;letter-spacing:.5px}
+.clock.run{border-color:var(--green);color:var(--green)}
+.clock.over{border-color:var(--red);color:var(--red);animation:blink 1.1s infinite}
+@keyframes blink{50%{opacity:.45}}
+.tab .tm{font-size:.76rem;opacity:.7;margin-left:5px}
+
+.hero{max-width:1180px;margin:0 auto 18px;padding:0 22px}
+.hero-in{background:linear-gradient(150deg,#082e33,#12706f 66%,#1a8a80);border-radius:calc(var(--r) + 6px);padding:42px 44px;text-align:center;color:#fff;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.hero-in::after{content:"";position:absolute;right:-70px;top:-70px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(226,101,63,.34),transparent 66%)}
+.hero .school{display:inline-block;font-weight:800;font-size:.85rem;color:#fff;background:var(--coral);padding:6px 17px;border-radius:99px;margin-bottom:15px;position:relative;z-index:1}
+.hero h1{font-family:var(--font-round);font-weight:400;font-size:2.3rem;line-height:1.24;color:#fff;position:relative;z-index:1}
+.hero h1 b{color:#ffc9ae}
+.hero .sub{font-family:var(--font-round);color:#cfeae6;font-size:1.1rem;margin-top:11px;position:relative;z-index:1}
+.hero .lead{font-size:1rem;color:#c3ddd9;margin:15px auto 0;max-width:700px;position:relative;z-index:1}
+.hero .lead b{color:#fff}
+@media(max-width:600px){.hero h1{font-size:1.6rem}.hero-in{padding:28px 20px}}
+
+.tabbar{position:sticky;top:0;z-index:100;background:rgba(242,246,246,.94);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.tabbar-in{max-width:1180px;margin:0 auto;padding:10px 14px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+.tabbar-in::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;font-weight:700;font-size:.9rem;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:9px 16px;cursor:pointer;transition:.15s;white-space:nowrap}
+.tab:hover{border-color:var(--coral);color:var(--deep);transform:translateY(-1px)}
+.tab.active{background:var(--deep);color:#fff;border-color:var(--deep)}
+.tab .te{margin-right:5px}
+.tabpanel{display:block;scroll-margin-top:66px}
+.tabpanel+.tabpanel{margin-top:8px;border-top:2px dashed var(--line);padding-top:26px}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.secno{display:block;text-align:center;font-family:var(--font-round);font-size:.82rem;color:var(--ink-soft);letter-spacing:.4px;margin-bottom:2px}
+.totop{position:fixed;right:18px;bottom:18px;z-index:120;font-family:var(--font-round);font-size:.9rem;background:var(--deep);color:#fff;border:none;border-radius:99px;padding:11px 18px;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:.25s}
+.totop.on{opacity:1;pointer-events:auto}
+.totop:hover{background:var(--teal)}
+.mins{font-family:inherit;font-size:.85rem;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:7px 10px;cursor:pointer}
+@media print{.tabbar,.topstrip,.totop{display:none}.tabpanel{break-inside:auto}}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.block{padding:32px 0}
+.sec-head{text-align:center;max-width:840px;margin:0 auto 24px}
+.sec-head .kick{display:inline-flex;gap:7px;font-family:var(--font-round);font-size:.86rem;color:#fff;background:var(--deep);padding:4px 15px;border-radius:20px;margin-bottom:12px}
+.sec-head h2{font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.85rem;line-height:1.3}
+.sec-head h2 b{color:var(--coral-deep)}
+.sec-head p{color:var(--ink-soft);font-size:1.02rem;margin-top:9px}
+
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;box-shadow:var(--shadow);transition:.18s}
+.pcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.pcard h3{font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.16rem;margin-bottom:8px}
+.pcard p{color:var(--ink-soft);font-size:.95rem}
+.pcard .num{font-family:var(--font-round);font-size:1.9rem;color:var(--coral);line-height:1}
+
+.punch{background:linear-gradient(140deg,#082e33,#12706f);color:#fff;border-radius:var(--r);padding:30px 32px;box-shadow:var(--shadow-lg);margin:22px auto;max-width:920px;text-align:center}
+.punch .q{font-family:var(--font-round);font-size:1.4rem;line-height:1.5}
+.punch .q b{color:#ffc9ae}
+.punch .cap{color:#bfdad6;font-size:.92rem;margin-top:12px}
+@media(max-width:600px){.punch{padding:22px 18px}.punch .q{font-size:1.1rem}}
+
+.callout{background:var(--teal-soft);border:1px solid #c4e2de;border-left:6px solid var(--teal);border-radius:14px;padding:16px 20px;margin:16px 0;color:#0f4f4e;font-size:.97rem}
+.callout b{color:#083a39}
+.callout.warn{background:var(--red-soft);border-color:#f3c3bd;border-left-color:var(--red);color:#7d2318}
+.callout.warn b{color:#5c1710}
+.callout.ok{background:var(--green-soft);border-color:#bde5cf;border-left-color:var(--green);color:#14603c}
+.callout.gold{background:var(--gold-soft);border-color:#f0dcae;border-left-color:var(--gold);color:#6b4d08}
+
+.note{display:none}
+body.presenter .note{display:block;background:#fff8e9;border:2px dashed var(--gold);border-radius:14px;padding:15px 19px;margin:14px 0;font-size:.94rem;color:#6b4a08}
+body.presenter .note::before{content:"🎤 강사 노트";display:block;font-family:var(--font-round);color:#a8760c;margin-bottom:6px}
+.script{display:none}
+body.presenter .script{display:block;background:var(--coral-soft);border-left:6px solid var(--coral);border-radius:12px;padding:15px 19px;margin:14px 0;font-size:1rem;color:#7d3319;font-family:var(--font-round);line-height:1.65}
+body.presenter .script::before{content:"🗣 이렇게 말합니다";display:block;font-size:.8rem;font-family:var(--font-sans);font-weight:800;color:var(--coral-deep);margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:var(--shadow);margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:.95rem;min-width:540px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{background:var(--teal-soft);color:var(--deep);font-weight:800;font-size:.9rem;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td b{color:var(--deep)}
+
+
+/* ══ 센서 신호 섹션 ══ */
+.qz{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow);margin:18px 0}
+.qz .qh{font-family:var(--font-round);font-size:1.3rem;color:var(--deep);text-align:center;line-height:1.45;margin-bottom:16px}
+.qz .opts{display:grid;gap:9px;max-width:640px;margin:0 auto}
+.qzopt{text-align:left;font-size:.97rem;background:var(--paper);border:2px solid var(--line);border-radius:13px;padding:13px 17px;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
+.qzopt:hover{border-color:var(--coral);transform:translateX(3px)}
+.qzopt.right{background:var(--green-soft);border-color:var(--green);color:#14603c;font-weight:700}
+.qzopt.wrong{background:var(--red-soft);border-color:var(--red);color:#7d2318}
+.qzopt .fb{display:block;font-size:.87rem;margin-top:7px;opacity:.9;font-weight:400}
+.qz .rev{display:none;margin-top:16px}
+.qz.done .rev{display:block;animation:fadein .35s ease}
+
+.lab{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);margin:16px 0}
+.lab h4{font-family:var(--font-round);font-weight:400;font-size:1.18rem;color:var(--deep);margin-bottom:4px}
+.lab .cap{font-size:.9rem;color:var(--ink-soft);margin-bottom:14px}
+.lab .ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.lab input[type=range]{flex:1;min-width:170px;accent-color:var(--coral);height:6px}
+.btn{font-family:var(--font-round);font-size:.95rem;background:linear-gradient(135deg,var(--teal),var(--deep));color:#fff;border:none;border-radius:99px;padding:10px 20px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--card);color:var(--deep);border:2px solid var(--line)}
+.btn.ghost:hover{border-color:var(--coral)}
+.btn.on{background:var(--coral)}
+
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:center;text-align:center}
+@media(max-width:720px){.flow{grid-template-columns:1fr 1fr;gap:10px}}
+.flow .st{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:12px 8px}
+.flow .st .lb{font-size:.74rem;font-weight:800;color:var(--ink-soft);letter-spacing:.3px}
+.flow .st .vl{font-family:var(--font-round);font-size:1.25rem;color:var(--deep);line-height:1.25;margin-top:3px}
+.flow .st .vl.c{color:var(--coral)}
+.sun{font-size:1.5rem;line-height:1.2}
+.vbar{height:74px;background:linear-gradient(180deg,#eef3f3,#e2eaea);border-radius:9px;position:relative;overflow:hidden;margin-top:5px;border:1px solid var(--line)}
+.vbar i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--coral),var(--gold));transition:height .18s}
+
+.bits{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:12px 0;min-height:34px}
+.bit{width:26px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;border:2px solid;opacity:0;transform:translateY(-6px);transition:.2s}
+.bit.show{opacity:1;transform:none}
+.bit.one{background:var(--teal-soft);border-color:var(--teal);color:var(--deep)}
+.bit.zero{background:#f1f4f5;border-color:#c9d3d6;color:#6b7c84}
+.bitgrp{display:flex;flex-direction:column;align-items:center;gap:4px}
+.bitgrp .gl{font-size:.72rem;font-weight:800;color:var(--ink-soft)}
+
+.wire{position:relative;height:8px;background:#dfe7e7;border-radius:99px;margin:10px 0;overflow:hidden}
+.wire b{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;background:var(--coral);left:-14px}
+.wire.hi{background:var(--teal-soft)}
+.pulse{height:46px;margin:8px 0}
+.pulse svg{width:100%;height:46px}
+
+.busrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+@media(max-width:600px){.busrow{grid-template-columns:1fr 1fr}}
+.dev{background:var(--paper);border:2px solid var(--line);border-radius:13px;padding:11px 6px;text-align:center;transition:.2s}
+.dev .ad{font-size:.72rem;font-weight:800;color:var(--ink-soft)}
+.dev .nm{font-size:.86rem;font-weight:700;color:var(--deep);margin-top:2px}
+.dev .rd{font-family:var(--font-round);font-size:1.05rem;color:var(--ink-soft);margin-top:3px}
+.dev.act{background:var(--teal-soft);border-color:var(--teal);transform:translateY(-3px);box-shadow:var(--shadow)}
+.dev.act .rd{color:var(--coral)}
+
+.sortwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.sortwrap{grid-template-columns:1fr}}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;align-content:flex-start}
+.scard{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:9px 14px;font-size:.92rem;font-weight:700;color:var(--deep);cursor:pointer;transition:.15s;user-select:none}
+.scard:hover{border-color:var(--coral)}
+.scard.sel{background:var(--coral);color:#fff;border-color:var(--coral)}
+.scard.ok{background:var(--green-soft);border-color:var(--green);color:#14603c;cursor:default}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.bin{border:2px dashed var(--line);border-radius:14px;padding:11px;min-height:78px;text-align:center;cursor:pointer;transition:.15s}
+.bin:hover{border-color:var(--coral);background:var(--coral-soft)}
+.bin .bt{font-family:var(--font-round);font-size:1.05rem;color:var(--deep)}
+.bin .items{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:6px}
+.bin .items span{font-size:.78rem;background:var(--green-soft);color:#14603c;border-radius:8px;padding:3px 8px;font-weight:700}
+.hintbox{margin-top:12px;padding:12px 16px;border-radius:12px;background:var(--gold-soft);color:#6b4d08;font-size:.93rem;display:none}
+.hintbox.on{display:block;animation:fadein .3s ease}
+
+.ox{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:11px}
+.oxc{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.18s;box-shadow:var(--shadow)}
+.oxc:hover{border-color:var(--coral)}
+.oxc .qq{font-size:.94rem;font-weight:700;color:var(--ink);line-height:1.5}
+.oxc .aa{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem;color:var(--ink-soft)}
+.oxc.open .aa{display:block;animation:fadein .3s ease}
+.oxc .mk{display:inline-block;font-family:var(--font-round);font-size:1.15rem;padding:1px 11px;border-radius:99px;margin-bottom:6px}
+.oxc .mk.o{background:var(--green-soft);color:#14603c}
+.oxc .mk.x{background:var(--red-soft);color:#7d2318}
+.oxc .tap{font-size:.76rem;color:var(--ink-soft);margin-top:7px}
+.oxc.open .tap{display:none}
+
+.tree{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin:16px 0}
+details.more{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;background:var(--paper)}
+details.more summary{cursor:pointer;font-weight:800;color:var(--teal);font-size:.93rem}
+details.more[open] summary{margin-bottom:8px}
+details.more p{font-size:.92rem;color:var(--ink-soft)}
+
+/* 탐구 기능 13개 */
+.fnwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 4px}
+@media(max-width:760px){.fnwrap{grid-template-columns:1fr}}
+.fngroup{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.fngroup h4{font-family:var(--font-round);font-weight:400;font-size:1.1rem;color:var(--deep);margin-bottom:11px;text-align:center}
+.fngroup h4 span{display:inline-block;background:var(--deep);color:#fff;border-radius:99px;font-size:.82rem;padding:1px 10px;margin-left:5px;vertical-align:middle}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:13px;padding:9px 13px;border:2px solid;font-weight:800;font-size:.97rem;line-height:1.2;min-width:88px}
+.chip em{font-style:normal;font-weight:700;font-size:.68rem;letter-spacing:.2px;opacity:.85}
+.chip.take{background:var(--red-soft);border-color:var(--red);color:#8c2519}
+.chip.boost{background:var(--green-soft);border-color:var(--green);color:#146042}
+.chip.same{background:#f1f4f5;border-color:#c9d3d6;color:#4f6069}
+.fnlab{display:inline-block;margin-top:8px;background:var(--deep);color:#fff;font-size:.73rem;font-weight:800;padding:3px 11px;border-radius:99px;letter-spacing:.2px}
+
+/* 잃는 것 / 옮겨가는 것 */
+.shift{display:grid;grid-template-columns:1fr 54px 1fr;gap:12px;align-items:center;margin:14px 0}
+@media(max-width:760px){.shift{grid-template-columns:1fr;gap:8px}.shift .arrow{transform:rotate(90deg);margin:0 auto}}
+.shift .box{border-radius:16px;padding:16px 18px;border:2px solid}
+.shift .from{background:var(--red-soft);border-color:#f0c4bd}
+.shift .to{background:var(--green-soft);border-color:#bde5cf}
+.shift .box .lb{font-size:.76rem;font-weight:800;letter-spacing:.4px;margin-bottom:4px}
+.shift .from .lb{color:var(--red)}
+.shift .to .lb{color:var(--green)}
+.shift .box p{font-size:.96rem;color:var(--ink)}
+.shift .arrow{font-size:1.6rem;color:var(--ink-soft);text-align:center}
+
+/* 초대 카드 */
+.moves{display:grid;gap:13px}
+.move{display:grid;grid-template-columns:56px 1fr;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.move .n{width:56px;height:56px;border-radius:17px;background:linear-gradient(140deg,var(--teal),var(--deep));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-round);font-size:1.35rem}
+.move h4{font-family:var(--font-round);font-weight:400;font-size:1.18rem;color:var(--deep);margin-bottom:4px}
+.move p{font-size:.96rem;color:var(--ink-soft)}
+.move .say{margin-top:9px;padding:10px 14px;background:var(--coral-soft);border-radius:11px;font-size:.94rem;color:#7d3319}
+.move .say::before{content:"이렇게 묻습니다 · ";font-weight:800;font-size:.8rem;color:var(--coral-deep)}
+@media(max-width:600px){.move{grid-template-columns:42px 1fr;gap:12px;padding:15px}.move .n{width:42px;height:42px;border-radius:13px;font-size:1.05rem}}
+
+/* 실험 카드 */
+.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.fbtn{font-size:.86rem;font-weight:700;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:7px 15px;cursor:pointer}
+.fbtn.on{background:var(--coral);color:#fff;border-color:var(--coral)}
+.exps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:15px}
+.exp{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.exp .top{padding:17px 19px 13px;border-bottom:1px solid var(--line-soft)}
+.exp .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.bd{font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:99px}
+.bd.unit{background:var(--teal-soft);color:var(--deep)}
+.bd.n8{background:var(--green-soft);color:#14603c}
+.bd.n4{background:var(--gold-soft);color:#7a5808}
+.bd.src{background:#eef1f3;color:#4d5f68}
+.exp h4{font-family:var(--font-round);font-weight:400;font-size:1.14rem;color:var(--deep);line-height:1.35}
+.exp .std{font-size:.8rem;color:var(--ink-soft);margin-top:5px}
+.exp .body{padding:15px 19px 18px;font-size:.93rem;flex:1}
+.exp .row{display:flex;gap:9px;margin-bottom:9px}
+.exp .row .k{flex-shrink:0;font-weight:800;color:var(--teal);font-size:.82rem;width:52px;padding-top:1px}
+.exp .row .v{color:var(--ink-soft)}
+.exp ol{margin:0 0 0 17px;color:var(--ink-soft)}
+.exp ol li{margin-bottom:4px}
+.exp .tip{margin-top:11px;padding:10px 13px;background:var(--gold-soft);border-radius:11px;color:#6b4d08;font-size:.9rem}
+.exp .tip::before{content:"TIP · ";font-weight:800}
+.exp.no{opacity:.72}
+.exp.no .top{background:var(--red-soft)}
+.exp .why{margin-top:9px;padding:10px 13px;background:var(--red-soft);border-radius:11px;color:#7d2318;font-size:.9rem}
+
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:11px;margin:16px 0}
+.kv .item{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;text-align:center;box-shadow:var(--shadow)}
+.kv .item .k{font-size:.8rem;color:var(--ink-soft)}
+.kv .item .v{font-family:var(--font-round);font-size:1.35rem;color:var(--deep);line-height:1.25}
+.kv .item .v.c{color:var(--coral)}
+.src-note{font-size:.86rem;color:var(--ink-soft);text-align:center;margin-top:18px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <a class="brand" href="#"><span class="ball"></span><span class="wm">해누리중 조승재</span></a>
+  <div class="tools">
+    <select class="mins" id="mins" title="타이머 분"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option><option value="20" selected>20분</option><option value="30">30분</option><option value="45">45분</option></select>
+    <span class="clock" id="clock">20:00</span>
+    <button class="pbtn" id="btnStart">▶ 시작</button>
+    <button class="pbtn" id="btnReset">↺ 초기화</button>
+    <button class="pbtn p-toggle" id="btnPresenter">🎤 강사모드</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-in">
+    <span class="school">2026 찾아가는 디지털 과학 수업 역량 강화 연수</span>
+    <h1>수집을 대신해 준 만큼,<br><b>어디에 쓸 것인가</b></h1>
+    <div class="sub">디지털 탐구도구로 하는 과학 수업</div>
+    <p class="lead">해누리중학교 <b>조승재</b> · 오늘은 선생님이 맡고 계신 학년의 실험 하나를 골라 직접 해 보십니다</p>
+  </div>
+</div>
+
+<nav class="tabbar"><div class="tabbar-in" id="tabbar"></div></nav>
+<main class="wrap" id="panels"></main>
+
+<button class="totop" id="toTop">↑ 맨 위로</button>
+
+<script>
+/* ═══════════════ 탭 ═══════════════ */
+/* min = 그 블록에 배정한 분 · tkey = 타이머를 공유하는 묶음(학년 탭 셋은 같은 45분을 씁니다) */
+const TABS = [
+  {id:'today', em:'📋', name:'오늘',            min:8},
+  {id:'why',   em:'🔭', name:'왜 디지털 도구인가', min:12},
+  {id:'smartlab',em:'🏫', name:'지능형 과학실', min:0},
+  {id:'lose',  em:'⚖️', name:'무엇을 잃는가',    min:18},
+  {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
+  {id:'invite',em:'🙋', name:'초대하는 법',      min:6},
+  {id:'mykit', em:'🧪', name:'내 센서로 할 수 있는 것', min:0},
+  {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
+  {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
+  {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
+  {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:12},
+  {id:'g1',    em:'1️⃣', name:'중1 실험',        min:45, tkey:'lab'},
+  {id:'g2',    em:'2️⃣', name:'중2 실험',        min:45, tkey:'lab'},
+  {id:'g3',    em:'3️⃣', name:'중3 실험',        min:45, tkey:'lab'},
+  {id:'share', em:'🤝', name:'나눔과 닫기',      min:25},
+  {id:'links', em:'🔗', name:'자료실 · 링크',   min:0},
+  {id:'kit',   em:'🧰', name:'오늘의 센서',      min:0},
+];
+
+/* ═══════════════ 실험 데이터 ═══════════════
+   n : 동시에 돌릴 수 있는 모둠 수 (보유 센서 기준)
+   ok: true 가능 / false 센서 없어서 불가
+   src: 출처 (EZ=이지메이커 사례집 / SB=서울시교육청 자료집)
+   ══════════════════════════════════════════ */
+const EXPS = [
+/* ── 중1 ── */
+{g:1,ok:1,n:8,unit:'Ⅵ 기체의 성질',title:'기체의 압력과 부피 관계 (보일의 법칙)',std:'9과06-02',
+ sensor:'이지 공기압 ×1',sw:'EZ·ON 수동 모드',src:'EZ 03 · SB 05',
+ prep:'주사기(이지 사례집은 60mL, 서울 자료집은 25mL), 투명 튜브, 실험복',
+ steps:['공기압 센서와 주사기를 연결한다 (필요하면 튜브를 사이에 낀다)','마개를 열고 피스톤을 당겨 부피를 30mL로 맞춘다',
+        'EZ·ON 수동 모드에서 수동 입력=부피, 센서 측정=공기압으로 지정한다','부피를 정해둔 값마다 바꾸며 압력을 수동으로 찍는다',
+        '표에서 P×V를 계산해 일정한지 본다'],
+ tip:'주사기 몸통을 감싸 쥐면 체온이 기체를 데웁니다. 밀대 끝만 잡으세요. 부피를 바꾼 뒤 1~2초 기다렸다 찍어야 값이 안정됩니다.'},
+
+{g:1,ok:1,n:8,unit:'Ⅵ 기체의 성질',title:'면적과 압력의 관계',std:'9과06-01',
+ sensor:'이지 공기압 ×2',sw:'EZ·ON 자동 수집',src:'EZ 25',
+ prep:'굵기가 다른 주사기 2개, OHP 필름 자, 테이프',
+ steps:['두 주사기의 원주를 재어 단면적을 구한다','두 주사기의 손잡이를 맞대어 세팅하고 수집을 시작한다',
+        '천천히 밀고 당기며 20초쯤 두 주사기의 공기압을 동시에 측정한다','수집한 값에서 1atm을 빼서 변화량을 만든다',
+        'A₁/A₂ 와 ΔP₂/ΔP₁ 가 같은지 확인한다'],
+ tip:'단면적 비가 압력 변화량의 역수 비로 나옵니다. 파스칼의 원리를 수식이 아니라 자기 데이터로 만나게 하는 드문 실험입니다.'},
+
+{g:1,ok:1,n:8,unit:'Ⅵ 기체의 성질',title:'공기압 센서로 물체의 무게 재기',std:'9과06-01',
+ sensor:'이지 공기압 ×1',sw:'EZ·ON 수동 모드',src:'EZ 26',
+ prep:'주사기, 무게를 아는 추 몇 개, 무게를 모르는 물체',
+ steps:['주사기를 세워 고정하고 공기압 센서를 연결한다','피스톤 위에 무게를 아는 추를 하나씩 올리며 압력을 찍는다',
+        '무게–압력 그래프를 그려 직선을 얻는다','무게를 모르는 물체를 올리고, 그 직선으로 무게를 거꾸로 읽는다'],
+ tip:'압력계가 저울이 되는 순간입니다. "이 센서는 압력만 재는데 어떻게 무게를 알았지?"가 좋은 발문이 됩니다.'},
+
+{g:1,ok:1,n:4,unit:'Ⅴ 힘의 작용',title:'마찰력에 영향을 주는 요인',std:'9과05-02',
+ sensor:'큐브 무선 힘·가속도 ×1',sw:'Science#',src:'SB 04',
+ prep:'걸고리 달린 나무토막 5개, 사포 1장, 도화지 1장, 테이프',
+ steps:['전원 짧게 1번 눌러 켜고 Science#에서 센서 번호로 페어링한다','전원을 2번 연속 눌러 영점을 잡는다',
+        '도화지 위에서 나무토막 1개부터 5개까지 당기며 측정한다','사포 위에서 똑같이 반복해 새 차트로 만든다',
+        '두 결과를 한 화면에 놓고 최고점을 비교한다'],
+ tip:'그래프의 피크값이 최대 정지 마찰력입니다. 용수철저울로는 이 순간 최댓값을 눈으로 못 읽습니다 — 센서 도입 효과가 가장 선명한 실험입니다.'},
+
+{g:1,ok:1,n:2,unit:'Ⅲ 열',title:'물과 식용유의 비열 비교',std:'9과03-03',
+ sensor:'온도 ×2 (한 조에 2개)',sw:'Science#',src:'EZ 07 · SB 01',
+ prep:'금속비커 2, 물 50g, 식용유 50g, 전자저울, 핫플레이트, 스탠드·클램프, 내열장갑',
+ steps:['비커 2개를 핫플레이트 중심에서 같은 거리에 놓는다','센서 끝이 바닥에 닿지 않게 클램프로 고정한다',
+        '가열을 시작하고 동시에 수집을 시작한다','기울기 차이가 뚜렷해지면(5~10분) 멈춘다'],
+ tip:'두 액체의 시작 온도가 같을 필요는 없습니다. 다만 상온보다 조금 높은 데서 시작해야 식용유에 대류가 일어나 제대로 비교됩니다. 최종 온도가 아니라 기울기를 읽게 하세요.'},
+
+{g:1,ok:1,n:4,unit:'Ⅳ 물질의 상태 변화',title:'물의 어는점 측정',std:'9과04-04',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 10 · SB 02',
+ prep:'얼음, 소금(한제), 시험관, 비커, 스탠드·클램프, 증류수',
+ steps:['시험관에 물을 넣고 온도 센서를 담근다','얼음+소금 한제를 만든 비커에 시험관을 담근다',
+        '수집을 시작하고 온도가 일정해지는 구간까지 기다린다','0℃ 부근 평평한 구간과 그 앞의 과냉각을 찾는다'],
+ tip:'과냉각으로 안 얼면 시험관을 가볍게 흔들어 결정핵을 만들어 주세요. 평평한 구간이 "응고열을 내놓는 동안"이라는 걸 그래프로 짚어줄 수 있습니다.'},
+
+{g:1,ok:1,n:4,unit:'Ⅳ 물질의 상태 변화',title:'물의 끓는점 측정',std:'9과04-04',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 09',
+ prep:'비커, 물, 핫플레이트, 끓임쪽, 스탠드·클램프, 내열장갑',
+ steps:['비커에 물과 끓임쪽을 넣고 센서를 담근다','가열을 시작하며 수집을 시작한다',
+        '온도가 올라가다 평평해지는 지점을 확인한다','끓는 동안 계속 가열해도 온도가 안 오르는 것을 확인한다'],
+ tip:'"계속 불을 주는데 왜 온도가 안 올라가지?"가 이 실험의 전부입니다. 그래프가 평평해진 순간 학생 얼굴을 보세요.'},
+
+{g:1,ok:1,n:2,unit:'Ⅲ 열',title:'열량계로 열평형 관찰',std:'9과03-01',
+ sensor:'온도 ×2',sw:'Science#',src:'EZ 18',
+ prep:'열량계, 뜨거운 물, 찬물, 비커 2, 내열장갑',
+ steps:['뜨거운 물과 찬물에 센서를 하나씩 담그고 수집을 시작한다','두 물을 열량계 안에서 섞거나 접촉시킨다',
+        '두 곡선이 만나 하나가 될 때까지 측정한다','만나는 지점의 온도와 걸린 시간을 읽는다'],
+ tip:'두 곡선이 한 점으로 모이는 그림이 열평형의 정의 그 자체입니다. 말로 백 번 설명한 것보다 낫습니다.'},
+
+{g:1,ok:1,n:4,unit:'Ⅲ 열',title:'단열재 성능 비교하기',std:'9과03-02',
+ sensor:'온도 ×1 (모둠마다 다른 단열재)',sw:'Science# 또는 EZ·ON',src:'EZ 04',
+ prep:'같은 용기 여러 개, 뜨거운 물, 스티로폼·신문지·에어캡·천 등 단열재',
+ steps:['모둠마다 다른 단열재로 용기를 감싼다','같은 온도의 뜨거운 물을 같은 양 붓는다',
+        '센서를 담그고 동시에 수집을 시작한다','일정 시간 뒤 온도가 얼마나 떨어졌는지 모둠끼리 비교한다'],
+ tip:'모둠마다 변인을 하나씩 나눠 맡는 구조라, 반 전체 데이터를 모아야 결론이 나옵니다. 협력이 실험 설계에 내장된 드문 사례입니다.'},
+
+{g:1,ok:1,n:2,unit:'Ⅲ 열',title:'모래와 물의 냉각 곡선 비교',std:'9과03-03',
+ sensor:'온도 ×2',sw:'Science#',src:'EZ 05',
+ prep:'같은 용기 2개, 마른 모래, 물, 가열 도구, 내열장갑',
+ steps:['모래와 물을 같은 양 담고 같은 온도까지 데운다','센서를 각각 꽂고 동시에 수집을 시작한다',
+        '식는 동안 계속 측정한다','두 곡선의 기울기를 비교한다'],
+ tip:'해안가의 낮과 밤 기온 차이로 이어집니다. 비열이 왜 생활에서 중요한지 묻기 좋은 자리입니다.'},
+
+{g:1,ok:1,n:4,unit:'Ⅲ 열',title:'물질에 따른 열의 전도 비교',std:'9과03-02',
+ sensor:'온도 ×1~2',sw:'Science# 또는 EZ·ON',src:'EZ 19',
+ prep:'구리·철·알루미늄 막대, 가열 도구, 스탠드, 내열장갑',
+ steps:['금속 막대의 한쪽 끝에서 같은 거리 되는 지점에 센서를 붙인다','반대쪽 끝을 동시에 가열한다',
+        '어느 금속에서 온도가 먼저 오르는지 측정한다','온도–시간 그래프의 기울기로 전도 속도를 비교한다'],
+ tip:'"뜨거워졌다"가 아니라 "몇 초 만에 몇 도 올랐다"로 바뀝니다. 순서만 알던 것이 크기가 됩니다.'},
+
+{g:1,ok:1,n:2,unit:'Ⅲ 열',title:'종이 색에 따른 복사 에너지 흡수',std:'9과03-02',
+ sensor:'온도 ×2 (표면 접촉)',sw:'Science# 또는 EZ·ON',src:'EZ 24',
+ prep:'적외선 전등(또는 보통 전등), 흰색·검정 도화지, 내열장갑',
+ steps:['흰 종이와 검은 종이에 센서를 각각 붙인다','전등에서 같은 거리에 나란히 놓는다',
+        '전등을 켜고 동시에 수집을 시작한다','두 곡선이 벌어지는 정도를 비교한다'],
+ tip:'온습도 센서(WL 117H)도 공기 온도를 재므로 이 실험에 함께 쓸 수 있어, 온도 계열 중 유일하게 조를 늘릴 수 있습니다.'},
+
+{g:1,ok:0,n:0,unit:'Ⅳ 물질의 상태 변화',title:'손소독제 증발 실험',std:'9과04-01',
+ sensor:'무게 센서',src:'EZ 15 · SB 03',
+ why:'무게(로드셀) 센서가 없습니다. 이지메이커·사이언스큐브 어느 쪽으로도 오늘은 못 합니다.'},
+
+/* ── 중2 ── */
+{g:2,ok:1,n:7,unit:'전기와 자기',title:'전압과 전류의 관계 (옴의 법칙)',std:'9과14-02',
+ sensor:'이지 전압(A0) + 전류(I2C)',sw:'EZ·ON',src:'EZ 23 · SB 08',
+ prep:'직류전원장치 또는 건전지, 집게전선, 니크롬선 저항판(15Ω), 내열장갑, 보안경',
+ steps:['회로를 한 바퀴 만든 뒤 배선을 끊고 그 자리에 전류 센서를 넣는다 (직렬)','저항 양끝에 전압 센서를 물린다 (병렬)',
+        '전압 센서 값이 5V·10V·15V·20V가 되도록 조절하며 전류를 함께 찍는다',
+        'x축을 시간에서 전압으로 바꿔 V–I 그래프를 만든다','추세선 기울기의 역수가 저항값인지 확인한다'],
+ tip:'전원 장치가 주는 전압과 니크롬선에 실제로 걸리는 전압은 다릅니다. 반드시 전압 센서 값을 기준으로 찍으세요. 기울기 0.0658 → 역수 15.2Ω(이론값 15Ω)이 자료집의 실측 예시입니다.'},
+
+{g:2,ok:1,n:7,unit:'전기와 자기',title:'저항과 전류의 관계',std:'9과14-02',
+ sensor:'이지 전압(A0) + 전류(I2C)',sw:'EZ·ON',src:'EZ 22',
+ prep:'직류전원장치, 집게전선, 저항값이 여러 개인 니크롬선 저항판',
+ steps:['회로를 연결하고 최대 전류 레버를 끝까지 돌린다','전압이 일정하게 유지되는지 전압 센서로 확인한다',
+        '저항값을 10·20·30·40·50으로 바꾸며 전류를 측정한다','저항–전류 그래프가 반비례인지 확인한다'],
+ tip:'앞의 옴의 법칙과 짝입니다. 하나는 전압을 바꾸고 하나는 저항을 바꿉니다. 두 조가 나눠 맡아 결과를 합치면 V=IR이 완성됩니다.'},
+
+{g:2,ok:1,n:4,unit:'식물과 에너지',title:'광합성에 필요한 물질 확인 (CO₂)',std:'9과12-01',
+ sensor:'파스코 CO₂ (PS-3208) ×1',sw:'SPARKvue',src:'EZ 02 · SB 06',
+ prep:'시금치 잎 5~10장, 투명 밀폐 용기, LED 광원(1,000~2,000lux), 알루미늄 호일',
+ steps:['잎을 겹치지 않게 용기에 펴 넣는다','CO₂ 센서를 넣고 밀폐한다','광원을 켜고 10분 측정한다',
+        '측정이 끝나면 호일로 감싸 빛을 막고 다시 측정한다','감소–일정–증가의 V자 그래프를 얻는다'],
+ tip:'시금치는 실험 1~2시간 전에 뿌리를 물에 담그고 빛을 비춰 기공을 열어두어야 5~10분 만에 급감 곡선이 나옵니다. 밀폐 직후 1~2분은 그래프가 요동치니 안정된 뒤 다시 수집하세요. 백열·삼파장은 35℃를 넘겨 호흡이 광합성을 앞지릅니다 — 반드시 LED로.'},
+
+{g:2,ok:1,n:4,unit:'식물과 에너지',title:'빛의 세기에 따른 광합성량',std:'9과12-01',
+ sensor:'CO₂ + 조도 + 온도 (세 개 동시)',sw:'SPARKvue + Science#',src:'SB 07',
+ prep:'시금치, 밀폐 용기, LED 광원 3개, 얼음팩(선택)',
+ steps:['CO₂·조도·온도 센서를 한 용기에 함께 넣는다','광원을 1개만 켜고 10분 측정한다',
+        '광원을 2개, 3개로 늘리며 반복한다','CO₂ 감소량을 광원 개수별로 비교한다'],
+ tip:'세 센서의 역할이 다릅니다 — CO₂는 종속변인, 조도는 조작변인이 실제로 달라졌는지 확인, 온도는 통제변인이 지켜졌는지 확인. 변인 통제를 말이 아니라 센서 배치로 가르치는 자리입니다. 45분에 3회가 어려우면 모둠마다 광원 개수를 나눠 맡고 기울기만 모으세요.'},
+
+{g:2,ok:1,n:4,unit:'물질의 특성',title:'온도에 따른 기체의 용해도',std:'9과08-01',
+ sensor:'온도 + CO₂ (두 개 동시)',sw:'SPARKvue + Science#',src:'EZ 20',
+ prep:'열량계, 콜라, 알루미늄 컵, 따뜻한 물, 테이프, 장갑·보안경',
+ steps:['열량계 뚜껑에 CO₂ 센서와 온도 센서를 끼우고 고정한다','틈을 테이프로 밀봉해 기체가 새지 않게 한다',
+        '알루미늄 컵에 콜라를 붓고 거품이 가라앉을 때까지 기다린다','바깥 공간에 따뜻한 물을 부으며 수집을 시작한다',
+        '온도가 오를 때 CO₂ 농도가 어떻게 변하는지 본다'],
+ tip:'탄산음료가 미지근해지면 김이 빠지는 이유가 그래프로 나옵니다. 콜라를 붓자마자 측정하면 초기 거품 때문에 값이 튀니 반드시 안정된 뒤 시작하세요.'},
+
+{g:2,ok:1,n:5,unit:'Ⅷ 별과 우주',title:'거리에 따른 빛의 세기 (역제곱 법칙)',std:'9과15-01',
+ sensor:'큐브 무선 조도·색도 ×1',sw:'Science# 수동 수집',src:'EZ 14 · SB 09',
+ prep:'LED 손전등(점광원), 100cm 이상 자, 스탠드·집게, 테이프, 종이컵, 암막',
+ steps:['광원을 고정하고 센서를 자 위에서 움직인다','20cm 간격으로 조도를 수동 입력한다 (X축 제목 = 거리)',
+        '같은 지점을 3회 이상 재어 평균을 낸다','데이터 변환으로 X축을 1/r²로 바꾼다',
+        '직선이 되는지 보고 기울기와 절편을 해석한다'],
+ tip:'변환 후에는 원본 복구가 안 되니 변환 전에 반드시 저장하세요. 기울기 A는 광원의 상대적 세기, 절편 B는 배경 조도(주변광·반사광)입니다. 창가 빛이 들면 먼 거리 구간이 뭉개지니 암막이 1순위입니다. RGB 모드로 바꾸면 「빛과 파동」 빛의 합성으로 이어집니다.'},
+
+{g:2,ok:1,n:4,unit:'물질의 특성',title:'물과 소금물의 냉각 곡선 비교',std:'9과08-02',
+ sensor:'온도 ×1~2',sw:'Science# 또는 EZ·ON',src:'EZ 06',
+ prep:'시험관 2, 물, 소금물, 얼음+소금 한제, 비커',
+ steps:['시험관에 물과 소금물을 각각 넣고 센서를 담근다','한제에 담그고 수집을 시작한다',
+        '두 곡선의 평평한 구간이 어디서 생기는지 비교한다','순물질과 혼합물의 차이를 그래프로 확인한다'],
+ tip:'순물질은 평평한 구간이 뚜렷하고 혼합물은 비스듬히 내려갑니다. "어는점이 하나가 아니다"를 눈으로 보는 실험입니다.'},
+
+{g:2,ok:1,n:4,unit:'물질의 특성',title:'물과 에탄올 혼합물 분리 (증류)',std:'9과08-03',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 08',
+ prep:'증류 장치, 물–에탄올 혼합물, 끓임쪽, 가열 장치, 냉각기',
+ steps:['증류 플라스크에 혼합물과 끓임쪽을 넣는다','증기가 지나는 자리에 온도 센서를 둔다',
+        '가열하며 수집을 시작한다','온도가 두 번 평평해지는 구간을 찾는다'],
+ tip:'첫 번째 평평한 구간이 에탄올(약 78℃), 두 번째가 물(100℃)입니다. 계단 모양 그래프가 분별 증류의 원리를 그대로 보여줍니다.'},
+
+{g:2,ok:1,n:1,unit:'수권과 해수의 순환',title:'수권의 층상 구조 만들기',std:'9과18-02',
+ sensor:'온도 ×4 (원래 5개 필요)',sw:'Science#',src:'EZ 16',
+ prep:'물이 담긴 수조, 적외선 전등, 미니 선풍기, 센서 고정 장치',
+ steps:['수조 안 서로 다른 깊이에 센서를 고정한다','전등을 비춰 표층을 데운다',
+        '선풍기로 바람을 일으켜 표층을 섞는다','깊이별 온도 차이로 혼합층·수온약층·심해층을 확인한다'],
+ tip:'센서가 4개뿐이라 한 조만 가능합니다. 전체 시연으로 돌리고 나머지 조는 데이터를 함께 읽는 방식이 현실적입니다.'},
+
+{g:2,ok:0,n:0,unit:'Ⅷ 별과 우주',title:'불꽃색에 따른 온도 비교',std:'9과15-01',
+ sensor:'고온 센서',src:'EZ 13',
+ why:'불꽃을 재는 고온 센서가 없습니다. 일반 온도 센서를 불꽃에 넣으면 센서가 망가집니다.'},
+
+/* ── 중3 ── */
+{g:3,ok:1,n:4,unit:'화학 반응의 규칙',title:'발열 반응 관찰',std:'9과16-06',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 11',
+ prep:'염화칼슘 또는 산화칼슘, 물, 비커, 젓개, 보안경·장갑',
+ steps:['비커에 물을 넣고 센서를 담근 뒤 수집을 시작한다','시약을 한 번에 넣고 젓는다',
+        '온도가 올라가는 구간을 측정한다','최고 온도와 도달 시간을 읽는다'],
+ tip:'"따뜻해졌다"가 "3분 만에 12℃ 올랐다"가 됩니다. 흡열 반응과 같은 축으로 겹쳐 그리면 대비가 확실합니다.'},
+
+{g:3,ok:1,n:4,unit:'화학 반응의 규칙',title:'흡열 반응 관찰',std:'9과16-06',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 30',
+ prep:'질산암모늄 또는 탄산수소나트륨+구연산, 물, 비커, 보안경·장갑',
+ steps:['비커에 물을 넣고 센서를 담근 뒤 수집을 시작한다','시약을 넣고 젓는다',
+        '온도가 내려가는 구간을 측정한다','발열 반응 그래프와 같은 축에 겹쳐 본다'],
+ tip:'발열과 흡열을 한 그래프에 겹쳐 놓는 것이 이 두 실험의 목적입니다. 따로 하면 절반만 배웁니다.'},
+
+{g:3,ok:1,n:4,unit:'기권과 날씨',title:'복사 평형 상태 관찰',std:'9과17-01',
+ sensor:'온도 ×1',sw:'Science# 또는 EZ·ON',src:'EZ 12',
+ prep:'검은색 알루미늄 컵과 뚜껑, 적외선 전등, 스티로폼 받침대, 줄자, 스탠드',
+ steps:['컵 안에 센서를 넣고 뚜껑을 덮는다','전등을 일정 거리에 두고 켠다',
+        '온도가 올라가다 더 이상 안 오르는 지점까지 측정한다','그 지점이 복사 평형임을 확인한다',
+        '거리를 바꿔 평형 온도가 달라지는지 본다'],
+ tip:'곡선이 눕는 지점이 "받는 만큼 내보내는" 상태입니다. 거리를 바꾸면 평형 온도가 달라지는 것까지 하면 지구–태양 거리 이야기로 이어집니다.'},
+
+{g:3,ok:1,n:2,unit:'기권과 날씨',title:'온실 효과 관찰',std:'9과17-01',
+ sensor:'온도 ×2',sw:'Science# 또는 EZ·ON',src:'EZ 21',
+ prep:'1.5L 페트병 2개, 비닐랩, 테이프, 드라이아이스(또는 뜨거운 물), 적외선 전등',
+ steps:['페트병 하나에는 공기만, 다른 하나에는 CO₂를 채운다','각각에 센서를 넣고 랩으로 막는다',
+        '같은 거리에서 전등을 비추고 동시에 수집한다','두 곡선이 벌어지는 정도를 비교한다'],
+ tip:'CO₂를 채운 쪽이 더 빨리, 더 높이 올라갑니다. 온습도 센서(WL 117H)를 함께 쓰면 조를 하나 더 늘릴 수 있습니다.'},
+
+{g:3,ok:1,n:4,unit:'기권과 날씨',title:'구름 생성 (단열 팽창)',std:'9과17-03',
+ sensor:'큐브 압력(WL 103P) + 온도',sw:'Science#',src:'SB 10',
+ prep:'감압 용기 + 펌프, 종이컵 받침대, 향·점화기(응결핵), 소량의 물',
+ steps:['용기 바닥에 물을 조금 넣고 받침대 위에 센서를 올린다','향 연기를 넣고 밀폐한다',
+        '수집을 시작하고 펌프로 일정한 속도로 감압한다','구름이 생기면 다시 공기를 넣어 없앤다',
+        '압력↓–온도↓–구름 생성 구간과 그 반대 구간을 짝지어 읽는다'],
+ tip:'자동 그래프로는 온도 변화가 안 보입니다. 축 설정에서 온도 범위를 1~2℃ 폭으로 직접 좁히세요. 수동 펌프는 속도가 일정하지 않아 그래프가 깨지니 전동형이 낫습니다. 감압 용기가 없으면 이 실험은 못 합니다.'},
+
+{g:3,ok:0,n:0,unit:'화학 반응의 규칙',title:'철 솜 연소와 무게 변화',std:'9과16-01',
+ sensor:'무게 센서',src:'EZ 27',
+ why:'무게(로드셀) 센서가 없습니다. 전자저울로 대신하면 연소 중 실시간 변화를 못 봅니다.'},
+
+{g:3,ok:0,n:0,unit:'자극과 반응',title:'시각 자극 반응 실험',std:'9과20-02',
+ sensor:'DIY-B 버튼 센서 ×2',src:'EZ 17',
+ why:'버튼(DIY-B) 센서가 없습니다. 자 낙하 실험으로 대신할 수 있으나 센서 수업은 아닙니다.'},
+
+{g:3,ok:0,n:0,unit:'자극과 반응',title:'청각 자극 반응 실험',std:'9과20-02',
+ sensor:'소리 센서',src:'EZ 28',
+ why:'소리 센서가 없습니다.'},
+
+{g:3,ok:0,n:0,unit:'운동과 에너지',title:'초음파 센서로 운동 분석',std:'9과19-01',
+ sensor:'초음파 센서',src:'EZ 29',
+ why:'초음파 센서가 없습니다. 이 실험은 거리–시간 그래프를 실시간으로 그리는 대표 사례라 아쉬운 항목입니다.'},
+];
+
+/* ═══════════════ 패널 ═══════════════ */
+function head(kick,h2,p){
+  return `<div class="sec-head"><span class="kick">${kick}</span><h2>${h2}</h2>${p?`<p>${p}</p>`:''}</div>`;
+}
+
+function expCard(e){
+  const nb = e.ok ? (e.n>=6 ? `<span class="bd n8">${e.n}모둠 동시</span>` : `<span class="bd n4">${e.n}모둠까지</span>`) : '';
+  if(!e.ok) return `<article class="exp no">
+    <div class="top"><div class="badges"><span class="bd unit">${e.unit}</span><span class="bd src">${e.src}</span></div>
+    <h4>${e.title}</h4><div class="std">${e.std} · 필요 센서 ${e.sensor}</div></div>
+    <div class="body"><div class="why">오늘은 못 합니다 — ${e.why}</div></div></article>`;
+  return `<article class="exp">
+    <div class="top"><div class="badges"><span class="bd unit">${e.unit}</span>${nb}<span class="bd src">${e.src}</span></div>
+    <h4>${e.title}</h4><div class="std">${e.std}</div></div>
+    <div class="body">
+      <div class="row"><span class="k">센서</span><span class="v">${e.sensor} · ${e.sw}</span></div>
+      <div class="row"><span class="k">준비물</span><span class="v">${e.prep}</span></div>
+      <div class="row"><span class="k">절차</span><span class="v"></span></div>
+      <ol>${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+      <div class="tip">${e.tip}</div>
+    </div></article>`;
+}
+
+function gradePanel(g){
+  const list = EXPS.filter(e=>e.g===g);
+  const okN = list.filter(e=>e.ok).length, noN = list.filter(e=>!e.ok).length;
+  return head(`${g}️⃣ 중${g}`, `중${g} — 오늘 <b>${okN}개</b>를 하실 수 있습니다`,
+    `보유한 센서로 가능한 것만 실었습니다. 못 하는 ${noN}개도 아래에 이유와 함께 남겨 두었습니다.`)
+    + `<div class="exps">${list.filter(e=>e.ok).map(expCard).join('')}</div>`
+    + (noN? `<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.3rem;margin:34px 0 14px;text-align:center">오늘은 못 하는 실험</h3>
+       <div class="exps">${list.filter(e=>!e.ok).map(expCard).join('')}</div>`:'');
+}
+
+const PANEL = {
+
+/* ───── 오늘 ───── */
+today: head('📋 여는 활동','시작하기 전에 <b>3분만</b> 해 보시겠습니다',
+  '설명은 그다음에 하겠습니다.')
++ `<div class="callout gold"><b>지금 나눠 드린 것</b> — 온도계 하나, 뜨거운 물 한 컵, 초시계, 그리고 빈 표 한 장.
+<br><b>30초마다 온도를 읽어서 표에 적어 주십시오.</b> 3분간 하겠습니다. 시작하십시오.</div>
+
+<div class="punch">
+  <div class="q">방금 그 3분 동안<br>선생님께서는 <b>물을 보고 계셨습니까,<br>표를 보고 계셨습니까.</b></div>
+  <div class="cap">오늘 두 시간은 이 질문에서 출발합니다</div>
+</div>
+
+<div class="callout"><b>그리고 하나 더 말씀드립니다.</b> 방금 제가 선생님들께 한 것이, <b>제가 학생들에게 하는 것</b>입니다.
+센서를 먼저 주지 않고 먼저 막히게 두는 것 — 오늘 「초대하는 법」 탭의 1번입니다.
+불편을 겪은 사람만이 도구를 반갑니다.</div>
+
+<div class="tablewrap"><table>
+<tr><th>시간</th><th>블록</th><th>하는 일</th></tr>
+<tr><td><b>0–8</b></td><td>여는 활동</td><td>온도계로 3분간 받아 적기 → "무엇을 보고 계셨습니까"</td></tr>
+<tr><td><b>8–20</b></td><td>왜 디지털 도구인가</td><td>교육과정의 요구와 도구의 다섯 가지 역할</td></tr>
+<tr><td><b>20–38</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
+<tr><td><b>38–44</b></td><td>학생이 얻는 것</td><td>교사가 편한 이야기 말고, 학생 쪽에서만</td></tr>
+<tr><td><b>44–50</b></td><td>초대하는 법</td><td>시켜서 하는 것과 하고 싶어서 하는 것</td></tr>
+<tr style="background:var(--gold-soft)"><td><b>선택</b></td><td>지능형 과학실</td><td>학교가 <b>ON을 쓰거나 모델학교</b>일 때 10분. 방과 플랫폼의 차이부터<br><span style="font-size:.86rem;color:var(--ink-soft)">센서 실습 뒤에 붙이는 것이 자연스럽습니다</span></td></tr>
+<tr style="background:var(--gold-soft)"><td><b>선택</b></td><td>센서는 어떻게 전달하나</td><td><b>이지메이커를 처음 쓰는 학교에서만</b> 12분. A·D·I2C·UART를 왜 갈라 꽂는지<br><span style="font-size:.86rem;color:var(--ink-soft)">넣으실 경우 나눔을 25 → 13분으로 줄이십시오</span></td></tr>
+<tr><td><b>50–95</b></td><td><b>내 학년 실험 직접 하기</b></td><td>맡고 계신 학년의 실험을 하나 골라 매뉴얼대로 <b>45분</b></td></tr>
+<tr><td><b>95–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
+</table></div>
+
+<div class="callout ok"><b>오늘 실습은 선생님이 고르십니다.</b> 맡고 계신 학년 탭을 열어 실험 하나를 고르시면 됩니다.
+센서는 제가 다 가져왔고, 카드마다 <b>몇 모둠이 동시에 가능한지</b>까지 적어 두었습니다.</div>
+
+<div class="script">"시작하기 전에 3분만 뭘 좀 해 보시겠습니다. 온도계로 30초마다 온도를 읽어서 적어 주십시오. …… 네, 3분 됐습니다.<br><br>
+하나만 여쭙겠습니다. <b>지금 물을 보고 계셨습니까, 표를 보고 계셨습니까?</b><br><br>
+… 그렇습니다. 표를 보셨습니다. 우리 학생들도 실험 시간 내내 그렇게 하고 있습니다.<br><br>
+그리고 방금 제가 선생님들께 한 게, 제가 학생들한테 하는 겁니다. 센서를 먼저 안 줍니다. <b>먼저 막히게 둡니다.</b> 오늘 그 이야기를 하겠습니다."</div>
+
+<div class="note"><b>준비물</b>: 온도계·뜨거운 물·종이컵·초시계·빈 표를 인원수만큼. 물은 <b>미리 끓여 보온병</b>에 담아 가세요.<br><br>
+3분이 길게 느껴지셔도 <b>끝까지 채우세요.</b> 지루해지는 게 목적입니다. 2분쯤 되면 웃으시거나 서로 쳐다보시는데, 그 순간이 오늘 연수에서 제일 중요한 장면입니다.<br><br>
+"물을 보셨습니까 표를 보셨습니까"에 <b>대답을 기다리세요.</b> 강사가 답을 말해 버리면 효과가 절반입니다.</div>`,
+
+/* ───── 왜 ───── */
+why: head('🔭 첫 번째 질문','우리는 <b>왜</b> 센서를 씁니까',
+  '"편해서"라고 답하면 이 연수는 실패합니다. 교육과정 문서를 펴 놓고 시작하겠습니다.')
++ `<div class="punch">
+  <div class="q">센서 수업은 <b>해도 되는 것</b>이 아니라<br><b>교육과정이 하라고 적어 둔 것</b>입니다.</div>
+  <div class="cap">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정</div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:28px 0 6px;text-align:center">근거 넷 — 모두 원문 그대로입니다</h3>
+
+<div class="callout"><b>① 내용 체계의 「과정⋅기능」에 이름이 박혀 있습니다</b>
+<br>중학교 1~3학년 <b>물질</b> 영역 과정⋅기능 내용 요소 —
+<br>"수학적 사고와 <b>디지털 탐구 도구 활용하기</b>"
+<br><br>지식⋅이해도 가치⋅태도도 아닌 <b>과정⋅기능 내용 요소 그 자체</b>입니다. 가르쳐야 할 기능 목록에 들어 있다는 뜻입니다.</div>
+
+<div class="callout"><b>② 교수⋅학습 방향이 지능형 과학실과 실시간 측정을 지목합니다</b>
+<br>"지능정보기술 등 첨단 과학기술 기반의 과학 교육이 이루어질 수 있도록 <b>지능형 과학실을 활용한 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 실행한다</b>."
+<br>"‘과학’ 관련 탐구 활동에서 <b>다양한 센서나 기기 등 디지털 탐구 도구를 활용하여 실시간으로 자료를 측정</b>하거나 (…) 자료를 수집하고 처리하는 기회를 제공한다."
+<br><br>지금 우리가 앉아 있는 이 방이 그 문장에 적힌 장소입니다. 그리고 이 연수의 정식 부제도 <b>"지능형 과학실에서 AI·센서·데이터로 완성하는 K-STEM 클래스"</b>입니다. <b>🏫 지능형 과학실</b> 탭에서 따로 다룹니다.</div>
+
+<div class="callout"><b>③ 「탐구 활동」에 센서가 이름으로 등장합니다</b>
+<br>중학교 1~3학년 <b>(3) 열</b> 단원의 탐구 활동 —
+<br>"열화상 카메라를 이용하여 물체에서 열의 전도 비교하기"
+<br>"<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>"
+<br><br>오늘 중1 탭에 있는 <b>「물과 식용유의 비열 비교」가 바로 이것</b>입니다. 우리가 고른 게 아니라 교육과정이 적어 둔 탐구 활동입니다.</div>
+
+<div class="callout warn"><b>④ 그리고 어떤 곳은 "할 수 있다"가 아니라 "하도록 한다"입니다</b>
+<br>(3) 열 · 성취기준 적용 시 고려 사항 —
+<br>"온도를 측정하거나 열의 전도를 관찰하는 활동에서 <b>온도 센서 등 디지털 탐구 도구를 활용하도록 한다.</b>"
+<br><br>다른 항목들은 대개 "활용할 수 있다"입니다. 열 단원만 <b>어조가 다릅니다.</b></div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 12px;text-align:center">단원마다 무엇을 쓰라고 적혀 있나</h3>
+<div class="tablewrap"><table>
+<tr><th>단원</th><th>교육과정 원문</th><th>오늘 되나</th></tr>
+<tr><td><b>열</b> (중1)</td><td>"온도 센서 등 디지털 탐구 도구를 활용하도록 한다"<br>탐구 활동 · 온도 센서로 여러 액체의 비열 비교</td><td>✅ 온도 4</td></tr>
+<tr><td><b>식물과 에너지</b> (중2)</td><td>"광합성 실험은 디지털 탐구 도구를 이용하여 데이터를 얻고 이를 해석하여 문제를 해결하는 디지털 기반 탐구 활동을 할 수 있다"</td><td>✅ CO₂ 4</td></tr>
+<tr><td><b>전기와 자기</b> (중2)</td><td>"전기 회로 실험에서 디지털 탐구 도구나 가상 실험을 활용할 수 있다"</td><td>✅ 전압·전류 7</td></tr>
+<tr><td><b>빛과 파동</b> (중2)</td><td>탐구 활동 · "디지털 탐구 도구를 이용하여 소리의 진폭, 진동수, 파형 탐구하기"</td><td>❌ 소리 센서 없음</td></tr>
+<tr><td><b>운동과 에너지</b> (중3)</td><td>"사진기나 <b>운동 센서</b> 등 다양한 디지털 탐구 도구를 활용할 수 있도록 한다"</td><td>❌ 초음파 없음</td></tr>
+<tr><td><b>별과 우주</b> (중2)</td><td>"디지털 탐구 도구를 활용하여 우리은하를 구성하는 천체의 종류와 특징을 비교⋅분석"</td><td>△ 조도 5</td></tr>
+</table></div>
+
+<div class="callout ok"><b>모둠 데이터를 모으는 것도 적혀 있습니다.</b>
+<br>"탐구 활동 수행 시, 의사소통과 협업 능력을 키우기 위해 <b>여러 모둠의 데이터를 공유</b>할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b> 등을 활용하여 디지털 소양 교육과 연계하여 지도한다."
+<br><br>오늘 뒤에서 보실 수업허브가 하는 일이 정확히 이 문장이고, <b>지능형 과학실 ON의 「탐구과정 공유」</b>도 같은 자리를 겨냥합니다.</div>
+
+<div class="callout warn"><b>다만 교육과정은 이 말도 함께 적어 두었습니다.</b>
+<br>"학교 및 학생의 디지털 활용 수준 등을 고려하여 <b>디지털 격차가 발생하지 않도록 유의한다.</b>"
+<br><br>기기가 모자라면 모둠마다 다른 변인을 맡기고 결과를 합치는 식으로 설계해야 합니다. 오늘 실험 카드에 <b>동시 가능 모둠 수</b>를 적어 둔 이유이기도 합니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 12px;text-align:center">그러면 도구는 무엇을 해 주는가</h3>
+
+<div class="tablewrap"><table>
+<tr><th>구분</th><th>전통적 탐구도구</th><th>디지털 탐구도구</th></tr>
+<tr><td><b>성격</b></td><td>관찰과 제시 중심</td><td>탐구 과정의 재정의</td></tr>
+<tr><td><b>도구</b></td><td>아날로그 측정도구, 광학현미경, 물리적 실험장치</td><td>디지털 센서·데이터로거, 시뮬레이션, 가상실험실</td></tr>
+<tr><td><b>자료</b></td><td>정보 검색과 제시 중심의 자료 제공자</td><td>실시간 수집과 그래프 시각화</td></tr>
+<tr><td><b>한계</b></td><td>미시·거시 현상의 시각화에 한계<br>위험·고비용 실험은 학교에서 곤란</td><td>추상적 개념의 가시화와 다중 표상<br>협력적 탐구와 데이터 공유</td></tr>
+</table></div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 14px;text-align:center">디지털 도구의 다섯 가지 역할</h3>
+<div class="cardgrid">
+  <div class="pcard"><div class="num">1</div><h3>데이터 수집의 정밀성</h3><p>실시간으로 수집·시각화하여 <b>현상과 표상의 관계</b>를 즉각 파악하게 합니다.</p></div>
+  <div class="pcard"><div class="num">2</div><h3>추상적 개념의 시각화</h3><p>원자·전자기장처럼 직접 볼 수 없는 것을 가시화합니다.</p></div>
+  <div class="pcard"><div class="num">3</div><h3>위험·고비용 실험의 대안</h3><p>학교에서 할 수 없던 실험을 안전하게 수행합니다.</p></div>
+  <div class="pcard"><div class="num">4</div><h3>협력적 탐구와 공유</h3><p>실시간 데이터 공유로 집단 지성을 활용합니다.</p></div>
+  <div class="pcard"><div class="num">5</div><h3>개인화된 학습</h3><p>학생 개개인의 수준과 속도에 맞춘 피드백을 제공합니다.</p></div>
+</div>
+
+<div class="callout warn"><b>그런데 같은 연구가 이렇게 덧붙입니다.</b> — "효과는 <b>기술 자체보다 교육과정·교수전략과의 연계</b>에 달려 있다." 센서를 샀다고 수업이 좋아지지 않습니다. 오늘 우리가 이야기할 것은 그 연계입니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 14px;text-align:center">네 가지 어포던스</h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">도구가 학습자에게 주는 <b>행위 가능성</b></p>
+<div class="cardgrid">
+  <div class="pcard"><h3>① 실시간성</h3><p>수집 즉시 확인하여 <b>현상과 데이터의 연결</b>을 강화합니다.</p></div>
+  <div class="pcard"><h3>② 자동성</h3><p>측정의 번거로움을 줄여 탐구의 본질에 집중하게 합니다.</p></div>
+  <div class="pcard"><h3>③ 시각화</h3><p>패턴과 경향성을 직관적으로 파악합니다.</p></div>
+  <div class="pcard"><h3>④ 공유·협력</h3><p>학생 간 과학적 의사소통을 촉진합니다.</p></div>
+</div>
+
+<div class="callout gold"><b>②번을 다시 보십시오.</b> "측정의 번거로움을 줄여 준다"— 그런데 그 <b>번거로움의 이름이 자료 수집</b>입니다. 그리고 자료 수집은 우리 교육과정의 <b>탐구 기능</b> 중 하나입니다. 다음 장에서 이 문제를 정면으로 보겠습니다.</div>
+
+<div class="script">"오늘 제가 센서를 잔뜩 들고 왔지만, 첫 질문은 '이걸 왜 쓰냐'입니다.<br><br>
+저는 이 질문에 <b>교육과정 문서로</b> 답을 드리겠습니다. 별책 9 펴 보시면, 중학교 물질 영역 <b>과정⋅기능 내용 요소</b>에 '수학적 사고와 <b>디지털 탐구 도구 활용하기</b>'가 적혀 있습니다. 가치⋅태도가 아니라 <b>가르쳐야 할 기능</b> 목록입니다.<br><br>
+그리고 열 단원 탐구 활동에 뭐라고 적혀 있냐면, '<b>온도 센서를 이용하여 여러 가지 액체의 비열 비교하기</b>'입니다. 오늘 중1 탭에 있는 그 실험, 제가 고른 게 아닙니다. 교육과정에 적혀 있는 겁니다.<br><br>
+게다가 열 단원은 어조가 다릅니다. 다른 데는 '활용할 수 있다'인데 여기는 '<b>활용하도록 한다</b>'입니다.<br><br>
+그러니 '쓸까 말까'는 지난 질문입니다. 다만 연구들이 공통으로 하는 말이 있습니다. <b>효과는 기술이 아니라 연계에 달려 있다.</b> 오늘 두 시간은 그 연계 이야기입니다."</div>
+
+<div class="note">이 탭은 <b>15분을 넘기지 마세요.</b> 이론이 길어지면 선생님들 손이 근질거립니다. 다섯 가지 역할과 네 가지 어포던스는 <b>읽지 말고 짚기만</b> 하시고, 마지막 노란 상자(②번 되짚기)에서 시간을 쓰세요. 거기가 다음 탭으로 넘어가는 다리입니다.</div>`,
+
+/* ───── 지능형 과학실 ON ───── */
+smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이 방</b> 이야기입니다',
+  '공간은 이미 있습니다. 그 위에 얹힌 플랫폼이 하나 더 있는데, 대부분 모르고 지나갑니다.')
++ `
+<div class="punch">
+  <div class="q">이 연수의 정식 부제가 무엇인지 아십니까.<br><b>"지능형 과학실에서 AI·센서·데이터로<br>완성하는 K-STEM 클래스"</b>입니다.</div>
+  <div class="cap">2026 찾아가는 디지털 과학 수업 역량 강화 연수 · 서울특별시교육청 창의미래교육과</div>
+</div>
+
+<div class="callout"><b>교육과정도 이 방을 콕 집어 말합니다.</b>
+<br>"지능정보기술 등 첨단 과학기술 기반의 과학 교육이 이루어질 수 있도록 <b>지능형 과학실을 활용한 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 실행한다.</b>"
+<br><span style="font-size:.88rem;color:var(--ink-soft)">— 교육부 고시 제2022-33호 [별책 9] 과학과 교육과정 · 교수⋅학습 방향</span>
+<br><br>연수 장소가 <b>신청 학교의 지능형 과학실</b>로 정해져 있는 것도 그래서입니다.</div>
+
+<div class="callout ok"><b>업체 프로그램 안에 이미 버튼이 있습니다.</b> 사이언스큐브 <b>Science# for Web</b>의 툴바 맨 아래가 <b>「Science-On에 업로드」</b>입니다. 지능형 과학실에서 만든 <b>모둠 아이디를 입력해 연결</b>한 뒤 누르면 측정값이 그대로 넘어갑니다. 이지메이커 EZ·ON도 상단에 <b>「지능형 과학실」</b> 칸이 있습니다. <b>🔗 자료실</b> 탭에 두 프로그램 매뉴얼과 ON 포털 주소를 모아 두었습니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 6px;text-align:center">먼저 갈라 봅시다 — <b style="color:var(--coral-deep)">방</b>과 <b style="color:var(--coral-deep)">플랫폼</b>은 다릅니다</h3>
+
+<div class="versus">
+  <div class="vs-card cube">
+    <span class="tag">공간</span>
+    <h3>지능형 과학실</h3>
+    <p style="font-size:.94rem;color:#1a5c8c">전자칠판, 무선 인터넷, 모둠 테이블, 태블릿 충전함, 그리고 <b>센서</b>.<br>사업으로 구축된 <b>물리적인 방</b>입니다.</p>
+    <p style="font-size:.9rem;color:#3d7ba5;margin-top:8px">대부분의 학교가 여기까지는 갖추고 있습니다.</p>
+  </div>
+  <div class="vs-card ez">
+    <span class="tag">플랫폼</span>
+    <h3>지능형 과학실 ON</h3>
+    <p style="font-size:.94rem;color:var(--coral-deep)">탐구를 개설하고, 모둠 데이터를 모으고, 보고서를 받고, 평가하고, <b>학생별 포트폴리오</b>로 쌓는 <b>웹 서비스</b>입니다.</p>
+    <p style="font-size:.9rem;color:#8a5c12;margin-top:8px">방은 쓰는데 <b>이건 안 쓰는</b> 경우가 훨씬 많습니다.</p>
+  </div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 12px;text-align:center">ON이 교사에게 주는 것</h3>
+
+<div class="cardgrid">
+  <div class="pcard"><h3>📊 데이터 센터</h3><p>데이터 공유 · <b>학생 포트폴리오</b> · 대시보드 · 보고서 현황 · 퀴즈·설문 현황 · 공동탐구 현황 · <b>과학학습 종합역량 진단</b></p></div>
+  <div class="pcard"><h3>🔬 탐구수업</h3><p>탐구 개설 → 학생·학급·<b>센서 관리</b> → 탐구 개요 → <b>데이터 수집</b> → <b>데이터 분석</b> → 보고서 양식·관리·<b>평가</b> → 퀴즈·설문 → 토론방 → <b>탐구과정 공유</b></p></div>
+  <div class="pcard"><h3>🌏 공동탐구</h3><p>기초·심화·자유탐구 + <b>오픈API 센서 연동</b>. 다른 학교와 같은 주제로 데이터를 모아 비교합니다</p></div>
+  <div class="pcard"><h3>📚 학습자료실·커뮤니티</h3><p>자료 등록·검색·북마크, 질문방, 교사 커뮤니티, 모델학교 운영(컨설팅·수업공개)</p></div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">센서와 ON은 <b style="color:var(--coral-deep)">어디서 만나나</b></h3>
+
+<div class="callout ok"><b>업체들이 이미 ON을 향해 만들고 있습니다.</b>
+<br>사이언스큐브 무선센서 카탈로그 표지에 이렇게 적혀 있습니다 —
+<br>"※ 본 제품은 <b>지능형과학실 ON의 오픈 API를 준수하여</b> 개발하였습니다."
+<br><br>이지메이커 EZ·ON도 마찬가지입니다. 상단 메뉴가 <b>홈 · 가이드 · 블록 코딩 · 데이터 분석 · 실험 보고서 · 「지능형 과학실」</b> 여섯 개인데, 마지막 칸이 바로 그것입니다.</div>
+
+<div class="tablewrap"><table>
+<tr><th>연결하는 길</th><th>어떻게</th><th>언제 쓰나</th></tr>
+<tr><td><b>CSV 올리기</b></td><td>센서 프로그램에서 내보낸 파일을 ON에 업로드</td><td>가장 쉽고 확실합니다. <b>처음이라면 이것부터</b></td></tr>
+<tr><td><b>모둠코드로 직접 연결</b></td><td>센서 프로그램에서 ON의 <b>모둠 아이디</b>를 입력해 연결한 뒤 [데이터 업로드]</td><td>손이 덜 가지만 계정·학급 세팅이 먼저 끝나 있어야 합니다</td></tr>
+<tr><td><b>오픈 API 연동</b></td><td>업체 프로그램이 ON 규격에 맞춰 값을 보냄</td><td>공동탐구에서 씁니다</td></tr>
+</table></div>
+
+<div class="callout"><b>공동탐구의 오픈API 센서 연동 화면은 이렇게 생겼습니다.</b>
+<br><b>장소</b>(학교·운동장·가정·도심공원·바닷가·강가·논 또는 밭·시내 중 선택) · <b>측정날짜</b>(2026-02-02 형식) ·
+<b>측정시간</b>(13:15 형식) · <b>기온(℃)</b>
+<br><br>센서에서 들어온 값을 <b>행 단위로 고치고 추가하고 지울 수</b> 있습니다. 그다음 [선택 데이터저장]을 누르면 공동탐구 활동에 반영됩니다.
+<br><span style="font-size:.9rem">— 즉 <b>기계가 준 값을 사람이 검토한 뒤 넘기는 구조</b>입니다. 「무엇을 잃는가」에서 말씀드린 <b>"어느 점을 버릴지 정하기"</b>가 여기 그대로 들어 있습니다.</span></div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">한 차시가 이렇게 흐릅니다</h3>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div><h4>탐구를 개설합니다</h4>
+    <p>탐구 개요를 쓰고 학급·모둠·센서를 등록합니다. 탐구 시간표에 걸어 두면 학생이 <b>학생 모드로 입장</b>합니다.</p></div></div>
+  <div class="move"><div class="n">2</div><div><h4>모둠이 데이터를 올립니다</h4>
+    <p>센서로 잰 값이 모둠별로 쌓입니다. 교사 화면에서 <b>모둠을 눌러 그 모둠 자료만</b> 볼 수 있고, 언제 수집했는지도 남습니다.</p></div></div>
+  <div class="move"><div class="n">3</div><div><h4>보고서를 받습니다</h4>
+    <p>교사가 만든 <b>보고서 양식</b>에 학생이 채워 냅니다. 한 번 출제된 양식은 수정이 잠깁니다.</p></div></div>
+  <div class="move"><div class="n">4</div><div><h4>평가하고 되돌려 줍니다</h4>
+    <p>보고서 평가 · 퀴즈 · 설문 · 토론방. 결과는 <b>학생 포트폴리오</b>와 <b>과학학습 종합역량 진단</b>에 쌓입니다.</p></div></div>
+  <div class="move"><div class="n">5</div><div><h4>탐구 과정을 공유합니다</h4>
+    <p>어느 모둠 자료를 학급에 공개할지 <b>체크로 고릅니다.</b> 잘된 것만이 아니라 <b>어긋난 것도 같이</b> 걸어 두면 그게 수업이 됩니다.</p></div></div>
+</div>
+
+<div class="punch">
+  <div class="q">이 다섯 단계가<br><b>「무엇을 잃는가」에서 말씀드린 그 이야기</b>입니다.<br>측정을 기계가 가져간 자리에<br><b>고르고 판단하고 나누는 일</b>이 들어옵니다.</div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">그런데 왜 안 쓸까요</h3>
+
+<div class="callout warn"><b>솔직하게 말씀드리겠습니다. 첫 진입 비용이 있습니다.</b>
+<br>· 교사 회원가입 → 학교 승인 → 학급 개설 → 학생 계정 → 탐구 개설 — <b>여기까지 가야 첫 수업이 됩니다</b>
+<br>· 매뉴얼이 교사용만 <b>273쪽</b>입니다. 학생용 197쪽, 탐구수업용 164쪽까지 하면 634쪽입니다
+<br>· 그래서 "센서 켜서 그래프 보는 것"보다 <b>훨씬 무겁게</b> 느껴집니다</div>
+
+<div class="callout ok"><b>그래서 순서를 권합니다.</b>
+<br><b>1단계</b> — 센서로 그래프만 봅니다. ON 없이. (오늘 실습이 여기입니다)
+<br><b>2단계</b> — 모둠 데이터를 한 화면에 모읍니다. 구글 시트든 수업허브든 가벼운 것으로.
+<br><b>3단계</b> — 익숙해지면 그 흐름을 <b>ON으로 옮깁니다.</b> 포트폴리오와 역량 진단이 필요해지는 시점이 옵니다.
+<br><br>ON부터 시작하면 대개 1차시에서 멈춥니다. <b>센서가 먼저이고 ON은 그다음입니다.</b></div>
+
+<div class="callout gold"><b>다만 이것만은 기억해 두십시오.</b> 학교가 <b>모델학교</b>로 지정되었거나 성과 보고가 필요하시면 이야기가 달라집니다.
+ON에는 <b>대시보드·보고서 현황·공동탐구 현황·역량 진단</b>이 다 들어 있어서, 따로 정리하지 않아도 <b>그 자체가 실적 자료</b>가 됩니다.
+그럴 때는 처음부터 ON으로 가시는 게 맞습니다.</div>
+
+<div class="callout"><b>매뉴얼은 이렇게 나뉘어 있습니다.</b>
+<br>· <b>교사용</b> 273쪽 — 데이터 센터 · 탐구수업 · 공동탐구 · 학습자료실 · 학교관리
+<br>· <b>학생용</b> 197쪽
+<br>· <b>탐구수업 매뉴얼</b> 164쪽
+<br>전부 화면을 하나씩 짚는 사용설명서라, <b>처음부터 읽지 마시고</b> 필요한 메뉴만 찾아보시는 게 낫습니다.</div>
+
+<div class="script">"오늘 이 방이 지능형 과학실입니다. 그런데 지능형 과학실이라는 말에는 두 가지가 섞여 있습니다. <b>방하고, 플랫폼</b>입니다.<br><br>
+방은 다 갖고 계십니다. 전자칠판 있고 무선 되고 센서 있고요. 그런데 <b>ON은 안 쓰시는 분이 훨씬 많습니다.</b><br><br>
+저는 그게 잘못됐다고 생각하지 않습니다. 교사용 매뉴얼만 273쪽이거든요. 센서 켜서 그래프 보는 것보다 훨씬 무겁습니다.<br><br>
+그래서 순서를 말씀드리면, <b>센서가 먼저입니다.</b> 오늘 하신 것처럼 그래프부터 보시고, 모둠 데이터를 가벼운 걸로 모아 보시고, 그다음에 ON으로 옮기시면 됩니다. <b>ON부터 시작하면 대개 1차시에서 멈춥니다.</b><br><br>
+다만 모델학교시거나 실적이 필요하시면 반대입니다. 그건 처음부터 ON으로 가셔야 합니다."</div>
+
+<div class="note"><b>이 탭은 학교 사정을 먼저 물어보고 여세요.</b><br><br>
+"ON 쓰고 계세요?"에 대한 답이 셋으로 갈립니다 — <b>안다·써봤다·모른다.</b>
+모르신다고 하면 '방과 플랫폼이 다르다'부터, 써보셨다고 하면 <b>어디서 멈추셨는지</b>부터 물으세요. 대개 <b>학생 계정 만들기</b>에서 멈춥니다.<br><br>
+<b>모델학교 여부를 꼭 확인하세요.</b> 모델학교면 이 탭이 오늘 연수에서 제일 중요한 부분이 됩니다.<br><br>
+매뉴얼 634쪽을 다 보여주지 마세요. 겁만 줍니다.</div>`,
+
+/* ───── 잃는 것 ───── */
+lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요',
+  '막연히 "탐구를 안 하게 된다"고 걱정하는 대신, 이름을 붙여서 세어 보겠습니다.')
++ `<div class="punch">
+  <div class="q">온도계를 30초마다 읽어 적던 학생은<br>그 30초 동안 <b>탐구 기능을 연습하고</b> 있었습니다.<br>그 기능의 <b>이름이 무엇입니까.</b></div>
+  <div class="cap">이름을 붙일 수 있어야 무엇을 잃었는지 셀 수 있습니다</div>
+</div>
+
+<div class="callout"><b>교육과정이 이렇게 적어 놓았습니다.</b> 중학교 1~3학년 <b>물질</b> 영역 과정⋅기능 —
+<br><br>"변인 간의 관계를 이끌어내기 위해 <b>자료를 수집</b>하고 이를 <b>그래프로 변환</b>하여 <b>해석</b>하기"
+<br><br>한 줄 안에 <b>수집 · 변환 · 해석</b> 셋이 나란히 있습니다. 센서는 앞의 둘을 가져가고 <b>해석만 남깁니다.</b>
+운동과 에너지 영역에도 같은 문장이 있습니다.</div>
+
+<div class="callout gold"><b>그리고 교육과정은 기초 탐구 기능의 이름을 그대로 부릅니다.</b>
+<br>"<b>관찰, 측정, 분류, 예상, 추리</b> 등을 통해 자료를 수집하고 비교⋅분석하기" — 물질·생명 영역 과정⋅기능
+<br><br>여섯 중 다섯이 문서에 그대로 있습니다. 나머지 하나인 <b>의사소통</b>은 "협력적 소통하기"라는 이름으로 따로 있습니다.</div>
+
+<p style="text-align:center;color:var(--ink-soft);margin:26px 0 4px">그래서 세어 봅시다 — 과학 탐구 기능은 흔히 <b>기초 6가지</b>와 <b>통합 7가지</b>로 나눕니다</p>
+<div class="fnwrap">
+  <div class="fngroup">
+    <h4>기초 탐구 기능 <span>6</span></h4>
+    <div class="chips">
+      <span class="chip take">측정<em>센서가 가져감</em></span>
+      <span class="chip boost">관찰<em>센서가 살림</em></span>
+      <span class="chip boost">예상<em>센서가 살림</em></span>
+      <span class="chip boost">의사소통<em>센서가 살림</em></span>
+      <span class="chip same">추리<em>그대로</em></span>
+      <span class="chip same">분류<em>그대로</em></span>
+    </div>
+  </div>
+  <div class="fngroup">
+    <h4>통합 탐구 기능 <span>7</span></h4>
+    <div class="chips">
+      <span class="chip take">자료 변환<em>센서가 가져감</em></span>
+      <span class="chip boost">변인 통제<em>센서가 살림</em></span>
+      <span class="chip boost">자료 해석<em>센서가 살림</em></span>
+      <span class="chip boost">문제 인식<em>센서가 살림</em></span>
+      <span class="chip boost">일반화<em>센서가 살림</em></span>
+      <span class="chip same">가설 설정<em>그대로</em></span>
+      <span class="chip same">결론 도출<em>그대로</em></span>
+    </div>
+  </div>
+</div>
+
+<div class="punch">
+  <div class="q">센서가 가져가는 것은 <b>딱 두 개</b>입니다.<br><b>측정</b>과 <b>자료 변환.</b><br>나머지 열한 개는 그대로 있고,<br>그중 일곱 개는 <b>센서가 있어야 제대로 됩니다.</b></div>
+</div>
+
+<div class="callout warn"><b>그래도 그 둘은 진짜로 잃습니다.</b> 인정하고 시작합시다.
+<br>· <b>측정</b> — "관찰을 수치로 나타내는 과정". 눈금을 읽어 숫자로 옮기는 그 일을 센서가 통째로 합니다.
+<br>· <b>자료 변환</b> — "측정하여 얻은 자료를 표나 그래프로 나타내는 과정". 소프트웨어가 켜자마자 그려 줍니다.
+<br>이지메이커 사례집의 실험 목적에도 <b>"자료를 그래프로 변환, 해석하여…"</b>가 그대로 적혀 있습니다. 변환은 분명히 우리가 가르쳐야 할 기능입니다.</div>
+
+<div class="callout ok"><b>그런데 관찰의 정의를 보십시오.</b>
+<br>"직접 오감을 이용하거나 <b>현미경처럼 감각을 확장시키는 도구를 사용해</b> 자료와 정보를 얻는 기능"
+<br><br>센서는 관찰을 방해하는 물건이 아니라 <b>관찰의 정의 안에 이미 들어와 있는 도구</b>입니다. 현미경과 같은 자리입니다.
+아무도 "현미경을 쓰면 관찰 능력이 떨어진다"고 하지 않습니다. 온도계로 30초마다 적을 때 학생의 고개는 공책에 있었지만,
+센서를 꽂으면 고개가 들립니다. <b>측정을 내주고 관찰을 돌려받는 거래</b>입니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:30px 0 6px;text-align:center">대책 — 없앤 게 아니라 <b style="color:var(--coral-deep)">옮긴다</b></h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:16px">잃은 <b>측정</b>과 <b>자료 변환</b>을 어느 기능으로 되돌려 놓을 것인가</p>
+
+<div class="shift">
+  <div class="box from"><div class="lb">사라진 것</div><p><b>눈금을 읽어 적는 일</b><br>손의 일. 30초마다 반복.</p></div>
+  <div class="arrow">→</div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>수동 수집 모드</b><br>부피·거리는 <b>센서가 못 잽니다.</b> 학생이 눈금을 읽어 직접 넣습니다. 자동으로 두면 x축이 시간밖에 안 되니, 부피–압력 그래프는 아예 나오지 않습니다.<br><span class="fnlab">되살아나는 기능 · 측정 + 변인 통제</span></p></div>
+</div>
+
+<div class="callout gold"><b>그래서 다행인 것 하나 — 센서는 종속변인만 잽니다.</b>
+<br>조작변인은 여전히 사람이 읽어서 넣어야 합니다. 자료 수집이 <b>통째로 없어지는 게 아니라 절반만</b> 없어집니다.
+<br>남은 절반 — 조작변인을 무엇으로 할지 정하고, 그 값을 읽고, 짝지어 기록하는 일 — 이 그대로 학생 몫이고,
+<b>그게 사실 변인 통제의 핵심</b>입니다.</div>
+
+<div class="tablewrap"><table>
+<tr><th>실험</th><th>센서가 재는 것 <span style="font-weight:400">(종속변인)</span></th><th>사람이 넣는 것 <span style="font-weight:400">(조작변인)</span></th></tr>
+<tr><td>보일의 법칙</td><td>압력</td><td><b>부피</b> — 주사기 눈금을 읽어서</td></tr>
+<tr><td>거리에 따른 빛의 세기</td><td>조도</td><td><b>거리</b> — 자를 보고</td></tr>
+<tr><td>마찰력에 영향을 주는 요인</td><td>힘</td><td><b>나무토막 개수</b></td></tr>
+<tr><td>빛의 세기와 광합성량</td><td>CO₂ 농도</td><td><b>광원 개수</b></td></tr>
+</table></div>
+
+<div class="callout warn"><b>다만 자료집을 오해하지는 맙시다.</b> 자료집이 수동 수집을 지정한 것은 탐구 기능을 살리려는 교육적 장치가 아니라 <b>센서가 그 변인을 못 재기 때문</b>입니다. 실제로 불꽃색 실험에서는 "시간 순서대로 측정한다면 수동 측정을 굳이 하지 않아도 된다"고 적어 두었습니다. <b>기능을 살리는 것은 자료집이 아니라 우리가 할 일</b>입니다.</div>
+
+<div class="shift">
+  <div class="box from"><div class="lb">사라진 것</div><p><b>모눈종이에 점 찍고 선 잇기</b><br>자료의 변환.</p></div>
+  <div class="arrow">→</div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어떤 축으로 볼지 학생이 정하기</b><br>시간–압력으로 나온 그래프를 그대로 두지 않습니다. x축을 부피로, 1/V로, 1/r²로 <b>바꾸는 판단</b>을 학생이 합니다. 변환이 손의 일에서 <b>판단의 일</b>로 올라갑니다.<br><span class="fnlab">되살아나는 기능 · 자료 변환 + 자료 해석</span></p></div>
+</div>
+
+<div class="shift">
+  <div class="box from"><div class="lb">사라진 것</div><p><b>측정하며 예측하기</b><br>적는 동안 자연스레 하던 생각.</p></div>
+  <div class="arrow">→</div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>측정 전에 그래프를 먼저 그리기</b><br>예상 곡선을 손으로 그린 뒤 실제와 겹칩니다. 예측을 측정 앞으로 옮기면 측정이 <b>내 예측을 확인하는 일</b>이 됩니다.<br><span class="fnlab">되살아나는 기능 · 예상 + 가설 설정</span></p></div>
+</div>
+
+<div class="shift">
+  <div class="box from"><div class="lb">사라진 것</div><p><b>어느 값을 적을지 고르던 일</b><br>측정의 판단.</p></div>
+  <div class="arrow">→</div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>어느 점을 버릴지 정하기</b><br>자동 수집은 점을 수백 개 만듭니다. 초기 요동 구간을 자를지, 어디부터 안정 구간으로 볼지는 <b>사람이 정합니다.</b><br><span class="fnlab">되살아나는 기능 · 자료 해석 + 추리</span></p></div>
+</div>
+
+<div class="shift">
+  <div class="box from"><div class="lb">사라진 것</div><p><b>자료가 어디서 왔는지 아는 감각</b></p></div>
+  <div class="arrow">→</div>
+  <div class="box to"><div class="lb">옮겨간 자리</div><p><b>원자료(CSV)를 열어 보기</b><br>그래프만 보면 숫자가 하늘에서 옵니다. 한 번은 표를 열어 몇 개의 점으로 이 선이 그려졌는지 세어 보게 합니다.<br><span class="fnlab">되살아나는 기능 · 측정</span></p></div>
+</div>
+
+<div class="callout ok"><b>한 번은 손으로 합니다.</b> 가장 확실한 대책입니다. 첫 차시는 온도계와 모눈종이로, 다음 차시부터 센서로. 수집과 변환을 몸으로 겪은 학생만이 그래프가 무슨 뜻인지 압니다. <b>센서는 아날로그를 대체하는 게 아니라 그 다음에 옵니다.</b></div>
+
+<div class="callout gold"><b>데이터를 먼저 보는 탐구도 있습니다 (ESDA)</b> — 가설을 먼저 세우는 대신 <b>데이터를 먼저 수집·탐색한 뒤 문제를 도출</b>하는 방식입니다. 가설부터 세우라는 부담을 낮춰 자기주도적 탐구를 촉진합니다. 센서가 수집을 빠르게 해 준 덕분에 <b>가능해진 순서</b>이기도 합니다.</div>
+
+<div class="script">"센서 수업의 단점을 물으면 다들 '기계가 안 될까 봐요'라고 하십니다. 저는 다르게 봅니다.<br><br>
+<b>학생이 할 일을 기계가 가져갑니다.</b> 그런데 막연히 걱정만 하지 말고 <b>세어 봅시다.</b> 탐구 기능이 기초 여섯, 통합 일곱 해서 열셋인데, 센서가 가져가는 건 <b>측정하고 자료 변환, 딱 둘</b>입니다. 열한 개는 그대로 있고 그중 일곱은 오히려 센서가 있어야 제대로 됩니다.<br><br>그리고 <b>관찰</b>의 정의를 한번 보십시오. "현미경처럼 <b>감각을 확장시키는 도구를 사용해</b> 자료를 얻는 기능"이라고 되어 있습니다. 센서가 바로 그겁니다. 아무도 현미경 쓰면 관찰력 떨어진다고 안 하지 않습니까. <b>측정을 내주고 관찰을 돌려받는 거래</b>입니다.<br><br>
+그래서 저는 이렇게 정리했습니다. <b>없앤 게 아니라 옮긴 겁니다.</b> 손의 일에서 판단의 일로요. 눈금을 적는 대신 어느 축으로 볼지 정하고, 점을 찍는 대신 어느 점을 버릴지 정합니다.<br><br>
+그리고 조금 안심되는 이야기를 하나 드리자면 — <b>센서는 종속변인만 잽니다.</b> 보일의 법칙에서 압력은 센서가 재지만 <b>부피는 학생이 눈금을 읽어 넣습니다.</b> 거리도, 나무토막 개수도, 광원 개수도 그렇습니다. 자료 수집이 다 없어지는 게 아니라 절반만 없어집니다. 남은 절반이 사실 변인 통제고요.<br><br>
+그리고 하나만 지켜 주십시오. <b>한 번은 손으로 하게 하세요.</b> 그 다음에 센서를 주십시오."</div>
+
+<div class="note">이 탭이 오늘의 <b>중심</b>입니다. 다른 데서 시간을 줄여서라도 여기는 20분을 확보하세요.<br><br>
+선생님들이 가장 많이 공감하시는 지점이고, "그래서 나는 안 쓴다"고 하시던 분이 마음을 여는 자리이기도 합니다. 다섯 개 화살표를 다 설명하지 말고 <b>두세 개만 깊게</b> 하셔도 됩니다.</div>`,
+
+/* ───── 학생이 얻는 것 ───── */
+gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻습니까',
+  '교사가 편해지는 이야기는 빼겠습니다. 학생 쪽에서만 보겠습니다.')
++ `<div class="cardgrid">
+  <div class="pcard"><h3>① 감각이 닿지 않는 곳을 본다</h3><p>사람 손으로는 "빡빡하다"까지가 끝입니다. 1초 사이의 압력 변화, 잎이 5분 동안 삼킨 이산화탄소, 마찰력이 최대가 되는 <b>바로 그 순간</b>은 감각으로 잡히지 않습니다.</p></div>
+  <div class="pcard"><h3>② 느낌이 숫자가 되는 경험</h3><p>손이 느낀 "빡빡함"이 <b>1.003 기압</b>이 됩니다. 정성에서 정량으로 넘어가는 이행을 몸으로 겪습니다. 이건 과학이라는 학문의 본질적 이행이기도 합니다.</p></div>
+  <div class="pcard"><h3>③ 기록자에서 관찰자로 돌아온다</h3><p>온도계를 읽어 적는 학생은 <b>현상을 못 봅니다.</b> 고개가 공책에 가 있으니까요. 센서가 읽는 동안 학생은 그래프가 자라는 것을 봅니다. "어, 왜 여기서 평평해지지?"가 <b>실험 도중에</b> 나옵니다. <br><span class="fnlab">기초 탐구 기능 · 관찰</span></p></div>
+  <div class="pcard"><h3>④ 실패해도 데이터가 남는다</h3><p>기존 실험은 실패하면 아무것도 없습니다. "선생님 안 돼요"로 끝납니다. 센서는 실패한 그래프를 남기고, <b>그 그래프가 왜 실패했는지 말해 줍니다.</b> 실패가 분석 대상이 됩니다.</p></div>
+  <div class="pcard"><h3>⑤ 자기 데이터를 갖는다</h3><p>교과서에 실린 남의 숫자가 아니라 <b>우리 모둠이 만든 숫자</b>입니다. 그래서 틀리면 억울해하고 맞으면 자랑합니다. 소유감이 곧 동기입니다.</p></div>
+  <div class="pcard"><h3>⑥ 재현성을 경험한다</h3><p>한 모둠의 결과는 우연일 수 있습니다. 그런데 일곱 모둠이 같은 경향이면 <b>법칙</b>이 됩니다. 과학이 왜 여러 번 재는지를 반 전체 그래프 한 장이 설명합니다.</p></div>
+  <div class="pcard"><h3>⑦ 오차를 정면으로 만난다</h3><p>교과서는 P×V가 일정하다고 하는데 내 데이터는 5.015에서 5.510까지 흩어집니다. <b>이 간극이 진짜 질문</b>이 됩니다. 밀폐가 샜나, 손이 데웠나, 눈금을 잘못 읽었나.</p></div>
+  <div class="pcard"><h3>⑧ 도구를 판단하는 사람이 된다</h3><p>센서도 틀립니다. 영점이 어긋나고 배터리 열이 온도값을 흔듭니다. <b>기계의 값을 의심해 본 학생</b>만이 디지털 시대의 자료를 읽을 수 있습니다.</p></div>
+</div>
+
+<div class="punch">
+  <div class="q">가장 큰 것은 ③번이라고 생각합니다.<br><b>센서는 학생을 받아 적는 사람에서<br>보는 사람으로 되돌려 놓습니다.</b></div>
+  <div class="cap">우리가 실험을 시키는 이유가 원래 그것이었습니다</div>
+</div>
+
+<div class="script">"학생이 뭘 얻느냐고 물으면 보통 '정확한 데이터'라고들 하십니다. 저는 세 번째 것이 제일 크다고 봅니다.<br><br>
+온도계로 실험할 때 학생 고개가 어디에 가 있습니까. <b>공책에 가 있습니다.</b> 30초마다 읽어 적느라 정작 물이 끓는 걸 못 봅니다.<br><br>
+센서를 꽂아 두면 고개가 듭니다. 그래프가 자라는 걸 보다가 스스로 묻습니다. '어 왜 여기서 평평해져요?' — 그 질문이 <b>실험이 끝난 뒤가 아니라 실험 도중에</b> 나옵니다. 저는 그게 제일 크다고 생각합니다."</div>
+
+<div class="note">이 여덟 개를 다 읽지 마세요. <b>③번과 ④번</b>만 확실히 전달되면 됩니다.<br><br>
+④번(실패해도 데이터가 남는다)은 특히 <b>실험을 꺼리시는 선생님</b>께 잘 통합니다. "실패할까 봐 안 한다"는 분들께 "실패해도 수업이 된다"는 답이 되기 때문입니다.</div>`,
+
+/* ───── 초대 ───── */
+invite: head('🙋 네 번째 질문','학생을 어떻게 <b>초대</b>할 것인가',
+  '시켜서 하는 것과 하고 싶어서 하는 것은 다릅니다. 여덟 가지 방법을 준비했습니다.')
++ `<div class="callout"><b>초대는 "이거 쓰면 편해"가 아닙니다.</b> "네가 지금 궁금해하는 걸 <b>이걸로만 알 수 있어</b>"여야 합니다. 그러려면 궁금함이 먼저 있어야 하고, 그 궁금함이 <b>맨손으로는 안 풀려야</b> 합니다.</div>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>먼저 맨손으로 하게 하고, 막히게 둔다</h4>
+    <p>센서를 먼저 주면 "선생님이 시킨 일"이 됩니다. 온도계로 30초마다 읽어 적게 해 보세요. 3분이면 학생이 먼저 말합니다 — "이거 언제까지 해요?" <b>그때 꺼냅니다.</b> 불편을 겪은 사람만이 도구를 반깁니다.</p>
+    <div class="say">"이거 계속 이렇게 할까? 아니면 다른 방법 찾아볼까?"</div></div></div>
+
+  <div class="move"><div class="n">2</div><div>
+    <h4>감각으로 느끼게 한 뒤, 그 감각을 배신한다</h4>
+    <p>주사기를 손으로 눌러 "빡빡하다"를 느끼게 합니다. 그리고 묻습니다 — "몇 배 빡빡해?" 답을 못 합니다. <b>자기 감각의 한계를 자기가 발견한 다음</b>에 센서가 들어갑니다.</p>
+    <div class="say">"방금 느낀 그 빡빡함, 숫자로 말해 볼 수 있어?"</div></div></div>
+
+  <div class="move"><div class="n">3</div><div>
+    <h4>예측 그래프를 먼저 그리게 한다</h4>
+    <p>측정 전에 빈 축에 예상 곡선을 손으로 그려 두게 합니다. 그러면 측정이 <b>"내 예측이 맞는지 확인하는 일"</b>이 됩니다. 남의 실험이 내 실험이 되는 가장 싼 방법입니다.</p>
+    <div class="say">"시작하기 전에, 그래프가 어떤 모양일 것 같은지 먼저 그려 보자."</div></div></div>
+
+  <div class="move"><div class="n">4</div><div>
+    <h4>틀릴 수 있는 자리를 준다</h4>
+    <p>"정답이 나와야 하는 실험"은 초대가 아니라 <b>검사</b>입니다. 예상과 다른 그래프가 나왔을 때 혼내지 않고 물어보면, 학생은 자기 데이터를 <b>변호하러</b> 옵니다.</p>
+    <div class="say">"예상이랑 다르게 나왔네. 왜 그럴까? 네 생각엔 뭐가 문제였을 것 같아?"</div></div></div>
+
+  <div class="move"><div class="n">5</div><div>
+    <h4>데이터에 이름을 붙여 준다</h4>
+    <p>"3모둠"이 아니라 그 모둠이 지은 이름으로 부릅니다. 반 전체 그래프에서 <b>자기 점을 찾게</b> 합니다. 자기 점이 화면에 있으면 수업에서 도망가지 않습니다.</p>
+    <div class="say">"이 점이 누구 거지? 이 위에 있는 건 어느 모둠이야?"</div></div></div>
+
+  <div class="move"><div class="n">6</div><div>
+    <h4>못 하는 것도 알려 준다</h4>
+    <p>"센서로도 이건 안 돼"를 말해 주면 학생은 도구를 맹신하지 않고 <b>도구를 판단하는 사람</b>이 됩니다. 이게 디지털 리터러시의 시작입니다. 오늘 우리가 못 하는 실험 목록을 각 학년 탭 아래에 남겨 둔 이유이기도 합니다.</p>
+    <div class="say">"이 센서는 이건 못 재. 그럼 이건 어떻게 알아낼 수 있을까?"</div></div></div>
+
+  <div class="move"><div class="n">7</div><div>
+    <h4>역할을 준다 — 조립하는 사람</h4>
+    <p>센서를 꽂는 자리가 곧 개념일 때가 있습니다. 전류는 회로를 끊고 <b>직렬</b>로, 전압은 저항 양끝에 <b>병렬</b>로. 이때 조립은 심부름이 아니라 <b>사고</b>입니다. 조립을 대신해 주지 마세요.</p>
+    <div class="say">"이 센서를 어디에 넣어야 할까? 왜 거기야?"</div></div></div>
+
+  <div class="move"><div class="n">8</div><div>
+    <h4>왜 하는지 먼저 말해 준다</h4>
+    <p>가장 단순하고 가장 자주 빠뜨리는 것입니다. "오늘 왜 이걸 하는지" 한 문장으로 말해 주면 학생은 목적지를 아는 채로 걷습니다. <b>질문하는 수업에서 질문의 이유를 설명하는 것과 같습니다.</b></p>
+    <div class="say">"오늘 이걸 하는 이유는, 우리가 지난 시간에 못 풀었던 그 질문 때문이야."</div></div></div>
+</div>
+
+<div class="punch">
+  <div class="q">여덟 개를 다 하실 필요는 없습니다.<br><b>1번과 3번만으로도 수업이 달라집니다.</b><br>막히게 두고, 예측을 먼저 그리게 하십시오.</div>
+</div>
+
+<div class="script">"저는 질문하는 수업을 할 때도 학생들한테 '우리가 이걸 왜 하는지'를 꼭 설명합니다. 센서도 똑같습니다.<br><br>
+제일 흔한 실수가 <b>센서를 먼저 주는 것</b>입니다. 그러면 시킨 일이 됩니다. 저는 일부러 먼저 막히게 둡니다. 온도계로 30초마다 적어 보라고 하면 3분 만에 애들이 먼저 물어봅니다. '선생님 이거 언제까지 해요?'<br><br>
+그때 꺼내면 애들이 반깁니다. <b>불편을 겪은 사람만 도구를 반가워합니다.</b>"</div>
+
+<div class="note">이 탭은 선생님들이 <b>메모를 가장 많이 하시는</b> 곳입니다. 화면을 오래 띄워 두세요.<br><br>
+"이 중에 내일 당장 하나만 해 보신다면 뭘 고르시겠어요?"로 마무리하면 나눔이 자연스럽게 열립니다. 학교급별 사례 공유 요건도 여기서 채워집니다.</div>`,
+
+/* ───── 내 센서 · 무엇을 할 수 있나 ───── */
+mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로 할 수 있는 실험',
+  '다 같이 한 가지를 하지 않습니다. 맡고 계신 학년에 맞는 것을 직접 고르십시오.')
++ `
+<div class="punch">
+  <div class="q">센서 <b>10종 51개</b>와 보드 16개를 가져왔습니다.<br>이걸로 되는 실험이 <b>28가지</b>입니다.<br><b>고르시면 매뉴얼을 펴 드리겠습니다.</b></div>
+</div>
+
+<div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
+  <input type="search" id="kQ" placeholder="센서나 실험 이름으로 찾기 (예: 온도, 보일, 광합성, 옴)"
+    style="flex:1;min-width:220px;padding:11px 16px;border:2px solid var(--line);border-radius:99px;font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card)">
+  <span id="kCount" style="font-family:var(--font-round);color:var(--coral);white-space:nowrap"></span>
+</div>
+<div class="exps" id="kList"></div>
+
+<div class="callout gold" style="margin-top:20px"><b>매뉴얼 약칭</b>
+<br><b>EZ</b> — 이지메이커 수업사례집(중학교, 111쪽) · 실험당 3쪽. 절차가 간결합니다
+<br><b>CB</b> — 같은 실험 <b>250쪽판</b> · 실험당 8쪽. <b>사진과 화면이 훨씬 자세합니다</b>
+<br><b>SB</b> — 서울시교육청 『2026 교구 및 디지털 도구 활용 과학 교수학습자료』 10사례. 학생 활동지가 붙어 있습니다
+<br><b>BASE</b> — 『기초 측정 방법』 센서 19종. 그 센서를 처음 만질 때 보는 것</div>
+
+<div class="callout warn"><b>수량이 곧 모둠 수입니다.</b>
+<br>· <b>7~8모둠</b> — 공기압 계열, 옴의 법칙 계열 (이지메이커라 넉넉합니다)
+<br>· <b>4모둠</b> — 온도·압력·힘·조도·CO₂ (대여한 무선 센서가 종류별 4개씩)
+<br>· <b>2모둠</b> — 온도를 <b>2개씩</b> 쓰는 것(비열·열평형·냉각곡선·온실효과)
+<br>· <b>1모둠</b> — 수권의 층상 구조(원래 5개 필요)
+<br><br>온도 계열을 두 분 이상 고르시면 <b>온습도 센서를 공기 온도 실험에 투입</b>해 조를 늘리십시오. 다만 액체에는 담그지 마십시오.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">실험 <b style="color:var(--coral-deep)">돌리는</b> 요령</h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">영서중 최효석 선생님 연수 자료에서 가져왔습니다. 사소해 보이는데 실제로 수업을 가릅니다.</p>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>책상 위를 먼저 비웁니다</h4>
+    <p>실험 전에 <b>물통이나 다른 물건은 앞에 제출</b>하게 합니다. 센서와 물이 같은 책상에 있으면 사고는 반드시 납니다.</p>
+    <div class="say">"실험 시작 전에 책상 위에 물통 있는 사람, 앞으로 가져다 놓으세요."</div></div></div>
+
+  <div class="move"><div class="n">2</div><div>
+    <h4>준비물을 미리 나눠 주지 않습니다</h4>
+    <p>바구니에 담아 각 테이블에 미리 놓아 두면 <b>학생들이 교사 말을 안 듣고 준비물만 봅니다.</b> 설명이 끝난 뒤 <b>중앙 테이블에서 모둠별로 받아 가게</b> 하십시오.</p>
+    <div class="say">"설명 다 들은 모둠부터 앞에 와서 가져가세요."</div></div></div>
+
+  <div class="move"><div class="n">3</div><div>
+    <h4>받아 갈 때 개수를 세게 합니다</h4>
+    <p>가져갈 때 무엇을 몇 개 받았는지 <b>학생이 직접 확인</b>하게 하고, <b>처음 상태와 나중 상태가 같도록</b> 기억하라고 일러 둡니다. 반납이 훨씬 빨라집니다.</p>
+    <div class="say">"지금 받은 그대로 돌려놓는 겁니다. 뭘 몇 개 받았는지 한 번 세어 보세요."</div></div></div>
+
+  <div class="move"><div class="n">4</div><div>
+    <h4>시뮬레이션을 먼저 보여 줍니다</h4>
+    <p>실험을 시작하기 전에 <b>어떻게 될지를 한 번 보고</b> 들어갑니다. 무엇을 봐야 할지 모른 채 시작하면 학생은 장비만 만지다 끝납니다.</p>
+    <div class="say">"이제 어떤 그림이 나올지 먼저 보고 시작하겠습니다."</div></div></div>
+
+  <div class="move"><div class="n">5</div><div>
+    <h4>예비 세트를 앞에 꺼내 둡니다</h4>
+    <p>고장난 걸 고치느라 시간을 쓰지 마십시오. <b>통째로 바꿔 주는 게 빠릅니다.</b> 예비가 보이면 학생도 조작을 겁내지 않습니다.</p>
+    <div class="say">"안 되면 손들지 말고 그냥 앞에 것으로 바꿔 가세요."</div></div></div>
+</div>
+
+<div class="callout"><b>연결이 안 되는 세 가지 흔한 이유</b> — 이것만 확인하시면 대부분 해결됩니다.
+<br>① <b>보드 전원이 꺼져 있다</b>(이지메이커는 PWR에 빨간불이 들어와야 합니다)
+<br>② <b>케이블이 끝까지 안 들어갔다</b>("딸깍" 소리가 날 때까지)
+<br>③ <b>센서의 악어집게가 보드에 닿았다</b> — 이러면 값이 아예 안 들어옵니다</div>
+
+<div class="script">"오늘은 제가 하나 정해 드리지 않겠습니다. <b>선생님들이 고르십시오.</b><br><br>
+센서 열 종류 쉰한 개하고 보드 열여섯 개를 가져왔고, 이걸로 되는 실험이 스물여덟 가지입니다. 맡고 계신 학년 보시고 마음에 드는 걸 고르시면, 제가 그 매뉴얼을 펴 드리겠습니다.<br><br>
+다만 하나만 미리 말씀드리면 <b>수량이 곧 모둠 수</b>입니다. 공기압하고 전압·전류는 여덟 세트라 넉넉한데, 온도는 네 개뿐입니다. 두 분 이상 온도를 고르시면 나눠 쓰셔야 합니다."</div>
+
+<div class="note"><b>실습 배정은 이렇게 하세요.</b><br><br>
+학년을 먼저 여쭙고, <b>같은 학년이 여러 분이면 다른 실험</b>을 고르시게 하세요. 그래야 나눔 때 서로 다른 이야기가 나옵니다.<br><br>
+온도 계열이 겹치면 <b>온습도 센서를 공기 온도 쪽에</b> 돌리십시오.<br><br>
+매뉴얼은 <b>CB(250쪽판)를 펴 드리는 게 낫습니다.</b> 사진이 훨씬 많습니다. 다만 클래스보드 화면이라, 연결 부분만 EZ·ON으로 바꿔 설명하시면 됩니다.</div>`,
+
+/* ───── 축을 바꾸면 보인다 ───── */
+axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것이 보입니다',
+  '센서 수업의 진짜 알맹이는 측정이 아니라 여기 있습니다.')
++ `
+<div class="punch">
+  <div class="q">센서는 언제나 <b>시간축</b>으로 줍니다.<br>그런데 우리가 알고 싶은 건 대개 <b>시간이 아닙니다.</b></div>
+  <div class="cap">이 간극을 메우는 일이 「자료 변환」이고, 교육과정의 통합 탐구 기능입니다</div>
+</div>
+
+<div class="callout"><b>교육과정에 이렇게 적혀 있습니다.</b>
+<br>"변인 간의 관계를 이끌어내기 위해 자료를 수집하고 이를 <b>그래프로 변환하여 해석하기</b>"
+<br><span style="font-size:.88rem;color:var(--ink-soft)">— 별책 9, 중학교 1~3학년 물질 영역 과정⋅기능</span>
+<br><br>그리고 이지메이커 자료집도 같은 말을 합니다 — "x축을 단순히 거리로 설정한 경우와 거리의 제곱으로 설정한 경우를 <b>모두 시도해 보도록 하여</b> 학생들이 다양한 방식으로 데이터를 해석해 볼 수 있도록 한다."</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 10px;text-align:center">왜 <b style="color:var(--coral-deep)">직선</b>을 만들려고 할까요</h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:14px">이걸 먼저 학생과 공유해야 "축을 바꿔 보자"가 심부름이 아니라 목표가 됩니다.</p>
+
+<div class="cardgrid">
+  <div class="pcard"><div class="num">1</div><h3>어긋난 점이 보입니다</h3><p>사람 눈은 <b>직선에서 벗어난 점</b>은 잘 찾지만, 휜 곡선에서 벗어난 점은 못 찾습니다. 직선으로 만들면 <b>이상한 측정이 드러납니다.</b></p></div>
+  <div class="pcard"><div class="num">2</div><h3>기울기가 이름을 갖습니다</h3><p>직선이 되면 <b>기울기와 절편이 각각 물리량</b>이 됩니다. 옴의 법칙에서 기울기의 역수는 저항이고, 역제곱에서 절편은 배경 조도입니다.</p></div>
+  <div class="pcard"><div class="num">3</div><h3>재보지 않은 곳을 말할 수 있습니다</h3><p>직선이면 <b>사이와 바깥을 예측</b>할 수 있습니다. 곡선은 눈대중으로 이어 붙이기 어렵습니다.</p></div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 10px;text-align:center">바꾸는 방법은 <b style="color:var(--coral-deep)">세 가지</b>입니다</h3>
+
+<div class="fnwrap" style="grid-template-columns:1fr 1fr 1fr">
+  <div class="fngroup"><h4>① 축 바꾸기</h4>
+    <p style="font-size:.92rem;color:var(--ink-soft);text-align:center">가로축을 <b>시간에서 다른 측정값</b>으로 갈아 끼웁니다.<br><br>값은 그대로 두고 <b>무엇을 가로축에 둘지</b>만 정합니다.<br><br><b>옴의 법칙</b>이 대표입니다.</p></div>
+  <div class="fngroup"><h4>② 축 변환</h4>
+    <p style="font-size:.92rem;color:var(--ink-soft);text-align:center">값에 <b>함수를 적용</b>합니다. 1/V, 1/r², log…<br><br>축 이름만 바꾸는 게 아니라 <b>숫자 자체를 계산</b>합니다.<br><br><b>보일·역제곱</b>이 대표입니다.</p></div>
+  <div class="fngroup"><h4>③ 요약값 뽑기</h4>
+    <p style="font-size:.92rem;color:var(--ink-soft);text-align:center">한 그래프에서 <b>수 하나</b>(봉우리·기울기)를 뽑아<br><br>그것을 <b>새 그래프의 점</b>으로 씁니다.<br><br><b>마찰력·광합성</b>이 대표입니다.</p></div>
+</div>
+
+<div class="callout ok"><b>③번이 특히 중요합니다.</b> 그래프 하나가 곧 결론인 실험은 많지 않습니다.
+대개는 <b>그래프 여러 장에서 수를 하나씩 뽑아</b> 마지막 그래프를 만듭니다.
+그런데 학생들은 첫 그래프를 결과라고 생각하고 거기서 멈춥니다. <b>"이 그래프에서 우리가 쓸 숫자는 몇 개일까?"</b>가 좋은 발문입니다.</div>
+
+<div class="filters" style="margin:26px 0 16px">
+  <button class="fbtn on" data-k="all">전체</button>
+  <button class="fbtn" data-k="axis">① 축 바꾸기</button>
+  <button class="fbtn" data-k="trans">② 축 변환</button>
+  <button class="fbtn" data-k="summ">③ 요약값 뽑기</button>
+</div>
+<div class="exps" id="aList"></div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">학생이 <b style="color:var(--coral-deep)">스스로 찾게</b> 하려면</h3>
+
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>먼저 곡선을 보여 주고 불편하게 만듭니다</h4>
+    <p>바로 변환을 시키면 심부름이 됩니다. <b>원래 그래프를 먼저 그리게</b> 하고, 그걸로 뭘 말할 수 있는지 물어보십시오. 잘 안 됩니다. 그때 시작합니다.</p>
+    <div class="say">"이 그래프로 '두 배가 되면 어떻게 된다'고 말할 수 있어?"</div></div></div>
+  <div class="move"><div class="n">2</div><div>
+    <h4>후보를 여러 개 그려 보게 합니다</h4>
+    <p>정답 하나를 알려 주지 마십시오. <b>x, 1/x, x² 을 다 그려 보게</b> 하고 <b>어느 것이 가장 곧은지 고르게</b> 합니다. 고르는 것이 곧 판단입니다.</p>
+    <div class="say">"세 가지로 다 그려 보고, 어느 게 제일 곧은지 정해 보자."</div></div></div>
+  <div class="move"><div class="n">3</div><div>
+    <h4>틀린 변환도 지우지 않습니다</h4>
+    <p>"x²로 해봤더니 더 휘었다"도 <b>결과</b>입니다. 남겨 두고 왜 그런지 이야기하십시오. 지워 버리면 정답만 남고 과정은 사라집니다.</p>
+    <div class="say">"이건 왜 더 휘었을까? 이것도 알아낸 거야."</div></div></div>
+  <div class="move"><div class="n">4</div><div>
+    <h4>기울기에 이름을 붙이게 합니다</h4>
+    <p>직선이 나왔으면 끝이 아닙니다. <b>"이 기울기는 무엇이지?"</b>를 물으십시오. 단위를 따져 보면 학생이 스스로 알아냅니다.</p>
+    <div class="say">"기울기 단위가 뭐가 되지? 그럼 이건 뭘 뜻할까?"</div></div></div>
+  <div class="move"><div class="n">5</div><div>
+    <h4>절편을 묻습니다</h4>
+    <p>0을 지나야 할 것 같은데 안 지날 때가 있습니다. <b>그 어긋남이 정보</b>입니다 — 배경 조도, 접촉 저항, 영점 오차.</p>
+    <div class="say">"왜 원점을 안 지나갈까? 이게 뭘 말해 주는 걸까?"</div></div></div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">교사가 알아 두어야 할 것 셋</h3>
+
+<div class="callout warn"><b>① 변환하면 오차도 함께 변환됩니다.</b>
+<br>1/V로 바꾸면 <b>부피가 작은 쪽</b>의 오차가 크게 부풀려집니다. 그래서 양 끝 점이 유난히 튀어 보일 수 있습니다.
+중학교에서 깊게 다룰 필요는 없지만, 학생이 "왜 여기만 이상해요?"라고 물으면 <b>변환 때문일 수 있다</b>는 걸 알고 계셔야 합니다.</div>
+
+<div class="callout warn"><b>② 변환한 뒤에는 원본으로 되돌릴 수 없습니다.</b>
+<br>사이언스큐브 자료집이 명시적으로 경고합니다 — <b>변환 전에 반드시 저장하십시오.</b>
+그리고 학생에게도 <b>원본 CSV를 먼저 내려받게</b> 하는 습관을 들이면 좋습니다.</div>
+
+<div class="callout warn"><b>③ 이지메이커 자료집의 역제곱 설명은 한 군데가 헷갈립니다.</b>
+<br>"x축이 <b>거리의 제곱</b>으로 설정한 그래프"라고 되어 있는데, <b>r²을 가로축에 두면 직선이 되지 않습니다.</b> 직선이 되려면 <b>1/r²</b>이어야 합니다.
+<br>같은 자료집이 옆에서 계산한 <b>「밝기 × 거리²가 일정하다」</b>는 맞습니다 — 같은 사실을 확인하는 다른 방법입니다.
+<br>서울시교육청 자료집 쪽이 정확합니다 — X축을 <b>1/r²</b>로 바꾸라고 되어 있습니다.
+<br><br><b>연수에서 이 대목을 짚으시면 좋습니다.</b> 자료집도 틀릴 수 있고, 그걸 확인하는 게 우리 일이라는 이야기가 됩니다.</div>
+
+<div class="script">"저는 센서 수업의 알맹이가 <b>측정이 아니라 여기</b>라고 생각합니다.<br><br>
+센서는 항상 시간축으로 줍니다. 그런데 우리가 알고 싶은 건 시간이 아니거든요. 옴의 법칙에서 알고 싶은 건 전압과 전류의 관계지 시간이 아닙니다. <b>그러니까 시간축을 버려야 합니다.</b><br><br>
+그런데 이걸 제가 알려 주면 안 됩니다. 학생이 <b>스스로 찾아야</b> 합니다. 그러려면 먼저 <b>불편하게</b> 만들어야 하고요. 곡선 하나 던져 주고 '이걸로 뭘 말할 수 있어?' 물어보면 애들이 막힙니다. 그때 시작하는 겁니다.<br><br>
+그리고 하나만 더. <b>직선을 왜 만들려고 하는지</b>를 먼저 이야기해 주십시오. 그냥 '직선으로 만들어 봐'라고 하면 그건 또 심부름입니다."</div>
+
+<div class="note"><b>이 탭이 오늘의 중심입니다.</b> 실습 시간을 줄여서라도 여기는 확보하세요.<br><br>
+전부 설명하지 마시고 <b>선생님들이 고르신 실험의 카드만</b> 열어서 같이 보십시오. 자기 실험이면 훨씬 잘 듣습니다.<br><br>
+③번(역제곱 자료집 오류)은 <b>MBL을 오래 쓰신 분들이 특히 좋아합니다.</b> 다만 자료집을 비난하는 말투가 되지 않게 하세요 — "확인해 보는 게 우리 일"로 마무리하십시오.<br><br>
+마지막 카드(냉각 곡선 로그 변환)는 <b>중학교에서는 하지 마십시오.</b> 고등 연결용 언급으로만.</div>`,
+
+/* ───── 교과서가 지정한 탐구 ───── */
+textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이미 적혀 있습니다',
+  '2022 개정 중등 교과서에 수록된 센서 탐구를 출판사별로 대조한 표입니다.')
++ `
+<div class="punch">
+  <div class="q">교육과정 문서가 "하라"고 적어 두었고,<br><b>교과서가 어느 센서로 무엇을 할지까지</b> 적어 두었습니다.</div>
+  <div class="cap">사이언스큐브 무선센서 카탈로그 Ver 9.0 · 「2022개정 중등교과서 수록 무선센서 및 탐구목록」</div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:28px 0 10px;text-align:center">중학교 과학 1</h3>
+<div class="tablewrap"><table>
+<tr><th>단원</th><th>비상</th><th>천재</th><th>동아</th><th>YBM</th><th>지학사</th></tr>
+<tr><td><b>3. 열</b></td>
+  <td class="win"><b>[온도]</b><br>열평형<br>여러 가지 액체의 비열</td>
+  <td class="win"><b>[온도]</b><br>열평형<br>비열</td>
+  <td class="win"><b>[온도]</b><br>열평형<br>비열</td>
+  <td class="win"><b>[온도]</b><br>열평형<br>비열</td>
+  <td class="win"><b>[온도]</b><br>열평형<br>물과 식용유 비열</td></tr>
+<tr><td><b>4. 물질의 상태 변화</b></td>
+  <td><b>[온도]</b><br>상태변화 가열곡선</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td><b>5. 힘의 작용</b></td>
+  <td>—</td>
+  <td><b>[힘·가속도]</b><br>용수철의 탄성력<br>물속에서 부력</td>
+  <td>—</td>
+  <td><b>[힘·가속도]</b><br>용수철의 탄성력</td>
+  <td>—</td></tr>
+<tr><td><b>6. 기체의 성질</b></td>
+  <td><b>[압력]</b><br>기체의 압력과 부피 관계</td>
+  <td><b>[압력]</b> 압력과 부피<br><b>[온도]</b> 온도와 부피</td>
+  <td>—</td>
+  <td><b>[압력]</b><br>기체의 압력과 부피 관계</td>
+  <td><b>[압력]</b><br>기체 압력과 부피 관계</td></tr>
+</table></div>
+
+<div class="callout ok"><b>3. 열은 다섯 출판사가 전부 온도 센서를 씁니다.</b> 어느 교과서를 쓰시든 <b>열평형과 비열</b>은 온도 센서 탐구로 실려 있습니다. 오늘 중1 탭의 「물과 식용유의 비열 비교」가 바로 그것이고, <b>교육과정 별책9의 탐구 활동에도</b> "온도 센서를 이용하여 여러 가지 액체의 비열 비교하기"로 적혀 있습니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 10px;text-align:center">중학교 과학 2</h3>
+<div class="tablewrap"><table>
+<tr><th>단원</th><th>비상</th><th>천재</th><th>YBM</th><th>지학사</th></tr>
+<tr><td><b>1. 물질의 특성</b></td>
+  <td><b>[온도]</b><br>물질의 양에 따른 성질 비교<br>상태 변화<br>끓는점 차를 이용한 혼합물 분리</td>
+  <td><b>[온도]</b><br>물과 에탄올의 끓는점<br>액체의 종류·양에 따른 끓는점</td>
+  <td><b>[온도]</b><br>물질의 끓는점 측정</td>
+  <td><b>[온도]</b><br>녹는점<br>끓는점</td></tr>
+<tr><td><b>5. 식물과 에너지</b></td>
+  <td><b>[CO₂]</b> 광합성에 필요한 물질과 산물<br>환경 요인과 광합성의 관계<br>식물의 호흡에서 기체의 출입<br><b>[산소]</b> 식물의 호흡에서 기체의 출입</td>
+  <td><b>[CO₂·산소·온도]</b><br>광합성</td>
+  <td>—</td>
+  <td><b>[CO₂]</b><br>광합성에 필요한 물질</td></tr>
+<tr><td><b>7. 전기와 자기</b></td>
+  <td><b>[자기장]</b><br>전류가 흐르는 코일 주위 자기장</td>
+  <td><b>[전압·전류]</b><br>저항·전류·전압 사이의 관계</td>
+  <td><b>[전압·전류]</b><br>전류·전압·저항 관계</td>
+  <td>—</td></tr>
+</table></div>
+
+<div class="callout"><b>과학 2는 온도가 네 곳 전부, 광합성 CO₂가 세 곳입니다.</b> 그리고 <b>옴의 법칙</b>은 천재·YBM 두 곳에 전압·전류 센서 탐구로 실려 있습니다 — 오늘 중2 탭의 그 실험입니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 10px;text-align:center">고등학교 <span style="font-size:.9rem;color:var(--ink-soft)">(참고)</span></h3>
+<div class="tablewrap"><table>
+<tr><th>과목 · 단원</th><th>센서</th><th>탐구</th></tr>
+<tr><td>통합과학 2 · 3. 과학과 미래 사회</td><td><b>[CO₂]</b></td><td>디지털 탐구도구를 활용한 실시간 생활 데이터 측정하기</td></tr>
+<tr><td>물리학 · 1. 힘과 에너지</td><td><b>[운동]</b> · <b>[힘·가속도]</b> · <b>[무선 카트]</b></td><td>일차원 충돌에서 운동량 보존 · 물체 사이에 상호작용하는 힘 · 용수철의 탄성력</td></tr>
+<tr><td>역학과 에너지 · 2. 열과 에너지</td><td><b>[압력]</b> · <b>[온도]</b></td><td>기체의 압력과 부피 관계 · 상태변화 가열곡선</td></tr>
+<tr><td>화학 · 4. 역동적인 화학 반응</td><td><b>[pH]</b></td><td>pH 측정</td></tr>
+<tr><td>화학 반응의 세계 · 1. 산·염기 평형</td><td><b>[pH]</b></td><td>중화 적정 과정에서 pH 변화 · 산염기 수용액의 pH 측정 · 물과 완충용액의 pH 변화</td></tr>
+</table></div>
+
+<div class="callout gold"><b>고등까지 이어집니다.</b> 중학교에서 압력·온도로 시작한 것이 「역학과 에너지」에서 다시 나오고, 중학교에 없던 <b>pH</b>가 고등 화학의 주력이 됩니다. 중학교에서 pH 센서를 사 두면 영재·심화 과정에서 그대로 쓰입니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:32px 0 12px;text-align:center">그래서 무엇을 먼저 사야 하나</h3>
+<div class="kv">
+  <div class="item"><div class="k">교과서 등장 횟수 1위</div><div class="v c">온도</div></div>
+  <div class="item"><div class="k">2위</div><div class="v c">압력</div></div>
+  <div class="item"><div class="k">3위</div><div class="v">CO₂</div></div>
+  <div class="item"><div class="k">4위</div><div class="v">전압·전류</div></div>
+</div>
+<div class="callout ok" style="margin-bottom:0"><b>세 근거가 같은 답을 가리킵니다.</b> 교육과정 별책9의 탐구 활동, 서울시교육청 자료집 10사례, 그리고 이 교과서 수록표 — <b>셋 다 온도가 1위, 압력이 2위</b>입니다. 다음에 하나만 사신다면 온도입니다.</div>
+
+<div class="script">"센서를 왜 써야 하냐고 물으시면, 저는 세 개를 순서대로 보여 드립니다.<br><br>
+첫째, <b>교육과정 문서</b>입니다. 과정·기능 내용 요소에 '디지털 탐구 도구 활용하기'가 적혀 있습니다.<br><br>
+둘째, <b>탐구 활동</b>입니다. 열 단원에 '온도 센서를 이용하여 여러 가지 액체의 비열 비교하기'가 이름까지 적혀 있습니다.<br><br>
+셋째, 이겁니다. <b>선생님이 지금 쓰시는 그 교과서</b>입니다. 다섯 출판사가 전부 3단원 열에 온도 센서 탐구를 실었습니다.<br><br>
+그러니까 이건 제가 권하는 게 아닙니다. <b>이미 다 적혀 있는 걸 확인해 드리는 겁니다.</b>"</div>
+
+<div class="note">이 탭은 <b>구매 상담에서 제일 강력합니다.</b> "뭘 사야 하나요"에 대한 답이 여기 다 있습니다.<br><br>
+학교에서 <b>어느 출판사 교과서를 쓰는지</b> 미리 물어 두시면, 그 열만 짚어 드릴 수 있습니다. 다섯 출판사를 다 보여드리면 흩어집니다.<br><br>
+고등 표는 <b>먼저 꺼내지 마세요.</b> 중학교 연수입니다. 영재·심화를 하시는 분이 물으실 때만.</div>`,
+
+/* ───── 센서 하나씩 익히기 ───── */
+basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
+  '19종을 각각 교실에서 무엇을 재며 시작할지, 설정값과 함정까지 정리했습니다.')
++ `
+<div class="callout"><b>이 자료의 좋은 점은 "무엇을 잴까"가 아니라 "왜 궁금할까"로 시작한다는 것입니다.</b>
+온도 센서 편은 이렇게 엽니다 — <b>"여름에 운동장에서 놀다가 교실에 들어오면 왜 시원하게 느껴질까요?"</b>
+「초대하는 법」에서 말씀드린 것이 이미 자료에 들어 있습니다.</div>
+
+<div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
+  <input type="search" id="sQ" placeholder="센서 이름·측정 대상으로 찾기 (예: 온도, 주사기, 전도도)"
+    style="flex:1;min-width:220px;padding:11px 16px;border:2px solid var(--line);border-radius:99px;font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card)">
+  <span id="sCount" style="font-family:var(--font-round);color:var(--coral);white-space:nowrap">19종</span>
+</div>
+<div class="exps" id="sList"></div>
+
+<div class="callout gold" style="margin-top:22px"><b>이 자료는 원래 다른 프로그램용이지만, 센서와 하드웨어는 같습니다.</b>
+준비물란에 <b>"EZMAKER 나노보드, EZMAKER 배터리"</b>라고 적혀 있습니다. 즉 <b>우리가 가진 그 센서</b>입니다.
+그래서 위 카드의 도입 질문·주의사항·해석 질문은 그대로 쓰시고, <b>연결과 수집은 아래 EZ·ON 절차</b>로 하시면 됩니다.</div>
+
+<div class="callout"><b>EZ·ON으로 연결하는 순서</b>
+<br>① 센서를 보드의 <b>표시된 포트</b>에 꽂고 (센서 기판에 Ⓐ·Ⓓ·I2C·UART가 인쇄되어 있습니다)
+<br>② 보드를 USB로 연결하고 <b>보드 전원을 켭니다</b> (PWR에 빨간불)
+<br>③ <code>ezon.ai</code> → [시작하기] → <b>구글 또는 웨일 계정</b>으로 로그인
+<br>④ [+ 프로젝트 만들기] → 이름·썸네일 입력 → 보드는 <b>[EZMAKER v1]</b> 선택 (메인보드·미니보드 모두)
+<br>⑤ 상단 <b>[블록 코딩]</b> → 쓰는 센서 메뉴에서 <b>[예제 코드 열기]</b> → 블록이 자동으로 채워집니다
+<br>⑥ <b>[업로드]</b> → 상단 <b>[데이터 분석]</b> → <b>[보드 연결]</b>을 한 번 더 누른 뒤 [수집 시작]
+<br><br>⚠️ <b>블록을 직접 짜지 마십시오.</b> [예제 코드 열기]면 충분하고, 연수에서 코딩을 시키면 시간이 다 갑니다.
+<br>⚠️ 태블릿은 웹이 아니라 <b>플레이스토어의 ezon 앱</b>으로 해야 코드가 올라갑니다.
+<br>⚠️ 시리얼포트 에러가 나면 <b>CH341 드라이버</b>를 설치하십시오 (haict.kr 자료실 · <b>UNINSTALL 먼저, 그다음 INSTALL</b>).</div>
+
+<div class="script">"이 19장은 제가 만든 게 아니라 자료집에 있는 겁니다. 다른 프로그램용 자료인데, <b>센서가 같아서</b> 그대로 씁니다. 그런데 제가 이걸 왜 넣었냐면, <b>첫 문장이 다 질문이거든요.</b><br><br>
+온도 편은 '여름에 운동장에서 놀다가 교실 들어오면 왜 시원할까요'로 시작합니다. 밝기 편은 '등잔 밑이 어둡다는 게 정말일까요'로 시작하고요.<br><br>
+센서 수업을 처음 하실 때 제일 막막한 게 <b>'그래서 첫마디를 뭐라고 하지'</b>인데, 그 첫마디가 열아홉 개 다 들어 있습니다. 이것만 가져가셔도 됩니다."</div>
+
+<div class="note">전부 훑지 마세요. <b>선생님들이 맡으신 학년에 걸리는 것만</b> 검색해서 여세요.<br><br>
+검색창에 "주사기", "전도도", "촛불" 같은 걸 쳐도 나옵니다.<br><br>
+자주 걸리는 함정 셋만 기억하시면 됩니다 — <b>전류·전압은 극성</b>(반대로 꽂으면 음수), <b>무게는 영점에 30초</b>,
+<b>고온 센서 금속부는 실험 직후 매우 뜨겁습니다.</b></div>`,
+
+/* ───── 센서는 어떻게 전달하나 ───── */
+ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전달할까',
+  '실습 전에 12분만. 포트 이름을 외우는 시간이 아니라, 왜 저기에 꽂는지 이해하는 시간입니다.')
++ `
+<div class="qz" id="qzPort">
+  <div class="qh">온도는 0 아니면 1이 아닌데,<br>왜 <b>온습도 센서는 D 포트</b>에 꽂을까요?</div>
+  <div class="opts">
+    <button class="qzopt" data-k="0">① 온습도 센서는 사실 아날로그 센서이기 때문이다
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="1">② D 포트도 여러 단계의 전압을 직접 측정하기 때문이다
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="2">③ 측정값과, 그 값을 보드에 전달하는 방식은 서로 다른 문제이기 때문이다
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="3">④ 온습도 센서만 특별한 예외이다
+      <span class="fb"></span></button>
+  </div>
+  <div class="rev">
+    <div class="punch" style="margin-bottom:0">
+      <div class="q">아날로그와 디지털의 구분은<br><b>무엇을 측정하느냐</b>가 아니라<br><b>측정 결과를 어떤 방식으로 전달하느냐</b>의 문제입니다.</div>
+      <div class="cap">온도·밝기·압력·힘·습도는 모두 연속적으로 변합니다. 다만 그 값을 보드에 넘기는 길이 다를 뿐입니다</div>
+    </div>
+  </div>
+</div>
+
+<div class="callout"><b>같은 온도라도 전달하는 길은 두 가지입니다.</b>
+<br>· <b>전압의 크기</b>로 넘긴다 → 보드의 <b>A 포트</b>가 받습니다
+<br>· <b>0과 1의 데이터</b>로 바꿔서 넘긴다 → <b>D · I2C · UART</b>가 받습니다
+<br><br>즉 <b>측정하는 물리량</b>과 <b>전달하는 신호</b>는 별개입니다. 지금부터 하나씩 보겠습니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:34px 0 6px;text-align:center">A 포트 — <b style="color:var(--coral-deep)">전압의 크기</b>로 전달</h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:12px">밝기 센서를 예로 들겠습니다. 슬라이더를 움직여 보십시오.</p>
+
+<div class="lab">
+  <div class="ctl">
+    <span style="font-weight:800;color:var(--teal);font-size:.9rem">빛의 세기</span>
+    <input type="range" id="lux" min="0" max="100" value="20">
+    <span id="luxTxt" style="font-family:var(--font-round);color:var(--coral);min-width:52px;text-align:right">약함</span>
+  </div>
+  <div class="flow">
+    <div class="st"><div class="lb">① 실제 빛</div><div class="sun" id="fSun">☀</div></div>
+    <div class="st"><div class="lb">② 밝기 센서</div><div class="vl">Ⓐ</div></div>
+    <div class="st"><div class="lb">③ 출력 전압</div><div class="vl c" id="fV">0.9 V</div>
+      <div class="vbar"><i id="fBar" style="height:18%"></i></div></div>
+    <div class="st"><div class="lb">④ 보드 ADC</div><div class="vl">0~1023</div></div>
+    <div class="st"><div class="lb">⑤ 컴퓨터가 읽는 수</div><div class="vl c" id="fN">184</div></div>
+  </div>
+  <div class="callout ok" style="margin-bottom:0"><b>센서는 숫자를 보내지 않습니다.</b> 전압을 보낼 뿐이고, <b>숫자로 바꾸는 일은 보드가</b> 합니다. 그 변환기를 ADC라고 부릅니다.</div>
+</div>
+
+<div class="callout gold"><b>0~1023이라는 숫자는 어디서 왔을까요.</b> 이지온 블록을 열면 "밝기 센서 A0 — <b>아날로그 값(0~1023)</b>"과 "<b>전압 값(0.0~5.0V)</b>" 두 가지가 있습니다. 0~5V를 1024단계로 나눠 읽는다는 뜻입니다. <b>연속적인 전압을 계단으로 끊어 읽는 것</b>이고, 그 계단이 촘촘할수록 정밀합니다.</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">D 포트 — 여기서 오해가 생깁니다</h3>
+
+<div class="callout warn"><b>D는 "0과 1만 측정하는 센서"가 아닙니다.</b>
+<br>D는 <b>일반 디지털 핀으로 신호나 데이터를 주고받는 포트</b>입니다. 여기에 아주 다른 두 종류가 함께 꽂힙니다.</div>
+
+<div class="versus" style="grid-template-columns:1fr 1fr">
+  <div class="vs-card cube">
+    <span class="tag">사례 A</span>
+    <h3>정말 두 상태만 필요한 것</h3>
+    <p style="font-size:.94rem;color:#1a5c8c">버튼 — 안 눌림 <b>LOW</b> / 눌림 <b>HIGH</b><br>인체 감지 — 없음 <b>LOW</b> / 있음 <b>HIGH</b></p>
+    <p style="font-size:.9rem;color:#3d7ba5;margin-top:8px">결과 자체가 두 상태라서, 선 하나의 높낮이만으로 충분합니다.</p>
+  </div>
+  <div class="vs-card ez">
+    <span class="tag">사례 B</span>
+    <h3>여러 비트의 데이터를 보내는 것</h3>
+    <p style="font-size:.94rem;color:var(--coral-deep)">온습도 센서 — <b>27℃ / 63%</b><br>센서가 27이라는 "전압"을 보내는 게 아닙니다.</p>
+    <p style="font-size:.9rem;color:#8a5c12;margin-top:8px">센서 안에서 값을 <b>디지털 데이터로 바꾼 뒤</b>, 0과 1을 시간 순서대로 흘려보냅니다.</p>
+  </div>
+</div>
+
+<div class="lab">
+  <h4>온습도 센서가 27℃를 보내는 방법</h4>
+  <div class="cap">데이터선 하나로 0과 1을 차례차례 보냅니다. 버튼을 눌러 보십시오.</div>
+  <div class="ctl"><button class="btn" id="dhtGo">▶ 측정 시작</button>
+    <span id="dhtState" style="color:var(--ink-soft);font-size:.92rem">대기 중</span></div>
+  <div class="flow" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="st"><div class="lb">센서가 잰 값</div><div class="vl c" id="dhtRaw">— —</div></div>
+    <div class="st"><div class="lb">데이터선 상태</div><div class="vl" id="dhtLine">—</div></div>
+    <div class="st"><div class="lb">보드가 해석한 값</div><div class="vl c" id="dhtOut">— —</div></div>
+  </div>
+  <div class="pulse"><svg id="dhtSvg" viewBox="0 0 600 46" preserveAspectRatio="none" role="img" aria-label="데이터선을 따라 HIGH와 LOW가 번갈아 지나가는 모습"><path id="dhtPath" d="M0 36 L600 36" fill="none" stroke="#12706f" stroke-width="3"/></svg></div>
+  <div class="bits" id="dhtBits"></div>
+  <div class="callout" style="margin-bottom:0"><b>전선에서 순간순간 오가는 것은 HIGH와 LOW뿐입니다.</b> 그런데 그 HIGH/LOW를 <b>여러 개 이어 붙이면</b> 27이나 63 같은 수를 표현할 수 있습니다. 모스 부호가 점과 선만으로 모든 글자를 적는 것과 같습니다.</div>
+</div>
+
+<div class="callout gold"><b>정확히 말하면</b> — 온습도 센서(DHT11 계열)는 I2C나 UART 같은 표준 통신이 아니라 <b>데이터선 하나를 쓰는 자체 방식</b>으로 주고받습니다. 실제로는 습도·온도의 정수부와 소수부, 검사용 값까지 40비트를 보냅니다. 위 그림은 이해를 돕기 위해 정수부만 줄여 그린 것입니다.</div>
+
+<div class="qz" id="qzWhy">
+  <div class="qh">그럼 <b>둘 다 디지털인데</b> 왜 포트가 다를까요?</div>
+  <div class="opts" style="max-width:560px">
+    <button class="qzopt" data-k="0">① 하나는 디지털이고 하나는 아날로그라서
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="1">② 디지털인 건 같고, <b>데이터를 주고받는 규칙</b>이 달라서
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="2">③ 제조사가 임의로 정해서
+      <span class="fb"></span></button>
+  </div>
+  <div class="rev">
+    <div class="cardgrid" style="margin-top:14px">
+      <div class="pcard"><h3>온습도 센서</h3><p>"우리 둘만 아는 약속으로, <b>한 줄</b>을 통해 말합니다."</p></div>
+      <div class="pcard"><h3>I2C</h3><p>"모두가 쓰는 <b>표준 규칙</b>으로 말하고, 장치마다 <b>주소</b>가 있습니다."</p></div>
+      <div class="pcard"><h3>UART</h3><p>"<b>보내는 길(TX)</b>과 <b>받는 길(RX)</b>을 따로 두고 순서대로 전달합니다."</p></div>
+    </div>
+    <div class="callout ok" style="margin-bottom:0">셋 다 <b>디지털</b>입니다. 다른 것은 <b>말하는 규칙</b>입니다. 그래서 꽂는 자리가 다릅니다.</div>
+  </div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">I2C — <b style="color:var(--coral-deep)">두 선</b>과 <b style="color:var(--coral-deep)">주소</b></h3>
+
+<div class="lab">
+  <h4>선이 두 개인 이유</h4>
+  <div class="cap">SDA는 데이터가 지나가는 길, SCL은 박자를 맞추는 길입니다.</div>
+  <div class="ctl"><button class="btn" id="i2cGo">▶ 신호 보내기</button></div>
+  <div style="display:grid;gap:6px">
+    <div><span style="font-size:.8rem;font-weight:800;color:var(--teal)">SCL · 박자</span>
+      <svg viewBox="0 0 600 30" preserveAspectRatio="none" style="width:100%;height:30px"><path id="sclPath" d="M0 24 L600 24" fill="none" stroke="#e2653f" stroke-width="3"/></svg></div>
+    <div><span style="font-size:.8rem;font-weight:800;color:var(--teal)">SDA · 데이터</span>
+      <svg viewBox="0 0 600 30" preserveAspectRatio="none" style="width:100%;height:30px"><path id="sdaPath" d="M0 24 L600 24" fill="none" stroke="#12706f" stroke-width="3"/></svg></div>
+  </div>
+  <div class="callout" style="margin:12px 0 0">박자 선이 따로 있어서 <b>"지금 읽어라"</b>를 정확히 맞출 수 있습니다. 그래서 선이 두 개입니다.</div>
+</div>
+
+<div class="lab">
+  <h4>같은 두 선에 여러 장치를 매답니다</h4>
+  <div class="cap">교사가 한 교실에서 "1번!", "2번!" 하고 부르는 것과 같습니다. 눌러 보십시오.</div>
+  <div class="ctl">
+    <button class="btn ghost" data-ch="0">채널 0 읽기</button>
+    <button class="btn ghost" data-ch="1">채널 1 읽기</button>
+    <button class="btn ghost" data-ch="2">채널 2 읽기</button>
+    <button class="btn ghost" data-ch="3">채널 3 읽기</button>
+  </div>
+  <div class="wire" style="height:6px;background:var(--teal-soft)"></div>
+  <div class="busrow" id="busRow">
+    <div class="dev" data-d="0"><div class="ad">채널 0</div><div class="nm">센서 A</div><div class="rd">—</div></div>
+    <div class="dev" data-d="1"><div class="ad">채널 1</div><div class="nm">센서 B</div><div class="rd">—</div></div>
+    <div class="dev" data-d="2"><div class="ad">채널 2</div><div class="nm">센서 C</div><div class="rd">—</div></div>
+    <div class="dev" data-d="3"><div class="ad">채널 3</div><div class="nm">센서 D</div><div class="rd">—</div></div>
+  </div>
+  <div class="callout ok" style="margin-bottom:0"><b>I2C 포트가 하나라고 센서를 하나만 쓸 수 있다는 뜻이 아닙니다.</b> 주소(채널)가 서로 다르면 같은 두 선에서 구별할 수 있습니다. 다만 제품마다 쓸 수 있는 주소 수와 전원 한계가 달라서, <b>무한정 붙일 수 있는 것은 아닙니다.</b></div>
+</div>
+
+<div class="qz" id="qzCh">
+  <div class="qh">이지메이커 전류 센서 설명에 <b>"채널 설정(0~3)으로 4채널 동시 측정"</b>이라고 적혀 있습니다.<br>센서 <b>하나</b>가 회로 네 곳의 전류를 동시에 잰다는 뜻일까요?</div>
+  <div class="opts" style="max-width:520px">
+    <button class="qzopt" data-k="0">① 그렇다. 센서 안에 전류계가 4개 들어 있다
+      <span class="fb"></span></button>
+    <button class="qzopt" data-k="1">② 아니다. 전류 센서 <b>여러 개</b>를 서로 다른 채널로 설정해 구별해 쓰는 것이다
+      <span class="fb"></span></button>
+  </div>
+  <div class="rev">
+    <div class="callout warn" style="margin-top:14px"><b>전류 센서 한 개는 자기가 연결된 그 한 자리의 전류만 잽니다.</b> "4채널"은 센서를 <b>네 개까지 서로 다른 이름표로 구별해</b> 한 시스템에서 함께 쓸 수 있다는 뜻입니다.</div>
+    <div class="callout">채널 번호가 제품 내부에서 주소와 정확히 어떻게 대응하는지는 <b>해당 센서의 공식 사양을 확인</b>하십시오. 이 화면은 개념을 설명하기 위한 것입니다.</div>
+  </div>
+</div>
+
+<div class="lab">
+  <h4>이렇게 쓰면 수업이 됩니다 — 병렬 회로</h4>
+  <div class="cap">전체 전류를 채널 0이, 갈라진 두 가지를 채널 1·2가 잽니다.</div>
+  <div class="ctl">
+    <button class="btn" id="parGo">▶ 측정</button>
+    <button class="btn ghost" id="parAlt">전구를 다른 것으로 바꾸기</button>
+  </div>
+  <figure style="margin:8px 0">
+    <svg viewBox="0 0 620 250" role="img" aria-label="병렬 회로에서 전체 전류를 재는 채널 0 센서와 두 가지 전류를 재는 채널 1, 채널 2 센서">
+      <g stroke="#16232a" stroke-width="4" fill="none" stroke-linecap="round">
+        <path d="M70 60 L70 190"/>
+        <path d="M70 60 L150 60"/>
+        <path d="M250 60 L330 60"/>
+        <path d="M330 60 L330 200"/>
+        <path d="M330 60 L560 60"/><path d="M560 60 L560 200"/>
+        <path d="M330 200 L560 200"/>
+        <path d="M330 130 L560 130"/>
+        <path d="M70 190 L330 190"/>
+      </g>
+      <rect x="52" y="88" width="36" height="74" rx="8" fill="#fff" stroke="#16232a" stroke-width="3"/>
+      <line x1="60" y1="108" x2="80" y2="108" stroke="#16232a" stroke-width="5"/>
+      <line x1="64" y1="126" x2="76" y2="126" stroke="#16232a" stroke-width="3"/>
+      <line x1="60" y1="144" x2="80" y2="144" stroke="#16232a" stroke-width="5"/>
+      <text x="70" y="182" text-anchor="middle" font-size="13" font-weight="700" fill="#16232a">전원</text>
+      <rect x="150" y="40" width="100" height="40" rx="10" fill="#fdeae2" stroke="#b8441f" stroke-width="3"/>
+      <text x="200" y="59" text-anchor="middle" font-size="13" font-weight="800" fill="#b8441f">채널 0</text>
+      <text x="200" y="74" text-anchor="middle" font-size="12" fill="#b8441f" id="pI">— A</text>
+      <text x="200" y="27" text-anchor="middle" font-size="12" fill="#587079">전체 전류</text>
+      <rect x="390" y="110" width="96" height="40" rx="10" fill="#dff0ee" stroke="#12706f" stroke-width="3"/>
+      <text x="438" y="129" text-anchor="middle" font-size="13" font-weight="800" fill="#0d3b40">채널 1</text>
+      <text x="438" y="144" text-anchor="middle" font-size="12" fill="#0d3b40" id="pI1">— A</text>
+      <rect x="390" y="180" width="96" height="40" rx="10" fill="#dff0ee" stroke="#12706f" stroke-width="3"/>
+      <text x="438" y="199" text-anchor="middle" font-size="13" font-weight="800" fill="#0d3b40">채널 2</text>
+      <text x="438" y="214" text-anchor="middle" font-size="12" fill="#0d3b40" id="pI2">— A</text>
+      <circle cx="360" cy="130" r="16" fill="#fcf1d9" stroke="#16232a" stroke-width="3"/>
+      <circle cx="360" cy="200" r="16" fill="#fcf1d9" stroke="#16232a" stroke-width="3"/>
+      <text x="360" y="103" text-anchor="middle" font-size="12" fill="#587079">가지 1</text>
+      <text x="360" y="238" text-anchor="middle" font-size="12" fill="#587079">가지 2</text>
+    </svg>
+  </figure>
+  <div class="punch" style="margin:6px 0 0;padding:18px"><div class="q" id="parEq">측정을 눌러 보십시오</div></div>
+  <div class="callout warn" style="margin-bottom:0"><b>전류 센서는 반드시 회로에 직렬로</b> 넣습니다. 배선을 끊고 그 자리에 끼우는 것입니다. 저항 양끝에 물리면 그건 단락입니다.</div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">UART — <b style="color:var(--coral-deep)">보내는 길</b>과 <b style="color:var(--coral-deep)">받는 길</b></h3>
+
+<div class="lab">
+  <h4>TX와 RX는 엇갈려 연결합니다</h4>
+  <div class="cap">보드가 말하는 입(TX)은 센서의 귀(RX)에 닿아야 합니다.</div>
+  <div class="ctl"><button class="btn" id="uartGo">▶ 데이터 흘려보내기</button></div>
+  <figure style="margin:6px 0">
+    <svg viewBox="0 0 600 150" role="img" aria-label="보드의 TX가 센서의 RX로, 센서의 TX가 보드의 RX로 엇갈려 연결된 모습">
+      <rect x="20" y="40" width="130" height="70" rx="12" fill="#0d3b40"/>
+      <text x="85" y="70" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">보드</text>
+      <text x="85" y="90" text-anchor="middle" font-size="12" fill="#ffc9ae">TX · RX</text>
+      <rect x="450" y="40" width="130" height="70" rx="12" fill="#fdeae2" stroke="#b8441f" stroke-width="3"/>
+      <text x="515" y="70" text-anchor="middle" font-size="14" font-weight="800" fill="#b8441f">센서</text>
+      <text x="515" y="90" text-anchor="middle" font-size="12" fill="#b8441f">RX · TX</text>
+      <path id="txLine" d="M150 62 L450 62" stroke="#12706f" stroke-width="3" fill="none"/>
+      <path id="rxLine" d="M450 92 L150 92" stroke="#c4703c" stroke-width="3" fill="none"/>
+      <circle id="txDot" cx="150" cy="62" r="7" fill="#12706f" opacity="0"/>
+      <circle id="rxDot" cx="450" cy="92" r="7" fill="#c4703c" opacity="0"/>
+      <text x="300" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#12706f">보드 TX → 센서 RX</text>
+      <text x="300" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#c4703c">센서 TX → 보드 RX</text>
+      <text x="300" y="140" text-anchor="middle" font-size="12" fill="#587079" id="uartBits">한 비트씩 순서대로</text>
+    </svg>
+  </figure>
+  <details class="more">
+    <summary>＋ 더 알아보기 — 왜 속도를 맞춰야 하나</summary>
+    <p>I2C에는 박자 선(SCL)이 따로 있었지만 <b>UART에는 박자 선이 없습니다.</b> 그래서 양쪽이 "1초에 몇 개를 보낼지"를 <b>미리 약속</b>해 두어야 합니다. 그 약속한 속도를 <b>보 레이트(baud rate)</b>라고 하고, 9600처럼 숫자로 씁니다. 속도가 어긋나면 글자가 깨진 것처럼 값이 이상하게 들어옵니다.<br><br>또 어디서부터가 한 덩어리인지 알려 주려고 앞에 <b>시작 비트</b>, 뒤에 <b>정지 비트</b>를 붙입니다. 편지의 "안녕하세요"와 "이만 줄입니다" 같은 것입니다.</p>
+  </details>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:38px 0 12px;text-align:center">정리 — 외우지 말고 <b style="color:var(--coral-deep)">판단</b>하십시오</h3>
+
+<div class="tablewrap"><table>
+<tr><th>포트</th><th>스스로 물을 질문</th><th>보드로 전달되는 방식</th><th>이지메이커에서</th></tr>
+<tr><td><b>A</b></td><td>전압의 <b>크기</b>를 읽는가?</td><td>연속적인 전압 → 보드가 ADC로 숫자화</td><td>밝기, 소리, DIY-A · <b>A0~A4</b></td></tr>
+<tr><td><b>D</b></td><td><b>일반 디지털 핀</b>으로 주고받는가?</td><td>HIGH/LOW, 또는 여러 비트의 디지털 신호</td><td>온습도, 초음파, 고온, DIY-B · <b>D0~D4</b></td></tr>
+<tr><td><b>I2C</b></td><td><b>주소</b>를 가진 장치와 표준 통신하는가?</td><td>SDA(데이터) + SCL(박자)</td><td>이산화탄소, I2C LCD · <b>I2C</b></td></tr>
+<tr><td><b>UART</b></td><td><b>보내는 선·받는 선</b>으로 직렬 통신하는가?</td><td>TX + RX</td><td>미세먼지, 무게 센서 · <b>UART</b></td></tr>
+</table></div>
+
+<div class="tree">
+  <p style="text-align:center;font-family:var(--font-round);color:var(--deep);font-size:1.1rem;margin-bottom:12px">센서가 값을 <b>내보내는 방식</b>으로 갈라 보면</p>
+  <svg viewBox="0 0 620 210" role="img" aria-label="센서의 출력 방식은 아날로그와 디지털로 나뉘고, 디지털은 다시 일반 디지털 핀과 I2C와 UART로 나뉜다">
+    <rect x="210" y="8" width="200" height="40" rx="12" fill="#0d3b40"/>
+    <text x="310" y="33" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">센서의 출력 방식</text>
+    <path d="M310 48 L310 66 M150 66 L470 66 M150 66 L150 84 M470 66 L470 84" stroke="#587079" stroke-width="3" fill="none"/>
+    <rect x="70" y="84" width="160" height="38" rx="11" fill="#fdeae2" stroke="#b8441f" stroke-width="3"/>
+    <text x="150" y="108" text-anchor="middle" font-size="14" font-weight="800" fill="#b8441f">아날로그</text>
+    <path d="M150 122 L150 146" stroke="#587079" stroke-width="3"/>
+    <rect x="105" y="146" width="90" height="34" rx="10" fill="#fff" stroke="#b8441f" stroke-width="3"/>
+    <text x="150" y="168" text-anchor="middle" font-size="14" font-weight="800" fill="#b8441f">A</text>
+    <rect x="390" y="84" width="160" height="38" rx="11" fill="#dff0ee" stroke="#12706f" stroke-width="3"/>
+    <text x="470" y="108" text-anchor="middle" font-size="14" font-weight="800" fill="#0d3b40">디지털</text>
+    <path d="M470 122 L470 136 M330 136 L610 136 M330 136 L330 150 M470 136 L470 150 M610 136 L610 150" stroke="#587079" stroke-width="3" fill="none"/>
+    <rect x="288" y="150" width="86" height="34" rx="10" fill="#fff" stroke="#12706f" stroke-width="3"/>
+    <text x="331" y="172" text-anchor="middle" font-size="13" font-weight="800" fill="#0d3b40">D</text>
+    <rect x="428" y="150" width="86" height="34" rx="10" fill="#fff" stroke="#12706f" stroke-width="3"/>
+    <text x="471" y="172" text-anchor="middle" font-size="13" font-weight="800" fill="#0d3b40">I2C</text>
+    <rect x="562" y="150" width="56" height="34" rx="10" fill="#fff" stroke="#12706f" stroke-width="3"/>
+    <text x="590" y="172" text-anchor="middle" font-size="13" font-weight="800" fill="#0d3b40">UART</text>
+    <text x="310" y="205" text-anchor="middle" font-size="13" font-weight="700" fill="#16232a">D · I2C · UART는 모두 디지털입니다 — 통신 규칙이 다를 뿐입니다</text>
+  </svg>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 6px;text-align:center">직접 나눠 보십시오</h3>
+<p style="text-align:center;color:var(--ink-soft);margin-bottom:12px">센서를 누른 뒤, 꽂아야 할 포트를 누르시면 됩니다.</p>
+
+<div class="lab">
+  <div class="sortwrap">
+    <div>
+      <div style="font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:8px">아직 안 꽂은 센서</div>
+      <div class="pool" id="sPool"></div>
+      <div class="hintbox" id="sHint"></div>
+      <button class="btn ghost" id="sReset" style="margin-top:12px">↺ 다시 하기</button>
+    </div>
+    <div class="bins">
+      <div class="bin" data-b="A"><div class="bt">A</div><div class="items"></div></div>
+      <div class="bin" data-b="D"><div class="bt">D</div><div class="items"></div></div>
+      <div class="bin" data-b="I2C"><div class="bt">I2C</div><div class="items"></div></div>
+      <div class="bin" data-b="UART"><div class="bt">UART</div><div class="items"></div></div>
+    </div>
+  </div>
+</div>
+
+<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.4rem;margin:36px 0 12px;text-align:center">오개념 점검 — 눌러서 뒤집어 보십시오</h3>
+<div class="ox" id="oxWrap"></div>
+
+<div class="callout ok" style="margin-top:24px"><b>이지메이커 보드에서 확인하는 법은 아주 쉽습니다.</b> 센서 기판에 <b>ⒶⒹ·I2C·UART가 인쇄되어 있습니다.</b> 적힌 대로 꽂으면 됩니다. 그리고 아날로그와 디지털은 <b>0~4번 중 아무 번호에 꽂아도 상관없습니다</b> — 다만 <b>코드에서 고른 번호와 실제로 꽂은 번호가 같아야</b> 합니다.</div>
+
+<div class="script">"포트 이름을 외우실 필요는 없습니다. 센서에 다 적혀 있으니까요.<br><br>
+제가 이걸 12분이나 쓰는 이유는 따로 있습니다. 학생이 <b>'선생님, 온도는 0이나 1이 아닌데 왜 D예요?'</b>라고 물을 때, 그게 아주 좋은 질문이거든요. 그때 '그냥 그런 거야'라고 답하면 그 질문이 죽습니다.<br><br>
+답은 이겁니다. <b>무엇을 재느냐와, 그 값을 어떻게 보내느냐는 다른 문제다.</b> 온도는 연속적으로 변하지만, 센서는 그 값을 자기 안에서 숫자로 바꾼 다음 0과 1로 보냅니다.<br><br>
+그리고 이 이야기는 <b>정보 교과와 그대로 이어집니다.</b> 아날로그를 디지털로 바꾼다는 게 바로 이겁니다."</div>
+
+<div class="note"><b>12분입니다. 여기서 늘어지면 실습 시간이 없어집니다.</b><br><br>
+전부 다 보여드리려 하지 마세요. <b>맨 위 퀴즈 → A 슬라이더 → 온습도 애니메이션</b> 셋만 하시면 핵심은 전달됩니다. I2C 채널과 UART는 <b>질문이 나올 때만</b> 여십시오.<br><br>
+<b>이지메이커를 처음 쓰는 학교에서만</b> 이 탭을 여세요. 큐브만 쓰는 학교에는 포트 개념이 필요 없습니다(센서가 곧 완제품이라).<br><br>
+드래그 대신 <b>눌러서 고르고 눌러서 넣는</b> 방식으로 만들었습니다. 전자칠판에서 손가락으로 됩니다.</div>`,
+
+/* ───── 학년 ───── */
+g1: gradePanel(1),
+g2: gradePanel(2),
+g3: gradePanel(3),
+
+/* ───── 나눔과 닫기 ───── */
+share: head('🤝 마지막','우리 학교에서는 <b>무엇부터</b> 하시겠습니까',
+  '오늘 하신 실험 하나를 실제 수업으로 옮기는 자리입니다.')
++ `<h3 style="font-family:var(--font-round);font-weight:400;color:var(--deep);font-size:1.35rem;margin:6px 0 14px;text-align:center">한 분씩 세 문장만</h3>
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>오늘 하신 실험은 무엇이었습니까</h4>
+    <p>학년과 단원, 그리고 어느 차시에 넣으실 수 있는지까지.</p>
+    <div class="say">"저는 중2 ○○ 단원의 △△ 실험을 했고, □월쯤 나갑니다."</div></div></div>
+  <div class="move"><div class="n">2</div><div>
+    <h4>막힌 데는 어디였습니까</h4>
+    <p>연결이었는지, 센서 개수였는지, 준비물이었는지. <b>막힌 곳이 곧 다음에 살 것</b>입니다.</p>
+    <div class="say">"저는 여기서 걸렸습니다 — 그래서 이게 필요할 것 같습니다."</div></div></div>
+  <div class="move"><div class="n">3</div><div>
+    <h4>초대하는 법 여덟 가지 중 하나만 고르신다면</h4>
+    <p>내일 당장 해 보실 수 있는 것 하나. <b>여덟 개를 다 하실 필요가 없습니다.</b></p>
+    <div class="say">"저는 ○번을 해 보겠습니다."</div></div></div>
+</div>
+
+<div class="punch">
+  <div class="q">오늘 가져가실 것은 센서가 아니라<br><b>한 실험과 한 문장</b>입니다.</div>
+  <div class="cap">그 하나가 다음 학기에 두 개가 됩니다</div>
+</div>
+
+<div class="tablewrap"><table>
+<tr><th>이런 학교라면</th><th>먼저 하실 것</th></tr>
+<tr><td><b>센서가 아직 없다</b></td><td>온도부터 사십시오. 자료집 실험의 절반이 온도입니다. 그다음이 압력(주사기)입니다</td></tr>
+<tr><td><b>있는데 안 쓴다</b></td><td>충전과 페어링부터 확인하세요. 안 쓰는 이유의 대부분이 "켜지는지 모르겠어서"입니다</td></tr>
+<tr><td><b>모둠 수가 부족하다</b></td><td>모둠마다 <b>다른 변인</b>을 맡기고 결과를 합치세요. 단열재 비교가 그 구조입니다</td></tr>
+<tr><td><b>크롬북·웨일북 학교다</b></td><td>세 회사 다 브라우저로 열립니다. 설치를 기다리지 마세요</td></tr>
+<tr><td><b>지능형 과학실 ON을 써야 한다</b></td><td>센서부터 익히고 그다음에 옮기십시오. 단 <b>모델학교</b>이시면 반대입니다 — 처음부터 ON으로 가야 실적이 남습니다</td></tr>
+</table></div>
+
+<ul style="list-style:none;margin:16px 0">
+  <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">오늘 자료</b> · 이 페이지를 그대로 나눠 드립니다</li>
+  <li style="padding:11px 0;border-bottom:1px dashed var(--line)"><b style="color:var(--deep)">MBL 수업허브</b> · <code style="background:var(--teal-soft);padding:3px 9px;border-radius:7px">scienceisjo.github.io/mblclasshub</code> — 모둠 데이터를 반 전체로 모을 때</li>
+  <li style="padding:11px 0"><b style="color:var(--deep)">문의</b> · 해누리중학교 조승재</li>
+</ul>
+
+<div class="script">"오늘 센서를 잔뜩 보셨는데, 가져가실 건 센서가 아닙니다. <b>실험 하나하고 문장 하나</b>입니다.<br><br>
+오늘 해 보신 그 실험, 그거 하나만 이번 학기에 실제로 해 보십시오. 그리고 초대하는 법 중에 하나만 골라서 같이 해 보십시오.<br><br>
+그 하나가 다음 학기에 두 개가 됩니다. 저도 그렇게 시작했습니다."</div>
+
+<div class="note"><b>25분입니다. 정시에 끝내세요.</b> 정시 종료가 다음 초청을 만듭니다.<br><br>
+세 문장 나눔은 <b>인원이 적을수록 깊어집니다.</b> 6~7명이면 한 분당 3분씩 충분합니다. 10명 넘으면 2번(막힌 데)만 돌리세요.<br><br>
+"뭘 사면 좋을까요"가 반드시 나옵니다. 그때 <b>되물으세요</b> — 몇 모둠인지, 지금 뭐가 있는지, 어느 학년을 주로 하시는지. 세 가지를 들으면 30초 안에 답이 나옵니다.</div>`,
+
+/* ───── 링크 자료실 ───── */
+links: head('🔗 자료실','필요할 때 <b>여기서 꺼내</b> 쓰십시오',
+  '중학교 과학 수업에 실제로 쓰이는 것만 골랐습니다. 주소를 외우실 필요 없습니다.')
++ `
+<div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;align-items:center">
+  <input type="search" id="lQ" placeholder="찾기 (예: 드라이버, 크롬북, 카탈로그, 지능형, 코딩)"
+    style="flex:1;min-width:220px;padding:11px 16px;border:2px solid var(--line);border-radius:99px;font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card)">
+  <span id="lCount" style="font-family:var(--font-round);color:var(--coral);white-space:nowrap"></span>
+</div>
+
+<div id="lList"></div>
+
+<div class="callout ok" style="margin-top:24px"><b>Science# for Web을 쓰실 때 미리 아셔야 할 것</b> <span style="font-size:.85rem;color:var(--ink-soft)">(사이언스샵 for Web 매뉴얼 K2025.12 기준)</span>
+<br>· 지원 기기 — <b>크롬북(Chrome)</b> · Windows(Chrome·Edge) · Android(Chrome) · <b>iOS는 Safari가 아니라 Bluefy</b> 브라우저
+<br>· <b>무선 센서용</b>입니다. 블루투스 또는 USB로 붙습니다
+<br>· <b>동시 4대까지</b> 권장. 센서 하나는 <b>한 기기에만</b> 붙습니다 (여러 기기 동시 연결 불가)
+<br>· ⚠️ <b>센서의 블루투스 모드를 반드시 Mobile로</b> 바꿔 두어야 합니다
+<br>· ⚠️ <b>보고서와 실험 콘텐츠는 들어 있지 않습니다.</b> 자료실에서 따로 받으셔야 합니다
+<br>· 수집은 <b>자동 / 수동</b> 두 가지. 수동일 때 X축을 <b>자동 증가수 · 숫자 입력 · 텍스트 입력</b> 중에 고릅니다
+ — 보일의 법칙에서 부피를 직접 넣는 그 방식이 여기 있습니다
+<br>· 간격 1~100Hz · 실험 시간 10~1000초 · 저장은 <b>jpg 이미지</b>와 <b>CSV</b>
+<br>· 툴바에 <b>그래프 분석 · 시간 마커 · 영역 선택 · 표 형식 보기</b>가 있습니다</div>
+
+<div class="callout gold"><b>그리고 툴바 맨 아래에 「Science-On에 업로드」가 있습니다.</b>
+<br>지능형 과학실에서 만든 <b>모둠 아이디를 입력해 연결</b>한 뒤 [데이터 업로드]를 누르면 측정값이 그대로 넘어갑니다.
+<br>🏫 <b>지능형 과학실</b> 탭에서 말씀드린 <b>"모둠코드로 직접 연결"</b>이 바로 이 버튼입니다.</div>
+
+<div class="callout warn"><b>연결이 안 될 때 순서</b>
+<br>① <b>보드 전원</b>이 켜져 있는지 (이지메이커는 PWR에 빨간불)
+<br>② 센서를 <b>표시된 포트</b>에 꽂았는지, 케이블이 <b>끝까지</b> 들어갔는지
+<br>③ 큐브 무선이면 <b>블루투스 모드가 Mobile</b>인지, 충전이 되어 있는지
+<br>④ 이지 유선이면 <b>CH341 드라이버</b> — 아래 목록에서 받으십시오 (<b>UNINSTALL 먼저, 그다음 INSTALL</b>)
+<br>⑤ 그래도 안 되면 <b>다른 브라우저</b>로. Chrome·Edge가 가장 안정적입니다</div>
+
+<div class="script">"주소를 다 적어 드릴 테니 외우지 마십시오. 이 페이지를 링크로 드리겠습니다.<br><br>
+딱 두 개만 기억하시면 됩니다. <b>이지메이커는 ezon.ai, 큐브는 on.sciencecube.com</b>입니다. 나머지는 필요할 때 여기서 찾으시면 됩니다.<br><br>
+그리고 하나만 더 — 큐브 쓰시는 분들, <b>무상 점검하고 무상 사용 연수</b>를 해 줍니다. 센서가 오래돼서 안 켜지는 게 있으면 그걸 신청하십시오. 목록에 링크 넣어 뒀습니다."</div>
+
+<div class="note">검색창에 <b>"드라이버", "크롬북", "카탈로그", "지능형", "코딩"</b> 정도만 쳐도 다 나옵니다.<br><br>
+질문이 나오면 <b>여기서 열어서 같이 보세요.</b> 말로 설명하는 것보다 화면을 띄우는 게 빠릅니다.<br><br>
+<b>무상 점검·연수 서비스</b>는 의외로 반응이 좋습니다. 안 켜지는 센서를 방치하고 계신 학교가 많습니다.</div>`,
+
+/* ───── 오늘의 센서 ───── */
+kit: head('🧰 오늘의 센서','가져온 것과 <b>못 가져온 것</b>',
+  '실험을 고르실 때 "몇 모둠이 동시에 가능한가"를 먼저 보십시오.')
++ `<div class="kv">
+  <div class="item"><div class="k">이지 공기압</div><div class="v c">8</div></div>
+  <div class="item"><div class="k">이지 전압</div><div class="v c">8</div></div>
+  <div class="item"><div class="k">이지 전류</div><div class="v c">7</div></div>
+  <div class="item"><div class="k">이지 보드</div><div class="v c">16</div></div>
+  <div class="item"><div class="k">큐브 온도</div><div class="v">4</div></div>
+  <div class="item"><div class="k">큐브 온습도</div><div class="v">4</div></div>
+  <div class="item"><div class="k">큐브 압력</div><div class="v">4</div></div>
+  <div class="item"><div class="k">큐브 힘·가속도</div><div class="v">4</div></div>
+  <div class="item"><div class="k">큐브 조도·색도</div><div class="v">5</div></div>
+  <div class="item"><div class="k">큐브 전압</div><div class="v">4</div></div>
+  <div class="item"><div class="k">파스코 CO₂</div><div class="v">4</div></div>
+</div>
+
+<div class="callout ok"><b>세 회사가 모두 브라우저에서 열립니다.</b> 설치가 필요 없습니다.
+<br>· 사이언스큐브 Science# → <b>on.sciencecube.com</b>
+<br>· 파스코 SPARKvue → <b>sparkvue.pasco.com</b>
+<br>· 이지메이커 EZ·ON → <b>ezon.ai</b>
+<br>블루투스 4.0 이상이 켜져 있으면 크롬북·웨일북에서도 됩니다.<br><br><b>그리고 셋 다 지능형 과학실 ON을 바라보고 있습니다.</b> 큐브 카탈로그에는 "본 제품은 <b>지능형과학실 ON의 오픈 API를 준수하여</b> 개발하였습니다"라고 적혀 있고, EZ·ON 상단 메뉴에도 <b>「지능형 과학실」</b> 칸이 있습니다.</div>
+
+<div class="tablewrap"><table>
+<tr><th>동시 가능</th><th>실험 계열</th><th>왜</th></tr>
+<tr><td><b>7~8모둠</b></td><td>보일의 법칙 · 면적과 압력 · 무게 재기 · 옴의 법칙 · 저항과 전류</td><td>이지메이커 유선이라 <b>모둠 수만큼 갖췄습니다.</b> 반 전체 실습이 가능한 유일한 계열입니다</td></tr>
+<tr><td><b>4~5모둠</b></td><td>마찰력 · 광합성 · 빛의 세기 · 온도 계열 전부</td><td>대여한 무선 센서가 종류별로 4개씩입니다</td></tr>
+<tr><td><b>2모둠</b></td><td>비열 비교 · 열평형 · 온실 효과 · 냉각 곡선 비교</td><td>한 조가 <b>온도 센서를 2개씩</b> 써야 합니다</td></tr>
+<tr><td><b>1모둠</b></td><td>수권의 층상 구조</td><td>원래 온도 센서 5개가 필요합니다. 전체 시연으로 돌리세요</td></tr>
+</table></div>
+
+<div class="callout warn"><b>없는 센서 — 그래서 못 하는 실험</b>
+<br>· <b>무게(로드셀)</b> → 손소독제 증발(중1), 철 솜 연소(중3)
+<br>· <b>고온</b> → 불꽃색에 따른 온도(중2)
+<br>· <b>소리</b> → 청각 자극 반응(중3)
+<br>· <b>초음파</b> → 물체의 운동 분석(중3)
+<br>· <b>버튼(DIY-B)</b> → 시각 자극 반응(중3)
+<br>다섯 종류가 비는데, <b>중3이 가장 많이 걸립니다.</b> 자극과 반응·운동 단원이 통째로 빠집니다.</div>
+
+<div class="callout gold"><b>온도 센서가 제일 아쉽습니다.</b> 자료집 전체에서 온도를 쓰는 실험이 <b>16개</b>로 압도적인데, 지금 온도 센서는 4개뿐입니다. 다음에 살 것을 하나만 고른다면 <b>온도</b>입니다. 그다음이 압력입니다.</div>
+
+<div class="note"><b>실습 배정 요령</b><br>
+선생님들께 학년을 여쭙고 그 학년 탭을 열어 고르시게 하세요. 같은 학년이 여러 분이면 <b>7~8모둠 계열(공기압·전압전류)을 먼저</b> 배정하고, 4모둠 계열은 나눠 맡으신 뒤 결과만 합치는 방식으로 돌리면 됩니다.<br><br>
+온도 계열을 두 분 이상이 고르시면 <b>온습도 센서(WL 117H)를 공기 온도 실험에 투입</b>해 조를 늘릴 수 있습니다. 다만 액체에 담그는 실험에는 쓰지 마세요.</div>
+
+<div class="src-note">
+실험 매뉴얼 출처 · <b>EZ</b> = 『피지컬 컴퓨팅 활용 AI융합과학교육의 실제 — 이지메이커 활용 과학실험 사례』(영서중 최효석) 30건<br>
+<b>SB</b> = 『2026 교구 및 디지털 도구 활용 과학 교수학습자료(중등 과학)』 서울특별시교육청 창의미래교육과, 2026. 7. 10건<br>
+교육과정 원문 · <b>교육부 고시 제2022-33호 [별책 9] 과학과 교육과정</b> — 내용 체계(과정⋅기능) · 탐구 활동 · 성취기준 적용 시 고려 사항 · 교수⋅학습 방향<br>
+도입부 이론 · 『AI·디지털도구, 새로운 과학탐구의 시작』 경상국립대학교 화학교육과 손미현<br>
+탐구 기능 분류 · 기초 6 + 통합 7
+</div>`
+};
+
+/* ═══════════════ 렌더 ═══════════════ */
+const tabbar=document.getElementById('tabbar'), panels=document.getElementById('panels');
+
+/* ── 섹션 전부 펼쳐 놓고, 위 칩은 그 자리로 데려다 줍니다 ── */
+TABS.forEach((t,i)=>{
+  const b=document.createElement('button');
+  b.className='tab'+(i===0?' active':'');
+  b.dataset.go=t.id;
+  b.innerHTML=`<span class="te">${t.em}</span>${t.name}`;
+  b.addEventListener('click',()=>{
+    const el=panels.querySelector('.tabpanel[data-tab="'+t.id+'"]');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  tabbar.appendChild(b);
+
+  const p=document.createElement('section');
+  p.className='tabpanel block';
+  p.dataset.tab=t.id;
+  p.id='sec-'+t.id;
+  p.innerHTML='<span class="secno">'+(i+1)+' / '+TABS.length+'</span>'+(PANEL[t.id]||'');
+  panels.appendChild(p);
+});
+
+/* ── 스크롤에 따라 위 칩을 따라오게 ── */
+const chips=Array.from(tabbar.children), secs=Array.from(panels.children);
+function mark(id){
+  chips.forEach(c=>c.classList.toggle('active', c.dataset.go===id));
+  const on=tabbar.querySelector('.tab.active');
+  if(on && tabbar.scrollWidth>tabbar.clientWidth){
+    const l=on.offsetLeft-tabbar.clientWidth/2+on.offsetWidth/2;
+    tabbar.scrollTo({left:Math.max(0,l),behavior:'smooth'});
+  }
+}
+if('IntersectionObserver' in window){
+  const seen=new Map();
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>seen.set(e.target.dataset.tab, e.intersectionRatio));
+    let best=null, r=-1;
+    seen.forEach((v,k)=>{ if(v>r){ r=v; best=k; } });
+    if(best && r>0) mark(best);
+  }, {rootMargin:'-66px 0px -55% 0px', threshold:[0,.15,.4,.75,1]});
+  secs.forEach(el=>io.observe(el));
+}
+
+/* ── 맨 위로 ── */
+const toTop=document.getElementById('toTop');
+toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+addEventListener('scroll',()=>{ toTop.classList.toggle('on', scrollY>600); }, {passive:true});
+
+/* ── 강사모드 ── */
+const btnP=document.getElementById('btnPresenter');
+btnP.addEventListener('click',()=>{
+  document.body.classList.toggle('presenter');
+  try{localStorage.setItem('dt_presenter',document.body.classList.contains('presenter')?'1':'0');}catch(e){}
+});
+try{ if(localStorage.getItem('dt_presenter')==='1') document.body.classList.add('presenter'); }catch(e){}
+
+/* ── 타이머 — 분을 직접 고릅니다 ── */
+const clockEl=document.getElementById('clock'), minsEl=document.getElementById('mins');
+let left=0, running=false, tick=null;
+function paint(){
+  const neg=left<0, x=Math.abs(left);
+  clockEl.textContent=(neg?'+':'')+String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
+  clockEl.classList.toggle('run', running&&!neg);
+  clockEl.classList.toggle('over', neg);
+}
+function reset(){
+  if(tick){clearInterval(tick);tick=null;}
+  running=false; left=(+minsEl.value)*60;
+  document.getElementById('btnStart').textContent='▶ 시작';
+  paint();
+}
+minsEl.addEventListener('change', reset);
+document.getElementById('btnStart').addEventListener('click',()=>{
+  running=!running;
+  document.getElementById('btnStart').textContent=running?'⏸ 멈춤':'▶ 시작';
+  if(running){ tick=setInterval(()=>{left--;paint();},1000); }
+  else if(tick){ clearInterval(tick); tick=null; }
+  paint();
+});
+document.getElementById('btnReset').addEventListener('click', reset);
+reset();
+
+/* ═══════════════ 센서 19종 · 기초 측정법 ═══════════════
+   출처: 『기초-측정 방법』(클래스보드, 무선/유선 각 1권) — 센서당 4쪽 구성
+   ══════════════════════════════════════════════════ */
+const SENSORS19 = [
+ {n:1, nm:'온도', what:'교실의 온도', port:'D', cyc:'1000ms (1초)', set:'온습도 센서',
+  hook:'여름에 운동장에서 놀다가 교실에 들어오면 왜 시원하게 느껴질까요? 지금 이 교실은 몇 도일까요? 교실 안 모든 곳이 같은 온도일까요?',
+  tips:['센서를 손으로 오래 잡으면 체온이 전달되어 실제보다 높게 나옵니다.','측정 중에 센서를 흔들지 마세요. 값이 계속 변합니다.'],
+  q:['교실에서 가장 온도가 높은 곳과 낮은 곳은 어디인가요?','위치에 따라 온도가 다른 이유는 무엇일까요?'],
+  read:'같은 기온인데 비 오는 날이 더 덥게 느껴지는 이유 — 습도가 10% 오르면 체감온도는 약 1℃ 오릅니다'},
+ {n:2, nm:'습도', what:'교실의 습도', port:'D', cyc:'1000ms (1초)', set:'온습도 센서',
+  hook:'장마철에 공기가 끈적하게 느껴진 적 있나요? 추운 날 밖에 있다가 교실에 들어오면 안경에 김이 서리는 이유는 무엇일까요?',
+  tips:['온도 센서와 같은 센서를 씁니다. 설정에서 습도를 고르면 됩니다.'],
+  q:['우리 교실의 습도는 적정 범위 안에 있나요?'],
+  read:'전기를 전혀 쓰지 않는 천연 제습기'},
+ {n:3, nm:'밝기', what:'교실의 밝기', port:'A', cyc:'1000ms (1초)', set:'밝기 센서',
+  hook:'"등잔 밑이 어둡다"는 말은 정말일까요? 교실에서 가장 밝은 자리와 어두운 자리는 어디일까요?',
+  tips:['센서에 그림자가 지지 않게 하세요.','창가와 복도 쪽을 꼭 같이 재야 비교가 됩니다.'],
+  q:['교실 위치에 따라 빛의 세기가 다른 이유는 무엇일까요?'],
+  read:'빛을 잡아먹는 검정, 반타블랙'},
+ {n:4, nm:'소리', what:'교실에서 나는 여러 소리', port:'A', cyc:'100ms (0.1초)', set:'소리 센서',
+  hook:'내가 생각하는 "공부를 방해하는 소음"의 기준은 몇 데시벨일까요?',
+  tips:['연결할 때 "딸깍" 소리가 날 때까지 끝까지 밀어 넣으세요.','소리가 나는 곳까지의 거리를 일정하게 유지해야 비교가 됩니다.'],
+  q:['어떤 소리가 가장 컸나요? 예상과 같았나요?'],
+  read:'내 귀에만 들리는 가상 헤드셋'},
+ {n:5, nm:'초음파 거리', what:'물체까지의 거리', port:'D', cyc:'1000ms (1초)', set:'초음파 거리 센서',
+  hook:'장난감 자동차가 멀어지는 것을 숫자로 볼 수 있을까요?',
+  tips:['센서와 물체를 서로 평행하게 두세요.','측정 범위가 5~500cm입니다. 너무 가까우면 오차가 큽니다.','목재·콘크리트·유리는 반사가 달라 값이 흔들립니다.'],
+  q:['시간이 지남에 따라 거리는 어떻게 변했나요?'],
+  read:'소리도 날씨를 탈까 — 음속은 온도에 따라 달라집니다'},
+ {n:6, nm:'수중 온도', what:'액체의 온도', port:'D', cyc:'60000ms (60초)', set:'수중 온도 센서',
+  hook:'물을 계속 가열하면 온도가 끝없이 올라갈까요?',
+  tips:['핫플레이트에 화상을 입지 않도록 조심하세요.','센서 끝이 비커의 바닥이나 벽에 닿지 않게 하세요.'],
+  q:['끓기 시작한 뒤에도 온도가 계속 올라갔나요?'],
+  read:'오랫동안 열을 더 많이 가해 주면 온도가 더 높이 올라갈까요'},
+ {n:7, nm:'자이로', what:'진동', port:'I2C', cyc:'10ms (0.01초)', set:'자이로·가속도(3축) 센서',
+  hook:'눈에 보이지 않는 흔들림을 숫자로 잡을 수 있을까요?',
+  tips:['흔들리지 않도록 단단히 고정하세요. 고정이 부실하면 데이터를 못 씁니다.','수집 주기가 10ms라 데이터가 아주 빨리 쌓입니다.'],
+  q:['진동이 가장 큰 순간은 언제였나요?'], read:''},
+ {n:8, nm:'기압', what:'교실의 기압', port:'I2C', cyc:'1000ms (1초)', set:'기압 센서',
+  hook:'1층과 4층의 기압은 다를까요? 계단을 오르며 재 보면 어떻게 될까요?',
+  tips:['입으로 세게 불거나 습기·침이 센서 안으로 들어가지 않게 하세요.'],
+  q:['고도가 높아질수록 기압은 어떻게 변했나요?'], read:''},
+ {n:9, nm:'DIY-A 아날로그', what:'유도 전류', port:'A', cyc:'100ms (0.1초)', set:'DIY-A 센서',
+  hook:'자석을 코일 근처에서 움직이면 정말 전기가 생길까요?',
+  tips:['강한 자석을 센서나 스마트기기에 직접 대면 오작동합니다. 반드시 코일 근처에서만 움직이세요.'],
+  q:['전기가 흐르기 위해 꼭 필요한 조건은 무엇인가요?'], read:''},
+ {n:10, nm:'DIY-B 디지털', what:'용액의 전도도', port:'D', cyc:'1000ms (1초)', set:'DIY-B 센서',
+  hook:'소금물과 설탕물 중 전기가 통하는 것은 어느 쪽일까요?',
+  tips:['용액을 바꿀 때마다 클립에 묻은 이전 용액을 씻고 잘 닦은 뒤 측정하세요.'],
+  q:['용액마다 전도도 수치가 다르게 나타난 이유는 무엇일까요?'], read:''},
+ {n:11, nm:'미세먼지', what:'교실의 미세먼지 농도', port:'UART', cyc:'1000ms (1초)', set:'미세먼지 센서',
+  hook:'창문을 열면 교실 공기가 정말 좋아질까요?',
+  tips:['센서의 공기 흡입구를 손이나 물건으로 막지 마세요. 값이 안 나옵니다.'],
+  q:['창문을 열기 전과 후의 농도는 어떻게 달랐나요?'],
+  read:'마스크에 적힌 숫자의 비밀'},
+ {n:12, nm:'전류', what:'회로에 흐르는 전류', port:'I2C', cyc:'100ms (0.1초)', set:'전류 센서',
+  hook:'전구를 하나 더 달면 전류는 늘어날까요, 줄어들까요?',
+  tips:['+와 – 방향이 정해져 있습니다. 건전지 + 극에서 나온 선이 센서 + 단자로 들어가야 합니다. 반대로 하면 음수가 나옵니다.','회로에 직렬로 넣습니다. 배선을 끊고 그 자리에 끼우세요.'],
+  q:['회로에 흐르는 전류를 더 크게 하려면 어떻게 해야 할까요?'], read:''},
+ {n:13, nm:'전압', what:'회로의 전압', port:'A', cyc:'100ms (0.1초)', set:'전압 센서',
+  hook:'건전지를 두 개로 늘리면 전압은 정확히 두 배가 될까요?',
+  tips:['+와 – 방향이 정해져 있습니다. 반대로 연결하면 음수가 나옵니다.','저항 양끝에 병렬로 물립니다.'],
+  q:['전압이 커질 때 전류는 어떻게 변했나요?'],
+  read:'우리 집 가전제품들은 어떻게 연결되어 있을까'},
+ {n:14, nm:'자기장', what:'교실의 자기장', port:'I2C', cyc:'1000ms (1초)', set:'자기장 센서',
+  hook:'철새는 살아 있는 나침반으로 지구의 자기장을 따라 여행합니다. 우리 교실에도 자기장이 흐를까요?',
+  tips:['디지털 자기장 탐지기를 들고 교실 곳곳을 다니며 숨겨진 자석을 찾아보게 하면 좋습니다.'],
+  q:['자기장이 가장 센 곳은 어디였나요? 왜 그럴까요?'], read:''},
+ {n:15, nm:'무게', what:'여러 가지 물체의 무게', port:'UART', cyc:'1000ms (1초)', set:'무게 센서',
+  hook:'손소독제를 뿌려 두면 정말 가벼워질까요?',
+  tips:['정확한 측정을 위해 초반 영점 잡는 시간이 필요합니다. 최대 30초, 영점이 잡힌 것을 확인한 뒤 시작하세요.'],
+  q:['시간이 지나며 무게는 어떻게 변했나요?'],
+  read:'세상을 바꾸는 센서 기술 — 읽고(RFID), 재고(무게)'},
+ {n:16, nm:'공기압', what:'주사기 안의 공기압', port:'A', cyc:'1000ms (1초)', set:'공기압 센서',
+  hook:'주사기를 손으로 누르면 "빡빡하다"고 느낍니다. 그 빡빡함은 몇 배일까요?',
+  tips:['센서와 주사기가 단단히 연결되었는지 확인하세요. 느슨하면 값이 맞지 않습니다.','주사기 몸통을 감싸 쥐지 마세요. 체온이 기체를 데웁니다.'],
+  q:['기체의 부피와 압력은 어떤 관계가 있나요?'], read:''},
+ {n:17, nm:'pH', what:'용액의 pH', port:'I2C', cyc:'1000ms (1초)', set:'pH 센서',
+  hook:'주변의 액체들은 산성일까요, 염기성일까요?',
+  tips:['측정하는 용액이 바뀔 때마다 전극을 반드시 증류수로 세척하세요.'],
+  q:['예상과 다른 결과가 나온 용액이 있었나요?'], read:''},
+ {n:18, nm:'고온', what:'촛불의 온도', port:'D', cyc:'1000ms (1초)', set:'고온 센서',
+  hook:'촛불에서 가장 뜨거운 곳은 어디일까요? 겉불꽃일까요, 불꽃심일까요?',
+  tips:['끝부분 금속 부위는 실험 직후 매우 뜨겁습니다. 절대 손으로 만지지 마세요.','일반 온도 센서를 불꽃에 넣으면 센서가 망가집니다. 반드시 고온 센서로.'],
+  q:['불꽃의 색과 온도는 어떤 관계가 있나요?'], read:''},
+ {n:19, nm:'이산화탄소', what:'CO₂ 농도', port:'I2C', cyc:'1000ms (1초)', set:'이산화탄소 센서',
+  hook:'탄산음료를 따르면 올라오는 기포는 무엇일까요? 물에 발포비타민을 넣을 때 생기는 기포도 같은 것일까요?',
+  tips:['밀폐 직후 1~2분은 그래프가 요동칩니다. 안정된 뒤 다시 수집하세요.'],
+  q:['기포가 이산화탄소라는 것을 어떻게 확인했나요?'],
+  read:'탄산음료와 멘토스가 만나면 폭발하는 이유'}
+];
+
+/* ── 센서 도감 렌더 + 검색 ── */
+function initBasics(){
+  var P=document.querySelector('.tabpanel[data-tab="basics"]');
+  if(!P) return;
+  var list=P.querySelector('#sList'), q=P.querySelector('#sQ'), cnt=P.querySelector('#sCount');
+  var PORTC={A:'n8',D:'n4','I2C':'unit','UART':'src'};
+  function card(s){
+    return '<article class="exp">'
+      +'<div class="top"><div class="badges">'
+      +'<span class="bd unit">'+s.what+'</span>'
+      +'<span class="bd '+(PORTC[s.port]||'src')+'">'+s.port+' 포트</span>'
+      +'<span class="bd src">기초측정 '+s.n+'</span></div>'
+      +'<h4>'+s.nm+' 센서</h4></div>'
+      +'<div class="body">'
+      +(s.hook?'<div class="tip" style="background:var(--coral-soft);color:#7d3319;margin:0 0 11px">'
+        +'<b style="display:block;font-size:.76rem;letter-spacing:.3px;margin-bottom:3px">이렇게 엽니다</b>'+s.hook+'</div>':'')
+      +'<div class="row"><span class="k">설정</span><span class="v">'+s.set+' · 수집 주기 '+s.cyc+'</span></div>'
+      +(s.tips.length?'<div class="row"><span class="k">주의</span><span class="v"></span></div><ol>'
+        +s.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol>':'')
+      +(s.q.length?'<div class="row" style="margin-top:9px"><span class="k">해석</span><span class="v">'
+        +s.q.join('<br>')+'</span></div>':'')
+      +(s.read?'<div class="tip">읽을거리 · '+s.read+'</div>':'')
+      +'</div></article>';
+  }
+  function draw(){
+    var k=(q.value||'').trim().toLowerCase();
+    var hit=SENSORS19.filter(function(s){
+      if(!k) return true;
+      return (s.nm+' '+s.what+' '+s.hook+' '+s.set+' '+s.port+' '+s.tips.join(' ')+' '+s.q.join(' ')+' '+s.read).toLowerCase().indexOf(k)>-1;
+    });
+    list.innerHTML = hit.length ? hit.map(card).join('')
+      : '<div class="callout warn" style="grid-column:1/-1">찾는 센서가 없습니다. 다른 말로 찾아보십시오 — 온도·습도·밝기·소리·거리·자이로·기압·전도도·미세먼지·전류·전압·자기장·무게·공기압·pH·고온·이산화탄소</div>';
+    cnt.textContent = k ? hit.length+'종' : '19종';
+  }
+  q.addEventListener('input', draw);
+  draw();
+}
+
+/* ═══════════════ 링크 자료실 ═══════════════
+   확인일 2026-08-23. g=묶음, tag=검색 보조어
+   ══════════════════════════════════════════ */
+const LINKS = [
+ {g:'바로 여는 곳', hot:1, items:[
+  {t:'EZ·ON 이지메이커', u:'https://ezon.ai/', d:'설치 없이 브라우저로. 구글·웨일 계정 로그인', tag:'이지메이커 이지온 실행'},
+  {t:'Science# for Web 사이언스큐브', u:'https://on.sciencecube.com/', d:'설치 없이 브라우저로. 크롬북에서도 열립니다', tag:'큐브 사이언스샵 실행 크롬북'},
+  {t:'SPARKvue 파스코', u:'https://sparkvue.pasco.com/', d:'파스코 무선 센서용 웹앱', tag:'파스코 실행'},
+  {t:'지능형 과학실 ON', u:'https://science-on.kosac.re.kr/main.do', d:'탐구 개설·데이터·보고서·포트폴리오. 한국과학창의재단', tag:'지능형 과학실 온 포털 science-on'}
+ ]},
+ {g:'이지메이커 — 처음 쓸 때', items:[
+  {t:'처음 사용할 경우 확인사항', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=28', d:'센서 연결부터 EZ·ON 사용까지 그림 두 장으로. 가장 먼저 볼 것', tag:'시작 기초 연결'},
+  {t:'EZ·ON 접속하기', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=12', d:'크롬북·웨일북·맥북에서 쓸 수 있다는 안내가 여기 있습니다', tag:'접속 크롬북 웨일북'},
+  {t:'⚠️ 보드 드라이버 (CH341)', u:'https://haict.kr/bbs/board.php?bo_table=down&wr_id=6', d:'시리얼포트 에러로 연결이 안 될 때. UNINSTALL 먼저, 그다음 INSTALL', tag:'드라이버 시리얼 포트 에러 연결안됨 CH341'},
+  {t:'EZ·ON 안드로이드 앱', u:'https://haict.kr/bbs/board.php?bo_table=down&wr_id=8', d:'태블릿은 웹이 아니라 이 앱으로 해야 코드가 올라갑니다', tag:'태블릿 앱 플레이스토어 안드로이드'}
+ ]},
+ {g:'이지메이커 — 보드와 센서', items:[
+  {t:'메인보드 / 미니보드 알아보기', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=22', d:'A0~A4 · D0~D4 · I2C · UART · SD · 전원 스위치 위치', tag:'보드 포트 미니보드'},
+  {t:'아날로그(A) 센서', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=21', d:'밝기·소리·공기압·DIY-A', tag:'아날로그 A포트'},
+  {t:'디지털(D) 센서', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=20', d:'온습도·초음파·고온·DIY-B', tag:'디지털 D포트'},
+  {t:'I2C 센서·모듈', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=19', d:'이산화탄소·전류·I2C LCD', tag:'I2C'},
+  {t:'UART 센서', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=18', d:'미세먼지·무게·블루투스', tag:'UART 무게 미세먼지'},
+  {t:'이지메이커 센서 알아보기', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=8', d:'센서 라인업 한눈에', tag:'센서 목록'},
+  {t:'데이터 케이블 연결 방법', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=9', d:'케이블 방향이 반대면 값이 안 들어옵니다', tag:'케이블 연결'},
+  {t:'DIY-A·DIY-B 악어클립 연결', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=10', d:'유도 전류·전도도 실험에 씁니다', tag:'악어클립 DIY 전도도 유도전류'}
+ ]},
+ {g:'이지메이커 — 코딩과 데이터', items:[
+  {t:'EZ·ON 매뉴얼 코딩 방법', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=23', d:'블록 없이 클릭으로 설정하는 방법', tag:'코딩 매뉴얼 수동'},
+  {t:'블럭 코딩 기초 학습하기', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=14', d:'직접 짜 보고 싶으실 때', tag:'블록 코딩 기초'},
+  {t:'블럭 코딩·데이터 분석 예제', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=13', d:'예제로 익히기', tag:'예제 데이터 분석'},
+  {t:'코드 컴파일 & 데이터 분석 활용', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=24', d:'업로드하고 값을 받는 전체 흐름', tag:'컴파일 업로드 데이터분석'},
+  {t:'실시간 데이터를 엑셀로 전송', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=25', d:'모둠 데이터를 반 전체로 모을 때', tag:'엑셀 구글시트 전송 데이터'},
+  {t:'SD카드 사용 가이드', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=26', d:'노트북 없이 보드에만 저장. 감압 용기처럼 밀폐할 때', tag:'SD카드 저장 밀폐'},
+  {t:'날씨 알리미 만들기 (온습도)', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=27', d:'만들기 수업으로 이어갈 때', tag:'날씨 온습도 만들기'},
+  {t:'학습가이드 한눈에 보기', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=1', d:'이지메이커 가이드 전체 목록', tag:'전체 목록 가이드'}
+ ]},
+ {g:'사이언스큐브 — 프로그램', items:[
+  {t:'사이언스샵 for Web 매뉴얼', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26191/', d:'브라우저판 사용설명서 PDF. 지원 기기·수집 설정·Science-On 업로드', tag:'웹 매뉴얼 설명서 크롬북'},
+  {t:'⭐ for Chromebook 설치 파일', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/318/', d:'크롬북 학교라면 이것부터. 디벗으로 수업하실 때', tag:'크롬북 디벗 설치'},
+  {t:'사이언스샵 for Windows', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/139/', d:'설치형. 실험 콘텐츠와 보고서가 들어 있습니다', tag:'윈도우 설치 콘텐츠'},
+  {t:'사이언스샵 매뉴얼', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/296/', d:'설치판 전체 설명서', tag:'매뉴얼 설명서'},
+  {t:'Science# with AI', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26314/', d:'AI 기능 안내', tag:'AI 인공지능'},
+  {t:'차트 합치기·분리하기', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/319/', d:'모둠 데이터를 한 그래프에 겹칠 때 꼭 필요합니다', tag:'차트 그래프 합치기 비교'},
+  {t:'안드로이드 센서 연결 방법', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26312/', d:'태블릿으로 하실 때', tag:'안드로이드 태블릿 연결'}
+ ]},
+ {g:'사이언스큐브 — 센서와 수업', items:[
+  {t:'⭐ 무선센서 카탈로그 Ver 9.0', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26290/', d:'센서 35종 + 2022개정 교과서 수록 탐구 대조표. 📚 탭의 그 표가 여기서 나왔습니다', tag:'카탈로그 교과서 수록 가격 센서목록'},
+  {t:'무선센서 사용설명서 (2025.10)', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/99/', d:'센서별 사용법·측정 범위·주의사항', tag:'센서 설명서 사용법 범위'},
+  {t:'동영상 설명서 — 사용법 기초', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/25973/', d:'영상 2편. 글보다 빠릅니다', tag:'동영상 영상 유튜브 기초'},
+  {t:'└ 사용법 기초 (1)', u:'https://youtu.be/brB2OwXyEQg', d:'유튜브', tag:'동영상 유튜브 기초1'},
+  {t:'└ 사용법 기초 (2)', u:'https://youtu.be/VzbXhczuJds', d:'유튜브', tag:'동영상 유튜브 기초2'},
+  {t:'[과자랩] 중등 화학 — MBL 센서 알차게 활용하기', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/330/', d:'중등 화학 수업 사례', tag:'중등 화학 수업사례 과자랩'},
+  {t:'연직 수온 분포 실험', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/349/', d:'중2 수권 단원. 온도 센서 여러 개를 깊이별로', tag:'수권 수온 해수 중2'},
+  {t:'자료실 전체 목록', u:'https://sciencecube.kr/board/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/', d:'여기 없는 것을 찾으실 때', tag:'자료실 전체 목록'}
+ ]},
+ {g:'지능형 과학실 ON', items:[
+  {t:'지능형 과학실 ON 포털', u:'https://science-on.kosac.re.kr/main.do', d:'교사 가입 → 학교 승인 → 학급 개설 → 탐구 개설', tag:'지능형 과학실 온 가입 포털'},
+  {t:'ON 사용설명서 & 동영상', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/315/', d:'큐브가 정리해 둔 것. 교실 생성 방법까지', tag:'지능형 사용설명서 동영상 교실생성'},
+  {t:'한국과학창의재단 안내', u:'https://www.kofac.re.kr/cms/content/view/993', d:'사업 소개와 공지', tag:'창의재단 kofac 소개'}
+ ]},
+ {g:'학교에 도움 되는 것', items:[
+  {t:'⭐ 무상 점검 · 무상 사용연수 서비스', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26310/', d:'안 켜지는 센서를 방치하고 계시다면. 점검과 연수를 무상으로 해 줍니다', tag:'무상 점검 수리 연수 서비스 고장'},
+  {t:'교육신청·문의', u:'https://sciencecube.kr/board/%EA%B5%90%EC%9C%A1%EB%AC%B8%EC%9D%98/3001/', d:'학교로 연수를 부르실 때', tag:'교육신청 문의 연수요청'},
+  {t:'이지메이커 홈', u:'https://haict.kr/', d:'견적 요청·제품 소개·커뮤니티', tag:'이지메이커 홈 견적'}
+ ]}
+];
+
+function initLinks(){
+  var P=document.querySelector('.tabpanel[data-tab="links"]');
+  if(!P) return;
+  var box=P.querySelector('#lList'), q=P.querySelector('#lQ'), cnt=P.querySelector('#lCount');
+  function row(it){
+    return '<li style="padding:12px 0;border-bottom:1px dashed var(--line)">'
+      +'<a href="'+it.u+'" target="_blank" rel="noopener" style="font-weight:800;color:var(--deep);text-decoration:none;border-bottom:2px solid var(--coral-soft)">'+it.t+' ↗</a>'
+      +'<div style="font-size:.9rem;color:var(--ink-soft);margin-top:3px">'+it.d+'</div>'
+      +'<code style="display:inline-block;margin-top:5px;font-size:.78rem;background:var(--paper);color:var(--ink-soft);padding:2px 8px;border-radius:6px;word-break:break-all">'+it.u.replace(/^https?:\/\//,'')+'</code>'
+      +'</li>';
+  }
+  function draw(){
+    var k=(q.value||'').trim().toLowerCase(), n=0, html='';
+    LINKS.forEach(function(G){
+      var hit=G.items.filter(function(it){
+        if(!k) return true;
+        return (it.t+' '+it.d+' '+it.tag+' '+it.u).toLowerCase().indexOf(k)>-1;
+      });
+      if(!hit.length) return;
+      n+=hit.length;
+      html+='<div class="lab" style="margin-bottom:14px'+(G.hot?';border-color:var(--coral);border-width:2px':'')+'">'
+        +'<h4>'+G.g+'</h4><ul style="list-style:none;margin:6px 0 0">'+hit.map(row).join('')+'</ul></div>';
+    });
+    box.innerHTML = html || '<div class="callout warn">찾는 것이 없습니다. 다른 말로 찾아보십시오 — 드라이버·크롬북·카탈로그·지능형·코딩·엑셀·동영상·무상</div>';
+    cnt.textContent = n+'건';
+  }
+  q.addEventListener('input', draw);
+  draw();
+}
+
+/* ═══════════════ 보유 센서 → 가능한 실험 ═══════════════
+   수량은 2026-08-23 실보유 기준. man = 매뉴얼 위치
+   EZ  = 이지메이커 사례집(111쪽판) 문서쪽
+   CB  = 같은 실험 클래스보드판(250쪽) 문서쪽 — 절차가 더 자세함
+   SB  = 서울시교육청 교수학습자료집 사례 번호
+   BASE= 기초 측정 방법(센서 19종) 문서쪽
+   ══════════════════════════════════════════════════════ */
+const MYKIT = [
+ {v:'이지', n:'공기압', q:8, port:'A', groups:8,
+  exps:[
+   {t:'기체의 압력과 부피 (보일의 법칙)', g:1, man:'EZ p.10 · CB p.26 · SB 사례 05 · BASE p.74'},
+   {t:'면적과 압력의 관계', g:1, man:'EZ p.88 · CB p.200'},
+   {t:'공기압 센서로 무게 재기', g:1, man:'EZ p.91 · CB p.208'}
+  ]},
+ {v:'이지', n:'전압', q:8, port:'A', groups:8,
+  exps:[
+   {t:'전압과 전류의 관계 (옴의 법칙)', g:2, man:'EZ p.81 · CB p.184 · SB 사례 08 · BASE p.60'},
+   {t:'저항과 전류의 관계', g:2, man:'EZ p.77 · CB p.176'}
+  ]},
+ {v:'이지', n:'전류', q:7, port:'I2C', groups:7,
+  exps:[
+   {t:'전압과 전류의 관계 (옴의 법칙)', g:2, man:'EZ p.81 · CB p.184 · SB 사례 08 · BASE p.56'},
+   {t:'저항과 전류의 관계', g:2, man:'EZ p.77 · CB p.176'}
+  ]},
+ {v:'이지', n:'보드', q:16, port:'—', groups:16,
+  exps:[{t:'위 이지메이커 센서 전부의 받침대입니다', g:0, man:'보드 1개에 센서 여러 개를 동시에 꽂을 수 있습니다'}]},
+ {v:'큐브', n:'온도', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'물과 식용유의 비열 비교', g:1, man:'EZ p.24 · CB p.58 · SB 사례 01 · 교육과정 탐구활동에 명시'},
+   {t:'물의 어는점 측정', g:1, man:'EZ p.34 · CB p.80 · SB 사례 02'},
+   {t:'물의 끓는점 측정', g:1, man:'EZ p.31 · CB p.72'},
+   {t:'열량계로 열평형 관찰', g:1, man:'EZ p.63 · CB p.144'},
+   {t:'단열재 성능 비교', g:1, man:'EZ p.14 · CB p.34'},
+   {t:'모래와 물의 냉각 곡선', g:1, man:'EZ p.17 · CB p.42'},
+   {t:'물질에 따른 열의 전도 비교', g:1, man:'EZ p.66 · CB p.152'},
+   {t:'종이 색에 따른 복사 에너지 흡수', g:1, man:'EZ p.85 · CB p.192'},
+   {t:'물과 소금물의 냉각 곡선', g:2, man:'EZ p.20 · CB p.50'},
+   {t:'물과 에탄올 혼합물 분리 (증류)', g:2, man:'EZ p.27 · CB p.64'},
+   {t:'수권의 층상 구조', g:2, man:'EZ p.55 · CB p.128 — 원래 5개 필요, 1조만'},
+   {t:'발열 반응 관찰', g:3, man:'EZ p.37 · CB p.88'},
+   {t:'흡열 반응 관찰', g:3, man:'EZ p.105 · CB p.240'},
+   {t:'복사 평형 상태 관찰', g:3, man:'EZ p.41 · CB p.96'},
+   {t:'온실 효과 관찰', g:3, man:'EZ p.74 · CB p.168'},
+   {t:'수중 온도 기초 측정', g:0, man:'BASE p.30'}
+  ]},
+ {v:'큐브', n:'온습도', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'공기 온도 실험에 온도 센서 대신 투입 가능', g:0, man:'종이 색 복사·복사 평형·온실 효과 — 조를 두 배로'},
+   {t:'교실의 습도 측정', g:0, man:'BASE p.14'}
+  ]},
+ {v:'큐브', n:'압력', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'구름 생성 (단열 팽창)', g:3, man:'SB 사례 10 — 감압 용기 필요'},
+   {t:'감압 용기 속 기체의 압력 변화', g:1, man:'EZ p.4 · CB p.10 — 무선이라 용기 안에 넣을 수 있습니다'},
+   {t:'보일의 법칙 (큐브판)', g:1, man:'SB 사례 05 — 25mL 주사기, 수동 수집'}
+  ]},
+ {v:'큐브', n:'전압', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'전지의 직렬·병렬 연결에 따른 전압 비교', g:2, man:'BASE p.60 — 자료집 매뉴얼은 없고 기초 측정 편만 있습니다'},
+   {t:'전압 측정 기초', g:0, man:'BASE p.60 · 극성 주의(반대로 물리면 음수)'}
+  ],
+  note:'큐브 <b>전류</b> 센서는 없어서, 옴의 법칙은 이지 세트로 하십시오'},
+ {v:'큐브', n:'힘·가속도', q:4, port:'무선', groups:4,
+  exps:[{t:'마찰력에 영향을 주는 요인', g:1, man:'SB 사례 04 — 센서 도입 효과가 가장 선명한 실험'}]},
+ {v:'큐브', n:'조도·색도', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'거리에 따른 빛의 세기 (역제곱)', g:2, man:'EZ p.48 · CB p.112 · SB 사례 09 · BASE p.18'},
+   {t:'빛의 세기와 광합성량 (밝기 담당)', g:2, man:'SB 사례 07'},
+   {t:'빛의 합성 (RGB 모드)', g:2, man:'SB 사례 09 확장 — 전원 짧게 눌러 LUX→RGB→UV 전환'}
+  ]},
+ {v:'파스코', n:'이산화탄소', q:4, port:'무선', groups:4,
+  exps:[
+   {t:'광합성에 필요한 물질 확인', g:2, man:'EZ p.7 · CB p.18 · SB 사례 06 · BASE p.88'},
+   {t:'빛의 세기와 광합성량', g:2, man:'SB 사례 07 — CO₂+조도+온도 셋 동시'},
+   {t:'온도에 따른 기체의 용해도', g:2, man:'EZ p.69 · CB p.160 — 온도 센서와 함께'},
+   {t:'온실 효과 (CO₂ 채우기)', g:3, man:'EZ p.74 · CB p.168'}
+  ]}
+];
+
+/* ═══════════════ 축 바꾸기 — 실험별 ═══════════════
+   kind: axis(축 바꾸기) / trans(축 변환) / summ(요약값 뽑기)
+   ══════════════════════════════════════════════════ */
+const AXIS = [
+ {kind:'trans', t:'보일의 법칙', raw:'시간 – 압력', to:'부피 – 압력 → <b>1/부피 – 압력</b>',
+  why:'PV가 일정하므로 P는 1/V에 비례합니다. 1/V를 가로축에 두면 직선이 됩니다.',
+  read:'기울기 = PV값(그 기체의 양과 온도가 정해 주는 상수)', g:1,
+  tip:'먼저 부피–압력으로 그려 곡선을 보게 하십시오. "이 곡선을 곧게 펴려면 가로축을 어떻게 바꿔야 할까?"가 이 실험의 진짜 질문입니다.'},
+ {kind:'trans', t:'거리에 따른 빛의 세기', raw:'거리 – 조도', to:'<b>1/거리² – 조도</b>',
+  why:'빛의 세기는 거리의 제곱에 반비례합니다. 1/r²을 가로축에 두어야 직선이 됩니다.',
+  read:'기울기 = 광원의 세기 · <b>절편 = 배경 조도</b>(주변광·반사광)', g:2,
+  tip:'⚠️ 가로축을 <b>거리의 제곱(r²)</b>으로 두면 직선이 되지 <b>않습니다.</b> 반드시 <b>1/r²</b>입니다. 한편 「조도 × 거리²」를 계산해 <b>일정한지</b> 보는 방법도 같은 사실을 확인하는 다른 길입니다.'},
+ {kind:'axis', t:'옴의 법칙', raw:'시간 – 전압, 시간 – 전류', to:'<b>전압 – 전류</b>',
+  why:'센서는 늘 시간축으로 줍니다. 그런데 우리가 알고 싶은 건 시간이 아니라 두 측정값 사이의 관계입니다.',
+  read:'<b>기울기의 역수 = 저항</b> (자료집 실측: 기울기 0.0658 → 15.2Ω, 이론값 15Ω)', g:2,
+  tip:'가로축을 "수집 시간"에서 "전압 센서"로 바꾸는 것만으로 V–I 그래프가 됩니다. 학생에게 시간축을 <b>버려도 되는지</b> 먼저 물어보십시오.'},
+ {kind:'summ', t:'마찰력에 영향을 주는 요인', raw:'시간 – 힘', to:'<b>나무토막 개수 – 최대 정지 마찰력</b>',
+  why:'힘–시간 그래프의 <b>봉우리 하나</b>가 곧 최대 정지 마찰력입니다. 그 값 하나만 뽑아 새 그래프의 점으로 씁니다.',
+  read:'기울기 = 마찰 계수와 관련 · 사포와 도화지의 기울기 차이', g:1,
+  tip:'"그래프 전체가 아니라 <b>한 점만</b> 필요할 때가 있다"를 배우는 자리입니다. 어느 점을 뽑을지 학생이 정하게 하십시오.'},
+ {kind:'summ', t:'빛의 세기와 광합성량', raw:'시간 – CO₂ 농도', to:'<b>광원 개수 – 기울기</b>',
+  why:'CO₂가 줄어드는 <b>속도(기울기)</b>가 광합성률입니다. 각 조건의 기울기를 뽑아 새 축에 놓습니다.',
+  read:'기울기의 절댓값 = 광합성률 · 광원이 늘면 어떻게 되는가', g:2,
+  tip:'45분에 3회가 어려우면 모둠마다 광원 개수를 나눠 맡고 <b>기울기만 모으십시오.</b> 반 전체가 한 그래프를 완성합니다.'},
+ {kind:'summ', t:'물과 식용유의 비열', raw:'시간 – 온도 ×2', to:'<b>두 곡선의 기울기 비교</b>',
+  why:'같은 열을 주었을 때 <b>덜 오르는 쪽</b>이 비열이 큽니다. 최종 온도가 아니라 기울기를 읽어야 합니다.',
+  read:'기울기가 작다 = 비열이 크다', g:1,
+  tip:'학생들이 자꾸 <b>최종 온도</b>를 비교합니다. "어느 쪽이 더 뜨거워졌나"가 아니라 "어느 쪽이 <b>더 빨리</b> 뜨거워졌나"로 질문을 바꾸십시오.'},
+ {kind:'summ', t:'단열재 성능 비교', raw:'시간 – 온도 (모둠마다 다른 단열재)', to:'<b>단열재 종류 – 온도 하강폭</b>',
+  why:'모둠마다 변인을 하나씩 맡았으므로, 반 전체 데이터를 모아야 비로소 그래프가 완성됩니다.',
+  read:'하강폭이 작다 = 단열이 잘 된다', g:1,
+  tip:'협력이 실험 설계 자체에 들어 있는 드문 사례입니다. 한 모둠 데이터만으로는 <b>결론이 나오지 않는다</b>는 걸 먼저 알려 주십시오.'},
+ {kind:'axis', t:'물의 어는점·끓는점', raw:'시간 – 온도', to:'축은 그대로. <b>평평한 구간을 찾는 것</b>이 과제',
+  why:'여기서는 축을 바꿀 필요가 없습니다. 대신 <b>어디부터 어디까지가 평평한가</b>를 정하는 것이 판단입니다.',
+  read:'평평한 구간의 온도 = 어는점/끓는점 · 그 앞의 움푹 = 과냉각', g:1,
+  tip:'축을 안 바꾸는 실험도 있다는 걸 보여 주십시오. <b>모든 데이터를 변환해야 하는 건 아닙니다.</b>'},
+ {kind:'trans', t:'냉각 곡선 (심화)', raw:'시간 – 온도', to:'시간 – <b>ln(온도 − 실온)</b>',
+  why:'식는 속도는 실온과의 차이에 비례합니다(뉴턴 냉각). 로그를 취하면 직선이 됩니다.',
+  read:'기울기 = 식는 빠르기 상수', g:0,
+  tip:'중학교에서는 <b>다루지 마십시오.</b> 다만 "지금은 곡선이지만 고등학교에 가면 이걸 곧게 펴는 방법을 배운다"고 한마디 해 두면 연결이 됩니다.'}
+];
+
+function initKit(){
+  var P=document.querySelector('.tabpanel[data-tab="mykit"]');
+  if(!P) return;
+  var list=P.querySelector('#kList'), q=P.querySelector('#kQ'), cnt=P.querySelector('#kCount');
+  var VC={'이지':'n8','큐브':'unit','파스코':'n4'};
+  function card(s){
+    return '<article class="exp">'
+      +'<div class="top"><div class="badges">'
+      +'<span class="bd '+(VC[s.v]||'src')+'">'+s.v+'</span>'
+      +'<span class="bd src">'+s.port+'</span>'
+      +'<span class="bd '+(s.groups>=7?'n8':'n4')+'">'+s.q+'개 · '+s.groups+'모둠</span></div>'
+      +'<h4>'+s.n+(s.n==='보드'?'':' 센서')+'</h4></div>'
+      +'<div class="body"><ol style="margin-left:16px">'
+      +s.exps.map(function(e){
+        return '<li style="margin-bottom:9px"><b style="color:var(--deep)">'+e.t+'</b>'
+          +(e.g?' <span class="bd unit" style="font-size:.68rem">중'+e.g+'</span>':'')
+          +'<br><span style="font-size:.85rem;color:var(--ink-soft)">'+e.man+'</span></li>';
+      }).join('')
+      +'</ol>'+(s.note?'<div class="tip">'+s.note+'</div>':'')+'</div></article>';
+  }
+  function draw(){
+    var k=(q.value||'').trim().toLowerCase();
+    var hit=MYKIT.filter(function(s){
+      if(!k) return true;
+      return (s.v+' '+s.n+' '+s.port+' '+s.exps.map(function(e){return e.t+' '+e.man;}).join(' ')).toLowerCase().indexOf(k)>-1;
+    });
+    list.innerHTML = hit.length ? hit.map(card).join('')
+      : '<div class="callout warn" style="grid-column:1/-1">없습니다. 온도·압력·공기압·전압·전류·조도·힘·이산화탄소·온습도 중에 찾아보십시오.</div>';
+    var n=0; hit.forEach(function(s){ n+=s.q; });
+    cnt.textContent = k ? hit.length+'종' : '센서 10종 51개 + 보드 16';
+  }
+  q.addEventListener('input', draw); draw();
+}
+
+function initAxis(){
+  var P=document.querySelector('.tabpanel[data-tab="axis"]');
+  if(!P) return;
+  var list=P.querySelector('#aList');
+  var KC={axis:{n:'축 바꾸기',c:'n8'}, trans:{n:'축 변환',c:'n4'}, summ:{n:'요약값 뽑기',c:'unit'}};
+  var cur='all';
+  function card(a){
+    var k=KC[a.kind];
+    return '<article class="exp">'
+      +'<div class="top"><div class="badges"><span class="bd '+k.c+'">'+k.n+'</span>'
+      +(a.g?'<span class="bd src">중'+a.g+'</span>':'<span class="bd src">심화</span>')+'</div>'
+      +'<h4>'+a.t+'</h4></div>'
+      +'<div class="body">'
+      +'<div class="shift" style="margin:0 0 12px"><div class="box from"><div class="lb">센서가 주는 것</div><p>'+a.raw+'</p></div>'
+      +'<div class="arrow">→</div>'
+      +'<div class="box to"><div class="lb">우리가 만들 것</div><p>'+a.to+'</p></div></div>'
+      +'<div class="row"><span class="k">왜</span><span class="v">'+a.why+'</span></div>'
+      +'<div class="row"><span class="k">읽기</span><span class="v">'+a.read+'</span></div>'
+      +'<div class="tip">'+a.tip+'</div>'
+      +'</div></article>';
+  }
+  function draw(){
+    var hit=AXIS.filter(function(a){ return cur==='all'||a.kind===cur; });
+    list.innerHTML=hit.map(card).join('');
+  }
+  P.querySelectorAll('.fbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      P.querySelectorAll('.fbtn').forEach(function(o){o.classList.remove('on');});
+      b.classList.add('on'); cur=b.dataset.k; draw();
+    });
+  });
+  draw();
+}
+
+function initPorts(){
+  var P = document.querySelector('.tabpanel[data-tab="ports"]');
+  if(!P) return;
+
+  /* ── 퀴즈 공통 ── */
+  function quiz(id, right, fbs){
+    var box = P.querySelector('#'+id); if(!box) return;
+    box.querySelectorAll('.qzopt').forEach(function(b){
+      b.addEventListener('click', function(){
+        var k = +b.dataset.k;
+        b.classList.add(k===right ? 'right' : 'wrong');
+        b.querySelector('.fb').textContent = fbs[k];
+        if(k===right){
+          box.classList.add('done');
+          box.querySelectorAll('.qzopt').forEach(function(o){
+            if(+o.dataset.k!==right && !o.classList.contains('wrong')) o.style.opacity='.5';
+          });
+        }
+      });
+    });
+  }
+  quiz('qzPort', 2, [
+    '온습도 센서도 온도라는 연속적인 값을 잽니다. 다만 그 값을 전압이 아니라 디지털 데이터로 내보냅니다.',
+    'D 포트는 전압의 크기를 단계별로 읽지 않습니다. 그건 A 포트와 ADC가 하는 일입니다.',
+    '맞습니다. 무엇을 재느냐와, 그 결과를 어떻게 전달하느냐는 별개의 문제입니다.',
+    '예외가 아닙니다. 초음파 센서도 고온 센서도 같은 이유로 D에 꽂습니다.'
+  ]);
+  quiz('qzWhy', 1, [
+    '둘 다 디지털입니다. 온습도 센서도 0과 1로 보냅니다.',
+    '맞습니다. 디지털인 것은 공통점이고, 다른 것은 주고받는 규칙입니다.',
+    '임의가 아닙니다. 규칙이 다르면 필요한 선의 수도, 읽는 방법도 달라집니다.'
+  ]);
+  quiz('qzCh', 1, [
+    '센서 한 개는 자기가 끼워진 그 한 자리의 전류만 잽니다. 안에 전류계가 네 개 들어 있는 것이 아닙니다.',
+    '맞습니다. 센서 여러 개에 서로 다른 이름표를 붙여 한 시스템에서 구별해 쓰는 것입니다.'
+  ]);
+
+  /* ── A 포트 슬라이더 ── */
+  var lux = P.querySelector('#lux');
+  function paintLux(){
+    var x = +lux.value;
+    var v = 0.30 + (x/100)*4.50;              /* 0.30 ~ 4.80 V */
+    var n = Math.round(v/5*1023);             /* 이지온: 0~5.0V → 0~1023 */
+    P.querySelector('#fV').textContent = v.toFixed(2)+' V';
+    P.querySelector('#fN').textContent = n;
+    P.querySelector('#fBar').style.height = (v/5*100).toFixed(1)+'%';
+    var suns = x<25 ? '☀' : x<55 ? '☀☀' : x<80 ? '☀☀☀' : '☀☀☀☀';
+    P.querySelector('#fSun').textContent = suns;
+    P.querySelector('#luxTxt').textContent = x<25?'약함':x<55?'보통':x<80?'밝음':'아주 밝음';
+  }
+  lux.addEventListener('input', paintLux); paintLux();
+
+  /* ── 파형 그리기 ── */
+  function wave(bits, w, hiY, loY, upto){
+    var n = bits.length, step = w/n, d = '', y = loY, x = 0;
+    for(var i=0;i<n;i++){
+      if(upto!==undefined && i>=upto) break;
+      var ny = bits[i] ? hiY : loY;
+      d += (i===0? 'M0 '+ny : ' L'+x+' '+ny);
+      x += step; d += ' L'+x+' '+ny;
+    }
+    return d || ('M0 '+loY);
+  }
+
+  /* ── 온습도 센서 애니메이션 ── */
+  var TEMP=27, HUMI=63;
+  function toBits(v){ return v.toString(2).padStart(8,'0').split('').map(Number); }
+  var dhtBits = toBits(HUMI).concat(toBits(TEMP));
+  var dhtTimer=null;
+  P.querySelector('#dhtGo').addEventListener('click', function(){
+    if(dhtTimer) return;
+    var wrap=P.querySelector('#dhtBits'), path=P.querySelector('#dhtPath');
+    wrap.innerHTML=''; path.setAttribute('d','M0 36 L600 36');
+    P.querySelector('#dhtOut').textContent='— —';
+    P.querySelector('#dhtRaw').textContent='27℃ / 63%';
+    P.querySelector('#dhtState').textContent='센서 안에서 숫자를 만드는 중…';
+    var g1=document.createElement('div'); g1.className='bitgrp';
+    var g2=document.createElement('div'); g2.className='bitgrp';
+    var r1=document.createElement('div'); r1.style.display='flex'; r1.style.gap='4px';
+    var r2=document.createElement('div'); r2.style.display='flex'; r2.style.gap='4px';
+    var l1=document.createElement('div'); l1.className='gl'; l1.textContent='습도 63';
+    var l2=document.createElement('div'); l2.className='gl'; l2.textContent='온도 27';
+    g1.appendChild(r1); g1.appendChild(l1); g2.appendChild(r2); g2.appendChild(l2);
+    wrap.appendChild(g1); wrap.appendChild(g2);
+    var els=dhtBits.map(function(b,i){
+      var e=document.createElement('div');
+      e.className='bit '+(b?'one':'zero'); e.textContent=b;
+      (i<8?r1:r2).appendChild(e); return e;
+    });
+    var i=0;
+    dhtTimer=setInterval(function(){
+      if(i>=dhtBits.length){
+        clearInterval(dhtTimer); dhtTimer=null;
+        P.querySelector('#dhtLine').textContent='전송 끝';
+        P.querySelector('#dhtOut').textContent='27℃ / 63%';
+        P.querySelector('#dhtState').textContent='보드가 0과 1의 묶음을 해석했습니다';
+        return;
+      }
+      els[i].classList.add('show');
+      P.querySelector('#dhtLine').textContent = dhtBits[i] ? 'HIGH' : 'LOW';
+      P.querySelector('#dhtState').textContent = '데이터선으로 보내는 중… ('+(i+1)+'/'+dhtBits.length+')';
+      path.setAttribute('d', wave(dhtBits,600,10,36,i+1));
+      i++;
+    }, 190);
+  });
+
+  /* ── I2C 파형 ── */
+  var i2cTimer=null;
+  P.querySelector('#i2cGo').addEventListener('click', function(){
+    if(i2cTimer) return;
+    var scl=[], sda=[0,1,0,1,1,0,1,0,0,1,1,1];
+    for(var k=0;k<12;k++) scl.push(k%2);
+    var sp=P.querySelector('#sclPath'), dp=P.querySelector('#sdaPath'), i=0;
+    sp.setAttribute('d','M0 24 L600 24'); dp.setAttribute('d','M0 24 L600 24');
+    i2cTimer=setInterval(function(){
+      i++;
+      sp.setAttribute('d', wave(scl,600,6,24,i));
+      dp.setAttribute('d', wave(sda,600,6,24,i));
+      if(i>=12){ clearInterval(i2cTimer); i2cTimer=null; }
+    }, 170);
+  });
+
+  /* ── I2C 주소(채널) ── */
+  var vals=['1013 hPa','24.6 ℃','812 ppm','58 %'];
+  P.querySelectorAll('[data-ch]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var ch=b.dataset.ch;
+      P.querySelectorAll('[data-ch]').forEach(function(o){ o.classList.toggle('on', o===b); });
+      P.querySelectorAll('#busRow .dev').forEach(function(d){
+        var on = d.dataset.d===ch;
+        d.classList.toggle('act', on);
+        d.querySelector('.rd').textContent = on ? vals[+ch] : '—';
+      });
+    });
+  });
+
+  /* ── 병렬 회로 ── */
+  var altMode=false;
+  P.querySelector('#parAlt').addEventListener('click', function(){ altMode=!altMode; });
+  P.querySelector('#parGo').addEventListener('click', function(){
+    var i1 = altMode ? 0.31 : 0.18, i2 = altMode ? 0.37 : 0.24;
+    var it = +(i1+i2).toFixed(2);
+    P.querySelector('#pI').textContent  = it.toFixed(2)+' A';
+    P.querySelector('#pI1').textContent = i1.toFixed(2)+' A';
+    P.querySelector('#pI2').textContent = i2.toFixed(2)+' A';
+    P.querySelector('#parEq').innerHTML =
+      'I = <b>'+it.toFixed(2)+'</b> A &nbsp;≈&nbsp; I₁ <b>'+i1.toFixed(2)+'</b> + I₂ <b>'+i2.toFixed(2)+'</b>'+
+      '<br><span style="font-size:1rem;color:#bfdad6">전구를 바꾸면 값은 달라져도 이 관계는 그대로입니다</span>';
+  });
+
+  /* ── UART ── */
+  var uartTimer=null;
+  P.querySelector('#uartGo').addEventListener('click', function(){
+    if(uartTimer) return;
+    var bits=[0,1,0,0,1,1,0,1], i=0;
+    var td=P.querySelector('#txDot'), rd=P.querySelector('#rxDot'), out=P.querySelector('#uartBits');
+    td.setAttribute('opacity','1'); rd.setAttribute('opacity','1');
+    out.textContent='';
+    uartTimer=setInterval(function(){
+      var t=i/bits.length;
+      td.setAttribute('cx', 150+300*t); td.setAttribute('cy', bits[i]?52:72);
+      rd.setAttribute('cx', 450-300*t);
+      out.textContent = (out.textContent+' '+bits[i]).trim();
+      i++;
+      if(i>=bits.length){
+        clearInterval(uartTimer); uartTimer=null;
+        td.setAttribute('opacity','0'); rd.setAttribute('opacity','0');
+        out.textContent = out.textContent+'  → 한 비트씩 순서대로 도착했습니다';
+      }
+    }, 260);
+  });
+
+  /* ── 분류 활동 ── */
+  var SENSORS=[
+    {n:'밝기 센서', b:'A'},
+    {n:'소리 센서', b:'A'},
+    {n:'버튼', b:'D'},
+    {n:'온습도 센서', b:'D'},
+    {n:'수중 온도 센서', b:'D'},
+    {n:'이산화탄소 센서', b:'I2C'},
+    {n:'미세먼지 센서', b:'UART'}
+  ];
+  var HINTS={
+    '온습도 센서':'온도가 연속적으로 변한다는 사실과, 센서가 그 값을 어떤 방식으로 보내는지는 다른 문제입니다. 온습도 센서는 잰 값을 자기 안에서 처리한 뒤 디지털 신호로 보냅니다.',
+    '수중 온도 센서':'온도를 재지만 A가 아닙니다. 이 센서도 값을 디지털로 바꿔 보냅니다. 실제로 이지메이커에서는 D0·D1 같은 D 포트에 꽂습니다.',
+    '이산화탄소 센서':'이 센서도 디지털 데이터를 씁니다. 다만 일반 D 핀이 아니라 SDA·SCL 두 선과 장치 주소를 쓰는 표준 통신 방식입니다.',
+    '미세먼지 센서':'보내는 선과 받는 선을 따로 쓰는 센서입니다. 보드에서 그 두 선이 있는 자리를 찾아보십시오.',
+    '밝기 센서':'이 센서는 빛의 세기를 전압의 크기로 바꿔 내보냅니다. 숫자로 바꾸는 일은 보드가 합니다.',
+    '소리 센서':'소리의 세기를 전압으로 바꿔 내보냅니다. 밝기 센서와 같은 계열입니다.',
+    '버튼':'눌림과 안 눌림, 두 상태면 충분합니다. 일반 디지털 핀 하나로 됩니다.'
+  };
+  var sel=null;
+  var pool=P.querySelector('#sPool'), hint=P.querySelector('#sHint');
+  function buildPool(){
+    pool.innerHTML=''; sel=null; hint.classList.remove('on');
+    P.querySelectorAll('.bin .items').forEach(function(x){ x.innerHTML=''; });
+    SENSORS.slice().sort(function(){ return 0; }).forEach(function(s){
+      var c=document.createElement('button');
+      c.className='scard'; c.textContent=s.n; c.dataset.b=s.b;
+      c.addEventListener('click', function(){
+        if(c.classList.contains('ok')) return;
+        pool.querySelectorAll('.scard').forEach(function(o){ o.classList.remove('sel'); });
+        c.classList.add('sel'); sel=c;
+        hint.classList.remove('on');
+      });
+      pool.appendChild(c);
+    });
+  }
+  P.querySelectorAll('.bin').forEach(function(bin){
+    bin.addEventListener('click', function(){
+      if(!sel) { hint.textContent='먼저 왼쪽에서 센서를 하나 누르십시오.'; hint.classList.add('on'); return; }
+      if(sel.dataset.b === bin.dataset.b){
+        var tag=document.createElement('span'); tag.textContent=sel.textContent;
+        bin.querySelector('.items').appendChild(tag);
+        sel.remove(); sel=null; hint.classList.remove('on');
+        if(!pool.querySelector('.scard')){
+          hint.textContent='전부 맞히셨습니다. 센서 기판에 적힌 표시대로 꽂으면 되는 이유를 아셨을 겁니다.';
+          hint.classList.add('on');
+        }
+      } else {
+        hint.innerHTML = '<b>'+sel.textContent+'</b> — '+(HINTS[sel.textContent]||'센서 기판에 인쇄된 표시를 떠올려 보십시오.');
+        hint.classList.add('on');
+      }
+    });
+  });
+  P.querySelector('#sReset').addEventListener('click', buildPool);
+  buildPool();
+
+  /* ── 오개념 O/X ── */
+  var OX=[
+    ['디지털 센서는 0과 1이라는 두 값만 측정한다.','X','두 값만 <b>전달 단위</b>로 쓸 뿐입니다. 그 0과 1을 여러 개 이어 붙이면 27이든 63이든 표현할 수 있습니다.'],
+    ['27.3℃라는 값을 디지털 센서가 전달할 수 있다.','O','센서 안에서 숫자로 바꾼 뒤 비트로 나눠 보냅니다. 소수점 아래 자리도 함께 보내는 센서가 많습니다.'],
+    ['D, I2C, UART는 모두 디지털 신호를 쓸 수 있다.','O','셋 다 디지털입니다. 다른 것은 <b>주고받는 규칙</b>이고, 그래서 필요한 선의 수가 다릅니다.'],
+    ['I2C의 장치 주소를 쓰면 같은 통신선에서 여러 장치를 구별할 수 있다.','O','교사가 "2번!" 하고 부르면 2번만 대답하는 것과 같습니다. 다만 제품마다 쓸 수 있는 주소 수와 전원 한계가 있습니다.'],
+    ['전류 센서의 채널 0~3은 센서 하나가 네 곳을 동시에 잰다는 뜻이다.','X','센서 <b>여러 개</b>를 서로 다른 이름표로 구별해 함께 쓴다는 뜻입니다. 한 개는 자기가 끼워진 자리만 잽니다.'],
+    ['아날로그 센서는 결과를 주로 전압의 크기로 전달하고, 보드가 ADC로 숫자를 만든다.','O','이지온 블록에 "아날로그 값(0~1023)"과 "전압 값(0.0~5.0V)"이 함께 있는 이유입니다.']
+  ];
+  var oxw=P.querySelector('#oxWrap');
+  OX.forEach(function(r,i){
+    var c=document.createElement('div');
+    c.className='oxc';
+    c.innerHTML='<div class="qq">'+(i+1)+'. '+r[0]+'</div>'+
+      '<div class="tap">눌러서 확인</div>'+
+      '<div class="aa"><span class="mk '+(r[1]==='O'?'o':'x')+'">'+r[1]+'</span><br>'+r[2]+'</div>';
+    c.addEventListener('click', function(){ c.classList.toggle('open'); });
+    oxw.appendChild(c);
+  });
+}
+
+initPorts();
+initBasics();
+initLinks();
+initKit();
+initAxis();
+</script>
+
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재 · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-08-23</span></footer>
+</body>
+</html>
