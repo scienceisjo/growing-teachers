@@ -155,6 +155,12 @@ th{background:var(--card);color:var(--teal);font-family:var(--font-display);font
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
 
+/* ══ 그림 ══ */
+.fig{margin:10px 0 22px}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow)}
+.fig figcaption{margin-top:11px;padding-top:10px;border-top:1.5px solid var(--deep);font-size:.95rem;color:var(--ink);line-height:1.6}
+.fig figcaption b{color:var(--coral-deep)}
+
 /* ══ 허브 ══ */
 .hub{max-width:1180px;margin:0 auto;padding:4px 22px 44px}
 .hubsec{margin-top:26px}
@@ -859,12 +865,9 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
 /* ───── 오늘 ───── */
 today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다',
   '')
-+ `<figure style="margin:8px 0 18px">
-  <!-- 만화 이미지를 여기에 넣으십시오: <img src="comic.png" alt="..."> -->
-  <div id="comicSlot" style="border:2px dashed var(--line);border-radius:var(--r);padding:44px 20px;text-align:center;color:var(--ink-soft);background:var(--card)">
-    <div style="font-family:var(--font-round);font-size:1.1rem;color:var(--deep)">🖼 만화 들어갈 자리</div>
-    <div style="font-size:.9rem;margin-top:6px">4컷 · 대사 없음 · 동물 주인공</div>
-  </div>
++ `<figure class="fig">
+  <img src="img/sensorstart.webp" width="1600" height="533" decoding="async"
+       alt="4컷 만화. 실험복을 입은 수달이 한 손에 온도계를 들고 공책에 숫자를 받아 적는다. 시간이 흘러 공책은 숫자로 빼곡해지고 비커 안에서는 기포가 활발히 올라오지만 수달은 고개를 들지 않는다. 온도계 대신 센서를 비커에 꽂자 옆 태블릿에 곡선이 저절로 그려지기 시작한다. 마지막 칸에서 수달은 처음으로 고개를 들어 화면과 비커를 번갈아 본다.">
   <figcaption>받아 적는 동안 고개는 어디에 있었을까요</figcaption>
 </figure>
 
@@ -969,6 +972,12 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
 
 <div class="termdef" id="def-logger"><b>데이터로거</b>란, 센서가 읽은 값을 <b>정해진 간격으로 자동 저장</b>하는 장치입니다. 사람이 시계를 보며 받아 적던 일을 대신합니다.<br>
 따로 사서 쓰는 물건이 아니라 <b>이미 갖고 계신 장비 안에 들어 있습니다</b> — 이지메이커 보드, 사이언스큐브 무선 센서가 그 역할을 합니다. 그래서 노트북과 끊겨도 값이 쌓이고(SD카드·센서 내부), 다시 연결하면 그동안의 기록이 한꺼번에 올라옵니다.</div>
+
+<figure class="fig">
+  <img src="img/difference.webp" width="1200" height="675" decoding="async"
+       alt="화면을 반으로 가른 그림. 왼쪽은 전통적인 과학실로, 칠판 앞에 교사가 그래프를 그리고 있고 학생들은 스탠드에 세운 아날로그 온도계와 현미경을 보며 공책에 손으로 적는다. 오른쪽은 디지털 탐구도구를 쓰는 과학실로, 비커에 센서가 꽂혀 있고 태블릿과 대형 화면에 실시간 그래프와 입자 모형이 떠 있으며 학생들이 그것을 보며 이야기한다.">
+  <figcaption>왼쪽은 눈금을 읽어 공책에 적고, 오른쪽은 센서가 보낸 값이 화면에서 그래프가 됩니다. <b>바뀐 것은 도구가 아니라 학생이 하는 일</b>입니다.</figcaption>
+</figure>
 
 <figure class="pipeline">
   <div class="pipe">
