@@ -552,6 +552,7 @@ const TABS = [
   {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
   {id:'axislab',em:'🛠', name:'축 바꾸기 — 어디를 누르나', min:0},
   {id:'classgraph',em:'📊', name:'우리 반 보일의 법칙 그래프', min:0},
+  {id:'classroom',em:'🗂', name:'반 전체 데이터 모으기 — 클래스룸', min:0},
   {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
   {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
   {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:9},
@@ -1036,7 +1037,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><td><b>25–43</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
 <tr><td><b>43–49</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
 <tr><td><b>49–58</b></td><td>축 바꾸기 — 어디를 누르나</td><td>Science# 는 수집 <b>전에</b>, EZ·ON 은 수집 <b>뒤에도</b></td></tr>
-<tr style="background:var(--teal-soft)"><td><b>58–88</b></td><td><b>공통 실습</b> · 사이언스큐브</td><td>① 기체의 압력과 부피 — <b>우리 반 보일의 법칙 그래프 만들기</b><br>② 기체의 온도와 부피 — 온도 센서로</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>58–88</b></td><td><b>공통 실습</b> · 사이언스큐브</td><td>① 기체의 압력과 부피 — <b>우리 반 보일의 법칙 그래프 만들기</b><br>② 기체의 온도와 부피 — 온도 센서로<br><span style="font-size:.86rem;color:var(--ink-soft)">모으는 방법은 「반 전체 데이터 모으기 — 클래스룸」 절에</span></td></tr>
 <tr style="background:var(--coral-soft)"><td><b>88–108</b></td><td><b>갈라서 실습</b></td><td><b>이지메이커</b> 관심 있으신 분 — 보드·포트·EZ·ON 가이드북<br><b>사이언스큐브</b> 계속하실 분 — 맡으신 학년 실험 골라서</td></tr>
 <tr><td><b>108–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
 </table></div>
@@ -1735,6 +1736,102 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 
 `,
 
+
+/* ───── 반 전체 데이터 모으기 ───── */
+classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 전체로</b> 모으는 설계',
+  '구글 클래스룸을 쓰고 계시면 새로 배울 것이 거의 없습니다')
++ `<div class="callout"><b>교육과정에도 적혀 있는 일입니다.</b> "여러 모둠의 데이터를 공유하여 탐구 활동을 수행할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b>을 활용할 수 있다" <span style="font-size:.86rem;color:var(--ink-soft)">별책 9 · (6) 기체의 성질</span></div>
+
+<h3 class="subh">두 회사가 <b>내보내는 방법이 다릅니다</b></h3>
+<div class="tablewrap"><table>
+<tr><th>　</th><th>이지메이커</th><th>사이언스큐브</th></tr>
+<tr><td><b>내보내기</b></td><td>EZ·ON 의 <b>「시트로 전송」</b> 단추<br>구글 시트에 <b>바로 꽂힙니다</b></td><td>툴바 <b>「차트를 CSV로 저장」</b><br>파일로 떨어집니다</td></tr>
+<tr><td><b>교사가 할 일</b></td><td>시트 하나 만들어 <b>링크만 뿌리면 끝</b></td><td>CSV 를 시트로 불러오거나<br>값만 공유 시트에 치게 하기</td></tr>
+<tr><td><b>좋은 점</b></td><td><b>원자료가 통째로</b> 들어옵니다</td><td>파일이라 클래스룸 <b>과제 제출</b>이 됩니다 — 그대로 평가 근거</td></tr>
+<tr><td><b>손이 더 가는 곳</b></td><td>전송할 때 <b>계정 권한</b>을 한 번 확인해야 합니다</td><td>파일을 올리는 <b>한 걸음</b>이 더 있습니다</td></tr>
+</table></div>
+<div class="callout gold"><b>둘 다 쓰시는 학교라면</b> 이지메이커 모둠은 시트로 바로 보내고, 큐브 모둠은 값만 같은 시트에 치게 하십시오. <b>도착지가 같으면 한 그래프가 됩니다.</b></div>
+
+<h3 class="subh">이지메이커 — <b>시트로 바로</b></h3>
+<div class="moves">
+  <div class="move"><div class="n">전날</div><div>
+    <h4>구글 시트 하나와 클래스룸 과제 하나</h4>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>시트를 만듭니다 — 이름은 <b>「2-3반 보일의 법칙」</b> 처럼 반이 드러나게</li>
+      <li>탭을 모둠 수만큼 만들고(<b>1모둠 … 7모둠</b>) 맨 앞에 <b>「반 전체」</b> 탭을 하나 더</li>
+      <li>「반 전체」 탭에 표 머리글만 미리 적어 둡니다 — <b>모둠 · 부피 · 압력 · 부피×압력</b></li>
+      <li>클래스룸 → 수업 → 만들기 → <b>과제</b> → 시트 첨부 → <b>「학생이 파일 수정 가능」</b></li>
+    </ol>
+    <div class="callout warn" style="margin:10px 0 0"><b>「학생별로 사본 제공」으로 두면 안 됩니다.</b> 그러면 모둠마다 <b>다른 파일</b>이 되어 한 그래프로 못 모읍니다. 반드시 <b>수정 가능</b>입니다.</div></div></div>
+
+  <div class="move"><div class="n">수업</div><div>
+    <h4>측정하고 「시트로 전송」</h4>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>모둠이 맡은 부피로 측정합니다</li>
+      <li>EZ·ON 에서 <b>「시트로 전송」</b> — 자기 모둠 탭으로 들어갑니다</li>
+      <li><b>「반 전체」 탭에 자기 줄 한 줄</b>을 적습니다(부피, 압력)</li>
+      <li>교사는 <b>「반 전체」 탭을 전자칠판에</b> 띄워 둡니다</li>
+    </ol>
+    <div class="say">"칠판 보세요. 지금 3모둠 값이 들어왔습니다. 이제 네 개 남았습니다."</div>
+    <p style="margin-top:9px">값이 하나씩 차오르는 것이 <b>그대로 보입니다.</b> 이게 이 설계에서 제일 좋은 대목입니다.</p></div></div>
+
+  <div class="move"><div class="n">마무리</div><div>
+    <h4>그 자리에서 그래프와 계산</h4>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>부피×압력 칸에 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=B2*C2</code></li>
+      <li>1/부피 칸을 하나 더 만들려면 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=1/B2</code></li>
+      <li>표를 끌어 선택하고 <b>삽입 → 차트 → 분산형</b></li>
+    </ol>
+    <div class="say">"곱한 값 보세요. 모둠마다 다 다른데 이 칸만 비슷하죠?"</div>
+    <p style="margin-top:9px"><b>모둠 탭의 원자료는 그대로 남습니다.</b> 값이 튀는 모둠이 나오면 그 탭을 열어 무슨 일이 있었는지 같이 봅니다.</p></div></div>
+</div>
+
+<h3 class="subh">사이언스큐브 — <b>CSV 로</b></h3>
+<div class="moves">
+  <div class="move"><div class="n">전날</div><div>
+    <h4>같은 시트에 과제를 하나 더</h4>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>위와 같은 <b>「반 전체」 시트</b>를 씁니다</li>
+      <li>클래스룸에 과제를 <b>하나 더</b> 만듭니다 — <b>「측정 원본 CSV 제출」</b></li>
+      <li>이건 <b>「학생별로 사본 제공」이 아니라 「제출」</b> 과제입니다</li>
+    </ol></div></div>
+
+  <div class="move"><div class="n">수업</div><div>
+    <h4>저장하고, 값 치고, 파일 내고</h4>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>측정이 끝나면 툴바 <b>「차트를 CSV로 저장」</b></li>
+      <li>크롬북이면 다운로드가 <b>구글 드라이브에 바로</b> 들어갑니다 — 파일 찾느라 헤맬 일이 없습니다</li>
+      <li><b>「반 전체」 시트에 자기 줄 한 줄</b>을 칩니다 <span style="font-size:.88rem;color:var(--ink-soft)">— 그래프는 이걸로 그립니다</span></li>
+      <li>CSV 는 <b>클래스룸 과제로 제출</b> <span style="font-size:.88rem;color:var(--ink-soft)">— 이건 원자료 보관용</span></li>
+    </ol>
+    <div class="callout" style="margin:10px 0 0"><b>순서가 중요합니다.</b> CSV 제출을 먼저 시키면 파일 올리다 시간을 다 씁니다. <b>값 한 줄부터</b> 치게 하고, 그래프를 다 본 다음에 파일을 내게 하십시오.</div></div></div>
+
+  <div class="move"><div class="n">필요하면</div><div>
+    <h4>CSV 를 시트로 불러오기</h4>
+    <p>원자료까지 한 시트에 모으고 싶으실 때만 하시면 됩니다.</p>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>시트에서 <b>파일 → 가져오기 → 업로드</b></li>
+      <li><b>「새 시트 삽입」</b>을 골라야 기존 표가 안 지워집니다</li>
+    </ol></div></div>
+</div>
+
+<h3 class="subh">그대로 <b>평가</b>가 됩니다</h3>
+<div class="callout ok">클래스룸에 남는 것이 <b>세 가지</b>입니다 — <b>① 원자료(CSV 또는 모둠 탭)</b> · <b>② 반 전체 시트에 적은 우리 줄</b> · <b>③ 축을 바꾼 그래프</b>. 수행평가 근거로 그대로 쓰실 수 있고, 세특 문장도 여기서 나옵니다.</div>
+
+<h3 class="subh">전날 <b>꼭 확인하실 것 넷</b></h3>
+<div class="tablewrap"><table>
+<tr><th>확인</th><th>왜</th></tr>
+<tr><td><b>학생 계정이 학교 도메인인지</b></td><td>외부 계정이면 시트 공유가 막힙니다. 수업 중에 알면 손쓸 수 없습니다</td></tr>
+<tr><td><b>시트 공유 권한</b></td><td>「링크가 있는 <b>우리 학교</b> 사용자」 → <b>편집자</b></td></tr>
+<tr><td><b>표 머리글 보호</b></td><td>데이터 → <b>시트 및 범위 보호</b>. 안 걸면 누군가 머리글을 지웁니다</td></tr>
+<tr><td><b>본인 계정으로 한 번 해 보기</b></td><td>EZ·ON <b>「시트로 전송」</b>을 전날 한 번 눌러 보십시오. 권한 창이 뜨는 자리를 미리 알아 두셔야 합니다</td></tr>
+</table></div>
+
+<div class="callout"><b>센스쿨을 함께 쓰신다면</b> 링크와 파일을 올리는 자리만 클래스룸 대신 센스쿨로 바꾸시면 됩니다 — <b>설계는 그대로</b>입니다. 데이터가 모이는 곳은 어차피 구글 시트 하나입니다.</div>
+
+
+`,
+
 /* ───── 교과서가 지정한 탐구 ───── */
 textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이미 적혀 있습니다',
   '출판사별 수록 탐구 대조표')
@@ -2314,6 +2411,7 @@ const HUBD = {
   axis:'축 바꾸기 · 축 변환 · 요약값 뽑기',
   axislab:'EZ·ON 과 Science# 에서 실제로 어느 단추를 누르나',
   classgraph:'모둠마다 다른 부피를 맡아 반 전체가 곡선 하나를 완성',
+  classroom:'이지메이커는 시트로 바로, 큐브는 CSV로 — 구글 클래스룸 설계',
   textbook:'교과서 5종이 실제로 실은 탐구 대조표',
   basics:'센서 19종을 하나씩 — 기초 측정법',
   links:'이지메이커 · 사이언스큐브 · 지능형 과학실 링크',
