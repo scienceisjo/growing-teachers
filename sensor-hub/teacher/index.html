@@ -154,6 +154,27 @@ th{background:var(--card);color:var(--teal);font-family:var(--font-display);font
 tr:last-child td{border-bottom:none}
 td b{color:var(--deep)}
 
+/* ══ 실험 카드 안 · 축과 수집 모드 ══ */
+.mono2{font-family:var(--font-mono);font-size:.84rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.how{margin:12px 0 0;border-top:1.5px solid var(--deep);padding-top:11px}
+.howtop{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px;font-size:.88rem}
+.howtop .hr,.howtop .ht{overflow-wrap:anywhere}
+.howtop .hr{color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:4px 9px}
+.howtop .ha{color:var(--coral);font-weight:700}
+.howtop .ht{color:var(--deep);font-weight:600;background:var(--coral-soft);border:1px solid #eec4b7;border-radius:5px;padding:4px 9px}
+.howgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:640px){.howgrid{grid-template-columns:1fr}}
+.hw{border:1px solid var(--line);border-top:2px solid var(--teal);border-radius:0 0 7px 7px;padding:9px 11px;background:var(--paper)}
+.hw.ez{border-top-color:var(--coral)}
+.hw .hn{display:block;font-family:var(--font-display);font-weight:600;font-size:.72rem;letter-spacing:.04em;color:var(--teal);margin-bottom:4px}
+.hw.ez .hn{color:var(--coral-deep)}
+.hw{min-width:0}
+.hw p{font-size:.87rem;color:var(--ink);line-height:1.55;overflow-wrap:anywhere}
+.hnote{font-size:.87rem;color:#63480a;background:var(--gold-soft);border-radius:6px;padding:8px 11px;margin-top:9px}
+.bd.no{background:#eef1f4;color:var(--ink-soft)}
+.exp.dim .top{background:var(--paper)}
+.exp.dim h4{color:var(--ink-soft)}
+
 /* ══ 만족도 조사 ══ */
 .survey{display:grid;grid-template-columns:154px 1fr;gap:24px;align-items:center;
   background:var(--card);border:1px solid var(--line);border-top:2px solid var(--coral);
@@ -467,8 +488,6 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 .exp ol li{margin-bottom:4px}
 .exp .tip{margin-top:11px;padding:10px 13px;background:var(--gold-soft);border-radius:11px;color:#6b4d08;font-size:.9rem}
 .exp .tip::before{content:"TIP · ";font-weight:800}
-.exp.no{opacity:.72}
-.exp.no .top{background:var(--red-soft)}
 .exp .why{margin-top:9px;padding:10px 13px;background:var(--red-soft);border-radius:11px;color:#7d2318;font-size:.9rem}
 
 .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:11px;margin:16px 0}
@@ -532,6 +551,7 @@ const TABS = [
   {id:'mykit', em:'🧪', name:'오늘 가져온 센서로 할 수 있는 것', min:0},
   {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
   {id:'axislab',em:'🛠', name:'축 바꾸기 — 어디를 누르나', min:0},
+  {id:'classgraph',em:'📊', name:'우리 반 보일의 법칙 그래프', min:0},
   {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
   {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
   {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:9},
@@ -559,6 +579,14 @@ const EXPS = [
         'EZ·ON 수동 모드에서 수동 입력=부피, 센서 측정=공기압으로 지정한다','부피를 정해둔 값마다 바꾸며 압력을 수동으로 찍는다',
         '표에서 P×V를 계산해 일정한지 본다'],
  tip:'주사기 몸통을 감싸 쥐면 체온이 기체를 데웁니다. 밀대 끝만 잡으세요. 부피를 바꾼 뒤 1~2초 기다렸다 찍어야 값이 안정됩니다.'},
+
+{g:1,ok:1,n:2,unit:'Ⅵ 기체의 성질',title:'기체의 온도와 부피 관계 (샤를의 법칙)',std:'9과06-03',
+ zero:'<b>온도 센서 두 개를 쓸 때는 같은 물에 담가 편차를 먼저 확인</b>하십시오. 압력을 함께 재면 공기압 센서는 마개를 연 상태가 기준입니다.',
+ sensor:'큐브 온도 (+ 압력 선택)',sw:'Science#',src:'SB 05 응용',
+ prep:'주사기(눈금 잘 보이는 것), 비커 두 개(찬물·더운물), 온도 센서, 스탠드',
+ steps:['주사기에 공기를 넣고 마개를 막아 부피를 읽어 둔다','찬물에 담그고 <b>온도 센서로 물 온도를 재면서</b> 주사기 눈금을 읽는다',
+        '더운물로 옮겨 같은 방법으로 읽는다','물 온도를 바꿔 가며 (온도, 부피) 짝을 여러 개 모은다'],
+ tip:'부피는 센서가 못 잽니다 — <b>학생이 눈금을 읽어 넣는 값</b>입니다. 온도만 센서가 재 줍니다. 보일의 법칙과 짝이 되는 실험이라 이어서 하시면 "무엇을 센서가 재고 무엇을 사람이 넣는가"가 선명해집니다.'},
 
 {g:1,ok:1,n:1,unit:'Ⅵ 기체의 성질',title:'면적과 압력의 관계',std:'9과06-01',
  zero:'수집한 값에서 <b>1atm을 빼서</b> 변화량으로 바꾸는 것이 이 실험의 영점입니다.',
@@ -784,33 +812,88 @@ function head(kick,h2,p){
   return `<div class="sec-head"><span class="kick">${k}</span><h2>${h2}</h2>${p?`<p>${p}</p>`:''}</div>`;
 }
 
+/* ═══ 실험마다 — 매뉴얼 쪽수 · 축 설정 · 수집 모드 ═══
+   man  매뉴얼 위치   raw 센서가 주는 축   to 우리가 만들 축
+   ez   EZ·ON 에서    cb  Science# 에서    note 덧붙임 */
+const HOWTO = {
+ '기체의 온도와 부피 관계 (샤를의 법칙)':{man:'교육과정 탐구 활동에 명시(9과06-03) · SB 사례 05 를 온도로 바꿔 응용',raw:'시간 – 온도',to:'<b>온도 – 부피</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>부피</b>, 센서 = <b>온도</b>',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>(부피). 또는 부피를 세로축에 두려면 시트에서 축을 바꿉니다',note:'보일의 법칙과 <b>같은 구조</b>입니다 — 센서는 한쪽만 재고 나머지는 학생이 눈금을 읽어 넣습니다.'},
+ '기체의 압력과 부피 관계 (보일의 법칙)':{man:'EZ p.10 · CB p.26 · SB 사례 05 · BASE p.74',raw:'시간 – 압력',to:'<b>부피 – 압력</b> → 1/부피 – 압력',ez:'<b>수동 모드</b> · 수동 입력 = <b>부피</b>, 센서 = <b>공기압</b>',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>(부피)',note:'1/부피 축은 두 프로그램 다 못 만듭니다 — 시트로 빼서 만드십시오.'},
+ '면적과 압력의 관계':{man:'EZ p.88 · CB p.200',raw:'시간 – 압력',to:'<b>누르는 면적 – 압력</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>면적</b>, 센서 = <b>공기압</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(면적)'},
+ '공기압 센서로 물체의 무게 재기':{man:'EZ p.91 · CB p.208',raw:'시간 – 압력',to:'<b>질량 – 압력</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>질량</b>, 센서 = <b>공기압</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(질량)',note:'직선이 나오면 그 기울기로 <b>모르는 물체의 질량</b>을 되짚어 낼 수 있습니다.'},
+ '마찰력에 영향을 주는 요인':{man:'SB 사례 04',raw:'시간 – 힘',to:'<b>나무토막 개수 – 최대 정지 마찰력</b>',ez:'기본/분석 모드로 당기고 그래프의 <b>봉우리 값 하나</b>만 적습니다',cb:'<b>자동수집</b>(빠른 Hz) 뒤 툴바 <b>그래프 분석</b>으로 최댓값을 읽습니다',note:'조건마다 얻은 봉우리 값을 새 표에 모아 <b>두 번째 그래프</b>를 그립니다.'},
+ '물과 식용유의 비열 비교':{man:'EZ p.24 · CB p.58 · SB 사례 01 · 교육과정 탐구 활동에 명시',raw:'시간 – 온도 ×2',to:'<b>두 곡선의 기울기 비교</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개를 한 보드에',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개를 한 화면에',note:'축은 그대로 둡니다. <b>최종 온도가 아니라 기울기</b>를 읽는 것이 요점입니다.'},
+ '물의 어는점 측정':{man:'EZ p.34 · CB p.80 · SB 사례 02',raw:'시간 – 온도',to:'시간축 그대로 · <b>평평해지는 구간</b>을 찾습니다',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 1Hz · 600초면 넉넉합니다'},
+ '물의 끓는점 측정':{man:'EZ p.31 · CB p.72',raw:'시간 – 온도',to:'시간축 그대로 · <b>평평해지는 구간</b>을 찾습니다',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 1Hz · 600초면 넉넉합니다'},
+ '열량계로 열평형 관찰':{man:'EZ p.63 · CB p.144',raw:'시간 – 온도 ×2',to:'시간축 그대로 · <b>두 곡선이 만나는 지점</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개',note:'두 곡선의 차이를 읽는 실험이라 <b>센서 두 개의 편차</b>를 먼저 맞춰야 합니다.'},
+ '단열재 성능 비교하기':{man:'EZ p.14 · CB p.34',raw:'시간 – 온도',to:'<b>단열재 종류 – 온도 하강폭</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 모둠마다 하나씩',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 모둠마다 하나씩',note:'모둠 값을 모아 두 번째 그래프를 만듭니다. 큐브는 <b>차트 합치기</b>로 겹쳐 볼 수 있습니다.'},
+ '모래와 물의 냉각 곡선 비교':{man:'EZ p.17 · CB p.42',raw:'시간 – 온도 ×2',to:'시간축 그대로 · <b>기울기 차이</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개'},
+ '물질에 따른 열의 전도 비교':{man:'EZ p.66 · CB p.152',raw:'시간 – 온도',to:'시간축 그대로 · <b>온도가 오르기 시작한 시각</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)',note:'물질마다 따로 재고 <b>시작 시각</b>을 비교합니다.'},
+ '종이 색에 따른 복사 에너지 흡수':{man:'EZ p.85 · CB p.192',raw:'시간 – 온도',to:'<b>색 – 온도 상승폭</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 색마다 따로',cb:'<b>수동수집</b> · X축 <b>텍스트 입력</b>을 쓰면 색 이름이 그대로 가로축이 됩니다',note:'큐브의 텍스트 입력이 빛을 보는 자리입니다.'},
+ '손소독제 증발 실험':{man:'EZ 사례 25',raw:'시간 – 온도',to:'시간축 그대로 · <b>내려갔다 돌아오는 모양</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)'},
+ '전압과 전류의 관계 (옴의 법칙)':{man:'EZ p.81 · CB p.184 · SB 사례 08 · BASE p.60',raw:'시간 – 전압, 시간 – 전류',to:'<b>전압 – 전류</b>',ez:'분석 모드로 수집 → <b>수동 모드로 바꾸고 오른쪽 아래 X축 탭 = 전압</b>',cb:'자동수집 뒤 툴바 <b>차트를 CSV로 저장</b> → 시트에서 전압을 가로축으로',note:'기울기의 <b>역수</b>가 저항입니다(자료집 실측 0.0658 → 15.2Ω, 이론값 15Ω).'},
+ '저항과 전류의 관계':{man:'EZ p.77 · CB p.176',raw:'시간 – 전류',to:'<b>저항 – 전류</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>저항(Ω)</b>, 센서 = <b>전류</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(저항)',note:'전압을 일정하게 유지하는 것이 이 실험의 관건입니다.'},
+ '광합성에 필요한 물질 확인 (CO₂)':{man:'EZ p.7 · CB p.18 · SB 사례 06 · BASE p.88',raw:'시간 – CO₂ 농도',to:'시간축 그대로 · <b>줄어드는 기울기</b>',ez:'I2C 에 CO₂ 센서 · <b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 10초 간격',cb:'SPARKvue 로 <b>자동수집</b>',note:'밀폐 직후 1~2분은 요동칩니다. 안정된 뒤 다시 수집하십시오.'},
+ '빛의 세기에 따른 광합성량':{man:'SB 사례 07',raw:'시간 – CO₂ 농도',to:'<b>빛의 세기(조도) – 기울기</b>',ez:'조건마다 따로 모으고 <b>기울기 하나씩</b> 뽑습니다',cb:'<b>자동수집</b>으로 조건마다. 이때 <b>조도 센서 값을 함께 적어 둡니다</b>',note:'가로축은 광원 개수가 아니라 <b>조도 센서가 실제로 잰 값</b>이어야 합니다.'},
+ '온도에 따른 기체의 용해도':{man:'EZ p.69 · CB p.160',raw:'시간 – 온도, 시간 – CO₂',to:'<b>온도 – CO₂ 농도</b>',ez:'분석 모드로 수집 → <b>수동 모드 · X축 탭 = 온도</b>',cb:'자동수집 → <b>CSV로 저장</b> → 시트에서 온도를 가로축으로',note:'자료집이 두 센서의 상관관계를 보라고 꼽은 대표 실험입니다.'},
+ '거리에 따른 빛의 세기 (역제곱 법칙)':{man:'EZ p.48 · CB p.112 · SB 사례 09 · BASE p.18',raw:'시간 – 조도',to:'<b>거리 – 조도</b> → 1/거리² – 조도',ez:'<b>수동 모드</b> · 수동 입력 = <b>거리</b>, 센서 = <b>밝기</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(거리)',note:'1/거리²은 시트에서. 「조도 × 거리²」가 일정한지 보는 길도 있습니다.'},
+ '물과 소금물의 냉각 곡선 비교':{man:'EZ p.20 · CB p.50',raw:'시간 – 온도 ×2',to:'시간축 그대로 · <b>평평해지는 온도의 차이</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개'},
+ '물과 에탄올 혼합물 분리 (증류)':{man:'EZ p.27 · CB p.64',raw:'시간 – 온도',to:'시간축 그대로 · <b>평평한 구간 두 개</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)',note:'두 번째 평평한 구간이 나올 때까지 충분히 기다려야 합니다.'},
+ '수권의 층상 구조 만들기':{man:'온도 센서 4~5개가 동시에 필요',raw:'깊이마다 온도',to:'<b>깊이 – 온도</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>깊이</b>, 센서 = <b>온도</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(깊이)',note:'세로축을 깊이로 뒤집어 그리면 실제 수심 그림과 같아집니다.'},
+ '불꽃색에 따른 온도 비교':{man:'EZ 사례 24',raw:'시간 – 온도',to:'<b>불꽃 부위 – 온도</b>',ez:'시간 순서대로 재면 수동 입력 없이도 됩니다',cb:'<b>수동수집</b> · X축 <b>텍스트 입력</b>(속불꽃·겉불꽃…)'},
+ '발열 반응 관찰':{man:'EZ p.37 · CB p.88',raw:'시간 – 온도',to:'시간축 그대로 · <b>올라간 폭</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)'},
+ '흡열 반응 관찰':{man:'EZ p.105 · CB p.240',raw:'시간 – 온도',to:'시간축 그대로 · <b>내려간 폭</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)'},
+ '복사 평형 상태 관찰':{man:'EZ p.41 · CB p.96',raw:'시간 – 온도 ×2',to:'시간축 그대로 · <b>평형에 이르는 지점</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개'},
+ '온실 효과 관찰':{man:'EZ p.74 · CB p.168',raw:'시간 – 온도 ×2',to:'시간축 그대로 · <b>두 곡선의 차이</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다 · 온도 두 개',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 온도 두 개',note:'두 곡선의 차이를 읽는 실험이라 <b>센서 편차</b>를 먼저 맞추십시오.'},
+ '구름 생성 (단열 팽창)':{man:'SB 사례 10 — 감압 용기 필요',raw:'시간 – 압력, 시간 – 온도',to:'시간축 그대로 · <b>압력이 떨어질 때 온도도 떨어지는가</b>',ez:'보드째 넣을 수 없으면 <b>SD카드 저장</b>을 씁니다',cb:'무선이라 <b>용기 안에 넣고 자동수집</b>할 수 있습니다',note:'무선 센서가 유리한 대표 실험입니다.'},
+ '철 솜 연소와 무게 변화':{man:'EZ 사례 27',raw:'시간 – 무게',to:'시간축 그대로 · <b>연소 전후의 차이</b>',ez:'<b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초)'},
+ '시각 자극 반응 실험':{man:'EZ 사례 28',raw:'자극에서 반응까지의 시간',to:'<b>시도 횟수 – 반응 시간</b>',ez:'버튼(DIY-B) · 수동 모드',cb:'<b>수동수집</b> · X축 <b>자동 증가수</b>(1,2,3…)',note:'횟수만 세면 되니 자동 증가수가 딱 맞는 자리입니다.'},
+ '청각 자극 반응 실험':{man:'EZ 사례 29',raw:'자극에서 반응까지의 시간',to:'<b>시도 횟수 – 반응 시간</b>',ez:'버튼(DIY-B) · 수동 모드',cb:'<b>수동수집</b> · X축 <b>자동 증가수</b>'},
+ '초음파 센서로 운동 분석':{man:'EZ 사례 17',raw:'시간 – 거리',to:'시간축 그대로 → <b>시간 – 속도</b>',ez:'초음파는 D 포트 · <b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 운동 센서',note:'거리 그래프의 <b>기울기가 속도</b>입니다. 속도 축은 시트에서 만듭니다.'},
+};
+
 function expCard(e){
-  const nb = e.ok ? (e.n>=6 ? `<span class="bd n8">${e.n}모둠 동시</span>` : `<span class="bd n4">${e.n}모둠까지</span>`) : '';
-  if(!e.ok) return `<article class="exp no">
-    <div class="top"><div class="badges"><span class="bd unit">${e.unit}</span><span class="bd src">${e.src}</span></div>
-    <h4>${e.title}</h4><div class="std">${e.std} · 필요 센서 ${e.sensor}</div></div>
-    <div class="body"><div class="why">오늘은 못 합니다 — ${e.why}</div></div></article>`;
-  return `<article class="exp">
-    <div class="top"><div class="badges"><span class="bd unit">${e.unit}</span>${nb}<span class="bd src">${e.src}</span></div>
+  const h = HOWTO[e.title] || {};
+  const man = h.man ? `<div class="row"><span class="k">매뉴얼</span><span class="v mono2">${h.man}</span></div>` : '';
+  const kit = e.ok
+    ? (e.n>=6 ? `<span class="bd n8">오늘 ${e.n}모둠</span>` : `<span class="bd n4">오늘 ${e.n}모둠</span>`)
+    : `<span class="bd no">오늘은 센서 없음</span>`;
+
+  const howBlock = h.raw ? `
+    <div class="how">
+      <div class="howtop"><span class="hr">${h.raw}</span><span class="ha">→</span><span class="ht">${h.to}</span></div>
+      <div class="howgrid">
+        <div class="hw ez"><span class="hn">EZ·ON</span><p>${h.ez}</p></div>
+        <div class="hw cb"><span class="hn">Science#</span><p>${h.cb}</p></div>
+      </div>
+      ${h.note?`<p class="hnote">${h.note}</p>`:''}
+    </div>` : '';
+
+  return `<article class="exp${e.ok?'':' dim'}">
+    <div class="top"><div class="badges"><span class="bd unit">${e.unit}</span>${kit}<span class="bd src">${e.src}</span></div>
     <h4>${e.title}</h4><div class="std">${e.std}</div></div>
     <div class="body">
-      <div class="row"><span class="k">센서</span><span class="v">${e.sensor} · ${e.sw}</span></div>
-      <details class="fold"><summary>준비물 · 절차 · TIP</summary>
+      <div class="row"><span class="k">센서</span><span class="v">${e.sensor}${e.sw?' · '+e.sw:''}</span></div>
+      ${man}
+      ${howBlock}
+      ${e.ok ? `<details class="fold"><summary>준비물 · 절차 · TIP</summary>
       <div class="row"><span class="k">준비물</span><span class="v">${e.prep}</span></div>
       ${e.zero?`<div class="row"><span class="k" style="color:var(--coral-deep)">영점</span><span class="v">${e.zero}</span></div>`:''}
-      <ol>${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
-      <div class="tip">${e.tip}</div></details>
+      <ol>${e.steps.map(x=>`<li>${x}</li>`).join('')}</ol>
+      <div class="tip">${e.tip}</div></details>`
+      : `<div class="why"><b>오늘 가져온 센서로는 못 합니다</b> — ${e.why}<br>학교에 그 센서가 있으면 위 매뉴얼대로 하시면 됩니다.</div>`}
     </div></article>`;
 }
 
 function gradePanel(g){
   const list = EXPS.filter(e=>e.g===g);
-  const okN = list.filter(e=>e.ok).length, noN = list.filter(e=>!e.ok).length;
-  return head(`${g}️⃣ 중${g}`, `중${g} — 오늘 <b>${okN}개</b>를 하실 수 있습니다`,
-    `보유한 센서로 가능한 것만 실었습니다. 못 하는 ${noN}개도 아래에 이유와 함께 남겨 두었습니다.`)
-    + `<div class="exps">${list.filter(e=>e.ok).map(expCard).join('')}</div>`
-    + (noN? `<h3 class="subh">오늘은 못 하는 실험</h3>
-       <div class="exps">${list.filter(e=>!e.ok).map(expCard).join('')}</div>`:'');
+  const units = [];
+  list.forEach(e=>{ if(!units.includes(e.unit)) units.push(e.unit); });
+  const okN = list.filter(e=>e.ok).length;
+  return head(`${g}️⃣ 중${g}`, `중${g} — 자료집에 있는 <b>${list.length}개</b>를 단원 순서로`,
+      `실험마다 <b>매뉴얼이 어디에 있는지</b>와 <b>축을 어떻게 잡고 어느 수집 모드로 하는지</b>를 EZ·ON · Science# 두 갈래로 적어 두었습니다.`)
+    + `<div class="callout"><b>오늘 이 자리에서 해 보실 수 있는 것은 ${okN}개</b>입니다. 나머지도 학교에 그 센서가 있으면 그대로 하실 수 있어 매뉴얼과 축 설정을 같이 실었습니다.</div>`
+    + units.map(u=>`<h3 class="subh">${u}</h3>`
+        + `<div class="exps">${list.filter(e=>e.unit===u).map(expCard).join('')}</div>`).join('');
 }
 
 const PANEL = {
@@ -847,7 +930,7 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
   <div><span class="no">03</span><span class="chk" role="checkbox" tabindex="0" aria-checked="false" aria-label="3번 완료 표시"></span></div>
   <div class="st-body">
     <h4>EZ·ON 열기</h4>
-    <p class="sd">이지메이커 <b>보드</b>에 코드를 올리고 값을 받는 화면입니다. 여기는 <b>구글이나 웨일 계정으로 로그인</b>까지 해 두셔야 합니다. 태블릿으로 하실 분은 웹이 아니라 안드로이드 앱이어야 코드가 올라갑니다.</p>
+    <p class="sd">이지메이커 <b>보드</b>에 코드를 올리고 값을 받는 화면입니다. 여기는 <b>구글이나 웨일 계정으로 로그인</b>까지 해 두셔야 합니다.<br><b>크롬북·웨일북에서도 그대로 됩니다</b> — 설치할 것이 없고 브라우저로 보드에 바로 연결됩니다. 다만 <b>태블릿은 웹이 아니라 안드로이드 앱</b>이어야 코드가 올라갑니다.</p>
     <div class="urls">
       <a class="ulink" href="https://ezon.ai/" target="_blank" rel="noopener">ezon.ai</a>
       <a class="ulink" href="https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=28" target="_blank" rel="noopener"><b>처음 쓸 때 확인사항</b></a>
@@ -952,10 +1035,21 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 </table></div></details>
 
 <details class="fold" data-school-only="wiresol" open style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
+<div class="callout"><b>사이언스큐브와 이지메이커를 반반으로</b> 다룹니다. 학교에 있는 <b>큐브 압력·온도 센서</b>를 중심에 두고, 이지메이커는 관심 있으신 분들과 따로 봅니다.</div>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
-<tr><td colspan="3" style="text-align:center;color:var(--ink-soft);padding:26px 14px">준비 중입니다</td></tr>
-</table></div></details>
+<tr><td><b>0–8</b></td><td>출발 준비</td><td>Science# for Web 열고 자료집 받기 · 이지메이커 쓰실 분은 EZ·ON 도</td></tr>
+<tr><td><b>8–15</b></td><td>여는 활동</td><td>만화 4컷 → "무엇을 보고 있었을까요"</td></tr>
+<tr><td><b>15–25</b></td><td>왜 디지털 도구인가</td><td>교육과정과 교과서가 센서를 어디에 적어 두었는지</td></tr>
+<tr><td><b>25–43</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
+<tr><td><b>43–49</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
+<tr><td><b>49–58</b></td><td>축 바꾸기 — 어디를 누르나</td><td>Science# 는 수집 <b>전에</b>, EZ·ON 은 수집 <b>뒤에도</b></td></tr>
+<tr style="background:var(--teal-soft)"><td><b>58–88</b></td><td><b>공통 실습</b> · 사이언스큐브</td><td>① 기체의 압력과 부피 — <b>우리 반 보일의 법칙 그래프 만들기</b><br>② 기체의 온도와 부피 — 온도 센서로</td></tr>
+<tr style="background:var(--coral-soft)"><td><b>88–108</b></td><td><b>갈라서 실습</b></td><td><b>이지메이커</b> 관심 있으신 분 — 보드·포트·EZ·ON 가이드북<br><b>사이언스큐브</b> 계속하실 분 — 맡으신 학년 실험 골라서</td></tr>
+<tr><td><b>108–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
+</table></div>
+<div class="callout gold"><b>연령대가 넓다고 들었습니다.</b> 88분부터 갈라서 하는 이유입니다 — 처음 잡으시는 분은 큐브 무선 센서 쪽이 문턱이 낮고(켜서 붙이면 끝), 보드와 포트를 만져 보고 싶으신 분은 이지메이커 쪽으로 가시면 됩니다.</div>
+</details>
 
 <div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 해 보십니다.</div>
 
@@ -1608,6 +1702,90 @@ axislab: head('🛠 실습','축을 바꾸려면 <b>어디를 누를까요</b>',
 <b>큐브 쓰시는 분께는 먼저 경고하십시오.</b> "실험 설정부터 보세요"라고 안 하면 그냥 시작 누르시고, 시간축으로 다 모으신 뒤에 다시 하셔야 합니다.<br><br>
 표 마지막 줄(비열)을 꼭 짚으세요. <b>축을 안 바꾸는 실험도 있다</b>는 걸 보여 줘야 "무조건 바꿔야 하나"라는 오해가 안 생깁니다.</div>`,
 
+
+/* ───── 우리 반 보일의 법칙 그래프 ───── */
+classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>를 맡아<br>반 전체가 <b>곡선 하나</b>를 만듭니다',
+  '센서가 두세 개뿐이어도 되는 설계입니다 — 오히려 그래서 더 좋습니다')
++ `<div class="callout"><b>왜 이렇게 할까요.</b> 한 모둠이 부피를 여덟 번 바꿔 가며 재면, 그 모둠 그래프는 그 모둠 것으로 끝납니다. 그런데 <b>모둠마다 한 점씩</b> 맡아 모으면, 완성된 곡선은 <b>반 전체가 함께 만든 것</b>이 됩니다. 자기 점이 어디 있는지 찾게 되고, 튀는 점이 나오면 그 모둠이 다시 재게 됩니다.</div>
+
+<h3 class="subh">준비 — 부피를 나눠 맡깁니다</h3>
+<p>50 mL 주사기 기준입니다. 25 mL 주사기면 절반씩 줄여 잡으십시오.</p>
+<div class="tablewrap"><table>
+<tr><th>모둠</th><th>맡은 부피</th><th>잰 압력</th><th>부피 × 압력</th></tr>
+<tr><td>1모둠</td><td><b>50 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>2모둠</td><td><b>45 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>3모둠</td><td><b>40 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>4모둠</td><td><b>35 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>5모둠</td><td><b>30 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>6모둠</td><td><b>25 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+<tr><td>7모둠</td><td><b>20 mL</b></td><td class="mono2">___ kPa</td><td class="mono2">___</td></tr>
+</table></div>
+<div class="callout gold"><b>모둠 수가 다르면 이렇게 나누십시오.</b> 부피 범위를 모둠 수로 나누면 됩니다. 다만 <b>양 끝(가장 크고 가장 작은 부피)은 꼭 포함</b>시키십시오 — 곡선의 휘어짐이 거기서 보입니다. 시간이 남으면 한 모둠이 <b>두 점</b>을 맡아도 됩니다.</div>
+
+<h3 class="subh">모둠이 하는 일 — <b>딱 네 걸음</b></h3>
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>마개를 연 채로 영점을 잡습니다</h4>
+    <p>이때가 <b>대기압 기준</b>입니다. 닫고 시작하면 그 순간 압력이 기준이 되어 <b>부피 × 압력이 일정하게 안 나옵니다.</b></p>
+    <div class="say">"아직 막지 마세요. 열어 둔 채로 영점부터."</div></div></div>
+  <div class="move"><div class="n">2</div><div>
+    <h4>맡은 부피에 눈금을 맞추고 막습니다</h4>
+    <p>피스톤을 <b>정확히 그 눈금</b>에 놓고 마개를 막습니다. 손으로 누르는 게 아니라 <b>고정</b>해야 합니다.</p>
+    <div class="say">"우리 모둠은 35 mL예요. 딱 거기 맞춰 놓고 막습니다."</div></div></div>
+  <div class="move"><div class="n">3</div><div>
+    <h4>값이 안정되면 압력을 읽습니다</h4>
+    <p>막은 직후에는 손 온도 때문에 값이 조금 움직입니다. <b>10초쯤 기다렸다</b> 읽습니다.</p>
+    <div class="say">"숫자가 멈출 때까지 기다렸다 적으세요."</div></div></div>
+  <div class="move"><div class="n">4</div><div>
+    <h4>칠판(또는 공유 화면)에 <b>한 줄</b>만 적습니다</h4>
+    <p>모둠 번호 · 부피 · 압력. 이 한 줄이 반 전체 그래프의 <b>점 하나</b>가 됩니다.</p>
+    <div class="say">"3모둠, 40 mL, 몇 kPa 나왔어요?"</div></div></div>
+</div>
+
+<h3 class="subh">모으는 방법 — 학교 사정에 맞게</h3>
+<div class="tablewrap"><table>
+<tr><th>방법</th><th>어떻게</th><th>이럴 때</th></tr>
+<tr><td><b>칠판</b></td><td>표를 그려 두고 모둠이 나와서 채웁니다</td><td>가장 빠르고 가장 확실합니다. <b>처음이라면 이걸로</b></td></tr>
+<tr><td><b>구글 시트</b></td><td>미리 표를 만들어 링크를 뿌리고, 모둠이 자기 줄만 채웁니다<br>다 차면 <b>삽입 → 차트 → 분산형</b></td><td>디벗·크롬북 학교. 그래프가 <b>실시간으로 자라는 게</b> 보입니다</td></tr>
+<tr><td><b>패들렛</b></td><td>모둠이 사진과 값을 같이 올립니다</td><td>이미 쓰고 계시다면</td></tr>
+<tr><td><b>MBL 수업허브</b></td><td>참여코드로 들어와 모둠 값을 넣으면 표가 자동으로 모입니다</td><td><a href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">scienceisjo.github.io/mblclasshub</a></td></tr>
+<tr><td><b>지능형 과학실 ON</b></td><td>Science# 툴바 → <b>Science-On에 업로드</b></td><td>학교가 ON을 쓰고 있다면</td></tr>
+</table></div>
+
+<h3 class="subh">완성한 다음 — <b>여기가 진짜입니다</b></h3>
+<div class="moves">
+  <div class="move"><div class="n">1</div><div>
+    <h4>자기 점을 찾게 합니다</h4>
+    <p>완성된 곡선에서 <b>우리 모둠 점</b>이 어디인지 찾게 합니다. 이 한 가지로 그래프가 남의 것에서 우리 것이 됩니다.</p>
+    <div class="say">"우리 점 어디 있지? 곡선 위에 잘 앉았나?"</div></div></div>
+  <div class="move"><div class="n">2</div><div>
+    <h4>튀는 점을 같이 봅니다</h4>
+    <p>꼭 하나는 튑니다. <b>혼내지 말고 물어보십시오</b> — 왜 그럴까. 마개가 덜 막혔거나, 영점을 닫고 잡았거나, 손으로 누르고 있었거나.</p>
+    <div class="say">"이 점만 좀 떨어져 있네. 왜 그럴까? 다시 한 번 재 볼까?"</div></div></div>
+  <div class="move"><div class="n">3</div><div>
+    <h4>부피 × 압력을 계산하게 합니다</h4>
+    <p>표의 마지막 칸입니다. <b>거의 같은 수</b>가 나옵니다. 이 숫자가 보일의 법칙입니다.</p>
+    <div class="say">"곱해 보세요. 모둠마다 부피도 압력도 다른데, 곱한 값은요?"</div></div></div>
+  <div class="move"><div class="n">4</div><div>
+    <h4>축을 바꿔 봅니다 — 곡선을 곧게</h4>
+    <p>가로축을 <b>1/부피</b>로 바꾸면 직선이 됩니다. 시트에 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=1/B2</code> 열을 하나 더 만들면 됩니다.</p>
+    <div class="say">"이 곡선을 곧게 펴려면 가로축을 어떻게 바꿔야 할까?"</div></div></div>
+</div>
+
+<div class="callout ok"><b>다음 시간에 이어 하실 것</b> — 같은 방식으로 <b>기체의 온도와 부피</b>(9과06-03)를 하시면 됩니다. 모둠마다 다른 물 온도를 맡고, 온도는 센서가 재고 부피는 학생이 눈금을 읽습니다. 구조가 똑같아서 두 번째는 훨씬 빨리 끝납니다.</div>
+
+<div class="callout warn"><b>영점만 조심하십시오.</b> 이 실험이 안 되는 이유의 대부분이 영점입니다. <b>마개를 연 상태</b>가 대기압 기준입니다. 모둠마다 시작 전에 한 번씩 확인해 주십시오.</div>
+
+<div class="script">"이 실험, 센서가 모둠 수만큼 없어서 못 한다고들 하십니다. 그런데 <b>없어도 됩니다.</b> 아니, 없는 게 나을 수도 있습니다.<br><br>
+모둠마다 <b>부피를 하나씩</b> 맡기십시오. 1모둠은 50, 2모둠은 45, 이런 식으로요. 각 모둠은 <b>점 하나만</b> 만들면 됩니다. 그걸 칠판에 모으면 반 전체가 곡선 하나를 완성합니다.<br><br>
+그러면 뭐가 달라지냐면 — <b>자기 점을 찾습니다.</b> "우리 점 어디 있어?" 하고 나옵니다. 그리고 <b>꼭 하나는 튑니다.</b> 그때가 제일 좋은 순간입니다. 왜 튀었을까를 반 전체가 같이 봅니다.<br><br>
+마지막으로 <b>부피 곱하기 압력</b>을 계산하게 하십시오. 모둠마다 부피도 압력도 다 다른데 곱하면 거의 같은 수가 나옵니다. 그게 보일의 법칙입니다. 외운 게 아니라 <b>자기들이 만든 숫자에서</b> 나온 겁니다."</div>
+
+<div class="note"><b>칠판이 제일 낫습니다.</b> 시트나 패들렛은 접속하다 시간을 다 씁니다. 처음 하실 때는 칠판에 표를 그려 두고 모둠이 나와서 채우게 하십시오. 두 번째부터 시트로 옮기시면 됩니다.<br><br>
+<b>양 끝 부피를 꼭 넣으십시오.</b> 가장 큰 부피와 가장 작은 부피가 빠지면 곡선이 거의 직선처럼 보여서 "축을 바꿔 보자"가 안 나옵니다.<br><br>
+<b>튀는 점은 미리 기대하고 계십시오.</b> 안 튀면 오히려 아쉽습니다. 튀었을 때 "누가 잘못했어"가 아니라 "왜 그럴까"로 받으시면 그 시간이 오늘 수업의 가장 좋은 5분이 됩니다.<br><br>
+25 mL 주사기라면 25·22·19·16·13·10·7 mL 정도로 나누시면 됩니다.</div>`,
+
 /* ───── 교과서가 지정한 탐구 ───── */
 textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이미 적혀 있습니다',
   '출판사별 수록 탐구 대조표')
@@ -2213,13 +2391,14 @@ const HUBD = {
   lose:'센서가 가져간 자리에 무엇을 넣을 것인가 — 오늘의 중심',
   gain:'센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷',
   ports:'A · D · I2C · UART를 왜 갈라 꽂나',
-  g1:'중1 실험 카드와 매뉴얼 쪽수',
-  g2:'중2 실험 카드와 매뉴얼 쪽수',
-  g3:'중3 실험 카드와 매뉴얼 쪽수',
+  g1:'중1 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
+  g2:'중2 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
+  g3:'중3 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
   share:'오늘 가져가실 것',
   mykit:'오늘 가져온 센서로 되는 실험 · 실험 수업 요령',
   axis:'축 바꾸기 · 축 변환 · 요약값 뽑기',
   axislab:'EZ·ON 과 Science# 에서 실제로 어느 단추를 누르나',
+  classgraph:'모둠마다 다른 부피를 맡아 반 전체가 곡선 하나를 완성',
   textbook:'교과서 5종이 실제로 실은 탐구 대조표',
   basics:'센서 19종을 하나씩 — 기초 측정법',
   links:'이지메이커 · 사이언스큐브 · 지능형 과학실 링크',
@@ -2244,7 +2423,7 @@ const hubEl=document.getElementById('hub'), secfoot=document.getElementById('sec
 /* ═══ 학교 ═══ */
 const SCHOOLS={
   songrye:{name:'송례중학교', when:'8월 24일(월)', note:'이지메이커 공통 실험 둘 — 보일의 법칙 · 옴의 법칙'},
-  wiresol:{name:'위례솔중학교', when:'8월 26일(수)', note:'준비 중입니다'}
+  wiresol:{name:'위례솔중학교', when:'8월 26일(수)', note:'사이언스큐브 · 이지메이커 반반 — 중1 기체 단원(압력·부피, 온도·부피) 중심'}
 };
 const schoolSel=document.getElementById('school');
 function setSchool(id){
