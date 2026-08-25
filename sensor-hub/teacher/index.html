@@ -175,6 +175,40 @@ td b{color:var(--deep)}
 .exp.dim .top{background:var(--paper)}
 .exp.dim h4{color:var(--ink-soft)}
 
+/* ══ 인쇄용 기록지 ══ */
+.wsbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 10px}
+.worksheet{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow);color:#111}
+.worksheet h4{font-family:var(--font-display);font-weight:600;font-size:1.3rem;color:var(--deep);letter-spacing:-.01em}
+.worksheet .wsub{font-size:.92rem;color:#555;margin-top:3px}
+.worksheet .wname{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0 18px;padding-bottom:12px;border-bottom:1.5px solid #0e3050;font-size:.95rem}
+.worksheet .wname span{white-space:nowrap}
+.worksheet .wq{font-family:var(--font-display);font-weight:600;font-size:1rem;color:var(--deep);margin:18px 0 7px}
+.worksheet .wq em{font-style:normal;font-family:var(--font-mono);color:var(--coral);margin-right:6px}
+.wbox{display:inline-block;min-width:96px;border-bottom:2px solid #111;text-align:center;padding:2px 10px;font-family:var(--font-mono);font-size:1.05rem}
+.wchk{display:inline-block;width:14px;height:14px;border:1.5px solid #111;vertical-align:-2px;margin-right:6px}
+.worksheet table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:0}
+.worksheet th,.worksheet td{border:1px solid #9fb0be;padding:7px 8px;text-align:center;background:#fff;color:#111}
+.worksheet th{font-family:var(--font-display);font-weight:600;font-size:.86rem;color:var(--deep);background:#eef3f7;letter-spacing:0;white-space:nowrap}
+.worksheet td.h{height:30px}
+.gwrap{position:relative;margin-top:6px}
+.gridpaper{display:block;width:100%;height:230px}
+.glab{display:flex;justify-content:space-between;font-size:.82rem;color:#333;margin-top:4px}
+.glab b{font-weight:600}
+.worksheet .wnote{font-size:.86rem;color:#555;margin-top:5px}
+.worksheet ol{margin:6px 0 0 20px;font-size:.93rem;line-height:2.4;color:#111}
+.wsheetbreak{break-before:page}
+@media print{
+  body.printsheet .topstrip,body.printsheet .hero,body.printsheet .tabbar,
+  body.printsheet .secfoot,body.printsheet #app-credit,body.printsheet .hub,
+  body.printsheet .totop,body.printsheet .wsbar{display:none!important}
+  body.printsheet .tabpanel{display:none!important}
+  body.printsheet #sec-classgraph{display:block!important;border:none!important;padding:0!important}
+  body.printsheet #sec-classgraph>*{display:none!important}
+  body.printsheet #sec-classgraph .worksheet{display:block!important;border:none;box-shadow:none;padding:0;border-radius:0}
+  .worksheet{page-break-inside:auto}
+  .gridpaper{height:210px}
+}
+
 /* ══ 만족도 조사 ══ */
 .survey{display:grid;grid-template-columns:154px 1fr;gap:24px;align-items:center;
   background:var(--card);border:1px solid var(--line);border-top:2px solid var(--coral);
@@ -1036,20 +1070,32 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 </table></div></details>
 
 <details class="fold" data-school-only="wiresol" open style="margin:14px 0"><summary>위례솔중 FLOW CHART</summary>
-<div class="callout"><b>사이언스큐브와 이지메이커를 반반으로</b> 다룹니다. 학교에 있는 <b>큐브 압력·온도 센서</b>를 중심에 두고, 이지메이커는 관심 있으신 분들과 따로 봅니다.</div>
+<div class="callout"><b>중1 기체 단원 두 실험을 그대로 해 봅니다.</b> 학교에 있는 <b>큐브 압력·온도 센서</b>가 중심이고, 이지메이커는 관심 있으신 분들과 뒤에서 따로 봅니다. <b>큐브와 이지메이커 반반</b>입니다.</div>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
-<tr><td><b>0–8</b></td><td>출발 준비</td><td>Science# for Web 열고 자료집 받기 · 이지메이커 쓰실 분은 EZ·ON 도</td></tr>
+<tr><td><b>0–8</b></td><td>출발 준비</td><td>Science# for Web 열기 · 자료집 받기 · 이지메이커 하실 분은 EZ·ON 도</td></tr>
 <tr><td><b>8–15</b></td><td>여는 활동</td><td>만화 4컷 → "무엇을 보고 있었을까요"</td></tr>
-<tr><td><b>15–25</b></td><td>왜 디지털 도구인가</td><td>교육과정과 교과서가 센서를 어디에 적어 두었는지</td></tr>
-<tr><td><b>25–43</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자료 수집·변환을 어디로 옮길 것인가 <b>← 오늘의 중심</b></td></tr>
-<tr><td><b>43–49</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
-<tr><td><b>49–58</b></td><td>축 바꾸기 — 어디를 누르나</td><td>Science# 는 수집 <b>전에</b>, EZ·ON 은 수집 <b>뒤에도</b></td></tr>
-<tr style="background:var(--teal-soft)"><td><b>58–88</b></td><td><b>공통 실습</b> · 사이언스큐브</td><td>① 기체의 압력과 부피 — <b>우리 반 보일의 법칙 그래프 만들기</b><br>② 기체의 온도와 부피 — 온도 센서로<br><span style="font-size:.86rem;color:var(--ink-soft)">모으는 방법은 「반 전체 데이터 모으기 — 클래스룸」 절에</span></td></tr>
-<tr style="background:var(--coral-soft)"><td><b>88–108</b></td><td><b>갈라서 실습</b></td><td><b>이지메이커</b> 관심 있으신 분 — 보드·포트·EZ·ON 가이드북<br><b>사이언스큐브</b> 계속하실 분 — 맡으신 학년 실험 골라서</td></tr>
-<tr><td><b>108–120</b></td><td>나눔과 닫기</td><td>우리 학교에서 무엇부터 할 것인가</td></tr>
+<tr><td><b>15–25</b></td><td>왜 디지털 도구인가</td><td>교육과정이 <b>중1 기체 단원</b>에 뭐라고 적어 두었는지 · 모둠 데이터 공유도 적혀 있다</td></tr>
+<tr><td><b>25–41</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자리에 무엇을 넣을 것인가 <b>← 오늘의 중심</b><br><span style="font-size:.86rem;color:var(--ink-soft)">보일의 법칙으로 바로 이어집니다 — 압력은 센서가, <b>부피는 학생이</b></span></td></tr>
+<tr><td><b>41–47</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
+<tr><td><b>47–56</b></td><td>축 바꾸기 — 어디를 누르나</td><td><b>Science# 는 수집 전에</b> 실험 설정에서, <b>EZ·ON 은 수집 뒤에도</b><br><span style="font-size:.86rem;color:var(--ink-soft)">실습 직전에 여는 절입니다</span></td></tr>
+<tr style="background:var(--teal-soft)"><td><b>56–86</b></td><td><b>공통 실습</b> · 큐브 압력<br>30분</td><td><b>「우리 반 보일의 법칙 그래프」</b><br>모둠마다 다른 부피를 맡아 점 하나씩 → 반 전체가 곡선 완성 → <b>축 바꿔 직선</b><br><span style="font-size:.86rem;color:var(--ink-soft)">학생 기록지를 그대로 쓰면서 해 봅니다</span></td></tr>
+<tr style="background:var(--coral-soft)"><td><b>86–106</b></td><td><b>갈라서</b><br>20분</td><td><b>이지메이커 조</b> — 같은 보일 실험을 보드 + 공기압으로. <b>수동 모드</b>와 오른쪽 아래 <b>X축 탭</b>을 직접<br><b>큐브 조</b> — <b>기체의 온도와 부피</b>(샤를) 또는 맡으신 학년 실험 하나</td></tr>
+<tr><td><b>106–114</b></td><td>데이터를 반 전체로</td><td>구글 클래스룸으로 모으는 설계 · <b>큐브는 CSV</b>, <b>이지는 구글 시트</b></td></tr>
+<tr><td><b>114–120</b></td><td>나눔과 닫기</td><td>만족도 조사 · 자료 안내</td></tr>
 </table></div>
-<div class="callout gold"><b>연령대가 넓다고 들었습니다.</b> 88분부터 갈라서 하는 이유입니다 — 처음 잡으시는 분은 큐브 무선 센서 쪽이 문턱이 낮고(켜서 붙이면 끝), 보드와 포트를 만져 보고 싶으신 분은 이지메이커 쪽으로 가시면 됩니다.</div>
+
+<div class="callout gold"><b>왜 이 두 실험인가.</b> 보일과 샤를은 <b>구조가 똑같습니다</b> — 센서는 압력이나 온도 한쪽만 재고, <b>부피는 학생이 눈금을 읽어 넣습니다.</b> 그래서 오늘 내내 이야기한 "센서가 가져간 자리"가 실습에서 그대로 손에 잡힙니다. 게다가 <b>선생님들이 곧 나가실 단원</b>입니다.</div>
+
+<div class="callout"><b>연령대가 넓다고 들었습니다.</b> 86분부터 갈라지는 이유입니다 — 처음 잡으시는 분은 <b>큐브 무선</b>이 문턱이 낮고(켜서 붙이면 끝), 보드와 포트를 만져 보고 싶으신 분은 <b>이지메이커</b> 쪽으로 가시면 됩니다.</div>
+
+<div class="callout warn"><b>「센서는 어떻게 전달하나」(A·D·I2C·UART) 절은 공통으로 열지 마십시오.</b> 이지메이커를 쓰실 분만 필요한 내용입니다. <b>86분 갈라진 뒤 그 조에게만</b> 펴 주시면 됩니다.</div>
+
+<div class="callout ok"><b>드릴 자료 넷</b><br>
+· <b>이 페이지</b> — 실험 33건의 매뉴얼 쪽수와 축·수집 모드가 다 들어 있습니다<br>
+· <b>매뉴얼 모음집</b>(원드라이브) — EZ · CB · SB · BASE 원본<br>
+· <b>학생 기록지</b> — 「우리 반 보일의 법칙 그래프」 절에서 바로 인쇄<br>
+· <b>구글 시트 양식</b> — 반 전체 표 · 모둠별 시작 셀을 미리 나눠 둔 것</div>
 </details>
 
 <div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 해 보십니다.</div>
@@ -1798,6 +1844,61 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
     <h4>축을 바꿔 봅니다 — 곡선을 곧게</h4>
     <p>가로축을 <b>1/부피</b>로 바꾸면 직선이 됩니다. 표에 <b>1/부피 칸을 하나 더</b> 만들어 학생이 계산해 넣게 하십시오 — 시트를 쓰신다면 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=1/B2</code> 한 줄이면 됩니다.</p>
     <div class="say">"이 곡선을 곧게 펴려면 가로축을 어떻게 바꿔야 할까?"</div></div></div>
+</div>
+
+<h3 class="subh">학생 <b>기록지</b> — 그대로 인쇄해 쓰십시오</h3>
+<div class="wsbar">
+  <button class="btn" id="wsPrint">기록지 인쇄하기</button>
+  <span style="font-size:.9rem;color:var(--ink-soft)">A4 두 장 · 모둠마다 한 장씩</span>
+</div>
+
+<div class="worksheet">
+  <h4>우리 반 보일의 법칙 그래프</h4>
+  <div class="wsub">기체의 압력과 부피 관계 · 9과06-02</div>
+  <div class="wname"><span>학년 <span class="wbox" style="min-width:44px"></span></span><span>반 <span class="wbox" style="min-width:44px"></span></span><span>모둠 <span class="wbox" style="min-width:44px"></span></span><span>이름 <span class="wbox" style="min-width:150px"></span></span></div>
+
+  <div class="wq"><em>1</em>우리 모둠이 맡은 부피는 얼마입니까?</div>
+  <div><span class="wbox"></span> mL</div>
+
+  <div class="wq"><em>2</em>영점을 잡았습니까?</div>
+  <div style="font-size:.95rem"><span class="wchk"></span><b>마개를 연 채로</b> 영점을 잡았다 &nbsp;&nbsp; <span class="wchk"></span>맡은 부피에 눈금을 맞추고 막았다</div>
+  <div class="wnote">마개를 닫고 영점을 잡으면 그 순간 압력이 기준이 되어 <b>부피 × 압력이 일정하게 나오지 않습니다.</b></div>
+
+  <div class="wq"><em>3</em>값이 멈출 때까지 기다렸다가, 압력을 읽어 적으십시오.</div>
+  <div><span class="wbox"></span> kPa</div>
+  <div class="wnote">막은 직후에는 손 온도 때문에 값이 조금 움직입니다. 10초쯤 기다렸다 읽습니다.</div>
+
+  <div class="wq"><em>4</em>반 전체 값을 옮겨 적고, 오른쪽 두 칸을 계산하십시오.</div>
+  <div class="tablewrap" style="border:none;box-shadow:none;margin:6px 0 0"><table>
+  <tr><th>모둠</th><th>부피 <span style="font-weight:400">V (mL)</span></th><th>압력 <span style="font-weight:400">P (kPa)</span></th><th>V × P</th><th>1 ÷ V</th></tr>
+  <tr><td class="h">1</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">2</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">3</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">4</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">5</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">6</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td class="h">7</td><td></td><td></td><td></td><td></td></tr>
+  </table></div>
+  <div class="wnote"><b>V × P 칸을 보십시오.</b> 모둠마다 부피도 압력도 다른데, 이 칸은 어떻습니까?</div>
+
+  <div class="wsheetbreak"></div>
+
+  <div class="wq"><em>5</em>가로축을 <b>부피</b>로 두고 점을 찍어 보십시오.</div>
+  <div class="gwrap"><svg class="gridpaper" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="g5" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#c9d4dd" stroke-width="0.5"/></pattern><pattern id="g50" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#g5)"/><path d="M50 0H0V50" fill="none" stroke="#9fb0be" stroke-width="1"/></pattern></defs><rect width="400" height="300" fill="url(#g50)"/><path d="M0 300H400M0 0V300" fill="none" stroke="#0e3050" stroke-width="2"/></svg></div>
+  <div class="glab"><span>가로 <b>부피 V (mL)</b></span><span>세로 <b>압력 P (kPa)</b></span></div>
+  <div class="wnote">곧은 선입니까, 휜 선입니까?</div>
+
+  <div class="wq"><em>6</em>이번에는 가로축을 <b>1 ÷ 부피</b>로 바꿔서 다시 찍어 보십시오.</div>
+  <div class="gwrap"><svg class="gridpaper" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="g5" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#c9d4dd" stroke-width="0.5"/></pattern><pattern id="g50" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#g5)"/><path d="M50 0H0V50" fill="none" stroke="#9fb0be" stroke-width="1"/></pattern></defs><rect width="400" height="300" fill="url(#g50)"/><path d="M0 300H400M0 0V300" fill="none" stroke="#0e3050" stroke-width="2"/></svg></div>
+  <div class="glab"><span>가로 <b>1 ÷ 부피 (1/mL)</b></span><span>세로 <b>압력 P (kPa)</b></span></div>
+  <div class="wnote">이번에는 어떻습니까? <b>왜 이렇게 바뀌었을까요?</b></div>
+
+  <div class="wq"><em>7</em>세 가지만 답해 봅시다.</div>
+  <ol>
+    <li>우리 모둠 점은 선 위에 잘 앉았습니까? 벗어났다면 왜 그럴까요?</li>
+    <li>부피와 압력 사이에 어떤 관계가 있다고 말할 수 있습니까?</li>
+    <li>부피를 재 보지 않은 값(예: 15 mL)에서 압력이 얼마일지 그래프로 말할 수 있습니까?</li>
+  </ol>
 </div>
 
 <div class="callout ok"><b>다음 시간에 이어 하실 것</b> — 같은 방식으로 <b>기체의 온도와 부피</b>(9과06-03)를 하시면 됩니다. 모둠마다 다른 물 온도를 맡고, 온도는 센서가 재고 부피는 학생이 눈금을 읽습니다. 구조가 똑같아서 두 번째는 훨씬 빨리 끝납니다.</div>
@@ -3124,6 +3225,15 @@ function initAxis(){
   draw();
 }
 
+function initSheetPrint(){
+  var b=document.getElementById('wsPrint'); if(!b) return;
+  b.addEventListener('click',function(){
+    document.body.classList.add('printsheet');
+    window.print();
+    setTimeout(function(){ document.body.classList.remove('printsheet'); },600);
+  });
+}
+
 function initTerms(){
   document.addEventListener('click',function(e){
     var b=e.target.closest('.term'); if(!b) return;
@@ -3415,6 +3525,7 @@ function initPorts(){
   });
 }
 
+initSheetPrint();
 initTerms();
 initSetup();
 initPorts();
