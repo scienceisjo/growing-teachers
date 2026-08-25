@@ -491,13 +491,14 @@ details.more p{font-size:.92rem;color:var(--ink-soft)}
 
 /* 초대 카드 */
 .moves{display:grid;gap:13px}
-.move{display:grid;grid-template-columns:56px 1fr;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;box-shadow:var(--shadow)}
-.move .n{width:56px;height:56px;border-radius:8px;background:linear-gradient(140deg,var(--teal),var(--deep));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-round);font-size:1.35rem}
+.move{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;box-shadow:var(--shadow)}
+.move .n{display:inline-block;font-family:var(--font-display);font-weight:600;font-size:1.05rem;letter-spacing:.01em;
+  color:var(--coral-deep);margin-bottom:8px;padding-bottom:3px;border-bottom:2px solid var(--coral)}
 .move h4{font-family:var(--font-display);font-weight:600;font-size:1.18rem;color:var(--deep);margin-bottom:4px}
 .move p{font-size:.96rem;color:var(--ink-soft)}
 .move .say{margin-top:9px;padding:10px 14px;background:var(--coral-soft);border-radius:11px;font-size:.94rem;color:#7d3319}
-.move .say::before{content:"이렇게 묻습니다 · ";font-weight:800;font-size:.8rem;color:var(--coral-deep)}
-@media(max-width:600px){.move{grid-template-columns:42px 1fr;gap:12px;padding:15px}.move .n{width:42px;height:42px;border-radius:7px;font-size:1.05rem}}
+.move .say::before{content:"교사 발화 예시 · ";font-family:var(--font-display);font-weight:600;font-size:.8rem;letter-spacing:.02em;color:var(--coral-deep)}
+@media(max-width:600px){.move{padding:16px 17px}.move .n{font-size:.98rem}}
 
 /* 실험 카드 */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
@@ -1100,7 +1101,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 · <b>이 페이지</b> — 실험 33건의 매뉴얼 쪽수와 축·수집 모드가 다 들어 있습니다<br>
 · <b>매뉴얼 모음집</b>(원드라이브) — EZ · CB · SB · BASE 원본<br>
 · <b>학생 기록지</b> — 「우리 반 보일의 법칙 그래프」 절에서 바로 인쇄<br>
-· <b>구글 시트 양식</b> — 반 전체 표 · 모둠별 시작 셀을 미리 나눠 둔 것</div>
+· <b>구글 시트 양식</b> — 매뉴얼 모음집 폴더의 <code>양식_반전체 보일의 법칙 시트.xlsx</code></div>
 </details>
 
 <div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 해 보십니다.</div>
@@ -1893,6 +1894,27 @@ classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 �
   '구글 클래스룸을 쓰고 계시면 새로 배울 것이 거의 없습니다')
 + `<div class="callout"><b>교육과정에도 적혀 있는 일입니다.</b> "여러 모둠의 데이터를 공유하여 탐구 활동을 수행할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b>을 활용할 수 있다" <span style="font-size:.86rem;color:var(--ink-soft)">별책 9 · (6) 기체의 성질</span></div>
 
+<h3 class="subh">시트 양식은 <b>만들어 두었습니다</b></h3>
+<p>매뉴얼 모음집 폴더에 <code style="background:var(--teal-soft);padding:2px 8px;border-radius:4px">양식_반전체 보일의 법칙 시트.xlsx</code> 로 들어 있습니다. 받아서 <b>드라이브에 올리면 그대로 구글 시트가 됩니다.</b></p>
+<div class="urls" style="margin:10px 0 14px">
+  <a class="ulink dl" href='https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=HKK13h' target="_blank" rel="noopener"><b>양식 받으러 가기</b></a>
+</div>
+
+<div class="tablewrap"><table>
+<tr><th>탭</th><th>들어 있는 것</th></tr>
+<tr><td><b>반 전체</b></td><td>순번 · 모둠 · <b>부피 V</b> · <b>압력 P</b> · V×P · 1÷V 아홉 줄.<br>부피는 <b>60·55·50·45·40·35·30·25·20</b> 이 미리 적혀 있고, <b>V×P 와 1÷V 는 수식이 걸려 있어</b> 값만 치면 자동으로 나옵니다. 맨 아래 <b>V×P 평균</b> 칸도 있습니다</td></tr>
+<tr><td><b>원자료</b></td><td>EZ·ON 시트 전송용 <b>모둠별 시작 셀</b> — <code>원자료!A10</code> · <code>F10</code> · <code>K10</code> … 다섯 칸씩 띄워 아홉 모둠 몫</td></tr>
+<tr><td><b>읽어보세요</b></td><td>드라이브에 올리는 법 · 공유 설정 · 클래스룸에 올리는 법 · 머리글 보호 · 수업 중 흐름</td></tr>
+</table></div>
+
+<div class="callout gold"><b>올리는 법은 세 걸음입니다.</b><br>
+① 구글 드라이브 → 새로 만들기 → <b>파일 업로드</b><br>
+② 올라온 파일을 두 번 눌러 열고 → <b>파일 → Google Sheets로 저장</b><br>
+③ 공유를 열고 클래스룸에 <b>「학생이 파일 수정 가능」</b> 으로 첨부<br>
+<span style="font-size:.9rem">25 mL 주사기를 쓰시면 부피 칸만 <b>25·23·21·19·17·15·13·11·9</b> 로 바꾸시면 됩니다.</span></div>
+
+<div class="callout"><b>양식 없이 손으로 만드셔도 2분입니다.</b> 표 머리글을 <b>순번 · 모둠 · 부피 · 압력</b> 으로 적고, 다섯째 칸에 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=C5*D5</code>, 여섯째 칸에 <code style="background:var(--teal-soft);padding:2px 7px;border-radius:4px">=1/C5</code> 를 넣고 아래로 끌면 끝입니다.</div>
+
 <h3 class="subh">두 회사가 <b>내보내는 방법이 다릅니다</b></h3>
 <div class="tablewrap"><table>
 <tr><th>　</th><th>이지메이커</th><th>사이언스큐브</th></tr>
@@ -1911,10 +1933,10 @@ classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 �
 <tr><td><b>공개 시트에 삽입</b></td><td>대상 시트 <b>URL</b> 과 <b>시작 셀</b>(A1 같은)을 적으면 그 자리에 씁니다</td><td>그 시트가 <b>공개</b>이거나 이지온 쪽 계정에 <b>편집 권한</b>이 있어야 합니다</td></tr>
 </table></div>
 
-<div class="callout warn"><b>물어보신 것 — 이미 값이 있는 시트에 보내면 어떻게 되나.</b><br>
+<div class="callout warn"><b>이미 값이 있는 시트에 보내면 어떻게 될까요.</b><br>
 「공개 시트에 삽입」은 <b>시작 셀을 지정해서 쓰는</b> 구조입니다. 그래서 <b>모둠마다 시작 셀을 다르게</b> 주면 서로 안 겹치고, <b>같은 셀을 주면 덮어씁니다.</b><br>
 「새로운 시트 생성」은 아예 <b>새 파일</b>이 만들어지므로 기존 시트를 건드리지 않습니다.<br>
-<span style="font-size:.9rem">이 내용은 EZ·ON 화면 문구에서 확인한 것입니다. <b>전날 두 모둠 몫을 직접 보내 보고</b> 겹치는지 한 번 눈으로 보시는 편이 안전합니다.</span></div>
+<span style="font-size:.9rem">EZ·ON 화면 문구를 확인해 정리한 것입니다. 수업 전에 <b>두 모둠 몫을 직접 보내 보고</b> 겹치는지 한 번 눈으로 확인해 두시면 안심입니다.</span></div>
 
 <div class="moves">
   <div class="move"><div class="n">전날</div><div>
