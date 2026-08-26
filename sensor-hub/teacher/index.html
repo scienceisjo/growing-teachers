@@ -624,7 +624,7 @@ const EXPS = [
         '수집 방식을 <b>수동</b>으로 바꾸고 입력 항목을 <b>부피(mL)</b> 로 정한다 — <b>큐브</b> 실험 설정 → 수동수집 · X축 숫자 입력 / <b>이지</b> 수동 모드 · 수동 입력=부피, 센서=공기압',
         '피스톤을 <b>30 mL</b> 에 맞추고 마개를 막는다 — 여기가 기준 부피다. <b>60 에서 막으면 안 됩니다</b>',
         '맡은 세트대로 <b>당겨서 60 쪽으로, 눌러서 10 쪽으로</b> 오가며 잰다. 값이 멈추면 부피를 입력하고 수집 — <b>아홉에서 열한 번</b>',
-        '표에서 <b>P × V</b> 를 계산해 값들이 비슷한지 본다. 화면 압력이 <b>상대압이면 1013 hPa 을 더한 뒤</b> 곱한다'],
+        '표에서 <b>V × P</b> 를 계산해 값들이 비슷한지 본다 — 30 mL 에서 막았으면 <b>30 근처</b>가 나온다'],
   tip:'<b>모둠마다 부피 세트를 어긋나게 주십시오.</b> 1모둠 60부터, 2모둠 58부터, 3모둠 56부터 — 그래야 합쳤을 때 점이 포개지지 않습니다. 배정표와 학생 기록지는 「우리 반 보일의 법칙 그래프」 절에 있습니다.<br>주사기 몸통을 감싸 쥐면 체온이 기체를 데웁니다. 밀대 끝만 잡으세요. 부피를 바꾼 뒤 1~2초 기다렸다 찍어야 값이 안정됩니다.'},
 
 {g:1,ok:1,n:4,unit:'Ⅵ 기체의 성질',title:'기체의 온도와 부피 관계 (샤를의 법칙)',std:'9과06-03',
@@ -895,7 +895,7 @@ function head(kick,h2,p){
 const HOWTO = {
  '저항을 바꾸면 V–I 직선은 어떻게 달라지나 (기울기 = 1/R)':{man:'교과서 수록표(과학2 7. 전기와 자기) · MBL 수업허브 cb-11',raw:'시간 – 전류',to:'<b>전압 – 전류</b> (저항 3종을 한 그래프에)',ez:'<b>수동 모드</b> · 수동 입력 = <b>전압</b>, 센서 = <b>전류</b>. 저항판(10·20·30Ω)을 바꿔 세 번 되풀이합니다',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>(전압). 저항판마다 새 실험으로 재어 한 그래프에 겹치고, 추세선·R²를 켭니다',note:'기울기가 <b>1/R</b> 입니다 — 저항이 클수록 직선이 눕고, 세 직선이 원점에서 부채꼴로 갈라지는 그림이 이 실험의 전부입니다.'},
  '기체의 온도와 부피 관계 (샤를의 법칙)':{man:'교과서 수록 탐구(9과06-03 · 큐브 카탈로그 수록표) — <b>자료집 넷 어디에도 절차가 없습니다.</b> 보일에서 구조를 옮겨 짠 것입니다',raw:'시간 – 온도',to:'<b>온도 – 부피</b> → 절대온도(K) – 부피',ez:'해당 없음 — <b>큐브 온도 센서</b>로 하는 실험입니다',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>. 입력 항목 이름을 <b>「부피(mL)」</b> 로 두고, 온도가 멈출 때마다 부피를 넣습니다',note:'보일과 <b>같은 구조</b>입니다 — 센서는 한쪽만 재고 나머지는 학생이 눈금을 읽어 넣습니다. 그래서 <b>매뉴얼이 없어도 만들 수 있습니다.</b> 가로축을 <b>K</b> 로 바꾸면 원점을 지나고, 늘여 보면 <b>−273℃</b> 가 나옵니다.'},
- '기체의 압력과 부피 관계 (보일의 법칙)':{man:'EZ p.10 · CB p.26 · SB 사례 05 · BASE p.74',raw:'시간 – 압력',to:'<b>부피 – 압력</b> → 1/부피 – 압력',ez:'<b>수동 모드</b> · 수동 입력 = <b>부피</b>, 센서 = <b>공기압</b>',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>(부피)',note:'1/부피를 <b>자동으로 계산해 주는 기능은 두 프로그램 다 없습니다.</b> 대신 수동 입력 칸에 부피 대신 <b>1/부피를 직접 넣으면</b> 그 자리에서 직선이 나옵니다 — 계산을 학생이 하게 되니 오히려 낫습니다. 부피와 1/부피를 둘 다 남기시려면 CSV 로 빼십시오.'},
+ '기체의 압력과 부피 관계 (보일의 법칙)':{man:'EZ p.10 · CB p.26 · SB 사례 05 · BASE p.74',raw:'시간 – 압력',to:'<b>부피 – 압력</b> → 1/부피 – 압력',ez:'<b>수동 모드</b> · 수동 입력 = <b>부피</b>, 센서 = <b>공기압</b>',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>(부피) · 압력 단위는 <b>atm</b>',note:'1/부피를 <b>자동으로 계산해 주는 기능은 두 프로그램 다 없습니다.</b> 대신 수동 입력 칸에 부피 대신 <b>1/부피를 직접 넣으면</b> 그 자리에서 직선이 나옵니다 — 계산을 학생이 하게 되니 오히려 낫습니다. 부피와 1/부피를 둘 다 남기시려면 CSV 로 빼십시오.'},
  '면적과 압력의 관계':{man:'EZ p.88 · CB p.200',raw:'시간 – 압력',to:'<b>누르는 면적 – 압력</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>면적</b>, 센서 = <b>공기압</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(면적)'},
  '공기압 센서로 물체의 무게 재기':{man:'EZ p.91 · CB p.208',raw:'시간 – 압력',to:'<b>질량 – 압력</b>',ez:'<b>수동 모드</b> · 수동 입력 = <b>질량</b>, 센서 = <b>공기압</b>',cb:'<b>수동수집</b> · X축 <b>숫자 입력</b>(질량)',note:'직선이 나오면 그 기울기로 <b>모르는 물체의 질량</b>을 되짚어 낼 수 있습니다.'},
  '용수철의 탄성력 (훅의 법칙)':{man:'교과서 수록 탐구(과학1 5. 힘의 작용) · MBL 수업허브 cb-01',raw:'시간 – 힘',to:'<b>힘 – 늘어난 길이</b>',ez:'해당 없음 — <b>큐브 무선 힘 센서</b>로 하는 실험입니다',cb:'실험 설정 → <b>수동수집</b> · X축 <b>숫자 입력</b>. 입력할 값의 이름을 <b>「늘어난 길이(cm)」</b> 로 정합니다',note:'추를 하나 걸 때마다 자로 읽은 길이를 넣고 수집을 누릅니다. <b>기울기가 그 용수철의 값</b>입니다.'},
@@ -1861,11 +1861,14 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 <div class="tablewrap"><table><tr><th>모둠</th><th>점</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr><tr><td><b>1모둠</b></td><td class="mono2">11</td><td class="mono2">60</td><td class="mono2">55</td><td class="mono2">50</td><td class="mono2">45</td><td class="mono2">40</td><td class="mono2">35</td><td class="mono2">30</td><td class="mono2">25</td><td class="mono2">20</td><td class="mono2">15</td><td class="mono2">10</td></tr><tr><td><b>2모둠</b></td><td class="mono2">10</td><td class="mono2">58</td><td class="mono2">53</td><td class="mono2">48</td><td class="mono2">43</td><td class="mono2">38</td><td class="mono2">33</td><td class="mono2">28</td><td class="mono2">23</td><td class="mono2">18</td><td class="mono2">13</td><td></td></tr><tr><td><b>3모둠</b></td><td class="mono2">10</td><td class="mono2">56</td><td class="mono2">51</td><td class="mono2">46</td><td class="mono2">41</td><td class="mono2">36</td><td class="mono2">31</td><td class="mono2">26</td><td class="mono2">21</td><td class="mono2">16</td><td class="mono2">11</td><td></td></tr><tr><td><b>4모둠</b></td><td class="mono2">9</td><td class="mono2">54</td><td class="mono2">49</td><td class="mono2">44</td><td class="mono2">39</td><td class="mono2">34</td><td class="mono2">29</td><td class="mono2">24</td><td class="mono2">19</td><td class="mono2">14</td><td></td><td></td></tr><tr><td><b>5모둠</b></td><td class="mono2">9</td><td class="mono2">52</td><td class="mono2">47</td><td class="mono2">42</td><td class="mono2">37</td><td class="mono2">32</td><td class="mono2">27</td><td class="mono2">22</td><td class="mono2">17</td><td class="mono2">12</td><td></td><td></td></tr></table></div>
 <p style="margin-top:14px"><b>25 mL 주사기</b> — 12~13 에서 막고, 2 mL 씩</p>
 <div class="tablewrap"><table><tr><th>모둠</th><th>점</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr><tr><td><b>1모둠</b></td><td class="mono2">11</td><td class="mono2">25</td><td class="mono2">23</td><td class="mono2">21</td><td class="mono2">19</td><td class="mono2">17</td><td class="mono2">15</td><td class="mono2">13</td><td class="mono2">11</td><td class="mono2">9</td><td class="mono2">7</td><td class="mono2">5</td></tr><tr><td><b>2모둠</b></td><td class="mono2">11</td><td class="mono2">24</td><td class="mono2">22</td><td class="mono2">20</td><td class="mono2">18</td><td class="mono2">16</td><td class="mono2">14</td><td class="mono2">12</td><td class="mono2">10</td><td class="mono2">8</td><td class="mono2">6</td><td class="mono2">4</td></tr></table></div>
-<div class="callout warn"><b>화면에 뜨는 압력이 <span style="color:var(--red)">절대압인지 상대압인지</span> 먼저 보십시오.</b><br>
-<b>P × V 가 일정하려면 절대압</b>이라야 합니다.<br>
-· 마개를 열어 둔 상태에서 값이 <b>1013 hPa(또는 101 kPa) 근처</b>면 <b>절대압</b> — 그대로 곱하시면 됩니다.<br>
-· 값이 <b>0 근처</b>면 <b>상대압(게이지)</b> — 30 mL 보다 당기면 <b>음수</b>가 나옵니다. 그때는 <b>1013 hPa 을 더한 뒤</b> 곱해야 일정한 값이 나옵니다.<br>
-<span style="font-size:.9rem">시트 양식에 <b>대기압 보정 칸</b>을 두었습니다. 절대압이면 0, 상대압이면 1013 을 넣으시면 됩니다. 학생에게는 이것이 <b>"센서가 주는 값이 무엇인지 알아야 한다"</b>는 좋은 이야깃거리가 됩니다.</span></div>
+<div class="callout"><b>압력 단위는 <span style="color:var(--coral-deep)">atm</span> 으로 두십시오.</b> 숫자가 깔끔해서 학생이 계산하기 좋습니다.<br>
+<div class="tablewrap" style="margin:9px 0 0;box-shadow:none"><table style="min-width:0">
+<tr><th>부피</th><th>60</th><th>40</th><th>30</th><th>20</th><th>15</th><th>10</th></tr>
+<tr><td><b>압력(atm)</b></td><td class="mono2">0.5</td><td class="mono2">0.75</td><td class="mono2">1.0</td><td class="mono2">1.5</td><td class="mono2">2.0</td><td class="mono2">3.0</td></tr>
+<tr><td><b>V × P</b></td><td class="mono2">30</td><td class="mono2">30</td><td class="mono2">30</td><td class="mono2">30</td><td class="mono2">30</td><td class="mono2">30</td></tr>
+</table></div>
+<span style="display:block;margin-top:8px"><b>30 mL 에서 막았으니 V × P 는 30 근처</b>로 나옵니다. 학생이 곱해 보고 "다 30이네?" 하는 순간이 이 실험의 핵심입니다.<br>
+마개를 연 상태에서 화면이 <b>1.0 atm 근처</b>인지 먼저 확인하십시오. 0 근처면 단위가 상대압이니 <b>설정에서 atm 으로</b> 바꾸시면 됩니다.</span></div>
 
 <div class="callout gold"><b>5모둠이면 49개 점이 모입니다.</b> 10~60 mL 사이가 거의 1 mL 간격으로 메워져서, 한 모둠 그래프로는 안 보이던 <b>곡선의 매끄러운 모양</b>이 드러납니다.<br>
 <b>6모둠부터는 1모둠 세트를 다시 씁니다.</b> 같은 세트를 맡은 두 모둠은 값이 서로 겹쳐야 정상입니다 — <b>재현성을 확인하는 짝</b>이 됩니다.</div>
@@ -1944,6 +1947,14 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 </div>
 <div class="callout"><b>참여코드 없이도 도감은 열립니다.</b> 데이터 입력과 보고서 탭만 수업에 들어가야 열립니다. 허브에서 실험을 고르면 <b>모둠이 값을 넣고 반 전체 그래프가 자동으로 합쳐집니다</b> — 칠판이나 시트 없이도 됩니다.</div>
 
+<h3 class="subh">반 전체 시트 — <b>사본 만들어 쓰십시오</b></h3>
+<p>모둠이 자기 줄에 <b>부피와 압력만</b> 적으면 <b>V × P</b> 와 <b>1 ÷ V</b> 는 자동으로 계산됩니다. 「부피 배정」 탭에 모둠별 세트가, 「원자료」 탭에 EZ·ON 전송용 시작 셀이 들어 있습니다.</p>
+<div class="urls" style="margin:10px 0 16px">
+  <a class="ulink" href='https://docs.google.com/spreadsheets/d/15EHqKJfZLyVzr_NqWZVLuAS4QYgGK3WQ8zRUGSgkuio/copy' target="_blank" rel="noopener"><b>사본 만들기</b></a>
+  <a class="ulink" href='https://docs.google.com/spreadsheets/d/15EHqKJfZLyVzr_NqWZVLuAS4QYgGK3WQ8zRUGSgkuio/edit?usp=sharing' target="_blank" rel="noopener">먼저 열어 보기</a>
+</div>
+<div class="callout gold"><b>「사본 만들기」로 여십시오.</b> 원본을 그대로 쓰면 여러 학교가 같은 시트에 값을 적게 됩니다. 사본을 만드신 뒤 <b>반 이름으로 바꾸고</b> 클래스룸에 <b>「학생이 파일 수정 가능」</b> 으로 올리시면 됩니다.</div>
+
 <h3 class="subh">학생 <b>기록지</b> — 그대로 인쇄해 쓰십시오</h3>
 <div class="wsbar">
   <button class="btn" id="wsPrint">기록지 인쇄하기</button>
@@ -1965,11 +1976,11 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 
   <div class="wq"><em>3</em>우리 세트를 다 재서 아래 표에 적으십시오.</div>
   <div class="tablewrap" style="border:none;box-shadow:none;margin:6px 0 0"><table>
-  <tr><th>순번</th><th>부피 V (mL)</th><th>압력 P (kPa)</th><th>V × P</th><th>1 ÷ V</th></tr>
+  <tr><th>순번</th><th>부피 V (mL)</th><th>압력 P (atm)</th><th>V × P</th><th>1 ÷ V</th></tr>
   <tr><td class="h">1</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">2</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">3</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">4</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">5</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">6</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">7</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">8</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">9</td><td></td><td></td><td></td><td></td></tr>
   </table></div>
   <div class="wnote">막은 직후에는 손 온도 때문에 값이 조금 움직입니다. <b>10초쯤 기다렸다</b> 읽습니다.<br>
-  <b>V × P 칸을 먼저 채워 보십시오.</b> 아홉 개가 비슷하게 나옵니까?</div>
+  <b>V × P 칸을 먼저 채워 보십시오.</b> 30 mL 에서 막았으면 <b>30 근처</b>가 나옵니다. 다 비슷합니까?</div>
   <div class="wnote">막은 직후에는 손 온도 때문에 값이 조금 움직입니다. 10초쯤 기다렸다 읽습니다.</div>
 
   <div class="wq"><em>4</em>반 전체 값 가운데, <b>우리 모둠과 가까운 부피</b>를 골라 옮겨 적으십시오.</div>
@@ -1991,12 +2002,12 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 
   <div class="wq"><em>5</em>가로축을 <b>부피</b>로 두고 <b>우리 모둠 아홉 점</b>을 찍어 보십시오.</div>
   <div class="gwrap"><svg class="gridpaper" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="g5" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#c9d4dd" stroke-width="0.5"/></pattern><pattern id="g50" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#g5)"/><path d="M50 0H0V50" fill="none" stroke="#9fb0be" stroke-width="1"/></pattern></defs><rect width="400" height="300" fill="url(#g50)"/><path d="M0 300H400M0 0V300" fill="none" stroke="#0e3050" stroke-width="2"/></svg></div>
-  <div class="glab"><span>가로 <b>부피 V (mL)</b></span><span>세로 <b>압력 P (kPa)</b></span></div>
+  <div class="glab"><span>가로 <b>부피 V (mL)</b></span><span>세로 <b>압력 P (atm)</b></span></div>
   <div class="wnote">곧은 선입니까, 휜 선입니까? 여유가 있으면 반 전체 점도 다른 색으로 함께 찍어 보십시오.</div>
 
   <div class="wq"><em>6</em>이번에는 가로축을 <b>1 ÷ 부피</b>로 바꿔서 다시 찍어 보십시오.</div>
   <div class="gwrap"><svg class="gridpaper" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="g5" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#c9d4dd" stroke-width="0.5"/></pattern><pattern id="g50" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#g5)"/><path d="M50 0H0V50" fill="none" stroke="#9fb0be" stroke-width="1"/></pattern></defs><rect width="400" height="300" fill="url(#g50)"/><path d="M0 300H400M0 0V300" fill="none" stroke="#0e3050" stroke-width="2"/></svg></div>
-  <div class="glab"><span>가로 <b>1 ÷ 부피 (1/mL)</b></span><span>세로 <b>압력 P (kPa)</b></span></div>
+  <div class="glab"><span>가로 <b>1 ÷ 부피 (1/mL)</b></span><span>세로 <b>압력 P (atm)</b></span></div>
   <div class="wnote">이번에는 어떻습니까? <b>왜 이렇게 바뀌었을까요?</b></div>
 
   <div class="wq"><em>7</em>세 가지만 답해 봅시다.</div>
@@ -2030,8 +2041,10 @@ classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 �
 <h3 class="subh">시트 양식은 <b>만들어 두었습니다</b></h3>
 <p>매뉴얼 모음집 폴더에 <code style="background:var(--teal-soft);padding:2px 8px;border-radius:4px">양식_반전체 보일의 법칙 시트.xlsx</code> 로 들어 있습니다. 받아서 <b>드라이브에 올리면 그대로 구글 시트가 됩니다.</b></p>
 <div class="urls" style="margin:10px 0 14px">
-  <a class="ulink dl" href='https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=HKK13h' target="_blank" rel="noopener"><b>양식 받으러 가기</b></a>
+  <a class="ulink" href='https://docs.google.com/spreadsheets/d/15EHqKJfZLyVzr_NqWZVLuAS4QYgGK3WQ8zRUGSgkuio/copy' target="_blank" rel="noopener"><b>구글 시트로 바로 사본 만들기</b></a>
+  <a class="ulink dl" href='https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=HKK13h' target="_blank" rel="noopener"><b>엑셀 파일로 받기</b></a>
 </div>
+<div class="callout"><b>구글 시트 쪽이 빠릅니다.</b> 「사본 만들기」를 누르면 내 드라이브에 바로 복사됩니다 — 올리고 변환하는 단계가 없습니다.</div>
 
 <div class="tablewrap"><table>
 <tr><th>탭</th><th>들어 있는 것</th></tr>
