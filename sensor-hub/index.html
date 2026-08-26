@@ -175,6 +175,14 @@ td b{color:var(--deep)}
 .exp.dim .top{background:var(--paper)}
 .exp.dim h4{color:var(--ink-soft)}
 
+/* ══ 유튜브 링크 ══ */
+.ytlink{display:inline-flex;align-items:center;gap:5px;font-size:.86rem;font-weight:600;color:var(--red);
+  background:var(--red-soft);border:1px solid #f0cdc7;border-radius:6px;padding:4px 9px;margin:0 5px 5px 0;text-decoration:none;transition:.14s}
+.ytlink::before{content:"▶";font-size:.72em}
+.ytlink:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.ytlink b{font-weight:700}
+.ytlink:hover b{color:#fff}
+
 /* ══ 인쇄용 기록지 ══ */
 .wsbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 10px}
 .worksheet{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow);color:#111}
@@ -919,9 +927,32 @@ const HOWTO = {
  '초음파 센서로 운동 분석':{man:'EZ 사례 17',raw:'시간 – 거리',to:'시간축 그대로 → <b>시간 – 속도</b>',ez:'초음파는 D 포트 · <b>기본 모드</b> 또는 <b>분석 모드</b> · 수집 간격만 정하면 됩니다',cb:'실험 설정 → <b>자동수집</b> · 수집 간격(Hz)과 실험 시간(초) · 운동 센서',note:'거리 그래프의 <b>기울기가 속도</b>입니다. 속도 축은 시트에서 만듭니다.'},
 };
 
+/* ═══ 사이언스큐브 유튜브 실험 영상 ═══
+   채널 @playsciencecube · 영상 108편에서 실험별로 짝지은 것 */
+const VID = {
+ '기체의 압력과 부피 관계 (보일의 법칙)':[['보일의 법칙 — 무선 압력센서A','kxwsMuzFBo8']],
+ '기체의 온도와 부피 관계 (샤를의 법칙)':[['샤를의 법칙 실험 기구 <b>제작하기</b>','7mgrmk82C7o'],['샤를의 법칙 — 무선 온도센서','-rOabTynIEI'],['기체의 온도와 부피의 관계','DnK7qM-bZB8']],
+ '마찰력에 영향을 주는 요인':[['MBL 실험 마찰력','lDZTW3N7L6E']],
+ '용수철의 탄성력 (훅의 법칙)':[['용수철의 탄성력 — 무선 힘가속도센서','cQj6Jxkjtfw'],['훅의 법칙 — 무선 힘가속도 센서','QA_UeOl4VpM'],['탄성력 측정 (2022 개정)','-9DrR_viU5U']],
+ '물과 식용유의 비열 비교':[['물과 식용유 비열 — <b>가열</b>','iBsNpYo7U5A'],['물과 식용유 비열 — <b>냉각</b>','tDD5gFyk6vo']],
+ '물의 어는점 측정':[['상태변화 응고 — 무선 온도센서','tUxzA3rgrKg']],
+ '열량계로 열평형 관찰':[['열평형 (2022 개정)','xl5k3JXaKZA'],['열 평형 — 무선 온도센서','xaa7bx7J0M0']],
+ '물질에 따른 열의 전도 비교':[['금속의 열전도 (2022 개정)','5AbYYAMTS2g']],
+ '광합성에 필요한 물질 확인 (CO₂)':[['광합성','eETyx6lTkn8']],
+ '빛의 세기에 따른 광합성량':[['광합성','eETyx6lTkn8']],
+ '거리에 따른 빛의 세기 (역제곱 법칙)':[['조도센서로 거리에 따른 별의 밝기','EGxCfZpoh-o']],
+ '물과 에탄올 혼합물 분리 (증류)':[['혼합물의 분리','By6mu0ixmK4']],
+ '구름 생성 (단열 팽창)':[['구름 생성 원리 — 온도 + 기체압력','T0DsS9BpV7Q']],
+ '초음파 센서로 운동 분석':[['운동과 에너지','_moVJ17bKnA']],
+};
+
 function expCard(e){
   const h = HOWTO[e.title] || {};
   const man = h.man ? `<div class="row"><span class="k">매뉴얼</span><span class="v mono2">${h.man}</span></div>` : '';
+  const vs = VID[e.title];
+  const vid = vs ? `<div class="row"><span class="k" style="color:var(--red)">영상</span><span class="v">`
+    + vs.map(v=>`<a class="ytlink" href="https://youtu.be/${v[1]}" target="_blank" rel="noopener">${v[0]}</a>`).join('')
+    + `</span></div>` : '';
   const kit = e.ok
     ? (e.n>=6 ? `<span class="bd n8">오늘 ${e.n}모둠</span>` : `<span class="bd n4">오늘 ${e.n}모둠</span>`)
     : `<span class="bd no">오늘은 센서 없음</span>`;
@@ -942,6 +973,7 @@ function expCard(e){
     <div class="body">
       <div class="row"><span class="k">센서</span><span class="v">${e.sensor}${e.sw?' · '+e.sw:''}</span></div>
       ${man}
+      ${vid}
       ${howBlock}
       ${e.ok ? `<details class="fold"><summary>준비물 · 절차 · TIP</summary>
       <div class="row"><span class="k">준비물</span><span class="v">${e.prep}</span></div>
@@ -2959,9 +2991,15 @@ const LINKS = [
  {g:'사이언스큐브 — 센서와 수업', items:[
   {t:'⭐ 무선센서 카탈로그 Ver 9.0', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26290/', d:'센서 35종 + 2022개정 교과서 수록 탐구 대조표. 「교과서가 지정한 탐구」 절의 그 표가 여기서 나왔습니다', tag:'카탈로그 교과서 수록 가격 센서목록'},
   {t:'무선센서 사용설명서 (2025.10)', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/99/', d:'센서별 사용법·측정 범위·주의사항', tag:'센서 설명서 사용법 범위'},
-  {t:'동영상 설명서 — 사용법 기초', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/25973/', d:'영상 2편. 글보다 빠릅니다', tag:'동영상 영상 유튜브 기초'},
-  {t:'└ 사용법 기초 (1)', u:'https://youtu.be/brB2OwXyEQg', d:'유튜브', tag:'동영상 유튜브 기초1'},
-  {t:'└ 사용법 기초 (2)', u:'https://youtu.be/VzbXhczuJds', d:'유튜브', tag:'동영상 유튜브 기초2'},
+  {t:'⭐ 유튜브 채널 — 실험 영상 108편', u:'https://www.youtube.com/@playsciencecube/videos', d:'실험 매뉴얼이 영상으로 올라와 있습니다. 실험 카드마다 해당 영상을 걸어 두었습니다', tag:'유튜브 채널 동영상 영상 매뉴얼'},
+  {t:'└ MBL 무선센서를 쉽게 다루는 방법 (1)', u:'https://youtu.be/brB2OwXyEQg', d:'유튜브 · 처음 잡으실 때 이것부터', tag:'동영상 유튜브 MBL 무선센서를 쉽게 다루는 방법 (1)'},
+  {t:'└ MBL 무선센서를 쉽게 다루는 방법 (2)', u:'https://youtu.be/VzbXhczuJds', d:'유튜브', tag:'동영상 유튜브 MBL 무선센서를 쉽게 다루는 방법 (2)'},
+  {t:'└ 사이언스# — 한 차트에 그래프 합치기', u:'https://youtu.be/c9RgjJ-gpaI', d:'유튜브 · 모둠 데이터를 겹쳐 볼 때', tag:'동영상 유튜브 사이언스# — 한 차트에 그래프 합치기'},
+  {t:'└ 블루투스 연결 안내', u:'https://youtu.be/B35V2dy8dk8', d:'유튜브', tag:'동영상 유튜브 블루투스 연결 안내'},
+  {t:'└ 이산화탄소 센서 사용 방법', u:'https://youtu.be/-66wtmqeCYE', d:'유튜브 · 광합성 실험 전에', tag:'동영상 유튜브 이산화탄소 센서 사용 방법'},
+  {t:'└ 건습도 온도계 사용 방법', u:'https://youtu.be/jAG86306Jc8', d:'유튜브', tag:'동영상 유튜브 건습도 온도계 사용 방법'},
+  {t:'└ 색도계 사용 방법', u:'https://youtu.be/8q9D-UgUo2Q', d:'유튜브', tag:'동영상 유튜브 색도계 사용 방법'},
+  {t:'└ 무선 포토게이트 설명서', u:'https://youtu.be/iM0wTs_MO0M', d:'유튜브', tag:'동영상 유튜브 무선 포토게이트 설명서'},
   {t:'[과자랩] 중등 화학 — MBL 센서 알차게 활용하기', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/330/', d:'중등 화학 수업 사례', tag:'중등 화학 수업사례 과자랩'},
   {t:'연직 수온 분포 실험', u:'https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/349/', d:'중2 수권 단원. 온도 센서 여러 개를 깊이별로', tag:'수권 수온 해수 중2'},
   {t:'자료실 전체 목록', u:'https://sciencecube.kr/board/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/', d:'여기 없는 것을 찾으실 때', tag:'자료실 전체 목록'}
