@@ -618,13 +618,13 @@ const EXPS = [
 {g:1,ok:1,n:2,unit:'Ⅵ 기체의 성질',title:'기체의 압력과 부피 관계 (보일의 법칙)',std:'9과06-02',
  zero:'<b>마개를 연 상태가 대기압 기준</b>입니다. 닫고 시작하면 그 순간 압력이 기준이 되어 P×V가 맞지 않습니다.',
  sensor:'큐브 압력 ×1 <b>또는</b> 이지 공기압 ×1',sw:'Science# / EZ·ON',src:'EZ 03 · SB 05',
- prep:'<b>60 mL 주사기</b>(권장) · 실리콘 튜브와 커넥터 · 마개 · 실험복. <span style="font-size:.93em">25 mL 도 되지만 범위가 좁아 곡선이 거의 직선처럼 보입니다</span>',
+ prep:'<b>60 mL 주사기</b>(권장 — <b>30 mL 에서 막습니다</b>) · 실리콘 튜브와 커넥터 · 마개 · 실험복. <span style="font-size:.93em">25 mL 도 되지만 범위가 좁아 곡선이 거의 직선처럼 보입니다</span>',
  steps:['센서와 주사기를 튜브로 잇고, <b>연결부가 새지 않는지</b> 먼저 확인한다',
         '<b>마개를 연 채로 영점</b>을 잡는다 — 이때가 대기압 기준이다',
         '수집 방식을 <b>수동</b>으로 바꾸고 입력 항목을 <b>부피(mL)</b> 로 정한다 — <b>큐브</b> 실험 설정 → 수동수집 · X축 숫자 입력 / <b>이지</b> 수동 모드 · 수동 입력=부피, 센서=공기압',
-        '<b>우리 모둠이 맡은 세트의 첫 부피</b>에 피스톤을 맞추고 마개를 막는다 (1모둠 60 · 2모둠 58 · 3모둠 56 …)',
-        '값이 멈추면 부피를 입력하고 수집을 누른다. <b>5 mL 씩 줄여 가며 아홉 번</b>',
-        '표에서 <b>P × V</b> 를 계산해 아홉 개가 비슷한지 본다'],
+        '피스톤을 <b>30 mL</b> 에 맞추고 마개를 막는다 — 여기가 기준 부피다. <b>60 에서 막으면 안 됩니다</b>',
+        '맡은 세트대로 <b>당겨서 60 쪽으로, 눌러서 10 쪽으로</b> 오가며 잰다. 값이 멈추면 부피를 입력하고 수집 — <b>아홉에서 열한 번</b>',
+        '표에서 <b>P × V</b> 를 계산해 값들이 비슷한지 본다. 화면 압력이 <b>상대압이면 1013 hPa 을 더한 뒤</b> 곱한다'],
   tip:'<b>모둠마다 부피 세트를 어긋나게 주십시오.</b> 1모둠 60부터, 2모둠 58부터, 3모둠 56부터 — 그래야 합쳤을 때 점이 포개지지 않습니다. 배정표와 학생 기록지는 「우리 반 보일의 법칙 그래프」 절에 있습니다.<br>주사기 몸통을 감싸 쥐면 체온이 기체를 데웁니다. 밀대 끝만 잡으세요. 부피를 바꾼 뒤 1~2초 기다렸다 찍어야 값이 안정됩니다.'},
 
 {g:1,ok:1,n:4,unit:'Ⅵ 기체의 성질',title:'기체의 온도와 부피 관계 (샤를의 법칙)',std:'9과06-03',
@@ -1779,21 +1779,25 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
   '센서가 두세 개뿐이어도 되는 설계입니다 — 오히려 그래서 더 좋습니다')
 + `<div class="callout"><b>왜 이렇게 할까요.</b> 한 모둠이 부피를 여덟 번 바꿔 가며 재면, 그 모둠 그래프는 그 모둠 것으로 끝납니다. 그런데 <b>모둠마다 한 점씩</b> 맡아 모으면, 완성된 곡선은 <b>반 전체가 함께 만든 것</b>이 됩니다. 자기 점이 어디 있는지 찾게 되고, 튀는 점이 나오면 그 모둠이 다시 재게 됩니다.</div>
 
-<h3 class="subh">준비 — 모둠마다 <b>어긋난 부피 세트</b>를 맡깁니다</h3>
-<div class="callout"><b>한 모둠이 아홉 점을 다 잽니다.</b> 그 모둠 자료만으로도 P × V 가 일정하다는 것을 확인할 수 있어야 하니까요.<br>
-다만 <b>시작 부피를 2 mL 씩 내려</b> 모둠마다 다른 세트를 줍니다. 그래야 합쳤을 때 점이 <b>같은 자리에 포개지지 않고</b> 촘촘히 이어집니다.</div>
+<h3 class="subh">준비 — 마개는 <b>30 mL 에서</b> 막습니다</h3>
+<div class="callout warn"><b>여기가 이 실험의 핵심입니다.</b><br>
+피스톤을 <b>30 mL 자리에 두고 마개를 막으십시오.</b> 그러면 <b>당겨서 60 까지, 눌러서 10 까지</b> 다 됩니다 — 부피가 <b>여섯 배</b> 차이라 곡선이 확실하게 휩니다.<br>
+60 에서 막고 누르기만 하면 세 배밖에 안 되고, 끝에서는 <b>센서 범위를 넘거나 손으로 못 누릅니다.</b></div>
 
-<p><b>60 mL 주사기</b> — 권장</p>
-<div class="tablewrap"><table><tr><th>모둠</th><th>1번째</th><th>2번째</th><th>3번째</th><th>4번째</th><th>5번째</th><th>6번째</th><th>7번째</th><th>8번째</th><th>9번째</th></tr><tr><td><b>1모둠</b></td><td class="mono2">60</td><td class="mono2">55</td><td class="mono2">50</td><td class="mono2">45</td><td class="mono2">40</td><td class="mono2">35</td><td class="mono2">30</td><td class="mono2">25</td><td class="mono2">20</td></tr><tr><td><b>2모둠</b></td><td class="mono2">58</td><td class="mono2">53</td><td class="mono2">48</td><td class="mono2">43</td><td class="mono2">38</td><td class="mono2">33</td><td class="mono2">28</td><td class="mono2">23</td><td class="mono2">18</td></tr><tr><td><b>3모둠</b></td><td class="mono2">56</td><td class="mono2">51</td><td class="mono2">46</td><td class="mono2">41</td><td class="mono2">36</td><td class="mono2">31</td><td class="mono2">26</td><td class="mono2">21</td><td class="mono2">16</td></tr><tr><td><b>4모둠</b></td><td class="mono2">54</td><td class="mono2">49</td><td class="mono2">44</td><td class="mono2">39</td><td class="mono2">34</td><td class="mono2">29</td><td class="mono2">24</td><td class="mono2">19</td><td class="mono2">14</td></tr><tr><td><b>5모둠</b></td><td class="mono2">52</td><td class="mono2">47</td><td class="mono2">42</td><td class="mono2">37</td><td class="mono2">32</td><td class="mono2">27</td><td class="mono2">22</td><td class="mono2">17</td><td class="mono2">12</td></tr></table></div>
-<p style="margin-top:14px"><b>25 mL 주사기</b> — 눈금 간격이 좁아 세트가 둘뿐입니다</p>
-<div class="tablewrap"><table><tr><th>모둠</th><th>1번째</th><th>2번째</th><th>3번째</th><th>4번째</th><th>5번째</th><th>6번째</th><th>7번째</th><th>8번째</th><th>9번째</th></tr><tr><td><b>1모둠</b></td><td class="mono2">25</td><td class="mono2">23</td><td class="mono2">21</td><td class="mono2">19</td><td class="mono2">17</td><td class="mono2">15</td><td class="mono2">13</td><td class="mono2">11</td><td class="mono2">9</td></tr><tr><td><b>2모둠</b></td><td class="mono2">24</td><td class="mono2">22</td><td class="mono2">20</td><td class="mono2">18</td><td class="mono2">16</td><td class="mono2">14</td><td class="mono2">12</td><td class="mono2">10</td><td class="mono2">8</td></tr></table></div>
-<div class="callout warn"><b>큐브 압력 센서로 하실 때 — 마지막 점을 조심하십시오.</b><br>
-무선압력센서 A(WL 103P)의 카탈로그 범위가 <b>−1,000 ~ +3,000 hPa</b> 입니다. 60 mL 에서 20 mL 까지 누르면 압력이 <b>세 배</b>가 되는데, 여기까지는 들어갑니다. 그런데 <b>5모둠의 마지막 12 mL</b> 는 네 배가 넘어 <b>범위를 벗어납니다.</b><br>
-<b>이렇게 하십시오</b> — <b>5모둠은 마지막 한 점(12 mL)을 빼고 여덟 점</b>만 재게 하시거나, 조가 넷 이하면 그냥 두셔도 됩니다.<br>
-<span style="font-size:.9rem">그리고 실습 전에 <b>한 조가 먼저 20 mL 까지 눌러 보십시오.</b> 값이 멈추거나 튀면 거기가 그 센서의 한계입니다 — 그 앞에서 끊으시면 됩니다. 손으로 누르기도 그쯤부터 버겁습니다.</span></div>
+<div class="callout"><b>한 모둠이 자기 세트를 다 잽니다.</b> 다만 <b>시작 부피를 2 mL 씩 내려</b> 모둠마다 다른 세트를 줍니다. 그래야 합쳤을 때 점이 <b>같은 자리에 포개지지 않고</b> 촘촘히 이어집니다.</div>
 
-<div class="callout gold"><b>5모둠이면 45개 점이 모입니다.</b> 12~60 mL 사이가 거의 1 mL 간격으로 메워져서, 한 모둠 그래프로는 안 보이던 <b>곡선의 매끄러운 모양</b>이 드러납니다.<br>
-<b>6모둠부터는 1모둠 세트를 다시 씁니다.</b> 같은 세트를 맡은 두 모둠은 값이 서로 겹쳐야 정상입니다 — <b>재현성을 확인하는 짝</b>이 됩니다. 안 겹치면 그게 토의거리입니다.</div>
+<p><b>60 mL 주사기</b> — 30 에서 막고, 당겼다가 눌러 갑니다</p>
+<div class="tablewrap"><table><tr><th>모둠</th><th>점</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr><tr><td><b>1모둠</b></td><td class="mono2">11</td><td class="mono2">60</td><td class="mono2">55</td><td class="mono2">50</td><td class="mono2">45</td><td class="mono2">40</td><td class="mono2">35</td><td class="mono2">30</td><td class="mono2">25</td><td class="mono2">20</td><td class="mono2">15</td><td class="mono2">10</td></tr><tr><td><b>2모둠</b></td><td class="mono2">10</td><td class="mono2">58</td><td class="mono2">53</td><td class="mono2">48</td><td class="mono2">43</td><td class="mono2">38</td><td class="mono2">33</td><td class="mono2">28</td><td class="mono2">23</td><td class="mono2">18</td><td class="mono2">13</td><td></td></tr><tr><td><b>3모둠</b></td><td class="mono2">10</td><td class="mono2">56</td><td class="mono2">51</td><td class="mono2">46</td><td class="mono2">41</td><td class="mono2">36</td><td class="mono2">31</td><td class="mono2">26</td><td class="mono2">21</td><td class="mono2">16</td><td class="mono2">11</td><td></td></tr><tr><td><b>4모둠</b></td><td class="mono2">9</td><td class="mono2">54</td><td class="mono2">49</td><td class="mono2">44</td><td class="mono2">39</td><td class="mono2">34</td><td class="mono2">29</td><td class="mono2">24</td><td class="mono2">19</td><td class="mono2">14</td><td></td><td></td></tr><tr><td><b>5모둠</b></td><td class="mono2">9</td><td class="mono2">52</td><td class="mono2">47</td><td class="mono2">42</td><td class="mono2">37</td><td class="mono2">32</td><td class="mono2">27</td><td class="mono2">22</td><td class="mono2">17</td><td class="mono2">12</td><td></td><td></td></tr></table></div>
+<p style="margin-top:14px"><b>25 mL 주사기</b> — 12~13 에서 막고, 2 mL 씩</p>
+<div class="tablewrap"><table><tr><th>모둠</th><th>점</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr><tr><td><b>1모둠</b></td><td class="mono2">11</td><td class="mono2">25</td><td class="mono2">23</td><td class="mono2">21</td><td class="mono2">19</td><td class="mono2">17</td><td class="mono2">15</td><td class="mono2">13</td><td class="mono2">11</td><td class="mono2">9</td><td class="mono2">7</td><td class="mono2">5</td></tr><tr><td><b>2모둠</b></td><td class="mono2">11</td><td class="mono2">24</td><td class="mono2">22</td><td class="mono2">20</td><td class="mono2">18</td><td class="mono2">16</td><td class="mono2">14</td><td class="mono2">12</td><td class="mono2">10</td><td class="mono2">8</td><td class="mono2">6</td><td class="mono2">4</td></tr></table></div>
+<div class="callout warn"><b>화면에 뜨는 압력이 <span style="color:var(--red)">절대압인지 상대압인지</span> 먼저 보십시오.</b><br>
+<b>P × V 가 일정하려면 절대압</b>이라야 합니다.<br>
+· 마개를 열어 둔 상태에서 값이 <b>1013 hPa(또는 101 kPa) 근처</b>면 <b>절대압</b> — 그대로 곱하시면 됩니다.<br>
+· 값이 <b>0 근처</b>면 <b>상대압(게이지)</b> — 30 mL 보다 당기면 <b>음수</b>가 나옵니다. 그때는 <b>1013 hPa 을 더한 뒤</b> 곱해야 일정한 값이 나옵니다.<br>
+<span style="font-size:.9rem">시트 양식에 <b>대기압 보정 칸</b>을 두었습니다. 절대압이면 0, 상대압이면 1013 을 넣으시면 됩니다. 학생에게는 이것이 <b>"센서가 주는 값이 무엇인지 알아야 한다"</b>는 좋은 이야깃거리가 됩니다.</span></div>
+
+<div class="callout gold"><b>5모둠이면 49개 점이 모입니다.</b> 10~60 mL 사이가 거의 1 mL 간격으로 메워져서, 한 모둠 그래프로는 안 보이던 <b>곡선의 매끄러운 모양</b>이 드러납니다.<br>
+<b>6모둠부터는 1모둠 세트를 다시 씁니다.</b> 같은 세트를 맡은 두 모둠은 값이 서로 겹쳐야 정상입니다 — <b>재현성을 확인하는 짝</b>이 됩니다.</div>
 
 <h3 class="subh">모둠이 하는 일 — <b>딱 네 걸음</b></h3>
 <div class="moves">
@@ -1802,17 +1806,17 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
     <p>이때가 <b>대기압 기준</b>입니다. 닫고 시작하면 그 순간 압력이 기준이 되어 <b>부피 × 압력이 일정하게 안 나옵니다.</b></p>
     <div class="say">"아직 막지 마세요. 열어 둔 채로 영점부터."</div></div></div>
   <div class="move"><div class="n">2</div><div>
-    <h4>맡은 세트의 첫 부피에 눈금을 맞추고 막습니다</h4>
-    <p>피스톤을 <b>정확히 그 눈금</b>에 놓고 마개를 막습니다. 손으로 누르는 게 아니라 <b>고정</b>해야 합니다. 아홉 점을 차례로 다 잽니다.</p>
-    <div class="say">"우리는 2모둠이니까 58부터입니다. 58 맞춰 놓고 막습니다."</div></div></div>
+    <h4><b>30 mL</b> 에 맞추고 마개를 막습니다</h4>
+    <p>맡은 세트의 첫 부피가 아니라 <b>30 mL 에서 막는 것</b>입니다. 여기가 이 실험의 기준 부피가 됩니다. 그다음 <b>당겨서 60 쪽으로, 눌러서 10 쪽으로</b> 오가며 잽니다.</p>
+    <div class="say">"먼저 30에 맞춰 놓고 막습니다. 그다음 우리 세트대로 58부터 잽니다."</div></div></div>
   <div class="move"><div class="n">3</div><div>
     <h4>값이 안정되면 압력을 읽습니다</h4>
     <p>막은 직후에는 손 온도 때문에 값이 조금 움직입니다. <b>10초쯤 기다렸다</b> 읽습니다.</p>
     <div class="say">"숫자가 멈출 때까지 기다렸다 적으세요."</div></div></div>
   <div class="move"><div class="n">4</div><div>
-    <h4>칠판(또는 공유 시트)에 <b>아홉 줄</b>을 옮겨 적습니다</h4>
-    <p>우리 모둠 자리에 아홉 점을 그대로. 이게 반 전체 그래프의 <b>한 갈래</b>가 됩니다.</p>
-    <div class="say">"3모둠 다 적었어요? 그럼 이제 56부터 16까지 아홉 개가 들어간 겁니다."</div></div></div>
+    <h4>칠판(또는 공유 시트)에 <b>우리 세트를 통째로</b> 옮겨 적습니다</h4>
+    <p>모둠마다 아홉에서 열한 점. 이게 반 전체 그래프의 <b>한 갈래</b>가 됩니다.</p>
+    <div class="say">"3모둠 다 적었어요? 56부터 11까지 열 개가 들어간 겁니다."</div></div></div>
 </div>
 
 <h3 class="subh">모으는 방법 — 학교 사정에 맞게</h3>
@@ -1881,14 +1885,14 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
   <div class="wname"><span>학년 <span class="wbox" style="min-width:44px"></span></span><span>반 <span class="wbox" style="min-width:44px"></span></span><span>모둠 <span class="wbox" style="min-width:44px"></span></span><span>이름 <span class="wbox" style="min-width:150px"></span></span></div>
 
   <div class="wq"><em>1</em>우리 모둠은 몇 모둠이고, 맡은 세트는 무엇입니까?</div>
-  <div><span class="wbox" style="min-width:60px"></span> 모둠 &nbsp;&nbsp; 시작 부피 <span class="wbox" style="min-width:60px"></span> mL
-  <span style="font-size:.86rem;color:#555;margin-left:8px">— 거기서 5 mL 씩 줄여 가며 아홉 번 잽니다</span></div>
+  <div><span class="wbox" style="min-width:60px"></span> 모둠 &nbsp;&nbsp; 세트 <span class="wbox" style="min-width:70px"></span> ~ <span class="wbox" style="min-width:70px"></span> mL
+  <span style="font-size:.86rem;color:#555;margin-left:8px">— 5 mL 씩 오가며 잽니다</span></div>
 
-  <div class="wq"><em>2</em>영점을 잡았습니까?</div>
-  <div style="font-size:.95rem"><span class="wchk"></span><b>마개를 연 채로</b> 영점을 잡았다 &nbsp;&nbsp; <span class="wchk"></span>맡은 부피에 눈금을 맞추고 막았다</div>
+  <div class="wq"><em>2</em>준비를 마쳤습니까?</div>
+  <div style="font-size:.95rem"><span class="wchk"></span><b>마개를 연 채로</b> 영점을 잡았다 &nbsp;&nbsp; <span class="wchk"></span><b>30 mL 에서</b> 마개를 막았다</div>
   <div class="wnote">마개를 닫고 영점을 잡으면 그 순간 압력이 기준이 되어 <b>부피 × 압력이 일정하게 나오지 않습니다.</b></div>
 
-  <div class="wq"><em>3</em>아홉 번을 재서 아래 표에 적으십시오.</div>
+  <div class="wq"><em>3</em>우리 세트를 다 재서 아래 표에 적으십시오.</div>
   <div class="tablewrap" style="border:none;box-shadow:none;margin:6px 0 0"><table>
   <tr><th>순번</th><th>부피 V (mL)</th><th>압력 P (kPa)</th><th>V × P</th><th>1 ÷ V</th></tr>
   <tr><td class="h">1</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">2</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">3</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">4</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">5</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">6</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">7</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">8</td><td></td><td></td><td></td><td></td></tr><tr><td class="h">9</td><td></td><td></td><td></td><td></td></tr>
