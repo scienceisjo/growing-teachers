@@ -311,8 +311,17 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
   </div>
 </section>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-<span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-02</span></footer>
+<footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 도구<br>
+<span style="font-size:11px;opacity:.85;">송쌤과학 「디벗 업무 도우미」 절차 참고 · 최종 업데이트: 2026-09-02</span></footer>
+</div>
+
+<div id="creditOv" style="position:fixed;inset:0;background:rgba(15,17,26,.55);z-index:90;display:flex;align-items:center;justify-content:center;padding:18px" hidden>
+  <div style="background:#fff;border-radius:14px;max-width:560px;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.28)">
+    <h3 style="margin:0 0 10px;font-size:18px">출처 안내</h3>
+    <p style="margin:0 0 10px;color:var(--tx2);font-size:14px;line-height:1.75">본 도구는 <b>송쌤과학(아주중 송세호 선생님)</b>의 「디벗 업무 도우미」에 정리된 업무 절차와 서식 구성을 참고하여 만든 것입니다.</p>
+    <div class="note i" style="margin:0 0 16px">서울특별시교육청 <b>디벗 전문가(테크니션) 직무연수 「윈도우 ADMIN · MDM UI 안내」</b> 실습 도구입니다. 입력한 명렬은 브라우저 밖으로 전송되지 않습니다.</div>
+    <div style="text-align:right"><button class="btn pri" id="creditOk">확인</button></div>
+  </div>
 </div>
 
 <script>
@@ -642,6 +651,16 @@ document.addEventListener("input",function(e){
 });
 
 loadAll();
+(function(){
+  try{
+    if(!sessionStorage.getItem("dibut_gen_credit")){
+      sessionStorage.setItem("dibut_gen_credit","1");
+      var ov=document.getElementById("creditOv");if(ov)ov.hidden=false;
+    }
+  }catch(e){}
+  var ok=document.getElementById("creditOk");
+  if(ok)ok.addEventListener("click",function(){document.getElementById("creditOv").hidden=true;});
+})();
 })();
 </script>
 </body>

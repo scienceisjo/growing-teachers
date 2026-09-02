@@ -131,10 +131,19 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
   <b>같은 브라우저·같은 주소</b>로 열어야 이어집니다. 실습기를 새 탭으로 열고, 깬 뒤 이 탭으로 돌아오세요.
 </p>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-<span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-02</span></footer>
+<footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 허브<br>
+<span style="font-size:11px;opacity:.85;">스테이지 구성: 송쌤과학 「디벗 업무 도우미」 월별 달력 기반 · 최종 업데이트: 2026-09-02</span></footer>
 </div>
 
+
+<div id="creditOv" style="position:fixed;inset:0;background:rgba(8,6,18,.72);z-index:90;display:flex;align-items:center;justify-content:center;padding:18px" hidden>
+  <div style="background:var(--panel2);border:1.5px solid var(--line);border-radius:18px;max-width:560px;padding:28px 30px">
+    <h3 style="margin:0 0 10px;font-size:19px;color:var(--gold)">출처 안내</h3>
+    <p style="margin:0 0 10px;color:var(--tx2);font-size:14px;line-height:1.75">이 허브의 월별 스테이지 구성은 <b style="color:var(--tx)">송쌤과학(아주중 송세호 선생님)</b>의 「디벗 업무 도우미」 연간 달력을 바탕으로 했습니다. M365 실습기는 <b style="color:var(--tx)">서울온라인학교 강현욱 선생님</b>의 실습 사이트 일부를 각색했습니다.</p>
+    <p style="margin:0 0 18px;color:var(--tx2);font-size:13.5px;line-height:1.7">서울특별시교육청 <b style="color:var(--tx)">디벗 전문가(테크니션) 직무연수 「윈도우 ADMIN · MDM UI 안내」</b> 실습 페이지입니다.</p>
+    <div style="text-align:right"><button id="creditOk" style="border:0;border-radius:10px;background:var(--pri2);color:#fff;font:inherit;font-weight:800;padding:10px 22px;cursor:pointer">확인</button></div>
+  </div>
+</div>
 <div id="cheer"><div class="card">
   <div class="big">🎉</div>
   <h3 id="cheerTitle">스테이지 클리어!</h3>
@@ -151,7 +160,7 @@ const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 const M365="m365.html";
 const ARGOS="argos.html";
 const GEN="ledger.html";
-const KEY_M="m365_sim_v3", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1";
+const KEY_M="m365_sim_v4", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1";
 
 /* 미션 사전 — app: M(M365)/A(Argos)/G(생성기) */
 const DEF={
@@ -290,6 +299,13 @@ window.addEventListener("focus",render);
 document.addEventListener("visibilitychange",function(){if(!document.hidden)render();});
 setInterval(render,1500);
 render();
+try{
+  if(!sessionStorage.getItem("dibut_hub_credit")){
+    sessionStorage.setItem("dibut_hub_credit","1");
+    document.getElementById("creditOv").hidden=false;
+  }
+}catch(e){}
+document.getElementById("creditOk").addEventListener("click",function(){document.getElementById("creditOv").hidden=true;});
 })();
 </script>
 </body>
