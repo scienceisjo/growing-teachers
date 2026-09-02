@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M365 관리 센터 — 승급처리 · MFA 실습기</title>
+<style>
+:root{
+  --brand:#0F6CBD; --brand-d:#0A5296; --brand-l:#EFF6FC; --brand-b:#B4D6F5;
+  --bg:#F5F5F5; --card:#fff; --line:#E1DFDD; --line2:#EDEBE9;
+  --tx:#242424; --tx2:#616161; --tx3:#8A8886;
+  --ok:#107C10; --warn:#C19C00; --bad:#C50F1F; --purple:#5C2E91;
+  --font:'Segoe UI','Pretendard','Malgun Gothic',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.mono{font-family:Consolas,ui-monospace,monospace;font-size:.92em}
+[hidden]{display:none !important}
+
+.top{height:48px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 8px 0 4px;gap:6px;flex:0 0 auto}
+.waffle{width:44px;height:44px;border:0;background:none;color:var(--tx2);display:flex;align-items:center;justify-content:center;border-radius:4px}
+.waffle:hover{background:#F3F2F1}
+.top-title{font-size:15px;font-weight:600;letter-spacing:-.2px}
+.top-sim{background:#FDE7E9;color:#A80000;font-weight:700;font-size:11px;padding:3px 9px;border-radius:3px;margin-left:4px}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.top-btn{height:32px;padding:0 10px;border:0;background:none;color:var(--tx2);border-radius:4px;display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.top-btn:hover{background:#F3F2F1;color:var(--tx)}
+.top-ava{width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+
+.shell{display:flex;height:calc(100% - 48px)}
+.nav{width:224px;flex:0 0 auto;background:#fff;border-right:1px solid var(--line);padding:10px 0;overflow:auto}
+.nav-g{padding:9px 16px 5px;font-size:11.5px;color:var(--tx3);font-weight:600;letter-spacing:.3px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 16px;color:var(--tx);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:#F3F2F1;text-decoration:none}
+.nav a.on{background:var(--brand-l);border-left-color:var(--brand);font-weight:600;color:var(--brand-d)}
+.nav .ic{width:18px;display:flex;justify-content:center;color:var(--tx2)}
+.nav a.on .ic{color:var(--brand)}
+.nav .ext{margin:12px 12px 0;padding:11px 12px;background:#FFF8E6;border:1px solid #F0D48A;border-radius:5px;font-size:11.5px;line-height:1.65;color:#6B4E00}
+
+.main{flex:1;overflow:auto;padding:22px 28px 40px}
+h1.pt{margin:0 0 4px;font-size:24px;font-weight:600;letter-spacing:-.4px}
+p.lead{color:var(--tx2);font-size:13.5px;margin:0 0 18px;line-height:1.75;max-width:940px}
+.crumb{font-size:12.5px;color:var(--tx2);margin-bottom:8px}
+.head-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.head-row .right{margin-left:auto}
+
+.btn{height:32px;padding:0 14px;background:#fff;border:1px solid #8A8886;border-radius:3px;color:var(--tx);display:inline-flex;align-items:center;gap:7px;font-size:13.5px;white-space:nowrap}
+.btn:hover{background:#F3F2F1}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.btn.pri:hover{background:var(--brand-d);border-color:var(--brand-d)}
+.btn.dgr{color:#A80000;border-color:#D69CA5}
+.btn.dgr:hover{background:#FDF3F4}
+.btn.sm{height:28px;padding:0 10px;font-size:12.5px}
+.btn.link{border:0;background:none;color:var(--brand);padding:0 4px;height:auto}
+.btn.link:hover{background:none;text-decoration:underline}
+.cmdbar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:6px 0 12px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.cmd{height:32px;padding:0 11px;border:0;background:none;border-radius:3px;display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--tx)}
+.cmd:hover{background:#F3F2F1}
+.cmd:disabled{opacity:.4;cursor:not-allowed}
+.cmd .ic{color:var(--brand)}
+.cmd:disabled .ic{color:var(--tx3)}
+.cmdbar .sp{margin-left:auto}
+
+.srch{display:flex;align-items:center;height:32px;border:1px solid #8A8886;border-radius:3px;background:#fff;padding:0 10px;gap:7px;min-width:250px}
+.srch input{border:0;flex:1;height:100%;background:none}
+.srch input:focus{outline:none}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
+.tbl thead th{text-align:left;padding:9px 12px;font-weight:600;font-size:12.5px;color:var(--tx2);border-bottom:1px solid var(--line);white-space:nowrap;background:#fff;position:sticky;top:0}
+.tbl tbody td{padding:9px 12px;border-bottom:1px solid var(--line2);vertical-align:middle}
+.tbl tbody tr:hover{background:#F3F9FD}
+.tbl tbody tr.sel{background:var(--brand-l)}
+.tbl .c{text-align:center}
+.tbl .empty td{text-align:center;color:var(--tx3);padding:40px 0}
+.tblbox{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#fff}
+.scroll-x{overflow-x:auto}
+.scroll-y{max-height:460px;overflow-y:auto}
+.uname{font-weight:600;color:var(--brand-d)}
+.uname:hover{text-decoration:underline;cursor:pointer}
+
+.pill{display:inline-block;padding:2px 9px;border-radius:3px;font-size:11.5px;font-weight:600;line-height:1.65}
+.pill.g{background:#DFF6DD;color:#0B5A0B}
+.pill.y{background:#FFF4CE;color:#6B5300}
+.pill.r{background:#FDE7E9;color:#A80000}
+.pill.n{background:#F3F2F1;color:#605E5C}
+.pill.b{background:var(--brand-l);color:var(--brand-d)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 20px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.card h3{margin:0 0 6px;font-size:16px;font-weight:600}
+.card p{margin:0 0 14px;color:var(--tx2);font-size:13px;line-height:1.7}
+.card .big{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.card .sub{font-size:12.5px;color:var(--tx2)}
+.card.acc{border-top:3px solid var(--brand)}
+.card.acc2{border-top:3px solid var(--purple)}
+
+.stat4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.st{background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.st .k{font-size:12px;color:var(--tx2);margin-bottom:6px}
+.st .v{font-size:24px;font-weight:700;letter-spacing:-.6px;line-height:1}
+.st .v small{font-size:12px;font-weight:600;color:var(--tx2);margin-left:3px;letter-spacing:0}
+
+.wz{background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.wz-steps{display:flex;border-bottom:1px solid var(--line);background:#FAF9F8;overflow-x:auto}
+.wz-step{flex:1;min-width:130px;padding:13px 12px;border:0;background:none;text-align:center;font-size:12.5px;color:var(--tx3);border-bottom:3px solid transparent;white-space:nowrap}
+.wz-step.done{color:var(--tx2)}
+.wz-step.on{color:var(--brand-d);font-weight:700;border-bottom-color:var(--brand);background:#fff}
+.wz-body{padding:22px 24px;min-height:330px}
+.wz-body h2{margin:0 0 6px;font-size:18px;font-weight:600}
+.wz-foot{padding:14px 24px;border-top:1px solid var(--line);display:flex;gap:8px;background:#FAF9F8}
+.wz-foot .right{margin-left:auto;display:flex;gap:8px}
+
+.field{margin-bottom:15px;max-width:520px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;height:32px;border:1px solid #8A8886;border-radius:3px;padding:0 10px;background:#fff}
+.field textarea{height:150px;padding:8px 10px;resize:vertical;font-family:Consolas,ui-monospace,monospace;font-size:12.5px;line-height:1.7}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.opt{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);border-radius:4px;margin-bottom:10px;cursor:pointer;background:#fff}
+.opt:hover{background:#F3F9FD;border-color:var(--brand-b)}
+.opt.on{border-color:var(--brand);background:var(--brand-l)}
+.opt b{display:block;font-size:13.5px;margin-bottom:3px}
+.opt span{font-size:12.5px;color:var(--tx2);line-height:1.6;display:block}
+
+.note{border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.7;margin-bottom:16px;border:1px solid}
+.note.i{background:var(--brand-l);border-color:var(--brand-b);color:#0B4C87}
+.note.w{background:#FFF8E6;border-color:#F0D48A;color:#6B4E00}
+.note.d{background:#FDE7E9;border-color:#EFB6BD;color:#8E0710}
+.note.g{background:#DFF6DD;border-color:#A6DDA3;color:#0B5A0B}
+.note b{font-weight:700}
+
+.diff{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:center;padding:11px 0;border-bottom:1px solid var(--line2);font-size:13px}
+.diff:last-child{border-bottom:0}
+.diff .a{color:var(--tx2)}
+.diff .ar{text-align:center;color:var(--brand);font-weight:700}
+.diff .b{font-weight:600}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:70;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:6px;width:min(580px,100%);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.modal.wide{width:min(900px,100%)}
+.modal-h{padding:18px 22px 12px;display:flex;align-items:center;gap:10px}
+.modal-h h3{margin:0;font-size:18px;font-weight:600}
+.modal-h .x{margin-left:auto;background:none;border:0;color:var(--tx2);width:30px;height:30px;border-radius:3px}
+.modal-h .x:hover{background:#F3F2F1}
+.modal-b{padding:0 22px 18px;overflow:auto;font-size:13.5px;line-height:1.7}
+.modal-f{padding:14px 22px;display:flex;gap:8px;justify-content:flex-start;border-top:1px solid var(--line2);flex-wrap:wrap}
+
+.side{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:#fff;z-index:65;box-shadow:-4px 0 18px rgba(0,0,0,.18);display:flex;flex-direction:column}
+.side-h{padding:18px 22px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line2)}
+.side-h h3{margin:0;font-size:17px;font-weight:600}
+.side-h .x{margin-left:auto;background:none;border:0;color:var(--tx2);width:30px;height:30px;border-radius:3px}
+.side-b{padding:18px 22px;overflow:auto;flex:1}
+.side-f{padding:14px 22px;border-top:1px solid var(--line2);display:flex;gap:8px}
+.kv{margin-bottom:15px}
+.kv .k{font-size:12px;color:var(--tx2);margin-bottom:3px}
+.kv .v{font-size:13.5px}
+
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(14px);z-index:120;opacity:0;transition:.22s;pointer-events:none}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast{background:#323130;color:#fff;padding:12px 20px;border-radius:4px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:min(600px,92vw)}
+.toast.ok{background:#0B5A0B}
+.toast.no{background:#A80000}
+
+.fab{position:fixed;right:22px;bottom:22px;z-index:60;height:46px;padding:0 18px;border-radius:23px;background:var(--brand);border:0;color:#fff;box-shadow:0 6px 18px rgba(15,108,189,.4);display:flex;align-items:center;gap:9px;font-weight:600;font-size:13.5px}
+.fab:hover{background:var(--brand-d)}
+.fab .bg{min-width:22px;height:22px;border-radius:11px;background:#fff;color:var(--brand-d);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.mp{position:fixed;right:22px;bottom:80px;z-index:61;width:min(400px,calc(100vw - 44px));max-height:min(620px,calc(100vh - 130px));background:#fff;border-radius:6px;box-shadow:0 14px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
+.mp-h{padding:16px 18px;background:var(--brand);color:#fff}
+.mp-h h3{margin:0 0 3px;font-size:15px}
+.mp-h p{margin:0;font-size:11.5px;color:#D6EAFB}
+.mp-pr{height:5px;border-radius:3px;background:rgba(255,255,255,.3);margin-top:10px;overflow:hidden}
+.mp-pr i{display:block;height:100%;background:#8FE08F;transition:.3s}
+.mp-b{overflow:auto;padding:4px 0}
+.mi{display:flex;gap:11px;padding:13px 18px;border-bottom:1px solid var(--line2)}
+.mi:last-child{border-bottom:0}
+.mi .ck{width:20px;height:20px;border-radius:3px;border:1.6px solid #8A8886;flex:0 0 auto;display:flex;align-items:center;justify-content:center;margin-top:2px;color:transparent}
+.mi.done .ck{background:var(--ok);border-color:var(--ok);color:#fff}
+.mi .t b{display:block;font-size:13px;margin-bottom:3px}
+.mi.done .t b{color:var(--tx3);text-decoration:line-through}
+.mi .t span{font-size:12px;color:var(--tx2);line-height:1.55;display:block}
+.mp-f{padding:12px 18px;border-top:1px solid var(--line2);display:flex;gap:8px}
+
+@media(max-width:900px){
+  /* 좁은 화면에서는 숨기지 말고 아이콘 레일로 줄인다 */
+  .nav{width:48px}
+  .nav .nlab,.nav .chev,.nav .nav-sec,.nav .nsub{display:none}
+  .nav .nrow{justify-content:center;padding:0}
+  .main{padding:16px 14px 40px}
+  .diff{grid-template-columns:1fr 30px 1fr}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   실제 Microsoft 365 관리 센터 크롬 재현 (라이트 · 다크)
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --suite:#252423; --suite-tx:#fff; --suite-hover:#3B3A39;
+  --navbg:#fff; --navtx:#242424; --navhov:#F3F2F1; --navsel:#EDEBE9;
+  --mainbg:#FAF9F8; --panel:#fff; --hair:#EDEBE9; --hair2:#E1DFDD;
+  --txx:#242424; --txx2:#605E5C; --txx3:#8A8886; --acc:#2564CF;
+}
+html[data-theme="dark"]{
+  --suite:#1B1A19; --suite-tx:#fff; --suite-hover:#323130;
+  --navbg:#201F1E; --navtx:#F3F2F1; --navhov:#323130; --navsel:#3B3A39;
+  --mainbg:#1B1A19; --panel:#252423; --hair:#3B3A39; --hair2:#484644;
+  --txx:#F3F2F1; --txx2:#C8C6C4; --txx3:#A19F9D; --acc:#7CB0F2;
+  --bg:#1B1A19; --card:#252423; --line:#3B3A39; --line2:#323130;
+  --tx:#F3F2F1; --tx2:#C8C6C4; --tx3:#A19F9D; --brand:#7CB0F2; --brand-d:#A9C9F5; --brand-l:#252F3E; --brand-b:#3B4A5F;
+}
+html[data-theme="dark"] body{background:var(--mainbg);color:var(--txx)}
+html[data-theme="dark"] .tblbox,html[data-theme="dark"] .card,html[data-theme="dark"] .st,
+html[data-theme="dark"] .modal,html[data-theme="dark"] .side{background:var(--panel);border-color:var(--hair)}
+html[data-theme="dark"] .tbl thead th{background:var(--panel);color:var(--txx2);border-color:var(--hair)}
+html[data-theme="dark"] .tbl td{border-color:var(--line2)}
+html[data-theme="dark"] .tbl tbody tr:hover{background:#323130}
+html[data-theme="dark"] .btn{background:var(--panel);border-color:#605E5C;color:var(--txx)}
+html[data-theme="dark"] .btn:hover{background:#3B3A39}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#323130;border-color:#605E5C;color:var(--txx)}
+html[data-theme="dark"] .opt{background:var(--panel);border-color:var(--hair)}
+html[data-theme="dark"] .srch{background:#323130;border-color:#605E5C}
+
+body{background:var(--mainbg);color:var(--txx)}
+
+/* ── 상단 스위트 바 ── */
+.suite{height:48px;background:var(--suite);color:var(--suite-tx);display:flex;align-items:center;
+  padding:0 4px;gap:2px;flex:0 0 auto;position:relative;z-index:30}
+.suite .waf{width:48px;height:48px;border:0;background:none;color:#fff;display:flex;align-items:center;justify-content:center}
+.suite .waf:hover{background:var(--suite-hover)}
+.suite .brand{font-size:15px;font-weight:600;padding:0 10px 0 4px;white-space:nowrap;letter-spacing:-.2px}
+.suite .simtag{background:#A4262C;color:#fff;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.suite-search{flex:1;max-width:600px;margin:0 auto;position:relative;display:flex;align-items:center}
+.suite-search svg{position:absolute;left:11px;color:#605E5C;pointer-events:none}
+.suite-search input{width:100%;height:32px;border:0;border-radius:4px;background:#fff;color:#242424;
+  padding:0 12px 0 34px;font-size:13.5px}
+.suite-search input::placeholder{color:#605E5C}
+.suite-right{display:flex;align-items:center;gap:0;margin-left:auto}
+.si{width:40px;height:40px;border:0;background:none;color:#fff;display:inline-flex;align-items:center;justify-content:center;border-radius:4px}
+.si:hover{background:var(--suite-hover)}
+.si.wide{width:auto;padding:0 10px;gap:6px;font-size:13px}
+.suite-org{padding:0 12px;font-size:13px;color:#fff;white-space:nowrap;border-left:1px solid #484644;margin-left:6px;height:24px;display:flex;align-items:center}
+.suite-ava{width:30px;height:30px;border-radius:50%;background:#8764B8;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;margin:0 6px}
+@media(max-width:1080px){.suite .simtag,.suite-org{display:none}}
+@media(max-width:760px){.suite-search{display:none}}
+
+/* ── 좌측 탐색 ── */
+.shell{display:flex;height:calc(100% - 48px)}
+.nav{width:230px;flex:0 0 auto;background:var(--navbg);border-right:1px solid var(--hair);
+  padding:6px 0 26px;overflow:auto;font-size:13.5px}
+.nav.mini{width:48px}
+.nav.mini .nlab,.nav.mini .chev,.nav.mini .nav-sec,.nav.mini .nsub{display:none}
+.nav.mini .nrow{justify-content:center;padding:0}
+.navtop{height:44px;display:flex;align-items:center;padding-left:2px}
+.navtop .ham{width:44px;height:44px;border:0;background:none;color:var(--txx2);display:flex;align-items:center;justify-content:center;border-radius:4px}
+.navtop .ham:hover{background:var(--navhov)}
+.nav-sec{padding:14px 16px 6px;font-size:11.5px;font-weight:700;color:var(--txx3);letter-spacing:.2px;
+  border-top:1px solid var(--hair);margin-top:8px}
+.nrow{display:flex;align-items:center;gap:10px;height:34px;padding:0 12px 0 13px;color:var(--navtx);
+  cursor:pointer;border-left:3px solid transparent;user-select:none}
+.nrow:hover{background:var(--navhov)}
+.nrow.on{background:var(--navsel);border-left-color:var(--acc);font-weight:600}
+.nrow.dim{color:var(--txx3)}
+.nrow .nic{width:18px;flex:none;display:flex;justify-content:center;color:var(--txx2)}
+.nrow.on .nic{color:var(--acc)}
+.nrow .nlab{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nrow .chev{color:var(--txx3);transition:transform .15s}
+.nrow.open .chev{transform:rotate(180deg)}
+.nsub{padding:1px 0 4px}
+.nsub .nrow{height:31px;padding-left:44px;font-size:13px}
+
+/* ── 본문 ── */
+.main{flex:1;overflow:auto;padding:18px 30px 46px;background:var(--mainbg)}
+.crumb{font-size:12.5px;color:var(--txx2);margin:0 0 6px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.crumb a{color:var(--txx2)}
+.crumb .sep{opacity:.6;display:inline-flex}
+h1.pt{margin:0 0 4px;font-size:26px;font-weight:600;letter-spacing:-.5px;color:var(--txx)}
+p.lead{color:var(--txx2)}
+
+/* ── 명령 모음 ── */
+.cmdbar{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:12px 0 10px;
+  border-bottom:1px solid var(--hair);padding-bottom:8px}
+.cmd{height:34px;padding:0 11px;border:0;background:none;color:var(--txx);border-radius:4px;
+  display:inline-flex;align-items:center;gap:7px;font-size:13.3px;white-space:nowrap}
+.cmd:hover:not(:disabled){background:var(--navhov)}
+.cmd:disabled{color:var(--txx3);cursor:not-allowed}
+.cmd .ic{display:flex;color:var(--acc)}
+.cmd:disabled .ic{color:var(--txx3)}
+.cmd.sep{border-left:1px solid var(--hair2);margin-left:4px;padding-left:14px;border-radius:0}
+
+/* ── 필터 집합 ── */
+.filterbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;font-size:13px}
+.filterbar .fl{color:var(--txx2)}
+.fchip{height:28px;padding:0 12px;border:1px solid var(--hair2);background:var(--panel);color:var(--txx);
+  border-radius:14px;font-size:12.5px;display:inline-flex;align-items:center;gap:5px}
+.fchip:hover{background:var(--navhov)}
+.fchip.on{background:var(--brand-l);border-color:var(--acc);color:var(--acc);font-weight:600}
+
+/* ── 표 ── */
+.tblbox{background:var(--panel);border:1px solid var(--hair);border-radius:4px;overflow:hidden}
+.tbl thead th{background:var(--panel);border-bottom:1px solid var(--hair2);color:var(--txx2);
+  font-size:12.2px;font-weight:600;padding:9px 12px;position:sticky;top:0;z-index:2}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line2);font-size:13.3px}
+.tbl tbody tr:hover{background:var(--navhov)}
+.uname{color:var(--acc);cursor:pointer;font-weight:600}
+.uname:hover{text-decoration:underline}
+.rowdot{opacity:0;border:0;background:none;color:var(--txx2);border-radius:3px;padding:2px 4px}
+tr:hover .rowdot{opacity:1}
+.colsel{margin-left:auto;height:30px;padding:0 10px;border:0;background:none;color:var(--txx2);
+  border-radius:4px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px}
+.colsel:hover{background:var(--navhov)}
+
+/* ── 홈(조직) 탭 ── */
+.orgtabs{display:flex;gap:2px;border-bottom:1px solid var(--hair);margin:6px 0 18px;flex-wrap:wrap}
+.otab{border:0;background:none;padding:10px 14px;font-size:14px;color:var(--txx2);
+  border-bottom:2px solid transparent;margin-bottom:-1px;display:inline-flex;align-items:center;gap:7px}
+.otab:hover{color:var(--txx)}
+.otab.on{color:var(--acc);border-bottom-color:var(--acc);font-weight:600}
+
+/* 반응형은 맨 뒤에 두어야 위 규칙을 이긴다 */
+@media(max-width:900px){
+  .nav,.nav.mini{width:48px}
+  .nav .nlab,.nav .chev,.nav .nav-sec,.nav .nsub{display:none}
+  .nav .nrow{justify-content:center;padding:0}
+  .main{padding:16px 14px 40px}
+}
+</style>
+</head>
+<body>
+<header class="suite">
+  <button class="waf" title="앱 시작 관리자" data-nope="앱 시작 관리자">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="20" cy="20" r="2"/></svg>
+  </button>
+  <span class="brand">Microsoft 365 관리 센터</span>
+  <span class="simtag">연수용 실습기</span>
+
+  <div class="suite-search">
+    <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+    <input type="text" id="suiteQ" placeholder="검색">
+  </div>
+
+  <div class="suite-right">
+    <button class="si wide" data-nope="Copilot">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5c-2 0-3.5 1.5-3.5 3.5v7C4.5 17.5 6 19 8 19h8c2 0 3.5-1.5 3.5-3.5v-7C19.5 6.5 18 5 16 5" stroke-linecap="round"/><path d="M9 9.5c.5-1.5 2-2.5 3-2.5s2.5 1 3 2.5l1 3c.5 1.5-.5 2.5-2 2.5h-4c-1.5 0-2.5-1-2-2.5l1-3z"/></svg>
+      <span>Copilot</span></button>
+    <button class="si" title="터미널" data-nope="터미널">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3.5" width="16" height="13" rx="1.5"/><polyline points="5,8 8,10.5 5,13"/><line x1="10" y1="13" x2="14" y2="13"/></svg></button>
+    <button class="si" title="설명서" data-nope="설명서">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 2.5h8.5L17 6v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"/><polyline points="13,2.5 13,6.5 17,6.5"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="13" x2="13" y2="13"/></svg></button>
+    <button class="si" title="어둡게 / 밝게" id="btnTheme">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg></button>
+    <button class="si" title="알림" data-nope="알림">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 2.5a5.5 5.5 0 0 1 5.5 5.5v3l1.5 3h-14l1.5-3V8A5.5 5.5 0 0 1 10 2.5z"/><path d="M8 16.5a2 2 0 0 0 4 0"/></svg></button>
+    <span class="suite-org" id="orgName">해누리중학교</span>
+    <button class="si" title="설정" data-nope="설정">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5l1 2.2 2.4-.4 1.1 2.1 2.2 1-.4 2.4 1.6 1.8-1.6 1.8.4 2.4-2.2 1-1.1 2.1-2.4-.4-1 2.2-1-2.2-2.4.4-1.1-2.1-2.2-1 .4-2.4L2.1 11.7l1.6-1.8-.4-2.4 2.2-1 1.1-2.1 2.4.4 1-2.2z" stroke-linejoin="round"/></svg></button>
+    <button class="si wide" title="실습 허브로" onclick="location.href='./'">🏰 허브</button>
+    <button class="si" title="실제와 다른 점" id="btnDiff">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.6A2.3 2.3 0 1 1 10 10v1.4"/><circle cx="10" cy="14.6" r=".7" fill="currentColor"/></svg></button>
+    <span class="suite-ava" title="조승재 · 전역 관리자">조</span>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="nav" id="nav"></nav>
+  <main class="main" id="main"></main>
+</div>
+
+<button class="fab" id="fab">실습 미션 <span class="bg" id="fabBg">0</span></button>
+<div class="mp" id="mp" hidden>
+  <div class="mp-h">
+    <h3>실습 미션</h3>
+    <p>새 교수요목의 「승급처리」와 「MFA 설정」에 맞춘 과제입니다.</p>
+    <div class="mp-pr"><i id="mpPr" style="width:0%"></i></div>
+  </div>
+  <div class="mp-b" id="mpB"></div>
+  <div class="mp-f">
+    <button class="btn sm" id="mpExport">진급 결과 내보내기</button>
+    <button class="btn sm dgr" id="mpReset">처음 상태로</button>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div id="sideRoot"></div>
+<div id="toast"></div>
+<script>
+(function(){
+"use strict";
+const SVG=(d,w)=>'<svg viewBox="0 0 24 24" width="'+(w||16)+'" height="'+(w||16)+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>';
+const I={
+ home:SVG('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',18),
+ user:SVG('<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c1-3.6 3.9-5.5 7.5-5.5s6.5 1.9 7.5 5.5"/>',18),
+ up:SVG('<path d="M12 20V5M6 11l6-6 6 6"/>',18),
+ lock:SVG('<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',18),
+ lic:SVG('<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M6 14h4"/>',18),
+ srch:SVG('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>'),
+ x:SVG('<path d="M6 6l12 12M18 6L6 18"/>',15),
+ chk:SVG('<path d="M5 12.5l4.5 4.5L19 7"/>',13),
+ add:SVG('<path d="M12 5v14M5 12h14"/>'),
+ del:SVG('<path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/>'),
+ key:SVG('<circle cx="8" cy="12" r="3.5"/><path d="M11.5 12H21l-2 2.5M17 12v3"/>'),
+ grp:SVG('<circle cx="8" cy="9" r="2.6"/><circle cx="16" cy="9" r="2.6"/><path d="M3 18c.7-2.7 2.6-4 5-4s4.3 1.3 5 4M13 18c.7-2.7 2.6-4 5-4"/>'),
+ dl:SVG('<path d="M12 4v10M8 10.5l4 3.5 4-3.5"/><path d="M5 19h14"/>'),
+ rf:SVG('<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/>')
+};
+const DOMAIN="haenuri.ms.kr";
+const DOM2="haenuri.sen.ms.kr";      /* 별칭용 두 번째 도메인 (실제 테넌트에도 둘이 공존) */
+const SCHOOLYEAR=2026;
+const ENTRY={1:2026,2:2025,3:2024};  /* 학년별 입학연도 — 아이디는 입학연도로 고정 */
+const QUOTA_DEF=1024;                /* OneDrive 기본 할당량 GB (1024GB = 1TB) */
+const GRP={1:"student_1학년",2:"student_2학년",3:"student_3학년",0:"교직원"};
+const LIC_S="학생용 Microsoft 365 A3", LIC_T="교직원용 Microsoft 365 A3";
+const CAP={};CAP[LIC_S]=400;CAP[LIC_T]=15;
+const MFA=["사용 안 함","사용","적용됨"];
+const SURNAME=["김","이","박","최","정","강","조","윤","장","임","한","오","서","신","권","황"];
+const GIVEN=["하늘","서준","지우","민서","도윤","예은","시우","수아","준호","연우","하은","지훈","채원","건우","다인","윤서","태윤","소율","현우","가온"];
+
+/* 미션 = 관리자 매뉴얼의 계정 세팅 8단계 순서 그대로 */
+const MISSIONS=[
+ {id:"m7",t:"1단계 · 개인 학생 계정 생성",d:"[사용자 추가]. 성=학번, 이름=이름, 사용자 이름=입학연도+학번. 학생용 A3를 꼭 고르세요."},
+ {id:"m8",t:"2단계 · 학생 단체 계정 생성(CSV)",d:"[여러 사용자 추가]로 일괄 생성. 표시 이름은 학번+이름 규칙으로 채웁니다."},
+ {id:"m12",t:"3단계 · 개인 비밀번호 초기화",d:"목록에서 이름을 눌러 [암호 재설정]. 「첫 로그인 때 변경」을 꺼서 학생이 직접 정하게 합니다."},
+ {id:"m9",t:"4단계 · 단체 비밀번호 초기화",d:"반 단위로 검색해 전체 선택 → [암호 초기화] → 담임 배부용 파일까지. 한 번에 40명 제한도 확인!"},
+ {id:"m13",t:"5단계 · 저장용량 변경",d:"사용자 상세에서 OneDrive 할당량을 1024GB(=1TB)로 바꿔 보세요."},
+ {id:"m14",t:"6단계 · 표시 이름 변경",d:"[표시 이름 일괄 변경]으로 학번형·학급형 규칙을 통일하세요. 섞이면 반 단위 검색이 무너집니다."},
+ {id:"m15",t:"7단계 · MFA 사용 해제",d:"다단계 인증에서 학생을 전체 선택 → 상태를 「사용 안 함」으로 되돌리세요."},
+ {id:"m11",t:"8단계 · 그룹(팀) 설정",d:"[M365 그룹 추가]. 소유자 1명은 필수, 그룹 메일은 영문·숫자만 됩니다."},
+ {id:"m16",t:"승급 ① 별칭으로 계정 이름 바꾸기",d:"학생 상세 → [사용자 이름 및 전자 메일 관리]. 새 별칭 추가 → 기본으로 설정 → 옛 별칭 삭제."},
+ {id:"m3",t:"승급 ② 학년 일괄 진급",d:"진급 처리 마법사를 끝까지 진행해 학년 그룹을 일괄 재배치하세요."},
+ {id:"m4",t:"승급 ③ 신입생 계정 일괄 생성",d:"진급 마법사 4단계에서 CSV를 붙여넣어 신입생 계정을 만드세요."},
+ {id:"m10",t:"담당교사에게 권한 위임",d:"교사 계정을 선택해 [역할 관리]에서 「사용자 관리자」를 부여하세요."},
+ {id:"m6",t:"MFA 재등록 요청 처리",d:"휴대폰을 바꾼 교사의 MFA 재등록을 요청하세요. (실무 민원 1위)"},
+ {id:"m17",t:"전체 계정 내려받기",d:"[사용자 내보내기]로 전원 CSV를 받아 보세요. 화면은 100명씩만 보이지만 파일은 전원이 나옵니다."}
+];
+
+/* 학생 아이디 = 입학연도 + 입학 당시 학번(학년1+반2+번호2). 학년이 올라도 바뀌지 않는다. */
+function stuUpn(g,cls,no){return ""+ENTRY[g]+"1"+String(cls).padStart(2,"0")+String(no).padStart(2,"0");}
+/* 표시 이름 두 형식 — 학번형(CSV 일괄 생성분)과 학급형(클래스이음 학적 반영분) */
+function nameOf(u){return u.name||String(u.disp||"").replace(/^\[[^\]]*\]/,"").replace(/^[0-9]+/,"");}
+function fmtNum(u){return u.upn+nameOf(u);}
+function fmtCls(u){return "["+u.grade+"학년 "+u.cls+"반]"+nameOf(u);}
+function dispKind(u){return /^\[/.test(u.disp)?"학급형":(/^[0-9]/.test(u.disp)?"학번형":"이름만");}
+function seed(){
+  let s=20260830;
+  const rnd=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
+  const pick=a=>a[Math.floor(rnd()*a.length)];
+  const out=[];let n=0;
+  const mkDate=d=>{const t=new Date(2026,7,29-d);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+  [1,2,3].forEach(function(g){
+    for(let i=1;i<=12;i++){
+      const cls=Math.ceil(i/6),no=((i-1)%6)+1;
+      const last=pick(SURNAME),first=pick(GIVEN),nm=last+first;
+      const upn=stuUpn(g,cls,no);
+      /* 2학년만 클래스이음으로 학적을 넣어 학급형 표시 이름 — 형식이 섞여 있는 실제 상황 재현 */
+      out.push({id:"u"+(++n),last:last,first:first,name:nm,
+        disp:g===2?("["+g+"학년 "+cls+"반]"+nm):(upn+nm),
+        upn:upn,dom:DOMAIN,alias:[],quota:QUOTA_DEF,
+        grade:g,cls:cls,no:no,group:GRP[g],license:LIC_S,role:"사용자",mfa:"사용 안 함",signIn:"허용",seen:mkDate(Math.floor(rnd()*20))});
+    }
+  });
+  [["강현욱","hyunwook",DOM2],["김현정","hyunjung",DOMAIN],["조승재","seungjae",DOMAIN],
+   ["이상민","sangmin",DOM2],["한지영","jiyoung",DOMAIN],["박서준","seojun",DOMAIN]].forEach(function(t){
+    out.push({id:"u"+(++n),last:t[0].charAt(0),first:t[0].slice(1),name:t[0],disp:t[0],
+      upn:t[1],dom:t[2],alias:[],quota:QUOTA_DEF,grade:0,cls:0,no:0,group:GRP[0],
+      license:LIC_T,role:t[0]==="조승재"?"전역 관리자":"사용자",mfa:"사용 안 함",signIn:"허용",seen:mkDate(Math.floor(rnd()*4))});
+  });
+  /* 라이선스 없는 시스템 계정 — 실제 목록에도 섞여 있어 "학생만 골라내기"를 어렵게 만든다 */
+  [["1학기 상담","G5975f5ca89d947bdaea95558d6162481"],
+   ["1학기 학부모 상담 신청 페이지","G9d0175e0ebb54d20a627cb7993aa7885"],
+   ["도서관 대출 신청","Ge5b6c8ce1d2c42c58e82bfca554ea33c"]].forEach(function(t){
+    out.push({id:"u"+(++n),last:"",first:"",name:t[0],disp:t[0],upn:t[1],dom:DOMAIN,alias:[],quota:0,
+      grade:9,cls:0,no:0,group:"(그룹 없음)",license:"",role:"사용자",mfa:"사용 안 함",signIn:"허용",seen:"-",sys:true});
+  });
+  return out;
+}
+const KEY="m365_sim_v3";
+let S=null,CREDIT=null;
+function fresh(){return {users:seed(),groups:[{n:"2026_3-1",owner:"강현욱",email:"2026_3-1@"+DOMAIN,priv:"비공개",mem:12}],secDef:false,missions:{},log:[],ui:{page:"home",sel:[],q:"",fg:"",fm:""},wz:null};}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.users&&o.users.length)return o;}}catch(e){}return fresh();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+const $=s=>document.querySelector(s);
+const $$=s=>[].slice.call(document.querySelectorAll(s));
+const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const addr=u=>u.upn+"@"+(u.dom||DOMAIN);   /* 계정마다 도메인이 다를 수 있다 */
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+let tt=null;
+function toast(m,k){const b=$("#toast");b.innerHTML='<div class="toast '+(k||"")+'">'+esc(m)+"</div>";b.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>b.classList.remove("on"),2800);}
+function modal(o){
+  const ov=document.createElement("div");ov.className="ov";
+  ov.innerHTML='<div class="modal '+(o.wide?"wide":"")+'"><div class="modal-h"><h3>'+esc(o.title)+'</h3><button class="x" data-close>'+I.x+'</button></div><div class="modal-b">'+o.body+"</div>"+(o.foot?'<div class="modal-f">'+o.foot+"</div>":"")+"</div>";
+  $("#modalRoot").appendChild(ov);
+  const close=()=>ov.remove();
+  ov.addEventListener("click",e=>{if(e.target===ov||e.target.closest("[data-close]"))close();});
+  if(o.onMount)o.onMount(ov,close);
+  return {ov,close};
+}
+function side(o){
+  const el=document.createElement("div");el.className="side";
+  el.innerHTML='<div class="side-h"><h3>'+esc(o.title)+'</h3><button class="x" data-sclose>'+I.x+'</button></div><div class="side-b">'+o.body+'</div>'+(o.foot?'<div class="side-f">'+o.foot+"</div>":"");
+  $("#sideRoot").innerHTML="";$("#sideRoot").appendChild(el);
+  const close=()=>{$("#sideRoot").innerHTML="";};
+  el.addEventListener("click",e=>{if(e.target.closest("[data-sclose]"))close();});
+  if(o.onMount)o.onMount(el,close);
+}
+function done(id){if(S.missions[id])return;S.missions[id]=true;save();paintMissions();const m=MISSIONS.filter(x=>x.id===id)[0];if(m)toast("미션 완료 — "+m.t,"ok");}
+function used(l){return S.users.filter(u=>u.license===l).length;}
+
+/* ===== 셸 ===== */
+const NAV=[{id:"home",n:"홈",i:I.home},{id:"users",n:"활성 사용자",i:I.user},{id:"groups",n:"팀 및 그룹",i:I.grp},{id:"promote",n:"진급 처리",i:I.up},{id:"mfa",n:"다단계 인증",i:I.lock},{id:"licenses",n:"라이선스",i:I.lic}];
+/* 실제 관리 센터의 탐색 구조. 실습기가 다루지 않는 항목도 그대로 두어 화면 감을 익히게 한다. */
+const CHEV='<svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,4 6,8 10,4"/></svg>';
+const NAVTREE=[
+  {id:"home",n:"홈",i:I.home},
+  {n:"사용자",i:I.user,sub:[
+    {id:"users",n:"활성 사용자"},
+    {id:"promote",n:"진급 처리",tag:"실습"},
+    {id:"mfa",n:"다단계 인증"},
+    {n:"연락처",off:1},{n:"게스트 사용자",off:1},{n:"삭제된 사용자",off:1}]},
+  {n:"Copilot",i:I.chk,off:1,sub:[{n:"개요",off:1},{n:"사용 현황",off:1},{n:"설정",off:1}]},
+  {n:"에이전트",i:I.chk,off:1,sub:[{n:"모든 에이전트",off:1},{n:"도구",off:1}]},
+  {n:"장치",i:I.lic,off:1,sub:[{n:"활성 장치",off:1},{n:"Autopilot",off:1}]},
+  {n:"Teams 및 그룹",i:I.grp,sub:[
+    {id:"groups",n:"활성 팀 및 그룹"},
+    {n:"정책",off:1},{n:"삭제된 그룹",off:1},{n:"공유 사서함",off:1}]},
+  {n:"청구",i:I.lic,sub:[
+    {id:"licenses",n:"라이선스"},
+    {n:"서비스 구매",off:1},{n:"청구 및 지불",off:1},{n:"결제 방법",off:1}]},
+  {n:"Setup",i:I.chk,off:1},
+  {sec:"관리 센터"},
+  {n:"모든 관리 센터",i:I.grp,off:1},
+  {n:"탐색 사용자 지정",i:I.chk,off:1},
+  {n:"모두 표시",i:I.chk,off:1}
+];
+/* 어떤 상위 메뉴가 펼쳐져야 하는지 */
+function navOpenFor(page){
+  for(let i=0;i<NAVTREE.length;i++){const g=NAVTREE[i];
+    if(g.sub&&g.sub.some(s=>s.id===page))return i;}
+  return -1;
+}
+function paintNav(){
+  if(S.ui.navOpen==null)S.ui.navOpen=navOpenFor(S.ui.page);
+  const row=function(o,idx,isSub){
+    const on=o.id&&S.ui.page===o.id;
+    const cls="nrow"+(on?" on":"")+(o.off?" dim":"")+(o.open?" open":"");
+    const at=o.off?' data-nope="'+esc(o.n)+'"':(o.id?' data-go="'+o.id+'"':(o.grp!=null?' data-navg="'+o.grp+'"':""));
+    return '<div class="'+cls+'"'+at+'>'
+      +(isSub?"":'<span class="nic">'+(o.i||"")+"</span>")
+      +'<span class="nlab">'+esc(o.n)+(o.tag?' <span class="pill y" style="font-size:10px">'+o.tag+"</span>":"")+"</span>"
+      +(o.sub?'<span class="chev">'+CHEV+"</span>":"")+"</div>";
+  };
+  let h='<div class="navtop"><button class="ham" id="btnHam" title="탐색 메뉴 축소">'
+    +'<svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg></button></div>';
+  NAVTREE.forEach(function(g,i){
+    if(g.sec){h+='<div class="nav-sec">'+esc(g.sec)+"</div>";return;}
+    const open=S.ui.navOpen===i;
+    h+=row({n:g.n,i:g.i,id:g.sub?null:g.id,off:g.sub?0:g.off,sub:g.sub,open:open,grp:g.sub?i:null},i,false);
+    if(g.sub&&open)h+='<div class="nsub">'+g.sub.map(s=>row(s,i,true)).join("")+"</div>";
+  });
+  $("#nav").innerHTML=h;
+  $("#nav").classList.toggle("mini",!!S.ui.navMini);
+}
+function go(p){
+  S.ui.page=p;S.ui.sel=[];
+  const oi=navOpenFor(p);if(oi>=0)S.ui.navOpen=oi;
+  save();render();$("#main").scrollTop=0;
+}
+/* 이동 경로 */
+const CRUMB={home:[],users:["사용자","활성 사용자"],promote:["사용자","진급 처리"],
+  mfa:["사용자","다단계 인증"],groups:["Teams 및 그룹","활성 팀 및 그룹"],licenses:["청구","라이선스"]};
+function crumbHtml(){
+  const c=CRUMB[S.ui.page]||[];
+  if(!c.length)return "";
+  const sep='<span class="sep"><svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="4,2 8,6 4,10"/></svg></span>';
+  return '<nav class="crumb"><a href="#" data-go="home">홈</a>'+c.map(x=>sep+"<span>"+esc(x)+"</span>").join("")+"</nav>";
+}
+function render(){
+  paintNav();
+  const m=$("#main");
+  m.innerHTML=crumbHtml()
+    +({home:pHome,users:pUsers,groups:pGroups,promote:pPromote,mfa:pMfa,licenses:pLic}[S.ui.page]||pHome)();
+  if(!CREDIT)CREDIT=$("#app-credit");
+  if(CREDIT)m.appendChild(CREDIT);
+  paintMissions();
+}
+
+/* ===== 홈 ===== */
+function pHome(){
+  const g=n=>S.users.filter(u=>u.grade===n).length;
+  const mfaOn=S.users.filter(u=>u.mfa!=="사용 안 함").length;
+  return '<h1 class="pt">홈</h1><p class="lead">해누리중학교 테넌트입니다. 교수요목의 M365 항목 — <b>계정 생성 · 비번 초기화 · 팀 설정 · 승급 처리 · MFA · 라이선스</b> — 를 관리 센터 흐름대로 실습합니다.</p>'
+   +'<div class="stat4">'
+   +['1학년|'+g(1),'2학년|'+g(2),'3학년|'+g(3),'교직원|'+g(0),'MFA 적용|'+mfaOn].map(function(x){const p=x.split("|");
+     return '<div class="st"><div class="k">'+p[0]+'</div><div class="v">'+p[1]+"<small>명</small></div></div>";}).join("")
+   +"</div>"
+   +'<div class="cards">'
+   +'<div class="card acc"><h3>계정 생성 · 암호 초기화</h3><p>개별 추가(첫 로그인 시 암호 변경), CSV 일괄 생성(암호 지정 불가!), 40명 단위 암호 초기화와 담임 배부용 초기 비밀번호 파일, 역할 위임까지.</p><button class="btn pri" data-go="users">활성 사용자 열기</button></div>'
+   +'<div class="card acc2"><h3>팀 설정 (M365 그룹)</h3><p>년도+학년반 규칙으로 비공개 그룹을 만들고, 그룹 이메일 하나로 Teams에 반 전체를 초대합니다.</p><button class="btn pri" data-go="groups">팀 및 그룹 열기</button></div>'
+   +'<div class="card acc"><h3>승급처리 (학년 진급)</h3><p>졸업생 계정 처리 → 학년 보안그룹 일괄 재배치 → 신입생 CSV 일괄 생성 → 라이선스 회수·재할당까지 한 번에 진행합니다. 5단계 마법사로 미리보기를 확인하고 실행합니다.</p><button class="btn pri" data-go="promote">진급 처리 열기</button></div>'
+   +'<div class="card acc2"><h3>다단계 인증 (MFA)</h3><p>사용자별 MFA 상태(사용 안 함 / 사용 / 적용됨)를 관리하고, 휴대폰을 바꾼 사용자의 재등록을 요청합니다. 학생 계정에 일괄 적용할 때의 위험도 함께 다룹니다.</p><button class="btn pri" data-go="mfa">다단계 인증 열기</button></div>'
+   +"</div>"
+   +'<h2 class="pt" style="font-size:18px;margin:26px 0 8px">계정 세팅 8단계</h2>'
+   +'<p class="lead">현장 담당자가 실제로 하는 순서입니다. 오른쪽 아래 미션 버튼을 열면 이 순서대로 실습 과제가 놓여 있습니다.</p>'
+   +'<div class="tblbox scroll-x"><table class="tbl"><thead><tr><th style="width:52px">단계</th><th>무엇을 하나</th><th>핵심 규칙</th><th>어디서</th></tr></thead><tbody>'
+   +[["1","개인 학생 계정 생성","사용자 이름 = 입학연도 + 학번","활성 사용자"],
+     ["2","학생 단체 계정 생성(CSV)","성 = 학번 · 표시 이름 = 학번 + 이름","활성 사용자"],
+     ["3","개인 비밀번호 초기화","첫 로그인 변경을 <b>꺼서</b> 학생이 직접 정하게","사용자 상세"],
+     ["4","단체 비밀번호 초기화","자동 암호 · <b>한 번에 40명</b>","활성 사용자"],
+     ["5","저장용량 변경","1024GB = 1TB","사용자 상세"],
+     ["6","표시 이름 변경","학번형·학급형 중 하나로 통일","활성 사용자"],
+     ["7","MFA 사용 해제","전체 선택 → 상태 「사용 안 함」","다단계 인증"],
+     ["8","그룹(팀) 설정","소유자 1명 필수 · 메일은 영문·숫자","팀 및 그룹"]]
+     .map(function(r){return "<tr><td class=\"c\"><b>"+r[0]+"</b></td><td>"+r[1]+"</td><td>"+r[2]+"</td><td>"+r[3]+"</td></tr>";}).join("")
+   +"</tbody></table></div>"
+   +'<div class="note w" style="margin-top:14px"><b>계정이 두 종류입니다.</b> 학생이 디벗에 로그인하는 <b>학교 도메인 계정</b>(우리가 만들고 관리)과, 교육청이 만들어 주는 <b>senedu.kr 계정</b>(AI 교수학습 플랫폼·웨일 스페이스용)은 서로 다릅니다. senedu.kr은 학교가 CSV를 올리는 방식이 아니라 <span class="mono">adm.senedu.kr</span>에서 발급된 목록을 내려받아 안내합니다. 두 계정을 같은 브라우저에서 동시에 열면 한쪽이 안 열리니 시크릿 창을 쓰세요.</div>'
+   +'<div class="note i"><b>접속 주소 · 지원처.</b> 관리 센터 <span class="mono">o365.sen.go.kr/admin</span> (= admin.microsoft.com) · 학교 전체 관리자 <span class="mono">schooladmin@'+DOMAIN+'</span> · 관리자 계정 문제(전임자 비번 변경 등)는 관리 업체 <b>에이마스 02-6123-4184</b>, 근거는 매년 4월 「업무용 소프트웨어(MS Office, Office 365) 일괄 구매 계약 체결 안내」 공문 · 단말(Argos MDM)은 <b>1666-6493</b>.</div>';
+}
+
+/* ===== 활성 사용자 ===== */
+function filt(){
+  const q=(S.ui.q||"").trim().toLowerCase();
+  return S.users.filter(function(u){
+    if(S.ui.fg&&u.group!==S.ui.fg)return false;
+    if(S.ui.fm&&u.mfa!==S.ui.fm)return false;
+    if(q&&[u.disp,u.upn,addr(u),u.group,nameOf(u)].join(" ").toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+}
+function userRows(list,mode){
+  const cols=mode?7:6;
+  if(!list.length)return '<tr class="empty"><td colspan="'+cols+'">조건에 맞는 사용자가 없습니다.</td></tr>';
+  return list.map(function(u){
+    const sel=S.ui.sel.indexOf(u.id)>=0;
+    return '<tr class="'+(sel?"sel":"")+'"><td><input type="checkbox" data-pick="'+u.id+'"'+(sel?" checked":"")+'></td>'
+      +'<td><span class="uname" data-open="'+u.id+'">'+esc(u.disp)+"</span></td>"
+      +'<td class="mono">'+esc(addr(u))+"</td>"
+      +"<td>"+esc(u.group)+"</td>"
+      +(mode==="role"?"<td>"+(u.role&&u.role!=="사용자"?'<span class="pill b">'+esc(u.role)+"</span>":"사용자")+"</td>":"")
+      +"<td>"+(u.license?'<span class="pill b">'+esc(u.license.replace("Microsoft 365 ",""))+"</span>":'<span class="pill n">Unlicensed</span>')+"</td>"
+      +"<td>"+(u.signIn==="허용"?'<span class="pill g">허용</span>':'<span class="pill r">차단됨</span>')+"</td>"
+      +(mode==="mfa"?"<td>"+mfaPill(u.mfa)+"</td>":"")+"</tr>";
+  }).join("");
+}
+function mfaPill(m){return m==="적용됨"?'<span class="pill g">적용됨</span>':(m==="사용"?'<span class="pill y">사용</span>':'<span class="pill n">사용 안 함</span>');}
+function pUsers(){
+  const list=filt(),n=S.ui.sel.length;
+  return '<h1 class="pt">활성 사용자</h1><p class="lead">계정을 만들고(개별·CSV), 초기 비밀번호를 설정하고, 담당교사에게 권한을 위임하는 곳입니다.</p>'
+   +'<div class="cmdbar" style="flex-wrap:wrap">'
+   +'<button class="cmd" data-act="addu"><span class="ic">'+I.user+"</span>사용자 추가</button>"
+   +'<button class="cmd" data-act="bulku"><span class="ic">'+I.user+"</span>여러 사용자 추가</button>"
+   +'<button class="cmd" data-act="pw"'+(n?"":" disabled")+'><span class="ic">'+I.lock+"</span>암호 초기화</button>"
+   +'<button class="cmd" data-act="role"'+(n?"":" disabled")+'><span class="ic">'+I.chk+"</span>역할 관리</button>"
+   +'<button class="cmd" data-act="grp"'+(n?"":" disabled")+'><span class="ic">'+I.grp+"</span>그룹 관리</button>"
+   +'<button class="cmd" data-act="block"'+(n?"":" disabled")+'><span class="ic">'+I.lock+"</span>로그인 차단/해제</button>"
+   +'<button class="cmd" data-act="lic"'+(n?"":" disabled")+'><span class="ic">'+I.lic+"</span>라이선스</button>"
+   +'<button class="cmd" data-act="rename"'+(n?"":" disabled")+'><span class="ic">'+I.chk+"</span>표시 이름 일괄 변경</button>"
+   +'<button class="cmd" data-act="export"><span class="ic">'+I.dl+"</span>사용자 내보내기</button>"
+   +'<button class="cmd" data-act="del"'+(n?"":" disabled")+'><span class="ic">'+I.del+"</span>삭제</button>"
+   +"</div>"
+   +'<div class="filterbar"><span class="fl">필터 집합:</span>'
+     +'<button class="fchip'+(S.ui.fg?"":" on")+'" data-fg="">자주 사용되는 항목</button>'
+     +[GRP[1],GRP[2],GRP[3],GRP[0]].map(g=>'<button class="fchip'+(S.ui.fg===g?" on":"")+'" data-fg="'+esc(g)+'">'+esc(g)+"</button>").join("")
+     +'<button class="fchip" data-nope="라이선스 필터">라이선스</button>'
+     +'<button class="fchip" data-nope="로그인 상태 필터">로그인 상태</button>'
+     +'<button class="fchip" data-nope="도메인 필터">도메인</button>'
+     +'<span style="flex:1"></span>'
+     +'<div class="srch" style="min-width:230px">'+I.srch+'<input id="uq" value="'+esc(S.ui.q)+'" placeholder="활성 사용자 검색 목록"></div>'
+   +"</div>"
+   +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">'
+     +'<span style="font-size:12.5px;color:var(--txx2)">선택 <b>'+n+"</b>명 / 전체 "+list.length+"명</span>"
+     +'<button class="colsel" data-nope="열 선택"><svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="14" height="12" rx="1"/><line x1="8" y1="4" x2="8" y2="16"/><line x1="13" y1="4" x2="13" y2="16"/></svg>열 선택</button></div>'
+   +'<div class="tblbox scroll-x"><div class="scroll-y"><table class="tbl"><thead><tr>'
+     +'<th style="width:36px"><input type="checkbox" data-all'+(list.length&&n===list.length?" checked":"")+'></th>'
+     +'<th>이름 <span style="font-size:10px">&#9650;</span></th><th>로그인을 위한 사용자 이름</th>'
+     +'<th>그룹</th><th>역할</th><th>라이선스</th><th>로그인 상태</th></tr></thead><tbody>'
+   +userRows(list,"role")+"</tbody></table></div></div>";
+}
+
+/* ===== 진급 처리 ===== */
+const WSTEPS=["1. 대상 확인","2. 졸업생 처리","3. 그룹 재배치","4. 신입생 등록","5. 검토 후 실행"];
+/* 매뉴얼 규칙: 사용자 이름=아이디(도메인까지) · 이름=학생 이름 · 성=학번 · 표시 이름=학번+이름 */
+const SAMPLE="사용자 이름,이름,성,표시 이름\n"+SCHOOLYEAR+"10101@"+DOMAIN+",하늘,10101,"+SCHOOLYEAR+"10101김하늘\n"
+  +SCHOOLYEAR+"10102@"+DOMAIN+",서준,10102,"+SCHOOLYEAR+"10102이서준\n"
+  +SCHOOLYEAR+"10103@"+DOMAIN+",지우,10103,"+SCHOOLYEAR+"10103박지우\n"
+  +SCHOOLYEAR+"10104@"+DOMAIN+",민서,10104,"+SCHOOLYEAR+"10104최민서";
+/* 아이디에서 현재 학년 되찾기 — 입학연도 4자리(2026…) · 2자리(26…) · 옛 5자리 모두 허용 */
+function gradeFromId(id){
+  let y=null;
+  if(/^\d{9}$/.test(id))y=+id.slice(0,4);
+  else if(/^\d{7}$/.test(id))y=2000+ +id.slice(0,2);
+  if(y){const g=SCHOOLYEAR-y+1;return (g>=1&&g<=3)?g:1;}
+  const g2=+String(id).charAt(0);return (g2>=1&&g2<=3)?g2:1;
+}
+function clsNoFromId(id){
+  const t=String(id).slice(-4);
+  return {cls:+t.slice(0,2)||0,no:+t.slice(2)||0};
+}
+function wzInit(){return {step:1,grad:"",csv:"",parsed:[],err:""};}
+function parseCsv(t){
+  const rows=[],err=[];
+  const raw=String(t).replace(/\r/g,"");
+  /* 실무 오류 1위 — 엑셀이 CSV로 저장할 때 붙이는 마지막 빈 줄 */
+  if(raw.trim()&&/\n[ \t]*$/.test(raw))
+    err.push("맨 아래에 빈 줄이 있습니다 — 관리 센터는 이것을 「내용 없는 사용자 1명」으로 읽어 업로드가 통째로 실패합니다. 메모장으로 열어 마지막 줄바꿈을 지우세요");
+  raw.split("\n").forEach(function(ln,i){
+    const s=ln.trim();if(!s)return;
+    const c=s.split(",").map(x=>x.trim());
+    if(i===0&&(c[0]==="사용자 이름"||c[0].toLowerCase()==="username"))return;
+    if(c.length<4){err.push((i+1)+"행: 열이 4개가 아닙니다 (사용자 이름·이름·성·표시 이름)");return;}
+    const id=c[0].split("@")[0];
+    if(!/^\d{5}$|^\d{7}$|^\d{9}$/.test(id)){
+      err.push((i+1)+"행: 사용자 이름은 학번 기반 숫자여야 합니다 (예: "+SCHOOLYEAR+"10101)");return;}
+    rows.push({upn:id,first:c[1],last:c[2],disp:c[3]});
+  });
+  return {rows:rows,err:err};
+}
+function pPromote(){
+  if(!S.wz)S.wz=wzInit();
+  const W=S.wz,st=W.step;
+  const cnt=g=>S.users.filter(u=>u.grade===g&&u.signIn==="허용").length;
+  let b="";
+  if(st===1){
+    b='<h2>대상 확인</h2><p class="lead">현재 테넌트의 학년별 계정 수입니다. 교직원 계정은 진급 대상이 아닙니다.</p>'
+     +'<div class="tblbox"><table class="tbl"><thead><tr><th>현재</th><th></th><th>변경 후</th><th class="c">대상</th><th>비고</th></tr></thead><tbody>'
+     +'<tr><td><b>3학년</b></td><td>→</td><td><b>졸업</b></td><td class="c">'+cnt(3)+'명</td><td>아래 2단계에서 처리 방식을 고릅니다</td></tr>'
+     +'<tr><td><b>2학년</b></td><td>→</td><td><b>3학년</b></td><td class="c">'+cnt(2)+'명</td><td>보안그룹 이동 · 사용자 이름 앞자리 변경</td></tr>'
+     +'<tr><td><b>1학년</b></td><td>→</td><td><b>2학년</b></td><td class="c">'+cnt(1)+'명</td><td>보안그룹 이동 · 사용자 이름 앞자리 변경</td></tr>'
+     +'<tr><td><b>신입생</b></td><td>→</td><td><b>1학년</b></td><td class="c">CSV</td><td>4단계에서 일괄 생성</td></tr>'
+     +'<tr><td><b>교직원</b></td><td></td><td>변경 없음</td><td class="c">'+cnt(0)+'명</td><td>진급 대상 아님</td></tr>'
+     +'</tbody></table></div>'
+     +'<div class="note w" style="margin-top:16px"><b>순서가 중요합니다.</b> 졸업생을 먼저 처리해 라이선스를 회수해야, 신입생에게 할당할 자리가 생깁니다. 반대로 하면 라이선스 부족으로 계정 생성이 막힙니다.</div>'
+     +'<div class="note g" style="margin-top:10px"><b>지금 쓰는 방법 ― ClassSync로 표시 이름 일괄 변경</b> <span class="pill g">권장</span><br>'
+       +'MS 이상근 매니저님이 안내하는 방식입니다. <b>기존 아이디는 그대로 두고 학번·이름 정보만 갱신</b>하므로 학생은 아무 영향을 받지 않습니다.<br>'
+       +'① Microsoft Store에서 <b>ClassSync</b> 설치 → ② 학교 관리자 계정으로 로그인, 최초 1회 학교 기본정보 설정 → ③ 왼쪽 [<b>통합 아이디 만들기</b>] → Microsoft → [<b>MS아이디 가져오기</b>] → ④ [<b>CSV 내보내기</b>]로 기존 명단 받기 → ⑤ 받은 CSV를 템플릿 삼아 <b>바꿀 대상만 남기고</b> 학번 칸을 새 학번으로 → ⑥ [<b>CSV 가져오기</b>] → 미리보기 확인 → ⑦ [<b>MS아이디 만들기</b>] 실행 → 처리완료.<br>'
+       +'<span class="mono">순번 · 학번/담당과목 · 성명 · 아이디 · 사용자구분 · 조직단위 · 상태 · 비고</span> — 표시 이름은 <b>학번 + 성명</b>으로 조립됩니다. 예: <span class="mono">10123 홍길동</span> → 학번만 <span class="mono">20120</span>으로 바꾸면 <span class="mono">20120 홍길동</span>. 여러 명은 한 파일에 순번을 쌓아 넣습니다.</div>'
+     +'<div class="note i"><b>손으로 하는 방법 ― 별칭 승격</b><br>각 반 담임에게 「사용자 관리자」를 주고, 학생 상세 → [사용자 이름 및 전자 메일 관리]에서 새 학번 <b>별칭</b>을 추가해 기본으로 지정합니다. 옛 별칭은 중복을 막기 위해 삭제합니다. 아이디 자체를 바꾸는 방식이라 <b>학생이 새 주소로 다시 로그인</b>해야 하고, Windows 11 24H2에서는 PIN이 풀립니다. 인원이 적을 때만 쓰세요.</div>'
+     +'<div class="note d"><b>PowerShell 방법은 이제 막혔습니다.</b> 윈도우 기기 매뉴얼 부록의 <span class="mono">Install-Module AzureAD · MSOnline</span> → <span class="mono">Set-AzureADUser</span> 절차는 두 모듈이 <b>2025년에 은퇴</b>해 그대로는 실행되지 않습니다. 굳이 스크립트로 하려면 Microsoft Graph PowerShell의 <span class="mono">Update-MgUser</span>로 바꿔야 합니다. 게다가 그 부록 명령은 <b>표시 이름만</b> 바꿔서 로그인 아이디는 그대로 남습니다 — 승급이 된 것처럼 보이지만 아닙니다.</div>'
+     +'<div class="note w">순서는 어느 방법이든 같습니다. <b>졸업생 정리 → 상위 학년부터</b>. 졸업생은 바로 지우지 말고 <b>로그인 차단</b>만 걸어 한 달쯤 자료 옮길 기간을 준 뒤 삭제하세요.</div>';
+  }
+  if(st===2){
+    const o=(v,t,d,rec)=>'<label class="opt'+(W.grad===v?" on":"")+'"><input type="radio" name="grad" value="'+v+'"'+(W.grad===v?" checked":"")+'><span><b>'+t+(rec?' <span class="pill g">권장</span>':"")+"</b><span>"+d+"</span></span></label>";
+    b='<h2>졸업생 처리 방식</h2><p class="lead">3학년 '+cnt(3)+'명을 어떻게 할지 고릅니다. 세 방식의 결과가 다릅니다.</p>'
+     +o("block","로그인 차단 + 라이선스 회수","계정과 데이터는 남기고 로그인만 막습니다. 라이선스는 즉시 회수되어 신입생에게 줄 수 있습니다. 나중에 생활기록·과제 자료를 찾을 일이 있을 때 안전합니다.",true)
+     +o("delete","즉시 삭제","계정을 삭제합니다. 라이선스는 자동 회수됩니다. <b>삭제 후 30일 안에만 복원</b>할 수 있고, 일정 항목과 별칭은 즉시 사라집니다.")
+     +o("keep","로그인 차단만","로그인만 막고 라이선스는 그대로 둡니다. 자리를 계속 차지하므로 신입생 라이선스가 모자랄 수 있습니다.")
+     +(W.grad?'<div class="note i" style="margin-top:8px">'+({block:"라이선스 "+cnt(3)+"석이 회수되어 신입생에게 할당할 수 있습니다.",delete:"계정 "+cnt(3)+"개가 삭제되고 라이선스 "+cnt(3)+"석이 회수됩니다. 30일 복원 기한을 기억하세요.",keep:"라이선스가 회수되지 않습니다. 현재 학생용 잔여 "+(CAP[LIC_S]-used(LIC_S))+"석으로 신입생을 감당할 수 있는지 확인하세요."}[W.grad])+"</div>":"");
+  }
+  if(st===3){
+    const rows=[[2,3],[1,2]].map(function(p){
+      const us=S.users.filter(u=>u.grade===p[0]&&u.signIn==="허용");
+      return us.slice(0,4).map(function(u){
+        return '<div class="diff"><span class="a">'+esc(u.disp)+' · <span class="mono">'+esc(u.upn)+'</span> · '+esc(u.group)+'</span><span class="ar">→</span><span class="b"><span class="mono">'+esc(String(p[1])+u.upn.slice(1))+"</span> · "+GRP[p[1]]+"</span></div>";
+      }).join("")+(us.length>4?'<div class="diff"><span class="a" style="color:var(--tx3)">… 외 '+(us.length-4)+"명</span><span class='ar'></span><span class='b'></span></div>":"");
+    }).join("");
+    b='<h2>그룹 재배치 미리보기</h2><p class="lead">보안그룹과 사용자 이름 앞자리가 함께 바뀝니다. 그룹 기준으로 정책이 걸려 있으면 그룹만 옮겨도 정책이 따라갑니다.</p>'
+     +'<div class="tblbox" style="padding:6px 16px">'+rows+"</div>"
+     +'<div class="note i" style="margin-top:16px"><b>표시 이름은 바뀌지 않습니다.</b> 이름은 그대로 두고 계정(사용자 이름)과 그룹만 바꿉니다. 표시 이름까지 바꾸면 Teams·과제 기록에서 사람을 못 찾게 됩니다.</div>';
+  }
+  if(st===4){
+    b='<h2>신입생 계정 일괄 생성</h2><p class="lead">CSV 형식으로 붙여넣습니다. 1열이 계정(사용자 이름)이고 이후 이름, 성, 표시 이름 순서입니다.</p>'
+     +'<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><button class="btn sm" data-sample>샘플 채우기</button><button class="btn sm" data-dlcsv>'+I.dl+' 서식 파일 내려받기</button></div>'
+     +'<div class="field" style="max-width:100%"><label>CSV 내용</label><textarea id="csv" placeholder="사용자 이름,이름,성,표시 이름">'+esc(W.csv)+"</textarea></div>"
+     +(W.err?'<div class="note d">'+W.err+"</div>":"")
+     +(W.parsed.length?'<div class="note g">'+W.parsed.length+'명을 읽었습니다. 계정은 <span class="mono">'+esc(W.parsed[0].upn)+"@"+DOMAIN+'</span> 형식으로 만들어집니다.</div>':"")
+     +'<div class="note w">신입생을 건너뛰려면 비워 둔 채 다음으로 넘어가세요. 라이선스 잔여가 부족하면 실행 단계에서 막힙니다. (학생용 잔여 <b>'+(CAP[LIC_S]-used(LIC_S))+"</b>석)</div>";
+  }
+  if(st===5){
+    const gl={block:"로그인 차단 + 라이선스 회수",delete:"즉시 삭제",keep:"로그인 차단만"}[W.grad]||"(미선택)";
+    const need=W.parsed.length, free=CAP[LIC_S]-used(LIC_S)+(W.grad&&W.grad!=="keep"?cnt(3):0);
+    b='<h2>검토 후 실행</h2><p class="lead">아래 내용대로 한 번에 실행합니다. 실행 후에는 되돌릴 수 없습니다(실습기에서는 「처음 상태로」로 복구 가능).</p>'
+     +'<div class="tblbox"><table class="tbl"><tbody>'
+     +'<tr><td style="width:180px;color:var(--tx2)">졸업생 처리</td><td><b>'+gl+"</b> · 3학년 "+cnt(3)+"명</td></tr>"
+     +'<tr><td style="color:var(--tx2)">2학년 → 3학년</td><td>'+cnt(2)+"명 · 그룹 "+GRP[3]+"</td></tr>"
+     +'<tr><td style="color:var(--tx2)">1학년 → 2학년</td><td>'+cnt(1)+"명 · 그룹 "+GRP[2]+"</td></tr>"
+     +'<tr><td style="color:var(--tx2)">신입생 생성</td><td>'+(need?need+"명 · 그룹 "+GRP[1]:"없음")+"</td></tr>"
+     +'<tr><td style="color:var(--tx2)">학생용 라이선스</td><td>실행 후 예상 잔여 <b>'+(free-need)+"</b>석 / 총 "+CAP[LIC_S]+"석</td></tr>"
+     +"</tbody></table></div>"
+     +(!W.grad?'<div class="note d" style="margin-top:16px">2단계에서 졸업생 처리 방식을 먼저 고르세요.</div>':"")
+     +(free-need<0?'<div class="note d" style="margin-top:16px">라이선스가 '+(need-free)+"석 모자랍니다. 졸업생 처리 방식을 「로그인 차단 + 라이선스 회수」로 바꾸거나 신입생 수를 줄이세요.</div>":"");
+  }
+  return '<h1 class="pt">진급 처리</h1><p class="lead">학년이 바뀔 때 계정을 정리하는 연간 업무입니다. 단말(Argos) 쪽 진급과 <b>짝으로</b> 진행해야 명단이 어긋나지 않습니다.</p>'
+   +'<div class="wz"><div class="wz-steps">'
+   +WSTEPS.map((s,i)=>'<button class="wz-step '+(i+1===st?"on":(i+1<st?"done":""))+'" data-wstep="'+(i+1)+'">'+s+"</button>").join("")
+   +'</div><div class="wz-body">'+b+'</div><div class="wz-foot">'
+   +'<button class="btn" data-wcancel>처음부터</button><span class="right">'
+   +(st>1?'<button class="btn" data-wprev>이전</button>':"")
+   +(st<5?'<button class="btn pri" data-wnext>다음</button>':'<button class="btn pri" data-wrun>진급 처리 실행</button>')
+   +"</span></div></div>";
+}
+function runPromote(){
+  const W=S.wz;
+  if(!W.grad){toast("졸업생 처리 방식을 먼저 고르세요.","no");W.step=2;render();return;}
+  const g3=S.users.filter(u=>u.grade===3&&u.signIn==="허용");
+  const free=CAP[LIC_S]-used(LIC_S)+(W.grad!=="keep"?g3.length:0);
+  if(W.parsed.length>free){toast("라이선스가 부족합니다.","no");return;}
+  const log=[];
+  if(W.grad==="delete"){
+    const ids=g3.map(u=>u.id);
+    S.users=S.users.filter(u=>ids.indexOf(u.id)<0);
+    log.push("졸업생 "+g3.length+"명 계정 삭제 (30일 내 복원 가능), 라이선스 "+g3.length+"석 회수");
+  }else{
+    g3.forEach(function(u){u.signIn="차단";u.grade=9;u.group="졸업";if(W.grad==="block")u.license="";});
+    log.push("졸업생 "+g3.length+"명 로그인 차단"+(W.grad==="block"?", 라이선스 "+g3.length+"석 회수":", 라이선스 유지"));
+  }
+  [[2,3],[1,2]].forEach(function(p){
+    const us=S.users.filter(u=>u.grade===p[0]);
+    us.forEach(function(u){u.grade=p[1];u.group=GRP[p[1]];u.upn=String(p[1])+u.upn.slice(1);});
+    log.push(p[0]+"학년 → "+p[1]+"학년 "+us.length+"명 그룹 재배치");
+  });
+  let made=0;
+  W.parsed.forEach(function(r){
+    if(S.users.some(u=>u.upn===r.upn))return;
+    S.users.push({id:"n"+r.upn+Date.now()+made,last:r.last,first:r.first,disp:r.disp,upn:r.upn,
+      grade:1,cls:+r.upn.charAt(1)*10+ +r.upn.charAt(2),no:+r.upn.slice(3),group:GRP[1],
+      license:LIC_S,role:"사용자",mfa:"사용 안 함",signIn:"허용",seen:"-"});
+    made++;
+  });
+  if(made)log.push("신입생 "+made+"명 계정 생성, 라이선스 "+made+"석 할당");
+  log.push("실행일: "+today()+" / 학생용 라이선스 잔여 "+(CAP[LIC_S]-used(LIC_S))+"석");
+  S.log=log;done("m3");if(made)done("m4");S.wz=wzInit();save();render();
+  modal({title:"진급 처리 완료",
+    body:'<div class="note g">아래 작업이 실행되었습니다.</div><ul style="line-height:2;padding-left:20px;margin:0">'+log.map(l=>"<li>"+esc(l)+"</li>").join("")+"</ul>"
+     +'<div class="note w" style="margin-top:16px"><b>다음 단계</b><br>① Argos에서 단말 진급 처리도 함께 실행하세요.<br>② 학급 Teams 팀은 보관 또는 삭제하고 소유자를 2명 이상 유지하세요.<br>③ 졸업생 라이선스 회수가 실제로 반영됐는지 「라이선스」에서 확인하세요.</div>',
+    foot:'<button class="btn pri" data-close>확인</button><button class="btn" id="dlLog">'+I.dl+" 결과 내려받기</button>",
+    onMount:function(ov){ov.querySelector("#dlLog").addEventListener("click",exportLog);}});
+}
+function exportLog(){
+  const L=["학년 진급 처리 결과 (연수 실습)","학교: 해누리중학교   실행일: "+today(),""];
+  (S.log.length?S.log:["아직 실행하지 않았습니다."]).forEach(l=>L.push("- "+l));
+  L.push("");L.push("[현재 학년별 계정 수]");
+  [1,2,3].forEach(g=>L.push("  "+g+"학년: "+S.users.filter(u=>u.grade===g).length+"명"));
+  L.push("  교직원: "+S.users.filter(u=>u.grade===0).length+"명");
+  L.push("  졸업(차단): "+S.users.filter(u=>u.grade===9).length+"명");
+  L.push("");L.push("[라이선스]");
+  L.push("  "+LIC_S+": "+used(LIC_S)+" / "+CAP[LIC_S]+"석");
+  L.push("  "+LIC_T+": "+used(LIC_T)+" / "+CAP[LIC_T]+"석");
+  L.push("");L.push("[MFA]");
+  MFA.forEach(m=>L.push("  "+m+": "+S.users.filter(u=>u.mfa===m).length+"명"));
+  L.push("");L.push("※ 연수용 실습기에서 생성한 연습 결과입니다.");
+  const b=new Blob([L.join("\n")],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="진급처리_결과_"+today()+".txt";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  toast("결과를 내려받았습니다.","ok");
+}
+
+/* ===== MFA ===== */
+function pMfa(){
+  const list=filt(),n=S.ui.sel.length;
+  const cnt=m=>S.users.filter(u=>u.mfa===m).length;
+  return '<h1 class="pt">다단계 인증</h1><p class="lead">사용자별 MFA 상태를 관리합니다. <b>사용 안 함</b> → <b>사용</b>(다음 로그인 때 등록 안내) → <b>적용됨</b>(등록 완료, 매번 2차 인증) 순서로 바뀝니다.</p>'
+   +'<div class="stat4">'+MFA.map(m=>'<div class="st"><div class="k">'+m+'</div><div class="v">'+cnt(m)+"<small>명</small></div></div>").join("")+"</div>"
+   +'<div class="tblbox" style="margin-bottom:14px;padding:13px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:260px"><b>보안 기본값 (Security Defaults)</b><div style="font-size:12.5px;color:var(--tx2);margin-top:4px">테넌트 전체 MFA를 한꺼번에 켜고 끄는 스위치. 경로: 관리 센터 → [모든 관리 센터] → <b>Entra</b> → [속성] → [보안 기본값 관리]</div></div>'+(S.secDef?'<span class="pill y">사용</span>':'<span class="pill n">사용 안 함</span>')+'<button class="btn sm" data-act="secdef">보안 기본값 관리</button></div>'
+
+   +'<div class="note w"><b>학생 계정에 한꺼번에 켜지 마세요.</b> 휴대폰이 없는 학생, 기기를 바꾼 학생이 반드시 나오고 수업 시작 5분이 로그인으로 사라집니다. <b>교직원·관리자 계정부터</b> 적용하고, 학생은 필요할 때 학급 단위로 나눠 적용하는 것이 안전합니다.</div>'
+   +'<div class="note i"><b>2024.10.16. 정책 변경:</b> 보안 기본값을 꺼도 <b>관리자 역할이 있는 계정에는 MFA가 강제</b>됩니다. 권한을 위임받은 선생님은 Authenticator 앱을 설치해 두어야 합니다.</div>'
+   +'<div class="cmdbar">'
+   +MFA.map(m=>'<button class="cmd" data-mfa="'+m+'"'+(n?"":" disabled")+'><span class="ic">'+I.lock+"</span>"+m+"으로</button>").join("")
+   +'<button class="cmd" data-act="reauth"'+(n?"":" disabled")+'><span class="ic">'+I.rf+"</span>MFA 재등록 요청</button>"
+   +'<span class="sp"></span><span style="font-size:12.5px;color:var(--tx2)">선택 <b>'+n+"</b>명</span></div>"
+   +'<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
+   +'<div class="srch">'+I.srch+'<input id="uq" value="'+esc(S.ui.q)+'" placeholder="이름 또는 사용자 이름 검색"></div>'
+   +'<select id="fg" style="height:32px;border:1px solid #8A8886;border-radius:3px;padding:0 8px"><option value="">모든 그룹</option>'
+     +[GRP[1],GRP[2],GRP[3],GRP[0]].map(g=>'<option'+(S.ui.fg===g?" selected":"")+">"+g+"</option>").join("")+"</select>"
+   +'<select id="fm" style="height:32px;border:1px solid #8A8886;border-radius:3px;padding:0 8px"><option value="">모든 MFA 상태</option>'
+     +MFA.map(m=>'<option'+(S.ui.fm===m?" selected":"")+">"+m+"</option>").join("")+"</select>"
+   +"</div>"
+   +'<div class="tblbox scroll-x"><div class="scroll-y"><table class="tbl"><thead><tr><th style="width:36px"><input type="checkbox" data-all'+(list.length&&n===list.length?" checked":"")+'></th><th>표시 이름</th><th>사용자 이름</th><th>그룹</th><th>라이선스</th><th>로그인</th><th>다단계 인증</th></tr></thead><tbody>'
+   +userRows(list,"mfa")+"</tbody></table></div></div>";
+}
+function openUser(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  const kv=(k,v)=>'<div class="kv"><div class="k">'+k+'</div><div class="v">'+v+"</div></div>";
+  const al=(u.alias||[]);
+  side({title:u.disp,
+    body:'<div class="cmdbar" style="flex-wrap:wrap;margin-bottom:12px">'
+       +'<button class="cmd" data-u1="pw" data-uid="'+u.id+'"><span class="ic">'+I.lock+'</span>암호 재설정</button>'
+       +'<button class="cmd" data-u1="alias" data-uid="'+u.id+'"><span class="ic">'+I.user+'</span>사용자 이름 및 전자 메일 관리</button>'
+       +'<button class="cmd" data-u1="contact" data-uid="'+u.id+'"><span class="ic">'+I.chk+'</span>연락처 정보 관리</button>'
+       +'<button class="cmd" data-u1="quota" data-uid="'+u.id+'"><span class="ic">'+I.lic+'</span>저장용량</button>'
+       +'<button class="cmd" data-u1="signout" data-uid="'+u.id+'"><span class="ic">'+I.lock+'</span>모든 세션에서 로그아웃</button>'
+       +'</div>'
+      +kv("사용자 이름 및 이메일",'<span class="mono">'+esc(addr(u))+"</span>")
+      +kv("별칭",al.length?al.map(a=>'<span class="mono">'+esc(a)+"</span>").join("<br>"):'<span style="color:var(--tx3)">없음</span>')
+      +kv("표시 이름",esc(u.disp)+' <span class="pill '+(dispKind(u)==="학번형"?"b":(dispKind(u)==="학급형"?"y":"n"))+'">'+dispKind(u)+"</span>")
+      +kv("부서 · 직함",(u.dept?esc(u.dept):"—")+" · "+(u.title?esc(u.title):"—"))
+      +kv("그룹",esc(u.group))+kv("역할",esc(u.role||"사용자"))+kv("라이선스",u.license?esc(u.license):'<span class="pill n">Unlicensed</span>')
+      +kv("OneDrive 할당량",(u.quota||0)?((u.quota)+"GB"+((u.quota)>=1024?" (= "+((u.quota)/1024).toFixed(0)+"TB)":"")):"—")
+      +kv("로그인 상태",u.signIn==="허용"?'<span class="pill g">허용</span>':'<span class="pill r">차단됨</span>')
+      +kv("마지막 로그인",esc(u.seen))
+      +kv("다단계 인증",mfaPill(u.mfa))
+      +kv("등록된 인증 방법",u.mfa==="적용됨"?"Microsoft Authenticator 앱, 전화(SMS)":"없음 — 다음 로그인 때 등록 안내가 표시됩니다")
+      +'<div class="note i">휴대폰을 바꾸거나 앱을 지운 사용자는 <b>재등록 요청</b>을 해야 새 기기로 등록할 수 있습니다. 실무에서 가장 많이 들어오는 요청입니다.</div>',
+    foot:'<button class="btn pri" data-reauth1="'+u.id+'">MFA 재등록 요청</button><button class="btn" data-sclose>닫기</button>'});
+}
+/* ── 3단계 · 개인 비밀번호 초기화 ── */
+function pwOne(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  modal({title:"암호 재설정 — "+u.disp,
+    body:'<div class="kv"><div class="k">계정</div><div class="v mono">'+esc(addr(u))+"</div></div>"
+     +'<label class="opt on"><input type="checkbox" id="oAuto" checked><span><b>자동으로 암호 생성</b><span>임시 암호가 만들어집니다.</span></span></label>'
+     +'<div class="field" id="oManBox" style="display:none"><label>직접 입력</label><input id="oMan" placeholder="예: Haenuri2026!"></div>'
+     +'<label class="opt"><input type="checkbox" id="oChg"><span><b>이 사용자가 처음 로그인할 때 암호를 변경하도록 요구</b><span>매뉴얼의 개인 초기화 요령은 이 항목을 <b>꺼서</b> 학생이 자기 암호를 직접 정하게 하는 것입니다.</span></span></label>'
+     +'<div class="note i">한 명만 처리할 때는 상세 화면에서, 여러 명은 목록에서 선택해 [암호 초기화]로 처리합니다(한 번에 40명).</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>재설정</button>',
+    onMount:function(ov,close){
+      ov.querySelector("#oAuto").addEventListener("change",function(){ov.querySelector("#oManBox").style.display=this.checked?"none":"block";});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const auto=ov.querySelector("#oAuto").checked,man=ov.querySelector("#oMan").value.trim(),chg=ov.querySelector("#oChg").checked;
+        if(!auto&&!man){toast("암호를 입력하세요.","no");return;}
+        const pw=auto?genPw():man;
+        done("m12");save();close();
+        modal({title:"임시 암호가 설정되었습니다",
+          body:'<div class="kv"><div class="k">'+esc(u.disp)+'</div><div class="v mono"><b>'+esc(pw)+"</b></div></div>"
+           +'<div class="note '+(chg?"i":"g")+'">'+(chg?"첫 로그인 때 이 암호를 새 암호로 바꾸게 됩니다.":"변경 요구를 껐습니다 — 학생이 이 임시 암호로 로그인한 뒤 자기 암호를 직접 정하도록 안내하세요.")+"</div>",
+          foot:'<button class="btn pri" data-close>확인</button>'});});}});
+}
+/* ── 승급 · 사용자 이름 및 전자 메일 관리(별칭) ── */
+function popAlias(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  const draw=function(ov){
+    const al=u.alias||[];
+    ov.querySelector("#alList").innerHTML=al.length
+      ? al.map((a,i)=>'<div class="kv"><div class="k mono" style="font-size:12.5px">'+esc(a)+'</div><div class="v"><button class="btn sm" data-almain="'+i+'">기본으로 설정</button> <button class="btn sm dgr" data-aldel="'+i+'">삭제</button></div></div>').join("")
+      : '<div style="color:var(--tx3);font-size:13px;padding:6px 0">별칭이 없습니다.</div>';
+    ov.querySelector("#alPri").innerHTML='<span class="mono">'+esc(addr(u))+"</span>";
+  };
+  modal({title:"사용자 이름 및 전자 메일 관리",wide:true,
+    body:'<p class="lead">기본 전자 메일이 곧 <b>로그인 아이디</b>입니다. 승급 때 아이디를 바꾸는 실제 절차가 여기 세 클릭입니다 — <b>새 별칭 추가 → 기본으로 설정 → 옛 별칭 삭제</b>.</p>'
+     +'<div class="field"><label>기본 전자 메일 주소와 사용자 이름</label><div id="alPri"></div></div>'
+     +'<div class="field"><label>별칭 추가</label><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'
+       +'<input id="alU" placeholder="예: '+(SCHOOLYEAR)+'10101" style="flex:1;min-width:160px">'
+       +'<span class="mono" style="font-size:12px">@</span>'
+       +'<select id="alD" style="height:32px;border:1px solid #8A8886;border-radius:3px;padding:0 8px"><option>'+DOMAIN+'</option><option>'+DOM2+'</option></select>'
+       +'<button class="btn sm" data-aladd>추가</button></div></div>'
+     +'<div class="field"><label>별칭 목록</label><div id="alList"></div></div>'
+     +'<div class="note w"><b>옛 별칭은 반드시 삭제하세요.</b> 남겨 두면 같은 사람이 두 주소로 검색되어 명단이 어긋납니다.</div>'
+     +'<div class="note d"><b>주의.</b> 아이디를 바꾸면 학생은 새 주소로 다시 로그인해야 하고, Windows 11 24H2에서는 PIN이 풀려 "PIN을 사용할 수 없습니다"가 뜹니다. 로그인 옵션 → 비밀번호로 로그인 → PIN 재설정 안내를 함께 배부하세요.</div>',
+    foot:'<button class="btn pri" data-close>닫기</button>',
+    onMount:function(ov){
+      draw(ov);
+      ov.addEventListener("click",function(e){
+        let n;
+        if((n=e.target.closest("[data-aladd]"))){
+          const v=ov.querySelector("#alU").value.trim(),d=ov.querySelector("#alD").value;
+          if(!v){toast("별칭으로 쓸 사용자 이름을 입력하세요.","no");return;}
+          if(v.indexOf("@")>=0){toast("@ 앞부분만 입력하세요.","no");return;}
+          const full=v+"@"+d;
+          if(full===addr(u)||(u.alias||[]).indexOf(full)>=0){toast("이미 있는 주소입니다.","no");return;}
+          if(S.users.some(x=>addr(x)===full||(x.alias||[]).indexOf(full)>=0)){toast("다른 계정이 쓰고 있는 주소입니다.","no");return;}
+          u.alias=(u.alias||[]).concat([full]);save();draw(ov);toast("별칭을 추가했습니다. 이제 [기본으로 설정]을 눌러야 로그인 아이디가 바뀝니다.","ok");return;
+        }
+        if((n=e.target.closest("[data-almain]"))){
+          const i=+n.getAttribute("data-almain"),old=addr(u),nw=u.alias[i];
+          u.alias.splice(i,1);u.alias.push(old);
+          u.upn=nw.split("@")[0];u.dom=nw.split("@")[1];
+          done("m16");save();draw(ov);render();
+          toast("기본 주소를 바꿨습니다. 옛 주소가 별칭으로 남아 있으니 삭제하세요.","ok");return;
+        }
+        if((n=e.target.closest("[data-aldel]"))){
+          const i=+n.getAttribute("data-aldel");
+          u.alias.splice(i,1);save();draw(ov);toast("별칭을 삭제했습니다.","ok");return;
+        }
+      });}});
+}
+/* ── 6단계 · 연락처 정보 관리(표시 이름·부서·직함) ── */
+function popContact(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  modal({title:"연락처 정보 관리 — "+u.disp,
+    body:'<div class="field"><label>표시 이름 *</label><input id="cD" value="'+esc(u.disp)+'"></div>'
+     +'<div style="display:flex;gap:8px;margin:-4px 0 10px;flex-wrap:wrap">'
+       +'<button class="btn sm" data-cfmt="num">학번형으로</button><button class="btn sm" data-cfmt="cls">학급형으로</button><button class="btn sm" data-cfmt="name">이름만</button></div>'
+     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 14px">'
+       +'<div class="field"><label>부서</label><input id="cDept" value="'+esc(u.dept||"")+'" placeholder="예: '+(u.grade>=1&&u.grade<=3?(u.grade+"-"+u.cls):"교무부")+'"></div>'
+       +'<div class="field"><label>직함</label><input id="cTitle" value="'+esc(u.title||"")+'" placeholder="'+(u.grade?"학생":"교사")+'"></div></div>'
+     +'<div class="note i"><b>부서에 학년-반을 넣어 두면</b> 승급이 훨씬 쉬워집니다. 로그인 아이디를 건드리지 않고 부서 값만 바꾸면 되기 때문입니다.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>변경 내용 저장</button>',
+    onMount:function(ov,close){
+      const D=ov.querySelector("#cD");
+      ov.addEventListener("click",function(e){
+        const n=e.target.closest("[data-cfmt]");if(!n)return;
+        const k=n.getAttribute("data-cfmt");
+        D.value=k==="num"?fmtNum(u):(k==="cls"?fmtCls(u):nameOf(u));
+      });
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const d=D.value.trim();
+        if(!d){toast("표시 이름은 비울 수 없습니다.","no");return;}
+        u.disp=d;u.dept=ov.querySelector("#cDept").value.trim();u.title=ov.querySelector("#cTitle").value.trim();
+        done("m14");save();close();render();toast("연락처 정보를 저장했습니다.","ok");});}});
+}
+/* ── 5단계 · 저장용량 변경 ── */
+function popQuota(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  modal({title:"저장용량 — "+u.disp,
+    body:'<p class="lead">A3에는 1인 최대 5TB가 포함되지만, 실제 할당량은 테넌트에서 정합니다. 매뉴얼 기준값은 <b>1024GB(=1TB)</b>입니다.</p>'
+     +'<div class="field"><label>OneDrive 할당량 (GB)</label><input id="qV" value="'+(u.quota||QUOTA_DEF)+'"></div>'
+     +'<div style="display:flex;gap:8px;margin:-4px 0 10px;flex-wrap:wrap"><button class="btn sm" data-qset="1024">1024GB (1TB)</button><button class="btn sm" data-qset="2048">2048GB (2TB)</button><button class="btn sm" data-qset="5120">5120GB (5TB)</button></div>'
+     +'<div class="note i">학교 테넌트 총량은 <b>100TB</b>를 나눠 씁니다. 전원에게 5TB를 주면 총량이 먼저 바닥납니다.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>변경 내용 저장</button>',
+    onMount:function(ov,close){
+      ov.addEventListener("click",function(e){const n=e.target.closest("[data-qset]");if(n)ov.querySelector("#qV").value=n.getAttribute("data-qset");});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const v=parseInt(ov.querySelector("#qV").value,10);
+        if(!v||v<1){toast("숫자를 입력하세요.","no");return;}
+        u.quota=v;done("m13");save();close();render();
+        toast(u.disp+"의 할당량을 "+v+"GB"+(v>=1024?" (= "+(v/1024).toFixed(0)+"TB)":"")+"로 바꿨습니다.","ok");});}});
+}
+/* ── 모든 세션에서 로그아웃 ── */
+function signOutAll(id){
+  const u=S.users.filter(x=>x.id===id)[0];if(!u)return;
+  modal({title:"모든 세션에서 로그아웃",
+    body:'<div class="note w"><b>'+esc(u.disp)+'</b> 계정을 모든 기기에서 로그아웃시킵니다. 암호를 초기화한 뒤에는 이 작업을 함께 해야 옛 세션이 남지 않습니다.</div>'
+     +'<div class="note i">반영에는 시간이 걸릴 수 있습니다. 실제 화면 문구도 같습니다.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>로그아웃</button>',
+    onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){
+      u.seen="-";save();close();render();toast("모든 세션에서 로그아웃을 요청했습니다.","ok");});}});
+}
+/* ── 6단계 · 표시 이름 일괄 변경 ── */
+function popRenameBulk(){
+  const ids=S.ui.sel.slice();if(!ids.length)return;
+  const us=S.users.filter(u=>ids.indexOf(u.id)>=0&&!u.sys);
+  if(!us.length){toast("학생·교사 계정을 선택하세요.","no");return;}
+  const cnt=function(k){return us.filter(u=>dispKind(u)===k).length;};
+  modal({title:"표시 이름 일괄 변경 — "+us.length+"명",wide:true,
+    body:'<div class="note i">지금 선택한 계정의 형식: 학번형 <b>'+cnt("학번형")+'</b> · 학급형 <b>'+cnt("학급형")+'</b> · 이름만 <b>'+cnt("이름만")+'</b>'
+       +(cnt("학번형")&&cnt("학급형")?' — <b>섞여 있습니다.</b> 반 단위 검색이 안 되는 원인입니다.':"")+'</div>'
+     +'<label class="opt on"><input type="radio" name="rn" value="num" checked><span><b>학번형 <span class="mono">'+esc(fmtNum(us[0]))+'</span></b><span>학번 순 정렬과 반 단위 검색이 됩니다. CSV 일괄 생성의 기본형.</span></span></label>'
+     +'<label class="opt"><input type="radio" name="rn" value="cls"><span><b>학급형 <span class="mono">'+esc(fmtCls(us[0]))+'</span></b><span>학년·반이 한눈에 보입니다. 클래스이음이 학적을 넣으면 이 형식이 됩니다.</span></span></label>'
+     +'<label class="opt"><input type="radio" name="rn" value="name"><span><b>이름만 <span class="mono">'+esc(nameOf(us[0]))+'</span></b><span>동명이인을 구분할 수 없습니다 — 권장하지 않습니다.</span></span></label>'
+     +'<div class="note w" style="margin-top:8px">표시 이름을 바꿔도 <b>로그인 아이디는 그대로</b>입니다. 학생은 아무 영향을 받지 않습니다.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>변경 내용 저장</button>',
+    onMount:function(ov,close){
+      ov.querySelectorAll("input[name=rn]").forEach(function(r){r.addEventListener("change",function(){ov.querySelectorAll("label.opt").forEach(function(o){const ip=o.querySelector("input[name=rn]");if(ip)o.classList.toggle("on",ip.checked);});});});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const v=ov.querySelector("input[name=rn]:checked").value;
+        us.forEach(function(u){u.disp=v==="num"?fmtNum(u):(v==="cls"?fmtCls(u):nameOf(u));});
+        done("m14");save();close();render();
+        toast(us.length+"명의 표시 이름을 "+(v==="num"?"학번형":(v==="cls"?"학급형":"이름만"))+"으로 통일했습니다.","ok");});}});
+}
+/* ── 사용자 내보내기 (화면 100명 제한 우회) ── */
+function exportUsers(){
+  const L=["표시 이름,사용자 이름,별칭,그룹,부서,직함,라이선스,역할,다단계 인증,저장용량(GB),로그인 상태,마지막 로그인"];
+  S.users.forEach(function(u){
+    L.push([u.disp,addr(u),(u.alias||[]).join(" "),u.group,u.dept||"",u.title||"",u.license||"Unlicensed",u.role||"사용자",u.mfa,u.quota||0,u.signIn,u.seen]
+      .map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(","));
+  });
+  const b=new Blob(["﻿"+L.join("\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="활성사용자_"+today()+".csv";a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+  done("m17");save();paintMissions();
+  modal({title:"전체 "+S.users.length+"명을 내려받았습니다",
+    body:'<div class="note g">화면 목록은 100명씩 끊어 보이지만 <b>[사용자 내보내기]는 전원</b>을 파일로 줍니다. 승급 전 현황 파악과 대조는 이 파일로 하세요.</div>'
+     +'<div class="note i">PowerShell을 쓸 수 있으면 <span class="mono">Get-MgUser -All</span> 로도 같은 결과를 얻습니다.</div>',
+    foot:'<button class="btn pri" data-close>확인</button>'});
+}
+function reauth(ids){
+  const us=S.users.filter(u=>ids.indexOf(u.id)>=0);
+  if(!us.length)return;
+  us.forEach(function(u){u.mfa=u.mfa==="적용됨"?"사용":u.mfa;});
+  done("m6");save();$("#sideRoot").innerHTML="";render();
+  toast("MFA 재등록을 요청했습니다. "+us.length+"명은 다음 로그인 때 인증 방법을 다시 등록합니다.","ok");
+}
+
+/* ===== 라이선스 ===== */
+function pLic(){
+  const row=function(l){
+    const u=used(l),c=CAP[l],pc=Math.round(u/c*100);
+    return '<tr><td><b>'+esc(l)+'</b></td><td class="c">'+c+'</td><td class="c">'+u+'</td><td class="c"><b style="color:'+(c-u<10?"#A80000":"#0B5A0B")+'">'+(c-u)+'</b></td>'
+      +'<td style="min-width:180px"><div style="height:8px;background:#EDEBE9;border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:'+pc+'%;background:'+(pc>90?"#C50F1F":"#0F6CBD")+'"></i></div></td></tr>';
+  };
+  return '<h1 class="pt">라이선스</h1><p class="lead">진급 처리 전후로 잔여 석수가 어떻게 바뀌는지 확인하는 곳입니다. 졸업생 라이선스를 회수해야 신입생에게 줄 자리가 생깁니다.</p>'
+   +'<div class="tblbox scroll-x"><table class="tbl"><thead><tr><th>제품</th><th class="c">총 라이선스</th><th class="c">할당됨</th><th class="c">사용 가능</th><th>사용률</th></tr></thead><tbody>'
+   +row(LIC_S)+row(LIC_T)+"</tbody></table></div>"
+   +'<div class="note i" style="margin-top:16px"><b>라이선스가 없는 계정은</b> 로그인은 되지만 Teams·OneDrive·Office 앱을 쓸 수 없습니다. 진급 처리 후 「라이선스 없음」 계정이 남아 있지 않은지 활성 사용자에서 확인하세요.</div>'
+   +'<div class="tblbox scroll-x" style="margin-top:16px"><table class="tbl"><thead><tr><th>구분</th><th class="c">인원</th></tr></thead><tbody>'
+   +[[1,"1학년"],[2,"2학년"],[3,"3학년"],[0,"교직원"],[9,"졸업(차단)"]].map(function(p){
+     return "<tr><td>"+p[1]+'</td><td class="c">'+S.users.filter(u=>u.grade===p[0]).length+"명</td></tr>";}).join("")
+   +'<tr><td>라이선스 없음</td><td class="c">'+S.users.filter(u=>!u.license).length+"명</td></tr>"
+   +"</tbody></table></div>"
+   +'<div class="note g" style="margin-top:16px"><b>2024년부터 A1 → A3 무상 업그레이드.</b> 교직원용 A3는 학교별 수량이 정해져 있어(이 실습기 기준 '+CAP[LIC_T]+'석) <b>수량 관리에 주의</b>해야 합니다. 학생용은 충분합니다. 요청 시 Microsoft Fabric(무료)·Power Automate Free를 추가로 할당할 수 있습니다.</div>'
+   +'<h2 class="pt" style="font-size:18px;margin:26px 0 8px">저장용량 (5단계)</h2>'
+   +'<p class="lead">A3 제공량은 1인 최대 5TB지만, <b>실제 할당량은 테넌트에서 정합니다.</b> 매뉴얼 기준값은 1024GB(=1TB)입니다. 개별 변경은 활성 사용자 → 이름 클릭 → [저장용량]에서 합니다.</p>'
+   +(function(){
+      const qs=S.users.filter(u=>!u.sys).map(u=>u.quota||0);
+      const tot=qs.reduce((a,b)=>a+b,0),avg=qs.length?Math.round(tot/qs.length):0;
+      const over=S.users.filter(u=>(u.quota||0)>1024).length;
+      return '<div class="tblbox scroll-x"><table class="tbl"><thead><tr><th>항목</th><th class="c">값</th><th>메모</th></tr></thead><tbody>'
+       +'<tr><td>기본 할당량</td><td class="c"><b>'+QUOTA_DEF+'GB</b></td><td>1024GB = 1TB</td></tr>'
+       +'<tr><td>평균 할당량</td><td class="c">'+avg+'GB</td><td>계정 '+qs.length+'개 기준</td></tr>'
+       +'<tr><td>합계</td><td class="c">'+(tot/1024).toFixed(1)+'TB</td><td>학교 테넌트 총량 <b>100TB</b> 안에서 나눠 씁니다</td></tr>'
+       +'<tr><td>1TB 초과 계정</td><td class="c">'+over+'명</td><td>'+(over?"총량이 먼저 바닥날 수 있습니다":"여유 있습니다")+'</td></tr>'
+       +'</tbody></table></div>';})()
+   +'<div class="note i" style="margin-top:16px"><b>A3에 포함:</b> Office 설치판 · OneDrive 1인 5TB(학교 테넌트 총 100TB 공유) · Teams · Clipchamp. <b>Copilot</b>은 A3·A5에서 데이터 보호 버전으로, 18세 이상 학생과 전 교직원이 사용할 수 있습니다(채팅 데이터 미저장·모델 학습에 미사용).</div>'
+   +'<div class="note w">관리자 계정 문제(전임자가 비번을 바꾸고 전출 등)는 관리 업체 <b>에이마스 02-6123-4184</b> · 근거 공문: 매년 4월 「업무용 소프트웨어(MS Office, Office 365) 일괄 구매 계약 체결 안내」.</div>';
+}
+
+/* ===== 팀 및 그룹 ===== */
+function pGroups(){
+  const sec=[[1,GRP[1]],[2,GRP[2]],[3,GRP[3]],[0,GRP[0]]].map(function(p){
+    return '<tr><td><b>'+esc(p[1])+'</b></td><td><span class="pill n">보안</span></td><td>-</td><td class="mono">-</td><td>-</td><td class="c">'+S.users.filter(u=>u.grade===p[0]).length+'명</td><td></td></tr>';
+  }).join("");
+  const m365=S.groups.map(function(g,i){
+    return '<tr><td><b>'+esc(g.n)+'</b></td><td><span class="pill b">M365 그룹</span></td><td>'+(g.priv==="비공개"?'<span class="pill g">비공개</span>':'<span class="pill y">공개</span>')+'</td><td class="mono">'+esc(g.email)+'</td><td>'+esc(g.owner)+'</td><td class="c">'+g.mem+'명</td><td><button class="btn sm dgr" data-gdel="'+i+'">삭제</button></td></tr>';
+  }).join("");
+  return '<h1 class="pt">팀 및 그룹</h1><p class="lead">M365 그룹에 사람을 넣으면 Teams·OneNote 등 공유 리소스 권한이 <b>자동으로</b> 따라갑니다. 학급 그룹을 미리 만들어 두면 팀즈 초대·라이선스 변경이 한 번에 끝납니다.</p>'
+   +'<div class="cmdbar"><button class="cmd" data-act="gnew"><span class="ic">'+I.grp+'</span>M365 그룹 추가</button><span class="sp"></span><span style="font-size:12.5px;color:var(--tx2)">보안그룹 4 · M365 그룹 '+S.groups.length+'</span></div>'
+   +'<div class="tblbox scroll-x"><table class="tbl"><thead><tr><th>이름</th><th>형식</th><th>개인 정보</th><th>그룹 전자 메일</th><th>소유자</th><th class="c">멤버</th><th style="width:70px"></th></tr></thead><tbody>'
+   +sec+m365+'</tbody></table></div>'
+   +'<div class="note i" style="margin-top:16px"><b>이름 규칙은 년도+학년반.</b> 예: <span class="mono">2026_3-1</span> 또는 <span class="mono">202631</span> — 해가 바뀌어도 그룹이 섞이지 않습니다. 소유자에는 담임 계정을 넣고, <b>반드시 비공개</b>로 만드세요. 공개(Public)면 소유자 승인 없이 아무나 들어올 수 있습니다.</div>'
+   +'<div class="note w"><b>Teams 팀과의 관계.</b> 팀은 4종(수업·PLC·직원·기타) 중 <b>수업 팀에만 [과제] 메뉴</b>가 생깁니다. 팀에 학생을 넣을 때 이 그룹의 <b>전자 메일 주소 하나</b>만 입력하면 반 전체가 한 번에 초대됩니다.</div>';
+}
+function popGroupNew(){
+  const teachers=S.users.filter(u=>u.grade===0);
+  modal({title:"M365 그룹 추가",wide:true,
+    body:'<div class="field"><label>그룹 이름 *</label><input id="gn" placeholder="예: 2026_1-1 (년도+학년반)"></div>'
+     +'<div class="field"><label>소유자 (담임 교사 계정) *</label><select id="go"><option value="">— 선택하세요 —</option>'+teachers.map(t=>'<option>'+esc(t.disp)+'</option>').join("")+'</select></div>'
+     +'<div class="field"><label>그룹 전자 메일</label><div style="display:flex;gap:6px;align-items:center"><input id="ge" placeholder="이름을 입력하면 자동으로 채워집니다" style="flex:1"><span class="mono" style="font-size:12px">@'+DOMAIN+'</span></div></div>'
+     +'<label class="opt on"><input type="radio" name="gp" value="비공개" checked><span><b>비공개 <span class="pill g">권장</span></b><span>소유자가 초대한 사람만 들어올 수 있습니다.</span></span></label>'
+     +'<label class="opt"><input type="radio" name="gp" value="공개"><span><b>공개</b><span>승인 없이 누구나 들어올 수 있습니다 — 학급 그룹에는 쓰지 마세요.</span></span></label>'
+     +'<div class="field" style="margin-top:10px"><label>구성원 담기 (실습용 단축)</label><select id="gm"><option value="">나중에 활성 사용자에서 추가</option><option value="1">1학년 전원</option><option value="2">2학년 전원</option><option value="3">3학년 전원</option></select></div>'
+     +'<div class="note w" style="margin-top:8px">실제 마법사의 구성원 단계에서는 <b>20명까지만</b> 추가됩니다. 그래서 실무는 그룹을 먼저 만들고, [활성 사용자]에서 학번으로 검색 → 전체 선택 → 그룹에 넣습니다.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>추가</button>',
+    onMount:function(ov,close){
+      const gn=ov.querySelector("#gn"),ge=ov.querySelector("#ge");
+      gn.addEventListener("input",function(){if(!ge.dataset.touch)ge.value=gn.value.replace(/[^0-9A-Za-z_\-]/g,"");});
+      ge.addEventListener("input",function(){ge.dataset.touch="1";});
+      ov.querySelectorAll("input[name=gp]").forEach(function(r){r.addEventListener("change",function(){ov.querySelectorAll("label.opt").forEach(function(o){const ip=o.querySelector("input[name=gp]");if(ip)o.classList.toggle("on",ip.checked);});});});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const n2=gn.value.trim();
+        if(!n2){toast("그룹 이름을 입력하세요.","no");return;}
+        if(S.groups.some(g=>g.n===n2)){toast("같은 이름의 그룹이 이미 있습니다.","no");return;}
+        const own=ov.querySelector("#go").value;
+        if(!own){toast("소유자는 한 명 이상 반드시 지정해야 합니다.","no");return;}
+        const mail=(ge.value.trim()||n2);
+        if(!/^[0-9A-Za-z_.\-]+$/.test(mail)){toast("그룹 전자 메일에는 영문·숫자만 쓸 수 있습니다. 한글·공백을 빼 주세요.","no");return;}
+        const gsel=ov.querySelector("#gm").value;
+        const mem=gsel?S.users.filter(u=>u.grade===+gsel).length:0;
+        S.groups.push({n:n2,owner:own,email:mail+"@"+DOMAIN,priv:ov.querySelector("input[name=gp]:checked").value,mem:mem});
+        done("m11");save();close();render();
+        toast("그룹을 만들었습니다. 팀즈 [멤버 추가]에 이 그룹 이메일 하나만 넣으면 반 전체가 초대됩니다.","ok");});}});
+}
+
+/* ===== 사용자 추가 · 일괄 추가 · 암호 초기화 · 역할 ===== */
+function genPw(){
+  const A="ABCDEFGHJKMNPQRSTUVWXYZ",a="abcdefghjkmnpqrstuvwxyz",d="23456789",s="!@#$%";
+  const p=t=>t[Math.floor(Math.random()*t.length)];
+  return p(A)+p(a)+p(a)+p(d)+p(d)+p(d)+p(s)+p(a);
+}
+function popAddUser(){
+  modal({title:"사용자 추가",wide:true,
+    body:'<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 14px">'
+     +'<div class="field"><label>성 *</label><input id="aL" placeholder="김"></div>'
+     +'<div class="field"><label>이름 *</label><input id="aF" placeholder="전입"></div></div>'
+     +'<div class="field"><label>표시 이름 (자동 입력)</label><input id="aD" placeholder="성·이름을 쓰면 자동으로 채워집니다"></div>'
+     +'<div class="field"><label>사용자 이름 *</label><div style="display:flex;gap:6px;align-items:center"><input id="aU" placeholder="예: 10931 (전입 연도 학번)" style="flex:1"><span class="mono" style="font-size:12px">@'+DOMAIN+'</span></div></div>'
+     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 14px"><div class="field"><label>그룹</label><select id="aG">'+[GRP[1],GRP[2],GRP[3],GRP[0]].map(g=>'<option>'+g+'</option>').join("")+'</select></div>'
+     +'<div class="field"><label>위치</label><select disabled><option>한국</option></select></div></div>'
+     +'<label class="opt on"><input type="checkbox" id="aAuto" checked><span><b>자동으로 암호 생성</b><span>임시 암호가 만들어져 결과 화면에 표시됩니다.</span></span></label>'
+     +'<label class="opt on"><input type="checkbox" id="aChg" checked><span><b>이 사용자가 처음 로그인할 때 암호를 변경하도록 설정</b><span>매뉴얼 권장 기본값. 첫 로그인 뒤에는 대부분 자동 로그인됩니다.</span></span></label>'
+     +'<div class="field" style="margin-top:8px"><label>라이선스</label></div>'
+     +'<label class="opt on"><input type="radio" name="al" value="s" checked><span><b>'+LIC_S+'</b><span>잔여 '+(CAP[LIC_S]-used(LIC_S))+'석</span></span></label>'
+     +'<label class="opt"><input type="radio" name="al" value="t"><span><b>'+LIC_T+'</b><span'+((CAP[LIC_T]-used(LIC_T))<10?' style="color:#A80000"':'')+'>잔여 '+(CAP[LIC_T]-used(LIC_T))+'석 — 학교별 수량 한정, 수량 관리 주의</span></span></label>'
+     +'<label class="opt"><input type="radio" name="al" value="none"><span><b>라이선스 없음</b><span>로그인은 되지만 Teams·OneDrive·Office를 못 씁니다.</span></span></label>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>추가</button>',
+    onMount:function(ov,close){
+      const L=ov.querySelector("#aL"),F=ov.querySelector("#aF"),D=ov.querySelector("#aD");
+      const autoD=function(){if(!D.dataset.touch)D.value=(L.value+F.value).trim();};
+      L.addEventListener("input",autoD);F.addEventListener("input",autoD);
+      D.addEventListener("input",function(){D.dataset.touch="1";});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const upn=ov.querySelector("#aU").value.trim(),disp=D.value.trim()||(L.value+F.value).trim();
+        if(!upn||!disp){toast("사용자 이름과 표시 이름을 입력하세요.","no");return;}
+        if(upn.indexOf("@")>=0){toast("사용자 이름에는 @ 앞부분만 입력하세요.","no");return;}
+        if(S.users.some(u=>u.upn===upn)){toast("이미 있는 사용자 이름입니다.","no");return;}
+        const lv=ov.querySelector("input[name=al]:checked").value;
+        if(lv==="s"&&CAP[LIC_S]-used(LIC_S)<=0){toast("학생용 라이선스 잔여가 없습니다.","no");return;}
+        if(lv==="t"&&CAP[LIC_T]-used(LIC_T)<=0){toast("교직원용 라이선스 잔여가 없습니다. 회수 후 다시 시도하세요.","no");return;}
+        const g=ov.querySelector("#aG").value;
+        const grade=g===GRP[0]?0:(g===GRP[1]?1:(g===GRP[2]?2:3));
+        const auto=ov.querySelector("#aAuto").checked,chg=ov.querySelector("#aChg").checked;
+        const pw=auto?genPw():"(직접 전달)";
+        S.users.push({id:"a"+Date.now(),last:L.value.trim()||disp.charAt(0),first:F.value.trim()||disp.slice(1),disp:disp,
+          upn:upn,grade:grade,cls:0,no:0,group:g,role:"사용자",
+          license:lv==="s"?LIC_S:(lv==="t"?LIC_T:""),mfa:"사용 안 함",signIn:"허용",seen:"-"});
+        done("m7");save();close();render();
+        modal({title:"사용자가 추가되었습니다",
+          body:'<div class="note g"><span class="mono">'+esc(upn)+"@"+DOMAIN+'</span> 계정이 만들어졌습니다.</div>'
+           +'<div class="kv"><div class="k">임시 암호</div><div class="v mono"><b>'+esc(pw)+'</b></div></div>'
+           +'<div class="note '+(chg?"i":"w")+'">'+(chg?"첫 로그인 때 이 임시 암호를 새 암호로 바꾸게 됩니다.":"암호 변경 요구를 꺼 두었습니다 — 임시 암호가 계속 사용되니 변경을 직접 안내하세요.")+"</div>",
+          foot:'<button class="btn pri" data-close>확인</button>'});});}});
+}
+function popBulkAdd(){
+  modal({title:"여러 사용자 추가 (CSV)",wide:true,
+    body:'<div class="note i"><b>순서.</b> ① 빈 CSV 서식 내려받기 → ② 나이스 반편성 자료에서 앞 4개 열만 옮기기 → ③ <b>CSV UTF-8(쉼표로 분리)</b>로 저장 → ④ 업로드(여기서는 붙여넣기).</div>'
+     +'<div class="tblbox" style="margin:10px 0"><table class="tbl"><thead><tr><th>열 이름</th><th>넣는 값</th><th>예시</th></tr></thead><tbody>'
+       +'<tr><td>사용자 이름</td><td>계정 아이디 (도메인까지)</td><td class="mono">'+SCHOOLYEAR+'10101@'+DOMAIN+'</td></tr>'
+       +'<tr><td>이름</td><td>학생 이름</td><td>하늘</td></tr>'
+       +'<tr><td>성</td><td><b>학번</b>을 넣습니다</td><td class="mono">10101</td></tr>'
+       +'<tr><td>표시 이름</td><td>명단에 보일 이름 (학번 + 이름)</td><td class="mono">'+SCHOOLYEAR+'10101김하늘</td></tr>'
+       +'<tr><td>나머지 열</td><td colspan="2">비워 둡니다</td></tr>'
+     +'</tbody></table></div>'
+     +'<div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap"><button class="btn sm" data-bsample>샘플 채우기</button><button class="btn sm" data-bdl>'+I.dl+' 빈 CSV 서식 내려받기</button></div>'
+     +'<div class="field" style="max-width:100%"><label>CSV 내용 (사용자 이름,이름,성,표시 이름)</label><textarea id="bcsv" placeholder="'+SCHOOLYEAR+'10931@'+DOMAIN+',전입,10931,'+SCHOOLYEAR+'10931김전입"></textarea></div>'
+     +'<div id="bmsg"></div>'
+     +'<div class="note d" style="margin-top:8px"><b>일괄 생성은 암호를 지정할 수 없습니다.</b> 무작위 임시 암호가 걸리므로, 생성 직후 [암호 초기화]로 초기 비밀번호를 만들어 배부해야 학생이 로그인할 수 있습니다.</div>'
+     +'<div class="note w"><b>머리글(첫 줄)은 한 글자도 바꾸지 마세요.</b> 관리 센터가 첫 줄로 열을 인식합니다. 그리고 <b>맨 아래 빈 줄</b>이 있으면 「내용 없는 사용자 1명」으로 읽혀 업로드가 통째로 실패합니다 — 실무 오류 1위입니다.</div>'
+     +'<div class="note i"><b>먼저 5명으로 시험 업로드.</b> 160명을 한 번에 올렸다가 실패하면 원인을 찾기 어렵습니다. 5줄만 남겨 올려 보고 정상 생성을 확인한 뒤 전체를 올리세요.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>추가</button>',
+    onMount:function(ov,close){
+      ov.querySelector("[data-bsample]").addEventListener("click",function(){ov.querySelector("#bcsv").value=SAMPLE;});
+      ov.querySelector("[data-bdl]").addEventListener("click",function(){
+        const b=new Blob(["\ufeff사용자 이름,이름,성,표시 이름\n"],{type:"text/csv;charset=utf-8"});
+        const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="사용자_일괄등록_서식.csv";a.click();
+        setTimeout(function(){URL.revokeObjectURL(a.href);},1500);toast("서식을 내려받았습니다. 저장할 때 CSV UTF-8(쉼표로 분리)!","ok");});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const r=parseCsv(ov.querySelector("#bcsv").value);
+        if(r.err.length){ov.querySelector("#bmsg").innerHTML='<div class="note d">'+r.err.join(" · ")+"</div>";return;}
+        if(!r.rows.length){toast("추가할 내용이 없습니다.","no");return;}
+        const dup=r.rows.filter(x=>S.users.some(u=>u.upn===x.upn));
+        if(dup.length){ov.querySelector("#bmsg").innerHTML='<div class="note d">이미 있는 사용자 이름: '+esc(dup.map(x=>x.upn).join(", "))+"</div>";return;}
+        if(r.rows.length>CAP[LIC_S]-used(LIC_S)){toast("학생용 라이선스 잔여가 부족합니다.","no");return;}
+        const ids=[];
+        r.rows.forEach(function(x,i){
+          const grade=gradeFromId(x.upn),cn=clsNoFromId(x.upn);
+          const id="b"+Date.now()+"_"+i;ids.push(id);
+          S.users.push({id:id,last:x.last,first:x.first,name:x.first,disp:x.disp,upn:x.upn,dom:DOMAIN,
+            alias:[],quota:QUOTA_DEF,grade:grade,cls:cn.cls,no:cn.no,group:GRP[grade],role:"사용자",
+            license:LIC_S,mfa:"사용 안 함",signIn:"허용",seen:"-"});
+        });
+        S.ui.page="users";S.ui.sel=ids;done("m8");save();close();render();
+        modal({title:r.rows.length+"명이 추가되었습니다",
+          body:'<div class="note w"><b>지금 이 계정들의 암호는 아무도 모릅니다.</b> 방금 만든 '+r.rows.length+'명이 목록에 선택된 상태입니다 — 바로 [암호 초기화]를 눌러 초기 비밀번호를 만들고 담임 배부용 파일을 내려받으세요.</div>',
+          foot:'<button class="btn pri" data-close>확인</button>'});});}});
+}
+function pwReset(){
+  const ids=S.ui.sel.slice();if(!ids.length)return;
+  if(ids.length>40){
+    modal({title:"암호 초기화",
+      body:'<div class="note d"><b>한 번에 40명까지만 초기화할 수 있습니다.</b> 지금 '+ids.length+'명이 선택되어 있습니다.</div>'
+       +'<div class="note i">실제 관리 센터에도 같은 제한이 있어 <b>한 반(또는 한 학년)씩</b> 나눠 진행합니다. 검색창에 <span class="mono">2026101</span>처럼 반까지 입력해 좁힌 뒤 전체 선택하는 것이 매뉴얼의 공식 요령입니다.</div>',
+      foot:'<button class="btn pri" data-close>확인</button>'});
+    return;
+  }
+  const us=S.users.filter(u=>ids.indexOf(u.id)>=0);
+  modal({title:"암호 초기화 — "+us.length+"명",
+    body:'<label class="opt on"><input type="checkbox" id="pAuto" checked><span><b>자동으로 암호 생성</b><span>사용자마다 서로 다른 임시 암호가 만들어집니다.</span></span></label>'
+     +'<div class="field" id="pManualBox" style="display:none"><label>직접 입력 (전원 동일 — 권장하지 않음)</label><input id="pManual" placeholder="예: Haenuri2026!"></div>'
+     +'<label class="opt on"><input type="checkbox" id="pChg" checked><span><b>이 사용자가 처음 로그인할 때 암호를 변경하도록 요구</b><span>첫 로그인 뒤에는 대부분 자동 로그인되므로 걸어 두어도 부담이 적습니다.</span></span></label>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>초기화</button>',
+    onMount:function(ov,close){
+      ov.querySelector("#pAuto").addEventListener("change",function(){ov.querySelector("#pManualBox").style.display=this.checked?"none":"block";});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const auto=ov.querySelector("#pAuto").checked,man=ov.querySelector("#pManual").value.trim(),chg=ov.querySelector("#pChg").checked;
+        if(!auto&&!man){toast("암호를 입력하세요.","no");return;}
+        const res=us.map(u=>({disp:u.disp,upn:u.upn,pw:auto?genPw():man}));
+        done("m9");save();close();render();
+        const rows=res.slice(0,12).map(r=>'<tr><td>'+esc(r.disp)+'</td><td class="mono">'+esc(r.upn)+"@"+DOMAIN+'</td><td class="mono"><b>'+esc(r.pw)+'</b></td></tr>').join("")
+          +(res.length>12?'<tr><td colspan="3" style="color:var(--tx3)">… 외 '+(res.length-12)+"명 (파일에는 전원 포함)</td></tr>":"");
+        modal({title:"임시 암호가 설정되었습니다",wide:true,
+          body:'<div class="tblbox scroll-x"><table class="tbl"><thead><tr><th>이름</th><th>계정</th><th>임시 암호</th></tr></thead><tbody>'+rows+"</tbody></table></div>"
+           +'<div class="note g" style="margin-top:12px"><b>이 파일이 담임 선생님의 「디벗활용」 차시 준비물입니다.</b> AI·디지털 역량 교육 주간 도움자료집의 준비사항 — “학생 계정 목록 및 초기 비밀번호가 적힌 파일” — 을 관리자가 이렇게 만들어 배부합니다.</div>'
+           +'<div class="note w">종이로 배부했다면 학생들이 비밀번호를 바꾼 뒤 회수·파쇄하세요.</div>',
+          foot:'<button class="btn pri" data-pwdl>'+I.dl+' 담임 배부용 파일 내려받기</button><button class="btn" data-close>닫기</button>',
+          onMount:function(ov2){
+            ov2.querySelector("[data-pwdl]").addEventListener("click",function(){
+              const Lx=["해누리중학교 초기 비밀번호 안내 (연수 실습)","생성일: "+today()+" / 첫 로그인 시 암호 변경 요구: "+(chg?"예":"아니요"),"","계정,이름,임시 암호"];
+              res.forEach(r=>Lx.push(r.upn+"@"+DOMAIN+","+r.disp+","+r.pw));
+              Lx.push("");Lx.push("※ 학생이 암호를 바꾼 뒤에는 이 파일(종이)을 회수·파쇄하세요.");
+              const b=new Blob(["\ufeff"+Lx.join("\n")],{type:"text/csv;charset=utf-8"});
+              const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="초기비밀번호_담임배부용_"+today()+".csv";a.click();
+              setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+              toast("담임 배부용 파일을 내려받았습니다.","ok");});}});});}});
+}
+function popRole(){
+  const ids=S.ui.sel.slice();if(!ids.length)return;
+  const us=S.users.filter(u=>ids.indexOf(u.id)>=0);
+  modal({title:"역할 관리 — "+us.length+"명",
+    body:'<p class="lead">관리 센터 [역할] → [역할 할당]에 해당합니다. 업무 담당·부장 교사에게만 위임하세요.</p>'
+     +'<label class="opt on"><input type="radio" name="rl" value="사용자" checked><span><b>사용자 (역할 없음)</b><span>일반 교사·학생 계정.</span></span></label>'
+     +'<label class="opt"><input type="radio" name="rl" value="사용자 관리자"><span><b>사용자 관리자</b><span>계정 생성·삭제·암호 초기화를 할 수 있습니다. 담임 위임의 표준 역할.</span></span></label>'
+     +'<div class="note i" style="margin-top:8px">매뉴얼 팁: <b>그룹 관리·MFA 관리 권한은 빼고</b> 위임하면 담당 교사가 중요한 업무 대부분을 처리할 수 있습니다. 전 교사 부여는 보안상 비권장 · 총괄 담당자에게는 전역 관리자(Global Administrator).</div>'
+     +'<div class="note w">2024.10.16.부터 <b>관리자 역할 계정은 보안 기본값을 꺼도 MFA가 강제</b>됩니다. 위임받는 선생님께 Authenticator 앱 설치를 함께 안내하세요.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>할당</button>',
+    onMount:function(ov,close){
+      ov.querySelectorAll("input[name=rl]").forEach(function(r){r.addEventListener("change",function(){ov.querySelectorAll("label.opt").forEach(function(o){const ip=o.querySelector("input[name=rl]");if(ip)o.classList.toggle("on",ip.checked);});});});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const v=ov.querySelector("input[name=rl]:checked").value;
+        const skipStu=v==="사용자 관리자"?us.filter(u=>u.grade>=1&&u.grade<=3).length:0;
+        const tgt=v==="사용자 관리자"?us.filter(u=>u.grade===0):us;
+        if(v==="사용자 관리자"&&!tgt.length){toast("학생 계정에는 관리자 역할을 부여하지 않습니다. 교사 계정을 선택하세요.","no");return;}
+        tgt.forEach(function(u){if(u.role!=="전역 관리자")u.role=v;});
+        if(skipStu)setTimeout(function(){toast("학생 계정 "+skipStu+"명은 제외했습니다 — 관리자 역할은 교직원에게만.","no");},1200);
+        if(v==="사용자 관리자"){done("m10");
+          const noMfa=tgt.filter(u=>u.mfa==="사용 안 함").length;
+          if(noMfa)setTimeout(function(){toast("관리 권한자는 MFA가 강제됩니다 — "+noMfa+"명은 다음 로그인 때 Authenticator 등록 화면을 만나게 됩니다.","ok");},1200);
+        }
+        save();close();render();toast(tgt.length+"명의 역할을 「"+v+"」로 바꿨습니다.","ok");});}});
+}
+function popSecDef(){
+  modal({title:"보안 기본값 관리 (Microsoft Entra)",
+    body:'<p class="lead">경로: 관리 센터 → [모두 보기] → [모든 관리 센터] → <b>Entra</b> → [개요]-[속성] → 아래로 스크롤 → <b>[보안 기본값 관리]</b></p>'
+     +'<label class="opt'+(S.secDef?"":" on")+'"><input type="radio" name="sd" value="off"'+(S.secDef?"":" checked")+'><span><b>사용 안 함 <span class="pill g">학교 표준</span></b><span>테넌트 일괄 해제. 대신 관리자 계정만 사용자별 MFA를 켭니다.</span></span></label>'
+     +'<label class="opt'+(S.secDef?" on":"")+'"><input type="radio" name="sd" value="on"'+(S.secDef?" checked":"")+'><span><b>사용</b><span>학생 포함 전 계정에 MFA 등록이 요구됩니다 — 휴대폰 없는 학생이 로그인을 못 해 수업이 멈출 수 있습니다.</span></span></label>'
+     +'<div class="note i" style="margin-top:8px">Microsoft가 UI를 자주 바꿉니다. 화면이 다르면 Microsoft Learn에서 “다단계 인증 설정”을 검색하세요.</div>',
+    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>저장</button>',
+    onMount:function(ov,close){
+      ov.querySelectorAll("input[name=sd]").forEach(function(r){r.addEventListener("change",function(){ov.querySelectorAll("label.opt").forEach(function(o){const ip=o.querySelector("input[name=sd]");if(ip)o.classList.toggle("on",ip.checked);});});});
+      ov.querySelector("[data-ok]").addEventListener("click",function(){
+        S.secDef=ov.querySelector("input[name=sd]:checked").value==="on";
+        save();close();render();
+        toast(S.secDef?"보안 기본값을 켰습니다. 전 계정에 MFA 등록이 요구됩니다.":"보안 기본값을 껐습니다. 관리자 역할 계정에는 여전히 MFA가 강제됩니다(2024.10. 정책).","ok");});}});
+}
+
+/* ===== 미션 ===== */
+function paintMissions(){
+  const n=MISSIONS.filter(m=>S.missions[m.id]).length;
+  $("#fabBg").textContent=n+"/"+MISSIONS.length;
+  $("#mpPr").style.width=Math.round(n/MISSIONS.length*100)+"%";
+  $("#mpB").innerHTML=MISSIONS.map(m=>'<div class="mi'+(S.missions[m.id]?" done":"")+'"><span class="ck">'+I.chk+'</span><span class="t"><b>'+esc(m.t)+"</b><span>"+esc(m.d)+"</span></span></div>").join("");
+}
+function diffModal(){
+  modal({title:"이 실습기가 실제와 다른 점",wide:true,
+    body:'<div class="note d">연수 실습용 재현본입니다. 실제 테넌트·계정에 어떤 영향도 주지 않습니다.</div>'
+     +'<div class="tblbox"><table class="tbl"><tbody>'
+     +'<tr><td style="width:150px;color:var(--tx2)">도메인</td><td><span class="mono">'+DOMAIN+"</span> 은 예시입니다. 실제 도메인은 학교마다 다릅니다.</td></tr>"
+     +'<tr><td style="color:var(--tx2)">사용자</td><td>42명 모두 가상 데이터입니다. 실제 학생 정보가 아닙니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">진급 처리</td><td>실제 관리 센터에는 「진급 처리」 전용 메뉴가 없습니다. 사용자 삭제 · 그룹 관리 · 여러 사용자 추가(CSV)를 <b>순서대로</b> 하는 작업을, 순서를 익히기 쉽게 한 화면으로 묶은 것입니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">계정·그룹 화면</td><td>사용자 추가 마법사·CSV 일괄 생성·암호 초기화(40명 제한)·역할 할당·M365 그룹 추가의 <b>단계와 제한</b>을 요약 재현했습니다. 실제 화면 배치와는 다를 수 있습니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">MFA</td><td>실제로는 사용자별 MFA(레거시) 외에 <b>보안 기본값</b>과 <b>조건부 액세스</b>로도 설정합니다. 교육청 테넌트 정책에 따라 학교에서 못 바꾸는 항목이 있을 수 있습니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">반영 속도</td><td>실제로는 그룹·라이선스 변경이 반영되는 데 시간이 걸립니다. 여기서는 즉시 반영됩니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">저장 위치</td><td>이 브라우저에만 저장됩니다(localStorage).</td></tr>'
+     +"</tbody></table></div>",
+    foot:'<button class="btn pri" data-close>확인</button>'});
+}
+
+/* ===== 이벤트 ===== */
+document.addEventListener("click",function(e){
+  const t=e.target;const hit=s=>t.closest(s);let n;
+  if(hit("#btnHam")){S.ui.navMini=!S.ui.navMini;save();paintNav();return;}
+  if(hit("#btnTheme")){
+    const dark=document.documentElement.getAttribute("data-theme")==="dark";
+    document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+    S.ui.theme=dark?"light":"dark";save();
+    toast(dark?"밝은 테마로 바꿨습니다.":"어두운 테마로 바꿨습니다. 실제 관리 센터에도 같은 전환 단추가 있습니다.","ok");return;
+  }
+  if((n=hit("[data-navg]"))){
+    const i=+n.getAttribute("data-navg");
+    S.ui.navOpen=(S.ui.navOpen===i?-1:i);save();paintNav();return;
+  }
+  if((n=hit("[data-fg]"))){
+    S.ui.fg=n.getAttribute("data-fg");S.ui.sel=[];
+    if(S.ui.fg===GRP[3])done("m1");
+    save();render();return;
+  }
+  if((n=hit("[data-nope]"))){
+    toast("「"+n.getAttribute("data-nope")+"」는 실제 관리 센터에는 있지만 이 실습기에서는 다루지 않습니다.","no");return;
+  }
+  if((n=hit("[data-go]"))){e.preventDefault();go(n.getAttribute("data-go"));return;}
+  if((n=hit("[data-open]"))){openUser(n.getAttribute("data-open"));return;}
+  if((n=hit("[data-reauth1]"))){reauth([n.getAttribute("data-reauth1")]);return;}
+  if((n=hit("[data-mfa]"))){
+    const m=n.getAttribute("data-mfa");const ids=S.ui.sel.slice();
+    if(!ids.length)return;
+    const us=S.users.filter(u=>ids.indexOf(u.id)>=0);
+    const students=us.filter(u=>u.grade>=1&&u.grade<=3).length;
+    const apply=function(){
+      us.forEach(u=>u.mfa=m);
+      if(m==="사용"&&us.some(u=>u.grade===0))done("m5");
+      if(m==="사용 안 함"&&students>=5)done("m15");   /* 7단계 · MFA 일괄 해제 */
+      save();render();toast(us.length+"명을 「"+m+"」으로 바꿨습니다."+(m==="사용 안 함"?" 상태가 disabled로 돌아갑니다.":""),"ok");
+    };
+    if(students>=10&&m!=="사용 안 함"){
+      modal({title:"학생 계정에 일괄 적용",
+        body:'<div class="note w">학생 <b>'+students+"</b>명에게 한 번에 MFA를 적용합니다. 휴대폰이 없거나 기기를 바꾼 학생은 다음 수업에서 로그인하지 못할 수 있습니다.<br><br>실무에서는 <b>학급 단위로 나눠서</b>, 담임에게 미리 안내한 뒤 적용하는 것을 권합니다.</div><p>그래도 진행하시겠습니까?</p>",
+        foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>진행</button>',
+        onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){close();apply();});}});
+    }else apply();
+    return;
+  }
+  if(hit("[data-act='reauth']")){reauth(S.ui.sel.slice());return;}
+  if(hit("[data-act='grp']")){
+    const ids=S.ui.sel.slice();
+    modal({title:"그룹 관리",
+      body:'<p class="lead">선택한 <b>'+ids.length+'</b>명의 보안그룹을 바꿉니다.</p><div class="field"><label>이동할 그룹</label><select id="gsel">'
+        +[GRP[1],GRP[2],GRP[3],GRP[0]].map(g=>"<option>"+g+"</option>").join("")+"</select></div>"
+        +'<div class="note i">그룹 기준으로 정책·팀 멤버십이 걸려 있으면 그룹만 옮겨도 함께 따라갑니다.</div>',
+      foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>변경 내용 저장</button>',
+      onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const g=ov.querySelector("#gsel").value;
+        S.users.filter(u=>ids.indexOf(u.id)>=0).forEach(u=>u.group=g);
+        save();close();render();toast(ids.length+"명의 그룹을 바꿨습니다.","ok");});}});
+    return;
+  }
+  if(hit("[data-act='block']")){
+    const us=S.users.filter(u=>S.ui.sel.indexOf(u.id)>=0);
+    us.forEach(u=>u.signIn=u.signIn==="허용"?"차단":"허용");
+    save();render();toast(us.length+"명의 로그인 상태를 바꿨습니다.","ok");return;
+  }
+  if(hit("[data-act='lic']")){
+    const ids=S.ui.sel.slice();
+    modal({title:"라이선스 회수 / 할당",
+      body:'<p class="lead">선택한 <b>'+ids.length+"</b>명의 라이선스를 바꿉니다. 현재 학생용 잔여 <b>"+(CAP[LIC_S]-used(LIC_S))+"</b>석입니다.</p>"
+        +'<label class="opt"><input type="radio" name="lc" value="s" checked><span><b>'+LIC_S+" 할당</b></span></label>"
+        +'<label class="opt"><input type="radio" name="lc" value="t"><span><b>'+LIC_T+" 할당</b></span></label>"
+        +'<label class="opt"><input type="radio" name="lc" value="none"><span><b>모두 회수</b><span>회수한 자리는 즉시 다른 사용자에게 줄 수 있습니다.</span></span></label>',
+      foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>변경 내용 저장</button>',
+      onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){
+        const v=ov.querySelector("input[name=lc]:checked").value;
+        S.users.filter(u=>ids.indexOf(u.id)>=0).forEach(u=>u.license=v==="s"?LIC_S:(v==="t"?LIC_T:""));
+        save();close();render();toast("라이선스를 변경했습니다.","ok");});}});
+    return;
+  }
+  if(hit("[data-act='del']")){
+    const ids=S.ui.sel.slice();
+    modal({title:"사용자 삭제",
+      body:'<div class="note w">사용자 <b>'+ids.length+"</b>명을 삭제합니다. 삭제 후 <b>30일</b> 안에는 「삭제된 사용자」에서 복원할 수 있지만, 일정 항목과 별칭은 즉시 삭제되어 복구되지 않습니다. 라이선스는 즉시 회수됩니다.</div>",
+      foot:'<button class="btn" data-close>취소</button><button class="btn dgr" data-ok>사용자 삭제</button>',
+      onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){
+        S.users=S.users.filter(u=>ids.indexOf(u.id)<0);S.ui.sel=[];
+        save();close();render();toast(ids.length+"명을 삭제했습니다. 라이선스가 회수되었습니다.","ok");});}});
+    return;
+  }
+  if((n=hit("[data-u1]"))){
+    const k=n.getAttribute("data-u1"),uid=n.getAttribute("data-uid");
+    if(k==="pw")pwOne(uid);
+    else if(k==="alias")popAlias(uid);
+    else if(k==="contact")popContact(uid);
+    else if(k==="quota")popQuota(uid);
+    else if(k==="signout")signOutAll(uid);
+    return;
+  }
+  if(hit("[data-act='rename']")){popRenameBulk();return;}
+  if(hit("[data-act='export']")){exportUsers();return;}
+  if(hit("[data-act='addu']")){popAddUser();return;}
+  if(hit("[data-act='bulku']")){popBulkAdd();return;}
+  if(hit("[data-act='pw']")){pwReset();return;}
+  if(hit("[data-act='role']")){popRole();return;}
+  if(hit("[data-act='gnew']")){popGroupNew();return;}
+  if(hit("[data-act='secdef']")){popSecDef();return;}
+  if((n=hit("[data-gdel]"))){
+    const gi=+n.getAttribute("data-gdel");
+    modal({title:"그룹 삭제",body:'<div class="note w"><b>'+esc(S.groups[gi].n)+'</b> 그룹을 삭제합니다. 그룹 기준으로 초대된 팀 멤버십·권한도 함께 사라집니다.</div>',
+      foot:'<button class="btn" data-close>취소</button><button class="btn dgr" data-ok>삭제</button>',
+      onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){S.groups.splice(gi,1);save();close();render();toast("그룹을 삭제했습니다.","ok");});}});
+    return;}
+  if((n=hit("[data-wstep]"))){wCommit();S.wz.step=+n.getAttribute("data-wstep");save();render();return;}
+  if(hit("[data-wprev]")){wCommit();S.wz.step--;save();render();return;}
+  if(hit("[data-wnext]")){
+    wCommit();
+    if(S.wz.step===2&&!S.wz.grad){toast("처리 방식을 고르세요.","no");return;}
+    S.wz.step++;save();render();return;
+  }
+  if(hit("[data-wcancel]")){S.wz=wzInit();save();render();return;}
+  if(hit("[data-wrun]")){wCommit();runPromote();return;}
+  if(hit("[data-sample]")){S.wz.csv=SAMPLE;S.wz.err="";S.wz.parsed=[];save();render();return;}
+  if(hit("[data-dlcsv]")){
+    const b=new Blob(["﻿"+SAMPLE],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="신입생_계정_서식.csv";a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);toast("서식 파일을 내려받았습니다.","ok");return;
+  }
+  if(hit("#btnDiff")){diffModal();return;}
+  if(hit("#fab")){$("#mp").hidden=!$("#mp").hidden;return;}
+  if(hit("#mpExport")){exportLog();return;}
+  if(hit("#mpReset")){
+    modal({title:"처음 상태로",body:'<p>모든 실습 내용(진급 결과·MFA·미션)이 지워집니다.</p>',
+      foot:'<button class="btn" data-close>취소</button><button class="btn dgr" data-ok>초기화</button>',
+      onMount:function(ov,close){ov.querySelector("[data-ok]").addEventListener("click",function(){
+        S=fresh();save();close();render();toast("처음 상태로 되돌렸습니다.","ok");});}});
+    return;
+  }
+});
+document.addEventListener("change",function(e){
+  const t=e.target;let n;
+  if((n=t.closest("[data-pick]"))){
+    const id=n.getAttribute("data-pick"),i=S.ui.sel.indexOf(id);
+    if(t.checked&&i<0)S.ui.sel.push(id);else if(!t.checked&&i>=0)S.ui.sel.splice(i,1);
+    save();render();return;
+  }
+  if(t.closest("[data-all]")){S.ui.sel=t.checked?filt().map(u=>u.id):[];save();render();return;}
+  if(t.id==="fg"){S.ui.fg=t.value;S.ui.sel=[];if(t.value===GRP[3])done("m1");save();render();return;}
+  if(t.id==="fm"){S.ui.fm=t.value;S.ui.sel=[];save();render();return;}
+  if(t.name==="grad"){S.wz.grad=t.value;done("m2");save();render();return;}
+});
+document.addEventListener("input",function(e){
+  if(e.target.id==="uq"){S.ui.q=e.target.value;clearTimeout(tt);}
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&e.target.id==="uq"){S.ui.q=e.target.value;save();render();}
+});
+function wCommit(){
+  const c=$("#csv");
+  if(c&&S.wz){
+    S.wz.csv=c.value;
+    if(c.value.trim()){const r=parseCsv(c.value);S.wz.parsed=r.rows;S.wz.err=r.err.join(" · ");}
+    else{S.wz.parsed=[];S.wz.err="";}
+  }
+}
+
+function boot(){
+  S=load();
+  if(!S.wz)S.wz=wzInit();
+  if(!S.ui.theme)S.ui.theme=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+  document.documentElement.setAttribute("data-theme",S.ui.theme);
+  CREDIT=$("#app-credit");
+  render();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+window.addEventListener("beforeunload",save);
+})();
+</script>
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-02</span></footer>
+</body>
+</html>

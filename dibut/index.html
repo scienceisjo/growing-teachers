@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 실습 허브 — 담당자의 1년, 스테이지 클리어</title>
+<style>
+:root{
+  --bg:#14121F; --bg2:#1C1930; --panel:#242040; --panel2:#2C2750;
+  --line:#3A3560; --tx:#F2F0FA; --tx2:#B7B2D6; --tx3:#7D77A3;
+  --pri:#8B84F5; --pri2:#6C63E8; --gold:#FFD166; --ok:#4ADE80; --lock:#565170;
+  --m365:#4FA3E3; --argos:#5EC9A8; --gen:#F0A35E;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 50% -10%, #2A2450 0%, var(--bg) 55%);
+  color:var(--tx);min-height:100vh;
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;
+  font-size:15px;line-height:1.6}
+.mono{font-family:Consolas,'Cascadia Mono',monospace}
+.wrap{max-width:1100px;margin:0 auto;padding:34px 18px 70px}
+
+header.top{text-align:center;margin-bottom:8px}
+header.top .kicker{color:var(--gold);font-weight:800;letter-spacing:3px;font-size:12.5px}
+header.top h1{margin:6px 0 6px;font-size:34px;letter-spacing:-.8px}
+header.top p{margin:0;color:var(--tx2);font-size:14px}
+
+.progress-all{max-width:560px;margin:18px auto 6px;background:var(--panel);border:1px solid var(--line);
+  border-radius:999px;height:16px;overflow:hidden;position:relative}
+.progress-all i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri2),var(--gold));
+  transition:width .6s ease;border-radius:999px}
+.progress-cap{text-align:center;color:var(--tx2);font-size:13px;margin-bottom:26px}
+.progress-cap b{color:var(--gold)}
+
+/* ── 스테이지 길 ── */
+.path{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.path{grid-template-columns:1fr}}
+
+.stage{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:18px 18px 16px;
+  position:relative;transition:transform .18s, box-shadow .18s, border-color .18s}
+.stage.open:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.stage.done{border-color:var(--ok)}
+.stage.now{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,209,102,.15)}
+.stage.locked{opacity:.55;filter:saturate(.4)}
+.stage .no{position:absolute;top:-13px;left:16px;background:var(--pri2);color:#fff;font-weight:800;
+  font-size:12px;border-radius:999px;padding:3px 12px;letter-spacing:1px}
+.stage.done .no{background:var(--ok);color:#06280F}
+.stage.locked .no{background:var(--lock)}
+.stage h2{margin:8px 0 2px;font-size:20px;display:flex;align-items:center;gap:8px}
+.stage h2 .season{font-size:12px;color:var(--tx3);font-weight:600}
+.stage .desc{color:var(--tx2);font-size:12.8px;margin:0 0 10px;min-height:34px}
+.stage .bar{height:9px;background:var(--bg2);border-radius:999px;overflow:hidden;margin-bottom:4px}
+.stage .bar i{display:block;height:100%;width:0;background:var(--pri);transition:width .5s}
+.stage.done .bar i{background:var(--ok)}
+.stage .cnt{font-size:12px;color:var(--tx3);margin-bottom:10px}
+.stage .cnt b{color:var(--tx)}
+
+.ml{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:5px}
+.ml li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--tx2);
+  background:var(--bg2);border-radius:9px;padding:6px 9px}
+.ml li .tickbox{flex:none;width:17px;height:17px;border-radius:50%;border:1.6px solid var(--tx3);
+  display:inline-flex;align-items:center;justify-content:center;font-size:11px;margin-top:1.5px}
+.ml li.on{color:var(--tx)}
+.ml li.on .tickbox{background:var(--ok);border-color:var(--ok);color:#06280F;font-weight:900}
+.ml li .app{flex:none;font-size:10.5px;font-weight:800;border-radius:5px;padding:1px 6px;margin-top:2.5px}
+.ml li .app.M{background:rgba(79,163,227,.18);color:var(--m365)}
+.ml li .app.A{background:rgba(94,201,168,.18);color:var(--argos)}
+.ml li .app.G{background:rgba(240,163,94,.18);color:var(--gen)}
+
+.golink{display:flex;gap:8px;flex-wrap:wrap}
+.btn{flex:1;min-width:120px;text-align:center;text-decoration:none;border:0;cursor:pointer;
+  border-radius:11px;padding:10px 10px;font:inherit;font-size:13.5px;font-weight:700;color:#fff;
+  background:var(--pri2);display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn:hover{filter:brightness(1.12)}
+.btn.m365{background:#2B6CB0}.btn.argos{background:#1F7A5C}.btn.gen{background:#B4691E}
+.btn.ghost{background:var(--bg2);color:var(--tx2);border:1px solid var(--line)}
+.stage.locked .btn{pointer-events:none;background:var(--lock);color:#CFCBE8}
+.lockmsg{font-size:12px;color:var(--tx3);margin-top:8px;display:flex;align-items:center;gap:6px}
+
+.stage .clearline{display:none;margin-top:10px;text-align:center;font-weight:800;color:var(--ok);font-size:13.5px}
+.stage.done .clearline{display:block}
+
+/* ── 하단 도구 ── */
+.tools{margin-top:34px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tools .tbtn{border:1px solid var(--line);background:var(--panel);color:var(--tx2);border-radius:10px;
+  padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
+.tools .tbtn:hover{color:var(--tx);border-color:var(--pri)}
+.hint{max-width:760px;margin:14px auto 0;color:var(--tx3);font-size:12.5px;text-align:center;line-height:1.7}
+
+/* ── 축하 오버레이 ── */
+#cheer{position:fixed;inset:0;background:rgba(10,8,20,.82);display:flex;align-items:center;justify-content:center;
+  z-index:60;opacity:0;pointer-events:none;transition:opacity .3s}
+#cheer.on{opacity:1;pointer-events:auto}
+#cheer .card{background:var(--panel2);border:1.5px solid var(--gold);border-radius:22px;padding:38px 44px;
+  text-align:center;max-width:430px;transform:scale(.92);transition:transform .3s}
+#cheer.on .card{transform:scale(1)}
+#cheer .big{font-size:52px;margin-bottom:8px}
+#cheer h3{margin:0 0 6px;font-size:23px;color:var(--gold)}
+#cheer p{margin:0 0 18px;color:var(--tx2);font-size:14px}
+#cheer button{border:0;border-radius:11px;background:var(--gold);color:#3B2E00;font:inherit;font-weight:800;
+  padding:11px 26px;cursor:pointer;font-size:15px}
+
+.confetti{position:fixed;top:-14px;font-size:19px;z-index:59;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(108vh) rotate(720deg);opacity:.15}}
+
+footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;
+  font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">DIBUT MISSION MAP</div>
+  <h1>🏰 디벗 실습 허브</h1>
+  <p>담당자의 1년을 스테이지로 — 그 달 미션을 다 깨면 다음 달이 열립니다.</p>
+</header>
+
+<div class="progress-all"><i id="allBar"></i></div>
+<div class="progress-cap"><b id="allCnt">0</b> / <span id="allTot">0</span> 미션 · 실습기에서 깨면 여기 실시간으로 켜집니다</div>
+
+<div class="path" id="path"></div>
+
+<div class="tools">
+  <button class="tbtn" id="btnUnlock">🔓 잠금 해제 모드(강사용): <b id="unlockState">꺼짐</b></button>
+  <button class="tbtn" id="btnRefresh">↻ 새로 고침</button>
+  <button class="tbtn" id="btnReset">전체 초기화</button>
+</div>
+<p class="hint">
+  미션 완료는 각 실습기가 이 브라우저(localStorage)에 기록하고, 허브가 그것을 읽습니다 —
+  <b>같은 브라우저·같은 주소</b>로 열어야 이어집니다. 실습기를 새 탭으로 열고, 깬 뒤 이 탭으로 돌아오세요.
+</p>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
+<span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-02</span></footer>
+</div>
+
+<div id="cheer"><div class="card">
+  <div class="big">🎉</div>
+  <h3 id="cheerTitle">스테이지 클리어!</h3>
+  <p id="cheerBody">다음 스테이지가 열렸습니다.</p>
+  <button id="cheerOk">다음 달로!</button>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const M365="m365.html";
+const ARGOS="argos.html";
+const GEN="ledger.html";
+const KEY_M="m365_sim_v3", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1";
+
+/* 미션 사전 — app: M(M365)/A(Argos)/G(생성기) */
+const DEF={
+ "M:m7":"신입생 계정 만들기(개별)","M:m8":"여러 사용자 추가(CSV)","M:m12":"개인 비밀번호 초기화",
+ "M:m9":"단체 암호 초기화(40명)","M:m14":"표시 이름 통일","M:m11":"학급 그룹 만들기",
+ "M:m15":"학생 MFA 일괄 해제","M:m6":"MFA 재등록 요청","M:m13":"저장용량 변경",
+ "M:m17":"계정 전체 내보내기","M:m16":"별칭으로 아이디 변경","M:m3":"학년 일괄 진급",
+ "M:m4":"신입생 CSV 일괄 생성","M:m10":"담당교사 권한 위임",
+ "A:m1":"미설치 단말 찾기","A:m2":"사용자 이름 변경(개별)","A:m3":"이름 일괄 변경 템플릿",
+ "A:m4":"화면 표시 설정","A:m5":"조직 담당자 계정","A:m6":"단말 그룹 만들기",
+ "A:m7":"분실 등록","A:m8":"분실 위치 확인","A:m9":"Windows 통합설정 만들기",
+ "A:m10":"통합설정 적용","A:m11":"미적용 재배포","A:m12":"MS Store 앱 등록",
+ "A:m13":"앱 배포","A:m14":"사이트 Black List","A:m15":"대여 설정·대여",
+ "A:m16":"처리 이력 확인",
+ "G:make":"생성기 [전부 만들기]","G:map":"시리얼–학번 대응표","G:label":"라벨지 인쇄",
+ "G:ledger":"대여·반납 대장 받기","G:receipt":"반납 확인서 인쇄","G:mdm":"MDM 이름표 CSV",
+ "G:m365csv":"M365 계정 CSV"
+};
+
+const STAGES=[
+ {id:"s1",label:"STAGE 1",name:"3월",season:"개학",
+  desc:"동의서 확인 → 계정 세팅. 신입생을 만들고 비번을 뿌리고 그룹·MFA까지.",
+  ms:["M:m7","M:m8","M:m12","M:m9","M:m14","M:m11","M:m15"]},
+ {id:"s2",label:"STAGE 2",name:"4월",season:"보급",
+  desc:"1학년 배부의 달. 생성기로 대응표·라벨을 뽑고 Argos 단말 이름을 맞춥니다.",
+  ms:["G:make","G:map","G:label","A:m2","A:m3"]},
+ {id:"s3",label:"STAGE 3",name:"학기 중",season:"운영",
+  desc:"민원 셋(비번·MFA·수리)과 통합설정 USB 왕복, 재배포·처리 이력까지.",
+  ms:["M:m6","M:m13","A:m1","A:m7","A:m8","A:m9","A:m10","A:m11","A:m16"]},
+ {id:"s4",label:"STAGE 4",name:"방학",season:"보관·점검",
+  desc:"잠그고 뽑고 식히고. 대여 반납 처리와 정책 정비, 대장 정리.",
+  ms:["A:m4","A:m14","A:m15","G:ledger"]},
+ {id:"s5",label:"STAGE 5",name:"9~12월",season:"양품화",
+  desc:"수리 마감 → 수거 → 배송. 반납 확인서와 계정 목록 보관, 앱 정비.",
+  ms:["G:receipt","M:m17","A:m12","A:m13"]},
+ {id:"s6",label:"STAGE 6",name:"1~2월",season:"승급",
+  desc:"ClassSync 승급의 달. 별칭·진급 마법사·신입생 CSV·위임, 단말·명렬까지.",
+  ms:["M:m16","M:m3","M:m4","M:m10","G:mdm","G:m365csv","A:m5","A:m6"]}
+];
+
+/* 스테이지 → 실습기 버튼 구성 */
+const APPS={M:{n:"M365 실습기",cls:"m365",href:M365},A:{n:"Argos 실습기",cls:"argos",href:ARGOS},G:{n:"관리대장 생성기",cls:"gen",href:GEN}};
+
+let H=load(KEY_H)||{cheered:{},unlock:false};
+function load(k){try{return JSON.parse(localStorage.getItem(k)||"null");}catch(e){return null;}}
+function saveH(){try{localStorage.setItem(KEY_H,JSON.stringify(H));}catch(e){}}
+
+function missionState(){
+ const m=load(KEY_M),a=load(KEY_A),g=load(KEY_G)||{};
+ const mm=(m&&m.missions)||{},am=(a&&a.missions)||{};
+ const st={};
+ Object.keys(DEF).forEach(function(key){
+   const app=key.charAt(0),id=key.slice(2);
+   st[key]=app==="M"?!!mm[id]:(app==="A"?!!am[id]:!!g[id]);
+ });
+ return st;
+}
+
+function render(){
+ const st=missionState();
+ let doneAll=0, prevDone=true;
+ const html=STAGES.map(function(sg,i){
+   const done=sg.ms.filter(k=>st[k]).length, tot=sg.ms.length, full=done===tot;
+   doneAll+=done;
+   const unlocked=H.unlock||i===0||prevDone;
+   const cls="stage "+(full?"done":(unlocked?(done>0?"now open":"open"):"locked"));
+   const apps={}; sg.ms.forEach(k=>apps[k.charAt(0)]=1);
+   const btns=Object.keys(apps).map(a=>'<a class="btn '+APPS[a].cls+'" target="_blank" rel="opener" href="'+encodeURI(APPS[a].href)+'">'+APPS[a].n+' 열기</a>').join("");
+   const rows=sg.ms.map(function(k){
+     const on=st[k];
+     return '<li class="'+(on?"on":"")+'"><span class="tickbox">'+(on?"✓":"")+'</span><span class="app '+k.charAt(0)+'">'+(k.charAt(0)==="M"?"M365":(k.charAt(0)==="A"?"Argos":"생성기"))+"</span><span>"+esc(DEF[k])+"</span></li>";
+   }).join("");
+   const out='<section class="'+cls+'" id="'+sg.id+'">'
+    +'<span class="no">'+sg.label+(full?" · CLEAR":"")+"</span>"
+    +"<h2>"+esc(sg.name)+' 스테이지 <span class="season">'+esc(sg.season)+"</span></h2>"
+    +'<p class="desc">'+esc(sg.desc)+"</p>"
+    +'<div class="bar"><i style="width:'+Math.round(done/tot*100)+'%"></i></div>'
+    +'<div class="cnt"><b>'+done+"</b> / "+tot+" 미션</div>"
+    +'<ul class="ml">'+rows+"</ul>"
+    +(unlocked?'<div class="golink">'+btns+"</div>"
+      :'<div class="golink">'+btns+'</div><div class="lockmsg">🔒 이전 스테이지를 모두 깨면 열립니다</div>')
+    +'<div class="clearline">STAGE CLEAR! 다음 달이 열렸습니다 ✨</div>'
+    +"</section>";
+   prevDone=prevDone&&full;
+   return out;
+ }).join("");
+ $("#path").innerHTML=html;
+ const tot=Object.keys(DEF).length;
+ $("#allBar").style.width=Math.round(doneAll/tot*100)+"%";
+ $("#allCnt").textContent=doneAll;
+ $("#allTot").textContent=tot;
+ $("#unlockState").textContent=H.unlock?"켜짐":"꺼짐";
+
+ /* 새로 클리어한 스테이지 축하 */
+ STAGES.forEach(function(sg,i){
+   const full=sg.ms.every(k=>st[k]);
+   if(full&&!H.cheered[sg.id]){
+     H.cheered[sg.id]=true;saveH();
+     cheer(sg.name+" 스테이지 클리어!",(i<STAGES.length-1?STAGES[i+1].name+" 스테이지가 열렸습니다.":"모든 스테이지를 정복했습니다 — 담당자의 1년 완주!"));
+   }
+ });
+}
+
+function cheer(t,b){
+ $("#cheerTitle").textContent="🎉 "+t;
+ $("#cheerBody").textContent=b;
+ $("#cheer").classList.add("on");
+ const EMO=["🎉","✨","⭐","🎊","💜"];
+ for(let i=0;i<26;i++){
+   const s=document.createElement("span");
+   s.className="confetti";s.textContent=EMO[i%EMO.length];
+   s.style.left=(Math.random()*100)+"vw";
+   s.style.animationDuration=(2.2+Math.random()*2.2)+"s";
+   s.style.animationDelay=(Math.random()*0.7)+"s";
+   document.body.appendChild(s);
+   setTimeout(function(){s.remove();},5200);
+ }
+}
+
+document.addEventListener("click",function(e){
+ if(e.target.closest("#cheerOk")){$("#cheer").classList.remove("on");return;}
+ if(e.target.closest("#btnRefresh")){render();return;}
+ if(e.target.closest("#btnUnlock")){H.unlock=!H.unlock;saveH();render();return;}
+ if(e.target.closest("#btnReset")){
+   if(!confirm("허브 진행 기록과 세 실습기의 미션·실습 상태를 모두 지웁니다. 계속할까요?"))return;
+   try{localStorage.removeItem(KEY_M);localStorage.removeItem(KEY_A);localStorage.removeItem(KEY_G);localStorage.removeItem(KEY_H);}catch(err){}
+   H={cheered:{},unlock:false};saveH();render();
+   alert("초기화했습니다. 열려 있는 실습기 탭이 있으면 그 탭도 새로 고침 하세요.");
+   return;
+ }
+});
+
+/* 실시간 반영 — 다른 탭에서 미션을 깨면 storage 이벤트 + 주기 폴링 */
+window.addEventListener("storage",render);
+window.addEventListener("focus",render);
+document.addEventListener("visibilitychange",function(){if(!document.hidden)render();});
+setInterval(render,1500);
+render();
+})();
+</script>
+</body>
+</html>
