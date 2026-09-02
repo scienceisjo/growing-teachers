@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 인수인계 대시보드 — 대장 파일만 올리면 집계 끝</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#F3F4F8; --pane:#fff; --line:#E3E5EC; --line2:#EDEEF3;
+  --tx:#1B1D23; --tx2:#5A5F6B; --tx3:#9AA0AC;
+  --pri:#4B4FD6; --pri2:#EFEFFC; --ok:#0B7A3B; --ok2:#E8F6EE;
+  --warn:#9A6400; --warn2:#FFF6E2; --dgr:#B3261E; --dgr2:#FDECEA;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;
+  font-size:14.5px;line-height:1.65}
+.mono{font-family:'Cascadia Mono',Consolas,monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:26px 18px 60px}
+header.top h1{margin:0;font-size:25px;letter-spacing:-.4px}
+header.top p{margin:4px 0 16px;color:var(--tx2);font-size:13.5px}
+.hublink{float:right;font-size:13px;font-weight:700;color:var(--pri);text-decoration:none;
+  border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#fff}
+.panel{background:var(--pane);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.panel h2{margin:0 0 4px;font-size:17px;display:flex;align-items:center;gap:9px}
+.panel h2 .no{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;
+  border-radius:8px;background:var(--pri);color:#fff;font-size:13px;font-weight:700}
+.panel .sub{margin:0 0 14px;color:var(--tx2);font-size:13.5px}
+textarea{width:100%;min-height:150px;padding:9px 11px;border:1px solid #C9CCD6;border-radius:8px;
+  font-family:'Cascadia Mono',Consolas,monospace;font-size:13px;line-height:1.55;resize:vertical}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #C9CCD6;background:#fff;color:var(--tx);
+  border-radius:8px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.btn:hover{background:#F7F8FB}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn.big{padding:12px 22px;font-size:15px;border-radius:10px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{border-radius:10px;padding:11px 13px;font-size:13.2px;margin:10px 0;line-height:1.6}
+.note.i{background:var(--pri2);color:#2E31A8}
+.note.g{background:var(--ok2);color:var(--ok)}
+.note.w{background:var(--warn2);color:var(--warn)}
+.note.d{background:var(--dgr2);color:var(--dgr)}
+.filebox{border:2px dashed #C9CCD6;border-radius:10px;padding:22px;text-align:center;color:var(--tx2);
+  background:#FBFBFE;cursor:pointer}
+.filebox:hover{border-color:var(--pri);color:var(--pri)}
+.filebox b{color:var(--tx)}
+.stat{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:12px 0}
+@media(max-width:860px){.stat{grid-template-columns:repeat(3,1fr)}}
+.stat .s{background:#F7F8FB;border:1px solid var(--line2);border-radius:10px;padding:10px 12px;text-align:center}
+.stat .s .k{font-size:12px;color:var(--tx2)}
+.stat .s .v{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.stat .s.ok .v{color:var(--ok)} .stat .s.as .v{color:var(--warn)} .stat .s.lost .v{color:var(--dgr)}
+.stat .s.rent .v{color:#2E6AD1} .stat .s.non .v{color:var(--tx3)}
+table.t{width:100%;border-collapse:collapse;font-size:13.2px}
+table.t th,table.t td{border-bottom:1px solid var(--line2);padding:7px 9px;text-align:left;vertical-align:middle}
+table.t th{background:#F7F8FB;font-weight:700;color:var(--tx2);font-size:12.5px;white-space:nowrap;position:sticky;top:0}
+table.t td.c,table.t th.c{text-align:center}
+.scroll{max-height:330px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700}
+.pill.g{background:var(--ok2);color:var(--ok)}
+.pill.w{background:var(--warn2);color:var(--warn)}
+.pill.d{background:var(--dgr2);color:var(--dgr)}
+.pill.b{background:#E8F0FE;color:#2E6AD1}
+.pill.n{background:#EEF0F4;color:var(--tx2)}
+.hidden{display:none!important}
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;
+  font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.paper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px;margin-top:12px}
+.paper h3{margin:0 0 4px;font-size:19px;text-align:center;letter-spacing:2px}
+.paper .meta{text-align:center;color:#555;font-size:12.5px;margin-bottom:16px}
+.paper table{width:100%;border-collapse:collapse;font-size:13px}
+.paper table th,.paper table td{border:1px solid #888;padding:7px 8px}
+.paper table th{background:#F0F1F5}
+.paper .sign{margin-top:24px;font-size:13px;line-height:2.2;text-align:right}
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .noprint,header.top,footer#app-credit{display:none!important}
+  .panel{border:0;padding:0;margin:0}
+  #report{display:block!important}
+  .paper{border:0;padding:0}
+  @page{size:A4;margin:12mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <a class="hublink" href="./">🏰 실습 허브</a>
+  <h1>디벗 인수인계 대시보드</h1>
+  <p>기기 대장 파일을 올리면 — COUNTIF·XLOOKUP 없이 상태별 집계 · 문제 목록 · 인수인계 리포트가 자동으로 나옵니다.</p>
+</header>
+
+<div class="note d noprint"><b>개인정보 안내.</b> 파일은 <b>브라우저 안에서만</b> 읽습니다. 어디로도 전송·저장되지 않으며, 창을 닫으면 사라집니다.</div>
+
+<section class="panel noprint">
+  <h2><span class="no">1</span>대장 올리기</h2>
+  <p class="sub">점검 엑셀·기기 대장을 그대로 쓰세요. <b>.xlsx / .csv 파일</b>을 올리거나, 엑셀에서 표를 복사해 붙여넣어도 됩니다.
+  열 이름(상태·시리얼·성명·학년·반·번호…)은 자동으로 알아봅니다.</p>
+  <div class="filebox" id="dropbox">
+    📂 <b>여기를 눌러 파일 선택</b> 또는 파일을 끌어다 놓기 (.xlsx / .csv)
+    <input type="file" id="fileIn" accept=".xlsx,.xls,.csv,.txt" hidden>
+  </div>
+  <div style="margin:12px 0 4px;font-size:12.5px;color:var(--tx2)">또는 엑셀에서 복사한 표 붙여넣기 (머리글 줄 포함)</div>
+  <textarea id="pasteIn" placeholder="관리번호	학년	반	번호	성명	시리얼	모델	상태	비고
+D-001	1	1	1	김민준	0FSN2601A001	갤럭시 북	정상
+D-002	1	1	2	이서연	0FSN2601A002	갤럭시 북	A/S중	액정"></textarea>
+  <div class="btnrow">
+    <button class="btn pri big" id="btnGo">분석하기</button>
+    <button class="btn" id="btnSample">예시 데이터로 보기</button>
+    <span id="msg" style="align-self:center;font-size:13px;color:var(--tx2)"></span>
+  </div>
+</section>
+
+<section class="panel hidden" id="out">
+  <h2 class="noprint"><span class="no">2</span>집계 결과</h2>
+  <div class="stat" id="stat"></div>
+  <div id="gradeBox"></div>
+  <div id="probBox"></div>
+  <h2 class="noprint" style="margin-top:18px"><span class="no">3</span>전체 목록 (상태별 색)</h2>
+  <div class="scroll noprint" style="margin-top:8px"><table class="t" id="listTbl"></table></div>
+  <div class="btnrow noprint">
+    <button class="btn pri" id="btnReport">인수인계 리포트 인쇄</button>
+    <button class="btn" id="btnBackup">백업 CSV 내려받기 (날짜 파일명)</button>
+  </div>
+  <div id="report" class="hidden"></div>
+</section>
+
+<footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 도구<br>
+<span style="font-size:11px;opacity:.85;">점검 엑셀의 집계·검증을 자동화한 도구 · 최종 업데이트: 2026-09-02</span></footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const MKEY="dibut_gen_missions_v1";
+let ROWS=[],COLS={};
+
+function mflag(id){
+  try{
+    const o=JSON.parse(localStorage.getItem(MKEY)||"{}");
+    if(!o[id]){o[id]=true;localStorage.setItem(MKEY,JSON.stringify(o));}
+  }catch(e){}
+}
+
+/* ── 파싱 ── */
+function splitLine(ln){
+  if(ln.indexOf("\t")>=0)return ln.split("\t");
+  if(ln.indexOf(",")>=0)return ln.split(",");
+  return ln.split(/\s{2,}/);
+}
+function normStatus(v){
+  const s=String(v||"").trim();
+  if(!s)return "상태없음";
+  if(/정상|사용\s*중|양호|보유/i.test(s))return "정상";
+  if(/a\/?s|수리|점검\s*중|고장/i.test(s))return "A/S중";
+  if(/분실|망실/i.test(s))return "분실";
+  if(/대여|반출/i.test(s))return "대여중";
+  if(/반납|회수|보관/i.test(s))return "정상";
+  return "기타("+s+")";
+}
+function detectCols(hdr){
+  const f={};
+  hdr.forEach(function(h,i){
+    const t=String(h||"").replace(/\s/g,"");
+    if(!t)return;
+    if(f.status==null&&/상태/.test(t))f.status=i;
+    else if(f.serial==null&&/시리얼|S\/N|SN|일련/i.test(t))f.serial=i;
+    else if(f.name==null&&/성명|이름|학생명/.test(t)&&!/사용자/.test(t))f.name=i;
+    else if(f.grade==null&&/학년/.test(t))f.grade=i;
+    else if(f.cls==null&&(t==="반"||/^반$|학급/.test(t)))f.cls=i;
+    else if(f.no==null&&/번호/.test(t)&&!/관리|일련|시리얼/.test(t))f.no=i;
+    else if(f.mgmt==null&&/관리번호|관리No/i.test(t))f.mgmt=i;
+    else if(f.model==null&&/모델|기종/.test(t))f.model=i;
+    else if(f.memo==null&&/비고|메모|처리/.test(t))f.memo=i;
+  });
+  return f;
+}
+function fromGrid(grid){
+  /* 머리글 행 찾기: 키워드 2개 이상 걸리는 첫 행 */
+  let hi=-1;
+  for(let i=0;i<Math.min(grid.length,10);i++){
+    const joined=grid[i].join("");
+    const hit=(/상태/.test(joined)?1:0)+(/시리얼|S\/N|SN/i.test(joined)?1:0)+(/성명|이름/.test(joined)?1:0)+(/학년/.test(joined)?1:0);
+    if(hit>=2){hi=i;break;}
+  }
+  if(hi<0)return {err:"머리글 줄을 찾지 못했습니다. 첫 줄에 '상태·시리얼·성명·학년' 같은 열 이름이 있어야 합니다."};
+  COLS=detectCols(grid[hi]);
+  if(COLS.status==null)return {err:"'상태' 열을 찾지 못했습니다. 대장에 상태 열(정상/A\\/S중/분실/대여)을 두는 것부터가 관리의 시작입니다."};
+  ROWS=[];
+  for(let i=hi+1;i<grid.length;i++){
+    const r=grid[i];
+    if(!r||!r.join("").trim())continue;
+    const pick=k=>COLS[k]!=null?String(r[COLS[k]]||"").trim():"";
+    ROWS.push({mgmt:pick("mgmt"),grade:pick("grade"),cls:pick("cls"),no:pick("no"),
+      name:pick("name"),serial:pick("serial"),model:pick("model"),
+      st:normStatus(pick("status")),raw:pick("status"),memo:pick("memo")});
+  }
+  return {ok:ROWS.length};
+}
+function parseText(t){
+  const grid=String(t).replace(/\r/g,"").split("\n").map(splitLine);
+  return fromGrid(grid);
+}
+
+/* ── 렌더 ── */
+function analyze(){
+  const c={};ROWS.forEach(r=>c[r.st]=(c[r.st]||0)+1);
+  const cnt=k=>c[k]||0;
+  const etc=Object.keys(c).filter(k=>k.indexOf("기타")===0).reduce((a,k)=>a+c[k],0);
+  $("#stat").innerHTML=[
+    ["총 기기",ROWS.length,""],["정상",cnt("정상"),"ok"],["A/S중",cnt("A/S중"),"as"],
+    ["분실",cnt("분실"),"lost"],["대여중",cnt("대여중"),"rent"],["상태없음·기타",cnt("상태없음")+etc,"non"]
+  ].map(p=>'<div class="s '+p[2]+'"><div class="k">'+p[0]+'</div><div class="v">'+p[1]+"</div></div>").join("");
+
+  /* 학년별 */
+  if(COLS.grade!=null){
+    const g={};ROWS.forEach(function(r){const k=r.grade||"?";g[k]=g[k]||{tot:0,as:0,lost:0};g[k].tot++;if(r.st==="A/S중")g[k].as++;if(r.st==="분실")g[k].lost++;});
+    $("#gradeBox").innerHTML='<div class="scroll" style="max-height:180px;margin:10px 0"><table class="t"><thead><tr><th>학년</th><th class="c">보유</th><th class="c">A/S중</th><th class="c">분실</th></tr></thead><tbody>'
+      +Object.keys(g).sort().map(k=>"<tr><td>"+esc(k)+'</td><td class="c">'+g[k].tot+'</td><td class="c">'+(g[k].as||"")+'</td><td class="c">'+(g[k].lost||"")+"</td></tr>").join("")
+      +"</tbody></table></div>";
+  }else $("#gradeBox").innerHTML="";
+
+  /* 문제 목록 */
+  const prob=[];
+  const dup={};ROWS.forEach(r=>{if(r.serial)dup[r.serial]=(dup[r.serial]||0)+1;});
+  ROWS.forEach(function(r,i){
+    const who=(r.grade&&r.cls?r.grade+"-"+r.cls+"-"+r.no+" ":"")+(r.name||r.mgmt||("행"+(i+2)));
+    if(r.st==="상태없음")prob.push([who,"상태가 비어 있음","상태를 채워야 집계가 맞습니다"]);
+    if(r.st.indexOf("기타")===0)prob.push([who,"상태 값 인식 불가: "+r.raw,"정상 / A/S중 / 분실 / 대여중 으로 통일"]);
+    if(r.serial&&dup[r.serial]>1)prob.push([who,"시리얼 중복: "+r.serial,"같은 시리얼이 "+dup[r.serial]+"번 — 오타 또는 이중 등록"]);
+    if(r.serial&&r.serial.replace(/\W/g,"").length<6)prob.push([who,"시리얼 의심: "+r.serial,"자릿수가 너무 짧음 — S/N 오타가 가장 큰 문제를 만듭니다"]);
+    if(COLS.name!=null&&!r.name)prob.push([who,"성명 비어 있음","누구 기기인지 알 수 없음"]);
+  });
+  $("#probBox").innerHTML=prob.length
+    ? '<div class="note w"><b>확인이 필요한 항목 '+prob.length+'건</b></div><div class="scroll" style="max-height:220px"><table class="t"><thead><tr><th>대상</th><th>문제</th><th>조치</th></tr></thead><tbody>'
+      +prob.map(p=>"<tr><td>"+esc(p[0])+"</td><td>"+esc(p[1])+"</td><td>"+esc(p[2])+"</td></tr>").join("")+"</tbody></table></div>"
+    : '<div class="note g"><b>문제 0건</b> — 상태·시리얼·성명이 모두 깨끗합니다. 이 상태로 인계하면 됩니다.</div>';
+
+  /* 전체 목록 */
+  const pill=s=>s==="정상"?'<span class="pill g">정상</span>':(s==="A/S중"?'<span class="pill w">A/S중</span>':(s==="분실"?'<span class="pill d">분실</span>':(s==="대여중"?'<span class="pill b">대여중</span>':'<span class="pill n">'+esc(s)+"</span>")));
+  $("#listTbl").innerHTML="<thead><tr><th>학년</th><th>반</th><th>번호</th><th>성명</th><th>시리얼</th><th>모델</th><th>상태</th><th>비고</th></tr></thead><tbody>"
+    +ROWS.map(r=>"<tr><td>"+esc(r.grade)+"</td><td>"+esc(r.cls)+"</td><td>"+esc(r.no)+"</td><td>"+esc(r.name)+'</td><td class="mono">'+esc(r.serial)+"</td><td>"+esc(r.model)+"</td><td>"+pill(r.st)+"</td><td>"+esc(r.memo)+"</td></tr>").join("")
+    +"</tbody>";
+
+  /* 리포트 */
+  const today=(function(){const d=new Date();return d.getFullYear()+"년 "+(d.getMonth()+1)+"월 "+d.getDate()+"일";})();
+  $("#report").innerHTML='<div class="paper"><h3>디벗 관리 현황 · 인수인계 리포트</h3>'
+    +'<div class="meta">작성일 '+today+" · 총 "+ROWS.length+"대</div>"
+    +'<table><thead><tr><th>총 기기</th><th>정상</th><th>A/S중</th><th>분실</th><th>대여중</th><th>상태없음·기타</th></tr></thead><tbody>'
+    +"<tr><td>"+ROWS.length+"</td><td>"+cnt("정상")+"</td><td>"+cnt("A/S중")+"</td><td>"+cnt("분실")+"</td><td>"+cnt("대여중")+"</td><td>"+(cnt("상태없음")+etc)+"</td></tr></tbody></table>"
+    +(prob.length?'<h4 style="margin:18px 0 6px">확인 필요 항목 ('+prob.length+"건)</h4><table><thead><tr><th>대상</th><th>문제</th><th>조치</th></tr></thead><tbody>"
+      +prob.slice(0,40).map(p=>"<tr><td>"+esc(p[0])+"</td><td>"+esc(p[1])+"</td><td>"+esc(p[2])+"</td></tr>").join("")
+      +(prob.length>40?'<tr><td colspan="3">… 외 '+(prob.length-40)+"건 (화면에서 확인)</td></tr>":"")+"</tbody></table>":"<p style=\"margin:18px 0 0\">확인 필요 항목 없음 — 대장이 깨끗한 상태로 인계됩니다.</p>")
+    +'<h4 style="margin:18px 0 6px">인계 확인</h4>'
+    +'<table><tbody><tr><th style="width:130px">함께 넘긴 것</th><td>점검 엑셀(원본) □ &nbsp; 백업 CSV □ &nbsp; 송쌤 도우미 백업 □ &nbsp; 충전함 열쇠·카드키 □</td></tr>'
+    +"<tr><th>미처리 안내</th><td style=\"height:44px\"></td></tr></tbody></table>"
+    +'<div class="sign">'+today+"<br>인계자: ______________ (인) &nbsp;&nbsp; 인수자: ______________ (인)</div></div>";
+
+  $("#out").classList.remove("hidden");
+  mflag("handover");
+  $("#out").scrollIntoView({behavior:"smooth"});
+}
+
+/* ── 입력 이벤트 ── */
+$("#dropbox").addEventListener("click",function(){$("#fileIn").click();});
+$("#dropbox").addEventListener("dragover",function(e){e.preventDefault();});
+$("#dropbox").addEventListener("drop",function(e){e.preventDefault();if(e.dataTransfer.files[0])readFile(e.dataTransfer.files[0]);});
+$("#fileIn").addEventListener("change",function(){if(this.files[0])readFile(this.files[0]);});
+
+function readFile(f){
+  const ext=(f.name.split(".").pop()||"").toLowerCase();
+  if(ext==="csv"||ext==="txt"){
+    const rd=new FileReader();
+    rd.onload=function(){
+      let t=rd.result;
+      const r=parseText(t);
+      if(r.err){ // cp949 재시도
+        const rd2=new FileReader();
+        rd2.onload=function(){const r2=parseText(rd2.result);after(r2,f.name);};
+        rd2.readAsText(f,"euc-kr");return;
+      }
+      after(r,f.name);
+    };
+    rd.readAsText(f,"utf-8");
+  }else{
+    if(!window.XLSX){$("#msg").textContent="엑셀 파일 해석 모듈을 못 불러왔습니다(오프라인?). CSV로 저장해 올리거나 표를 복사해 붙여넣어 주세요.";return;}
+    const rd=new FileReader();
+    rd.onload=function(){
+      const wb=XLSX.read(rd.result,{type:"array"});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const grid=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""}).map(r=>r.map(x=>String(x)));
+      after(fromGrid(grid),f.name);
+    };
+    rd.readAsArrayBuffer(f);
+  }
+}
+function after(r,label){
+  if(r.err){$("#msg").textContent="⚠ "+r.err;return;}
+  $("#msg").textContent=(label?label+" · ":"")+ROWS.length+"행 읽음";
+  analyze();
+}
+$("#btnGo").addEventListener("click",function(){
+  const t=$("#pasteIn").value;
+  if(!t.trim()){$("#msg").textContent="파일을 올리거나 표를 붙여넣어 주세요.";return;}
+  after(parseText(t),"붙여넣기");
+});
+$("#btnSample").addEventListener("click",function(){
+  const nm=["김민준","이서연","박도윤","최지우","정하은","강시우","조예린","윤태호","장수아","임재현"];
+  const st=["정상","정상","정상","A/S중","정상","분실","정상","대여중","","정상"];
+  const L=["관리번호\t학년\t반\t번호\t성명\t시리얼\t모델\t상태\t비고"];
+  nm.forEach(function(x,i){L.push("D-"+String(i+1).padStart(3,"0")+"\t1\t1\t"+(i+1)+"\t"+x+"\t0FSN2601A"+String(i+1).padStart(3,"0")+"\t갤럭시 북 EDU\t"+st[i]+"\t"+(st[i]==="A/S중"?"액정":""));});
+  L.push("D-011\t1\t1\t11\t한지민\t0FSN2601A001\t갤럭시 북 EDU\t정상\t");  // 중복 시리얼 예시
+  $("#pasteIn").value=L.join("\n");
+  after(parseText($("#pasteIn").value),"예시");
+});
+$("#btnReport").addEventListener("click",function(){window.print();});
+$("#btnBackup").addEventListener("click",function(){
+  const d=new Date(),tag=d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+  const L=["관리번호,학년,반,번호,성명,시리얼,모델,상태,비고"];
+  ROWS.forEach(r=>L.push([r.mgmt,r.grade,r.cls,r.no,r.name,r.serial,r.model,r.st,r.memo].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")));
+  const b=new Blob(["﻿"+L.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="디벗대장_백업_"+tag+".csv";a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+});
+})();
+</script>
+</body>
+</html>

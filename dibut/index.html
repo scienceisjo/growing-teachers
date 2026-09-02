@@ -160,6 +160,7 @@ const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 const M365="m365.html";
 const ARGOS="argos.html";
 const GEN="ledger.html";
+const HAND="handover.html";
 const KEY_M="m365_sim_v4", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1";
 
 /* 미션 사전 — app: M(M365)/A(Argos)/G(생성기) */
@@ -177,7 +178,8 @@ const DEF={
  "A:m16":"처리 이력 확인",
  "G:make":"생성기 [전부 만들기]","G:map":"시리얼–학번 대응표","G:label":"라벨지 인쇄",
  "G:ledger":"대여·반납 대장 받기","G:receipt":"반납 확인서 인쇄","G:mdm":"MDM 이름표 CSV",
- "G:m365csv":"M365 계정 CSV"
+ "G:m365csv":"M365 계정 CSV",
+ "H:handover":"인수인계 대시보드로 대장 점검"
 };
 
 const STAGES=[
@@ -198,11 +200,11 @@ const STAGES=[
   ms:["G:receipt","M:m17","A:m12","A:m13"]},
  {id:"s6",label:"STAGE 6",name:"1~2월",season:"승급",
   desc:"ClassSync 승급의 달. 별칭·진급 마법사·신입생 CSV·위임, 단말·명렬까지.",
-  ms:["M:m16","M:m3","M:m4","M:m10","G:mdm","G:m365csv","A:m5","A:m6"]}
+  ms:["M:m16","M:m3","M:m4","M:m10","G:mdm","G:m365csv","H:handover","A:m5","A:m6"]}
 ];
 
 /* 스테이지 → 실습기 버튼 구성 */
-const APPS={M:{n:"M365 실습기",cls:"m365",href:M365},A:{n:"Argos 실습기",cls:"argos",href:ARGOS},G:{n:"관리대장 생성기",cls:"gen",href:GEN}};
+const APPS={M:{n:"M365 실습기",cls:"m365",href:M365},A:{n:"Argos 실습기",cls:"argos",href:ARGOS},G:{n:"관리대장 생성기",cls:"gen",href:GEN},H:{n:"인수인계 대시보드",cls:"gen",href:HAND}};
 
 let H=load(KEY_H)||{cheered:{},unlock:false};
 function load(k){try{return JSON.parse(localStorage.getItem(k)||"null");}catch(e){return null;}}
@@ -214,7 +216,7 @@ function missionState(){
  const st={};
  Object.keys(DEF).forEach(function(key){
    const app=key.charAt(0),id=key.slice(2);
-   st[key]=app==="M"?!!mm[id]:(app==="A"?!!am[id]:!!g[id]);
+   st[key]=app==="M"?!!mm[id]:(app==="A"?!!am[id]:!!g[id]);   /* G와 H는 같은 기록(dibut_gen_missions_v1)을 읽는다 */
  });
  return st;
 }
