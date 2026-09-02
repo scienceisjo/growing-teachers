@@ -1498,6 +1498,14 @@ function wCommit(){
   }
 }
 
+function popCredit(){
+  modal({title:"출처 안내",
+    body:'<p class="lead">본 페이지는 <b>서울온라인학교 강현욱 선생님</b>의 M365 가상 실습 사이트'
+     +'(<span class="mono">seoulonline.github.io/msadmin</span>)의 화면 구성 일부를 각색하여 만든 것입니다.</p>'
+     +'<div class="note i">서울특별시교육청 <b>디벗 전문가(테크니션) 직무연수 「윈도우 ADMIN · MDM UI 안내」</b> 실습용 재현본입니다. '
+     +'실제 테넌트·계정·단말에는 어떤 영향도 주지 않으며, 데이터는 전부 가상입니다.</div>',
+    foot:'<button class="btn pri" data-close>확인</button>'});
+}
 function boot(){
   S=load();
   if(!S.wz)S.wz=wzInit();
@@ -1505,11 +1513,12 @@ function boot(){
   document.documentElement.setAttribute("data-theme",S.ui.theme);
   CREDIT=$("#app-credit");
   render();
+  popCredit();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.addEventListener("beforeunload",save);
 })();
 </script>
-<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-02</span></footer>
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 자료<br><span style="font-size:11px;opacity:.85;">원본 구성: 서울온라인학교 강현욱 선생님 실습 사이트 각색 · 최종 업데이트: 2026-09-02</span></footer>
 </body>
 </html>
