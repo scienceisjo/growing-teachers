@@ -417,10 +417,10 @@ html[data-theme="dark"] #guideBar{background:#3A2E00}
       <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg></button>
     <button class="si" title="알림" data-nope="알림">
       <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 2.5a5.5 5.5 0 0 1 5.5 5.5v3l1.5 3h-14l1.5-3V8A5.5 5.5 0 0 1 10 2.5z"/><path d="M8 16.5a2 2 0 0 0 4 0"/></svg></button>
-    <span class="suite-org" id="orgName">해누리중학교</span>
+    <span class="suite-org" id="orgName">서울특별시교육청</span>
     <button class="si" title="설정" data-nope="설정">
       <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5l1 2.2 2.4-.4 1.1 2.1 2.2 1-.4 2.4 1.6 1.8-1.6 1.8.4 2.4-2.2 1-1.1 2.1-2.4-.4-1 2.2-1-2.2-2.4.4-1.1-2.1-2.2-1 .4-2.4L2.1 11.7l1.6-1.8-.4-2.4 2.2-1 1.1-2.1 2.4.4 1-2.2z" stroke-linejoin="round"/></svg></button>
-    <button class="si wide" title="실습 허브로" onclick="location.href='./'">🏰 허브</button>
+    <button class="si wide" title="실습 허브로" onclick="location.href='./'">실습 허브</button>
     <button class="si" title="실제와 다른 점" id="btnDiff">
       <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.6A2.3 2.3 0 1 1 10 10v1.4"/><circle cx="10" cy="14.6" r=".7" fill="currentColor"/></svg></button>
     <span class="suite-ava" title="조승재 · 전역 관리자">조</span>
@@ -471,8 +471,8 @@ const I={
  dl:SVG('<path d="M12 4v10M8 10.5l4 3.5 4-3.5"/><path d="M5 19h14"/>'),
  rf:SVG('<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/>')
 };
-const DOMAIN="haenuri.ms.kr";
-const DOM2="haenuri.sen.ms.kr";      /* 별칭용 두 번째 도메인 (실제 테넌트에도 둘이 공존) */
+const DOMAIN="gaon.ms.kr";           /* 가상의 가온중학교 — 연수용 예시 도메인 */
+const DOM2="gaon.sen.ms.kr";         /* 별칭용 두 번째 도메인 (실제 테넌트에도 둘이 공존) */
 const SCHOOLYEAR=2026;
 const ENTRY={1:2026,2:2025,3:2024};  /* 학년별 입학연도 — 아이디는 입학연도로 고정 */
 const QUOTA_DEF=1024;                /* OneDrive 기본 할당량 GB (1024GB = 1TB) */
@@ -497,7 +497,6 @@ const MISSIONS=[
  {id:"m3",t:"승급 ② 학년 일괄 진급",d:"진급 처리 마법사를 끝까지 진행해 학년 그룹을 일괄 재배치하세요."},
  {id:"m4",t:"승급 ③ 신입생 계정 일괄 생성",d:"진급 마법사 4단계에서 CSV를 붙여넣어 신입생 계정을 만드세요."},
  {id:"m10",t:"담당교사에게 권한 위임",d:"교사 계정을 선택해 [역할 관리]에서 「사용자 관리자」를 부여하세요."},
- {id:"m6",t:"MFA 재등록 요청 처리",d:"휴대폰을 바꾼 교사의 MFA 재등록을 요청하세요. (실무 민원 1위)"},
  {id:"m17",t:"전체 계정 내려받기",d:"[사용자 내보내기]로 전원 CSV를 받아 보세요. 화면은 100명씩만 보이지만 파일은 전원이 나옵니다."}
 ];
 
@@ -656,7 +655,7 @@ function render(){
 function pHome(){
   const g=n=>S.users.filter(u=>u.grade===n).length;
   const mfaOn=S.users.filter(u=>u.mfa!=="사용 안 함").length;
-  return '<h1 class="pt">홈</h1><p class="lead">해누리중학교 테넌트입니다. 교수요목의 M365 항목 — <b>계정 생성 · 비번 초기화 · 팀 설정 · 승급 처리 · MFA · 라이선스</b> — 를 관리 센터 흐름대로 실습합니다.</p>'
+  return '<h1 class="pt">홈</h1><p class="lead">서울특별시교육청 연수용 테넌트입니다(도메인 예시는 가상의 <b>가온중학교</b> · gaon.ms.kr). 교수요목의 M365 항목 — <b>계정 생성 · 비번 초기화 · 팀 설정 · 승급 처리 · MFA · 라이선스</b> — 를 관리 센터 흐름대로 실습합니다.</p>'
    +'<div class="stat4">'
    +['1학년|'+g(1),'2학년|'+g(2),'3학년|'+g(3),'교직원|'+g(0),'MFA 적용|'+mfaOn].map(function(x){const p=x.split("|");
      return '<div class="st"><div class="k">'+p[0]+'</div><div class="v">'+p[1]+"<small>명</small></div></div>";}).join("")
@@ -923,7 +922,7 @@ function runPromote(){
     onMount:function(ov){ov.querySelector("#dlLog").addEventListener("click",exportLog);}});
 }
 function exportLog(){
-  const L=["학년 진급 처리 결과 (연수 실습)","학교: 해누리중학교   실행일: "+today(),""];
+  const L=["학년 진급 처리 결과 (연수 실습)","학교: 가온중학교(가상)   실행일: "+today(),""];
   (S.log.length?S.log:["아직 실행하지 않았습니다."]).forEach(l=>L.push("- "+l));
   L.push("");L.push("[현재 학년별 계정 수]");
   [1,2,3].forEach(g=>L.push("  "+g+"학년: "+S.users.filter(u=>u.grade===g).length+"명"));
@@ -1489,7 +1488,7 @@ function pwReset(){
           foot:'<button class="btn pri" data-pwdl>'+I.dl+' 담임 배부용 파일 내려받기</button><button class="btn" data-close>닫기</button>',
           onMount:function(ov2){
             ov2.querySelector("[data-pwdl]").addEventListener("click",function(){
-              const Lx=["해누리중학교 초기 비밀번호 안내 (연수 실습)","생성일: "+today()+" / 첫 로그인 시 암호 변경 요구: "+(chg?"예":"아니요"),"","계정,이름,임시 암호"];
+              const Lx=["가온중학교(가상) 초기 비밀번호 안내 (연수 실습)","생성일: "+today()+" / 첫 로그인 시 암호 변경 요구: "+(chg?"예":"아니요"),"","계정,이름,임시 암호"];
               res.forEach(r=>Lx.push(r.upn+"@"+DOMAIN+","+r.disp+","+r.pw));
               Lx.push("");Lx.push("※ 학생이 암호를 바꾼 뒤에는 이 파일(종이)을 회수·파쇄하세요.");
               const b=new Blob(["\ufeff"+Lx.join("\n")],{type:"text/csv;charset=utf-8"});
@@ -1793,10 +1792,6 @@ const GUIDE={
  m15:{n:"실습 ⑤-2 학생 MFA 일괄 해제",steps:[
   {page:"mfa",sel:"[data-all]",t:"머리글의 전체 선택 체크",d:"학생 전원을 선택합니다."},
   {sel:"[data-mfa='사용 안 함']",t:"[사용 안 함으로] 클릭",d:"휴대폰 없는 학생이 수업 중 로그인을 못 하기 때문 — 상태가 disabled로 돌아갑니다."}]},
- m6:{n:"MFA 재등록 요청",steps:[
-  {page:"users",sel:"#uq",ev:"input",min:2,t:"검색창에 교사 이름 입력(예: 강현욱)",d:"휴대폰을 바꾼 선생님의 민원 — 실무 1위."},
-  {sel:".uname",t:"교사 이름 클릭",d:"상세 패널이 열립니다."},
-  {sel:"[data-reauth1]",t:"[MFA 재등록 요청] 클릭",d:"다음 로그인 때 새 기기로 다시 등록하게 됩니다."}]},
  m17:{n:"계정 전체 내보내기",steps:[
   {page:"users",sel:"[data-act='export']",t:"[사용자 내보내기] 클릭",d:"화면은 100명씩 보여도 파일은 전원이 나옵니다."},
   {sel:".modal [data-close]",t:"[확인]",d:"승급 전 현황 파악·삭제 전 보관용으로 씁니다."}]},
