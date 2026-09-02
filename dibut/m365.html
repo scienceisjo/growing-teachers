@@ -471,8 +471,8 @@ const I={
  dl:SVG('<path d="M12 4v10M8 10.5l4 3.5 4-3.5"/><path d="M5 19h14"/>'),
  rf:SVG('<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/>')
 };
-const DOMAIN="gaon.ms.kr";           /* 가상의 가온중학교 — 연수용 예시 도메인 */
-const DOM2="gaon.sen.ms.kr";         /* 별칭용 두 번째 도메인 (실제 테넌트에도 둘이 공존) */
+const DOMAIN="dibeot.ms.kr";         /* 가상의 디벗중학교 — 연수용 예시 도메인 */
+const DOM2="dibeot.sen.ms.kr";       /* 별칭용 두 번째 도메인 (실제 테넌트에도 둘이 공존) */
 const SCHOOLYEAR=2026;
 const ENTRY={1:2026,2:2025,3:2024};  /* 학년별 입학연도 — 아이디는 입학연도로 고정 */
 const QUOTA_DEF=1024;                /* OneDrive 기본 할당량 GB (1024GB = 1TB) */
@@ -655,7 +655,7 @@ function render(){
 function pHome(){
   const g=n=>S.users.filter(u=>u.grade===n).length;
   const mfaOn=S.users.filter(u=>u.mfa!=="사용 안 함").length;
-  return '<h1 class="pt">홈</h1><p class="lead">서울특별시교육청 연수용 테넌트입니다(도메인 예시는 가상의 <b>가온중학교</b> · gaon.ms.kr). 교수요목의 M365 항목 — <b>계정 생성 · 비번 초기화 · 팀 설정 · 승급 처리 · MFA · 라이선스</b> — 를 관리 센터 흐름대로 실습합니다.</p>'
+  return '<h1 class="pt">홈</h1><p class="lead">서울특별시교육청 연수용 테넌트입니다(도메인 예시는 가상의 <b>디벗중학교</b> · dibeot.ms.kr). 교수요목의 M365 항목 — <b>계정 생성 · 비번 초기화 · 팀 설정 · 승급 처리 · MFA · 라이선스</b> — 를 관리 센터 흐름대로 실습합니다.</p>'
    +'<div class="stat4">'
    +['1학년|'+g(1),'2학년|'+g(2),'3학년|'+g(3),'교직원|'+g(0),'MFA 적용|'+mfaOn].map(function(x){const p=x.split("|");
      return '<div class="st"><div class="k">'+p[0]+'</div><div class="v">'+p[1]+"<small>명</small></div></div>";}).join("")
@@ -922,7 +922,7 @@ function runPromote(){
     onMount:function(ov){ov.querySelector("#dlLog").addEventListener("click",exportLog);}});
 }
 function exportLog(){
-  const L=["학년 진급 처리 결과 (연수 실습)","학교: 가온중학교(가상)   실행일: "+today(),""];
+  const L=["학년 진급 처리 결과 (연수 실습)","학교: 디벗중학교(가상)   실행일: "+today(),""];
   (S.log.length?S.log:["아직 실행하지 않았습니다."]).forEach(l=>L.push("- "+l));
   L.push("");L.push("[현재 학년별 계정 수]");
   [1,2,3].forEach(g=>L.push("  "+g+"학년: "+S.users.filter(u=>u.grade===g).length+"명"));
@@ -1488,7 +1488,7 @@ function pwReset(){
           foot:'<button class="btn pri" data-pwdl>'+I.dl+' 담임 배부용 파일 내려받기</button><button class="btn" data-close>닫기</button>',
           onMount:function(ov2){
             ov2.querySelector("[data-pwdl]").addEventListener("click",function(){
-              const Lx=["가온중학교(가상) 초기 비밀번호 안내 (연수 실습)","생성일: "+today()+" / 첫 로그인 시 암호 변경 요구: "+(chg?"예":"아니요"),"","계정,이름,임시 암호"];
+              const Lx=["디벗중학교(가상) 초기 비밀번호 안내 (연수 실습)","생성일: "+today()+" / 첫 로그인 시 암호 변경 요구: "+(chg?"예":"아니요"),"","계정,이름,임시 암호"];
               res.forEach(r=>Lx.push(r.upn+"@"+DOMAIN+","+r.disp+","+r.pw));
               Lx.push("");Lx.push("※ 학생이 암호를 바꾼 뒤에는 이 파일(종이)을 회수·파쇄하세요.");
               const b=new Blob(["\ufeff"+Lx.join("\n")],{type:"text/csv;charset=utf-8"});
