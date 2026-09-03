@@ -94,13 +94,14 @@ body{background:var(--bg);color:var(--tx);min-height:100vh;
 .ml li .app.A{background:#E6F2EF;color:var(--argos)}
 .ml li .app.G{background:#F7EFE3;color:var(--gen)}
 .ml li .app.H{background:#EFEAF8;color:var(--hand)}
+.ml li .app.D{background:#E4F1F6;color:#0E7490}
 
 .golink{display:flex;gap:8px;flex-wrap:wrap}
 .btn{flex:1;min-width:118px;text-align:center;text-decoration:none;border:0;cursor:pointer;
   border-radius:6px;padding:9px 10px;font:inherit;font-size:13px;font-weight:600;color:#fff;
   background:var(--pri);display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .btn:hover{filter:brightness(1.08)}
-.btn.m365{background:var(--m365)}.btn.argos{background:var(--argos)}.btn.gen{background:var(--gen)}
+.btn.m365{background:var(--m365)}.btn.argos{background:var(--argos)}.btn.gen{background:var(--gen)}.btn.dbs{background:#0E7490}
 .stage.locked .btn{pointer-events:none;background:#D4D9E0;color:#8A93A2}
 .lockmsg{font-size:12px;color:var(--tx3);margin-top:8px;display:flex;align-items:center;gap:6px}
 
@@ -196,7 +197,8 @@ const M365="m365.html";
 const ARGOS="argos.html";
 const GEN="ledger.html";
 const HAND="handover.html";
-const KEY_M="m365_sim_v4", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1";
+const DBS="dbs.html";
+const KEY_M="m365_sim_v4", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1", KEY_D="dibut_dbs_v1";
 
 /* 미션 사전 — app: M(M365)/A(Argos)/G(생성기)/H(인수인계) */
 const DEF={
@@ -211,6 +213,8 @@ const DEF={
  "A:m10":"통합설정 적용","A:m11":"미적용 재배포","A:m12":"MS Store 앱 등록",
  "A:m13":"앱 배포","A:m14":"사이트 Black List","A:m15":"예비 디벗 대여 처리",
  "A:m16":"처리 이력 확인",
+ "D:d1":"DBS 수리 현황 조회","D:d2":"마스킹 해제(비밀번호)","D:d3":"명렬표 양식 내려받기",
+ "D:d4":"명렬표 일괄 등록 실행",
  "G:make":"생성기 [전부 만들기]","G:map":"시리얼–학번 대응표","G:label":"라벨지 인쇄",
  "G:ledger":"대여·반납 대장 받기","G:receipt":"반납 확인서 인쇄","G:mdm":"MDM 이름표 CSV",
  "G:m365csv":"M365 계정 CSV",
@@ -225,8 +229,8 @@ const STAGES=[
   desc:"1학년 배부의 달. 생성기로 대응표·라벨을 뽑고 Argos 단말 이름을 맞춥니다.",
   ms:["G:make","G:map","G:label","A:m2","A:m3"]},
  {id:"s3",label:"STAGE 3",name:"학기 중",season:"운영",
-  desc:"가장 많이 하는 일 — 암호 초기화(3월 요령 그대로)·예비 디벗 대여·분실 처리, 그리고 통합설정 USB 왕복.",
-  ms:["A:m15","A:m7","A:m8","M:m13","A:m1","A:m9","A:m10","A:m11","A:m16"]},
+  desc:"가장 많이 하는 일 — 예비 디벗 대여·분실 처리·암호(3월 요령), 수리 추적(DBS)과 통합설정 USB 왕복.",
+  ms:["A:m15","A:m7","A:m8","D:d1","D:d2","M:m13","A:m1","A:m9","A:m10","A:m11","A:m16"]},
  {id:"s4",label:"STAGE 4",name:"방학",season:"보관·점검",
   desc:"잠그고 뽑고 식히고. 정책 정비와 대장 정리, 화면 설정 손보기.",
   ms:["A:m4","A:m14","G:ledger"]},
@@ -234,25 +238,25 @@ const STAGES=[
   desc:"수리 마감 → 수거 → 배송. 반납 확인서와 계정 목록 보관, 앱 정비.",
   ms:["G:receipt","M:m17","A:m12","A:m13"]},
  {id:"s6",label:"STAGE 6",name:"1~2월",season:"승급",
-  desc:"ClassSync 승급의 달. 별칭·진급 마법사·신입생 CSV·위임, 단말·명렬까지.",
-  ms:["M:m16","M:m3","M:m4","M:m10","G:mdm","G:m365csv","H:handover","A:m5","A:m6"]}
+  desc:"ClassSync 승급의 달. 별칭·진급 마법사·신입생 CSV·위임, 단말·DBS 명렬표까지.",
+  ms:["M:m16","M:m3","M:m4","M:m10","G:mdm","G:m365csv","D:d3","D:d4","H:handover","A:m5","A:m6"]}
 ];
 
 /* 스테이지 → 실습기 버튼 구성 */
-const APPS={M:{n:"M365 실습기",cls:"m365",href:M365},A:{n:"Argos 실습기",cls:"argos",href:ARGOS},G:{n:"관리대장 생성기",cls:"gen",href:GEN},H:{n:"인수인계 대시보드",cls:"gen",href:HAND}};
-const CHIP={M:"M365",A:"Argos",G:"생성기",H:"인수인계"};
+const APPS={M:{n:"M365 실습기",cls:"m365",href:M365},A:{n:"Argos 실습기",cls:"argos",href:ARGOS},G:{n:"관리대장 생성기",cls:"gen",href:GEN},H:{n:"인수인계 대시보드",cls:"gen",href:HAND},D:{n:"디벗 관리 시스템",cls:"dbs",href:DBS}};
+const CHIP={M:"M365",A:"Argos",G:"생성기",H:"인수인계",D:"DBS"};
 
 let H=load(KEY_H)||{cheered:{},unlock:false};
 function load(k){try{return JSON.parse(localStorage.getItem(k)||"null");}catch(e){return null;}}
 function saveH(){try{localStorage.setItem(KEY_H,JSON.stringify(H));}catch(e){}}
 
 function missionState(){
- const m=load(KEY_M),a=load(KEY_A),g=load(KEY_G)||{};
- const mm=(m&&m.missions)||{},am=(a&&a.missions)||{};
+ const m=load(KEY_M),a=load(KEY_A),g=load(KEY_G)||{},d=load(KEY_D);
+ const mm=(m&&m.missions)||{},am=(a&&a.missions)||{},dm=(d&&d.missions)||{};
  const st={};
  Object.keys(DEF).forEach(function(key){
    const app=key.charAt(0),id=key.slice(2);
-   st[key]=app==="M"?!!mm[id]:(app==="A"?!!am[id]:!!g[id]);   /* G와 H는 같은 기록(dibut_gen_missions_v1)을 읽는다 */
+   st[key]=app==="M"?!!mm[id]:(app==="A"?!!am[id]:(app==="D"?!!dm[id]:!!g[id]));   /* G와 H는 같은 기록을 읽는다 */
  });
  return st;
 }
@@ -325,7 +329,7 @@ document.addEventListener("click",function(e){
  if(e.target.closest("#btnUnlock")){H.unlock=!H.unlock;saveH();render();return;}
  if(e.target.closest("#btnReset")){
    if(!confirm("허브 진행 기록과 세 실습기의 미션·실습 상태를 모두 지웁니다. 계속할까요?"))return;
-   try{localStorage.removeItem(KEY_M);localStorage.removeItem(KEY_A);localStorage.removeItem(KEY_G);localStorage.removeItem(KEY_H);}catch(err){}
+   try{localStorage.removeItem(KEY_M);localStorage.removeItem(KEY_A);localStorage.removeItem(KEY_G);localStorage.removeItem(KEY_H);localStorage.removeItem(KEY_D);}catch(err){}
    H={cheered:{},unlock:false};saveH();render();
    alert("초기화했습니다. 열려 있는 실습기 탭이 있으면 그 탭도 새로 고침 하세요.");
    return;

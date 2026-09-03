@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 관리 시스템 — 연수용 시뮬레이터</title>
+<style>
+:root{
+  --pri:#2F6BFF; --pri2:#1F54D6; --nav-tx:#3E4757; --nav-on:#EEF3FF;
+  --bg:#F5F7FA; --card:#FFFFFF; --line:#E6E9F0; --line2:#D3D9E4;
+  --tx:#232B38; --tx2:#5B6472; --tx3:#8A93A2;
+  --ok:#16A34A; --okbg:#E9F7EE; --warn:#E58E00; --warnbg:#FFF4E0;
+  --fix:#8B5CF6; --fixbg:#F1EBFF; --done:#64748B; --donebg:#EEF1F5;
+  --red:#E23A3A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-size:14px;line-height:1.55;
+  font-family:'Segoe UI',Pretendard,-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}
+.mono{font-family:Consolas,'Cascadia Mono',monospace}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit}
+
+/* ── 로그인 ── */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#EFF3F9}
+.lg-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:42px 46px;width:420px;
+  box-shadow:0 18px 50px rgba(25,45,90,.10);text-align:center}
+.lg-org{display:flex;align-items:center;gap:9px;justify-content:center;color:#1E4FB8;font-weight:700;font-size:14px}
+.lg-org .sym{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2F6BFF,#55C1E8);
+  display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+.lg-card h1{margin:10px 0 2px;font-size:22px;letter-spacing:-.4px}
+.lg-card .sub{color:var(--tx2);font-size:12.5px;margin-bottom:20px}
+.lg-warn{background:#FFF3C9;border:1px solid #F3D97E;color:#6b5200;border-radius:8px;
+  font-size:12.5px;font-weight:700;padding:8px 10px;margin-bottom:18px}
+.lg-card input{width:100%;height:42px;border:1px solid var(--line2);border-radius:8px;
+  padding:0 12px;margin-bottom:10px;font-size:14px}
+.lg-card .go{width:100%;height:44px;border:0;border-radius:8px;background:var(--pri);color:#fff;
+  font-weight:700;font-size:15px;margin-top:4px}
+.lg-foot{margin-top:16px;color:var(--tx3);font-size:11.5px;line-height:1.7}
+
+/* ── 앱 골격 ── */
+#app{display:none;min-height:100vh}
+#app.on{display:flex}
+.side{width:238px;flex:none;background:#fff;border-right:1px solid var(--line);
+  padding:14px 12px 90px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center;margin-bottom:12px}
+.brand .org{display:flex;align-items:center;gap:7px;justify-content:center;color:#1E4FB8;font-weight:700;font-size:12px}
+.brand .org .sym{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#2F6BFF,#55C1E8);
+  display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800}
+.brand h2{margin:7px 0 0;font-size:15.5px;letter-spacing:-.3px}
+.sec{color:var(--tx3);font-size:11px;font-weight:700;margin:16px 8px 5px}
+.nv{display:flex;align-items:center;gap:9px;width:100%;border:0;background:none;color:var(--nav-tx);
+  border-radius:8px;padding:8px 10px;font-size:13.5px;text-align:left}
+.nv:hover{background:#F3F6FC}
+.nv.on{background:var(--nav-on);color:var(--pri);font-weight:700}
+.nv .ic{width:17px;text-align:center;flex:none;font-size:13px;opacity:.85}
+.nv .ar{margin-left:auto;color:var(--tx3)}
+
+.main{flex:1;min-width:0;padding:20px 26px 60px}
+.tophead{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.tophead h1{margin:0;font-size:21px;letter-spacing:-.4px}
+.tophead .sp{flex:1}
+.acct{text-align:right;font-size:13px}
+.acct b{font-weight:700}
+.acct a{display:inline-block;color:var(--pri);font-size:12px;text-decoration:underline;cursor:pointer}
+.icon-btn{border:1px solid var(--line2);background:#fff;border-radius:9px;width:36px;height:36px}
+.hub-btn{border:1px solid var(--line2);background:#fff;border-radius:9px;height:36px;padding:0 12px;font-size:12.5px;color:var(--tx2)}
+.hub-btn:hover{color:var(--pri);border-color:var(--pri)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.f-lb{font-size:12.5px;color:var(--tx2);font-weight:700;margin-right:2px}
+.f-in{height:36px;border:1px solid var(--line2);border-radius:8px;padding:0 10px;min-width:170px;background:#fff}
+select.f-in{min-width:130px}
+.btnrow{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.btn{border:1px solid var(--line2);background:#fff;border-radius:8px;height:36px;padding:0 16px;font-size:13px}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:700}
+.btn.dark{background:#20293A;border-color:#20293A;color:#fff;font-weight:700}
+.right-tools{display:flex;gap:8px;justify-content:flex-end;margin:10px 0}
+.tbl-wrap{overflow-x:auto}
+table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
+.tb th{background:#F7F9FC;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  color:var(--tx2);font-weight:700;padding:10px 8px;white-space:nowrap}
+.tb td{border-bottom:1px solid #F0F2F6;padding:10px 8px;text-align:center;white-space:nowrap}
+.tb tr.click{cursor:pointer}
+.tb tr.click:hover td{background:#F6F9FF}
+.tb tr.new td{background:#F0FFF4}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2.5px 10px;font-size:12px;font-weight:700}
+.chip i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.c-recv{background:var(--okbg);color:var(--ok)} .c-recv i{background:var(--ok)}
+.c-in{background:var(--warnbg);color:var(--warn)} .c-in i{background:var(--warn)}
+.c-fix{background:var(--fixbg);color:var(--fix)} .c-fix i{background:var(--fix)}
+.c-done{background:var(--donebg);color:var(--done)} .c-done i{background:var(--done)}
+.pin{color:#E0455A}
+.empty{padding:56px 10px;text-align:center;color:var(--tx2)}
+.empty .box{font-size:44px;margin-bottom:6px}
+.note-r{color:var(--red);font-size:12px;line-height:1.7}
+.note-b{background:#EFF5FF;border:1px solid #CBDCFF;color:#234C9A;border-radius:8px;padding:9px 12px;font-size:12.5px}
+
+/* 대시보드 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi .t{color:var(--tx2);font-size:12.5px;display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:26px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+.kpi .v small{font-size:13px;color:var(--tx3);font-weight:600}
+.kpi .delta{display:inline-block;margin-left:8px;background:#FDECEC;color:#D33;border-radius:6px;
+  font-size:11.5px;font-weight:700;padding:2px 8px;vertical-align:3px}
+.gauge-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
+.g-card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;display:flex;gap:12px;align-items:center}
+.g-card .gi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px}
+.g-tot .gi{background:#EEF1FF;color:#4655D4}.g-use .gi{background:#E9F9EF;color:#16A34A}
+.g-fix .gi{background:#FFF4DE;color:#DB8B00}.g-spare .gi{background:#F1EBFF;color:#8B5CF6}
+.g-card .gt{color:var(--tx2);font-size:12px}.g-card .gv{font-size:21px;font-weight:800}
+
+/* 모달 */
+.ov{position:fixed;inset:0;background:rgba(23,32,48,.45);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px}
+.ov[hidden]{display:none!important}
+.pop{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow:auto;
+  box-shadow:0 24px 70px rgba(10,20,45,.3)}
+.pop .hd{display:flex;align-items:center;padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15.5px}
+.pop .hd .x{margin-left:auto;border:0;background:none;font-size:17px;color:var(--tx3)}
+.pop .bd{padding:18px 20px}
+.pop .ft{padding:13px 20px 17px;display:flex;gap:8px;justify-content:center}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
+.fld .req{color:var(--red)}
+.fld select,.fld input[type=text],.fld input[type=password]{width:100%;height:40px;border:1px solid var(--line2);
+  border-radius:8px;padding:0 11px;background:#fff}
+.fld .fixed{background:#F3F5F9;color:var(--tx2)}
+.drop{border:1.5px dashed var(--line2);border-radius:10px;padding:34px 14px;text-align:center;color:var(--tx2);
+  cursor:pointer;background:#FBFCFE}
+.drop:hover{border-color:var(--pri);color:var(--pri)}
+.steps{display:flex;gap:0;margin:6px 0 14px}
+.stp{flex:1;text-align:center;position:relative;font-size:12px;color:var(--tx3)}
+.stp .dot{width:26px;height:26px;border-radius:50%;background:#E7EAF1;color:var(--tx3);margin:0 auto 5px;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
+.stp.on .dot{background:var(--pri);color:#fff}
+.stp.done .dot{background:var(--okbg);color:var(--ok)}
+.stp::after{content:"";position:absolute;top:13px;left:calc(50% + 16px);right:calc(-50% + 16px);height:2px;background:#E7EAF1}
+.stp:last-child::after{display:none}
+.kv{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
+.kv td{border-bottom:1px solid #F0F2F6;padding:8px 6px}
+.kv td:first-child{color:var(--tx2);width:118px}
+
+/* 토스트 · FAB · 미션 */
+#toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#243040;color:#fff;
+  border-radius:9px;padding:10px 18px;font-size:13px;z-index:120;opacity:0;pointer-events:none;transition:opacity .25s;max-width:80vw}
+#toast.on{opacity:1}
+#toast.err{background:#B33;}
+#fab{position:fixed;right:22px;bottom:22px;z-index:70;border:0;border-radius:999px;background:#1B3A5F;color:#fff;
+  font-weight:700;font-size:13.5px;padding:13px 20px;box-shadow:0 10px 26px rgba(15,35,70,.35)}
+#fab b{color:#FFD166}
+#mp{position:fixed;right:22px;bottom:74px;z-index:71;background:#fff;border:1px solid var(--line);
+  border-radius:14px;width:330px;box-shadow:0 18px 50px rgba(15,30,60,.25);padding:14px 16px}
+#mp[hidden]{display:none}
+#mp h3{margin:0 0 4px;font-size:15px}
+#mp .cap{color:var(--tx2);font-size:12px;margin-bottom:10px}
+.mi{display:flex;gap:9px;padding:8px 6px;border-radius:9px;font-size:12.8px;color:var(--tx2)}
+.mi:hover{background:#F5F8FE}
+.mi .ck{flex:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line2);color:transparent;
+  display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:1px}
+.mi.done{color:var(--tx)}
+.mi.done .ck{background:var(--pri);border-color:var(--pri);color:#fff}
+.mi b{display:block;color:var(--tx);font-size:13px}
+#mp .rst{margin-top:8px;width:100%;border:1px solid var(--line2);background:#fff;border-radius:8px;padding:7px;font-size:12px;color:var(--tx2)}
+#creditOv[hidden]{display:none!important}
+footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;
+  font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lg-card">
+    <div class="lg-org"><span class="sym">SEN</span>서울특별시교육청</div>
+    <h1>디벗 관리 시스템</h1>
+    <div class="sub">보유 · 대여 · 수리 · 명렬표의 정본</div>
+    <div class="lg-warn">연수용 시뮬레이터 · 실제 시스템(dbs.edu-portal.ai)이 아닙니다</div>
+    <input id="lgId" value="dibeot.sen.ms.kr" autocomplete="off">
+    <input id="lgPw" type="password" value="training123" autocomplete="off">
+    <button class="go" id="loginBtn">로그인</button>
+    <div class="lg-foot">학교 담당자 계정은 학교당 1개 발급됩니다.<br>계정 문의: 시스템 공지사항의 「계정문의 안내」 참고</div>
+  </div>
+</div>
+
+<div id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="org"><span class="sym">SEN</span>서울특별시교육청</div>
+      <h2>디벗 관리 시스템</h2>
+    </div>
+    <button class="nv on" data-go="dash"><span class="ic">▦</span>대시보드</button>
+    <div class="sec">사업 관리</div>
+    <button class="nv" data-go="roster"><span class="ic">◈</span>명렬표 관리</button>
+    <button class="nv" data-go="devices"><span class="ic">▯</span>디벗 관리</button>
+    <button class="nv" data-go="as"><span class="ic">🔧</span>AS 관리</button>
+    <button class="nv" data-go="unsettled"><span class="ic">₩</span>미정산 금액</button>
+    <div class="sec">통계 현황</div>
+    <button class="nv" data-go="unreturned"><span class="ic">◇</span>미회수 장비 현황</button>
+    <button class="nv" data-go="equip"><span class="ic">▤</span>장비 현황</button>
+    <div class="sec">게시판</div>
+    <button class="nv" data-go="notice"><span class="ic">📢</span>공지사항</button>
+    <button class="nv" data-go="newsletter"><span class="ic">▤</span>학교통신문</button>
+    <button class="nv" data-go="manual"><span class="ic">▥</span>사용자 매뉴얼</button>
+    <div class="sec">간편접수</div>
+    <button class="nv" data-go="oneclick"><span class="ic">⚡</span>원클릭 접수</button>
+    <button class="nv" data-go="purchase"><span class="ic">🛍</span>간편구매 신청</button>
+    <button class="nv" data-go="qna"><span class="ic">?</span>Q&amp;A</button>
+    <button class="nv" data-go="voc"><span class="ic">▭</span>VOC</button>
+    <div class="sec">신규설치, 양품화, 정기점검</div>
+    <button class="nv" data-nope="신규설치"><span class="ic">🚚</span>신규설치<span class="ar">›</span></button>
+    <button class="nv" data-nope="양품화"><span class="ic">♻</span>양품화<span class="ar">›</span></button>
+    <button class="nv" data-nope="2026년 정기점검"><span class="ic">🗓</span>2026년 정기점검<span class="ar">›</span></button>
+  </aside>
+  <main class="main">
+    <div class="tophead">
+      <h1 id="pgTitle">대시보드</h1>
+      <span class="sp"></span>
+      <div class="acct"><b>dibeot.sen.ms.kr</b> (담당 선생님)<br><a data-nope="프로필 정보 변경">프로필 정보 변경</a></div>
+      <button class="hub-btn" onclick="location.href='./'">실습 허브</button>
+      <button class="icon-btn" id="btnLogout" title="로그아웃">⎋</button>
+    </div>
+    <div id="content"></div>
+    <footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 자료<br>
+    <span style="font-size:11px;opacity:.85;">디벗 관리 시스템(dbs.edu-portal.ai) 화면 구성 재현 · 데이터는 전부 가상(디벗중학교) · 최종 업데이트: 2026-09-03</span></footer>
+  </main>
+</div>
+
+<div class="ov" id="modal" hidden><div class="pop" id="modalPop"></div></div>
+
+<div class="ov" id="creditOv" hidden>
+  <div class="pop" style="max-width:560px">
+    <div class="hd">출처 안내</div>
+    <div class="bd" style="color:var(--tx2);font-size:13.5px;line-height:1.8">
+      <p style="margin:0 0 10px">본 페이지는 서울시교육청 <b style="color:var(--tx)">디벗 관리 시스템(dbs.edu-portal.ai)</b>의
+      화면 구성을 연수용으로 재현한 것입니다. 실제 시스템·학생 정보와는 어떤 연결도 없으며,
+      등장하는 학교(<b style="color:var(--tx)">디벗중학교</b>)·학생·기기·접수 건은 전부 가상입니다.</p>
+      <p style="margin:0">서울특별시교육청 <b style="color:var(--tx)">디벗 전문가(테크니션) 직무연수 「윈도우 ADMIN · MDM UI 안내」</b> 실습용 재현본입니다.</p>
+    </div>
+    <div class="ft"><button class="btn pri" id="creditOk">확인</button></div>
+  </div>
+</div>
+
+<button id="fab" hidden>실습 미션 <b id="fabN">0</b>/4</button>
+<div id="mp" hidden>
+  <h3>실습 미션</h3>
+  <div class="cap">완료하면 실습 허브 스테이지에 실시간 반영됩니다.</div>
+  <div id="mpList"></div>
+  <button class="rst" id="btnReset">처음 상태로 (이 실습기 초기화)</button>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+var KEY="dibut_dbs_v1";
+var S; try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
+if(!S)S={missions:{},masked:true,extra:false,page:"dash"};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function done(id){if(!S.missions[id]){S.missions[id]=true;save();fab();toast("미션 완료 — 실습 허브에 반영되었습니다 ✓");}}
+var MISSIONS=[
+ {id:"d1",t:"수리 현황 조회",d:"AS 관리에서 「입고」(수리 중) 건을 눌러 진행 단계와 완료 예정을 확인하세요."},
+ {id:"d2",t:"학생 정보 마스킹 해제",d:"[마스킹 해제] 버튼 → 비밀번호 입력. 힌트는 공지사항 「마스킹해제 패스워드 안내」."},
+ {id:"d3",t:"명렬표 양식 내려받기",d:"명렬표 관리 → [명렬표 일괄 등록] → 모달 맨 아래 [양식 다운로드]."},
+ {id:"d4",t:"명렬표 일괄 등록 실행",d:"같은 모달에서 업로드 영역을 눌러 연수용 예시 파일로 등록까지 실행하세요."}
+];
+var toastTm;
+function toast(m,err){var t=$("#toast");t.textContent=m;t.className=err?"err on":"on";
+ clearTimeout(toastTm);toastTm=setTimeout(function(){t.className="";},2600);}
+
+/* ───────── 가상 데이터 (디벗중학교) ───────── */
+function mask(n){if(!S.masked)return n;return n.length<=2?n[0]+"*":n[0]+"*"+n.slice(2);}
+function mg(v){return S.masked?"*":v;}   /* 학년·반 마스킹 */
+function mn(v){return S.masked?"":v;}    /* 번호는 빈칸 */
+var TODAY="2026-09-03";
+var ROSTER=[
+ [634,2,1,1,"김도석","62UJ9FAX700558N"],[633,2,1,2,"김서윤","62UJ9FAX700296V"],
+ [632,2,1,3,"김지유","62UJ9FAX700375E"],[631,2,1,4,"나은우","62UJ9FAX700563L"],
+ [630,2,1,5,"박준영","62UJ9FAX701685M"],[629,2,1,6,"박다서","62UJ9FAX700497P"],
+ [628,2,1,7,"박시후","62UJ9FAX701547Z"],[627,2,1,8,"박채원","62UJ9FAX701431Z"],
+ [626,2,1,9,"소예아","62UJ9FAX700496T"],[625,2,1,10,"손아령","62UJ9FAX700961E"],
+ [624,2,1,11,"신주하","62UJ9FAX700712C"],[623,2,1,12,"안현서","62UJ9FAX700884Q"]];
+var EXTRA=[[637,2,7,3,"강하람","0B34FHD220833F"],[636,2,7,18,"이도준","0B34JJG220933F"],[635,2,11,9,"김소연","0B34HTG220333F"]];
+var DEVICES=[
+ [760,"0B34HTG220333F",2,11,9,"김소연","수리중"],
+ [759,"0B3334M220933F",0,0,0,"","사용중"],[758,"0B3336B220933F",0,0,0,"","사용중"],
+ [757,"0B3337K220933F",2,3,5,"문리안","사용중"],[756,"0B3338V220933F",2,3,6,"배주혁","사용중"],
+ [755,"0B3338W220433F",2,3,7,"백소민","사용중"],[754,"0B333DC220933F",0,0,0,"","사용중"],
+ [753,"0B333KF220933F",2,4,1,"서하람","사용중"],[752,"0B333KH220933F",2,4,2,"성지오","사용중"],
+ [751,"0B336TP220433F",0,0,0,"","사용중"],[750,"0B336VR220933F",2,4,3,"양온유","사용중"],
+ [749,"0B337AB220833F",2,4,4,"오채민","사용중"]];
+var AS=[
+ {no:36763,req:"2026-09-02",acc:"260902-0079",gen:"-",st:"접수",mgr:"김매니저",stu:"김소연",cls:"2/11/9",os:"-",sn:"-",who:"김소연",trouble:"소프트웨어 / 전원안켜짐",due:"접수 확인 중"},
+ {no:36717,req:"2026-09-02",acc:"260902-0033",gen:"-",st:"접수",mgr:"김매니저",stu:"이지안",cls:"2/8/23",os:"-",sn:"-",who:"박선욱",trouble:"소프트웨어 / 블루스크린발생",due:"접수 확인 중"},
+ {no:36651,req:"2026-09-01",acc:"260901-0148",gen:"2022(1차)",st:"완료",mgr:"김매니저",stu:"손예서",cls:"2/2/14",os:"WINDOWS",sn:"0B33378220933F",who:"손예서",trouble:"하드웨어 / 화면(액정)이상",fin:"2026-09-02"},
+ {no:36025,req:"2026-08-27",acc:"260827-0067",gen:"2022(1차)",st:"완료",mgr:"김매니저",stu:"최지채",cls:"2/5/2",os:"WINDOWS",sn:"0B34K9P220833F",who:"최지채",trouble:"소프트웨어 / 앱실행불가",fin:"2026-08-29"},
+ {no:35963,req:"2026-08-27",acc:"260827-0005",gen:"2022(1차)",st:"입고",mgr:"김매니저",stu:"이도준",cls:"2/7/18",os:"WINDOWS",sn:"0B34JJG220933F",who:"이도준",trouble:"하드웨어 / 화면(액정)이상",due:"2026-09-05 (액정 교체)"},
+ {no:35917,req:"2026-08-26",acc:"260826-0123",gen:"2022(1차)",st:"완료",mgr:"김매니저",stu:"서민규",cls:"2/6/11",os:"WINDOWS",sn:"0B34F9G220833F",who:"서민규",trouble:"소프트웨어 / 계정관련",fin:"2026-08-27"},
+ {no:35825,req:"2026-08-25",acc:"260825-0052",gen:"2022(1차)",st:"완료",mgr:"김매니저",stu:"박지욱",cls:"2/1/7",os:"WINDOWS",sn:"0B34F9V220833F",who:"박지욱",trouble:"소프트웨어 / 사용중기기멈춤",fin:"2026-08-26"},
+ {no:35660,req:"2026-08-20",acc:"260820-0031",gen:"2022(1차)",st:"입고",mgr:"김매니저",stu:"강하람",cls:"2/7/3",os:"WINDOWS",sn:"0B34FHD220833F",who:"강하람",trouble:"하드웨어 / 화면(액정)이상",due:"2026-09-04 (액정 교체)"}];
+var NOTICE=[
+ {pin:1,t:"디벗 명렬 현행화",w:"박기완",d:"2026-07-23",p:"Y",body:"전·출입, 진급으로 바뀐 학생 정보는 [명렬표 관리 → 명렬표 일괄 등록]의 「명렬표 변경 및 수정」 양식으로 현행화해 주세요. 명렬표는 디벗 관리의 정본입니다 — MDM·M365와 자동으로 맞춰지지 않으므로 학교에서 직접 갱신합니다."},
+ {pin:1,t:"무인보관함 AS 신청안내",w:"박기완",d:"2026-06-30",p:"Y",body:"파손 기기는 무인보관함에 접수하면 수거·수리·회송이 자동으로 진행됩니다. 접수 후 진행 상황은 [AS 관리]에서 확인하세요."},
+ {pin:1,t:"마스킹해제 패스워드 안내",w:"김성환",d:"2026-06-29",p:"Y",body:"학생 개인정보 보호를 위해 목록의 이름·학년·반은 마스킹되어 표시됩니다. 필요한 경우에만 [마스킹 해제]를 사용하고, 사용 후에는 다시 마스킹 상태로 두세요.\n\n※ 연수용 힌트: 비밀번호는 통합콜센터 번호(1566-6647)의 뒤 4자리입니다."},
+ {pin:1,t:"계정문의 안내",w:"김성환",d:"2026-04-30",p:"Y",body:"학교 담당자 계정 분실·잠금은 콜센터로 문의해 주세요. 계정은 학교당 1개 발급이 원칙입니다."},
+ {pin:0,no:5,t:"명렬표 최신화 안내",w:"박기완",d:"2026-06-29",p:"N",body:"명렬표 등록일이 오래된 학교는 최신 명렬로 갱신 부탁드립니다."},
+ {pin:0,no:6,t:"디벗관리 기기정보 등록안내",w:"김성환",d:"2026-04-30",p:"N",body:"신규 보급·재배부 기기는 [디벗 관리 → 기기 등록]으로 등록 후 사용해 주세요."}];
+var MANUAL=[
+ ["📌","디벗 기기 등록이 필요한 경우","senMaster","2025-03-04"],
+ ["2","디벗 MDM 관리자 매뉴얼(#5. 웨일)","senMaster","2025-07-14"],
+ ["3","디벗 MDM 관리자 매뉴얼(#4. 크롬)","senMaster","2025-07-08"],
+ ["4","디벗 MDM 관리자 매뉴얼(#3. 아이패드)","senMaster","2025-07-08"],
+ ["5","디벗 MDM 관리자 매뉴얼(#2. 윈도우즈)","senMaster","2025-07-08"],
+ ["6","디벗 MDM 관리자 매뉴얼(#1. 안드로이드)","senMaster","2025-07-08"],
+ ["7","안드로이드,크롬,윈도우즈,IOS,웨일 동영상 강의","LG헬로비전","2025-04-11"],
+ ["8","사용자 매뉴얼(AS 매니저, AS 요원 계정)","관리자","2025-03-04"],
+ ["9","사용자 매뉴얼(설치기사, 콜센터, 학교 담당자, 뷰어 계정)","관리자","2025-03-04"]];
+
+/* ───────── 공통 조각 ───────── */
+function chip(st){
+ var m={"접수":"c-recv","입고":"c-in","수리중":"c-fix","완료":"c-done","사용중":"c-recv"};
+ var ic={"완료":"✓"};
+ return '<span class="chip '+(m[st]||"c-done")+'"><i></i>'+esc(st)+(ic[st]?"":"")+"</span>";
+}
+function maskBtn(){
+ return '<div class="right-tools">'+
+  (S.masked?'<button class="btn pri" data-act="unmask">마스킹 해제</button>'
+           :'<button class="btn" data-act="remask">마스킹 적용</button>');
+}
+function filterCard(inner){
+ return '<div class="card"><div class="filters">'+inner+'</div>'+
+  '<div class="btnrow"><button class="btn dark" data-act="search">검색</button><button class="btn" data-act="search">⟳ 초기화</button></div></div>';
+}
+function emptyBox(msg){return '<div class="empty"><div class="box">🗂</div>'+esc(msg||"검색 결과가 없습니다.")+"</div>";}
+
+/* ───────── 페이지 ───────── */
+function pgDash(){
+ var rows=[["접수","2026-09-02","2","11","9","김소연","소프트웨어","전원안켜짐"],
+           ["접수","2026-09-02","2","8","23","이지안","소프트웨어","블루스크린발생"],
+           ["입고","2026-08-27","2","7","18","이도준","하드웨어","화면(액정)이상"],
+           ["입고","2026-08-20","2","7","3","강하람","하드웨어","화면(액정)이상"]];
+ return '<div class="card" style="padding:18px 20px"><b style="font-size:16.5px">담당 선생님, 안녕하세요!</b>'+
+  '<div style="color:var(--tx2);font-size:12.5px;margin-top:2px">우리 학교(디벗중학교) 서비스 및 장비 현황</div></div>'+
+  '<div class="cards">'+
+  '<div class="kpi"><div class="t">▦ 이번달 요청한 서비스</div><div class="v">3건<span class="delta">전월 대비 -50% ↘</span></div></div>'+
+  '<div class="kpi"><div class="t">▤ 미완료 서비스</div><div class="v">4건</div></div>'+
+  '<div class="kpi"><div class="t">₩ 미정산 서비스 및 금액</div><div class="v">0건 <small>(0원)</small></div></div>'+
+  '<div class="kpi"><div class="t">◇ 미회수 장비</div><div class="v">0대</div></div>'+
+  '<div class="kpi"><div class="t">▯ 학교 총 장비 대수</div><div class="v">760대</div></div></div>'+
+  '<div class="card"><b>A/S 현황</b> <span style="color:var(--tx3);font-size:12px">— 자세한 조회·검색은 [AS 관리]에서</span>'+
+  '<div class="tbl-wrap"><table class="tb"><thead><tr><th>A/S 현황</th><th>요청일</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>장애구분</th><th>장애유형</th></tr></thead><tbody>'+
+  rows.map(function(r){return "<tr><td>"+chip(r[0])+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td><td>"+r[3]+"</td><td>"+r[4]+"</td><td>"+esc(r[5])+"</td><td>"+r[6]+"</td><td>"+r[7]+"</td></tr>";}).join("")+
+  "</tbody></table></div></div>";
+}
+
+function pgRoster(){
+ var list=(S.extra?EXTRA.concat(ROSTER):ROSTER);
+ return filterCard('<span class="f-lb">통합검색</span><input class="f-in" placeholder="학교명, 이름">'+
+   '<span class="f-lb">이름</span><input class="f-in" style="min-width:120px">'+
+   '<span class="f-lb">학년</span><input class="f-in" style="min-width:70px">'+
+   '<span class="f-lb">도입년도</span><select class="f-in"><option>전체</option><option>2022학년도(1차)</option><option>2024학년도(2차)</option></select>'+
+   '<span class="f-lb">디벗부여여부</span><select class="f-in"><option>전체</option><option>부여</option><option>미부여</option></select>')+
+  '<div class="right-tools">'+
+   (S.masked?'<button class="btn pri" data-act="unmask">마스킹 해제</button>':'<button class="btn" data-act="remask">마스킹 적용</button>')+
+   '<button class="btn pri" style="background:#4C86FF;border-color:#4C86FF" data-act="batch">명렬표 일괄 등록</button>'+
+   '<button class="btn pri" data-nope="명렬표 등록(개별)">명렬표 등록</button></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th></th><th>연번</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>OS</th><th>시리얼 넘버</th><th>도입년도</th><th>등록일</th></tr></thead><tbody>'+
+  list.map(function(r,i){
+    var isNew=S.extra&&i<3;
+    return '<tr'+(isNew?' class="new"':'')+'><td><input type="checkbox"></td><td>'+r[0]+"</td><td>"+mg(r[1])+"</td><td>"+mg(r[2])+"</td><td>"+mn(r[3])+"</td><td>"+esc(mask(r[4]))+"</td><td>WINDOWS</td><td class=\"mono\">"+r[5]+"</td><td>"+(isNew?"2022학년도 중고등학...":"2024학년도 중고등학...")+"</td><td>"+(isNew?TODAY+' <span class="chip c-recv" style="padding:1px 7px">오늘</span>':"2025-01-10")+"</td></tr>";
+  }).join("")+"</tbody></table></div>"+
+  '<div class="note-b" style="margin-top:10px">명렬표는 디벗 관리의 <b>정본</b>입니다 — 전·출입, 진급이 생기면 [명렬표 일괄 등록]으로 현행화하세요. MDM·M365와는 자동으로 맞춰지지 않습니다.</div></div>';
+}
+
+function pgDevices(){
+ return filterCard('<span class="f-lb">통합검색</span><input class="f-in" placeholder="학교명, 이름, 시리얼번호, 관리번호">'+
+   '<span class="f-lb">시리얼/관리번호</span><input class="f-in">'+
+   '<span class="f-lb">OS구분</span><select class="f-in"><option>전체</option><option>WINDOWS</option></select>'+
+   '<span class="f-lb">기기상태</span><select class="f-in"><option>전체</option><option>사용중</option><option>수리중</option></select>'+
+   '<span class="f-lb">도입년도</span><select class="f-in"><option>전체</option></select>')+
+  maskBtn()+'<button class="btn pri" data-nope="기기 등록">기기 등록</button></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>연번</th><th>시리얼 넘버</th><th>OS 구분</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>기기상태</th></tr></thead><tbody>'+
+  DEVICES.map(function(r){
+    var has=!!r[5];
+    return "<tr><td>"+r[0]+'</td><td class="mono">'+r[1]+"</td><td>WINDOWS</td><td>"+(has?mg(r[2]):"")+"</td><td>"+(has?mg(r[3]):"")+"</td><td>"+(has?mn(r[4]):"")+"</td><td>"+(has?esc(mask(r[5])):"")+"</td><td>"+chip(r[6])+"</td></tr>";
+  }).join("")+"</tbody></table></div>"+
+  '<div class="note-b" style="margin-top:10px">이름이 빈 기기는 <b>예비 기기</b>입니다. 수리중 상태는 [AS 관리]의 접수 건과 연동됩니다.</div></div>';
+}
+
+function pgAS(){
+ return filterCard('<span class="f-lb">통합검색</span><input class="f-in" style="min-width:250px" placeholder="학교명, 요청자명, 학생이름, 접수번호, 시리얼번호">'+
+   '<span class="f-lb">A/S현황</span><select class="f-in"><option>전체</option><option>접수</option><option>입고</option><option>완료</option></select>'+
+   '<span class="f-lb">도입연도</span><select class="f-in"><option>전체</option><option>2022(1차)</option></select>'+
+   '<span class="f-lb">요청장애구분</span><select class="f-in"><option>전체</option><option>하드웨어</option><option>소프트웨어</option></select>'+
+   '<span class="f-lb">접수기간</span><input class="f-in" style="min-width:120px" placeholder="날짜 선택">~<input class="f-in" style="min-width:120px" placeholder="날짜 선택">')+
+  maskBtn()+"</div>"+
+  '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span class="chip c-done">TGS 이관 0</span>'+
+  '<span style="color:var(--tx3);font-size:12px">행을 누르면 처리 단계·완료(예정)일이 열립니다 — “내 디벗 언제 와요?”는 이 화면으로 답합니다.</span></div>'+
+  '<div class="tbl-wrap"><table class="tb"><thead><tr><th>No.</th><th>요청일</th><th>접수번호</th><th>도입연도</th><th>A/S현황</th><th>AS 담당자</th><th>[지원청]학교명</th><th>학생이름</th><th>학년반번</th><th>OS</th><th>기기 시리얼</th><th>요청자</th><th>요청 장애</th></tr></thead><tbody>'+
+  AS.map(function(a,i){
+    return '<tr class="click" data-as="'+i+'"><td>'+a.no+"</td><td>"+a.req+"</td><td>"+a.acc+"</td><td>"+a.gen+"</td><td>"+chip(a.st)+"</td><td>"+esc(a.mgr)+"</td><td>[강동송파] 디벗중학교</td><td>"+esc(mask(a.stu))+"</td><td>"+(S.masked?"*/**/*":a.cls)+"</td><td>"+a.os+'</td><td class="mono">'+a.sn+"</td><td>"+esc(mask(a.who))+"</td><td>"+esc(a.trouble)+"</td></tr>";
+  }).join("")+"</tbody></table></div></div>";
+}
+
+function pgUnsettled(){
+ return '<div class="card"><b style="font-size:16px">총 미정산 금액: 0원</b></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>연번</th><th>[지원청]학교명</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>부담금 청구일</th><th>부담금</th><th>지연일</th></tr></thead></table></div>'+
+  emptyBox()+'<button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button></div>';
+}
+function pgUnreturned(){
+ return '<div class="card" style="background:#FFF6DD;border-color:#F0DFA0"><div style="display:flex;gap:12px;align-items:center">'+
+  '<div style="width:44px;height:44px;border-radius:11px;background:#F5A700;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px">⚠</div>'+
+  '<div><div style="color:#7a6200;font-size:12.5px">총 미회수 장비 대수</div><b style="font-size:22px">0 대</b></div></div></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>연번</th><th>[지원청]학교명</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>지급일자</th><th>지연일</th></tr></thead>'+
+  '<tbody><tr><td>합계</td><td></td><td></td><td></td><td></td><td></td><td>-</td><td>-</td></tr></tbody></table></div>'+
+  '<button class="btn" data-nope="엑셀 다운로드" style="margin-top:8px">엑셀 다운로드 ⭳</button></div>';
+}
+function pgEquip(){
+ var cls=[["class_11",29],["class_10",28],["class_0",58],["class_2",58],["class_1",58],["class_4",58],["class_3",58],["class_6",56],["class_5",56],["class_8",58],["class_7",58],["class_9",58]];
+ return '<div class="card"><b>학교 장비 현황</b><div class="gauge-cards" style="margin-top:10px">'+
+  '<div class="g-card g-tot"><div class="gi">▯</div><div><div class="gt">총 대수</div><div class="gv">760대</div></div></div>'+
+  '<div class="g-card g-use"><div class="gi">✓</div><div><div class="gt">사용중</div><div class="gv">691대</div></div></div>'+
+  '<div class="g-card g-fix"><div class="gi">🔧</div><div><div class="gt">수리중</div><div class="gv">4대</div></div></div>'+
+  '<div class="g-card g-spare"><div class="gi">▤</div><div><div class="gt">예비기기</div><div class="gv">127대</div></div></div></div></div>'+
+  '<div class="card"><b>학년별 및 반별 현황</b><div class="tbl-wrap" style="margin-top:8px"><table class="tb"><thead><tr><th>구분</th>'+
+  cls.map(function(c){return "<th>"+c[0]+"</th>";}).join("")+'<th>총대수</th></tr></thead><tbody><tr><td><b>1학년</b></td>'+
+  cls.map(function(c){return "<td>"+c[1]+"</td>";}).join("")+'<td style="color:var(--pri);font-weight:700">633</td></tr></tbody></table></div></div>'+
+  '<div class="card"><b>OS별 현황</b><div class="tbl-wrap" style="margin-top:8px"><table class="tb"><thead><tr><th>구분</th><th>ANDROID</th><th>IPADOS</th><th>WINDOWS</th><th>CHROME</th><th>WHALE</th></tr></thead>'+
+  '<tbody><tr><td>총 기기 대수</td><td>0</td><td>0</td><td><b>760</b></td><td>0</td><td>0</td></tr></tbody></table></div></div>';
+}
+function pgNotice(){
+ return filterCard('<span class="f-lb">제목</span><input class="f-in"><span class="f-lb">작성자</span><input class="f-in">')+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>공지사항 번호</th><th>제목</th><th>작성자</th><th>작성(수정)일</th><th>팝업 여부</th><th>첨부파일</th></tr></thead><tbody>'+
+  NOTICE.map(function(n,i){
+    return '<tr class="click" data-notice="'+i+'"><td>'+(n.pin?'<span class="pin">📌</span>':n.no)+'</td><td style="text-align:left;padding-left:22px">'+esc(n.t)+"</td><td>"+esc(n.w)+"</td><td>"+n.d+"</td><td>"+n.p+"</td><td>⭳</td></tr>";
+  }).join("")+"</tbody></table></div></div>";
+}
+function pgNewsletter(){return filterCard('<span class="f-lb">제목</span><input class="f-in"><span class="f-lb">작성자</span><input class="f-in">')+'<div class="card">'+emptyBox()+"</div>";}
+function pgManual(){
+ return filterCard('<span class="f-lb">제목</span><input class="f-in"><span class="f-lb">작성자</span><input class="f-in">')+
+  '<div class="card"><div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">'+
+  ["디벗","AS","명렬표","계정","기타","디벗관리시스템 사용메뉴얼"].map(function(c){return '<span class="chip" style="background:#EFF5FF;color:#2F6BFF">'+c+"</span>";}).join("")+"</div>"+
+  '<div class="tbl-wrap"><table class="tb"><thead><tr><th>매뉴얼 번호</th><th>카테고리</th><th>제목</th><th>작성자</th><th>작성(수정)일</th><th>첨부파일</th></tr></thead><tbody>'+
+  MANUAL.map(function(m){return "<tr><td>"+(m[0]==="📌"?'<span class="pin">📌</span>':m[0])+"</td><td>미분류</td><td style=\"text-align:left;padding-left:22px\">"+esc(m[1])+"</td><td>"+esc(m[2])+"</td><td>"+m[3]+"</td><td>⭳</td></tr>";}).join("")+
+  "</tbody></table></div></div>";
+}
+function pgOneclick(){
+ return filterCard('<span class="f-lb">검색어</span><input class="f-in" style="min-width:420px" placeholder="요청자명, 학생명">')+
+  '<div class="right-tools"><button class="btn pri" data-nope="A/S 접수 — 이 연수에서는 무인보관함·콜센터 흐름으로 안내합니다(강의 자료 수리 다섯 걸음)">A/S 접수하기</button></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>접수번호</th><th>접수일시</th><th>요청자명</th><th>장애구분</th><th>장애유형</th><th>A/S현황</th><th>학생명</th></tr></thead></table></div>'+emptyBox()+"</div>";
+}
+function pgPurchase(){
+ return filterCard('<span class="f-lb">접수번호</span><input class="f-in"><span class="f-lb">신청자</span><input class="f-in"><span class="f-lb">상태</span><select class="f-in"><option>전체</option></select>')+
+  '<div class="right-tools"><button class="btn pri" data-nope="간편구매 신청">간편구매 신청</button></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th></th><th>접수번호</th><th>신청자</th><th>학교명</th><th>OS</th><th>수량</th><th>상태</th><th>승인자</th><th>신청일</th></tr></thead></table></div>'+emptyBox()+"</div>";
+}
+function pgQna(){return filterCard('<span class="f-lb">제목</span><input class="f-in"><span class="f-lb">작성자</span><input class="f-in">')+'<div class="right-tools"><button class="btn pri" data-nope="Q&A 등록">Q&amp;A 등록</button></div><div class="card">'+emptyBox()+"</div>";}
+function pgVoc(){return filterCard('<span class="f-lb">제목</span><input class="f-in"><span class="f-lb">작성자</span><input class="f-in">')+'<div class="right-tools"><button class="btn pri" data-nope="VOC 등록">VOC 등록</button></div><div class="card">'+emptyBox()+"</div>";}
+
+var PAGES={dash:["대시보드",pgDash],roster:["명렬표 관리",pgRoster],devices:["디벗 관리",pgDevices],
+ as:["AS 관리",pgAS],unsettled:["미정산 금액",pgUnsettled],unreturned:["미회수 장비 현황",pgUnreturned],
+ equip:["장비 현황",pgEquip],notice:["공지사항",pgNotice],newsletter:["학교통신문",pgNewsletter],
+ manual:["사용자 매뉴얼",pgManual],oneclick:["원클릭 접수",pgOneclick],purchase:["간편구매 신청",pgPurchase],
+ qna:["Q&A",pgQna],voc:["VOC",pgVoc]};
+
+function render(){
+ var p=PAGES[S.page]||PAGES.dash;
+ $("#pgTitle").textContent=p[0];
+ $("#content").innerHTML=p[1]();
+ document.querySelectorAll(".nv[data-go]").forEach(function(b){
+   b.classList.toggle("on",b.getAttribute("data-go")===S.page);});
+ fab();
+}
+function fab(){
+ var n=MISSIONS.filter(function(m){return S.missions[m.id];}).length;
+ $("#fabN").textContent=n;
+ $("#mpList").innerHTML=MISSIONS.map(function(m){
+   var on=S.missions[m.id];
+   return '<div class="mi'+(on?" done":"")+'"><span class="ck">✓</span><span><b>'+esc(m.t)+"</b>"+esc(m.d)+"</span></div>";
+ }).join("");
+}
+
+/* ───────── 모달 ───────── */
+function openModal(html){$("#modalPop").innerHTML=html;$("#modal").hidden=false;}
+function closeModal(){$("#modal").hidden=true;}
+
+function popMask(){
+ openModal('<div class="hd">마스킹 해제 <button class="x" data-close>✕</button></div>'+
+  '<div class="bd"><p style="margin:0 0 10px;color:var(--tx2);font-size:13px">학생 개인정보 보호를 위해 목록은 마스킹되어 있습니다. 해제 비밀번호를 입력하세요.</p>'+
+  '<div class="fld"><label>비밀번호 <span class="req">*</span></label><input type="password" id="mkPw" placeholder="숫자 4자리" maxlength="4"></div>'+
+  '<div id="mkErr" class="note-r" style="display:none">비밀번호가 일치하지 않습니다.</div>'+
+  '<div class="note-b">힌트: 공지사항의 「마스킹해제 패스워드 안내」 — 통합콜센터 번호(1566-6647)의 뒤 4자리.</div></div>'+
+  '<div class="ft"><button class="btn" data-close>취소</button><button class="btn pri" id="mkGo">확인</button></div>');
+ $("#mkPw").focus();
+}
+function popNotice(i){
+ var n=NOTICE[i];
+ openModal('<div class="hd">'+esc(n.t)+' <button class="x" data-close>✕</button></div>'+
+  '<div class="bd"><div style="color:var(--tx3);font-size:12px;margin-bottom:10px">'+esc(n.w)+" · "+n.d+"</div>"+
+  '<div style="font-size:13.5px;line-height:1.85;white-space:pre-line">'+esc(n.body)+"</div></div>"+
+  '<div class="ft"><button class="btn pri" data-close>확인</button></div>');
+}
+function popAsDetail(i){
+ var a=AS[i];
+ var flow=["접수","입고","수리","출고","완료"];
+ var cur=a.st==="접수"?0:a.st==="입고"?2:4;   /* 입고 건은 수리 진행 중으로 표현 */
+ openModal('<div class="hd">A/S 처리 현황 — 접수번호 '+a.acc+' <button class="x" data-close>✕</button></div>'+
+  '<div class="bd"><div class="steps">'+flow.map(function(f,k){
+    return '<div class="stp '+(k<cur?"done":k===cur?"on":"")+'"><div class="dot">'+(k<cur?"✓":k+1)+"</div>"+f+"</div>";
+  }).join("")+"</div>"+
+  '<table class="kv">'+
+  "<tr><td>학생</td><td>"+esc(mask(a.stu))+" ("+(S.masked?"*/**/*":a.cls)+")</td></tr>"+
+  "<tr><td>학교</td><td>[강동송파] 디벗중학교</td></tr>"+
+  "<tr><td>기기 시리얼</td><td class=\"mono\">"+a.sn+"</td></tr>"+
+  "<tr><td>요청 장애</td><td>"+esc(a.trouble)+"</td></tr>"+
+  "<tr><td>AS 담당자</td><td>"+esc(a.mgr)+"</td></tr>"+
+  (a.fin?"<tr><td>수리 완료일</td><td><b>"+a.fin+"</b></td></tr>"
+        :"<tr><td>완료 예정</td><td><b>"+esc(a.due||"확인 중")+"</b></td></tr>")+
+  "</table>"+
+  '<div class="note-b">“내 디벗 언제 와요?”라는 질문에는 이 화면의 진행 단계와 완료(예정)일로 답하면 됩니다.</div></div>'+
+  '<div class="ft"><button class="btn pri" data-close>확인</button></div>');
+ if(a.st!=="완료")done("d1");
+}
+function popBatch(){
+ openModal('<div class="hd">명렬표 일괄 등록 <button class="x" data-close>✕</button></div>'+
+  '<div class="bd">'+
+  '<div class="fld"><label>OS 종류 <span class="req">*</span></label><select><option>WINDOWS</option><option>ANDROID</option><option>IPADOS</option><option>CHROME</option><option>WHALE</option></select>'+
+  '<div class="note-r" style="margin-top:5px">* 학교에서 사용하는 기기의 OS를 선택하면 해당 OS에 필요한 계정 정보만 입력하시면 됩니다.</div></div>'+
+  '<div class="fld"><label>업로드 유형 선택 <span class="req">*</span></label><input type="text" class="fixed" value="명렬표 변경 및 수정" readonly>'+
+  '<div class="note-r" style="margin-top:5px">* 학교계정은 명렬표 변경 및 수정 양식만 업로드할 수 있습니다.<br>* 학생 정보 수정, 전·출입, 진급, 계정정보 수정이 필요한 경우 이 유형으로 진행해주세요.</div></div>'+
+  '<div class="fld"><label>도입년도 선택 <span class="req">*</span></label><select><option>2022학년도 도입 디벗(1차)</option><option>2024학년도 도입 디벗(2차)</option><option>2026학년도 도입 디벗(3차)</option></select>'+
+  '<div class="note-r" style="margin-top:5px">* 신규보급 및 양품화 해당학교 구분하여 선택 *</div></div>'+
+  '<div class="drop" id="dropZone">📎<br><b style="color:var(--pri)">파일을 드래그하거나 클릭하여 파일을 업로드</b> 하세요<br>'+
+  '<span style="font-size:12px">하단의 양식을 다운로드 받아 사용해주세요. (연수용: 클릭하면 예시 파일로 진행합니다)</span></div>'+
+  '<div class="note-r" style="margin-top:8px">* 위에서 모든 항목을 선택한 후 양식을 다운로드하여 작성해주세요.</div></div>'+
+  '<div class="ft"><button class="btn" id="btnTmpl">양식 다운로드 ⭳</button><button class="btn" data-close>닫기</button></div>');
+}
+function dlTemplate(){
+ var head=["(기존)학년","(기존)반","(기존)번호","(기존)이름","(기존)MS계정","디벗 S/N(수정금지)","디벗 관리번호(수정금지)","(변경)학년","(변경)반","(변경)번호","(변경)이름","(변경)MS계정","*(변경학생) 디벗 S/N","*(변경학생) 디벗 관리번호","예비기기여부"];
+ var rows=[
+  ["1","1","1","김하늘","202610101@dibeot.ms.kr","0B34M63220833F","B100009999_0001","2","1","1","김하늘","202610101@dibeot.ms.kr","","",""],
+  ["1","7","3","강하람","202610703@dibeot.ms.kr","0B34FHD220833F","B100009999_0087","2","7","3","강하람","202610703@dibeot.ms.kr","","",""],
+  ["1","2","5","전출학생","","0B343BC220333F","B100009999_0031","","","","","","","","Y"]];
+ var csv="﻿"+[head].concat(rows).map(function(r){return r.join(",");}).join("\r\n");
+ var a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+ a.download="명렬표_일괄등록_양식(연수용 예시).csv";a.click();
+ done("d3");toast("양식을 내려받았습니다 — 기존 정보는 그대로 두고 (변경) 열만 채웁니다.");
+}
+function runUpload(){
+ openModal('<div class="hd">명렬표 일괄 등록 — 검증 결과 <button class="x" data-close>✕</button></div>'+
+  '<div class="bd"><div class="note-b" style="margin-bottom:10px">연수용 예시 파일 <b>명렬표_일괄등록_양식(연수용 예시).csv</b> — 12행을 읽었습니다.</div>'+
+  '<table class="kv">'+
+  "<tr><td>변경(진급·반 이동)</td><td><b>8명</b> — 학년·반·번호 갱신</td></tr>"+
+  "<tr><td>전출 처리</td><td><b>2명</b> — 디벗 회수 대상 표시</td></tr>"+
+  "<tr><td>예비기기 전환</td><td><b>2대</b></td></tr>"+
+  "<tr><td>오류</td><td>0건 (S/N·관리번호 대조 통과)</td></tr></table>"+
+  '<div class="note-r">* 디벗 S/N·관리번호 열은 수정 금지 — 이 값으로 기존 학생과 대조합니다.</div></div>'+
+  '<div class="ft"><button class="btn" data-close>취소</button><button class="btn pri" id="btnApply">등록 실행</button></div>');
+}
+
+/* ───────── 이벤트 ───────── */
+document.addEventListener("click",function(e){
+ var n;
+ if(e.target.closest("#loginBtn")){
+   $("#login").style.display="none";$("#app").classList.add("on");$("#fab").hidden=false;
+   render();return;}
+ if(e.target.closest("#btnLogout")){location.reload();return;}
+ if((n=e.target.closest("[data-nope]"))){toast("연수용 재현 범위 밖입니다 — "+n.getAttribute("data-nope")+" (실제 시스템에서 제공)");return;}
+ if((n=e.target.closest(".nv[data-go]"))){S.page=n.getAttribute("data-go");save();render();return;}
+ if(e.target.closest("#fab")){$("#mp").hidden=!$("#mp").hidden;return;}
+ if(e.target.closest("#btnReset")){
+   if(!confirm("이 실습기의 미션·마스킹 상태를 초기화할까요?"))return;
+   try{localStorage.removeItem(KEY);}catch(err){}
+   location.reload();return;}
+ if(e.target.closest("[data-close]")||e.target.id==="modal"){closeModal();return;}
+ if(e.target.closest("[data-act='unmask']")){popMask();return;}
+ if(e.target.closest("[data-act='remask']")){S.masked=true;save();render();toast("마스킹을 다시 적용했습니다.");return;}
+ if(e.target.closest("[data-act='search']")){render();toast("검색 조건이 적용되었습니다. (연수용 목록)");return;}
+ if(e.target.closest("[data-act='batch']")){popBatch();return;}
+ if(e.target.closest("#btnTmpl")){dlTemplate();return;}
+ if(e.target.closest("#dropZone")){runUpload();return;}
+ if(e.target.closest("#btnApply")){
+   S.extra=true;save();closeModal();S.page="roster";render();
+   done("d4");toast("명렬표 일괄 등록 완료 — 12건 반영(변경 8 · 전출 2 · 예비 2)");return;}
+ if(e.target.closest("#mkGo")){
+   var v=($("#mkPw")&&$("#mkPw").value||"").trim();
+   if(v==="6647"){S.masked=false;save();closeModal();render();done("d2");toast("마스킹이 해제되었습니다 — 사용 후 [마스킹 적용]으로 되돌리세요.");}
+   else{$("#mkErr").style.display="block";$("#mkPw").value="";$("#mkPw").focus();}
+   return;}
+ if((n=e.target.closest("tr[data-as]"))){popAsDetail(+n.getAttribute("data-as"));return;}
+ if((n=e.target.closest("tr[data-notice]"))){popNotice(+n.getAttribute("data-notice"));return;}
+});
+document.addEventListener("keydown",function(e){
+ if(e.key==="Enter"&&!$("#modal").hidden&&$("#mkPw")){var b=$("#mkGo");if(b)b.click();}
+});
+
+try{
+  if(!sessionStorage.getItem("dibut_dbs_credit")){
+    sessionStorage.setItem("dibut_dbs_credit","1");
+    $("#creditOv").hidden=false;
+  }
+}catch(e){}
+$("#creditOk").addEventListener("click",function(){$("#creditOv").hidden=true;});
+})();
+</script>
+</body>
+</html>
