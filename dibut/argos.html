@@ -721,16 +721,17 @@ const MENUS=[
  {id:"home",n:"홈",i:I.home},{id:"devices",n:"단말 현황",i:I.dev},{id:"setup",n:"통합 설정",i:I.plcy},
  {id:"apps",n:"앱 관리",i:I.app},{id:"data",n:"데이터 관리",i:I.data},{id:"board",n:"정보 나눔터",i:I.board},
  {id:"account",n:"조직/계정 관리",i:I.acnt},{id:"group",n:"단말 그룹 관리",i:I.grp},{id:"rent",n:"단말 대여 관리",i:I.rent},
- {id:"parent",n:"학부모앱",i:I.parent},{id:"history",n:"처리 이력",i:I.hist}
+ {id:"history",n:"처리 이력",i:I.hist}   /* 학부모앱 메뉴는 실서비스에 없음(실물 확인) */
 ];
-const P_WIN="서울시교육청_Windows_기본 정책", P_AND="서울교육청기본_Android_기본정책", P_IOS="iOS_기본 정책(2024년 04월)", P_TEST="Win Test";
+const P_WIN="디벗중 기본 디벗 설정", P_AND="서울교육청기본_Android_기본정책", P_IOS="iOS_기본 정책(2024년 04월)", P_TEST="시험기간 전용 설정";
 function DEV(o){return Object.assign({lost:false,mute:false,pending:false,multi:false,perm:false,rent:"비대여단말",apps:["w1","w7"],battery:70,ssid:"DIBEOT_5G",agentVer:"1.3.6/1993",regDate:"2026-03-02 10:11",maker:"Microsoft",model:"Surface Go 3",os:"Windows 11 Pro 22H2",build:"22621.3155",freeGB:60,totGB:128},o);}
 /* 조직·이름 체계는 학교 '형식'만 차용한 가상 데이터: 학년 학생용/전출/예비 9개 조직, 졸업 없음.
    기기: 1학년=2026 도입 갤럭시북 · 2학년=2022 도입 Surface Go 3 · 3학년=2024 도입 갤럭시북 */
 const ORGDEF=[
  ["o01","01_1학년 학생용",129,"stu",1],["o02","02_2학년 학생용",124,"stu",2],["o03","03_3학년 학생용",118,"stu",3],
  ["o04","04_1학년 전출",2,"out",1],["o05","05_2학년 전출",4,"out",2],["o06","06_3학년 전출 및 AS",6,"out",3],
- ["o07","07_1학년 예비",11,"spare",1],["o08","08_2학년 예비",8,"spare",2],["o09","09_3학년 예비",14,"spare",3]
+ ["o07","07_1학년 예비",11,"spare",1],["o08","08_2학년 예비",8,"spare",2],["o09","09_3학년 예비",14,"spare",3],
+ ["o10","10_2025졸업",58,"grad",2],["o11","11_2026졸업",62,"grad",2]   /* 실물처럼 졸업 조직 보관 — MDM 총대수가 DBS 재학 대수보다 많은 이유 */
 ];
 const GY={1:"26",2:"22",3:"24"};
 function seedDev(){
@@ -781,9 +782,9 @@ function seedDev(){
     }else{
       for(let i=0;i<cntTot;i++){
         const num=(kind==="spare")?(16+cntTot-i):(cntTot-i);
-        const nm=kind==="spare"?(yy+"예비_"+num+"(유)"):(yy+"전출_"+(cntTot-i));
+        const nm=kind==="spare"?(yy+"예비_"+num+"(유)"):(kind==="grad"?(yy+"졸업_"+(cntTot-i)):(yy+"전출_"+(cntTot-i)));
         const d=add(DEV({name:nm,user:"",platform:"Windows",maker:hw.maker,model:hw.model,os:hw.os,serial:hw.ser(),mac:mac(),org:oid,group:"그룹 없음",
-          policy:"정책해제",policyAt:dApply(),totGB:hw.tot,freeGB:hw.tot-ri(8,20),
+          policy:"정책제외",policyAt:dApply(),totGB:hw.tot,freeGB:hw.tot-ri(8,20),
           regDate:"20"+yy+"-03-0"+ri(2,5)+" "+p2(ri(9,16))+":"+p2(ri(0,59)),
           conn:(kind==="spare"&&r()<0.2)?"연결":"미연결",lastAccess:dt(ri(20,90)),lastAlive:dt(ri(20,90))}));
         if(kind==="spare"&&d.conn==="연결"){d.lastAccess=dt(ri(0,2));d.lastAlive=d.lastAccess;}
@@ -796,16 +797,20 @@ function seedDev(){
   if(stu[210])stu[210].perm=true;
   if(stu[120])stu[120].multi=true;
   [stu[77],stu[330]].forEach(d=>{if(d){d.conn="미등록";d.policy="";d.policyAt="";d.lastAccess="-";d.lastAlive="-";d.agentVer="-";d.apps=[];d.freeGB=0;}});
-  let pd=0;for(let i=0;i<stu.length&&pd<12;i++){const d=stu[i];if(d&&d.conn==="미연결"&&d.policy===P_WIN){d.pending=true;pd++;}}
+  let pd=0;for(let i=0;i<stu.length&&pd<29;i++){const d=stu[i];if(d&&(d.conn==="미연결"||(pd>7&&d.conn==="연결"))&&d.policy===P_WIN){d.pending=true;pd++;}}   /* 실물처럼 미적용 29대(261/232 사례) */
   return out;
 }
 function POL(id,n,os,extra){return Object.assign({id:id,name:n,platform:os,regUser:"systemadmin",created:"2024/07/22 11:20",updated:"2024/07/22 11:20",
  block:{camera:false,bluetooth:false,usb:false,registry:false,gps:true,hotspot:true,factory:true},mdmDel:false,
  time:{on:false,days:{}},deploy:["w1","w7"],appCtl:{mode:"none",list:[]},siteCtl:{mode:"black",opt:"db",auto:true,list:[]},targets:[]},extra||{});}
 function seedPol(){
+  /* 실물 학교의 정책 이름 스타일을 차용 — 용도가 보이게 짓는 실례 */
   return [POL("p1",P_IOS,"iOS"),POL("p2","Windows_기본 정책(2024년 04월)","Windows"),POL("p3","Android_기본정책_(2024년 04월)","Android"),
-   POL("p4",P_WIN,"Windows",{regUser:"dibeot_admin",created:"2026/03/04 09:20",updated:"2026/03/04 09:20"}),
-   POL("p5",P_TEST,"Windows",{regUser:"dibeot_admin",created:"2023/08/17 09:31",updated:"2023/08/17 09:31"})];
+   POL("p4",P_WIN,"Windows",{regUser:"dibeot_admin",created:"2026/03/04 09:20",updated:"2026/08/24 11:56"}),
+   POL("p5",P_TEST,"Windows",{regUser:"dibeot_admin",created:"2023/08/17 09:31",updated:"2026/06/27 10:40"}),
+   POL("p6","점심시간 허용","Windows",{regUser:"dibeot_admin",created:"2023/10/07 18:42",updated:"2025/04/21 12:23"}),
+   POL("p7","주말 사용 가능","Windows",{regUser:"dibeot_admin",created:"2023/10/07 18:43",updated:"2025/04/14 12:27"}),
+   POL("p8","사이트 차단(유튜브 등)","Windows",{regUser:"dibeot_admin",created:"2023/10/10 14:21",updated:"2026/05/28 15:01"})];
 }
 const APPS0=[
  {id:"w1",os:"Windows",via:"MS Store",n:"EBS On",pkg:"BA789D90.PocketEBS",fmy:"BA789D90.PocketEBS_x5ywlkecwxbtt",ver:"1.5.5",reg:"iostest"},
@@ -835,8 +840,11 @@ const MSSTORE=[
 ];
 const DEPAPPS=["Stunt Car Crash Test","Meta Board","DICOM Image Gallery Maker","Invitation Maker RSVP Maker","Invitation Card Maker: E-cards & Digital Invites"];
 const NOTICES=[
- {d:"2022.11.03",t:"[공지]스마트 단말 관리 시스템[MDM] 패치 후 최적화 및 참고사항 안내",b:"패치 이후 단말 목록 로딩이 개선되었습니다. 화면이 이전과 다른 경우 브라우저 캐시를 삭제해 주세요.",hit:433},
- {d:"2022.10.28",t:"[공지] 스마트 단말 관리 시스템[MDM] 신규 UI 적용 패치 예정 사항 안내",b:"신규 UI 적용 일자 및 관련 사항을 사전 공지 드립니다. 자세한 내용은 본문을 참고하세요.",hit:348},
+ {d:"2026.08.23",t:"[공지] 스마트기기 통합관리시스템[MDM] AMA 등록 학교 수량 제한 이슈로 인한 로직 개선 패치일정 안내",b:"AMA 등록 학교 수량 제한 이슈로 로직 개선 패치를 진행합니다. 일정은 본문을 참고하세요.",hit:512},
+ {d:"2026.07.08",t:"[공지] Android, iOS, Windows 사용 메뉴얼, 설치 메뉴얼 안내",b:"OS별 사용·설치 매뉴얼 최신본을 안내합니다.",hit:964},
+ {d:"2026.07.08",t:"[공지] Android 단말 「스마트 단말관리 에이전트」 1.4.0 신규 버전 업데이트 관련 안내",b:"Android 에이전트 1.4.0 업데이트 내용을 안내합니다.",hit:433},
+ {d:"2026.06.30",t:"[공지] Windows 단말 「스마트 단말관리 에이전트」 1.1.9 신규 버전 업데이트 관련 안내",b:"Windows 에이전트 1.1.9 업데이트 내용을 안내합니다.",hit:389},
+ {d:"2026.05.19",t:"[공지] 스마트기기 통합관리 시스템[MDM] 서비스 고도화 기능 패치 작업 일정 사전 안내",b:"서비스 고도화 패치 작업 일정을 사전 안내합니다.",hit:341},
  {d:"2022.10.04",t:"[공지] 스마트 단말 관리 시스템[MDM] 설치 및 교육 매뉴얼 가이드 모음",b:"에이전트 설치 파일 및 가이드 매뉴얼 모음 자료입니다. 공장초기화 후 재설치 시 참고하세요.",hit:1479},
  {d:"2022.10.04",t:"[공지] 스마트 단말 관리 시스템[MDM] 신규 UI 적용 전 사전 안내 🔗",b:"신규 UI 적용 전 사전 안내입니다.",hit:927},
  {d:"2022.09.27",t:"[공지] 단말 대여 관리 Agent 설치 및 사용 방법 매뉴얼 공유 안내 🔗",b:"단말 대여 관리 기능 사용 방법 매뉴얼입니다.",hit:459},
@@ -991,7 +999,7 @@ function tabs(list,cur,attr,hk){
 function render(){
   paintGnb();paintTree();
   const P={home:pgHome,devices:pgDev,setup:pgSetup,apps:pgApps,data:pgData,board:pgBoard,
-    account:pgAccount,group:pgGroup,rent:pgRent,parent:pgParent,history:pgHistory}[S.ui.page]||pgHome;
+    account:pgAccount,group:pgGroup,rent:pgRent,history:pgHistory}[S.ui.page]||pgHome;
   const o=P();
   $("#headerTop").innerHTML=o.head||"";
   $("#contents").innerHTML=o.body||"";
@@ -1060,6 +1068,18 @@ function pgHome(){
    +'<article class="wh-b" data-h="home.commonapp"><h3 class="h3-art-t">공통어플</h3><div class="preview-newapp"><ul>'
      +COMMONAPPS.map(a=>'<li><span class="app-ic" style="background:'+a.bg+'">'+esc(a.n.slice(0,1))+"</span><span>"+esc(a.n)+" "+(a.os==="Android"?"🟢":"⚫")+'</span><span class="r-date">'+esc(a.d)+"</span></li>").join("")
    +"</ul></div></article></div>"};
+}
+function popPwExpire(){
+  /* 실물: 비밀번호는 3개월 주기 변경, 지나면 로그인 직후 이 안내가 뜬다(연장 1회) */
+  try{if(sessionStorage.getItem("argos_pw_seen"))return;sessionStorage.setItem("argos_pw_seen","1");}catch(e){}
+  pop({title:"비밀번호 변경 안내",
+   body:'<p style="margin:0 0 8px">※ <b>비밀번호 변경 시기가 지났습니다.</b> 비밀번호를 변경해 주세요.</p>'
+    +'<p style="margin:0 0 14px">※ 비밀번호 변경 연장은 <b>1회</b> 할 수 있습니다.</p>'
+    +'<div class="msg-box msg-i">실제 시스템은 3개월마다 변경을 요구하며, 5회 오류 시 계정이 잠깁니다(해제는 MDM 기술지원센터 1666-6493). 연수용이므로 [나중에 변경]으로 넘어가세요.</div>',
+   btns:'<button class="btn--st pill" data-close>나중에 변경</button><button class="btn--st pill btn-major-outline" data-pwgo>비밀번호 변경</button>',
+   mount:function(el,close){
+     el.querySelector("[data-pwgo]").addEventListener("click",function(){close();toast("연수용 시뮬레이터에서는 비밀번호 변경을 재현하지 않습니다 — 실제 화면에는 기존/새 비밀번호 입력란이 나옵니다.","no");});
+   }});
 }
 function noticePopup(){
   if(S.ui.noticeHidden)return;
@@ -1135,7 +1155,7 @@ function devListRows(list){
      +"<td>"+connTag(d.conn)+"</td><td>"+(d.multi?"멀티유저":"-")+"</td>"
      +'<td class="l">'+esc(S.orgs.filter(o=>o.id===d.org)[0]?S.orgs.filter(o=>o.id===d.org)[0].n:"-")+"</td>"
      +'<td class="l">'+esc(d.group||"그룹 없음")+'</td><td class="l mono">'+esc(d.serial)+"</td>"
-     +'<td class="l">'+esc(d.policy||"정책해제")+"</td>"
+     +'<td class="l">'+esc(d.policy||"정책제외")+"</td>"
      +'<td class="l">'+(S.hist.filter(h=>h.devs&&h.devs.some(v=>v[1]===d.serial))[0]?esc(S.hist.filter(h=>h.devs&&h.devs.some(v=>v[1]===d.serial))[0].fn)+"(처리성공)":"-")+"</td>"
      +"<td><span style='color:#0B8A5E'>●</span> "+usedPct(d)+"%</td><td>"+esc(d.lastAccess||"-")+"</td>"
      +'<td><button class="btn--st small btn-major-outline" data-detail="'+d.id+'">상세</button></td></tr>';
@@ -1203,7 +1223,7 @@ function fltBox(){
    +'<select class="select--st" data-f="platform" style="height:34px"><option value="">플랫폼 전체</option>'+["Android","iOS","Windows"].map(v=>'<option'+(S.ui.f.platform===v?" selected":"")+">"+v+"</option>").join("")+"</select>"
    +'<select class="select--st" data-f="conn" style="height:34px"><option value="">연결여부 전체</option>'+["연결","미연결","미설치","미등록"].map(v=>'<option'+(S.ui.f.conn===v?" selected":"")+">"+v+"</option>").join("")+"</select>"
    +'<select class="select--st" data-f="vol" style="height:34px"><option value="">저장공간 전체</option>'+["여유","부족"].map(v=>'<option'+(S.ui.f.vol===v?" selected":"")+">"+v+"</option>").join("")+"</select>"
-   +'<select class="select--st" data-f="policy" style="height:34px"><option value="">통합설정 전체</option><option value="__none__"'+(S.ui.f.policy==="__none__"?" selected":"")+">미지정/해제</option>"
+   +'<select class="select--st" data-f="policy" style="height:34px"><option value="">통합설정 전체</option><option value="__none__"'+(S.ui.f.policy==="__none__"?" selected":"")+">미지정/제외</option>"
     +S.pol.map(p=>'<option'+(S.ui.f.policy===p.name?" selected":"")+">"+esc(p.name)+"</option>").join("")+"</select>"
    +'<button class="btn--st small" data-act="fltclear">필터 초기화</button></div>';
 }
@@ -1597,16 +1617,16 @@ function pgSetup(){
     +'<button class="btn--st pill btn-major-outline" data-act="pol-deploy">선택된 통합 설정 적용</button></div>'};
 }
 function popOsSelect(){
-  const os=[["Android","#2FA84F","A","8단계 : 차단 및 초기화 → 사용 시간<br>→ 배포 앱·콘텐츠 → 앱 제어 → 차단 예외 앱<br>→ 사이트 제어 → 내용 확인","os.android"],["iOS","#3B3B3D","","9단계 : 차단 → 배포 앱 → Web Clip<br>→ 앱·사이트 제어 → 배경/화면 제어<br>→ Wi-Fi → 내용 확인","os.ios"],
-   ["Windows","#0F6CBD","W","6단계 : 차단 → 사용 시간 → 배포 앱<br>→ 앱 제어 → 사이트 제어 → 내용 확인","os.windows"],["AMA","#8E8E93","AMA","AMA Android 기기(학교별 별도 신청)에<br>대한 통합 설정을 시작합니다.","os.ama"]];
+  const os=[["Android","#2FA84F","A","Android 기기에 대한 통합 설정을 시작합니다.<br>(8단계 : 차단 및 초기화 → 사용 시간 → 배포<br>앱·콘텐츠 → 앱 제어 → 예외 앱 → 사이트 → 확인)","os.android"],["iOS","#3B3B3D","","iOS 기기에 대한 통합 설정을 시작합니다.<br>(9단계 : 차단 → 배포 앱 → Web Clip → 앱·사이트<br>제어 → 배경/화면 제어 → Wi-Fi → 내용 확인)","os.ios"],
+   ["Windows","#0F6CBD","W","Windows 기기에 대한 통합 설정을 시작합니다.<br>(6단계 : 차단 → 사용 시간 → 배포 앱<br>→ 앱 제어 → 사이트 제어 → 내용 확인)","os.windows"]];
   pop({title:"신규 통합 설정 OS 선택",w:"w900",
-   body:'<div class="os-choice-group">'+os.map(o=>'<label class="os-choice'+(o[0]==="Windows"?" active-radio":"")+'" data-os="'+o[0]+'" data-h="'+o[4]+'"><figure style="background:'+o[1]+'">'+(o[2]||"")+"</figure><h4>"+o[0]+"</h4><p>"+o[3]+'</p><label class="label-radio"><input type="radio" name="pos" value="'+o[0]+'"'+(o[0]==="Windows"?" checked":"")+'><i></i></label></label>').join("")+"</div>",
+   body:'<div class="os-choice-group">'+os.map(o=>'<label class="os-choice'+(o[0]==="Android"?" active-radio":"")+'" data-os="'+o[0]+'" data-h="'+o[4]+'"><figure style="background:'+o[1]+'">'+(o[2]||"")+"</figure><h4>"+o[0]+"</h4><p>"+o[3]+'</p><label class="label-radio"><input type="radio" name="pos" value="'+o[0]+'"'+(o[0]==="Android"?" checked":"")+'><i></i></label></label>').join("")+"</div>",
    btns:'<button class="btn--st pill" data-close>취소</button><button class="btn--st pill btn-major-outline" data-ok>확인</button>',
    mount:function(el,close){
      el.addEventListener("click",e=>{const c=e.target.closest("[data-os]");if(c){el.querySelectorAll(".os-choice").forEach(x=>x.classList.remove("active-radio"));c.classList.add("active-radio");c.querySelector("input").checked=true;}});
      el.querySelector("[data-ok]").addEventListener("click",function(){
        const v=el.querySelector("input[name=pos]:checked").value;close();
-       if(v!=="Windows"){toast(v+" 통합 설정은 이 연수용 시뮬레이터에서 다루지 않습니다. Windows를 선택하세요. (실제 구성 — Android 8단계·iOS 9단계, 카드에 ❕도움말 모드로 마우스를 올리면 차이를 볼 수 있습니다)","no");return;}
+       if(v!=="Windows"){toast(v+" 통합 설정은 이 연수용 시뮬레이터에서 다루지 않습니다. Windows를 선택하세요. (실제 시스템도 Android가 기본 선택이라, 디벗 작업 때는 Windows로 바꾸는 것부터가 실무입니다)","no");return;}
        WZ={step:1,name:"",block:{camera:false,bluetooth:false,usb:false,registry:true,gps:false,hotspot:false,factory:false},mdmDel:false,
          time:{on:false,days:{}},selDays:[],buf:{mode:"free",slots:[["09:00","14:00"]]},
          deploy:[],appCtl:{mode:"none",list:[]},siteCtl:{mode:"none",auto:false,opt:"list",list:[]},lsel:[],rsel:[],applySel:[],applyOrg:"all"};
@@ -1764,7 +1784,7 @@ function wizApply(){
     +'<span style="font-size:13px">전체 <b class="cc-blue">'+all.length+'</b>대 \\ 선택 <b class="cc-red">'+sel+"</b>대</span></div>"
     +'<div class="dev-grid x7">'+list.map(function(d){
       const on=WZ.applySel.indexOf(d.id)>=0;
-      return '<div class="dev-card'+(on?" sel":"")+'" data-wapply="'+d.id+'" style="cursor:pointer"><div class="dc-nm">'+osIco(d.platform)+'<span class="t">'+esc(d.name)+'</span></div><div class="dc-body"><div class="dc-row"><span class="k">SERIAL</span><span class="v mono">'+esc(d.serial)+'</span></div><div class="dc-row"><span class="k">통합설정</span><span class="v">'+esc(d.policy||"정책해제")+"</span></div></div></div>";
+      return '<div class="dev-card'+(on?" sel":"")+'" data-wapply="'+d.id+'" style="cursor:pointer"><div class="dc-nm">'+osIco(d.platform)+'<span class="t">'+esc(d.name)+'</span></div><div class="dc-body"><div class="dc-row"><span class="k">SERIAL</span><span class="v mono">'+esc(d.serial)+'</span></div><div class="dc-row"><span class="k">통합설정</span><span class="v">'+esc(d.policy||"정책제외")+"</span></div></div></div>";
     }).join("")+"</div>"
     +(all.length>100?'<p class="bottom-txt-alert">※ '+all.length+"대 중 100대까지 표시합니다. 조직을 선택해 좁혀 보세요.</p>":"")
     +"</div>"
@@ -1817,7 +1837,7 @@ function popApply(ids){
      el.addEventListener("change",e=>{if(e.target.name==="ap"){cur=e.target.value;el.querySelector("#apL").innerHTML=list();detail();}});
      el.querySelector("[data-toggleinfo]").addEventListener("click",detail);
      el.querySelector("[data-clear]").addEventListener("click",function(){
-       ids.forEach(id=>{const d=S.dev.filter(x=>x.id===id)[0];if(d){d.policy="정책해제";d.policyAt=now();d.pending=false;}});
+       ids.forEach(id=>{const d=S.dev.filter(x=>x.id===id)[0];if(d){d.policy="정책제외";d.policyAt=now();d.pending=false;}});
        S.pol.forEach(p=>{p.targets=p.targets.filter(t=>ids.indexOf(t)<0);});
        logHist("정책 해제",ids.length);close();save();render();toast("통합 설정을 해제했습니다.","ok");});
      el.querySelector("[data-ok]").addEventListener("click",function(){
@@ -1859,8 +1879,8 @@ function popPolDetail(id){
      });
      el.querySelector("[data-status]").addEventListener("click",function(){close();popPolStatus(p.id);});
      el.querySelector("[data-del]").addEventListener("click",function(){
-       alertPop("통합 설정 삭제","<p><b>"+esc(p.name)+"</b> 정책을 삭제합니다. 적용된 단말은 “정책해제” 상태가 됩니다.</p>","삭제",function(){
-         S.dev.forEach(d=>{if(d.policy===p.name){d.policy="정책해제";d.pending=false;}});
+       alertPop("통합 설정 삭제","<p><b>"+esc(p.name)+"</b> 정책을 삭제합니다. 적용된 단말은 “정책제외” 상태가 됩니다.</p>","삭제",function(){
+         S.dev.forEach(d=>{if(d.policy===p.name){d.policy="정책제외";d.pending=false;}});
          S.pol=S.pol.filter(x=>x.id!==id);close();save();render();toast("삭제했습니다.");},true);});
    }});
 }
@@ -2196,7 +2216,7 @@ function popOrgDev(orgId){
    btns:'<button class="btn--st pill" data-close>취소</button><button class="btn--st pill btn-major-outline" data-ok>적용</button>',
    mount:(el,close)=>{el.querySelector("[data-ok]").addEventListener("click",function(){
      const ids=$$(".popup-area-bg [data-od]:checked").map(x=>x.getAttribute("data-od"));
-     ids.forEach(id=>{const d=S.dev.filter(x=>x.id===id)[0];if(d){d.org=orgId;d.group="그룹 없음";d.policy="정책해제";d.pending=false;}});
+     ids.forEach(id=>{const d=S.dev.filter(x=>x.id===id)[0];if(d){d.org=orgId;d.group="그룹 없음";d.policy="정책제외";d.pending=false;}});
      save();close();render();toast(ids.length+"대를 "+org.n+"으로 이동했습니다. (그룹 해제·정책 해제됨 — 정책을 재 적용하세요)","ok");});}});
 }
 function popAcntNew(){
@@ -2342,16 +2362,40 @@ function pgRent(){
     +'<div class="filter-right">'+right+'<button class="btn-ico" data-act="refresh">'+I.rf+"</button></div></div></div>"+body};
 }
 function popRentPool(){
+  /* 실물과 동일한 좌(전체 단말) → 우(대여 단말) 이동식 듀얼 리스트 */
+  let sel=S.rentPool.slice(), pickL=[], pickR=[];
+  function paint(el){
+    const L=S.dev.filter(d=>sel.indexOf(d.id)<0), R=S.dev.filter(d=>sel.indexOf(d.id)>=0);
+    const row=(d,side,on)=>'<tr class="'+(on?"sel":"")+'"><td><label class="label-check-circle" style="gap:0"><input type="checkbox" data-r'+side+'="'+d.id+'"'+(on?" checked":"")+'><i style="width:19px;height:19px"></i></label></td><td>'+osIco(d.platform)+'</td><td class="l">'+esc(d.user||"-")+'</td><td class="l">'+esc(d.name)+'</td><td class="l mono">'+esc(d.serial)+"</td></tr>";
+    const panel=(t,arr,side,picks)=>'<div class="blu-cont-bg" style="flex:1;min-width:0"><h2 class="blu-title">'+t+"</h2>"
+     +'<div style="display:flex;gap:8px;margin:6px 0 8px;align-items:center"><span style="font-size:13px;font-weight:700">검색</span><input type="text" class="input--st" placeholder="이름·시리얼 검색" style="flex:1;height:32px"><button class="btn-ico-search" style="width:32px;height:32px">'+I.srch+"</button></div>"
+     +'<div style="font-size:12.5px;margin-bottom:6px">단말 <b class="cc-blue">'+arr.length+'</b>대 \\ 선택 <b class="cc-red">'+picks.length+"</b>대</div>"
+     +'<div class="list-st--table scroll-y" style="max-height:330px"><table class="tbl"><thead><tr><th style="width:44px"></th><th style="width:52px">종류</th><th class="l">사용자 이름</th><th class="l">단말 이름</th><th class="l">시리얼 번호</th></tr></thead><tbody>'
+     +(arr.length?arr.map(d=>row(d,side,picks.indexOf(d.id)>=0)).join(""):'<tr><td colspan="5" style="padding:26px">단말이 없습니다.</td></tr>')+"</tbody></table></div></div>";
+    el.querySelector("[data-rentwrap]").innerHTML=panel("전체 단말",L,"l",pickL)
+     +'<div class="blu-change-move-btns"><button class="btn-add-arr" data-radd>추가 ›</button><button class="btn-remove-arr" data-rdel>‹ 삭제</button></div>'
+     +panel("대여 단말",R,"r",pickR);
+  }
   pop({title:"단말 대여 설정",w:"w1150",
-   body:'<div class="blu-cont-bg" style="margin-bottom:14px"><b class="cc-blue">대여 대상 단말을 선택해 주세요. 선택된 단말은 대여가 가능합니다.</b></div>'
-    +'<div class="list-st--table scroll-y" style="max-height:380px"><table class="tbl"><thead><tr><th style="width:46px"></th><th>종류</th><th class="l">사용자 이름</th><th class="l">단말 이름</th><th class="l">시리얼 번호</th></tr></thead><tbody>'
-    +S.dev.map(d=>'<tr><td><label class="label-check-circle" style="gap:0"><input type="checkbox" data-rp="'+d.id+'"'+(S.rentPool.indexOf(d.id)>=0?" checked":"")+'><i style="width:19px;height:19px"></i></label></td><td>'+osIco(d.platform)+'</td><td class="l">'+esc(d.user||"-")+'</td><td class="l">'+esc(d.name)+'</td><td class="l mono">'+esc(d.serial)+"</td></tr>").join("")
-    +"</tbody></table></div>",
+   body:'<div class="msg-box msg-i" style="margin-bottom:12px">대여 대상 단말을 선택해 주세요. 선택된 단말은 대여가 가능합니다.</div>'
+    +'<div class="blu-change-wrap" data-rentwrap></div>',
    btns:'<button class="btn--st pill" data-close>취소</button><button class="btn--st pill btn-major-outline" data-ok>저장</button>',
-   mount:(el,close)=>{el.querySelector("[data-ok]").addEventListener("click",function(){
-     S.rentPool=$$(".popup-area-bg [data-rp]:checked").map(x=>x.getAttribute("data-rp"));
-     S.dev.forEach(d=>{d.rent=S.rentPool.indexOf(d.id)>=0?"대여가능":"비대여단말";});
-     save();close();render();toast("대여 단말 "+S.rentPool.length+"대를 설정했습니다.","ok");});}});
+   mount:(el,close)=>{
+     paint(el);
+     el.addEventListener("change",function(e){
+       let n;
+       if((n=e.target.closest("[data-rl]"))){const id=n.getAttribute("data-rl");const i=pickL.indexOf(id);i<0?pickL.push(id):pickL.splice(i,1);return;}
+       if((n=e.target.closest("[data-rr]"))){const id=n.getAttribute("data-rr");const i=pickR.indexOf(id);i<0?pickR.push(id):pickR.splice(i,1);return;}
+     });
+     el.addEventListener("click",function(e){
+       if(e.target.closest("[data-radd]")){if(!pickL.length){toast("전체 단말에서 옮길 단말을 먼저 체크하세요.","no");return;}sel=sel.concat(pickL.filter(id=>sel.indexOf(id)<0));pickL=[];paint(el);return;}
+       if(e.target.closest("[data-rdel]")){if(!pickR.length){toast("대여 단말에서 뺄 단말을 먼저 체크하세요.","no");return;}sel=sel.filter(id=>pickR.indexOf(id)<0);pickR=[];paint(el);return;}
+     });
+     el.querySelector("[data-ok]").addEventListener("click",function(){
+       S.rentPool=sel.slice();
+       S.dev.forEach(d=>{d.rent=S.rentPool.indexOf(d.id)>=0?"대여가능":"비대여단말";});
+       save();close();render();toast("대여 단말 "+S.rentPool.length+"대를 설정했습니다.","ok");});
+   }});
 }
 function popRent(devId){
   const d=S.dev.filter(x=>x.id===devId)[0];if(!d)return;
@@ -2503,8 +2547,10 @@ function popDiff(){
     +r("접속 조건","실제 <b>mdm.sen.go.kr</b>은 학내 망 및 eVPN 연결 시에만 접속됩니다.")
     +r("데이터","단말·계정·공지·좌표는 모두 매뉴얼의 예시를 재현한 가상 데이터입니다.")
     +r("명령 전달","실제로는 단말의 에이전트가 서버와 통신할 때 명령을 받으므로 즉시 반영되지 않을 수 있습니다.")
-    +r("미구현","Android·iOS·AMA 통합설정 위자드, iOS(VPP)·ASM 토큰, Web Clip·배경화면 실제 등록, 지도(V-WORLD) 연동은 화면 안내만 제공합니다.")
+    +r("미구현","Android·iOS 통합설정 위자드, iOS(VPP)·ASM 토큰, Web Clip·배경화면 실제 등록, 지도(V-WORLD) 연동은 화면 안내만 제공합니다. (실서비스의 OS 선택은 Android·iOS·Windows 3종입니다)")
     +r("파일 업로드","엑셀/CSV 업로드는 실제 파일 대신 예시 데이터로 처리 흐름만 재현합니다.")
+    +r("화면 차이","실물 기본 화면은 좌측 내비가 아이콘으로 접혀 있고 상단 바가 짙은 남색입니다 — 연수 가독성을 위해 펼침·밝은 배치로 고정했습니다. 실서비스에는 학부모앱 메뉴가 없습니다.")
+    +r("실물 반영","정책제외 표기, 졸업 조직 보관(총대수가 디벗 관리 시스템의 재학 대수보다 많은 이유), 미적용 재배포 사례(기본 정책 지정/적용 불일치), 3개월 비밀번호 변경 안내는 실물 확인 후 반영했습니다.")
     +"</tbody></table>",
    btns:'<button class="btn--st pill btn-major" data-close>확인</button>'});
 }
@@ -2525,7 +2571,7 @@ function exportChk(){
   L.push("  - 사용자 이름 미등록: "+d.filter(x=>!x.user).length+"대 / 분실 등록: "+d.filter(x=>x.lost).length+"대 / 권한 해제 감지: "+d.filter(x=>x.perm).length+"대");L.push("");
   L.push("2. MDM 정책 관리");
   S.pol.forEach(p=>{L.push("  - ["+p.platform+"] "+p.name+" : 지정 "+p.targets.length+"대 / 적용 "+applied(p)+"대");});
-  L.push("  - 정책 미지정·해제 단말: "+d.filter(x=>!x.policy||x.policy==="정책해제").length+"대");L.push("");
+  L.push("  - 정책 미지정·해제 단말: "+d.filter(x=>!x.policy||x.policy==="정책제외").length+"대");L.push("");
   L.push("3. 앱 관리(배포, 삭제)");
   L.push("  - 등록 앱: "+S.apps.length+"건 (MS Store "+S.apps.filter(a=>a.via==="MS Store").length+" / In House "+S.apps.filter(a=>a.via==="In House").length+" / 기타 "+S.apps.filter(a=>a.via!=="MS Store"&&a.via!=="In House").length+")");L.push("");
   L.push("4. 대여·반납 관리");
@@ -2542,7 +2588,7 @@ document.addEventListener("click",function(e){
   const t=e.target,h=s=>t.closest(s);let n;
   if(HELP&&h("[data-h]")&&!h("#btnHelp")&&!h("#helpOff")){e.preventDefault();e.stopPropagation();return;}
   if(h("#loginBtn")){$("#login").hidden=true;$("#app").hidden=false;$("#fab").hidden=false;
-    S.ui.user=$("#loginId").value.trim()||"mdm관리자";$("#topUser").textContent=S.ui.user;save();render();noticePopup();return;}
+    S.ui.user=$("#loginId").value.trim()||"mdm관리자";$("#topUser").textContent=S.ui.user;save();render();popPwExpire();return;}
   if(h("#btnLogout")){$("#app").hidden=true;$("#fab").hidden=true;$("#mp").hidden=true;$("#login").hidden=false;setHelp(false);return;}
   if(h("#btnGnb")){S.ui.gnbOff=!S.ui.gnbOff;save();paintGnb();return;}
   if(h("#btnHelp")){setHelp(!HELP);return;}

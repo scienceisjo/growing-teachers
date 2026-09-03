@@ -22,7 +22,16 @@ button{font:inherit;cursor:pointer}
 input,select{font:inherit}
 
 /* ── 로그인 ── */
-#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#EFF3F9}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#EFF3F9;position:relative}
+.lg-notices{position:absolute;top:24px;left:24px;right:470px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;z-index:5}
+.lg-pop{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(20,40,80,.14);
+  width:300px;padding:16px 16px 0;font-size:12px;color:var(--tx2);line-height:1.65}
+.lg-pop h4{margin:0 0 8px;font-size:14.5px;color:var(--tx);text-align:center}
+.lg-pop p{margin:0}
+.lg-pop-ft{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);
+  margin-top:12px;padding:8px 0;font-size:11.5px}
+.lg-pop-ft button{border:0;background:#3A4657;color:#fff;border-radius:6px;padding:4px 12px;font-size:11.5px}
+@media(max-width:1100px){.lg-notices{display:none}}
 .lg-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:42px 46px;width:420px;
   box-shadow:0 18px 50px rgba(25,45,90,.10);text-align:center}
 .lg-org{display:flex;align-items:center;gap:9px;justify-content:center;color:#1E4FB8;font-weight:700;font-size:14px}
@@ -171,6 +180,29 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
 <body>
 
 <div id="login">
+  <!-- 실물처럼 로그인 화면에 공지 팝업이 뜬다 (오늘 하루 안보기/닫기) -->
+  <div class="lg-notices" id="lgNotices">
+    <div class="lg-pop">
+      <h4>디벗 명렬 현행화 업데이트 안내</h4>
+      <p>2027년 디벗 명렬화 진행 전 정기점검 대비, 교육청을 통한 명렬 현행화 자료 업로드가 진행되고 있습니다.<br><br>해당 자료 취합 완료 후 이를 기준으로 <b>디벗 명렬 현행화 업데이트</b>를 진행할 예정입니다. 보다 정확한 디벗 관리와 안정적인 서비스 제공을 위한 절차이오니 협조 부탁드립니다.</p>
+      <div class="lg-pop-ft"><label><input type="checkbox"> 오늘 하루 안보기</label><button data-lgclose>닫기</button></div>
+    </div>
+    <div class="lg-pop">
+      <h4>무인보관함 AS신청 안내</h4>
+      <p>무인보관함을 통한 서비스 신청 QR 안내입니다. <b>초·중·고 학교 공동</b></p>
+      <p style="margin-top:8px"><b>KT컨소시엄 티지에스</b> — 23년·24년 상반기·26년 도입기기 서비스요청<br><b>LG헬로비전 컨소시엄 케이원</b> — 22년·24년 하반기·25년 도입기기 서비스요청</p>
+      <p style="margin-top:8px;color:#B33">· 티지에스 : <b>A</b> 시작 보관함<br>· 케이원 : <b>E / M / H</b> 시작 보관함</p>
+      <div class="lg-pop-ft"><label><input type="checkbox"> 오늘 하루 안보기</label><button data-lgclose>닫기</button></div>
+    </div>
+    <div class="lg-pop">
+      <h4>디벗관리시스템</h4>
+      <p style="color:#B33;font-weight:700;text-align:center;margin-bottom:8px">&lt;마스킹해제 패스워드 안내&gt;</p>
+      <p>디벗관리시스템은 개인정보보호로 인하여 일부 정보가 마스킹 처리되어 있습니다. 마스킹 해제 시 개인정보가 열람 가능하며, 해제 후 액셀을 다운로드 해야 마스킹해제된 정보가 다운로드 됩니다.</p>
+      <p style="margin-top:8px;text-align:center">전체의 학교가 동일한 패스워드 입니다.<br><b style="color:#B33">- 마스킹해제 패스워드 : 6647 -</b><br>변경을 원하시는 학교는 메일로 변경할 비번을 전달해 주시면 변경해 드리도록 하겠습니다.</p>
+      <p style="margin-top:8px;text-align:center" class="mono">kone_sen@k-one.co.kr</p>
+      <div class="lg-pop-ft"><label><input type="checkbox"> 오늘 하루 안보기</label><button data-lgclose>닫기</button></div>
+    </div>
+  </div>
   <div class="lg-card">
     <div class="lg-org"><span class="sym">SEN</span>서울특별시교육청</div>
     <h1>디벗 관리 시스템</h1>
@@ -241,7 +273,7 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
   </div>
 </div>
 
-<button id="fab" hidden>실습 미션 <b id="fabN">0</b>/4</button>
+<button id="fab" hidden>실습 미션 <b id="fabN">0</b>/5</button>
 <div id="mp" hidden>
   <h3>실습 미션</h3>
   <div class="cap">완료하면 실습 허브 스테이지에 실시간 반영됩니다.</div>
@@ -264,7 +296,8 @@ var MISSIONS=[
  {id:"d1",t:"수리 현황 조회",d:"AS 관리에서 「입고」(수리 중) 건을 눌러 진행 단계와 완료 예정을 확인하세요."},
  {id:"d2",t:"학생 정보 마스킹 해제",d:"[마스킹 해제] 버튼 → 비밀번호 입력. 힌트는 공지사항 「마스킹해제 패스워드 안내」."},
  {id:"d3",t:"명렬표 양식 내려받기",d:"명렬표 관리 → [명렬표 일괄 등록] → 모달 맨 아래 [양식 다운로드]."},
- {id:"d4",t:"명렬표 일괄 등록 실행",d:"같은 모달에서 업로드 영역을 눌러 연수용 예시 파일로 등록까지 실행하세요."}
+ {id:"d4",t:"명렬표 일괄 등록 실행",d:"같은 모달에서 업로드 영역을 눌러 연수용 예시 파일로 등록까지 실행하세요."},
+ {id:"d5",t:"원클릭 A/S 접수",d:"원클릭 접수 → [A/S 접수하기]. 수령 장소(무인보관함)와 명렬표 학생 검색까지 채워 접수하세요."}
 ];
 var toastTm;
 function toast(m,err){var t=$("#toast");t.textContent=m;t.className=err?"err on":"on";
@@ -398,10 +431,11 @@ function pgAS(){
   maskBtn()+"</div>"+
   '<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span class="chip c-done">TGS 이관 0</span>'+
   '<span style="color:var(--tx3);font-size:12px">행을 누르면 처리 단계·완료(예정)일이 열립니다 — “내 디벗 언제 와요?”는 이 화면으로 답합니다.</span></div>'+
-  '<div class="tbl-wrap"><table class="tb"><thead><tr><th>No.</th><th>요청일</th><th>접수번호</th><th>도입연도</th><th>A/S현황</th><th>AS 담당자</th><th>[지원청]학교명</th><th>학생이름</th><th>학년반번</th><th>OS</th><th>기기 시리얼</th><th>요청자</th><th>요청 장애</th></tr></thead><tbody>'+
+  '<div class="tbl-wrap"><table class="tb"><thead><tr><th>No.</th><th>요청일</th><th>접수번호</th><th>도입연도</th><th>A/S현황</th><th>AS 담당자</th><th>[지원청]학교명</th><th>학생이름</th><th>학년반번</th><th>OS</th><th>기기 시리얼</th><th>QR</th><th>요청자</th><th>요청 장애</th><th>조치 장애</th><th>명세서</th></tr></thead><tbody>'+
   AS.map(function(a,i){
-    return '<tr class="click" data-as="'+i+'"><td>'+a.no+"</td><td>"+a.req+"</td><td>"+a.acc+"</td><td>"+a.gen+"</td><td>"+chip(a.st)+"</td><td>"+esc(a.mgr)+"</td><td>[강동송파] 디벗중학교</td><td>"+esc(mask(a.stu))+"</td><td>"+(S.masked?"*/**/*":a.cls)+"</td><td>"+a.os+'</td><td class="mono">'+a.sn+"</td><td>"+esc(mask(a.who))+"</td><td>"+esc(a.trouble)+"</td></tr>";
-  }).join("")+"</tbody></table></div></div>";
+    return '<tr class="click" data-as="'+i+'"><td>'+a.no+"</td><td>"+a.req+"</td><td>"+a.acc+"</td><td>"+a.gen+"</td><td>"+chip(a.st)+"</td><td>"+esc(a.mgr)+"</td><td>[강동송파] 디벗중학교</td><td>"+esc(mask(a.stu))+"</td><td>"+(S.masked?"*/**/*":a.cls)+"</td><td>"+a.os+'</td><td class="mono">'+a.sn+'</td><td>▦</td><td>'+esc(mask(a.who))+"</td><td>"+esc(a.trouble)+"</td><td>-</td><td>"+(a.st==="완료"?"보기":"")+"</td></tr>";
+  }).join("")+"</tbody></table></div>"+
+  '<div style="display:flex;gap:8px;align-items:center;margin-top:10px"><button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button><button class="btn" data-nope="엑셀 다운로드(콜센터완료포함)">엑셀 다운로드(콜센터완료포함) ⭳</button><span style="color:var(--tx3);font-size:12.5px;margin-left:auto">전체 8건</span></div></div>';
 }
 
 function pgUnsettled(){
@@ -447,9 +481,34 @@ function pgManual(){
   "</tbody></table></div></div>";
 }
 function pgOneclick(){
+ var oc=S.oneclick||[];
  return filterCard('<span class="f-lb">검색어</span><input class="f-in" style="min-width:420px" placeholder="요청자명, 학생명">')+
-  '<div class="right-tools"><button class="btn pri" data-nope="A/S 접수 — 이 연수에서는 무인보관함·콜센터 흐름으로 안내합니다(강의 자료 수리 다섯 걸음)">A/S 접수하기</button></div>'+
-  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>접수번호</th><th>접수일시</th><th>요청자명</th><th>장애구분</th><th>장애유형</th><th>A/S현황</th><th>학생명</th></tr></thead></table></div>'+emptyBox()+"</div>";
+  '<div class="right-tools"><button class="btn pri" data-act="asnew">A/S 접수하기</button></div>'+
+  '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>접수번호</th><th>접수일시</th><th>요청자명</th><th>장애구분</th><th>장애유형</th><th>A/S현황</th><th>학생명</th></tr></thead><tbody>'+
+  oc.map(function(o){return "<tr><td>"+o.acc+"</td><td>"+o.at+"</td><td>"+esc(o.who)+"</td><td>"+o.g1+"</td><td>"+o.g2+"</td><td>"+chip("접수")+"</td><td>"+esc(mask(o.stu))+"</td></tr>";}).join("")+
+  "</tbody></table></div>"+(oc.length?"":emptyBox())+
+  '<div style="color:var(--tx3);font-size:12.5px;text-align:right;margin-top:8px">전체 '+oc.length+"건</div></div>";
+}
+function popOneclick(){
+ var stuOpts=ROSTER.map(function(r,i){return '<option value="'+i+'">'+esc(mask(r[4]))+" ("+mg(r[1])+"학년 "+mg(r[2])+"반)</option>";}).join("");
+ openModal('<div class="hd">원클릭 A/S 접수 <button class="x" data-close>✕</button></div>'+
+  '<div class="bd"><div class="note-r" style="margin-bottom:12px">*표시가 된 것은 필수 입력값입니다.</div>'+
+  '<b style="font-size:14px">요청자 정보</b>'+
+  '<div class="fld" style="margin-top:8px"><label>요청자 이름 <span class="req">*</span></label><input type="text" id="ocWho" placeholder="담당 선생님"></div>'+
+  '<div class="fld"><label>요청자 연락처 <span class="req">*</span></label><input type="text" id="ocTel" placeholder="02-0000-0000"></div>'+
+  '<b style="font-size:14px">수령 장소</b>'+
+  '<div class="fld" style="margin-top:8px"><label style="font-weight:400"><input type="radio" name="ocPlace" checked> <b>무인보관함 (학교)</b> — 학교 내 설치된 무인보관함에서 수령</label>'+
+  '<label style="font-weight:400;display:block;margin-top:4px"><input type="radio" name="ocPlace"> <b>직접수령</b> — 지정 장소에서 직접 수령</label></div>'+
+  '<div class="fld"><label>무인보관함 선택 <span class="req">*</span></label><select id="ocBox"><option>E-01 (케이원 — 본관 1층)</option><option>E-02 (케이원 — 본관 2층)</option><option>A-01 (티지에스 — 별관 1층)</option></select>'+
+  '<div class="note-b" style="margin-top:6px">보관함 이름이 <b>A로 시작하면 티지에스</b>(23·24상반기·26년 도입기기), <b>E·M·H로 시작하면 케이원</b>(22·24하반기·25년 도입기기)입니다.</div></div>'+
+  '<b style="font-size:14px">학생 정보</b>'+
+  '<div class="fld" style="margin-top:8px"><label>명렬표에서 학생 검색 <span class="req">*</span></label><select id="ocStu"><option value="">— 학생을 선택하세요 —</option>'+stuOpts+'</select>'+
+  '<div class="note-r" style="margin-top:5px">* 명렬표 검색을 통해 학생정보를 선택해주세요. (선택하면 학년·반·번호·기기가 자동으로 붙습니다)</div></div>'+
+  '<b style="font-size:14px">장애 증상</b>'+
+  '<div class="fld" style="margin-top:8px"><label>장애 구분 <span class="req">*</span></label><select id="ocG1"><option>하드웨어</option><option>소프트웨어</option><option>기타</option></select></div>'+
+  '<div class="fld"><label>장애 유형 <span class="req">*</span></label><select id="ocG2"><option>화면(액정)이상</option><option>전원안켜짐</option><option>블루스크린발생</option><option>앱실행불가</option><option>사용중기기멈춤</option><option>기타문의</option></select></div>'+
+  '<div class="fld"><label>상세내용</label><input type="text" id="ocMemo" placeholder="증상을 적어 주세요"></div></div>'+
+  '<div class="ft"><button class="btn" data-close>목록</button><button class="btn" data-nope="초기화">초기화</button><button class="btn pri" id="ocGo">접수하기</button></div>');
 }
 function pgPurchase(){
  return filterCard('<span class="f-lb">접수번호</span><input class="f-in"><span class="f-lb">신청자</span><input class="f-in"><span class="f-lb">상태</span><select class="f-in"><option>전체</option></select>')+
@@ -564,6 +623,7 @@ function runUpload(){
 /* ───────── 이벤트 ───────── */
 document.addEventListener("click",function(e){
  var n;
+ if(e.target.closest("[data-lgclose]")){e.target.closest(".lg-pop").style.display="none";return;}
  if(e.target.closest("#loginBtn")){
    $("#login").style.display="none";$("#app").classList.add("on");$("#fab").hidden=false;
    render();return;}
@@ -580,6 +640,19 @@ document.addEventListener("click",function(e){
  if(e.target.closest("[data-act='remask']")){S.masked=true;save();render();toast("마스킹을 다시 적용했습니다.");return;}
  if(e.target.closest("[data-act='search']")){render();toast("검색 조건이 적용되었습니다. (연수용 목록)");return;}
  if(e.target.closest("[data-act='batch']")){popBatch();return;}
+ if(e.target.closest("[data-act='asnew']")){popOneclick();return;}
+ if(e.target.closest("#ocGo")){
+   var who=($("#ocWho").value||"").trim(),tel=($("#ocTel").value||"").trim(),si=$("#ocStu").value;
+   if(!who||!tel){toast("요청자 이름과 연락처는 필수입니다.",1);return;}
+   if(si===""){toast("명렬표에서 학생을 선택해 주세요.",1);return;}
+   var st=ROSTER[+si];
+   S.oneclick=S.oneclick||[];
+   var seq=String(S.oneclick.length+31).padStart(4,"0");
+   S.oneclick.unshift({acc:"260904-"+seq,at:TODAY+" "+new Date().toTimeString().slice(0,5),
+     who:who,stu:st[4],g1:$("#ocG1").value,g2:$("#ocG2").value});
+   save();closeModal();S.page="oneclick";render();
+   done("d5");toast("A/S 접수가 완료되었습니다 — 접수번호 260904-"+seq+". 진행 상황은 [AS 관리]에서 확인하세요.");
+   return;}
  if(e.target.closest("#btnTmpl")){dlTemplate();return;}
  if(e.target.closest("#dropZone")){runUpload();return;}
  if(e.target.closest("#btnApply")){
