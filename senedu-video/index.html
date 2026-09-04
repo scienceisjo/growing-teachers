@@ -208,6 +208,10 @@
     padding:16px 20px;line-height:1.6;}
   .kit .aim span{font-size:12px;font-weight:550;letter-spacing:.06em;color:var(--ink-faint);
     display:block;margin:0 0 4px;}
+  .kitnote{margin:-8px 0 24px;font-size:14px;line-height:1.65;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:8px;padding:14px 18px;}
+  .kitnote b{display:block;font-size:12px;font-weight:550;letter-spacing:.06em;
+    color:var(--amber);margin:0 0 4px;}
   .kitdl{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 24px;}
   .kitdl-note{font-size:14px;color:var(--ink-faint);}
   .kitdl-none{margin:0 0 24px;font-size:14px;line-height:1.6;color:var(--ink-faint);
@@ -805,6 +809,7 @@
    재료 세트 — 연수장에서 나눠 주는 완성 재료
    ──────────────────────────────────────────────────────────────────────────
    선생님이 직접 만든 세트로 갈아 끼우실 때는 아래 KITS 배열만 고치시면 됩니다.
+     note               : (선택) 이 세트를 쓰실 때 알아 두실 것. 없으면 안 뜹니다.
      color              : 이 세트의 색. 브랜드의 다섯 갈래 중에서 고릅니다 —
                           var(--fill-purple) / --fill-pink / --fill-blue / --fill-orange / --fill-green
      firstImg / lastImg : img/ 폴더에 넣은 파일 이름. 비워 두면 이미지 자리 대신
@@ -844,12 +849,14 @@ const KITS = [
     title: '비비기 전에는 안 붙던 종이',
     firstImg: 'rod-first.png', lastImg: 'rod-last.png',
     aim: '왜 그냥 댈 때는 가만있다가, 비비고 나면 딸려 올라올까?',
+    note:
+      '문지르는 동작은 두 프레임 사이에서 일어납니다. 화면에는 담기지 않으니, 영상을 틀기 전에 교실에서 자를 털가죽이나 옷소매에 문지르는 장면을 직접 보여 주시면 연결이 자연스럽습니다.',
     firstPrompt:
-      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 흩어져 있고 그 옆에 회색 털가죽 천 조각이 접힌 채 놓여 있다. 손이 투명한 플라스틱 자를 종이 조각들 위 손바닥 한 뼘 높이에 수평으로 들고 있는데, 종이 조각들은 책상에 그대로 놓여 하나도 움직이지 않는다.',
+      '오후 햇빛이 드는 교실, 나무 책상 위. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 넓게 흩어져 있고, 손이 길고 투명한 막대를 종이 조각들 위 한 뼘 높이에 수평으로 들고 있다. 종이 조각들은 책상에 그대로 놓여 하나도 움직이지 않는다.',
     lastPrompt:
-      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 옆에는 회색 털가죽 천 조각이 그대로 놓여 있고, 손이 든 투명한 플라스틱 자 아랫면에 흰 종이 조각들이 다닥다닥 붙어 딸려 올라와 있으며 몇 조각은 공중에 매달려 있다.',
+      '오후 햇빛이 드는 교실, 나무 책상 위. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 손이 든 길고 투명한 막대 아랫면에 흰 종이 조각들이 다닥다닥 붙어 딸려 올라와 있고, 몇 조각은 책상과 막대 사이 공중에 떠 있다.',
     videoPrompt:
-      '플라스틱 자를 종이 위에 댔을 때는 종이가 가만히 있다가, 손이 자를 털가죽 천에 여러 번 문지른 뒤 다시 가져가자 종이 조각들이 하나씩 떠올라 자 아랫면에 달라붙는다, 오후 햇빛이 비스듬히 드는 조용한 교실 책상, 옆에서 아주 느리게 다가가는 줌인, 시네마틱'
+      '종이 위에 든 투명한 막대 아래로 흰 종이 조각들이 하나씩 떠올라 다닥다닥 달라붙는다, 오후 햇빛이 비스듬히 드는 조용한 교실 나무 책상, 옆에서 아주 느리게 다가가는 줌인, 시네마틱'
   }
 ];
 
@@ -1026,6 +1033,7 @@ function renderKits(){
       <div class="kithead"><span class="unit">${esc(k.unit)}</span></div>
       <h3>${esc(k.title)}</h3>
       <p class="aim"><span>이 영상으로 받고 싶은 질문</span>${esc(k.aim)}</p>
+      ${k.note ? `<p class="kitnote"><b>쓰실 때 알아 두실 것</b>${esc(k.note)}</p>` : ''}
       ${(k.firstImg && k.lastImg) ? `
       <p class="kitdl">
         <button class="btn ghost" data-dl-kit="${i}">
