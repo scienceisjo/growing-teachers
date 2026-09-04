@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>학생이 들어오는 문부터 나가는 문까지 — 해누리중학교 조승재</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* =====================================================================
+   수업 도구 생태계 발표 덱
+   디자인 언어: getdesign.md — Notion DESIGN.md (MIT, VoltAgent/awesome-design-md)
+   제작: 해누리중학교 조승재
+   ===================================================================== */
+
+:root{
+  --primary:#5645d4; --primary-pressed:#4534b3; --primary-deep:#3a2a99;
+  --on-primary:#ffffff;
+  --brand-navy:#0a1530; --brand-navy-deep:#070f24; --brand-navy-mid:#1a2a52;
+  --link-blue:#0075de;
+  --brand-orange:#dd5b00; --brand-orange-deep:#793400;
+  --brand-pink:#ff64c8; --brand-pink-deep:#a02e6d;
+  --brand-purple:#7b3ff2; --brand-purple-300:#d6b6f6; --brand-purple-800:#391c57;
+  --brand-teal:#2a9d99; --brand-green:#1aae39; --brand-yellow:#f5d75e; --brand-brown:#523410;
+
+  --tint-peach:#ffe8d4; --tint-rose:#fde0ec; --tint-mint:#d9f3e1;
+  --tint-lavender:#e6e0f5; --tint-sky:#dcecfa; --tint-yellow:#fef7d6;
+  --tint-yellow-bold:#f9e79f; --tint-cream:#f8f5e8; --tint-gray:#f0eeec;
+
+  --canvas:#ffffff; --surface:#f6f5f4; --surface-soft:#fafaf9;
+  --hairline:#e5e3df; --hairline-soft:#ede9e4; --hairline-strong:#c8c4be;
+  --ink:#1a1a1a; --charcoal:#37352f; --slate:#5d5b54; --steel:#787671;
+  --stone:#a4a097; --muted:#bbb8b1;
+  --on-dark:#ffffff; --on-dark-muted:#a4a097;
+  --error:#e03131;
+
+  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:20px; --r-3xl:24px; --r-full:9999px;
+
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --font-num: "Pretendard Variable", Pretendard, "Segoe UI", system-ui, sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font);
+  background:var(--brand-navy-deep);
+  color:var(--charcoal);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  display:flex;align-items:center;justify-content:center;
+}
+
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{
+  width:1280px;height:720px;flex:none;
+  transform-origin:center center;position:relative;
+  background:var(--canvas);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.45);
+}
+
+.slide{
+  position:absolute;inset:0;
+  padding:66px 72px 76px;
+  display:none;flex-direction:column;
+  background:var(--canvas);
+}
+.slide.on{display:flex;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── 타이포 ── */
+.eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.12em;color:var(--steel);
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.eyebrow .dot{width:8px;height:8px;border-radius:var(--r-full);background:var(--primary);flex:none}
+.eyebrow .live{
+  background:var(--error);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;
+  padding:3px 9px;border-radius:var(--r-full);
+}
+h1.title{font-size:46px;font-weight:700;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+h1.title .accent{color:var(--primary)}
+h1.title.sm{font-size:39px}
+p.lede{font-size:20px;line-height:1.6;color:var(--slate);margin-top:14px;max-width:1000px}
+.small{font-size:15px;line-height:1.55;color:var(--steel)}
+.small b{color:var(--charcoal);font-weight:600}
+
+/* ── 표지 ── */
+.cover{padding:0;background:var(--brand-navy);justify-content:center}
+.cover-inner{position:relative;z-index:2;padding:0 84px}
+.cover h1{font-size:68px;font-weight:700;line-height:1.14;letter-spacing:-.035em;color:var(--on-dark)}
+.cover h1 .line2{display:block;color:var(--brand-purple-300)}
+.cover .sub{font-size:23px;font-weight:500;color:#cfd4e2;margin-top:26px;letter-spacing:-.01em}
+.cover .who{margin-top:42px;display:flex;align-items:center;gap:14px;color:var(--on-dark);font-size:19px;font-weight:600}
+.cover .who .badge{background:var(--primary);color:#fff;padding:9px 18px;border-radius:var(--r-full);font-size:15px;font-weight:600}
+.cover .who .sep{width:1px;height:20px;background:rgba(255,255,255,.28)}
+.cover .who .role{color:var(--on-dark-muted);font-weight:500;font-size:17px}
+.dots{position:absolute;inset:0;z-index:1;pointer-events:none}
+.dots span{position:absolute;border-radius:var(--r-full);opacity:.9}
+
+/* ── 어두운 강조 슬라이드 ── */
+.dark-slide{background:var(--brand-navy)}
+.dark-slide .eyebrow{color:#9aa3ba}
+.dark-slide .eyebrow .dot{background:var(--brand-purple-300)}
+.dark-slide h1.title{color:var(--on-dark)}
+.dark-slide h1.title .accent{color:var(--brand-purple-300)}
+.dark-slide p.lede{color:#c8cddb}
+.dark-slide .small{color:#98a0b5}
+.dark-slide .small b{color:#dfe3ee}
+.dark-slide .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.dark-slide .card h3{color:#fff}
+.dark-slide .card p{color:#c3cadb}
+.dark-slide .card .tag{background:rgba(255,255,255,.14);color:#e2e6f0}
+.dark-slide .feat li{color:#dbe0ed}
+.dark-slide .feat li b{color:#fff}
+
+/* ── 카드 ── */
+.grid{display:grid;gap:18px;flex:1 1 auto;align-content:center}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{
+  background:var(--surface-soft);border:1px solid var(--hairline);
+  border-radius:var(--r-xl);padding:24px 24px 22px;
+  display:flex;flex-direction:column;gap:9px;
+}
+.card .ic{font-size:26px;line-height:1}
+.card h3{font-size:20px;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
+.card p{font-size:15.5px;line-height:1.55;color:var(--slate)}
+.card .tag{
+  align-self:flex-start;margin-top:2px;font-size:12px;font-weight:600;
+  padding:4px 10px;border-radius:var(--r-full);background:var(--tint-gray);color:var(--charcoal);
+}
+.card.tint-peach{background:var(--tint-peach);border-color:#f7d5b8}
+.card.tint-rose{background:var(--tint-rose);border-color:#f5c9dd}
+.card.tint-mint{background:var(--tint-mint);border-color:#bfe6cd}
+.card.tint-lav{background:var(--tint-lavender);border-color:#cfc5ea}
+.card.tint-sky{background:var(--tint-sky);border-color:#c3ddf2}
+.card.tint-yellow{background:var(--tint-yellow);border-color:#f2e4a8}
+.card.tint-cream{background:var(--tint-cream);border-color:#eae4cf}
+
+/* ── 좌우 분할 ── */
+.split{display:grid;grid-template-columns:1.08fr .92fr;gap:34px;margin-top:24px;flex:1;min-height:0}
+.feat{display:flex;flex-direction:column;gap:14px;padding-top:4px}
+.feat li{list-style:none;display:flex;gap:12px;align-items:flex-start;font-size:17.5px;line-height:1.5;color:var(--charcoal)}
+.feat li b{color:var(--ink);font-weight:700}
+.feat li .k{
+  flex:none;width:24px;height:24px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.scene{
+  border-radius:var(--r-xl);padding:26px;border:1px solid transparent;
+  display:flex;flex-direction:column;gap:12px;justify-content:center;
+}
+.scene .lab{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--brand-orange-deep)}
+.scene .quote{font-size:21px;line-height:1.5;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
+.scene .beat{font-size:16px;line-height:1.55;color:var(--charcoal);opacity:.86}
+.scene .when{
+  margin-top:4px;align-self:flex-start;font-size:13px;font-weight:700;
+  padding:5px 12px;border-radius:var(--r-full);background:rgba(255,255,255,.72);color:var(--charcoal);
+}
+
+/* ── 링크 pill ── */
+.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13.5px;font-weight:600;text-decoration:none;
+  padding:8px 15px;border-radius:var(--r-full);
+  background:var(--primary);color:var(--on-primary);transition:background .15s;
+}
+.pill:hover{background:var(--primary-pressed)}
+.pill.ghost{background:var(--canvas);color:var(--charcoal);border:1px solid var(--hairline-strong)}
+.pill.ghost:hover{background:var(--surface)}
+.pill.big{font-size:16px;padding:13px 24px}
+.pill .u{font-family:var(--font-num);font-weight:500;opacity:.82;font-size:12.5px}
+.dark-slide .pill.ghost{background:rgba(255,255,255,.08);color:#e6e9f2;border-color:rgba(255,255,255,.24)}
+
+/* ── 학생 인용 ── */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;flex:1 1 auto;align-content:center}
+.q{
+  background:var(--surface-soft);border:1px solid var(--hairline);
+  border-radius:var(--r-xl);padding:26px 24px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.q .mark{font-family:Georgia,serif;font-size:40px;line-height:.7;color:var(--brand-purple-300)}
+.q .txt{font-size:18px;line-height:1.55;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
+.q .by{margin-top:auto;font-size:13px;color:var(--steel);font-weight:500}
+.q.ph{
+  background:repeating-linear-gradient(135deg,#fafaf9,#fafaf9 10px,#f2f1ef 10px,#f2f1ef 20px);
+  border:2px dashed var(--hairline-strong);
+}
+.q.ph .txt{color:var(--steel);font-weight:500;font-size:16px}
+
+/* ── 여정 지도 ── */
+.journey{display:flex;align-items:stretch;margin:auto 0;padding:8px 0}
+.stop{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 6px}
+.stop .bub{
+  width:72px;height:72px;border-radius:var(--r-full);
+  display:flex;align-items:center;justify-content:center;font-size:30px;
+  border:1px solid var(--hairline);background:var(--surface);position:relative;z-index:2;
+}
+.stop .nm{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;text-align:center}
+.stop .de{font-size:13px;line-height:1.45;color:var(--steel);text-align:center}
+.stop::after{content:"";position:absolute;top:36px;left:50%;width:100%;height:2px;background:var(--hairline);z-index:1}
+.stop:last-child::after{display:none}
+
+/* ── 세 가지 이유 (마무리) ── */
+.reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1 1 auto;align-content:center}
+.reason{
+  border-radius:var(--r-xl);padding:30px 26px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  display:flex;flex-direction:column;gap:10px;
+}
+.reason.key{background:var(--primary);border-color:var(--primary)}
+.reason .no{font-family:var(--font-num);font-size:14px;font-weight:700;color:var(--brand-purple-300);letter-spacing:.08em}
+.reason.key .no{color:#dcd6f7}
+.reason h3{font-size:26px;font-weight:700;letter-spacing:-.02em;color:#fff}
+.reason p{font-size:15.5px;line-height:1.55;color:#c3cadb}
+.reason.key p{color:#e4e0fa}
+
+/* ── 마무리 ── */
+.closing{background:var(--brand-navy);justify-content:center;padding:0 84px}
+.closing h1{font-size:48px;font-weight:700;line-height:1.22;letter-spacing:-.03em;color:var(--on-dark)}
+.closing h1 em{font-style:normal;color:var(--brand-purple-300)}
+.closing p{font-size:19px;line-height:1.65;color:#c8cddb;margin-top:20px;max-width:860px}
+
+#app-credit{
+  margin-top:30px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16);
+  font-size:13px;line-height:1.6;color:var(--on-dark-muted);
+}
+#app-credit b{color:#e5e7ee;font-weight:600}
+
+/* ── 크롬 ── */
+#bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--hairline-soft);z-index:20}
+#bar i{display:block;height:100%;width:0;background:var(--primary);transition:width .3s ease}
+#chrome{
+  position:absolute;left:0;right:0;bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 30px;z-index:21;pointer-events:none;
+}
+#chrome .left{font-size:12.5px;font-weight:600;color:var(--stone);letter-spacing:.02em}
+#chrome .right{display:flex;align-items:center;gap:8px;pointer-events:auto}
+.nb{
+  width:32px;height:32px;border-radius:var(--r-full);
+  border:1px solid var(--hairline);background:var(--canvas);color:var(--charcoal);
+  font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;
+}
+.nb:hover{background:var(--surface)}
+#num{font-family:var(--font-num);font-size:12.5px;font-weight:600;color:var(--steel);padding:0 6px}
+#stage.dark #chrome .left,#stage.dark #num{color:var(--on-dark-muted)}
+#stage.dark .nb{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff}
+#stage.dark .nb:hover{background:rgba(255,255,255,.16)}
+#stage.dark #bar{background:rgba(255,255,255,.14)}
+
+/* ── 타이머 ── */
+#timer{
+  position:absolute;top:20px;right:24px;z-index:22;
+  font-family:var(--font-num);font-size:14px;font-weight:700;
+  padding:7px 14px;border-radius:var(--r-full);
+  background:var(--surface);color:var(--slate);border:1px solid var(--hairline);
+  cursor:pointer;user-select:none;
+}
+#timer.run{background:var(--tint-mint);border-color:#bfe6cd;color:#146b2b}
+#timer.warn{background:var(--tint-yellow-bold);border-color:#efd98a;color:var(--brand-orange-deep)}
+#timer.over{background:#fde2e2;border-color:#f5bcbc;color:var(--error)}
+#stage.dark #timer{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#d7dbe6}
+
+/* ── 발표자 대본 ── */
+#notes{
+  position:absolute;left:0;right:0;bottom:0;z-index:30;
+  background:var(--brand-navy-deep);color:#dfe3ee;
+  padding:16px 210px 18px 30px;
+  font-size:15px;line-height:1.55;border-top:2px solid var(--primary);display:none;
+}
+#notes.on{display:block}
+#notes b{color:var(--brand-purple-300);font-weight:700}
+#stage.notes #chrome{z-index:31}
+#stage.notes #chrome .left{display:none}
+#stage.notes #num{color:#c3c8d6}
+#stage.notes .nb{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24);color:#fff}
+#stage.notes .nb:hover{background:rgba(255,255,255,.2)}
+
+/* ── 목차 ── */
+#overview{position:absolute;inset:0;z-index:40;background:rgba(10,21,48,.97);display:none;padding:36px 40px;overflow:auto}
+#overview.on{display:block}
+#overview h4{color:#fff;font-size:17px;font-weight:700;margin-bottom:18px;letter-spacing:-.01em}
+#ovGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ov{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--r-lg);padding:14px 15px;cursor:pointer;text-align:left;
+  color:#e6e9f2;font-family:var(--font);transition:background .15s;
+}
+.ov:hover{background:rgba(255,255,255,.16)}
+.ov .i{font-family:var(--font-num);font-size:11px;font-weight:700;color:var(--brand-purple-300)}
+.ov .t{font-size:14px;font-weight:600;margin-top:6px;line-height:1.35;letter-spacing:-.01em}
+
+/* ── 도움말 ── */
+#help{
+  position:absolute;left:24px;top:18px;z-index:22;
+  font-size:12px;color:var(--stone);
+  background:var(--surface);border:1px solid var(--hairline);
+  padding:6px 12px;border-radius:var(--r-full);transition:opacity .5s ease;
+}
+#help.hide{opacity:0;pointer-events:none}
+#stage.dark #help{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#c3c8d6}
+kbd{
+  font-family:var(--font-num);font-size:11px;font-weight:700;
+  background:var(--canvas);border:1px solid var(--hairline-strong);
+  border-bottom-width:2px;border-radius:var(--r-xs);padding:1px 5px;color:var(--charcoal);
+}
+#stage.dark kbd{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+  <!-- ══════════ 1 · 표지 ══════════ -->
+  <section class="slide cover on" data-dark data-name="표지"
+    data-note="인사. <b>15분</b> 동안 제 수업 한 시간을 학생 동선대로 따라가며, 제가 만든 것들과 그것이 교실에서 어떻게 쓰이는지 말씀드리겠습니다.">
+    <div class="dots">
+      <span style="width:22px;height:22px;background:var(--brand-yellow);left:8.5%;top:15%"></span>
+      <span style="width:14px;height:14px;background:var(--brand-pink);left:5.5%;top:84%"></span>
+      <span style="width:30px;height:30px;background:var(--brand-purple);right:9%;top:19%"></span>
+      <span style="width:16px;height:16px;background:var(--brand-teal);right:18%;top:80%"></span>
+      <span style="width:11px;height:11px;background:var(--brand-orange);right:5%;top:52%"></span>
+      <span style="width:13px;height:13px;background:var(--brand-green);left:3.2%;top:12%"></span>
+    </div>
+    <div class="cover-inner">
+      <h1>학생이 들어오는 문부터<span class="line2">나가는 문까지</span></h1>
+      <p class="sub">수업을 여는 도구와 닫는 도구를 하나의 생태계로</p>
+      <div class="who">
+        <span class="badge">해누리중학교</span>
+        <span>조승재</span>
+        <span class="sep"></span>
+        <span class="role">과학 · 화학 전공</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2 · 저는 이런 교사입니다 ══════════ -->
+  <section class="slide" data-name="저는 이런 교사입니다"
+    data-note="<b>[슬라이드에 없는 이야기 — 여기서 말로 하기]</b> 저를 이 자리에 추천해 주신 <b>송세호 선생님</b>께 먼저 감사드립니다. 가까운 학교에 계셔서 도움을 정말 많이 받고 있고, 특히 선생님이 올려 주신 자료와 유튜브 실험 영상이 없었으면 정말 많이 힘들었을 겁니다. 제가 <b>김정식 선생님만큼이나 존경하는 분</b>입니다. — 그 다음 제 소개는 짧게.">
+    <div class="eyebrow"><span class="dot"></span>먼저, 제 소개</div>
+    <h1 class="title">2025년 3월에 발령받아,<br><span class="accent">교실에서 행복하게 수업하고 있습니다.</span></h1>
+    <div class="grid g3">
+      <div class="card tint-sky">
+        <div class="ic">🏫</div>
+        <h3>해누리중학교 조승재</h3>
+        <p>2025년 3월 발령. 중학교 과학을 맡고 있습니다.</p>
+      </div>
+      <div class="card tint-mint">
+        <div class="ic">🧪</div>
+        <h3>화학 전공</h3>
+        <p>전공은 화학이지만, 교실에서는 중학교 과학 전 영역을 가르칩니다.</p>
+      </div>
+      <div class="card tint-peach">
+        <div class="ic">☺️</div>
+        <h3>학생들과 함께</h3>
+        <p>수업에서 학생들과 함께 지내는 시간이 가장 즐겁습니다.</p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:auto">이 자리를 추천해 주신 분께 드리는 감사 인사는 말씀으로 대신하겠습니다.</p>
+  </section>
+
+  <!-- ══════════ 3 · 학생들의 말 ══════════ -->
+  <!-- ★★ 여기에 학생 설문 응답 원문을 그대로 붙여넣으세요.
+       .q.ph 의 ph 클래스를 지우고, .txt 안의 문구를 학생 원문으로 교체하면 됩니다. ★★ -->
+  <section class="slide" data-name="학생들이 해준 말"
+    data-note="제가 생각하는 저보다, <b>학생들이 제 수업을 듣고 해준 말</b>로 저를 소개하고 싶었습니다. 설문 응답을 <b>토씨 하나 바꾸지 않고</b> 그대로 가져왔습니다. — 읽고 나서: “교사는 정말 이런 걸로 사는 것 같습니다. 이런 학생들 덕분에 우리가 살 수 있는 것 같습니다.”">
+    <div class="eyebrow"><span class="dot"></span>제 소개 대신</div>
+    <h1 class="title sm">제가 말하는 저보다,<br><span class="accent">학생들이 해준 말로 소개하겠습니다.</span></h1>
+    <div class="quotes" style="margin-top:20px">
+      <div class="q ph">
+        <div class="mark">“</div>
+        <div class="txt">학생 설문 응답 원문 ①<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
+        <div class="by">— 수업 설문에서</div>
+      </div>
+      <div class="q ph">
+        <div class="mark">“</div>
+        <div class="txt">학생 설문 응답 원문 ②<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
+        <div class="by">— 수업 설문에서</div>
+      </div>
+      <div class="q ph">
+        <div class="mark">“</div>
+        <div class="txt">학생 설문 응답 원문 ③<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
+        <div class="by">— 수업 설문에서</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:20px"><b>교사는 정말 이런 걸로 사는 것 같습니다.</b> 이런 학생들 덕분에 우리가 버틸 수 있는 것 같습니다.</p>
+  </section>
+
+  <!-- ══════════ 4 · 먼저 밝힐 것 (여건) ══════════ -->
+  <section class="slide dark-slide" data-dark data-name="먼저 밝힐 것 — 제 여건"
+    data-note="여기는 <b>솔직하게</b>. 학교 부서에서 ‘신나는 AI 교실’, ‘질문하는 교실’ 사업으로 구독료를 지원받았습니다. 매달 220달러를 제가 다 내는 건 아니고, Claude 가장 높은 요금제를 <b>선생님 세 분과 함께</b> 나눠 쓰고 있습니다. 그래서 상상했던 걸 거의 다 만들어 볼 수 있었습니다. — 핵심: <b>아이디어는 여기 계신 선생님들이 저보다 훨씬 좋으실 겁니다.</b> 저는 토큰이 많았고 시간이 있었을 뿐입니다.">
+    <div class="eyebrow"><span class="dot"></span>사례를 나누기 전에, 먼저 밝힐 것</div>
+    <h1 class="title">제가 특별해서가 아니라,<br><span class="accent">여건이 있었기 때문입니다.</span></h1>
+    <div class="grid g3" style="margin-top:8px">
+      <div class="card">
+        <div class="ic">🏢</div>
+        <h3>부서 사업 지원</h3>
+        <p>‘신나는 AI 교실’, ‘질문하는 교실’ 같은 사업으로 구독료를 지원받았습니다.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🤝</div>
+        <h3>네 명이 나눠 쓰는 계정</h3>
+        <p>가장 높은 요금제를 혼자 쓰는 게 아니라, 사업하시는 선생님 세 분과 함께 나눠 씁니다.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⏳</div>
+        <h3>쓸 수 있는 양이 많았습니다</h3>
+        <p>그래서 상상한 것을 대부분 실제로 만들어 볼 수 있었습니다.</p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:22px"><b>아이디어는 여기 계신 선생님들이 저보다 훨씬 좋으실 겁니다.</b> 저는 토큰이 많았고, 시간이 있었습니다. 그래서 사례를 나누는 게 부끄럽지만, 이런 자리가 주어졌으니 말씀드리겠습니다.</p>
+  </section>
+
+  <!-- ══════════ 5 · 오늘 이야기 ══════════ -->
+  <section class="slide" data-name="오늘 이야기 — 하나의 생태계"
+    data-note="오늘 보여드릴 건 도구 목록이 아니라 <b>흐름</b>입니다. 질문나무에서 시작해 도장판으로 이어지고, 그게 세특 근거까지 갑니다. 앞의 세 개(질문나무·도장판·수업 페이지)를 자세히, 나머지는 마지막에 모아서 보여드리겠습니다.">
+    <div class="eyebrow"><span class="dot"></span>오늘 이야기</div>
+    <h1 class="title">도구를 나열하지 않고,<br><span class="accent">하나로 이어지는 흐름을 보여드립니다.</span></h1>
+    <div class="journey">
+      <div class="stop"><div class="bub" style="background:var(--tint-sky);border-color:#c3ddf2">🚪</div><div class="nm">들어오기</div><div class="de">주소 하나로<br>수업에 접속</div></div>
+      <div class="stop"><div class="bub" style="background:var(--tint-mint);border-color:#bfe6cd">🌱</div><div class="nm">질문나무</div><div class="de">질문 유발 자료 →<br>학생 질문</div></div>
+      <div class="stop"><div class="bub" style="background:var(--tint-yellow);border-color:#f2e4a8">🏅</div><div class="nm">도장</div><div class="de">좋은 질문에<br>도장 찍기</div></div>
+      <div class="stop"><div class="bub" style="background:var(--tint-rose);border-color:#f5c9dd">📋</div><div class="nm">도장판</div><div class="de">차시별<br>관찰 기록</div></div>
+      <div class="stop"><div class="bub" style="background:var(--tint-lavender);border-color:#cfc5ea">🔬</div><div class="nm">수업 페이지</div><div class="de">그 차시<br>웹앱</div></div>
+      <div class="stop"><div class="bub" style="background:var(--tint-cream);border-color:#eae4cf">📝</div><div class="nm">세특 근거</div><div class="de">학기 말에<br>그대로 쓰임</div></div>
+    </div>
+    <p class="small">따로 만든 도구들이 아니라, <b>같은 문·같은 계정·같은 학생</b>을 가리키는 하나의 생태계입니다.</p>
+  </section>
+
+  <!-- ══════════ 6 · 질문나무 ══════════ -->
+  <section class="slide" data-name="① 질문나무 [시연]"
+    data-note="<b>여기서 사이트를 직접 엽니다.</b> 보여줄 순서 — ① 제가 올린 질문 유발 자료 ② 학생들이 달아 놓은 질문 목록 ③ 좋은 질문에 도장을 찍는 화면. 화면 전환 시간을 감안해 <b>3분</b> 정도.">
+    <div class="eyebrow"><span class="dot"></span>① 수업을 여는 도구<span class="live">직접 시연</span></div>
+    <h1 class="title">해누리 질문 과수원</h1>
+    <div class="split">
+      <div>
+        <p class="lede">제가 질문 유발 자료를 올리면, 학생들이 그 아래에 질문을 답니다. 수업의 도입이 여기서 시작합니다.</p>
+        <ul class="feat" style="margin-top:18px">
+          <li><span class="k">1</span><span>교사가 <b>질문 유발 자료</b>를 차시에 맞춰 올립니다</span></li>
+          <li><span class="k">2</span><span>학생이 그 자료를 보고 <b>자기 질문</b>을 답니다</span></li>
+          <li><span class="k">3</span><span>질문이 쌓이면 <b>나무가 자라고 열매가 열립니다</b></span></li>
+          <li><span class="k">4</span><span>좋은 질문에는 제가 <b>도장을 찍습니다</b> → 다음 장</span></li>
+        </ul>
+        <div class="links">
+          <a class="pill big" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문 과수원 열기 <span class="u">questionuri</span></a>
+        </div>
+      </div>
+      <div class="scene" style="background:var(--tint-mint);border-color:#bfe6cd">
+        <div class="lab">지금 화면에서 보여드릴 것</div>
+        <div class="quote">① 제가 올린 질문 유발 자료<br>② 학생들이 달아 놓은 질문<br>③ 도장을 찍는 화면</div>
+        <div class="beat">손 드는 학생 몇 명만 말하던 도입이, 반 전체가 한 줄씩 쓰는 시간이 됩니다.</div>
+        <div class="when">시연 3분</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 7 · 질문 → 도장 연결 ══════════ -->
+  <section class="slide" data-name="② 질문이 도장으로 이어집니다"
+    data-note="여기가 <b>‘생태계’라는 말을 쓰는 이유</b>입니다. 질문나무와 도장판이 따로 있는 앱이 아니라, 제가 질문에 도장을 찍으면 <b>그 학생의 도장판에 바로 쌓입니다</b>. 로그인도 한 번뿐입니다.">
+    <div class="eyebrow"><span class="dot"></span>② 이어지는 지점</div>
+    <h1 class="title">좋은 질문에 도장을 찍으면,<br><span class="accent">그 학생의 도장판에 쌓입니다.</span></h1>
+    <div class="grid g3">
+      <div class="card tint-mint">
+        <div class="ic">🌱</div>
+        <h3>질문나무에서</h3>
+        <p>학생이 올린 질문 중 좋은 것에 제가 도장을 찍습니다.</p>
+        <span class="tag">교사가 누르는 곳</span>
+      </div>
+      <div class="card tint-yellow">
+        <div class="ic">➡️</div>
+        <h3>같은 데이터베이스</h3>
+        <p>두 도구가 같은 계정·같은 학생을 가리킵니다. 옮겨 적을 일이 없습니다.</p>
+        <span class="tag">따로 만든 앱이 아님</span>
+      </div>
+      <div class="card tint-rose">
+        <div class="ic">🏅</div>
+        <h3>도장판에 도착</h3>
+        <p>학생 화면에는 도장이 늘고 캐릭터가 자랍니다.</p>
+        <span class="tag">학생이 보는 곳</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 8 · 도장판 → 세특 ══════════ -->
+  <section class="slide" data-name="③ 칭찬 도장판 → 세특 근거"
+    data-note="<b>오늘 가장 하고 싶은 이야기</b>입니다. 골든벨을 하면서도 도장을 주고, 도장판에 <b>차시를 미리 넣어 둡니다</b>. 그날 <b>쉬는 시간에</b> 그 차시에서 어떤 학생이 무엇을 잘했는지 적어 두면, 학기 말에 그게 그대로 <b>세특 근거</b>가 됩니다. (행발이 아니라 세특입니다.)">
+    <div class="eyebrow"><span class="dot"></span>③ 수업을 닫는 도구</div>
+    <h1 class="title">칭찬 도장판 —<br><span class="accent">겉은 도장판, 속은 관찰 기록부</span></h1>
+    <div class="split">
+      <div>
+        <ul class="feat" style="margin-top:6px">
+          <li><span class="k">1</span><span>도장판에 <b>차시를 미리 넣어 둡니다</b></span></li>
+          <li><span class="k">2</span><span>그날 <b>쉬는 시간에</b>, 그 차시에서 어떤 학생이 무엇을 잘했는지 적습니다</span></li>
+          <li><span class="k">3</span><span>골든벨을 하면서도 <b>도장이 함께 나갑니다</b></span></li>
+          <li><span class="k">4</span><span>학기 말, 그 기록이 그대로 <b>세특의 근거</b>가 됩니다</span></li>
+        </ul>
+        <div class="links">
+          <a class="pill big" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">도장판 열기 <span class="u">stamp-board</span></a>
+        </div>
+      </div>
+      <div class="scene" style="background:var(--tint-rose);border-color:#f5c9dd">
+        <div class="lab">제가 얻은 것</div>
+        <div class="quote">“기록해야지” 하고<br>따로 앉는 시간이 없어졌습니다.</div>
+        <div class="beat">학생에게는 캐릭터가 자라는 보상이고, 저에게는 그날 그 학생을 봤다는 증거입니다. 같은 화면, 다른 목적입니다.</div>
+        <div class="when">쉬는 시간 몇 분</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 9 · 수업 페이지 ══════════ -->
+  <section class="slide" data-name="④ 수업 페이지 — 만드는 방식"
+    data-note="만드는 방법은 단순합니다. <b>메모장을 켜고, 제가 수업에서 설명하는 방식 그대로 쭉 씁니다.</b> 그 다음 Claude에게 그대로 구현해 달라고 합니다. — 다만 이 방식은 <b>토큰이 많아야 가능한</b> 방법입니다. 그리고 솔직히 말씀드리면 <b>지금도 계속 고치고 있습니다.</b> 수업 직전까지 수정됩니다. 그래서 섣불리 공유하기가 조심스럽습니다.">
+    <div class="eyebrow"><span class="dot"></span>④ 차시마다 여는 수업 페이지</div>
+    <h1 class="title">만드는 방식은 하나입니다</h1>
+    <div class="split">
+      <div>
+        <ul class="feat" style="margin-top:6px">
+          <li><span class="k">1</span><span>메모장을 켜고, <b>제가 수업에서 설명하는 방식 그대로</b> 쭉 씁니다</span></li>
+          <li><span class="k">2</span><span>그 글을 Claude에게 주고 <b>그대로 구현해 달라</b>고 합니다</span></li>
+          <li><span class="k">3</span><span>이 방식은 <b>토큰이 많아야 가능</b>합니다</span></li>
+        </ul>
+        <div class="links">
+          <a class="pill ghost" href="https://scienceisjo.github.io/scienceclass/" target="_blank" rel="noopener">학생 입구</a>
+          <a class="pill ghost" href="https://scienceisjo.github.io/electricity/" target="_blank" rel="noopener">전기와 자기</a>
+          <a class="pill ghost" href="https://scienceisjo.github.io/starandspace/" target="_blank" rel="noopener">별과 우주</a>
+          <a class="pill ghost" href="https://scienceisjo.github.io/gas-properties/" target="_blank" rel="noopener">기체의 성질</a>
+        </div>
+      </div>
+      <div class="scene" style="background:var(--tint-cream);border-color:#eae4cf">
+        <div class="lab">솔직하게 말씀드리면</div>
+        <div class="quote">지금도 계속 고치고 있습니다.</div>
+        <div class="beat">만들어 둔 것들이 수업 직전까지 수정됩니다. 그래서 아직 섣불리 공유해 드리기가 조심스럽습니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 10 · 아이들이 하는 말 ══════════ -->
+  <section class="slide" data-name="학생들의 반응 ①"
+    data-note="여기는 가볍고 즐겁게. 아이들이 실제로 하는 말들입니다. — <b>“나무가 자랐어!”, “도토리로 내 나무 꾸몄어!”, “나 부화했어!”, “나 진화했어!”</b> 이런 걸 하면서 <b>수업 태도가 정말 많이 좋아졌습니다.</b>">
+    <div class="eyebrow"><span class="dot"></span>학생들의 반응 ①</div>
+    <h1 class="title">아이들이 실제로 하는 말</h1>
+    <div class="quotes" style="grid-template-columns:repeat(2,1fr);margin-top:18px">
+      <div class="q" style="background:var(--tint-mint);border-color:#bfe6cd">
+        <div class="mark">“</div>
+        <div class="txt">나무가 자랐어!<br>도토리로 내 나무 꾸몄어!</div>
+        <div class="by">— 질문나무에서</div>
+      </div>
+      <div class="q" style="background:var(--tint-rose);border-color:#f5c9dd">
+        <div class="mark">“</div>
+        <div class="txt">나 부화했어!<br>나 진화했어!</div>
+        <div class="by">— 칭찬 도장판에서</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:20px">이런 말을 하면서 <b>수업 태도가 정말 많이 좋아졌습니다.</b></p>
+  </section>
+
+  <!-- ══════════ 11 · 제가 느낀 변화 ══════════ -->
+  <section class="slide" data-name="학생들의 반응 ② — 눈빛"
+    data-note="<b>여기서 속도를 늦추세요.</b> 두 가지입니다. ① “선생님 어디 들어가요?”가 사라졌습니다 — 페이지 하나에 모든 자료가 연결되니까. ② 질문나무에 올라온 질문 중 <b>오늘 학습목표와 가장 맞는 두 개</b>를 옆에 띄워 놓고 수업했더니, <b>아이들 눈빛이 달라지는 걸 정말 많이 느꼈습니다.</b> 지난 시간이 후회될 정도였습니다.">
+    <div class="eyebrow"><span class="dot"></span>학생들의 반응 ② · 제가 느낀 변화</div>
+    <h1 class="title sm">가장 크게 느낀 두 가지</h1>
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card tint-sky">
+        <div class="ic">🚪</div>
+        <h3>“선생님, 어디 들어가요?”가 사라졌습니다</h3>
+        <p>페이지 하나로 들어오면 모든 자료와 수업 페이지가 거기서 연결됩니다. 어디로 들어가라고 설명하는 시간이 없어졌습니다.</p>
+      </div>
+      <div class="card tint-mint">
+        <div class="ic">👀</div>
+        <h3>아이들 눈빛이 달라졌습니다</h3>
+        <p>질문 유발 자료를 보고 올라온 질문 중 <b>오늘 학습목표와 가장 맞는 두 개</b>를 옆에 띄워 놓고 수업했습니다. 그렇게 하고 나니 눈빛이 달라지는 걸 정말 많이 느꼈습니다.</p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:20px"><b>지난 시간이 후회될 정도였습니다.</b> 그 정도로 많은 것을 느끼고 있습니다.</p>
+  </section>
+
+  <!-- ══════════ 12 · 나선 교육과정 지도 ══════════ -->
+  <section class="slide" data-name="⑤ 과학 나선 교육과정 지도"
+    data-note="<b>이건 꼭 말씀드리고 싶었던 것</b>입니다. 수업 때마다 ‘이 아이들이 어디까지 배우고 왔지, 어디까지 배워야 하지, 이게 나중에 어떻게 확장되지’를 알아야 하는데 매번 교육과정 문서를 뒤지기가 어려웠습니다. 그래서 문서를 통째로 넣고 만들었습니다. — 학생들에게 보여주면 <b>“우리가 여기까지 배웠고 여기까지 배울 거야”</b>라고 목표를 정확히 말해줄 수 있고, 지금 배우는 게 나중에 이렇게 연결되니 이 수업을 들어야 한다고 <b>설득이 됩니다.</b>">
+    <div class="eyebrow"><span class="dot"></span>⑤ 꼭 말씀드리고 싶은 것</div>
+    <h1 class="title">과학 나선 교육과정 지도</h1>
+    <div class="split">
+      <div>
+        <p class="lede">매번 교육과정 문서를 뒤지기가 어려워서, 문서를 통째로 넣고 만들었습니다.</p>
+        <ul class="feat" style="margin-top:18px">
+          <li><span class="k">?</span><span>이 아이들은 <b>어디까지 배우고 왔는가</b></span></li>
+          <li><span class="k">?</span><span>지금 <b>어디까지 배워야 하는가</b></span></li>
+          <li><span class="k">?</span><span>이게 <b>나중에 어떻게 확장되는가</b></span></li>
+        </ul>
+        <div class="links">
+          <a class="pill big" href="https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/" target="_blank" rel="noopener">나선 지도 열기 <span class="u">science-curriculum-map</span></a>
+        </div>
+      </div>
+      <div class="scene" style="background:var(--tint-lavender);border-color:#cfc5ea">
+        <div class="lab">학생에게 보여줄 때</div>
+        <div class="quote">“우리가 여기까지 배웠고,<br>이제 여기까지 배울 거야.”</div>
+        <div class="beat">목표를 정확히 말해 줄 수 있고, 지금 배우는 것이 나중에 이렇게 이어지니 이 수업을 들어야 한다는 <b>설득이 됩니다.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 13 · MBL 클래스 허브 ══════════ -->
+  <section class="slide" data-name="⑥ MBL 클래스 허브"
+    data-note="지능형 과학실이나 기존 데이터 분석 도구가 쓰기에 아쉬운 부분이 있어서, <b>그 실험에 맞는 분석</b>을 할 수 있게 만들었습니다. — <b>솔직히 아직 학교에서 직접 써보지는 않았습니다.</b> 더 다듬어야 할 부분입니다.">
+    <div class="eyebrow"><span class="dot"></span>⑥ 만들어 두었지만 아직 다듬는 중</div>
+    <h1 class="title">MBL 클래스 허브</h1>
+    <div class="split">
+      <div>
+        <p class="lede">지능형 과학실이나 기존 데이터 분석 도구가 쓰기에 아쉬운 부분이 있었습니다.</p>
+        <ul class="feat" style="margin-top:18px">
+          <li><span class="k">1</span><span><b>그 실험에 맞는 분석</b>을 할 수 있게 만들었습니다</span></li>
+          <li><span class="k">2</span><span>실험 <b>49건</b>(중1 18 · 중2 17 · 중3 14), <b>센서 24종</b></span></li>
+          <li><span class="k">3</span><span>2022 개정 <b>성취기준 87개</b>와 연결해 두었습니다</span></li>
+        </ul>
+        <div class="links">
+          <a class="pill big" href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">MBL 허브 열기 <span class="u">mblclasshub</span></a>
+        </div>
+      </div>
+      <div class="scene" style="background:var(--tint-gray);border-color:#e0dcd7">
+        <div class="lab">솔직하게</div>
+        <div class="quote">아직 학교에서<br>직접 써보지는 않았습니다.</div>
+        <div class="beat">제가 계속 더 다듬어야 하는 부분입니다. 만들어 놓은 것과 수업에서 검증된 것은 다르다고 생각합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 14 · 그밖에 만든 것들 ══════════ -->
+  <section class="slide" data-name="그밖에 만든 것들"
+    data-note="빠르게 훑기. ① <b>편지 메이커</b> — 시험기간에 반 아이들 한 명 한 명 편지를 써주는데 손이 너무 아파서. ② <b>롤링페이퍼</b> — 전학 가는 친구를 위해 몰래 하려고, ‘학교 만족도 조사’라고 하고 그 친구만 빼고 돌렸습니다. ③ <b>PDF 도구</b> — 병합·분할. ④ <b>CLASS GAME WORLD</b> — 진도가 빨리 끝났거나 쉬어갈 수 있을 때 반 단합용. — 그리고 <b>고쳐야 하는 것도 많고, 오랫동안 안 고쳐진 것도 꽤 있습니다.</b>">
+    <div class="eyebrow"><span class="dot"></span>그밖에, 필요해서 만든 것들</div>
+    <h1 class="title sm">수업 밖에서도 필요해서 만들었습니다</h1>
+    <div class="grid g4" style="margin-top:18px">
+      <div class="card tint-peach">
+        <div class="ic">💌</div>
+        <h3>편지 메이커</h3>
+        <p>시험기간에 반 아이들 한 명 한 명 편지를 써주는데, 손이 너무 아파서 만들었습니다.</p>
+      </div>
+      <div class="card tint-rose">
+        <div class="ic">🤫</div>
+        <h3>롤링페이퍼</h3>
+        <p>전학 가는 친구를 위해 몰래 하려고, ‘학교 만족도 조사’라고 하고 그 친구만 빼고 돌렸습니다.</p>
+      </div>
+      <div class="card tint-gray" style="background:var(--tint-gray);border-color:#e0dcd7">
+        <div class="ic">📄</div>
+        <h3>PDF 도구</h3>
+        <p>병합하고 분할하는 도구입니다. 파일이 밖으로 나가지 않습니다.</p>
+      </div>
+      <div class="card tint-yellow">
+        <div class="ic">🎮</div>
+        <h3>CLASS GAME WORLD</h3>
+        <p>진도가 빨리 끝났거나 쉬어갈 수 있는 날, 반 단합용으로 쓰는 게임 모음입니다.</p>
+      </div>
+    </div>
+    <div class="links">
+      <a class="pill ghost" href="https://scienceisjo.github.io/lettermaker/" target="_blank" rel="noopener">편지 메이커</a>
+      <a class="pill ghost" href="https://scienceisjo.github.io/class-tools/rolling-paper/" target="_blank" rel="noopener">롤링페이퍼</a>
+      <a class="pill ghost" href="https://scienceisjo.github.io/class-tools/pdf-tool/" target="_blank" rel="noopener">PDF 도구</a>
+      <a class="pill ghost" href="https://brain-break-lab.vercel.app/sonic.html" target="_blank" rel="noopener">CLASS GAME WORLD</a>
+    </div>
+    <p class="small" style="margin-top:14px">솔직히 <b>고쳐야 하는 것도 많고, 오랫동안 안 고쳐진 것도 꽤 있습니다.</b></p>
+  </section>
+
+  <!-- ══════════ 15 · 무엇이 가능하게 했나 ══════════ -->
+  <section class="slide dark-slide" data-dark data-name="무엇이 이걸 가능하게 했나"
+    data-note="정리입니다. 제가 이렇게 할 수 있었던 건 세 가지 때문입니다. 첫째 <b>시간</b>이 많았고, 둘째 <b>아이디어</b>가 있었고, 그리고 <b>가장 중요한 건 토큰이 있었기 때문</b>입니다. 이 세 번째를 빼면 나머지는 실현되지 않았을 겁니다.">
+    <div class="eyebrow"><span class="dot"></span>정리 · 무엇이 이걸 가능하게 했나</div>
+    <h1 class="title">세 가지가 있었습니다</h1>
+    <div class="reasons">
+      <div class="reason">
+        <div class="no">첫째</div>
+        <h3>시간</h3>
+        <p>만들고, 고치고, 다시 만들 시간이 있었습니다.</p>
+      </div>
+      <div class="reason">
+        <div class="no">둘째</div>
+        <h3>아이디어</h3>
+        <p>수업에서 아쉬웠던 것이 그대로 만들 목록이 되었습니다.</p>
+      </div>
+      <div class="reason key">
+        <div class="no">셋째 · 가장 중요</div>
+        <h3>토큰</h3>
+        <p>이게 없었으면 앞의 두 가지도 실현되지 않았습니다. 솔직한 이야기입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 16 · 가장 경계하는 것 ══════════ -->
+  <section class="slide closing" data-dark data-name="가장 경계하는 것"
+    data-note="마지막입니다. 제가 <b>가장 경계하는 것은, AI가 만든 산출물을 제가 했다고 자만하는 것</b>입니다. 그래서 요즘은 질문 유발 자료나 수업 도입에 쓸 실험을 준비할 때, 오히려 <b>교과 내용과 과학사 공부</b>를 정말 많이 하고 있습니다. AI를 쓰는 것보다요. — 이상으로 발표를 마치겠습니다. 감사합니다.">
+    <div class="dots">
+      <span style="width:18px;height:18px;background:var(--brand-yellow);left:3%;top:13%"></span>
+      <span style="width:26px;height:26px;background:var(--brand-purple);right:7%;top:17%"></span>
+      <span style="width:12px;height:12px;background:var(--brand-teal);right:14%;top:84%"></span>
+      <span style="width:14px;height:14px;background:var(--brand-pink);left:3.5%;top:87%"></span>
+    </div>
+    <div style="position:relative;z-index:2">
+      <h1>제가 가장 경계하는 것은,<br><em>AI가 만든 것을 내가 했다고</em><br>자만하는 것입니다.</h1>
+      <p>그래서 요즘은 질문 유발 자료나 수업 도입에 쓸 실험을 준비할 때, 오히려 <b style="color:#e5e7ee;font-weight:600">교과 내용과 과학사 공부</b>를 훨씬 더 많이 하고 있습니다. AI를 쓰는 것보다요.</p>
+      <div id="app-credit">
+        <b>해누리중학교 조승재</b> · 과학 &nbsp;|&nbsp; 발표 자료 © 2026 조승재 &nbsp;|&nbsp; 최종 업데이트 2026-09-04
+        <br>디자인 언어: Notion DESIGN.md (getdesign.md · VoltAgent/awesome-design-md, MIT)
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 크롬 ══════════ -->
+  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
+  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">15:00</div>
+
+  <div id="chrome">
+    <div class="left" id="stageName">표지</div>
+    <div class="right">
+      <button class="nb" id="prev" aria-label="이전">◀</button>
+      <span id="num">1 / 16</span>
+      <button class="nb" id="next" aria-label="다음">▶</button>
+    </div>
+  </div>
+  <div id="bar"><i></i></div>
+
+  <div id="notes"></div>
+
+  <div id="overview">
+    <h4>목차 — 눌러서 이동</h4>
+    <div id="ovGrid"></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var stage   = document.getElementById('stage');
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var bar     = document.querySelector('#bar i');
+  var numEl   = document.getElementById('num');
+  var nameEl  = document.getElementById('stageName');
+  var notesEl = document.getElementById('notes');
+  var ovEl    = document.getElementById('overview');
+  var ovGrid  = document.getElementById('ovGrid');
+  var i = 0, notesOn = false;
+
+  /* 1280×720 무대를 창에 맞춰 배율 조정 (전자칠판 왼쪽 몰림 방지) */
+  function fit(){
+    var s = Math.min((innerWidth - 28) / 1280, (innerHeight - 28) / 720);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  addEventListener('resize', fit);
+  fit();
+
+  function labelOf(sl, idx){
+    return sl.getAttribute('data-name') || ('슬라이드 ' + (idx + 1));
+  }
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    var cur = slides[i];
+    stage.classList.toggle('dark', cur.hasAttribute('data-dark'));
+    numEl.textContent = (i + 1) + ' / ' + slides.length;
+    nameEl.textContent = labelOf(cur, i);
+    bar.style.width = (i / (slides.length - 1) * 100) + '%';
+    notesEl.innerHTML = cur.getAttribute('data-note') || '<span style="opacity:.5">이 슬라이드에는 대본이 없습니다.</span>';
+    try { history.replaceState(null, '', '#s' + (i + 1)); } catch (e) {}
+  }
+  function go(d){ show(i + d); }
+
+  slides.forEach(function(s, k){
+    var b = document.createElement('button');
+    b.className = 'ov';
+    b.innerHTML = '<div class="i">' + String(k + 1).padStart(2, '0') + '</div>'
+                + '<div class="t">' + labelOf(s, k) + '</div>';
+    b.onclick = function(){ ovEl.classList.remove('on'); show(k); };
+    ovGrid.appendChild(b);
+  });
+
+  /* 15분 타이머 */
+  var TOTAL = 15 * 60, left = TOTAL, tick = null;
+  var tEl = document.getElementById('timer');
+  function paint(){
+    var neg = left < 0, v = Math.abs(left);
+    tEl.textContent = (neg ? '+' : '')
+      + String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0');
+    tEl.classList.toggle('run',  !!tick && left > 180);
+    tEl.classList.toggle('warn', !!tick && left <= 180 && left >= 0);
+    tEl.classList.toggle('over', left < 0);
+  }
+  function toggleTimer(){
+    if (tick){ clearInterval(tick); tick = null; }
+    else { tick = setInterval(function(){ left--; paint(); }, 1000); }
+    paint();
+  }
+  function resetTimer(){ clearInterval(tick); tick = null; left = TOTAL; paint(); }
+  tEl.onclick = toggleTimer;
+  paint();
+
+  document.getElementById('prev').onclick = function(){ go(-1); };
+  document.getElementById('next').onclick = function(){ go(1); };
+
+  addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'Escape'){ ovEl.classList.remove('on'); return; }
+    if (ovEl.classList.contains('on') && k !== 'o' && k !== 'O' && k !== 'ㅐ') return;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); go(1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); go(-1); }
+    else if (k === 'Home'){ show(0); }
+    else if (k === 'End'){ show(slides.length - 1); }
+    else if (k === 'o' || k === 'O' || k === 'ㅐ'){ ovEl.classList.toggle('on'); }
+    else if (k === 'n' || k === 'N' || k === 'ㅜ'){
+      notesOn = !notesOn;
+      notesEl.classList.toggle('on', notesOn);
+      stage.classList.toggle('notes', notesOn);
+    }
+    else if (k === 't' || k === 'T' || k === 'ㅅ'){ toggleTimer(); }
+    else if (k === 'r' || k === 'R' || k === 'ㄱ'){ resetTimer(); }
+    else if (k >= '1' && k <= '9'){ show(parseInt(k, 10) - 1); }
+  });
+
+  stage.addEventListener('click', function(e){
+    if (e.target.closest('a, button, #timer, #overview, #notes')) return;
+    go(1);
+  });
+
+  /* 도움말 배지는 6초 뒤 사라지고, H 로 다시 볼 수 있습니다 */
+  var helpEl = document.getElementById('help');
+  var helpTimer = setTimeout(function(){ helpEl.classList.add('hide'); }, 6000);
+  addEventListener('keydown', function(e){
+    if (e.key === 'h' || e.key === 'H' || e.key === 'ㅗ'){
+      clearTimeout(helpTimer);
+      helpEl.classList.toggle('hide');
+    }
+  });
+
+  var m = (location.hash || '').match(/^#s(\d+)$/);
+  show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>
