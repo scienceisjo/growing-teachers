@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>첫 장면과 끝 장면 사이</title>
+<meta name="description" content="SENEDU로 만드는 질문 유발 영상 — 재료 세트, 에이전트 지시문, 프롬프트 빌더">
+<style>
+  :root{
+    --bg:#f5f5fb; --surface:#ffffff; --surface-2:#f7f7fc;
+    --ink:#1f1e37; --ink-soft:#565476; --ink-faint:#8b89a8;
+    --line:#e7e6f1; --line-soft:#efeef7;
+    --purple:#6b45e0; --purple-bg:#efeaff;
+    --mint:#0aa79f; --mint-bg:#daf4f1;
+    --pink:#e0408b; --pink-bg:#fbe4ef;
+    --amber:#cf8410; --amber-bg:#fbeed3;
+    --blue:#3670d8; --blue-bg:#e4edfc;
+    --red:#d43c3c; --red-bg:#fbe3e3;
+    color-scheme:light dark;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#121124; --surface:#1c1b34; --surface-2:#232241;
+      --ink:#edecff; --ink-soft:#b0add6; --ink-faint:#807da9;
+      --line:#2c2b4f; --line-soft:#252445;
+      --purple:#a48bff; --purple-bg:#2b2557;
+      --mint:#3ad8ce; --mint-bg:#123f42;
+      --pink:#ff82bd; --pink-bg:#48203c;
+      --amber:#f4b74f; --amber-bg:#44320f;
+      --blue:#7aa8ff; --blue-bg:#1c2f58;
+      --red:#ff8b8b; --red-bg:#4a1f1f;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121124; --surface:#1c1b34; --surface-2:#232241;
+    --ink:#edecff; --ink-soft:#b0add6; --ink-faint:#807da9;
+    --line:#2c2b4f; --line-soft:#252445;
+    --purple:#a48bff; --purple-bg:#2b2557; --mint:#3ad8ce; --mint-bg:#123f42;
+    --pink:#ff82bd; --pink-bg:#48203c; --amber:#f4b74f; --amber-bg:#44320f;
+    --blue:#7aa8ff; --blue-bg:#1c2f58; --red:#ff8b8b; --red-bg:#4a1f1f;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.68;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+  .num{font-variant-numeric:tabular-nums;}
+
+  /* ── header ───────────────────────────── */
+  header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 82%,transparent);
+    backdrop-filter:saturate(1.3) blur(10px);border-bottom:1px solid var(--line-soft);}
+  .hbar{display:flex;align-items:center;gap:12px;padding:12px 0;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14.5px;
+    letter-spacing:-.01em;text-decoration:none;}
+  .brand .dot{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:#fff;
+    background:linear-gradient(135deg,var(--purple),var(--pink));font-size:12px;}
+  .spacer{flex:1;}
+  .navlink{font-size:13px;font-weight:700;color:var(--ink-faint);text-decoration:none;padding:6px 10px;
+    border-radius:9px;transition:.18s;white-space:nowrap;}
+  .navlink:hover{color:var(--purple);background:var(--purple-bg);}
+  @media(max-width:720px){.navlink{display:none;}}
+  .toggle{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+    display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:.2s;font-size:15px;}
+  .toggle:hover{color:var(--purple);border-color:var(--purple);transform:translateY(-1px) rotate(-8deg);}
+
+  /* ── hero ─────────────────────────────── */
+  .hero{position:relative;overflow:hidden;padding:64px 0 26px;}
+  .blob{position:absolute;border-radius:50%;filter:blur(66px);z-index:0;pointer-events:none;}
+  .b1{width:320px;height:320px;background:var(--purple);opacity:.45;top:-110px;right:-30px;animation:f1 15s ease-in-out infinite;}
+  .b2{width:240px;height:240px;background:var(--pink);opacity:.32;top:30px;right:180px;animation:f2 19s ease-in-out infinite;}
+  .b3{width:210px;height:210px;background:var(--mint);opacity:.28;top:-40px;left:-70px;animation:f1 17s ease-in-out infinite reverse;}
+  @keyframes f1{50%{transform:translate(-22px,24px) scale(1.07);}}
+  @keyframes f2{50%{transform:translate(18px,-18px) scale(1.1);}}
+  .hero .inner{position:relative;z-index:1;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    color:var(--purple);background:var(--purple-bg);padding:6px 14px;border-radius:999px;margin:0 0 20px;}
+  .eyebrow .live{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mint) 55%,transparent);}70%{box-shadow:0 0 0 8px transparent;}}
+  h1{font-size:clamp(32px,6.2vw,56px);line-height:1.1;margin:0 0 18px;font-weight:800;
+    letter-spacing:-.035em;text-wrap:balance;}
+  h1 .u{position:relative;white-space:nowrap;color:var(--purple);}
+  h1 .u svg{position:absolute;left:-3%;bottom:-.26em;width:106%;height:.42em;overflow:visible;}
+  h1 .u svg path{fill:none;stroke:var(--pink);stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:340;stroke-dashoffset:340;animation:draw 1.1s .35s ease forwards;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .lede{font-size:clamp(15.5px,2.1vw,18.5px);color:var(--ink-soft);max-width:54ch;margin:0 0 26px;}
+  .lede b{color:var(--ink);font-weight:700;}
+
+  /* 두 갈래 */
+  .forks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 6px;}
+  @media(max-width:640px){.forks{grid-template-columns:1fr;}}
+  .fork{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;padding:20px 22px;transition:.2s;position:relative;overflow:hidden;}
+  .fork:hover{transform:translateY(-3px);border-color:var(--c);box-shadow:0 10px 30px -14px color-mix(in srgb,var(--c) 60%,transparent);}
+  .fork .fi{font-size:22px;line-height:1;}
+  .fork .fw{font-size:11.5px;font-weight:800;letter-spacing:.07em;color:var(--c);margin:10px 0 4px;text-transform:uppercase;}
+  .fork h4{margin:0 0 6px;font-size:18px;font-weight:800;letter-spacing:-.02em;}
+  .fork p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+
+  /* ── section ──────────────────────────── */
+  section{padding:44px 0 6px;scroll-margin-top:72px;}
+  .lbl{display:inline-flex;align-items:center;gap:9px;margin:0 0 10px;transform:rotate(-1.2deg);}
+  .lbl .t{font-size:13px;font-weight:800;color:var(--c);background:var(--cbg);padding:5px 13px;border-radius:9px;}
+  .lbl .n{font-size:12px;color:var(--ink-faint);font-weight:700;}
+  h2{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.03em;margin:6px 0 12px;line-height:1.25;text-wrap:balance;}
+  .sub{font-size:15.5px;color:var(--ink-soft);margin:0 0 22px;max-width:58ch;}
+  .sub b{color:var(--ink);font-weight:700;}
+
+  /* 강조 인용 */
+  .pull{border-left:4px solid var(--purple);background:var(--purple-bg);
+    padding:18px 22px;border-radius:0 14px 14px 0;margin:22px 0;}
+  .pull p{margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.015em;line-height:1.6;color:var(--ink);}
+  .pull p + p{margin-top:8px;font-weight:500;font-size:14.5px;color:var(--ink-soft);}
+
+  /* ── 원리 도해 ────────────────────────── */
+  .frames{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;margin:8px 0 4px;}
+  @media(max-width:640px){.frames{grid-template-columns:1fr;}}
+  .frame{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;position:relative;}
+  .frame .tag{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--c);
+    background:var(--cbg);display:inline-block;padding:4px 10px;border-radius:7px;margin:0 0 10px;}
+  .frame h4{margin:0 0 6px;font-size:17px;font-weight:800;letter-spacing:-.02em;}
+  .frame p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+  .gap{display:grid;place-items:center;color:var(--ink-faint);}
+  .gap .g{writing-mode:vertical-rl;font-size:11.5px;font-weight:800;letter-spacing:.14em;
+    color:var(--pink);padding:8px 0;}
+  @media(max-width:640px){.gap .g{writing-mode:horizontal-tb;letter-spacing:.1em;}}
+  .arrowdown{font-size:20px;color:var(--pink);}
+  .becomes{text-align:center;margin:18px 0 0;font-size:15px;color:var(--ink-soft);}
+  .becomes b{color:var(--pink);font-weight:800;}
+
+  /* ── 되는것/안되는것 ──────────────────── */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 0;}
+  @media(max-width:720px){.duo{grid-template-columns:1fr;}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 24px;}
+  .card.good{border-color:color-mix(in srgb,var(--mint) 40%,var(--line));}
+  .card.bad{border-color:color-mix(in srgb,var(--red) 40%,var(--line));}
+  .card h3{margin:0 0 4px;font-size:18px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:9px;}
+  .card .note{margin:0 0 14px;font-size:13px;color:var(--ink-faint);}
+  .card ul{margin:0;padding:0;list-style:none;}
+  .card li{font-size:14.5px;color:var(--ink-soft);padding:7px 0 7px 22px;position:relative;line-height:1.5;
+    border-top:1px solid var(--line-soft);}
+  .card li:first-child{border-top:0;}
+  .card li::before{position:absolute;left:0;top:7px;font-weight:800;}
+  .card.good li::before{content:"✓";color:var(--mint);}
+  .card.bad li::before{content:"✕";color:var(--red);}
+  .card li b{color:var(--ink);font-weight:700;}
+  .whybad{margin:16px 0 0;font-size:13.5px;color:var(--ink-soft);background:var(--red-bg);
+    border-radius:11px;padding:12px 15px;line-height:1.55;}
+  .whybad b{color:var(--ink);}
+
+  /* ── 요령 ─────────────────────────────── */
+  .tips{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:6px 0 0;}
+  @media(max-width:640px){.tips{grid-template-columns:1fr;}}
+  .tip{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 20px;
+    display:flex;gap:14px;align-items:flex-start;}
+  .tip .no{flex:0 0 auto;width:26px;height:26px;border-radius:9px;background:var(--blue-bg);color:var(--blue);
+    display:grid;place-items:center;font-size:13px;font-weight:800;}
+  .tip h4{margin:0 0 4px;font-size:15px;font-weight:800;letter-spacing:-.015em;}
+  .tip p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+
+  /* ── 재료 세트 ────────────────────────── */
+  .kit{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+    padding:24px 26px;margin:0 0 18px;}
+  .kithead{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin:0 0 4px;}
+  .kithead .unit{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--blue);
+    background:var(--blue-bg);padding:4px 11px;border-radius:7px;}
+  .kit h3{margin:8px 0 8px;font-size:21px;font-weight:800;letter-spacing:-.025em;width:100%;}
+  .kit .aim{margin:0 0 18px;font-size:15px;color:var(--ink);background:var(--amber-bg);
+    border-radius:12px;padding:12px 16px;line-height:1.55;}
+  .kit .aim span{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--amber);
+    display:block;margin:0 0 3px;}
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 14px;}
+  @media(max-width:640px){.shots{grid-template-columns:1fr;}}
+  .shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface-2);}
+  .shot .cap{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:10px 14px;border-bottom:1px solid var(--line-soft);}
+  .shot .cap b{font-size:13px;font-weight:800;letter-spacing:-.01em;}
+  .shot .cap i{font-style:normal;font-size:11.5px;color:var(--ink-faint);font-weight:700;}
+  .shot .ph{aspect-ratio:16/9;display:grid;place-items:center;text-align:center;
+    color:var(--ink-faint);font-size:12.5px;padding:14px;line-height:1.5;background:var(--bg);}
+  .shot img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--bg);}
+  .shot .body{padding:12px 14px;}
+
+  /* 프롬프트 상자 — 한글이라 고정폭 글꼴을 쓰지 않습니다 */
+  .prompt{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:12px;
+    padding:13px 15px;font-size:13.5px;line-height:1.7;color:var(--ink-soft);
+    white-space:pre-wrap;word-break:keep-all;}
+  .prompt.big{font-size:14.5px;color:var(--ink);}
+  .plabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 7px;}
+  .plabel b{font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--ink-faint);}
+
+  .copy{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+    font-family:inherit;font-size:12px;font-weight:700;padding:5px 11px;border-radius:8px;
+    cursor:pointer;transition:.16s;white-space:nowrap;}
+  .copy:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
+  .copy.done{border-color:var(--mint);color:var(--mint);background:var(--mint-bg);}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;border:0;cursor:pointer;
+    font-family:inherit;font-size:15px;font-weight:800;letter-spacing:-.01em;
+    padding:14px 24px;border-radius:14px;color:#fff;text-decoration:none;
+    background:linear-gradient(135deg,var(--purple),var(--pink));transition:.2s;
+    box-shadow:0 8px 24px -10px color-mix(in srgb,var(--purple) 80%,transparent);}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px color-mix(in srgb,var(--purple) 80%,transparent);}
+  .btn.done{background:linear-gradient(135deg,var(--mint),var(--blue));}
+  .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:none;}
+  .btn.ghost:hover{border-color:var(--purple);color:var(--purple);}
+
+  /* ── 절차 ─────────────────────────────── */
+  .steps{counter-reset:s;margin:6px 0 0;padding:0;list-style:none;}
+  .steps li{position:relative;padding:0 0 22px 46px;border-left:2px solid var(--line);
+    margin-left:13px;}
+  .steps li:last-child{border-left-color:transparent;padding-bottom:4px;}
+  .steps li::before{counter-increment:s;content:counter(s);position:absolute;left:-14px;top:-2px;
+    width:27px;height:27px;border-radius:50%;background:var(--purple);color:#fff;
+    display:grid;place-items:center;font-size:13px;font-weight:800;}
+  .steps h4{margin:1px 0 5px;font-size:16.5px;font-weight:800;letter-spacing:-.02em;}
+  .steps p{margin:0;font-size:14.5px;color:var(--ink-soft);line-height:1.6;}
+  .steps p + p{margin-top:6px;}
+  .steps .hint{font-size:13.5px;color:var(--ink-faint);background:var(--surface-2);
+    border-radius:10px;padding:9px 13px;margin-top:9px;}
+
+  /* ── 빌더 ─────────────────────────────── */
+  .builder{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;}
+  .fields{display:grid;gap:14px;}
+  .field label{display:block;font-size:13.5px;font-weight:800;color:var(--ink);margin:0 0 5px;letter-spacing:-.01em;}
+  .field label em{font-style:normal;font-weight:600;color:var(--ink-faint);font-size:12.5px;margin-left:6px;}
+  .field input,.field textarea{width:100%;font-family:inherit;font-size:14.5px;line-height:1.6;
+    color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
+    padding:11px 14px;transition:.16s;resize:vertical;}
+  .field input:focus,.field textarea:focus{outline:0;border-color:var(--purple);
+    background:var(--surface);box-shadow:0 0 0 3px color-mix(in srgb,var(--purple) 16%,transparent);}
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-faint);opacity:.75;}
+  .optional{font-size:12.5px;color:var(--ink-faint);background:var(--mint-bg);color:var(--mint);
+    font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;}
+  .out{margin:22px 0 0;padding:20px 0 0;border-top:1px dashed var(--line);}
+  .builder .row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 0;}
+
+  details{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:0;margin:16px 0 0;overflow:hidden;}
+  summary{cursor:pointer;padding:16px 22px;font-size:14.5px;font-weight:800;letter-spacing:-.01em;
+    list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:"▾";color:var(--ink-faint);font-size:13px;transition:.2s;}
+  details[open] summary::after{transform:rotate(180deg);}
+  details .dbody{padding:0 22px 22px;}
+
+  .callout{background:var(--amber-bg);border-radius:14px;padding:16px 20px;margin:20px 0 0;
+    font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .callout b{color:var(--ink);font-weight:800;}
+
+  /* ── footer ───────────────────────────── */
+  footer{margin:64px 0 0;padding:30px 0 46px;border-top:1px solid var(--line-soft);}
+  #app-credit{font-size:12.5px;color:var(--ink-faint);text-align:center;line-height:1.9;}
+  #app-credit b{color:var(--ink-soft);font-weight:700;}
+  #app-credit .sep{margin:0 8px;opacity:.5;}
+  #app-credit a{color:var(--ink-faint);text-decoration:none;border-bottom:1px solid var(--line);}
+  #app-credit a:hover{color:var(--purple);}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);z-index:60;
+    background:var(--ink);color:var(--bg);font-size:13.5px;font-weight:700;
+    padding:11px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.22s;}
+  .toast.on{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="https://scienceisjo.github.io/growing-teachers/">
+      <span class="dot">✦</span>Growing Teachers
+    </a>
+    <span class="spacer"></span>
+    <a class="navlink" href="#kits">재료 세트</a>
+    <a class="navlink" href="#why">원리</a>
+    <a class="navlink" href="#agent">에이전트</a>
+    <a class="navlink" href="#builder">빌더</a>
+    <button class="toggle" id="themeBtn" aria-label="밝기 전환">◐</button>
+  </div>
+</header>
+
+<!-- ══════════ 표지 ══════════ -->
+<div class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="wrap inner">
+    <p class="eyebrow"><span class="live"></span>학생 질문 중심 수업·평가 선도교원 연수 · 2교시 실습</p>
+    <h1>첫 장면과 끝 장면<br><span class="u">사이<svg viewBox="0 0 120 12" preserveAspectRatio="none"><path d="M3 8 Q 30 2, 60 7 T 117 5"/></svg></span>가 질문이 됩니다</h1>
+    <p class="lede">SENEDU는 <b>시작 프레임과 끝 프레임</b>을 받아서 그 사이를 영상으로 채웁니다.
+      첫 장면에 <b>학생이 예상하는 장면</b>을, 끝 장면에 <b>예상이 어긋난 장면</b>을 두면
+      그 몇 초가 그대로 질문 유발 자료가 됩니다.</p>
+
+    <div class="forks">
+      <a class="fork" style="--c:var(--pink)" href="#kits">
+        <div class="fi">🎬</div>
+        <div class="fw">오늘 · 연수장에서</div>
+        <h4>주는 재료로 한 편 만들기</h4>
+        <p>이미지 두 장과 프롬프트를 받아 SENEDU에 넣기만 합니다. 먼저 되는 걸 보십시오.</p>
+      </a>
+      <a class="fork" style="--c:var(--purple)" href="#agent">
+        <div class="fi">🧪</div>
+        <div class="fw">나중에 · 학교에서</div>
+        <h4>내 단원으로 직접 만들기</h4>
+        <p>에이전트를 하나 만들어 두면, 단원과 받고 싶은 질문만 넣어도 프롬프트 세 개가 나옵니다.</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 재료 세트 ══════════ -->
+<section id="kits" style="--c:var(--pink);--cbg:var(--pink-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">오늘 현장</span><span class="n" id="kitCount">세 세트</span></div>
+    <h2>이미 만들어 둔 재료로 시작합니다</h2>
+    <p class="sub">처음부터 혼자 만들면 십중팔구 막힙니다. <b>먼저 되는 걸 한 번 보고</b> 나서
+      내 단원으로 옮기는 게 훨씬 빠릅니다. 아래 세트를 그대로 쓰십시오.</p>
+
+    <div class="pull">
+      <p>SENEDU에서 할 일은 셋뿐입니다.</p>
+      <p>① 첫 프레임 이미지 올리기 → ② 끝 프레임 이미지 올리기 → ③ 영상 프롬프트 붙여넣고 생성</p>
+    </div>
+
+    <div id="kitList"></div>
+
+    <div class="callout">
+      <b>이미지가 아직 안 보이시나요?</b> 각 세트에 이미지 자리가 비어 있으면,
+      그 자리에 적힌 <b>이미지 프롬프트를 SENEDU 이미지 생성에 그대로 붙여넣어</b> 두 장을 먼저 만드시면 됩니다.
+      만들어진 이미지를 그대로 영상 생성의 시작·끝 프레임으로 올립니다.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 원리 ══════════ -->
+<section id="why" style="--c:var(--purple);--cbg:var(--purple-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">원리</span><span class="n">왜 두 장인가</span></div>
+    <h2>두 장 사이의 어긋남이 질문입니다</h2>
+    <p class="sub">시작·끝 프레임은 화면을 안정시키는 기능이지만, 수업에서는 그보다 훨씬 큰 쓸모가 있습니다.
+      <b>예상과 결과를 두 장에 나눠 담는 틀</b>이 됩니다.</p>
+
+    <div class="frames">
+      <div class="frame" style="--c:var(--blue);--cbg:var(--blue-bg)">
+        <span class="tag">첫 프레임</span>
+        <h4>학생이 예상하는 장면</h4>
+        <p>지극히 평범한 상태. 여기까지는 아무도 궁금해하지 않습니다. 그래야 합니다.</p>
+      </div>
+      <div class="gap">
+        <span class="g">4~8초</span>
+        <span class="arrowdown">↓</span>
+      </div>
+      <div class="frame" style="--c:var(--pink);--cbg:var(--pink-bg)">
+        <span class="tag">끝 프레임</span>
+        <h4>예상이 어긋난 장면</h4>
+        <p>딱 한 가지만 달라져 있습니다. 그 하나가 “어? 왜 저러지?”를 만듭니다.</p>
+      </div>
+    </div>
+    <p class="becomes">그래서 선생님이 채울 칸은 두 개뿐입니다 —
+      <b>학생은 뭘 예상할까</b>, 그리고 <b>실제론 뭐가 다를까</b>.</p>
+
+    <div class="pull">
+      <p>영상이 답을 보여주면 실패입니다.</p>
+      <p>왜 그런지까지 보여 주는 순간 학생은 물을 게 없어집니다. 이 영상의 목적은 설명이 아니라 <b>불편함</b>입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 되는 것 / 안 되는 것 ══════════ -->
+<section id="limits" style="--c:var(--mint);--cbg:var(--mint-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">경계</span><span class="n">한 번 해보고 접지 않으시도록</span></div>
+    <h2>되는 것과, 조용히 틀리는 것</h2>
+    <p class="sub">생성형 영상은 <b>현상</b>에는 강하고 <b>개념</b>에는 형편없습니다.
+      이 선을 모르고 시작하면 첫 시도에서 실망하고 접게 됩니다.</p>
+
+    <div class="duo">
+      <div class="card good">
+        <h3>🎯 잘 됩니다</h3>
+        <p class="note">보여만 주면 되는 것들</p>
+        <ul>
+          <li><b>일상 사물이 이상하게 구는 순간</b> — 뜨는 캔, 딸려 올라가는 종이</li>
+          <li><b>느린 변화</b> — 김 서림, 물방울, 그림자, 녹는 것, 번지는 것</li>
+          <li><b>사람의 반응</b> — 놀라는 표정, 갸웃하는 몸짓</li>
+          <li><b>실물로 못 보여주는 규모·속도</b> — 아주 크거나 아주 느린 것</li>
+          <li><b>카메라가 다가가며 드러나는 것</b> — 줌인으로 마지막에 알아채기</li>
+        </ul>
+      </div>
+      <div class="card bad">
+        <h3>🚫 넣지 마십시오</h3>
+        <p class="note">틀려도 티가 안 나서 더 위험합니다</p>
+        <ul>
+          <li><b>화면 속 글자·숫자</b> — 거의 항상 깨집니다</li>
+          <li><b>입자·분자·원자 모형</b>, 전하 부호</li>
+          <li><b>힘 화살표·자기력선·광선 경로</b>, 전류 방향</li>
+          <li><b>그래프·계기판 눈금·측정값</b></li>
+          <li><b>“정확히 두 배” 같은 정량적 결과</b></li>
+          <li><b>몇 초 안에 두 가지 이상 변하는 장면</b></li>
+          <li>불·폭발·부상 장면, 실존 인물, 우리 반 학생</li>
+        </ul>
+        <p class="whybad"><b>왜 이렇게까지 막나요?</b> 개념 그림은 틀려도 그럴듯해 보입니다.
+          학생은 그걸 사실로 받아들이고, 오개념은 영상만큼 오래 갑니다.
+          개념은 시뮬레이션·실물·판서로 하십시오. 영상은 <b>현상 하나</b>만 맡깁니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 일관성 요령 ══════════ -->
+<section id="tips" style="--c:var(--blue);--cbg:var(--blue-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">요령</span><span class="n">네 가지</span></div>
+    <h2>두 장을 같은 장면으로 만드는 법</h2>
+    <p class="sub">첫 장면과 끝 장면이 <b>다른 세상</b>처럼 보이면 영상이 이상해집니다.
+      아래 넷만 지키면 대부분 해결됩니다.</p>
+
+    <div class="tips">
+      <div class="tip"><span class="no">1</span><div>
+        <h4>배경 문장은 통째로 복사</h4>
+        <p>끝 프레임 프롬프트를 새로 쓰지 마십시오. 첫 프레임의 장소·조명·각도 문장을
+          <b>글자 하나 안 바꾸고</b> 복사한 뒤, 달라지는 부분만 갈아 끼웁니다.</p>
+      </div></div>
+      <div class="tip"><span class="no">2</span><div>
+        <h4>달라지는 건 딱 하나</h4>
+        <p>캔이 가라앉았다, 컵에 물방울이 맺혔다. 둘 이상 바뀌면 학생의 눈이 흩어지고
+          질문도 흩어집니다.</p>
+      </div></div>
+      <div class="tip"><span class="no">3</span><div>
+        <h4>얼굴 클로즈업은 피하기</h4>
+        <p>두 장에서 다른 사람이 되어 버립니다. 사람이 필요하면 <b>손</b>이나
+          <b>뒷모습</b>, 멀리 있는 실루엣으로 쓰십시오.</p>
+      </div></div>
+      <div class="tip"><span class="no">4</span><div>
+        <h4>카메라는 하나만 시키기</h4>
+        <p>“아주 느린 줌인” 하나면 충분합니다. 팬·드론·회전을 같이 넣으면
+          몇 초 안에 다 못 하고 장면이 무너집니다.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 에이전트 ══════════ -->
+<section id="agent" style="--c:var(--purple);--cbg:var(--purple-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">학교에서</span><span class="n">한 번만 만들어 두면 됩니다</span></div>
+    <h2>내 단원으로 만드는 에이전트</h2>
+    <p class="sub">SENGPT에 에이전트를 하나 만들어 두십시오.
+      다음부터는 <b>단원과 받고 싶은 질문</b>만 넣으면 장면 설계와 프롬프트 세 개가 한 번에 나옵니다.</p>
+
+    <ol class="steps">
+      <li>
+        <h4>SENGPT에서 새 에이전트를 만듭니다</h4>
+        <p>이름은 알아보기 쉽게 — 예: <b>질문 유발 영상 설계사</b></p>
+      </li>
+      <li>
+        <h4>아래 지시문을 통째로 붙여넣습니다</h4>
+        <p>버튼 하나로 전부 복사됩니다. 고치지 마시고 그대로 넣으십시오 —
+          금지 목록이 지시문 안에 들어 있어서, 이걸 빼면 에이전트가 입자 모형을 그리기 시작합니다.</p>
+        <div class="row2">
+          <button class="btn" id="copySpec">📋 에이전트 지시문 전체 복사</button>
+          <button class="btn ghost" id="dlSpec">파일로 내려받기</button>
+        </div>
+      </li>
+      <li>
+        <h4>템플릿을 채워 보냅니다</h4>
+        <p>아래 <a href="#builder" style="color:var(--purple);font-weight:700">프롬프트 빌더</a>에서
+          칸을 채우면 붙여넣을 문장이 만들어집니다.</p>
+        <p class="hint">5·6번 칸(예상·반전)은 비워도 됩니다. 비우면 에이전트가 서로 다른 세 가지 안을 먼저 제안합니다.</p>
+      </li>
+      <li>
+        <h4>나온 프롬프트로 이미지 두 장 → 영상 한 편</h4>
+        <p>이미지 생성에 【2】【3】을, 영상 생성에 두 이미지와 【4】를 넣습니다.</p>
+      </li>
+    </ol>
+
+    <details>
+      <summary>지시문 전문 보기</summary>
+      <div class="dbody">
+        <div class="prompt" id="specBox"></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ 빌더 ══════════ -->
+<section id="builder" style="--c:var(--amber);--cbg:var(--amber-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">빌더</span><span class="n">여섯 칸</span></div>
+    <h2>채우면 보낼 문장이 만들어집니다</h2>
+    <p class="sub">적으신 내용은 <b>이 브라우저에만</b> 저장됩니다. 서버로 가지 않습니다.</p>
+
+    <div class="builder">
+      <div class="fields">
+        <div class="field">
+          <label for="f1">1. 학년 · 단원</label>
+          <input id="f1" placeholder="예: 중2 · 물질의 특성">
+        </div>
+        <div class="field">
+          <label for="f2">2. 성취기준 또는 개념 한 줄</label>
+          <input id="f2" placeholder="예: 물질마다 밀도가 다르다는 것을 안다">
+        </div>
+        <div class="field">
+          <label for="f3">3. 학생에게서 받고 싶은 질문</label>
+          <input id="f3" placeholder="예: 똑같이 생긴 캔인데 왜 하나만 가라앉을까?">
+        </div>
+        <div class="field">
+          <label for="f4">4. 무대 <em>어디서 벌어지는 일인가</em></label>
+          <input id="f4" placeholder="예: 과학실 실험대 / 부엌 / 운동장 / 편의점">
+        </div>
+        <div class="field">
+          <label for="f5">5. 학생이 예상할 결과 <span class="optional">비워도 됩니다</span></label>
+          <textarea id="f5" rows="2" placeholder="예: 둘 다 물에 뜰 것이다"></textarea>
+        </div>
+        <div class="field">
+          <label for="f6">6. 실제로 벌어지는 일 <span class="optional">비워도 됩니다</span></label>
+          <textarea id="f6" rows="2" placeholder="예: 하나만 바닥까지 가라앉는다"></textarea>
+        </div>
+      </div>
+
+      <div class="out">
+        <div class="plabel">
+          <b>에이전트에게 보낼 문장</b>
+          <button class="copy" data-copy-target="#builtOut">복사</button>
+        </div>
+        <div class="prompt big" id="builtOut"></div>
+        <div class="row2">
+          <button class="btn ghost" id="clearBuilder">비우기</button>
+          <span style="font-size:13px;color:var(--ink-faint)">에이전트를 아직 안 만드셨다면
+            <a href="#agent" style="color:var(--purple);font-weight:700">위로</a> 먼저 올라가십시오.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 수업에 넣기 ══════════ -->
+<section id="use" style="--c:var(--mint);--cbg:var(--mint-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">수업</span><span class="n">도입 3분</span></div>
+    <h2>만든 영상을 어디에 넣나</h2>
+    <p class="sub">영상은 재료일 뿐입니다. <b>틀고 나서 무엇을 하느냐</b>가 질문 수를 정합니다.</p>
+
+    <ol class="steps">
+      <li>
+        <h4>아무 말 없이 한 번 틉니다</h4>
+        <p>“오늘은 밀도를 배울 거예요” 같은 예고를 하면 학생은 답을 찾으러 갑니다. 그냥 틉니다.</p>
+      </li>
+      <li>
+        <h4>“이상한 데 찾으면서” 한 번 더 틉니다</h4>
+        <p>두 번째는 시선이 달라집니다. 첫 장면과 끝 장면 사이에서 뭐가 달라졌는지 보게 됩니다.</p>
+      </li>
+      <li>
+        <h4>30초, 각자 종이에 씁니다</h4>
+        <p>바로 손들게 하면 서너 명만 말합니다. 먼저 <b>혼자 쓰는 30초</b>를 주면 전원이 하나씩 갖게 됩니다.</p>
+        <p class="hint">문장 시작을 정해 주면 훨씬 잘 나옵니다 — “왜 …일까?” / “만약 …라면 어떻게 될까?”</p>
+      </li>
+      <li>
+        <h4>짝과 하나 고르고, 칠판에 올립니다</h4>
+        <p>둘 중 <b>더 궁금한 것 하나</b>만 올리게 합니다. 고르는 과정이 이미 다듬기입니다.</p>
+      </li>
+      <li>
+        <h4>답하지 않고 남겨 둡니다</h4>
+        <p>이 차시에서 다룰 질문에 표시만 하고 넘어갑니다. 답을 그 자리에서 주면 다음 시간엔 아무도 안 씁니다.</p>
+      </li>
+    </ol>
+
+    <div class="callout">
+      <b>영상 생성이 오래 걸립니다.</b> 연수장에서든 교실에서든 한 편에 몇 분씩 기다립니다.
+      기다리는 동안 할 일을 미리 정해 두십시오 — 옆 선생님 프롬프트를 읽고
+      <b>“이 영상 보면 학생이 뭘 물을까”</b>를 적어 보는 것만으로 실습 하나가 더 생깁니다.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div id="app-credit">
+      <b>첫 장면과 끝 장면 사이</b> · SENEDU로 만드는 질문 유발 영상<br>
+      © 2026 조승재 · 해누리중학교 <span class="sep">|</span> 최종 업데이트: 2026-09-04
+      <span class="sep">|</span> <a href="https://scienceisjo.github.io/growing-teachers/">Growing Teachers</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   재료 세트 — 연수장에서 나눠 주는 완성 재료
+   ──────────────────────────────────────────────────────────────────────────
+   선생님이 직접 만든 세트로 갈아 끼우실 때는 아래 KITS 배열만 고치시면 됩니다.
+     firstImg / lastImg : img/ 폴더에 넣은 파일 이름. 비워 두면 이미지 자리 대신
+                          이미지 프롬프트만 보입니다(그래도 실습은 됩니다).
+     firstPrompt        : 첫 프레임 이미지 생성용
+     lastPrompt         : 끝 프레임 이미지 생성용 — 첫 프롬프트의 배경 문장을
+                          그대로 두고 달라진 것 하나만 교체합니다
+     videoPrompt        : SENEDU 영상 생성용 · [주체+동작],[배경+분위기],[카메라]
+   ══════════════════════════════════════════════════════════════════════════ */
+const KITS = [
+  {
+    unit: '중2 · 물질의 특성',
+    title: '똑같이 생긴 캔 두 개',
+    aim: '똑같이 생긴 캔인데 왜 하나만 가라앉을까?',
+    firstImg: '', lastImg: '',
+    firstPrompt:
+      '밝은 학교 과학실 실험대 위, 물이 가득 담긴 커다란 투명 아크릴 수조. 창문에서 들어오는 부드러운 낮 자연광. 카메라는 수조를 정면 눈높이에서 담는다. 사실적인 사진, 화면에 글자 없음. 수조 앞에 라벨이 없는 은색 알루미늄 음료 캔 두 개가 나란히 서 있고, 두 캔은 크기와 색이 똑같다.',
+    lastPrompt:
+      '밝은 학교 과학실 실험대 위, 물이 가득 담긴 커다란 투명 아크릴 수조. 창문에서 들어오는 부드러운 낮 자연광. 카메라는 수조를 정면 눈높이에서 담는다. 사실적인 사진, 화면에 글자 없음. 라벨이 없는 은색 알루미늄 캔 두 개가 수조 물속에 들어가 있는데, 하나는 물 위에 반쯤 떠 있고 다른 하나는 수조 바닥에 가라앉아 있다.',
+    videoPrompt:
+      '물속으로 나란히 미끄러져 들어가는 은색 캔 두 개, 하나는 떠오르고 다른 하나는 천천히 바닥까지 가라앉는다, 낮 햇빛이 드는 조용한 과학실 수조 앞, 아주 느린 줌인, 시네마틱'
+  },
+  {
+    unit: '중1 · 물질의 상태 변화',
+    title: '컵 바깥에 맺힌 물',
+    aim: '컵 안에 있던 물이 밖으로 새어 나온 걸까?',
+    firstImg: '', lastImg: '',
+    firstPrompt:
+      '여름 오후 카페 창가의 나무 테이블. 창으로 들어오는 따뜻한 자연광, 배경은 부드럽게 흐려져 있다. 카메라는 컵을 살짝 위에서 비스듬히 내려다본다. 사실적인 사진, 화면에 글자 없음. 얼음이 가득 든 투명 유리컵 하나가 마른 컵받침 위에 놓여 있고, 컵 바깥면은 뽀송하고 깨끗하다.',
+    lastPrompt:
+      '여름 오후 카페 창가의 나무 테이블. 창으로 들어오는 따뜻한 자연광, 배경은 부드럽게 흐려져 있다. 카메라는 컵을 살짝 위에서 비스듬히 내려다본다. 사실적인 사진, 화면에 글자 없음. 얼음이 든 투명 유리컵 바깥면이 굵은 물방울로 빽빽하게 덮였고, 흘러내린 물이 컵받침에 고여 나무 테이블에 둥근 물자국을 남겼다.',
+    videoPrompt:
+      '유리컵 바깥면에 물방울이 하나씩 맺혀 점점 굵어지고 흘러내린다, 여름 오후 햇빛이 드는 조용한 카페 창가, 컵 표면으로 아주 느린 접사 줌인, 시네마틱'
+  },
+  {
+    unit: '중2 · 전기와 자기',
+    title: '자에 딸려 올라간 종이',
+    aim: '왜 종이가 자한테 딸려 올라갈까?',
+    firstImg: '', lastImg: '',
+    firstPrompt:
+      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 흩어져 있고, 그 위 손바닥 한 뼘 높이에 투명한 플라스틱 자가 수평으로 들려 있으며, 종이 조각들은 책상에 그대로 붙어 있다.',
+    lastPrompt:
+      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 작게 자른 흰 종이 조각들이 책상에서 떠올라 투명한 플라스틱 자 아랫면에 다닥다닥 붙어 있고, 몇 조각은 공중에 매달려 있다.',
+    videoPrompt:
+      '책상 위 흰 종이 조각들이 하나씩 떠올라 플라스틱 자 아랫면에 달라붙는다, 오후 햇빛이 비스듬히 드는 조용한 교실, 옆에서 아주 느리게 다가가는 줌인, 시네마틱'
+  }
+];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   에이전트 지시문 — SENGPT 에 붙여넣는 본문
+   ══════════════════════════════════════════════════════════════════════════ */
+const AGENT_SPEC = `너는 중등 과학 교사가 「질문 유발 영상」을 만들도록 돕는 조력자다.
+결과물은 SENEDU에서 쓸 이미지 프롬프트 두 개와 영상 프롬프트 한 개다.
+
+■ 가장 중요한 원칙
+이 영상은 개념을 설명하지 않는다. 현상 하나만 보여 준다.
+학생이 "어? 왜 저러지?" 하고 묻게 만드는 것이 유일한 목적이다.
+영상이 답까지 보여 주면 실패다.
+
+■ 절대 넣지 않는 것
+- 화면에 나오는 글자, 숫자, 기호
+- 입자·분자·원자 모형, 전하 부호
+- 힘 화살표, 자기력선, 광선 경로, 전류 방향
+- 그래프, 계기판 눈금, 측정값
+- "정확히 두 배" 같은 정량적 결과
+- 몇 초 안에 두 가지 이상 변하는 복잡한 장면
+- 불·폭발·부상 등 위험 장면, 실존 인물, 특정 학생
+이 중 하나라도 꼭 필요하다고 판단되면 그 장면을 버리고 다른 현상을 제안하라.
+왜 버렸는지 한 줄로 알린다.
+
+■ 잘 되는 것
+- 일상 사물이 이상하게 구는 순간
+- 느린 변화 — 김 서림, 물방울, 그림자, 녹는 것, 번지는 것
+- 사람이 놀라거나 갸웃하는 반응 (얼굴 클로즈업은 피하고 손·뒷모습을 쓴다)
+- 실물로 보여 주기 어려운 규모나 속도
+- 카메라가 다가가며 무언가를 드러내는 것
+
+■ 장면 구조 (반드시 지킨다)
+첫 프레임 = 학생이 예상하는 평범한 상태
+끝 프레임 = 예상이 어긋난 상태
+두 프레임 사이에 달라지는 것은 딱 하나다.
+장소, 카메라 각도, 조명, 등장 인물과 복장은 완전히 같아야 한다.
+
+■ 교사가 주는 것
+1 학년·단원  2 성취기준 또는 개념  3 받고 싶은 학생 질문
+4 무대  5 학생이 예상할 결과  6 실제로 벌어지는 일
+5번과 6번은 비어 있을 수 있다. 비어 있으면 서로 다른 세 가지 안을 먼저 제시하고,
+교사가 하나를 고른 뒤에 아래 출력을 진행한다.
+
+■ 출력 형식 — 이 순서와 이 제목 그대로 쓴다
+
+【1】 장면 설계
+- 한 문장 요약 :
+- 처음 : (평범한 상태)
+- 사이 : (무슨 일이 일어나는가)
+- 끝 : (어긋난 결과)
+- 달라지는 것 딱 하나 :
+- 예상 학생 질문 3개 : (실제 중학생이 쓸 법한 말투로)
+- 이 장면으로는 나오지 않는 질문 1개 : (교사가 헛기대하지 않도록)
+
+【2】 첫 프레임 이미지 프롬프트
+한 문단으로 쓴다. 장소, 사물, 조명, 카메라 각도를 확정한다.
+한국 중학교 맥락으로 쓰고, "사실적인 사진, 화면에 글자 없음"을 반드시 포함한다.
+
+【3】 끝 프레임 이미지 프롬프트
+【2】의 장소·조명·카메라 문장을 글자 하나 바꾸지 말고 그대로 다시 쓴 다음,
+달라지는 한 가지만 교체한다.
+
+【4】 영상 프롬프트
+SENEDU 형식으로 한 줄만 쓴다.
+[주체+동작], [배경+분위기], [카메라 움직임] 순서로 쓰고 카메라는 하나만 지정한다.
+예: 천천히 기울어지는 유리컵, 창가 아침 햇빛이 드는 조용한 교실, 아주 느린 줌인, 시네마틱
+
+【5】 점검
+- 금지 목록 위반 : 없음 / (있으면 무엇인지)
+- 영상이 답을 보여 주는가 : 아니오 / (예라면 어떻게 고칠지)
+- 4~8초 안에 담기는가 : 예 / 아니오
+
+■ 말투와 태도
+교사에게 존댓말로 짧게 답한다. 설명을 늘리지 않는다. 프롬프트는 한국어로 쓴다.
+교사가 "다시"라고 하면 같은 개념으로 무대가 완전히 다른 안을 새로 준다.`;
+
+/* ══════════════════════════════════════════════════════════════════════════
+   렌더링
+   ══════════════════════════════════════════════════════════════════════════ */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const KO_NUM = ['영','한','두','세','네','다섯','여섯','일곱','여덟','아홉','열'];
+
+function shotBlock(label, order, img, prompt, kitIdx, which){
+  const id = 'p-' + kitIdx + '-' + which;
+  const visual = img
+    ? `<img src="img/${esc(img)}" alt="${esc(label)}">`
+    : `<div class="ph">이미지 파일이 아직 없습니다<br>아래 프롬프트로 먼저 만드십시오</div>`;
+  return `
+    <div class="shot">
+      <div class="cap"><b>${esc(label)}</b><i>${esc(order)}</i></div>
+      ${visual}
+      <div class="body">
+        <div class="plabel">
+          <b>이미지 프롬프트</b>
+          <button class="copy" data-copy-target="#${id}">복사</button>
+        </div>
+        <div class="prompt" id="${id}">${esc(prompt)}</div>
+      </div>
+    </div>`;
+}
+
+function renderKits(){
+  const host = $('#kitList');
+  if(!host) return;
+  host.innerHTML = KITS.map((k, i) => `
+    <article class="kit">
+      <div class="kithead"><span class="unit">${esc(k.unit)}</span></div>
+      <h3>${esc(k.title)}</h3>
+      <p class="aim"><span>이 영상으로 받고 싶은 질문</span>${esc(k.aim)}</p>
+      <div class="shots">
+        ${shotBlock('첫 프레임', '학생의 예상', k.firstImg, k.firstPrompt, i, 'first')}
+        ${shotBlock('끝 프레임', '어긋난 결과', k.lastImg,  k.lastPrompt,  i, 'last')}
+      </div>
+      <div class="plabel">
+        <b>영상 프롬프트 — SENEDU 에 붙여넣습니다</b>
+        <button class="copy" data-copy-target="#v-${i}">복사</button>
+      </div>
+      <div class="prompt big" id="v-${i}">${esc(k.videoPrompt)}</div>
+    </article>`).join('');
+
+  const c = $('#kitCount');
+  if(c) c.textContent = (KO_NUM[KITS.length] || KITS.length) + ' 세트';
+}
+
+/* ── 복사 ─────────────────────────────── */
+let toastTimer = null;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('on'), 1700);
+}
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text);
+  }
+  // file:// 로 직접 여신 경우를 위한 대비책
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); resolve(); }
+    catch(e){ reject(e); }
+    finally{ document.body.removeChild(ta); }
+  });
+}
+
+function flash(btn, label){
+  const old = btn.textContent;
+  btn.textContent = label;
+  btn.classList.add('done');
+  setTimeout(() => { btn.textContent = old; btn.classList.remove('done'); }, 1600);
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-copy-target]');
+  if(!btn) return;
+  const src = $(btn.getAttribute('data-copy-target'));
+  if(!src) return;
+  copyText(src.textContent)
+    .then(() => { flash(btn, '복사됨'); toast('복사했습니다. 붙여넣으십시오.'); })
+    .catch(() => toast('복사가 막혀 있습니다. 글자를 직접 선택해 주십시오.'));
+});
+
+/* ── 지시문 ───────────────────────────── */
+function initSpec(){
+  $('#specBox').textContent = AGENT_SPEC;
+
+  $('#copySpec').addEventListener('click', function(){
+    copyText(AGENT_SPEC)
+      .then(() => { flash(this, '✓ 복사됐습니다'); toast('SENGPT 에이전트 지시문 칸에 붙여넣으십시오.'); })
+      .catch(() => toast('복사가 막혀 있습니다. 아래 「지시문 전문 보기」에서 직접 선택해 주십시오.'));
+  });
+
+  $('#dlSpec').addEventListener('click', () => {
+    const blob = new Blob([AGENT_SPEC], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '질문유발영상_에이전트_지시문.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+}
+
+/* ── 빌더 ─────────────────────────────── */
+const FIELDS = ['f1','f2','f3','f4','f5','f6'];
+const LABELS = [
+  '1. 학년·단원',
+  '2. 성취기준 또는 개념',
+  '3. 받고 싶은 학생 질문',
+  '4. 무대',
+  '5. 학생이 예상할 결과',
+  '6. 실제로 벌어지는 일'
+];
+const STORE = 'senedu-video-builder';
+
+function buildText(){
+  const v = FIELDS.map(id => ($('#' + id).value || '').trim());
+  const lines = LABELS.map((lb, i) => {
+    if(i >= 4 && !v[i]) return lb + ' : (비워 둡니다 — 세 가지 안을 제안해 주십시오)';
+    return lb + ' : ' + (v[i] || '');
+  });
+  return '[질문 유발 영상 요청]\n' + lines.join('\n') +
+    '\n\n지시문에 있는 출력 형식 【1】~【5】 그대로 답해 주십시오.';
+}
+
+function syncBuilder(){
+  $('#builtOut').textContent = buildText();
+  try{
+    const data = {};
+    FIELDS.forEach(id => data[id] = $('#' + id).value);
+    localStorage.setItem(STORE, JSON.stringify(data));
+  }catch(e){/* 저장이 막힌 브라우저에서도 화면은 그대로 씁니다 */}
+}
+
+function initBuilder(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORE) || '{}');
+    FIELDS.forEach(id => { if(saved[id]) $('#' + id).value = saved[id]; });
+  }catch(e){}
+
+  FIELDS.forEach(id => $('#' + id).addEventListener('input', syncBuilder));
+
+  $('#clearBuilder').addEventListener('click', () => {
+    FIELDS.forEach(id => $('#' + id).value = '');
+    syncBuilder();
+    toast('비웠습니다.');
+  });
+
+  syncBuilder();
+}
+
+/* ── 밝기 ─────────────────────────────── */
+function initTheme(){
+  const root = document.documentElement, btn = $('#themeBtn');
+  try{
+    const s = localStorage.getItem('gt-theme');
+    if(s) root.setAttribute('data-theme', s);
+  }catch(e){}
+  btn.addEventListener('click', () => {
+    let cur = root.getAttribute('data-theme');
+    if(!cur) cur = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem('gt-theme', next); }catch(e){}
+  });
+}
+
+renderKits();
+initSpec();
+initBuilder();
+initTheme();
+</script>
+</body>
+</html>
