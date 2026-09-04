@@ -187,11 +187,60 @@ p.lede{font-size:20px;line-height:1.6;color:var(--slate);margin-top:14px;max-wid
 .q .mark{font-family:Georgia,serif;font-size:40px;line-height:.7;color:var(--brand-purple-300)}
 .q .txt{font-size:18px;line-height:1.55;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
 .q .by{margin-top:auto;font-size:13px;color:var(--steel);font-weight:500}
-.q.ph{
-  background:repeating-linear-gradient(135deg,#fafaf9,#fafaf9 10px,#f2f1ef 10px,#f2f1ef 20px);
-  border:2px dashed var(--hairline-strong);
+.q.tall .txt{font-size:16.5px;line-height:1.6}
+
+/* 요약 띠 + 전문 열기 */
+.sumbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.chip2{
+  font-size:13.5px;font-weight:600;padding:7px 13px;border-radius:var(--r-full);
+  background:var(--tint-gray);color:var(--charcoal);border:1px solid var(--hairline);
 }
-.q.ph .txt{color:var(--steel);font-weight:500;font-size:16px}
+.chip2.a{background:var(--tint-mint);border-color:#bfe6cd}
+.chip2.b{background:var(--tint-sky);border-color:#c3ddf2}
+.chip2.c{background:var(--tint-peach);border-color:#f7d5b8}
+.chip2.d{background:var(--tint-lavender);border-color:#cfc5ea}
+.openall{
+  margin-left:auto;cursor:pointer;font-family:var(--font);
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13.5px;font-weight:700;padding:9px 17px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;border:none;transition:background .15s;
+}
+.openall:hover{background:var(--primary-pressed)}
+
+/* ── 학생 답변 전문 ── */
+#answers{
+  position:absolute;inset:0;z-index:41;background:#070f24;
+  display:none;flex-direction:column;
+}
+#answers.on{display:flex}
+#answers .ahead{
+  flex:none;display:flex;align-items:center;gap:14px;
+  padding:22px 40px 16px;border-bottom:1px solid rgba(255,255,255,.14);
+}
+#answers .ahead h4{color:#fff;font-size:19px;font-weight:700;letter-spacing:-.015em}
+#answers .ahead .sub{font-size:13px;color:#8f98af}
+#answers .close{
+  margin-left:auto;cursor:pointer;font-family:var(--font);
+  font-size:13px;font-weight:700;padding:8px 15px;border-radius:var(--r-full);
+  background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);
+}
+#answers .close:hover{background:rgba(255,255,255,.2)}
+#answers .abody{flex:1;overflow-y:auto;padding:22px 40px 34px}
+#answers .agroup{margin-bottom:26px}
+#answers .agroup > h5{
+  font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--brand-purple-300);
+  margin-bottom:12px;
+}
+#answers .alist{columns:2;column-gap:16px}
+#answers .a{
+  break-inside:avoid;margin-bottom:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--r-lg);padding:16px 18px;
+  font-size:14.5px;line-height:1.65;color:#e2e6f0;white-space:pre-line;
+}
+#answers .a.long{columns:1;column-span:all;background:rgba(86,69,212,.18);border-color:rgba(163,148,247,.4)}
+#answers .abody::-webkit-scrollbar{width:10px}
+#answers .abody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:var(--r-full)}
 
 /* ── 여정 지도 ── */
 .journey{display:flex;align-items:stretch;margin:auto 0;padding:8px 0}
@@ -367,30 +416,34 @@ kbd{
   </section>
 
   <!-- ══════════ 3 · 학생들의 말 ══════════ -->
-  <!-- ★★ 여기에 학생 설문 응답 원문을 그대로 붙여넣으세요.
-       .q.ph 의 ph 클래스를 지우고, .txt 안의 문구를 학생 원문으로 교체하면 됩니다. ★★ -->
   <section class="slide" data-name="학생들이 해준 말"
-    data-note="제가 생각하는 저보다, <b>학생들이 제 수업을 듣고 해준 말</b>로 저를 소개하고 싶었습니다. 설문 응답을 <b>토씨 하나 바꾸지 않고</b> 그대로 가져왔습니다. — 읽고 나서: “교사는 정말 이런 걸로 사는 것 같습니다. 이런 학생들 덕분에 우리가 살 수 있는 것 같습니다.”">
+    data-note="제가 생각하는 저보다, <b>학생들이 제 수업을 듣고 해준 말</b>로 저를 소개하고 싶었습니다. 설문 응답을 <b>토씨 하나 바꾸지 않고</b> 그대로 가져왔습니다. 오타도 그대로입니다. — 세 개만 읽고, 필요하면 <b>‘학생들이 쓴 말 전체’ 단추</b>(또는 A 키)로 나머지를 보여주세요. — 읽고 나서: “교사는 정말 이런 걸로 사는 것 같습니다. 이런 학생들 덕분에 우리가 버틸 수 있는 것 같습니다.”">
     <div class="eyebrow"><span class="dot"></span>제 소개 대신</div>
     <h1 class="title sm">제가 말하는 저보다,<br><span class="accent">학생들이 해준 말로 소개하겠습니다.</span></h1>
-    <div class="quotes" style="margin-top:20px">
-      <div class="q ph">
+    <div class="quotes" style="margin-top:18px">
+      <div class="q tall" style="background:var(--tint-lavender);border-color:#cfc5ea">
         <div class="mark">“</div>
-        <div class="txt">학생 설문 응답 원문 ①<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
-        <div class="by">— 수업 설문에서</div>
+        <div class="txt">선생님 덕분에 저의 적이었던 과학 이라는 과목한테 더 쉽게 다가가고 시도해볼 수 있었던 것 같아서 정말 감사해요. … 잠깐동안이지만 선생님을 뵈면서 과학교사라는 꿈도 가졌었어요.</div>
+        <div class="by">— 과학이 ‘적’이었던 학생</div>
       </div>
-      <div class="q ph">
+      <div class="q tall" style="background:var(--tint-sky);border-color:#c3ddf2">
         <div class="mark">“</div>
-        <div class="txt">학생 설문 응답 원문 ②<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
-        <div class="by">— 수업 설문에서</div>
+        <div class="txt">저는 사실 거의 모든 내용을 선행했었거든요.그래서 그냥 수업 때 적당히 대답하고 지낼려고 했는데 선생님의 수업을 듣고 조금 생각이 바뀌었어요</div>
+        <div class="by">— 이미 다 배우고 온 학생</div>
       </div>
-      <div class="q ph">
+      <div class="q tall" style="background:var(--tint-peach);border-color:#f7d5b8">
         <div class="mark">“</div>
-        <div class="txt">학생 설문 응답 원문 ③<br><br>여기에 학생이 쓴 문장을<br>고치지 말고 그대로 넣기</div>
+        <div class="txt">모든 학생들한테 진심으로 대해주시고 열정적인 모습 너무 좋아요.</div>
         <div class="by">— 수업 설문에서</div>
       </div>
     </div>
-    <p class="small" style="margin-top:20px"><b>교사는 정말 이런 걸로 사는 것 같습니다.</b> 이런 학생들 덕분에 우리가 버틸 수 있는 것 같습니다.</p>
+    <div class="sumbar">
+      <span class="chip2 a">“과학이랑 안 맞는 사람”이라는 생각에서 벗어남</span>
+      <span class="chip2 b">외우는 과목 → 이해하는 과목</span>
+      <span class="chip2 c">모른다고 말해도 되는 분위기</span>
+      <span class="chip2 d">교실 밖까지 이어짐</span>
+      <button class="openall" id="btnAnswers">학생들이 쓴 말 전체 <span style="opacity:.7">A</span></button>
+    </div>
   </section>
 
   <!-- ══════════ 4 · 먼저 밝힐 것 (여건) ══════════ -->
@@ -711,7 +764,7 @@ kbd{
   </section>
 
   <!-- ══════════ 크롬 ══════════ -->
-  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
+  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>A</kbd> 학생 말 전문 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
   <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">15:00</div>
 
   <div id="chrome">
@@ -729,6 +782,69 @@ kbd{
   <div id="overview">
     <h4>목차 — 눌러서 이동</h4>
     <div id="ovGrid"></div>
+  </div>
+
+  <!-- ══════════ 학생 답변 전문 (A 키 · 원문 그대로, 오타 포함) ══════════ -->
+  <div id="answers">
+    <div class="ahead">
+      <h4>학생들이 쓴 말 — 전문</h4>
+      <span class="sub">수업 설문 응답 · 맞춤법과 이모지까지 원문 그대로</span>
+      <button class="close" id="btnAnswersClose">닫기 (Esc)</button>
+    </div>
+    <div class="abody">
+
+      <div class="agroup">
+        <h5>“과학이랑 안 맞는 사람”이라는 생각에서 벗어난 이야기</h5>
+        <div class="a long">선생님 덕분에 저의 적이었던 과학 이라는 과목한테 더 쉽게 다가가고 시도해볼 수 있었던 것 같아서 정말 감사해요. 누군가는 중간고사를 봐야 했기에 어쩔 수 없이 과학 공부를 해야 했었다고 할 수 있고 저도 그에 약간 동의하지만 그것을 통해서 과학적인 지식을 더 넓히고 과학이 좀 더 좋아진 것 같아요. 잠깐동안이지만 선생님을 뵈면서 과학교사라는 꿈도 가졌었어요. 저희 오빠가 과학을 엄청 좋아하고 과학고 준비도 했었는데 제가 과학을 너무 못하니까 항상 저를 보면서 너는 과학이랑은 결이 안맞는다고 나중에 어떻게 할거냐고 항상 구박을 했었어요. 근데 제가 선생님께 수업을 받으면서 얻은 과학 지식을 가지고 오빠랑 과학에 대해서 토론도 하고 서로 이게 맞다고 싸우기도 했었어요. 그만큼 과학이 너무 좋아진 것 같아요.ㅎ 제가 너무 얻기만 하고 드리는 건 없는 것 같아서 죄송하지만 진짜진짜 너무 감사해요!!!!!!! 앞으로도 잘 부탁드려요! 사랑합니닷💘</div>
+        <div class="alist">
+          <div class="a">선생님! 항상 재밌게 수업해주셔서 감사해요. 덕분에 과학이랑은 하나도 맞지 않다고 생각했던 제가 드디어 과학에 흥미를 느끼게 되었어요. 과학을 공부하면서 저의 문제해결능력? 도 늘었다고 생각하고 과학이 너무 재미있어졌어요. 그냥 제 최애 과목이에요. 항상 과학이 저의 큰 걸림돌이었는데 사람 한 명 살려주셔서 감사해요!!!</div>
+          <div class="a">과학이 저한테는 어려운 과목이였고 이해가 안되니까 암기조차 안됐얼는데 조승재선생님이 매 수업시간마다 잘 이해할수있게 쉽게 설명해주시고 수업끝나고 친구들이 편하게 모르는거에대해 질문하고 답변받을수있는 시간이있었어서 과학이랑 있었던 벽을 깰수 있었어요:)</div>
+          <div class="a">나는 사실 어릴 때부터 학기 초까지는 과학 시험을 보지 않으니까 애매하게 이해가 되면 넘어가고 안될땐 외우는 식으로 과학을 공부했었다. 근데 그렇게 하다보니 궁금증이 수도 없이 나타나고, 근데 해결하려 하진 않고, 그래서 흥미를 못 느끼니 학원에 있는 시간만 과학을 공부해 딱히 성과가 나지 않았었다. 그래서 다른 애들은 당연히 다 아는 완전 기본적인 과학 지식도 난 몰랐고 그 때문에 나는 문과라고 생각하며 살았었다. 그런데 이번에 과학에 시간을 많이 들이면서 꽤 많은 것을 느끼게 되었다. 처음엔 이해가 되지 않고, 어떤 식으로 공부해야 할 지 모르겠는데 시간은 얼마 남지 않아 스카에서 혼자 많이 울어보고 답답해 하곤 했는데 점점 이해가 되면서 다른 애들한테도 알려주고</div>
+          <div class="a">수업 진짜진짜 재밌었어요. 처음 배울 때 2학년 과학 진도만 따라가도 어려웠는데, 이제 어느 정도 설명도 할 수 있을 것 같아요. 감사합니다!</div>
+        </div>
+      </div>
+
+      <div class="agroup">
+        <h5>외우는 과목에서 이해하는 과목으로</h5>
+        <div class="alist">
+          <div class="a">외우기 전에 이해를 할 수 있게 되었다</div>
+          <div class="a">외워야 하는 과목에서 이해하는 과목으로 바꿨다</div>
+          <div class="a">원래 과학은 지루하고 암기하는 과목이라고 생각했는데, 현재는 과학에 대한 흥미가 증폭했고 암기 과목이 아니었다는 것을 깨달았다</div>
+        </div>
+      </div>
+
+      <div class="agroup">
+        <h5>모른다고 말해도 되는 분위기</h5>
+        <div class="alist">
+          <div class="a">1년동안 과학에 대해 잘 알려주시고 분위기를 편안하게 해주시게 해주셔서 너무 감사하고</div>
+          <div class="a">그리고 잘 모르는게 있을때 착하게 설명해주셔서 감사했어요.</div>
+          <div class="a">직접 피드백 받는 선생님이 거의 안계시는데 다음 수업을 더 잘하기 위에서 설문도 하시도 피드백도 받으면서 노력해주셔서 정말 감사합니다.</div>
+        </div>
+      </div>
+
+      <div class="agroup">
+        <h5>선생님의 노력이 눈에 보인다</h5>
+        <div class="alist">
+          <div class="a">쌤 항상 우리 위해서 노력해주셔서 너무 감사해요..
+ 진짜 많이 노력해주시고 생각해주시는데 눈으로 보여요!!! 쌤 만큼 학생들을 챙겨주시는 쌤은 정말 없는것같아요! 항상 감사하고 좀 주무세요 건강 걱정됩니다 ㅠㅠ</div>
+          <div class="a">저는 사실 거의 모든 내용을 선행했었거든요.그래서 그냥 수업 때 적당히 대답하고 지낼려고 했는데 선생님의 수업을 듣고 조금 생각이 바뀌었어요</div>
+          <div class="a">선생님이 열정적으로 어떻게든 저희를 즐겁게 가르치르고 하시는 것이 눈에 너무 잘 보이더라구요.그 이후 항상 선생님의 수업이 궁금해졌어요.</div>
+          <div class="a">선생님, 선생님이 우리를 위해서 여러 노력을 해주셔서 감사하고 이런 기회를 주시는 것만 봐도 저희와 수업에 열정적이라는 걸 알 수 있었습니다. 항상 감사해요 😀😀😀😀😀</div>
+          <div class="a">모든 학생들한테 진심으로 대해주시고 열정적인 모습 너무 좋아요.</div>
+          <div class="a">다른 일 하기도 바쁘실텐데 우리 반까지 꼼꼼히 챙기면서 서로간에 기분 상하는 일 없게 말조심하는것 등 너무 많아서 말하기 힘들정도에요ㅋㅋㅠㅠ항상 감사합니다!!</div>
+        </div>
+      </div>
+
+      <div class="agroup">
+        <h5>교실 밖까지 이어진 것</h5>
+        <div class="alist">
+          <div class="a">영화나 책에서 우리가 배운거 나오면 신기했어요!
+ 과학 영화도 자발적으로 보고 화학 반응 영상들도 찾아봣어용 ദ്ദി ´ᵕ｀๑)و♡</div>
+          <div class="a">직접 발견한 암석이라 더 애정이 생겨, 물에 깨끗이 씻어 지금까지 집에 잘 보관하고 있습니다</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </div>
@@ -803,9 +919,24 @@ kbd{
   document.getElementById('prev').onclick = function(){ go(-1); };
   document.getElementById('next').onclick = function(){ go(1); };
 
+  /* 학생 답변 전문 */
+  var ansEl = document.getElementById('answers');
+  document.getElementById('btnAnswers').onclick = function(){ ansEl.classList.add('on'); ansEl.querySelector('.abody').scrollTop = 0; };
+  document.getElementById('btnAnswersClose').onclick = function(){ ansEl.classList.remove('on'); };
+
   addEventListener('keydown', function(e){
     var k = e.key;
-    if (k === 'Escape'){ ovEl.classList.remove('on'); return; }
+    if (k === 'Escape'){ ovEl.classList.remove('on'); ansEl.classList.remove('on'); return; }
+    if (ansEl.classList.contains('on')){
+      if (k === 'a' || k === 'A' || k === 'ㅁ') ansEl.classList.remove('on');
+      return;                       /* 전문이 열려 있으면 슬라이드는 넘기지 않습니다 */
+    }
+    if (k === 'a' || k === 'A' || k === 'ㅁ'){
+      show(2);                      /* 어디서든 A → 학생 말 슬라이드 + 전문 */
+      ansEl.classList.add('on');
+      ansEl.querySelector('.abody').scrollTop = 0;
+      return;
+    }
     if (ovEl.classList.contains('on') && k !== 'o' && k !== 'O' && k !== 'ㅐ') return;
     if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); go(1); }
     else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); go(-1); }
@@ -823,7 +954,7 @@ kbd{
   });
 
   stage.addEventListener('click', function(e){
-    if (e.target.closest('a, button, #timer, #overview, #notes')) return;
+    if (e.target.closest('a, button, #timer, #overview, #notes, #answers')) return;
     go(1);
   });
 
