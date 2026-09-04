@@ -259,6 +259,22 @@
     font-size:14px;color:var(--ink-soft);line-height:1.6;}
   .callout b{color:var(--ink);font-weight:800;}
 
+  /* ── 지시문을 이렇게 쓴 이유 ───────────── */
+  .reasons{display:grid;gap:14px;margin:6px 0 0;counter-reset:r;}
+  .reason{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:22px;
+    align-items:start;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;padding:20px 22px;}
+  @media(max-width:760px){.reason{grid-template-columns:1fr;gap:13px;}}
+  .reason .rq{font-size:13.5px;line-height:1.65;color:var(--ink-soft);background:var(--surface-2);
+    border-left:3px solid var(--blue);border-radius:0 11px 11px 0;padding:12px 15px;word-break:keep-all;}
+  .reason .rq em{font-style:normal;color:var(--ink);font-weight:700;}
+  .reason h4{margin:0 0 6px;font-size:16px;font-weight:800;letter-spacing:-.02em;
+    display:flex;gap:9px;align-items:baseline;}
+  .reason h4::before{counter-increment:r;content:counter(r);font-size:12px;color:var(--blue);
+    background:var(--blue-bg);border-radius:6px;padding:2px 7px;font-variant-numeric:tabular-nums;}
+  .reason p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.62;}
+  .reason p b{color:var(--ink);font-weight:700;}
+
   /* ── footer ───────────────────────────── */
   footer{margin:64px 0 0;padding:30px 0 46px;border-top:1px solid var(--line-soft);}
   #app-credit{font-size:12.5px;color:var(--ink-faint);text-align:center;line-height:1.9;}
@@ -284,6 +300,7 @@
     <a class="navlink" href="#kits">재료 세트</a>
     <a class="navlink" href="#why">원리</a>
     <a class="navlink" href="#agent">에이전트</a>
+    <a class="navlink" href="#whyspec">지시문 읽기</a>
     <a class="navlink" href="#builder">빌더</a>
     <button class="toggle" id="themeBtn" aria-label="밝기 전환">◐</button>
   </div>
@@ -503,6 +520,127 @@
         <div class="prompt" id="specBox"></div>
       </div>
     </details>
+  </div>
+</section>
+
+<!-- ══════════ 지시문을 이렇게 쓴 이유 ══════════ -->
+<section id="whyspec" style="--c:var(--blue);--cbg:var(--blue-bg)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">지시문 읽기</span><span class="n">열한 가지</span></div>
+    <h2>왜 이렇게 썼나</h2>
+    <p class="sub">지시문은 그냥 부탁하는 글이 아니라 <b>설계된 물건</b>입니다.
+      문장 하나하나에 이유가 있습니다. 여기서 쓴 요령은 SENEDU 전용이 아니라
+      <b>어떤 에이전트를 만드실 때든 그대로 쓰입니다</b>.</p>
+
+    <div class="reasons">
+
+      <div class="reason">
+        <div class="rq">“결과물은 SENEDU에서 쓸 <em>이미지 프롬프트 두 개와 영상 프롬프트 한 개</em>다.”</div>
+        <div>
+          <h4>결과물을 첫 줄에 못박습니다</h4>
+          <p>이걸 안 쓰면 에이전트가 수업 지도안을 쓰거나 밀도를 설명하기 시작합니다.
+            <b>무엇을 만들어 내는 기계인지</b>를 맨 앞에 두면 대화가 옆으로 새지 않습니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“영상이 <em>답까지 보여 주면 실패다</em>.”</div>
+        <div>
+          <h4>목적 대신 실패 조건을 씁니다</h4>
+          <p>“질문을 유발하게 해 줘”는 채점이 안 됩니다. 반대로 <b>무엇이 실패인지</b>를 주면
+            에이전트가 자기 결과를 그 잣대로 걸러 냅니다. 좋은 지시문은 목표보다 탈락 기준이 선명합니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“교사가 요청하지 않으면 … <em>네가 먼저 넣지 마라</em>.”</div>
+        <div>
+          <h4>금지가 아니라 행위자를 지정합니다</h4>
+          <p>“넣지 마라”라고만 하면 선생님이 정당하게 요청할 때도 거절합니다.
+            <b>“네가 먼저”</b> 한 마디를 넣으면, 슬쩍 끼워 넣는 것만 막히고 요청한 것은 통과합니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“금지해서가 아니라, <em>요청하지 않은 표현이 조용히 틀리기 때문이다</em>.”</div>
+        <div>
+          <h4>규칙마다 이유를 붙입니다</h4>
+          <p>이유 없는 규칙은 목록에 적힌 것만 막습니다. 목록 밖의 새로운 상황이 오면 그냥 통과시킵니다.
+            <b>이유를 알면 처음 보는 경우에도 같은 판단</b>을 합니다. 이건 사람을 가르칠 때와 같습니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“그대로 한다. … <em>대신 반드시 세 가지를 함께 준다</em>.”</div>
+        <div>
+          <h4>막을 게 아니면 조건을 답니다</h4>
+          <p>일부러 틀린 자료를 만드는 건 좋은 수업입니다. 위험한 건 <b>만든 사람이 뭐가 틀렸는지 모르는 것</b>뿐입니다.
+            그래서 금지 대신 “정답지·발문·바로잡는 문장을 붙여라”로 조건을 걸었습니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“<em>조용히 넘어가지 않는다</em>.”</div>
+        <div>
+          <h4>기본 습성을 뒤집는 문장입니다</h4>
+          <p>생성형 AI는 지적하라고 시키지 않으면 문제를 말하지 않습니다. 그냥 만들어 줍니다.
+            이 한 줄이 <b>“말 안 하는 것이 기본”을 “말하는 것이 기본”으로</b> 바꿉니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“■ 잘 되는 것 … - <em>느린 변화</em> — 김 서림, 물방울, 그림자, 녹는 것, 번지는 것”</div>
+        <div>
+          <h4>안 되는 것만 주면 무난한 것만 나옵니다</h4>
+          <p>금지 목록만 있으면 에이전트는 안전한 쪽으로만 피합니다. 아무도 안 궁금한 장면이 나옵니다.
+            <b>되는 것을 구체적으로</b> 줘야 아이디어가 나옵니다. 금지와 권장은 한 쌍으로 씁니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“두 프레임 사이에 <em>달라지는 것은 딱 하나다</em>. 장소, 카메라 각도, 조명, 등장 인물과 복장은 완전히 같아야 한다.”</div>
+        <div>
+          <h4>제약이 곧 품질입니다</h4>
+          <p>자유롭게 쓰라고 하면 두 장이 다른 세상이 되어 영상이 무너집니다.
+            <b>좁힐수록 결과가 좋아지는 자리</b>가 있습니다. 여기가 그 자리라서 가장 세게 묶었습니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“5번과 6번은 비어 있을 수 있다. <em>비어 있으면 서로 다른 세 가지 안을 먼저 제시</em>하고…”</div>
+        <div>
+          <h4>막히는 자리에 미리 갈림길을 냅니다</h4>
+          <p>선생님이 가장 많이 막히는 칸이 “학생이 뭘 예상할까”입니다.
+            이 분기를 안 써 두면 에이전트가 되물으며 멈춰 섭니다.
+            <b>사용자가 못 채울 칸을 미리 예상해서</b> 그때 뭘 할지 적어 둡니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“길어지면 <em>형용사와 배경 묘사를 먼저 줄이고</em>, 장소·조명·카메라·달라지는 것 하나는 끝까지 남긴다.”</div>
+        <div>
+          <h4>길이 제한에는 버릴 순서를 함께 줍니다</h4>
+          <p>“1,000자 이내로”만 쓰면 아무 데서나 자릅니다. 하필 제일 중요한 게 잘립니다.
+            <b>무엇부터 버리고 무엇은 남길지</b>를 정해 주면 짧아져도 장면이 살아 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="rq">“【5】 점검 … - <em>일부러 틀리게 한 것</em> : 없음 / (있으면 무엇을 어떻게 — 교사만 보는 정답지)”</div>
+        <div>
+          <h4>규칙은 앞에, 검사는 끝에 둡니다</h4>
+          <p>앞쪽 규칙만으로는 잘 안 지켜집니다. <b>마지막에 스스로 답하게</b> 하면 훨씬 잘 지킵니다.
+            제목을 【 】로 고정한 것도 이유가 있습니다 — 매번 같은 자리에 나와야 선생님이 눈으로 찾아 복사합니다.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <b>한 가지 더.</b> 지시문 끝에 “교사가 <b>다시</b>라고 하면 같은 개념으로 무대가 완전히 다른 안을 새로 준다”를
+      넣어 두었습니다. 마음에 안 들 때 뭐라고 말해야 할지 몰라 대화가 길어지는 걸 막습니다.
+      한 단어면 됩니다.
+    </div>
   </div>
 </section>
 
