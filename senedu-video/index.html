@@ -193,6 +193,11 @@
   .plabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 7px;}
   .plabel b{font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--ink-faint);}
 
+  .pr{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+  .cnt{font-size:11.5px;font-weight:700;color:var(--ink-faint);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .cnt.over{color:var(--red);}
+
   .copy{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
     font-family:inherit;font-size:12px;font-weight:700;padding:5px 11px;border-radius:8px;
     cursor:pointer;transition:.16s;white-space:nowrap;}
@@ -320,6 +325,7 @@
     <div class="pull">
       <p>SENEDU에서 할 일은 셋뿐입니다.</p>
       <p>① 첫 프레임 이미지 올리기 → ② 끝 프레임 이미지 올리기 → ③ 영상 프롬프트 붙여넣고 생성</p>
+      <p>영상 프롬프트는 <b>1,000자 이내</b>로 넣습니다. 아래 상자마다 글자 수가 함께 표시됩니다.</p>
     </div>
 
     <div id="kitList"></div>
@@ -520,7 +526,10 @@
       <div class="out">
         <div class="plabel">
           <b>에이전트에게 보낼 문장</b>
-          <button class="copy" data-copy-target="#builtOut">복사</button>
+          <span class="pr">
+            <span class="cnt" data-count-for="#builtOut"></span>
+            <button class="copy" data-copy-target="#builtOut">복사</button>
+          </span>
         </div>
         <div class="prompt big" id="builtOut"></div>
         <div class="row2">
@@ -676,6 +685,11 @@ const AGENT_SPEC = `너는 중등 과학 교사가 「질문 유발 영상」을
 5번과 6번은 비어 있을 수 있다. 비어 있으면 서로 다른 세 가지 안을 먼저 제시하고,
 교사가 하나를 고른 뒤에 아래 출력을 진행한다.
 
+■ 길이 제한
+SENEDU 는 프롬프트를 1,000자까지만 받는다.
+아래 【2】【3】【4】는 각각 1,000자를 넘지 않게 쓴다.
+길어지면 형용사와 배경 묘사를 먼저 줄이고, 장소·조명·카메라·달라지는 것 하나는 끝까지 남긴다.
+
 ■ 출력 형식 — 이 순서와 이 제목 그대로 쓴다
 
 【1】 장면 설계
@@ -696,7 +710,7 @@ const AGENT_SPEC = `너는 중등 과학 교사가 「질문 유발 영상」을
 달라지는 한 가지만 교체한다.
 
 【4】 영상 프롬프트
-SENEDU 형식으로 한 줄만 쓴다.
+SENEDU 형식으로 한 줄만 쓴다. 1,000자 이내로 쓴다.
 [주체+동작], [배경+분위기], [카메라 움직임] 순서로 쓰고 카메라는 하나만 지정한다.
 예: 천천히 기울어지는 유리컵, 창가 아침 햇빛이 드는 조용한 교실, 아주 느린 줌인, 시네마틱
 
@@ -704,6 +718,7 @@ SENEDU 형식으로 한 줄만 쓴다.
 - 금지 목록 위반 : 없음 / (있으면 무엇인지)
 - 영상이 답을 보여 주는가 : 아니오 / (예라면 어떻게 고칠지)
 - 4~8초 안에 담기는가 : 예 / 아니오
+- 글자 수 : 【2】○○자 · 【3】○○자 · 【4】○○자 (모두 1,000자 이내여야 한다)
 
 ■ 말투와 태도
 교사에게 존댓말로 짧게 답한다. 설명을 늘리지 않는다. 프롬프트는 한국어로 쓴다.
@@ -730,11 +745,27 @@ function shotBlock(label, order, img, prompt, kitIdx, which){
       <div class="body">
         <div class="plabel">
           <b>이미지 프롬프트</b>
-          <button class="copy" data-copy-target="#${id}">복사</button>
+          <span class="pr">
+            <span class="cnt" data-count-for="#${id}"></span>
+            <button class="copy" data-copy-target="#${id}">복사</button>
+          </span>
         </div>
         <div class="prompt" id="${id}">${esc(prompt)}</div>
       </div>
     </div>`;
+}
+
+/** SENEDU 는 프롬프트를 1,000자까지 받습니다. 상자마다 남은 여유를 보여 줍니다. */
+const LIMIT = 1000;
+
+function updateCounts(){
+  $$('[data-count-for]').forEach(el => {
+    const src = $(el.getAttribute('data-count-for'));
+    if(!src) return;
+    const n = src.textContent.length;
+    el.textContent = n.toLocaleString('ko-KR') + '자 / ' + LIMIT.toLocaleString('ko-KR') + '자';
+    el.classList.toggle('over', n > LIMIT);
+  });
 }
 
 function renderKits(){
@@ -751,13 +782,18 @@ function renderKits(){
       </div>
       <div class="plabel">
         <b>영상 프롬프트 — SENEDU 에 붙여넣습니다</b>
-        <button class="copy" data-copy-target="#v-${i}">복사</button>
+        <span class="pr">
+          <span class="cnt" data-count-for="#v-${i}"></span>
+          <button class="copy" data-copy-target="#v-${i}">복사</button>
+        </span>
       </div>
       <div class="prompt big" id="v-${i}">${esc(k.videoPrompt)}</div>
     </article>`).join('');
 
   const c = $('#kitCount');
   if(c) c.textContent = (KO_NUM[KITS.length] || KITS.length) + ' 세트';
+
+  updateCounts();
 }
 
 /* ── 복사 ─────────────────────────────── */
@@ -848,6 +884,7 @@ function buildText(){
 
 function syncBuilder(){
   $('#builtOut').textContent = buildText();
+  updateCounts();
   try{
     const data = {};
     FIELDS.forEach(id => data[id] = $('#' + id).value);
