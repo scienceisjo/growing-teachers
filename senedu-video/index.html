@@ -208,6 +208,11 @@
     padding:16px 20px;line-height:1.6;}
   .kit .aim span{font-size:12px;font-weight:550;letter-spacing:.06em;color:var(--ink-faint);
     display:block;margin:0 0 4px;}
+  .kitdl{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 24px;}
+  .kitdl-note{font-size:14px;color:var(--ink-faint);}
+  .kitdl-none{margin:0 0 24px;font-size:14px;line-height:1.6;color:var(--ink-faint);
+    background:var(--surface-2);border-radius:8px;padding:14px 18px;}
+  .shot .cap .pr{gap:10px;}
   .shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 24px;}
   @media(max-width:720px){.shots{grid-template-columns:1fr;}}
   .shot{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--canvas);}
@@ -291,9 +296,25 @@
   details[open] summary::after{content:"-";}
   details .dbody{padding:0 24px 24px;}
 
+  details .dbody p{margin:0 0 14px;font-size:15px;line-height:1.7;color:var(--ink-soft);}
+  details .dbody p:last-child{margin-bottom:0;}
+  .note-lead{font-size:18px !important;font-weight:500;color:var(--ink) !important;
+    line-height:1.5 !important;}
+
   .callout{background:var(--surface-2);border-radius:8px;padding:20px 24px;margin:24px 0 0;
     font-size:15px;color:var(--ink-soft);line-height:1.6;}
   .callout b{color:var(--ink);font-weight:500;}
+
+  /* 이 페이지에서 가장 눈에 띄어야 하는 한 칸 */
+  .spotlight{background:var(--fill-purple);color:#fff;border-radius:8px;
+    padding:32px;margin:0 0 16px;box-shadow:var(--sh-3);}
+  .sp-tag{display:inline-block;font-size:12px;font-weight:550;letter-spacing:.08em;
+    color:var(--fill-purple);background:#fff;padding:4px 10px;border-radius:4px;margin:0 0 16px;}
+  .spotlight h3{margin:0 0 12px;font-size:clamp(24px,3.4vw,32px);font-weight:600;
+    letter-spacing:-.01em;line-height:1.25;color:#fff;}
+  .spotlight p{margin:0 0 12px;font-size:16px;line-height:1.7;color:rgba(255,255,255,.9);}
+  .spotlight p:last-child{margin-bottom:0;}
+  .spotlight b{color:#fff;font-weight:500;}
 
   /* ── 지시문을 이렇게 쓴 이유 ──────────────────────────── */
   .reasons{display:grid;gap:16px;margin:0;counter-reset:r;}
@@ -336,7 +357,6 @@
     </a>
     <span class="spacer"></span>
     <a class="navlink" href="#kits">재료 세트</a>
-    <a class="navlink" href="#why">원리</a>
     <a class="navlink" href="#agent">에이전트</a>
     <a class="navlink" href="#whyspec">지시문 읽기</a>
     <a class="navlink" href="#builder">빌더</a>
@@ -349,22 +369,22 @@
   <div class="wrap inner">
     <p class="eyebrow"><span class="live"></span>학생 질문 중심 수업·평가 선도교원 연수 · 2교시 실습</p>
     <h1>첫 장면과 끝 장면<br><span class="u">사이</span>가 질문이 됩니다</h1>
-    <p class="lede">SENEDU는 <b>시작 프레임과 끝 프레임</b>을 받아서 그 사이를 영상으로 채웁니다.
-      첫 장면에 <b>학생이 예상하는 장면</b>을, 끝 장면에 <b>예상이 어긋난 장면</b>을 두면
-      그 몇 초가 그대로 질문 유발 자료가 됩니다.</p>
+    <p class="lede">SENEDU는 <b>시작 프레임과 끝 프레임</b> 두 장을 받아서 그 사이를 영상으로 채웁니다.
+      그래서 만드는 사람이 정할 것은 <b>무엇이 어떻게 달라지는가</b> 하나입니다.
+      그 몇 초를 학생이 보고 묻게 만드는 것이 오늘 할 일입니다.</p>
 
     <div class="forks">
       <a class="fork" style="--c:var(--fill-orange)" href="#kits">
         <div class="fi">🎬</div>
         <div class="fw">오늘 · 연수장에서</div>
-        <h4>주는 재료로 한 편 만들기</h4>
-        <p>이미지 두 장과 프롬프트를 받아 SENEDU에 넣기만 합니다. 먼저 되는 걸 보십시오.</p>
+        <h4>제가 미리 만들어 놓은 자료로<br>영상 한 편 만들기</h4>
+        <p>이미지 두 장과 프롬프트를 그대로 드립니다. SENEDU에 넣어 한 편 만들어 보시면 됩니다.</p>
       </a>
       <a class="fork" style="--c:var(--fill-purple)" href="#agent">
         <div class="fi">🧪</div>
         <div class="fw">나중에 · 학교에서</div>
         <h4>내 단원으로 직접 만들기</h4>
-        <p>에이전트를 하나 만들어 두면, 단원과 받고 싶은 질문만 넣어도 프롬프트 세 개가 나옵니다.</p>
+        <p>선생님께서 학교에서 가르치실 단원으로 직접 만들어 보겠습니다. 에이전트를 하나 만들어 두면 됩니다.</p>
       </a>
     </div>
   </div>
@@ -374,13 +394,13 @@
 <section id="kits" style="--c:var(--pink)">
   <div class="wrap">
     <div class="lbl"><span class="t">오늘 현장</span><span class="n" id="kitCount">세 세트</span></div>
-    <h2>이미 만들어 둔 재료로 시작합니다</h2>
-    <p class="sub">처음부터 혼자 만들면 십중팔구 막힙니다. <b>먼저 되는 걸 한 번 보고</b> 나서
-      내 단원으로 옮기는 게 훨씬 빠릅니다. 아래 세트를 그대로 쓰십시오.</p>
+    <h2>저 먼저 영상을 만들어 보겠습니다</h2>
+    <p class="sub">제가 미리 만들어 둔 자료로 <b>영상이 어떻게 만들어지는지 그 과정을 먼저</b> 보시겠습니다.
+      아래 세트를 그대로 쓰시면 됩니다.</p>
 
     <div class="pull">
-      <p>SENEDU에서 할 일은 셋뿐입니다.</p>
-      <p>① 첫 프레임 이미지 올리기 → ② 끝 프레임 이미지 올리기 → ③ 영상 프롬프트 붙여넣고 생성</p>
+      <p>SENEDU에서 할 일은 세 가지입니다.</p>
+      <p>① 첫 프레임 이미지 올리기 &nbsp;→&nbsp; ② 끝 프레임 이미지 올리기 &nbsp;→&nbsp; ③ 영상 프롬프트 붙여넣고 생성하기</p>
       <p>영상 프롬프트는 <b>1,000자 이내</b>로 넣습니다. 아래 상자마다 글자 수가 함께 표시됩니다.</p>
     </div>
 
@@ -390,40 +410,10 @@
       <b>이미지가 아직 안 보이시나요?</b> 각 세트에 이미지 자리가 비어 있으면,
       그 자리에 적힌 <b>이미지 프롬프트를 SENEDU 이미지 생성에 그대로 붙여넣어</b> 두 장을 먼저 만드시면 됩니다.
       만들어진 이미지를 그대로 영상 생성의 시작·끝 프레임으로 올립니다.
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ 원리 ══════════ -->
-<section id="why" style="--c:var(--purple)">
-  <div class="wrap">
-    <div class="lbl"><span class="t">원리</span><span class="n">왜 두 장인가</span></div>
-    <h2>두 장 사이의 어긋남이 질문입니다</h2>
-    <p class="sub">시작·끝 프레임은 화면을 안정시키는 기능이지만, 수업에서는 그보다 훨씬 큰 쓸모가 있습니다.
-      <b>예상과 결과를 두 장에 나눠 담는 틀</b>이 됩니다.</p>
-
-    <div class="frames">
-      <div class="frame" style="--c:var(--fill-blue)">
-        <span class="tag">첫 프레임</span>
-        <h4>학생이 예상하는 장면</h4>
-        <p>지극히 평범한 상태. 여기까지는 아무도 궁금해하지 않습니다. 그래야 합니다.</p>
-      </div>
-      <div class="gap">
-        <span class="g">4~8초</span>
-        <span class="arrowdown">↓</span>
-      </div>
-      <div class="frame" style="--c:var(--fill-pink)">
-        <span class="tag">끝 프레임</span>
-        <h4>예상이 어긋난 장면</h4>
-        <p>딱 한 가지만 달라져 있습니다. 그 하나가 “어? 왜 저러지?”를 만듭니다.</p>
-      </div>
-    </div>
-    <p class="becomes">그래서 선생님이 채울 칸은 두 개뿐입니다 —
-      <b>학생은 뭘 예상할까</b>, 그리고 <b>실제론 뭐가 다를까</b>.</p>
-
-    <div class="pull">
-      <p>영상이 답을 보여주면 실패입니다.</p>
-      <p>왜 그런지까지 보여 주는 순간 학생은 물을 게 없어집니다. 이 영상의 목적은 설명이 아니라 <b>불편함</b>입니다.</p>
+      <br><br>
+      <b>끝 프레임 프롬프트를 새로 쓰지 마십시오.</b> 첫 프레임의 장소·조명·각도 문장을
+      글자 하나 바꾸지 말고 그대로 두고, 달라지는 부분만 갈아 끼웁니다.
+      두 장이 다른 장소처럼 보이면 영상이 무너집니다.
     </div>
   </div>
 </section>
@@ -433,8 +423,8 @@
   <div class="wrap">
     <div class="lbl"><span class="t">경계</span><span class="n">한 번 해보고 접지 않으시도록</span></div>
     <h2>되는 것과, 조용히 틀리는 것</h2>
-    <p class="sub">생성형 영상은 <b>현상</b>에는 강하고 <b>개념</b>에는 형편없습니다.
-      이 선을 모르고 시작하면 첫 시도에서 실망하고 접게 됩니다.</p>
+    <p class="sub">입자 모형이나 자기장 표현처럼 <b>조금이라도 오개념을 만들 수 있는 것</b>은
+      굳이 영상으로 시도하지 않으려는 것입니다. 이 선을 알고 시작하시는 편이 낫습니다.</p>
 
     <div class="duo">
       <div class="card good">
@@ -458,9 +448,9 @@
           <li><b>여러 개가 한꺼번에 변하면</b> 몇 초 안에 다 못 담습니다</li>
           <li><b>이건 만들지 않습니다</b> — 위험 장면, 실존 인물, 우리 반 학생</li>
         </ul>
-        <p class="whybad"><b>왜 기본값이 “빼기”인가요?</b> 개념 그림은 틀려도 그럴듯해 보이고,
-          학생은 그걸 사실로 받아들입니다. 그래서 <b>가만두면 안 넣는 쪽</b>으로 맞춰 두었습니다.
-          필요하시면 넣으십시오 — 다만 <b>무엇이 틀렸는지 선생님이 먼저 아셔야</b> 합니다.</p>
+        <p class="whybad"><b>왜 기본값이 “빼기”인가요?</b> 개념 그림은 틀려도 그럴듯해 보여서,
+          학생이 그대로 받아들이기 쉽습니다. 그래서 <b>가만두면 안 넣는 쪽</b>으로 맞춰 두었습니다.
+          필요하시면 넣으십시오 — 다만 <b>무엇이 틀렸는지 선생님이 먼저 보실 수 있을 때</b> 넣는 것이 좋습니다.</p>
       </div>
     </div>
 
@@ -480,39 +470,6 @@
       <p class="whybad" style="background:var(--amber-bg)">지시문에 이 규칙이 들어 있어서,
         <b>“틀리게 만들어 주세요”</b>라고만 하셔도 에이전트가 세 가지를 함께 내놓습니다.
         빌더의 <b>8번 칸</b>에 적으시면 됩니다.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ 일관성 요령 ══════════ -->
-<section id="tips" style="--c:var(--blue)">
-  <div class="wrap">
-    <div class="lbl"><span class="t">요령</span><span class="n">네 가지</span></div>
-    <h2>두 장을 같은 장면으로 만드는 법</h2>
-    <p class="sub">첫 장면과 끝 장면이 <b>다른 세상</b>처럼 보이면 영상이 이상해집니다.
-      아래 넷만 지키면 대부분 해결됩니다.</p>
-
-    <div class="tips">
-      <div class="tip"><span class="no">1</span><div>
-        <h4>배경 문장은 통째로 복사</h4>
-        <p>끝 프레임 프롬프트를 새로 쓰지 마십시오. 첫 프레임의 장소·조명·각도 문장을
-          <b>글자 하나 안 바꾸고</b> 복사한 뒤, 달라지는 부분만 갈아 끼웁니다.</p>
-      </div></div>
-      <div class="tip"><span class="no">2</span><div>
-        <h4>달라지는 건 딱 하나</h4>
-        <p>캔이 가라앉았다, 컵에 물방울이 맺혔다. 둘 이상 바뀌면 학생의 눈이 흩어지고
-          질문도 흩어집니다.</p>
-      </div></div>
-      <div class="tip"><span class="no">3</span><div>
-        <h4>얼굴 클로즈업은 피하기</h4>
-        <p>두 장에서 다른 사람이 되어 버립니다. 사람이 필요하면 <b>손</b>이나
-          <b>뒷모습</b>, 멀리 있는 실루엣으로 쓰십시오.</p>
-      </div></div>
-      <div class="tip"><span class="no">4</span><div>
-        <h4>카메라는 하나만 시키기</h4>
-        <p>“아주 느린 줌인” 하나면 충분합니다. 팬·드론·회전을 같이 넣으면
-          몇 초 안에 다 못 하고 장면이 무너집니다.</p>
-      </div></div>
     </div>
   </div>
 </section>
@@ -552,6 +509,21 @@
     </ol>
 
     <details>
+      <summary>한 가지만 먼저 말씀드리겠습니다 &mdash; 「AI 딸깍」에 대하여</summary>
+      <div class="dbody">
+        <p class="note-lead">저는 <b>「AI 딸깍」</b>이라는 말을 가장 경계합니다.</p>
+        <p>이 에이전트가 내놓는 것은 <b>초안</b>입니다. 장면 하나와 프롬프트 세 개, 그게 전부입니다.
+          그 장면이 우리 반 아이들에게 통할지, 이 질문이 다음 차시로 이어질지,
+          이 표현이 아이들 머릿속에 어떤 그림을 남길지 &mdash; 그건 판단해 주는 사람이 필요합니다.</p>
+        <p>그 판단은 저보다 훨씬 오래 아이들을 보아 오신 <b>선생님들의 교육적 감식안</b>이 합니다.
+          어떤 장면에서 우리 반이 조용해지는지, 어떤 질문에서 손이 올라오는지 아시는 눈 말입니다.
+          그 눈은 에이전트가 갖지 못합니다.</p>
+        <p>그래서 오늘 드리는 것은 <b>완성품이 아니라 재료</b>입니다.
+          다듬는 일이 선생님 몫으로 남는 것이 이 도구의 한계가 아니라, 제대로 된 자리라고 생각합니다.</p>
+      </div>
+    </details>
+
+    <details>
       <summary>지시문 전문 보기</summary>
       <div class="dbody">
         <div class="prompt" id="specBox"></div>
@@ -563,12 +535,28 @@
 <!-- ══════════ 지시문을 이렇게 쓴 이유 ══════════ -->
 <section id="whyspec" style="--c:var(--blue)">
   <div class="wrap">
-    <div class="lbl"><span class="t">지시문 읽기</span><span class="n">열세 가지</span></div>
-    <h2>왜 이렇게 썼나</h2>
-    <p class="sub">지시문은 그냥 부탁하는 글이 아니라 <b>설계된 물건</b>입니다.
-      문장 하나하나에 이유가 있습니다. 여기서 쓴 요령은 SENEDU 전용이 아니라
-      <b>어떤 에이전트를 만드실 때든 그대로 쓰입니다</b>.</p>
+    <div class="lbl"><span class="t">지시문 읽기</span><span class="n">간단히</span></div>
+    <h2>이 지시문을 이렇게 쓴 까닭</h2>
+    <p class="sub">지시문은 부탁하는 글이 아니라 <b>설계된 물건</b>이라, 문장마다 이유가 있습니다.
+      크게 셋입니다 &mdash; <b>무엇을 만드는지 첫 줄에 못박고</b>,
+      <b>규칙마다 왜 그런지를 같이 적고</b>,
+      <b>선생님이 막히실 자리에 미리 갈림길을 내 두는 것</b>.
+      여기서 쓴 요령은 SENEDU 전용이 아니라 어떤 에이전트를 만드실 때든 그대로 쓰입니다.</p>
 
+    <div class="spotlight">
+      <span class="sp-tag">가장 중요한 한 가지</span>
+      <h3>성취기준 위에 한 칸을 더 받습니다</h3>
+      <p>성취기준만 주면 <b>그 차시 안에서 끝나는 장면</b>이 나옵니다.
+        그래서 빌더 3번 칸에 어제 만드신 것을 한 번 더 받습니다 &mdash;
+        <b>국가 수준 핵심 아이디어를 이 단원 크기로 좁히고, 학기가 지나도 학생에게 남을 한 문장</b>.</p>
+      <p>이 한 문장이 있어야 장면이 성취기준을 다루면서도 그 위쪽으로 뻗습니다.
+        지시문에도 <b>「3번이 이 설계의 위쪽 끝이다」</b>라고 못박아 두었고,
+        마지막 점검에서 <b>이 장면이 그 한 문장까지 닿는지</b> 에이전트가 스스로 답하게 했습니다.</p>
+    </div>
+
+    <details>
+      <summary>지시문을 어떻게 설계했는지 &mdash; 열세 가지, 자세히 보기</summary>
+      <div class="dbody">
     <div class="reasons">
 
       <div class="reason">
@@ -581,11 +569,11 @@
       </div>
 
       <div class="reason">
-        <div class="rq">“영상이 <em>답까지 보여 주면 실패다</em>.”</div>
+        <div class="rq">“영상이 답까지 보여 주면 <em>학생이 물을 것이 남지 않는다</em>. 거기까지는 담지 않는다.”</div>
         <div>
-          <h4>목적 대신 실패 조건을 씁니다</h4>
-          <p>“질문을 유발하게 해 줘”는 채점이 안 됩니다. 반대로 <b>무엇이 실패인지</b>를 주면
-            에이전트가 자기 결과를 그 잣대로 걸러 냅니다. 좋은 지시문은 목표보다 탈락 기준이 선명합니다.</p>
+          <h4>목적 대신 멈출 지점을 씁니다</h4>
+          <p>“질문을 유발하게 해 줘”는 채점이 안 됩니다. 반대로 <b>어디서 멈춰야 하는지</b>를 주면
+            에이전트가 자기 결과를 그 잣대로 걸러 냅니다. 좋은 지시문은 목표보다 경계가 선명합니다.</p>
         </div>
       </div>
 
@@ -655,7 +643,7 @@
       </div>
 
       <div class="reason">
-        <div class="rq">“두 프레임 사이에 <em>달라지는 것은 딱 하나다</em>. 장소, 카메라 각도, 조명, 등장 인물과 복장은 완전히 같아야 한다.”</div>
+        <div class="rq">“두 프레임 사이에 <em>달라지는 것은 하나로 좁힌다</em>. … 장소, 카메라 각도, 조명, 등장 인물과 복장은 같아야 한다.”</div>
         <div>
           <h4>제약이 곧 품질입니다</h4>
           <p>자유롭게 쓰라고 하면 두 장이 다른 세상이 되어 영상이 무너집니다.
@@ -698,6 +686,8 @@
       넣어 두었습니다. 마음에 안 들 때 뭐라고 말해야 할지 몰라 대화가 길어지는 걸 막습니다.
       한 단어면 됩니다.
     </div>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -812,7 +802,7 @@
   <div class="wrap">
     <div id="app-credit">
       <b>첫 장면과 끝 장면 사이</b> · SENEDU로 만드는 질문 유발 영상<br>
-      © 2026 조승재 · 해누리중학교 <span class="sep">|</span> 최종 업데이트: 2026-09-04
+      © 2026 조승재 · 해누리중학교 <span class="sep">|</span> 최종 업데이트: 2026-09-05
       <span class="sep">|</span> <a href="https://scienceisjo.github.io/growing-teachers/">Growing Teachers</a>
     </div>
   </div>
@@ -861,15 +851,15 @@ const KITS = [
   },
   {
     unit: '중2 · 전기와 자기', color: 'var(--fill-orange)',
-    title: '자에 딸려 올라간 종이',
-    aim: '왜 종이가 자한테 딸려 올라갈까?',
+    title: '비비기 전에는 안 붙던 종이',
+    aim: '왜 그냥 댈 때는 가만있다가, 비비고 나면 딸려 올라올까?',
     firstImg: '', lastImg: '',
     firstPrompt:
-      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 흩어져 있고, 그 위 손바닥 한 뼘 높이에 투명한 플라스틱 자가 수평으로 들려 있으며, 종이 조각들은 책상에 그대로 붙어 있다.',
+      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 흩어져 있고 그 옆에 회색 털가죽 천 조각이 접힌 채 놓여 있다. 손이 투명한 플라스틱 자를 종이 조각들 위 손바닥 한 뼘 높이에 수평으로 들고 있는데, 종이 조각들은 책상에 그대로 놓여 하나도 움직이지 않는다.',
     lastPrompt:
-      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 작게 자른 흰 종이 조각들이 책상에서 떠올라 투명한 플라스틱 자 아랫면에 다닥다닥 붙어 있고, 몇 조각은 공중에 매달려 있다.',
+      '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 옆에는 회색 털가죽 천 조각이 그대로 놓여 있고, 손이 든 투명한 플라스틱 자 아랫면에 흰 종이 조각들이 다닥다닥 붙어 딸려 올라와 있으며 몇 조각은 공중에 매달려 있다.',
     videoPrompt:
-      '책상 위 흰 종이 조각들이 하나씩 떠올라 플라스틱 자 아랫면에 달라붙는다, 오후 햇빛이 비스듬히 드는 조용한 교실, 옆에서 아주 느리게 다가가는 줌인, 시네마틱'
+      '플라스틱 자를 종이 위에 댔을 때는 종이가 가만히 있다가, 손이 자를 털가죽 천에 여러 번 문지른 뒤 다시 가져가자 종이 조각들이 하나씩 떠올라 자 아랫면에 달라붙는다, 오후 햇빛이 비스듬히 드는 조용한 교실 책상, 옆에서 아주 느리게 다가가는 줌인, 시네마틱'
   }
 ];
 
@@ -881,8 +871,8 @@ const AGENT_SPEC = `너는 중등 과학 교사가 「질문 유발 영상」을
 
 ■ 가장 중요한 원칙
 이 영상은 개념을 설명하지 않는다. 현상 하나만 보여 준다.
-학생이 "어? 왜 저러지?" 하고 묻게 만드는 것이 유일한 목적이다.
-영상이 답까지 보여 주면 실패다.
+학생이 "어? 왜 저러지?" 하고 묻게 만드는 것이 목적이다.
+영상이 답까지 보여 주면 학생이 물을 것이 남지 않는다. 거기까지는 담지 않는다.
 
 ■ 화면에 과학적 표현을 넣을 것인가 — 기본값과 예외
 기본값은 "현상만 보여 주기"다. 교사가 요청하지 않으면 모형·화살표·기호·수치를
@@ -924,10 +914,12 @@ const AGENT_SPEC = `너는 중등 과학 교사가 「질문 유발 영상」을
 - 카메라가 다가가며 무언가를 드러내는 것
 
 ■ 장면 구조 (반드시 지킨다)
-첫 프레임 = 학생이 예상하는 평범한 상태
-끝 프레임 = 예상이 어긋난 상태
-두 프레임 사이에 달라지는 것은 딱 하나다.
-장소, 카메라 각도, 조명, 등장 인물과 복장은 완전히 같아야 한다.
+SENEDU 는 시작 프레임과 끝 프레임 두 장 사이를 영상으로 채운다. 그래서 두 장으로 설계한다.
+첫 프레임 = 변화가 일어나기 전
+끝 프레임 = 변화가 일어난 뒤
+두 프레임 사이에 달라지는 것은 하나로 좁힌다. 여러 개가 한꺼번에 변하면 몇 초 안에 담기지 않는다.
+장소, 카메라 각도, 조명, 등장 인물과 복장은 같아야 한다.
+끝 프레임 프롬프트는 첫 프레임의 배경 문장을 그대로 두고 달라지는 부분만 교체해 쓴다.
 
 ■ 교사가 주는 것
 1 학년·단원  2 성취기준  3 이 단원에서 남길 한 문장 (핵심 아이디어·영속적 이해)
@@ -1003,10 +995,13 @@ function shotBlock(label, order, img, prompt, kitIdx, which){
   const id = 'p-' + kitIdx + '-' + which;
   const visual = img
     ? `<img src="img/${esc(img)}" alt="${esc(label)}">`
-    : `<div class="ph">이미지 파일이 아직 없습니다<br>아래 프롬프트로 먼저 만드십시오</div>`;
+    : `<div class="ph">아직 올려 두지 않았습니다<br>아래 프롬프트로 먼저 만드셔도 됩니다</div>`;
+  const dl = img
+    ? `<a class="copy" download href="img/${esc(img)}">내려받기</a>`
+    : '';
   return `
     <div class="shot">
-      <div class="cap"><b>${esc(label)}</b><i>${esc(order)}</i></div>
+      <div class="cap"><b>${esc(label)}</b><span class="pr"><i>${esc(order)}</i>${dl}</span></div>
       ${visual}
       <div class="body">
         <div class="plabel">
@@ -1042,9 +1037,17 @@ function renderKits(){
       <div class="kithead"><span class="unit">${esc(k.unit)}</span></div>
       <h3>${esc(k.title)}</h3>
       <p class="aim"><span>이 영상으로 받고 싶은 질문</span>${esc(k.aim)}</p>
+      ${(k.firstImg && k.lastImg) ? `
+      <p class="kitdl">
+        <button class="btn ghost" data-dl-kit="${i}">
+          연수 강사가 만든 이미지 두 장 받기
+        </button>
+        <span class="kitdl-note">받으신 두 장을 SENEDU 영상 생성의 시작·끝 프레임으로 올리시면 됩니다.</span>
+      </p>` : `
+      <p class="kitdl-none">이미지는 연수 당일에 올려 둡니다. 그때까지는 아래 이미지 프롬프트로 직접 만들어 보실 수 있습니다.</p>`}
       <div class="shots">
-        ${shotBlock('첫 프레임', '학생의 예상', k.firstImg, k.firstPrompt, i, 'first')}
-        ${shotBlock('끝 프레임', '어긋난 결과', k.lastImg,  k.lastPrompt,  i, 'last')}
+        ${shotBlock('첫 프레임', '변화가 일어나기 전', k.firstImg, k.firstPrompt, i, 'first')}
+        ${shotBlock('끝 프레임', '변화가 일어난 뒤',   k.lastImg,  k.lastPrompt,  i, 'last')}
       </div>
       <div class="plabel">
         <b>영상 프롬프트 — SENEDU 에 붙여넣습니다</b>
@@ -1104,6 +1107,24 @@ document.addEventListener('click', e => {
   copyText(src.textContent)
     .then(() => { flash(btn, '복사됨'); toast('복사했습니다. 붙여넣으십시오.'); })
     .catch(() => toast('복사가 막혀 있습니다. 글자를 직접 선택해 주십시오.'));
+});
+
+/** 강사가 올려 둔 이미지 두 장을 한 번에 내려받습니다 */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-dl-kit]');
+  if(!btn) return;
+  const k = KITS[+btn.getAttribute('data-dl-kit')];
+  if(!k) return;
+  [k.firstImg, k.lastImg].filter(Boolean).forEach((file, idx) => {
+    // 브라우저가 연속 내려받기를 막지 않도록 살짝 띄웁니다
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = 'img/' + file; a.download = file;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }, idx * 400);
+  });
+  flash(btn, '받는 중입니다');
+  toast('이미지 두 장을 내려받습니다.');
 });
 
 /* ── 지시문 ───────────────────────────── */
