@@ -555,7 +555,7 @@
     </div>
 
     <details>
-      <summary>지시문을 어떻게 설계했는지 &mdash; 열세 가지, 자세히 보기</summary>
+      <summary>지시문을 어떻게 설계했는지 &mdash; 열두 가지, 자세히 보기</summary>
       <div class="dbody">
     <div class="reasons">
 
@@ -629,16 +629,6 @@
           <p>성취기준만 주면 그 차시 안에서 끝나는 장면이 나옵니다. 어제 김도윤 선생님 연수에서
             <b>국가 수준 핵심 아이디어를 이 단원 크기로 좁히고, 학기가 지나도 남을 한 문장</b>을 만드신
             그 칸을 여기서 다시 씁니다. 장면은 성취기준을 다루되 그 한 문장 쪽으로 뻗어야 합니다.</p>
-        </div>
-      </div>
-
-      <div class="reason">
-        <div class="rq">“<em>세 개를 고르게 좋게 만들려 하지 마라. 하나가 확실히 강한 편이 낫다.</em>”</div>
-        <div>
-          <h4>가장 강한 하나를 고르게 합니다</h4>
-          <p>예상 질문 세 개를 나란히 주면 선생님이 수업에서 무엇을 붙잡을지 못 정합니다.
-            어제 연수의 <b>「가장 강한 질문 하나」</b>를 그대로 가져와, 에이전트가 ★를 붙이고
-            <b>왜 그것이 강한지</b>까지 말하게 했습니다. 고르는 일을 미루지 않게 하는 장치입니다.</p>
         </div>
       </div>
 
@@ -719,7 +709,7 @@
             비우시면 에이전트가 2번에서 좁혀 제안하고 먼저 여쭙습니다.</p>
         </div>
         <div class="field">
-          <label for="f4">4. 학생에게서 받고 싶은 질문 <em>가장 강한 것 하나만</em></label>
+          <label for="f4">4. 학생에게서 받고 싶은 질문</label>
           <input id="f4" placeholder="예: 똑같이 생긴 캔인데 왜 하나만 가라앉을까?">
         </div>
         <div class="field">
@@ -828,8 +818,8 @@ const KITS = [
   {
     unit: '중2 · 물질의 특성', color: 'var(--fill-purple)',
     title: '똑같이 생긴 캔 두 개',
+    firstImg: 'can-first.png', lastImg: 'can-last.png',
     aim: '똑같이 생긴 캔인데 왜 하나만 가라앉을까?',
-    firstImg: '', lastImg: '',
     firstPrompt:
       '밝은 학교 과학실 실험대 위, 물이 가득 담긴 커다란 투명 아크릴 수조. 창문에서 들어오는 부드러운 낮 자연광. 카메라는 수조를 정면 눈높이에서 담는다. 사실적인 사진, 화면에 글자 없음. 수조 앞에 라벨이 없는 은색 알루미늄 음료 캔 두 개가 나란히 서 있고, 두 캔은 크기와 색이 똑같다.',
     lastPrompt:
@@ -840,8 +830,8 @@ const KITS = [
   {
     unit: '중1 · 물질의 상태 변화', color: 'var(--fill-blue)',
     title: '컵 바깥에 맺힌 물',
+    firstImg: 'cup-first.png', lastImg: 'cup-last.png',
     aim: '컵 안에 있던 물이 밖으로 새어 나온 걸까?',
-    firstImg: '', lastImg: '',
     firstPrompt:
       '여름 오후 카페 창가의 나무 테이블. 창으로 들어오는 따뜻한 자연광, 배경은 부드럽게 흐려져 있다. 카메라는 컵을 살짝 위에서 비스듬히 내려다본다. 사실적인 사진, 화면에 글자 없음. 얼음이 가득 든 투명 유리컵 하나가 마른 컵받침 위에 놓여 있고, 컵 바깥면은 뽀송하고 깨끗하다.',
     lastPrompt:
@@ -852,8 +842,8 @@ const KITS = [
   {
     unit: '중2 · 전기와 자기', color: 'var(--fill-orange)',
     title: '비비기 전에는 안 붙던 종이',
+    firstImg: 'rod-first.png', lastImg: 'rod-last.png',
     aim: '왜 그냥 댈 때는 가만있다가, 비비고 나면 딸려 올라올까?',
-    firstImg: '', lastImg: '',
     firstPrompt:
       '오후 교실의 나무 책상, 창에서 비스듬히 들어오는 부드러운 자연광. 카메라는 책상과 같은 눈높이에서 옆에서 본다. 사실적인 사진, 화면에 글자 없음. 책상 위에 작게 자른 흰 종이 조각들이 흩어져 있고 그 옆에 회색 털가죽 천 조각이 접힌 채 놓여 있다. 손이 투명한 플라스틱 자를 종이 조각들 위 손바닥 한 뼘 높이에 수평으로 들고 있는데, 종이 조각들은 책상에 그대로 놓여 하나도 움직이지 않는다.',
     lastPrompt:
@@ -950,10 +940,7 @@ SENEDU 는 프롬프트를 1,000자까지만 받는다.
 - 끝 : (어긋난 결과)
 - 달라지는 것 딱 하나 :
 - 예상 학생 질문 3개 : (실제 중학생이 쓸 법한 말투로)
-  이 중 가장 강한 하나에 ★ 를 붙이고, 왜 그것이 가장 강한지 한 줄로 밝힌다.
-  강한 질문이란 답이 바로 나오지 않고 3번의 한 문장 쪽으로 뻗는 질문이다.
-  세 개를 고르게 좋게 만들려 하지 마라. 하나가 확실히 강한 편이 낫다.
-- 핵심 아이디어로 가는 길 : (★ 질문에서 3번의 한 문장까지 어떻게 이어지는지 한 줄)
+- 핵심 아이디어로 가는 길 : (이 질문들에서 3번의 한 문장까지 어떻게 이어지는지 한 줄)
 - 이 장면으로는 나오지 않는 질문 1개 : (교사가 헛기대하지 않도록)
 
 【2】 첫 프레임 이미지 프롬프트
@@ -973,7 +960,7 @@ SENEDU 형식으로 한 줄만 쓴다. 1,000자 이내로 쓴다.
 - 화면에 들어간 과학적 표현 : 없음 / (있으면 무엇이고, 교사가 요청한 것인지)
 - 일부러 틀리게 한 것 : 없음 / (있으면 무엇을 어떻게 — 교사만 보는 정답지)
 - 교사가 눈으로 확인해야 할 지점 : (있으면 한 줄)
-- ★ 질문이 3번의 한 문장까지 뻗는가 : 예 / 아니오 (아니면 무엇을 바꿔야 하는지)
+- 이 장면이 3번의 한 문장까지 뻗는가 : 예 / 아니오 (아니면 무엇을 바꿔야 하는지)
 - 영상이 답을 보여 주는가 : 아니오 / (예라면 어떻게 고칠지)
 - 4~8초 안에 담기는가 : 예 / 아니오
 - 글자 수 : 【2】○○자 · 【3】○○자 · 【4】○○자 (모두 1,000자 이내여야 한다)
@@ -991,13 +978,15 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 
 const KO_NUM = ['영','한','두','세','네','다섯','여섯','일곱','여덟','아홉','열'];
 
-function shotBlock(label, order, img, prompt, kitIdx, which){
+function shotBlock(label, order, img, prompt, kitIdx, which, dlName){
   const id = 'p-' + kitIdx + '-' + which;
+  const thumb = img ? img.replace(/\.png$/i, '-thumb.jpg') : '';
   const visual = img
-    ? `<img src="img/${esc(img)}" alt="${esc(label)}">`
+    ? `<img src="img/${esc(thumb)}" alt="${esc(label)}" loading="lazy" decoding="async">`
     : `<div class="ph">아직 올려 두지 않았습니다<br>아래 프롬프트로 먼저 만드셔도 됩니다</div>`;
+  // 화면에는 가벼운 사본을 띄우고, 내려받기는 원본 PNG 를 줍니다
   const dl = img
-    ? `<a class="copy" download href="img/${esc(img)}">내려받기</a>`
+    ? `<a class="copy" download="${esc(dlName)}" href="img/${esc(img)}">내려받기</a>`
     : '';
   return `
     <div class="shot">
@@ -1046,8 +1035,8 @@ function renderKits(){
       </p>` : `
       <p class="kitdl-none">이미지는 연수 당일에 올려 둡니다. 그때까지는 아래 이미지 프롬프트로 직접 만들어 보실 수 있습니다.</p>`}
       <div class="shots">
-        ${shotBlock('첫 프레임', '변화가 일어나기 전', k.firstImg, k.firstPrompt, i, 'first')}
-        ${shotBlock('끝 프레임', '변화가 일어난 뒤',   k.lastImg,  k.lastPrompt,  i, 'last')}
+        ${shotBlock('첫 프레임', '변화가 일어나기 전', k.firstImg, k.firstPrompt, i, 'first', k.title + ' 첫 프레임.png')}
+        ${shotBlock('끝 프레임', '변화가 일어난 뒤',   k.lastImg,  k.lastPrompt,  i, 'last',  k.title + ' 끝 프레임.png')}
       </div>
       <div class="plabel">
         <b>영상 프롬프트 — SENEDU 에 붙여넣습니다</b>
@@ -1115,14 +1104,17 @@ document.addEventListener('click', e => {
   if(!btn) return;
   const k = KITS[+btn.getAttribute('data-dl-kit')];
   if(!k) return;
-  [k.firstImg, k.lastImg].filter(Boolean).forEach((file, idx) => {
-    // 브라우저가 연속 내려받기를 막지 않도록 살짝 띄웁니다
-    setTimeout(() => {
-      const a = document.createElement('a');
-      a.href = 'img/' + file; a.download = file;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }, idx * 400);
-  });
+  [[k.firstImg, '첫 프레임'], [k.lastImg, '끝 프레임']]
+    .filter(pair => pair[0])
+    .forEach(([file, label], idx) => {
+      // 브라우저가 연속 내려받기를 막지 않도록 살짝 띄웁니다
+      setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = 'img/' + file;
+        a.download = k.title + ' ' + label + '.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      }, idx * 400);
+    });
   flash(btn, '받는 중입니다');
   toast('이미지 두 장을 내려받습니다.');
 });
