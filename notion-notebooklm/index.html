@@ -153,6 +153,8 @@ a.tile:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:var(
 .introcard details.toggle{margin-top:20px;text-align:left}
 .introcard .creds{margin:10px 0 0;padding-left:20px}
 .introcard .creds li{font-size:.92rem;color:var(--ink-soft);line-height:1.6;margin:5px 0}
+.introcard .pfb{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--font-round);font-size:1rem;color:#fff;background:linear-gradient(135deg,#20285e,var(--navy));border-radius:12px;padding:11px 22px;text-decoration:none}
+.introcard .pfu{margin-top:9px;font-size:.78rem;color:var(--gold-deep);font-family:ui-monospace,monospace;word-break:break-all}
 
 /* ── compare ── */
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto}
@@ -461,8 +463,7 @@ const CONFIG = {
   supabaseUrl:'https://vbvtnmnodeoocbbjauap.supabase.co',
   supabaseAnonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc',
   liveTable:'yeonsu_responses',
-  teamsUrl:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.05c214d9-291b-4e02-bf7b-da198826c285.24ds-uMbgumkJlOgXBy9SiBNqoHySiffi1VcUgj00lA78jyfMUiVJ0gMar6D--rFVp-T7KtUtNzWGVR7KT7hEQ',
-  teamsQR:'assets/teams-qr.png',
+  portfolioUrl:'https://scienceisjo.github.io/growing-teachers/',
   practiceFileUrl:'https://scienceisjo.github.io/growing-teachers/notion-notebooklm/gongmun/',
   notebooklmUrl:'https://notebooklm.google.com', notionUrl:'https://www.notion.so',
   notionExampleUrl:'https://techisl.notion.site/technologyroad',
@@ -491,7 +492,7 @@ const PRICING = {
 const DATA = {
   acts:[{e:'💗',t:'감정 체크인'},{e:'🎒',t:'유용한 도구'},{e:'🏫',t:'SEN스쿨'},{e:'🎧',t:'NotebookLM 실습'},{e:'🗂️',t:'Notion 실습'},{e:'🔗',t:'함께 쓰기'}],
   runsheet:[
-    {t:'0:00–0:05',l:'감정 체크인(팀즈)',g:'아이스브레이킹 — 서두르지 않기'},
+    {t:'0:00–0:05',l:'감정 체크인',g:'아이스브레이킹 — 서두르지 않기'},
     {t:'0:05–0:08',l:'오늘의 흐름 + 준비물',g:'개인 Google 계정 확인(학교·SEN 계정 X) 꼭 짚기'},
     {t:'0:08–0:15',l:'유용한 도구 + 두 도구 소개',g:'도구는 가볍게, NotebookLM·Notion만 깊게'},
     {t:'0:15–0:20',l:'SEN스쿨(보너스)',g:'무료 AI 창구 — 모델은 직접 시연, 한계 솔직히, 가입은 토글로'},
@@ -510,10 +511,9 @@ const DATA = {
 
   introName:'조승재',
   introRole:'해누리중학교 과학교사',
-  introHumble:'아직 교직경력 <b>1년 4개월</b>의 저경력 교사입니다.',
-  introCreds:['한국교원대학교 화학교육과 졸업 (2025.2.)','교직경력 1년 4개월','AI디지털 기반 교육혁신 선도교사','AIEDAP 마스터교원 · MIEE · MAI HERO','AI·디지털 학교로 찾아가는 컨설팅 강사·보조강사'],
+  introDesc:'제 소개는 길게 말씀드리기보다, 그동안 <b>만든 수업·도구·연수 기록</b>을 한곳에 모아 둔 페이지로 대신하겠습니다. 아래에서 천천히 둘러보실 수 있습니다.',
   introMsg:'제가 드릴 수 있는 것은 <b>도구 사용법</b>까지입니다. 이 도구를 어디에, 어떻게 쓸지 — 그 활용의 폭은 <b>여기 계신 선생님들의 오랜 경력</b>에서 나오는 것이라, 저는 감히 따라가지 못합니다. 그래서 오늘 저는 도구 활용을 <b>기쁜 마음으로</b> 알려 드리는 데까지만 하고, 그 도구가 교실에서 어떻게 빛날지는 온전히 선생님들께 맡겨 두려 합니다. 오늘 배운 것이 연수가 끝난 뒤에도 <b>작게나마 도움</b>이 되면 좋겠습니다.',
-  introNote:'[강사 소개] 저경력이지만 학생 편지로 신뢰 형성. 이력·약력은 “펼쳐보지말기” 유머로 겸손하게. 핵심 멘트는 introMsg — “도구는 제가 알려드리지만, 활용은 선생님들의 경력에서 나온다”로 청중을 존중하며 문을 엶.',
+  introNote:'[강사 소개] 이력을 읊지 말고 <b>포트폴리오 페이지</b>를 열어 학생 편지·수업 도구를 한두 개만 스치듯 보여 주기(1~2분). 핵심 멘트는 introMsg — “도구는 제가 알려드리지만, 활용은 선생님들의 경력에서 나온다”로 청중을 존중하며 문을 엶.',
   toolsSub:'수업과 업무에서 바로 활용하실 수 있는 도구들입니다. 오늘 깊게 다루는 것은 NotebookLM과 Notion 두 가지이며, 나머지는 가볍게 소개만 드립니다.',
   toolGroups:[
     {h:'📚 저의 수업 페이지', tiles:[{e:'🌍',n:'과학탐구월드',g:'수업 자료 허브',href:CONFIG.hubUrl,ext:1}]},
@@ -718,7 +718,7 @@ const DATA = {
   },
 
   heroNote:'[오프닝] "오늘은 설명을 최소화하고, 여러분이 직접 만들어 보는 시간입니다. 상단 탭 순서대로 진행합니다." 이 화면(?present=1)에서만 진행표·노트가 보입니다.',
-  checkinNote:'[체크인] 팀즈(Reflect)로 오늘의 마음을 가볍게 체크인. 준비물(개인 Google 계정)은 다음 ‘오늘의 흐름’ 탭에서 확인. 실습용 공문 자료는 NotebookLM 탭에서 받습니다.',
+  checkinNote:'[체크인] 화면의 배터리 이모지를 눌러 오늘의 마음을 가볍게 체크인(전자칠판에서 직접 눌러 보이기). 준비물(개인 Google 계정)은 다음 ‘오늘의 흐름’ 탭에서 확인. 실습용 공문 자료는 NotebookLM 탭에서 받습니다.',
   toolsNote:'[가볍게] 도구는 클릭해 화면만 보여 주는 정도로. 오늘 깊게 다루는 것은 NotebookLM·Notion 두 가지임을 분명히.',
   senNote:'[보너스] 모델 목록은 SenGPT에 직접 들어가 시연. 한계(앱 전용 기능 불가)만 분명히 짚기.',
   nlmNote:'[NotebookLM 탭] 계정 문제 먼저 정리(학교계정=공개링크 공유 "제한"). 무료 한도는 토글로. 실습은 자료 추가→질문(출처 클릭 시연)→Studio 하나. "일반 AI와 다른 점"을 꼭 강조. 마지막 라이브질문2로 참여 유도.',
@@ -760,10 +760,10 @@ function useHtml(arr){return '<div class="uselists">'+arr.map(u=>'<div class="ul
 function cautionHtml(c){return '<div class="caution"><div class="cah">'+esc(c.h)+'</div><ul>'+c.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function vsHtml(v){return '<div class="vsbox"><div class="vh">'+rich(v.h)+'</div><ul>'+v.li.map(x=>'<li>'+rich(x)+'</li>').join('')+'</ul></div>'}
 function moreHtml(items){return '<div class="more">'+items.map(m=>'<div class="mcard">'+(m.flag?'<span class="mflag">'+esc(m.flag)+'</span>':'')+'<span class="mtag">'+esc(m.tag)+'</span><div class="mhead"><span class="mic">'+esc(m.ic)+'</span><span class="mname">'+esc(m.n)+'</span></div><div class="mben">'+rich(m.ben)+'</div><div class="mcap">'+rich(m.cap)+'</div></div>').join('')+'</div>'}
-function introCardHtml(){const d=DATA;
+function portfolioCardHtml(){const d=DATA,u=(CONFIG.portfolioUrl||'').trim();
   return '<div class="introcard"><div class="avatar">🔬</div><div class="iname">'+esc(d.introName)+'</div><div class="irole">'+esc(d.introRole)+'</div>'+
-    '<p class="ihumble">'+rich(d.introHumble)+'</p>'+
-    '<details class="toggle"><summary>이력 · 약력 펼쳐보지말기</summary><ul class="creds">'+d.introCreds.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></details></div>';}
+    '<p class="ihumble">'+rich(d.introDesc)+'</p>'+
+    (u?'<a class="pfb" href="'+esc(u)+'" target="_blank" rel="noopener">📖 포트폴리오 열어 보기 →</a><div class="pfu">'+esc(u.replace(/^https?:\/\//,''))+'</div>':'')+'</div>';}
 function ndetailsHtml(arr){return '<div class="ndetails">'+arr.map(u=>'<div class="ndcard"><div class="ndh">'+esc(u.h)+'</div>'+u.items.map(it=>'<details class="nd"><summary>'+esc(it.k)+'</summary><div class="ndx">'+rich(it.d)+'</div></details>').join('')+'</div>').join('')+'</div>'}
 function exampleHtml(ex){let h='<div class="example"><div class="exh">📓 '+esc(ex.title)+'</div>';ex.blocks.forEach(b=>{h+='<h4>'+esc(b.h)+'</h4>';if(b.type==='quote')h+='<blockquote>'+esc(b.q)+'</blockquote>';else h+='<ul>'+b.li.map(x=>'<li>'+(b.type==='check'?'☐ ':'')+esc(x)+'</li>').join('')+'</ul>';});return h+'<div class="extag">💡 '+esc(ex.tag)+'</div></div>'}
 function comicHtml(id,src,meta){const s=(src||'').trim();
@@ -783,11 +783,6 @@ function wallHtml(n,q,ph){return '<div class="live"><div class="lq">'+rich(q)+'<
   '<div class="lstatus" id="liveStatus'+n+'"></div><div class="wall" id="wall'+n+'" aria-live="polite"></div></div>'}
 function cmpHtml(arr){return '<div class="cmp">'+arr.map(c=>'<div class="cmpcard '+(c.cls||'')+'"><div class="ci">'+c.i+'</div><div class="cn">'+esc(c.n)+'</div><div class="cr">'+rich(c.r||c.flow)+'</div><div class="cdo"><span class="lab">'+esc(c.lab)+'</span>'+rich(c.todo||c.ex)+'</div></div>').join('')+'</div>'}
 function moodHtml(){const moods=[['🔋','가득'],['🙂','보통'],['😐','반쯤'],['😴','조금'],['🪫','바닥']];return '<div class="mood"><div class="mq">지금 내 업무 배터리는? 🔋</div><div class="mgrid">'+moods.map((m,i)=>'<div class="mo" data-i="'+i+'" onclick="pickMood(this)"><div class="e">'+m[0]+'</div><div class="t">'+m[1]+'</div></div>').join('')+'</div><div class="mnote" id="mnote"></div></div>'}
-function startPanelHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim(),pf=(CONFIG.practiceFileUrl||'').trim();
-  return '<div class="startpanel"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div>'+
-  '<div class="spcard"><div class="spqr" style="font-size:2.2rem">🧳</div><div class="spt">실습 자료 받기</div><div class="spd">NotebookLM에 넣을 여행지 자료</div>'+(pf?'<a class="spb" href="'+esc(pf)+'" target="_blank" rel="noopener">자료 다운로드 →</a>':'')+'</div></div>'}
-function teamsCardHtml(){const q=(CONFIG.teamsQR||'').trim(),tu=(CONFIG.teamsUrl||'').trim();
-  return '<div class="startpanel" style="grid-template-columns:1fr;max-width:400px"><div class="spcard"><div class="spqr">'+(q?'<img src="'+esc(q)+'" alt="팀즈 감정 체크인 QR">':'QR')+'</div><div class="spt">🙂 팀즈 감정 체크인</div><div class="spd">QR을 찍거나 버튼을 눌러 입장해 주세요.</div>'+(tu?'<a class="spb tcol" href="'+esc(tu)+'" target="_blank" rel="noopener">팀즈 열기 →</a>':'')+'</div></div>'}
 function prepHtml(){return '<div class="warn-card" style="border-color:var(--teal);background:#eefaf8"><div class="wh" style="color:var(--teal)">🎒 오늘 연수 준비물</div><p><b>개인용 Google 계정(gmail)</b> 하나만 있으면 됩니다.</p><ul style="list-style:none"><li>NotebookLM·Notion 모두 <b>개인 Google 계정</b>으로 로그인하시면 가장 매끄럽습니다.</li><li><b>학교 계정은 사용하지 않습니다.</b> 공개 공유·기능 제한이 있어 실습이 막힐 수 있습니다.</li><li>뒤에 나오는 <b>SEN스쿨</b>은 이와 별개인 보너스 소개입니다(서울 선생님용 무료 AI 창구).</li><li>계정이 없으시면 <b>gmail.com</b>에서 무료로 만드실 수 있습니다.</li></ul></div>'}
 function flowStepsHtml(){return '<div class="bsteps" style="max-width:980px">'+DATA.flow.map((f,i)=>'<div class="bstep accent-'+f.a+'"><span class="bn">'+(i+1)+'</span><div class="bi">'+f.i+'</div><div class="bh">'+esc(f.h)+'</div><div class="bb">'+rich(f.b)+'</div></div>').join('')+'</div>'}
 function stuckHtml(){return '<div class="vsbox" style="border-left-color:var(--blue);max-width:920px;margin-bottom:18px"><div class="vh" style="color:var(--blue)">🆘 막히면 이렇게 하세요</div><ul><li>로그인이 안 되면 → <b>gmail.com</b>에서 개인 계정을 새로 만들어 로그인</li><li>AI 응답이 안 뜨면 → 30초~1분 기다리기(오디오 개요는 조금 더 걸립니다)</li><li>그래도 막히면 → <b>옆 짝과 한 화면</b>을 함께 보기</li><li>정 안 되면 → <b>손을 들어</b> 주세요</li></ul></div>'}
@@ -799,7 +794,7 @@ function runsheetHtml(){return '<div class="po" style="margin-top:24px"><div cla
 /* ═══ 탭 패널 조립 ═══ */
 function panelHTML(id){
   const D=DATA, w='<div class="wrap">';
-  if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','아래 팀즈(Reflect)에서 오늘의 마음을 가볍게 체크인해 주세요.')+teamsCardHtml()+
+  if(id==='start') return '<div class="block">'+w+head('시작','','💗 감정 체크인','오늘 이 자리에 오신 마음을 가볍게 눌러 주세요.')+moodHtml()+
       head('','','✍️ 선생님의 교과가 궁금합니다')+wallHtml(3,'선생님의 교과를 적어 주세요 ^^','예: 과학 · 수학 · 국어 · 영어 · 역사 · 체육 ...')+
       '<div class="warn-card" style="border-color:var(--grape);background:#f3f1fb"><div class="wh" style="color:var(--grape)">🤖 잠깐 — ‘자동화’가 뭔가요?</div>'+
         '<p><b>자동화</b>는 반복되는 일을 <b>규칙에 따라 사람 손 없이</b> 처리하는 것입니다. 키워드로는 <b>반복 · 규칙(조건) · 자동 실행 · 일괄 처리</b>가 있습니다.</p>'+
@@ -808,7 +803,7 @@ function panelHTML(id){
       '</div>'+
       runsheetHtml()+pnoteHtml('checkinNote',D.checkinNote)+'</div></div>';
   if(id==='intro') return '<div class="block">'+w+head('강사 소개','','🙇 만나서 반갑습니다','')+
-      introCardHtml()+
+      portfolioCardHtml()+
       '<div class="warn-card" style="border-color:var(--grape);background:#f3f1fb;max-width:720px;margin:18px auto 0"><div class="wh" style="color:var(--grape)">💬 오늘 연수를 열며</div><p>'+rich(D.introMsg)+'</p></div>'+
       pnoteHtml('introNote',D.introNote)+'</div></div>';
   if(id==='flow') return '<div class="block">'+w+head('오늘의 흐름','80분','🗺️ 오늘 이렇게 진행합니다','탭 순서대로 따라오시면 됩니다.')+prepHtml()+flowStepsHtml()+pnoteHtml('flowNote',D.flowNote)+'</div></div>';
