@@ -357,6 +357,22 @@
   .reason p{margin:0;font-size:15px;color:var(--ink-soft);line-height:1.65;}
   .reason p b{color:var(--ink);font-weight:500;}
 
+  /* ── AIEP 11개 시도 ──────────────────────────────────── */
+  .aiep{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 4px;}
+  @media(max-width:860px){.aiep{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.aiep{grid-template-columns:1fr;}}
+  .ar{display:block;text-decoration:none;background:var(--canvas);border:1px solid var(--line);
+    border-radius:8px;padding:14px 16px;transition:.16s;}
+  a.ar:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:var(--sh-2);}
+  .ar .arg{display:inline-block;font-size:11.5px;font-weight:550;letter-spacing:.06em;
+    color:#fff;background:var(--primary);padding:3px 8px;border-radius:4px;margin:0 0 8px;}
+  .ar b{display:block;font-size:15px;font-weight:500;letter-spacing:-.01em;color:var(--ink);}
+  .ar .au{display:block;font-family:var(--mono);font-size:11.5px;color:var(--blue);margin-top:3px;
+    overflow-wrap:anywhere;}
+  .ar.off{opacity:.55;}
+  .ar.off .arg{background:var(--ink-faint);}
+  .ar.off .au{color:var(--ink-faint);}
+
   /* ── 지역별 플랫폼 ────────────────────────────────────── */
   .subh{font-size:clamp(20px,2.6vw,28px);font-weight:600;letter-spacing:-.01em;
     margin:56px 0 12px;line-height:1.3;}
@@ -480,13 +496,13 @@
       <span class="dot">✦</span>해누리중학교 조승재
     </a>
     <span class="spacer"></span>
-    <a class="navlink" href="#where">어디서</a>
     <a class="navlink" href="#howto">만드는 순서</a>
     <a class="navlink" href="#kits">재료 세트</a>
     <a class="navlink" href="#chain">장면 잇기</a>
     <a class="navlink" href="#agent">에이전트</a>
     <a class="navlink" href="#whyspec">지시문 읽기</a>
     <a class="navlink" href="#builder">빌더</a>
+    <a class="navlink" href="#where">내 지역</a>
     <button class="toggle" id="themeBtn" aria-label="밝기 전환">◐</button>
   </div>
 </header>
@@ -531,85 +547,15 @@
   </div>
 </div>
 
-<!-- ══════════ 어디서 만드나 ══════════ -->
-<section id="where" style="--c:var(--blue)">
-  <div class="wrap">
-    <div class="lbl"><span class="t">어디서 만드나</span><span class="n">지역마다 다릅니다</span></div>
-    <h2>내 지역에도 있을 수 있습니다</h2>
-    <p class="sub">서울은 교육청 플랫폼 안에 영상 생성이 들어 있습니다. 다른 지역은 사정이 다릅니다 —
-      상용 도구를 계정으로 묶어 주는 곳도 있고, 아직 확인이 안 된 곳도 있습니다.
-      <b>확인된 것만 확인됐다고 적었습니다.</b></p>
-
-    <div class="plat">
-      <article class="pcard on">
-        <div class="phead"><span class="pregion">서울</span><span class="pstate ok">영상 생성 있음</span></div>
-        <h3>SEN스쿨 · SenGPT</h3>
-        <p>로그인은 <b>senedu.kr</b>, 그 안에서 SenGPT로 넘어갑니다.
-          상단 <b>「비디오」</b> 탭이 영상 생성입니다. 엔진은 <b>웍스AI</b>.</p>
-        <dl>
-          <div><dt>프롬프트</dt><dd>1,000자</dd></div>
-          <div><dt>길이</dt><dd>4~15초</dd></div>
-          <div><dt>해상도</dt><dd>768P · 2K</dd></div>
-          <div><dt>비율</dt><dd>16:9 · 9:16 · 1:1 · 4:3 · 3:4 · 21:9</dd></div>
-        </dl>
-        <p class="pnote">@sen.go.kr 계정을 가진 교직원이 씁니다.</p>
-      </article>
-
-      <article class="pcard on">
-        <div class="phead"><span class="pregion">부산</span><span class="pstate ok">상용 도구 묶음</span></div>
-        <h3>펜즈 (PENZ)</h3>
-        <p>2026년 9월 개통. 계정 하나로 <b>제미나이 · MS 코파일럿 · 어도비 파이어플라이 ·
-          챗GPT · 캔바 교육용</b>을 씁니다.</p>
-        <p class="pnote">초1~고3과 교직원 전체. 전학·진학해도 같은 계정을 씁니다.
-          영상은 위 도구들 안에서 만듭니다.</p>
-      </article>
-
-      <article class="pcard">
-        <div class="phead"><span class="pregion">경기</span><span class="pstate wait">영상 생성 확인 필요</span></div>
-        <h3>하이러닝</h3>
-        <p>AI 교수학습 플랫폼. 도내 전 학교로 넓히는 중입니다.
-          진단·콘텐츠 추천과 수업 운영 도구가 중심입니다.</p>
-      </article>
-
-      <article class="pcard">
-        <div class="phead"><span class="pregion">그 밖</span><span class="pstate wait">시범 운영</span></div>
-        <h3>11개 시도 교수학습 플랫폼</h3>
-        <p>서울·인천·광주·대전·울산·세종·강원·전북·전남·경북·제주가
-          인공지능 교수학습 플랫폼을 시범 운영 중입니다.
-          인천은 <b>인천교육플랫폼</b>과 AI융합교육원을 따로 두고 있습니다.</p>
-        <p class="pnote">영상 생성 기능이 있는지는 로그인 안쪽이라 밖에서 확인되지 않습니다.
-          선생님 지역에서 확인되면 알려 주십시오. 여기에 더하겠습니다.</p>
-      </article>
-    </div>
-
-    <div class="callout">
-      <b>지역 플랫폼에 영상 생성이 없다면</b> 아래 상용 도구를 쓰시면 됩니다.
-      대부분 무료 체험이 있고, 만드는 방법과 프롬프트 쓰는 법은 이 페이지 그대로 통합니다.
-    </div>
-
-    <h3 class="subh">돈을 내고 쓰는 도구</h3>
-    <p class="sub">시작·끝 프레임을 받는 도구는 <b>이 페이지의 방법을 그대로</b> 쓸 수 있습니다.
-      가격과 기능은 자주 바뀌니 쓰시기 전에 한 번 확인하십시오.</p>
-    <div class="tools">
-      <div class="tool"><b>Runway</b><span>Gen-4</span><p>시작·끝 프레임 지원. 영상 편집 기능까지 한곳에.</p></div>
-      <div class="tool"><b>Kling</b><span>클링</span><p>시작·끝 프레임 지원. 무료 크레딧이 넉넉한 편.</p></div>
-      <div class="tool"><b>Luma</b><span>Dream Machine</span><p>시작·끝 프레임 지원. 자연스러운 움직임.</p></div>
-      <div class="tool"><b>Google Veo</b><span>Gemini · Flow</span><p>시작·끝 프레임 지원. 화질이 좋습니다.</p></div>
-      <div class="tool"><b>Pika</b><span>피카</span><p>짧은 장면과 효과에 강합니다.</p></div>
-      <div class="tool"><b>Hailuo</b><span>MiniMax</span><p>사람 동작 표현이 좋은 편.</p></div>
-    </div>
-    <p class="pnote wide">부산처럼 교육청이 상용 도구를 묶어 주는 곳이라면,
-      <b>제미나이(Veo)</b>가 이미 계정 안에 들어 있을 수 있습니다. 먼저 확인해 보십시오.</p>
-  </div>
-</section>
-
 <!-- ══════════ 만드는 순서 ══════════ -->
 <section id="howto" style="--c:var(--purple)">
   <div class="wrap">
     <div class="lbl"><span class="t">만드는 순서</span><span class="n">서울 SEN스쿨 기준</span></div>
     <h2>여섯 걸음이면 한 편이 나옵니다</h2>
     <p class="sub">아래 그림은 실제 화면을 그대로 옮겨 그린 것입니다.
-      <b>이번에 눌러야 할 자리</b>만 색으로 표시했습니다.</p>
+      <b>이번에 눌러야 할 자리</b>만 색으로 표시했습니다.
+      AIEP를 쓰는 <b>11개 시도교육청은 화면이 거의 같습니다</b> —
+      <a href="#where" style="color:var(--purple);font-weight:500">내 지역 주소는 맨 아래</a>에 있습니다.</p>
 
     <div class="warn">
       <b>시작하기 전에 — 팝업 차단부터 풀어 주십시오.</b>
@@ -1185,6 +1131,83 @@
       기다리는 동안 할 일을 미리 정해 두십시오 — 옆 선생님 프롬프트를 읽고
       <b>“이 영상 보면 학생이 뭘 물을까”</b>를 적어 보는 것만으로 실습 하나가 더 생깁니다.
     </div>
+  </div>
+</section>
+
+<!-- ══════════ 어디서 만드나 ══════════ -->
+<section id="where" style="--c:var(--blue)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">어디서 만드나</span><span class="n">내 지역 확인</span></div>
+    <h2>AIEP를 쓰신다면 어디서나 됩니다</h2>
+    <p class="sub"><b>AIEP</b>는 전국 17개 가운데 <b>11개 시도교육청</b>이 함께 만든
+      「인공지능 맞춤형 교수학습 플랫폼」입니다. 이름은 지역마다 다르지만 안쪽은 같습니다.
+      <b>이 페이지의 방법이 그대로 통합니다.</b></p>
+
+    <div class="aiep">
+      <a class="ar" href="https://senedu.kr" target="_blank" rel="noreferrer">
+        <span class="arg">서울</span><b>SEN스쿨</b><span class="au">senedu.kr</span></a>
+      <a class="ar" href="https://icedu.kr" target="_blank" rel="noreferrer">
+        <span class="arg">인천</span><b>AI 맞춤형 교수학습</b><span class="au">icedu.kr</span></a>
+      <a class="ar" href="https://genedu.kr" target="_blank" rel="noreferrer">
+        <span class="arg">광주</span><b>AI 맞춤형 교수학습</b><span class="au">genedu.kr</span></a>
+      <a class="ar" href="https://ai.djsch.kr" target="_blank" rel="noreferrer">
+        <span class="arg">대전</span><b>AI 맞춤형 교수학습</b><span class="au">ai.djsch.kr</span></a>
+      <a class="ar" href="https://wooriai2.use.go.kr" target="_blank" rel="noreferrer">
+        <span class="arg">울산</span><b>우리아이 2.0</b><span class="au">wooriai2.use.go.kr</span></a>
+      <a class="ar" href="https://gwedu.kr" target="_blank" rel="noreferrer">
+        <span class="arg">강원</span><b>강원아이로</b><span class="au">gwedu.kr</span></a>
+      <a class="ar" href="https://ai.jbedu.kr" target="_blank" rel="noreferrer">
+        <span class="arg">전북</span><b>AI 맞춤형 교수학습</b><span class="au">ai.jbedu.kr</span></a>
+      <a class="ar" href="https://ai.jne.kr" target="_blank" rel="noreferrer">
+        <span class="arg">전남</span><b>AI 맞춤형 교수학습</b><span class="au">ai.jne.kr</span></a>
+      <a class="ar" href="https://aiep.gbe.kr" target="_blank" rel="noreferrer">
+        <span class="arg">경북</span><b>AI 맞춤형 교수학습</b><span class="au">aiep.gbe.kr</span></a>
+      <a class="ar" href="https://aiep.jje.kr" target="_blank" rel="noreferrer">
+        <span class="arg">제주</span><b>바당</b><span class="au">aiep.jje.kr</span></a>
+      <span class="ar off">
+        <span class="arg">세종</span><b>참여 교육청</b><span class="au">주소 확인 중</span></span>
+    </div>
+    <p class="pnote wide">열한 곳 가운데 <b>열 곳은 주소를 직접 확인</b>했습니다.
+      세종은 공개된 주소를 찾지 못했습니다 — 아시는 분은 알려 주시면 채워 넣겠습니다.
+      로그인은 <b>교육청 계정</b>으로 합니다.</p>
+
+    <div class="callout">
+      <b>영상 생성이 어느 지역에나 있는 것은 아닙니다.</b>
+      서울은 SenGPT 안에 「비디오」가 들어 있는 것을 직접 확인했습니다.
+      다른 지역은 메뉴 이름이 다를 수 있으니, 로그인하신 뒤 <b>AI 도구·수업 도구</b> 쪽을 먼저 보십시오.
+      없다면 아래 상용 도구를 쓰시면 됩니다 — <b>만드는 방법은 똑같습니다.</b>
+    </div>
+
+    <h3 class="subh">AIEP 밖의 지역</h3>
+    <div class="plat">
+      <article class="pcard on">
+        <div class="phead"><span class="pregion">부산</span><span class="pstate ok">상용 도구 묶음</span></div>
+        <h3>펜즈 (PENZ)</h3>
+        <p>2026년 9월 개통. 계정 하나로 <b>제미나이 · MS 코파일럿 · 어도비 파이어플라이 ·
+          챗GPT · 캔바 교육용</b>을 씁니다. 영상은 이 도구들 안에서 만듭니다.</p>
+        <p class="pnote">초1~고3과 교직원 전체. 전학·진학해도 같은 계정을 씁니다.</p>
+      </article>
+      <article class="pcard">
+        <div class="phead"><span class="pregion">경기</span><span class="pstate wait">영상 생성 확인 필요</span></div>
+        <h3>하이러닝</h3>
+        <p>AI 교수학습 플랫폼. 도내 전 학교로 넓히는 중입니다.
+          진단·콘텐츠 추천과 수업 운영 도구가 중심입니다.</p>
+      </article>
+    </div>
+
+    <h3 class="subh">돈을 내고 쓰는 도구</h3>
+    <p class="sub">시작·끝 프레임을 받는 도구는 <b>이 페이지의 방법을 그대로</b> 쓸 수 있습니다.
+      가격과 기능은 자주 바뀌니 쓰시기 전에 한 번 확인하십시오.</p>
+    <div class="tools">
+      <div class="tool"><b>Runway</b><span>Gen-4</span><p>시작·끝 프레임 지원. 영상 편집 기능까지 한곳에.</p></div>
+      <div class="tool"><b>Kling</b><span>클링</span><p>시작·끝 프레임 지원. 무료 크레딧이 넉넉한 편.</p></div>
+      <div class="tool"><b>Luma</b><span>Dream Machine</span><p>시작·끝 프레임 지원. 자연스러운 움직임.</p></div>
+      <div class="tool"><b>Google Veo</b><span>Gemini · Flow</span><p>시작·끝 프레임 지원. 화질이 좋습니다.</p></div>
+      <div class="tool"><b>Pika</b><span>피카</span><p>짧은 장면과 효과에 강합니다.</p></div>
+      <div class="tool"><b>Hailuo</b><span>MiniMax</span><p>사람 동작 표현이 좋은 편.</p></div>
+    </div>
+    <p class="pnote wide">부산처럼 교육청이 상용 도구를 묶어 주는 곳이라면
+      <b>제미나이(Veo)</b>가 이미 계정 안에 들어 있을 수 있습니다. 먼저 확인해 보십시오.</p>
   </div>
 </section>
 
