@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>조승재 · 해누리중학교 과학교사</title>
+<meta name="description" content="바이브 코딩으로 만든 프로그램과 페이지들을 모아 두었습니다.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* ══════════════════════════════════════════════════════
+   토큰 — 애플: 단일 블루, 색면 교대, 그림자 없음
+   ══════════════════════════════════════════════════════ */
+:root{
+  --blue:#0066cc;            /* 유일한 인터랙션 색 */
+  --blue-focus:#0071e3;
+  --blue-on-dark:#2997ff;
+
+  --ink:#1d1d1f;
+  --ink-80:#333333;
+  --ink-48:#7a7a7a;
+  --on-dark:#ffffff;
+  --on-dark-muted:#cccccc;
+
+  --canvas:#ffffff;
+  --parchment:#f5f5f7;
+  --pearl:#fafafc;
+  --tile-1:#272729;
+  --tile-2:#2a2a2c;
+  --tile-3:#252527;
+  --black:#000000;
+
+  --hairline:#e0e0e0;
+  --divider-soft:#f0f0f0;
+
+  --r-sm:8px; --r-md:11px; --r-lg:18px; --r-pill:9999px;
+
+  --s-xxs:4px; --s-xs:8px; --s-sm:12px; --s-md:17px;
+  --s-lg:24px; --s-xl:32px; --s-xxl:48px; --s-section:80px;
+
+  /* SF Pro 대체: 애플 기기에선 진짜 SF/애플 SD 산돌, 그 외엔 프리텐다드 */
+  --sf:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+       "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif;
+
+  --maxw:1440px;
+  --readw:692px;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:96px}
+body{
+  background:var(--canvas);color:var(--ink);
+  font-family:var(--sf);
+  font-size:17px;font-weight:400;line-height:1.6;letter-spacing:-.374px;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+@media(min-width:1069px){.wrap{padding:0 40px}}
+
+/* 색면 = 구분선. 테두리도 그림자도 쓰지 않는다 */
+.tile{padding:var(--s-section) 0}
+@media(max-width:640px){.tile{padding:var(--s-xxl) 0}}
+.t-white{background:var(--canvas);color:var(--ink)}
+.t-parch{background:var(--parchment);color:var(--ink)}
+.t-dark{background:var(--tile-1);color:var(--on-dark)}
+.t-dark-2{background:var(--tile-2);color:var(--on-dark)}
+.t-dark-3{background:var(--tile-3);color:var(--on-dark)}
+
+/* ══════════════ 글자 사다리 ══════════════ */
+.hero-display{
+  font-size:clamp(34px,5.6vw,56px);font-weight:600;line-height:1.07;
+  letter-spacing:-.28px;word-break:keep-all;
+}
+.display-lg{
+  font-size:clamp(28px,3.4vw,40px);font-weight:600;line-height:1.15;
+  letter-spacing:-.374px;word-break:keep-all;
+}
+.lead{
+  font-size:clamp(19px,2.1vw,28px);font-weight:400;line-height:1.35;
+  letter-spacing:.196px;word-break:keep-all;
+}
+.tagline{font-size:21px;font-weight:600;line-height:1.28;letter-spacing:.231px}
+.body{font-size:17px;font-weight:400;line-height:1.6;letter-spacing:-.374px;word-break:keep-all}
+.caption{font-size:14px;font-weight:400;line-height:1.5;letter-spacing:-.224px}
+.caption-strong{font-size:14px;font-weight:600;line-height:1.29;letter-spacing:-.224px}
+.fine{font-size:12px;font-weight:400;line-height:1.6;letter-spacing:-.12px}
+.muted{color:var(--ink-48)}
+.t-dark .muted,.t-dark-2 .muted,.t-dark-3 .muted{color:var(--on-dark-muted)}
+
+/* ══════════════ 버튼 — 파란 알약 하나뿐 ══════════════ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--sf);font-size:17px;font-weight:400;line-height:1;
+  letter-spacing:-.374px;border:1px solid transparent;cursor:pointer;
+  border-radius:var(--r-pill);padding:11px 22px;min-height:44px;
+  transition:transform .15s ease, background .2s ease, color .2s ease;
+}
+.btn:active{transform:scale(.95)}
+.btn:focus-visible{outline:2px solid var(--blue-focus);outline-offset:3px}
+.btn-fill{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-ghost{background:transparent;color:var(--blue);border-color:var(--blue)}
+.t-dark .btn-ghost,.t-dark-2 .btn-ghost,.t-dark-3 .btn-ghost{
+  color:var(--blue-on-dark);border-color:var(--blue-on-dark)}
+.link{color:var(--blue)}
+.link:hover{text-decoration:underline;text-underline-offset:3px}
+.t-dark .link,.t-dark-2 .link,.t-dark-3 .link{color:var(--blue-on-dark)}
+.cta-row{display:flex;flex-wrap:wrap;gap:var(--s-md);margin-top:var(--s-xl);justify-content:center}
+
+/* ══════════════ 내비 두 줄 ══════════════ */
+.gnav{background:var(--black);color:var(--on-dark);height:44px;position:relative;z-index:60}
+.gnav .inner{display:flex;align-items:center;gap:var(--s-lg);height:44px;
+  font-size:12px;font-weight:400;letter-spacing:-.12px}
+.gnav .name{font-weight:600}
+.gnav .sp{flex:1}
+.gnav a{opacity:.88;transition:opacity .2s ease}
+.gnav a:hover{opacity:1}
+.gnav .hide-sm{display:none}
+@media(min-width:736px){.gnav .hide-sm{display:inline}}
+
+.snav{
+  position:sticky;top:0;z-index:55;height:52px;
+  background:rgba(245,245,247,.8);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.snav .inner{display:flex;align-items:center;gap:var(--s-lg);height:52px}
+.snav .cat{font-size:21px;font-weight:600;letter-spacing:.231px;white-space:nowrap}
+.snav .sp{flex:1}
+.snav nav{display:none;gap:var(--s-lg);font-size:14px;letter-spacing:-.224px}
+@media(min-width:900px){.snav nav{display:flex}}
+.snav nav a{color:var(--ink-80);transition:color .2s ease}
+.snav nav a:hover{color:var(--ink)}
+.snav .btn{font-size:14px;padding:7px 16px;min-height:34px}
+
+/* ══════════════ 타일 안쪽 ══════════════ */
+.center{text-align:center;max-width:820px;margin:0 auto}
+.center .lead{margin-top:var(--s-md);color:var(--ink-80)}
+.t-dark .center .lead,.t-dark-2 .center .lead,.t-dark-3 .center .lead{color:var(--on-dark-muted)}
+.eyebrow{
+  display:block;font-size:14px;font-weight:600;letter-spacing:-.224px;
+  color:var(--blue);margin-bottom:var(--s-sm);
+}
+.t-dark .eyebrow,.t-dark-2 .eyebrow,.t-dark-3 .eyebrow{color:var(--blue-on-dark)}
+.tile-head{margin-bottom:var(--s-xxl);text-align:center;max-width:760px;margin-left:auto;margin-right:auto}
+.tile-head .lead{margin-top:var(--s-sm);color:var(--ink-80);font-size:clamp(17px,1.6vw,21px);
+  line-height:1.5;letter-spacing:0}
+.t-dark .tile-head .lead,.t-dark-2 .tile-head .lead{color:var(--on-dark-muted)}
+
+/* 히어로 수치 */
+.stats{display:flex;justify-content:center;gap:var(--s-xxl);flex-wrap:wrap;margin-top:var(--s-xxl)}
+.stats div{text-align:center}
+.stats b{display:block;font-size:40px;font-weight:600;letter-spacing:-.374px;line-height:1.1}
+.stats span{font-size:14px;letter-spacing:-.224px;color:var(--ink-48);margin-top:2px;display:block}
+
+/* ══════════════ 소개 목록 ══════════════ */
+.bio{max-width:var(--readw);margin:0 auto}
+.bio li{list-style:none;padding:var(--s-lg) 0;border-bottom:1px solid var(--hairline);
+  font-size:17px;line-height:1.6;letter-spacing:-.374px;word-break:keep-all}
+.bio li:first-child{border-top:1px solid var(--hairline)}
+.bio .ig{display:inline-flex;align-items:center;gap:8px;margin-top:var(--s-lg);
+  color:var(--blue);font-size:17px;letter-spacing:-.374px}
+.bio .ig svg{width:19px;height:19px}
+.bio .ig:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* ══════════════ 여는 편지 ══════════════ */
+.letter{max-width:var(--readw);margin:0 auto}
+.letter p{font-size:17px;line-height:1.7;letter-spacing:-.374px;margin-top:var(--s-lg);word-break:keep-all}
+.letter p:first-child{margin-top:0}
+.letter p.big{
+  font-size:clamp(24px,2.8vw,34px);font-weight:600;line-height:1.35;letter-spacing:-.374px;
+  margin-top:var(--s-xxl);margin-bottom:var(--s-xxl);
+}
+.letter .sign{margin-top:var(--s-xxl);padding-top:var(--s-lg);
+  border-top:1px solid var(--hairline);font-size:14px;letter-spacing:-.224px;color:var(--ink-48);text-align:right}
+.letter .sign b{color:var(--ink);font-weight:600}
+
+/* ══════════════ 아이들이 써준 말 ══════════════ */
+.chips{display:flex;flex-wrap:wrap;gap:var(--s-xs);justify-content:center;margin-bottom:var(--s-xxl)}
+.chip{
+  background:transparent;color:var(--on-dark);
+  border:1px solid rgba(255,255,255,.32);border-radius:var(--r-pill);
+  padding:9px 16px;font-family:var(--sf);font-size:14px;letter-spacing:-.224px;
+  cursor:pointer;transition:transform .15s ease,background .2s ease,border-color .2s ease;
+}
+.chip:hover{border-color:rgba(255,255,255,.7)}
+.chip:active{transform:scale(.95)}
+.chip:focus-visible{outline:2px solid var(--blue-on-dark);outline-offset:3px}
+.chip[aria-selected="true"]{background:var(--on-dark);color:var(--ink);border-color:var(--on-dark)}
+.quote{max-width:900px;margin:0 auto;text-align:center;min-height:220px;
+  display:flex;flex-direction:column;justify-content:center}
+.quote blockquote{
+  font-size:clamp(21px,2.9vw,40px);font-weight:600;line-height:1.3;
+  letter-spacing:-.374px;word-break:keep-all;
+}
+.quote cite{display:block;margin-top:var(--s-lg);font-style:normal;
+  font-size:14px;letter-spacing:-.224px;color:var(--on-dark-muted)}
+.quote.swap blockquote,.quote.swap cite{animation:fade .35s cubic-bezier(.25,.46,.45,.94)}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ══════════════ 유틸리티 카드 격자 ══════════════ */
+.grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:641px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1069px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{
+  background:var(--canvas);color:var(--ink);
+  border:1px solid var(--hairline);border-radius:var(--r-lg);
+  padding:var(--s-lg);display:flex;flex-direction:column;gap:var(--s-sm);
+  transition:transform .15s ease,border-color .2s ease;
+}
+.card:hover{border-color:#c9c9cf}
+.card:active{transform:scale(.99)}
+.card h3{font-size:21px;font-weight:600;letter-spacing:-.374px;line-height:1.3;word-break:keep-all}
+.card p{font-size:14px;line-height:1.55;letter-spacing:-.224px;color:var(--ink-80);flex:1;word-break:keep-all}
+.card .go{font-size:14px;letter-spacing:-.224px;color:var(--blue)}
+.card:hover .go{text-decoration:underline;text-underline-offset:3px}
+/* 짙은 타일 위 카드 — 색면만 바꾸고 테두리는 유지 */
+.t-dark .card,.t-dark-2 .card,.t-dark-3 .card{
+  background:transparent;border-color:rgba(255,255,255,.24);color:var(--on-dark)}
+.t-dark .card:hover,.t-dark-2 .card:hover{border-color:rgba(255,255,255,.55)}
+.t-dark .card p,.t-dark-2 .card p{color:var(--on-dark-muted)}
+.t-dark .card .go,.t-dark-2 .card .go{color:var(--blue-on-dark)}
+
+/* ══════════════ 연수 목록 — 촘촘한 링크 열 ══════════════ */
+.rows{max-width:900px;margin:0 auto;border-top:1px solid var(--hairline)}
+.row{display:flex;gap:var(--s-lg);align-items:baseline;padding:var(--s-lg) 4px;
+  border-bottom:1px solid var(--hairline);transition:padding-left .2s ease}
+.row:hover{padding-left:var(--s-sm)}
+.row .n{flex:0 0 auto;font-size:12px;letter-spacing:-.12px;color:var(--ink-48);
+  min-width:22px;font-variant-numeric:tabular-nums}
+.row .b{flex:1;min-width:0}
+.row h3{font-size:17px;font-weight:600;letter-spacing:-.374px;line-height:1.4;word-break:keep-all}
+.row:hover h3{color:var(--blue)}
+.row p{font-size:14px;line-height:1.5;letter-spacing:-.224px;color:var(--ink-48);margin-top:4px;word-break:keep-all}
+.row .go{flex:0 0 auto;font-size:14px;color:var(--blue)}
+
+/* ══════════════ 푸터 ══════════════ */
+footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
+.fcols{display:grid;gap:var(--s-xl);border-bottom:1px solid var(--hairline);padding-bottom:var(--s-xl)}
+@media(min-width:736px){.fcols{grid-template-columns:repeat(3,1fr)}}
+.fcols h4{font-size:14px;font-weight:600;letter-spacing:-.224px;color:var(--ink);margin-bottom:var(--s-xs)}
+.fcols a{display:block;font-size:14px;line-height:2.2;letter-spacing:-.224px;color:var(--ink-80)}
+.fcols a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+#app-credit{margin-top:var(--s-lg);font-size:12px;line-height:1.9;letter-spacing:-.12px;color:var(--ink-48)}
+#app-credit b{color:var(--ink-80);font-weight:600}
+#app-credit .sep{margin:0 8px;opacity:.5}
+
+/* 미리보기 딱지 */
+.flag{background:var(--blue);color:#fff;text-align:center;padding:8px 16px;
+  font-size:12px;letter-spacing:-.12px}
+.flag a{text-decoration:underline;text-underline-offset:2px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="flag">애플 디자인 시스템으로 짜본 시안입니다 · 실제 페이지는 <a href="./">여기</a></div>
+
+<div class="gnav">
+  <div class="wrap inner">
+    <span class="name">조승재</span>
+    <span class="hide-sm">해누리중학교 과학교사</span>
+    <span class="sp"></span>
+    <a href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://github.com/scienceisjo" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div>
+
+<div class="snav">
+  <div class="wrap inner">
+    <span class="cat">포트폴리오</span>
+    <span class="sp"></span>
+    <nav>
+      <a href="#letter">여는 편지</a>
+      <a href="#voices">아이들의 말</a>
+      <a href="#tools">교사 도구</a>
+      <a href="#lesson">수업</a>
+      <a href="#training">연수 자료</a>
+    </nav>
+    <a class="btn btn-fill" href="#tools">자료 둘러보기</a>
+  </div>
+</div>
+
+<!-- 히어로 -->
+<section class="tile t-white">
+  <div class="wrap center">
+    <span class="eyebrow">수업을 사랑하는 과학교사</span>
+    <h1 class="hero-display">수업을 연구하고,<br>수업에서 힐링합니다</h1>
+    <p class="lead">바이브 코딩으로 만든 프로그램과 페이지들을 모아 두었습니다.<br>
+      그중에는 선생님들께서 그대로 가져가 쓰실 수 있는 것들도 있습니다.</p>
+    <div class="cta-row">
+      <a class="btn btn-fill" href="#tools">바로 쓰실 수 있는 것 보기</a>
+      <a class="btn btn-ghost" href="#letter">먼저 인사드리겠습니다</a>
+    </div>
+    <div class="stats">
+      <div><b>23</b><span>웹 도구 · 수업 앱</span></div>
+      <div><b>12</b><span>연수 · 강의 자료</span></div>
+      <div><b>0원</b><span>전부 무료 공개</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 약력 -->
+<section class="tile t-parch">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">약력</span>
+      <h2 class="display-lg">과학교사 조승재</h2>
+    </div>
+    <ul class="bio">
+      <li>잠이나 워라밸보다 수업이 더 중요한 교사입니다.</li>
+      <li>과학을 그렇게 좋아하지 않았지만, 학생들을 만나고 과학에 푹 빠졌습니다.</li>
+      <li>질문에서 출발하는 수업과 평가를 고민합니다. 학생을 과학의 세계로 초대하는 방법을 늘 찾고 있습니다.</li>
+      <li>센서와 디지털 탐구도구 활용 수업에 관심이 높아 연구하고 있고, 모든 선생님이 쓰실 수 있도록 페이지로 만들고 있습니다.</li>
+      <li>학생들이 공부해야 하는 이유를, 그리고 제가 학교에 있어야 하는 이유를 늘 고민합니다.</li>
+    </ul>
+    <div class="bio">
+      <a class="ig" href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>@science_is_jo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 여는 편지 -->
+<section class="tile t-white" id="letter">
+  <div class="wrap">
+    <div class="letter">
+      <p>안녕하세요. <b>해누리중학교에서 과학을 가르치는 조승재</b>입니다.</p>
+      <p>저는 운 좋게 참 훌륭한 학생들을 만났습니다. 그 덕분에 제가 하고자 했던 것보다
+        더 좋은 수업을 하기 위해 많은 노력을 쏟고 있습니다.</p>
+      <p>여기 있는 것들은 제가 AI를 활용해 만든 것이 대부분입니다. 그런데 만들면서
+        참고한 자료와 지식은 결국 또 다른 누군가가 먼저 만들어 둔 것들입니다.
+        저는 거기에 제 아이디어를 조금 얹었을 뿐이라, 혼자 했다고는 절대 말할 수 없습니다.</p>
+      <p>그래서 이 페이지들의 코드는 모두 공개해 두었습니다. 자유롭게 가져다 쓰시고,
+        도움이 될 만큼 도움이 되었으면 좋겠습니다. 그중 <b>과학 교육과정 나선지도</b>,
+        <b>학습지 스튜디오</b>, <b>클래스 게임 월드</b> 같은 것들은
+        다른 선생님들께서도 그대로 쓰실 수 있을 것 같습니다.</p>
+      <p class="big">AI 도구를 사용해서 이렇게 많이 만들었지만, 사실 저는
+        AI가 발달할수록 교육은 더욱더 본질로 돌아가야 한다고 생각합니다.</p>
+      <p>학생들이 무엇을 궁금해할지, 궁금증을 가지게 하려면 어떤 노력을 해야 할지,
+        AI 시대에 스스로 생각하는 힘을 길러 주려면 무엇을 해야 할지.
+        AI를 아예 못 쓰게 막아야 할지, 아니면 어떻게 쓰는지를 가르쳐야 할지.
+        이런 고민을 진짜 많이 합니다.</p>
+      <p>그런데 이런 고민들은 저보다 훨씬 경력이 많은 선생님들께
+        제가 배워야 할 부분이라고 생각합니다.</p>
+      <p>이 페이지를 알고 계시다는 건 저와 어떤 식으로든 만나게 되신 분일 텐데요.
+        이 인연이 짧게 끝나지 않고, 교육에 대한 고민을 함께 나누며
+        조언도 주고받는 사이로 이어졌으면 좋겠습니다.</p>
+      <div class="sign">해누리중학교 과학교사 <b>조승재</b> 드림</div>
+    </div>
+  </div>
+</section>
+
+<!-- 아이들이 써준 말 -->
+<section class="tile t-dark" id="voices">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">마음 보관함</span>
+      <h2 class="display-lg">저를 소개하는 가장 정확한 말은<br>아이들이 써 주었습니다</h2>
+      <p class="lead">학기가 끝날 때 받은 편지에서 그대로 옮겼습니다. 낱말을 눌러 보세요.</p>
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="아이들이 써준 말"></div>
+    <figure class="quote" id="quotebox">
+      <blockquote id="vq"></blockquote>
+      <cite id="vc"></cite>
+    </figure>
+  </div>
+</section>
+
+<!-- 교사 도구 -->
+<section class="tile t-white" id="tools">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">함께 쓰실 수 있는 것</span>
+      <h2 class="display-lg">선생님 학교에서도 그대로</h2>
+      <p class="lead">설치도 로그인도 없이 링크만 열면 됩니다. 결과물은 A4로 인쇄하거나 PDF로 저장하실 수 있습니다.</p>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/"><h3>과학 교육과정 나선지도</h3><p>2022 개정 과학과 초3~고3의 108개 단원을 지하철 노선도로 펼쳤습니다. 단원을 누르면 성취기준·해설과 선수·후속 학습 연계가 함께 나옵니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/"><h3>학습지 스튜디오</h3><p>수업 내용을 블록으로 조립해 A4 학습지를 만듭니다. 교사용 원본 하나에서 학생용과 정답지를 한 번에 뽑습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/brain-break-lab/"><h3>클래스 게임 월드</h3><p>남는 5분, 학급 행사, 수업 전환에 바로 띄우는 교실 미니게임 모음. 전자칠판 화면에 맞춰 만들었고 준비물이 없습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/class-tools/pdf-tool/"><h3>PDF 만능 도구</h3><p>병합·분할·압축·쪽번호·워터마크·텍스트 추출·OCR까지 11가지. 파일이 밖으로 나가지 않고, 앱으로 설치하면 인터넷 없이도 씁니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/teacher-toolkit/sensor-guide/"><h3>센서 구매 가이드</h3><p>이지메이커·사이언스큐브·버니어·파스코의 가격과 장단점을 비교합니다. 예산·모둠 수·수업을 고르면 구매 계획이 자동으로 만들어집니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/lettermaker/"><h3>편지 메이커</h3><p>시험 응원, 발표 격려 같은 짧은 편지를 학생 수만큼 찍어냅니다. 이름만 넣으면 편지지에 맞춰 배치됩니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/teacher-toolkit/value-journey/"><h3>교직 가치 여정</h3><p>60개의 교직 낱말 중에서 고르고, 여러 번 내려놓으며 지금 내 수업을 붙들고 있는 다섯 가지를 만나는 8단계.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/imyong-curriculum/"><h3>중등임용 교육과정 트레이너</h3><p>2022 개정 과학과 교육과정을 13개년 기출 분석에 기대어 훈련합니다. 교육과정을 다시 읽고 싶은 분께도.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 수업 -->
+<section class="tile t-parch" id="lesson">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">학생과 함께</span>
+      <h2 class="display-lg">수업 시간에 같이 여는 것들</h2>
+      <p class="lead">학생은 계정을 만들지 않습니다. 참여 코드나 링크만으로 들어옵니다.</p>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://scienceisjo.github.io/scienceclass/"><h3>해누리와 승재쌤이 함께하는 과학 시간</h3><p>제 수업 전체가 이 문 하나로 들어옵니다. 학습지·평가·수업 페이지·질문나무·도장판이 서로 이어져 하나로 굴러가는 수업 생태계입니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/questionuri/"><h3>해누리 질문 과수원</h3><p>학생이 수업 중 떠오른 질문을 심으면 나무가 자랍니다. 좋은 질문은 다듬어 다시 수업으로 돌아옵니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/class-tools/stamp-board/"><h3>과학 칭찬 도장판</h3><p>학생에게는 캐릭터를 키우는 도장판이고, 교사에게는 30초 만에 끝나는 관찰 기록부입니다. 그 기록이 그대로 생기부 근거가 됩니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/mblclasshub/"><h3>MBL 센서 수업 허브</h3><p>센서로 모은 모둠 데이터를 한 화면에 모아 비교합니다. 참여 코드 6자리로 학생이 들어오고, 교사 대시보드와 발표 모드가 따로 있습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html"><h3>과학탐험월드</h3><p>중1·중2 과학 단원별 시뮬레이션과 가상 실험실을 모은 통합 허브. 지금까지 만든 수업 웹앱 대부분이 여기 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 학급 운영 -->
+<section class="tile t-white" id="room">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">학급 운영</span>
+      <h2 class="display-lg">담임을 하면서 필요해서</h2>
+      <p class="lead">과학과 상관없이, 어느 학급에서나 쓰실 수 있습니다.</p>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://scienceisjo.github.io/class-tools/notice-board/"><h3>공지 알리미</h3><p>복도·교실 전자칠판에 상시 띄우는 학교 공지판. 급식·시간표·학사일정은 나이스에서 자동으로 올라오고, 긴급공지·디데이·청소당번까지 붙습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/class-tools/rolling-paper/"><h3>롤링페이퍼</h3><p>전학·졸업 가는 친구에게. QR을 몰래 뿌려 메시지를 남기면 전시 화면에 모입니다. 사진을 얹어 PDF로 저장하면 그대로 인쇄됩니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/class-tools/election/"><h3>학급 임원 선거</h3><p>유의사항·규칙·후보자를 입력하면 PPT 없이 선거를 진행합니다. 소견발표 타이머부터 개표와 당선자 발표까지.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/class-tools/memory-village/"><h3>우리 반 추억의 숲</h3><p>내 캐릭터로 걸어 다니는 진짜 3D 학급 공간. 다짐·명장면·행사·1인 1역을 남기고 친구 마음에 공감을 누릅니다.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 단원 웹앱 -->
+<section class="tile t-dark-2" id="units">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">수업 자료</span>
+      <h2 class="display-lg">단원을 통째로 만든 수업 웹앱</h2>
+      <p class="lead">교과서 차시 순서대로 도입·활동·시뮬레이션·정리를 한 페이지에 담았습니다. 그대로 수업에 띄우셔도 됩니다.</p>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://scienceisjo.github.io/lightandwave/hubpage.html"><h3>빛과 파동</h3><p>중2 · 물체를 보는 과정부터 빛의 반사·굴절, 파동과 소리까지. 시뮬레이터 갤러리가 딸려 있습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/electricity/"><h3>전기와 자기</h3><p>중2 · 에디슨 연구실을 테마로 한 8차시 전체. 전압계·전구 시뮬레이션과 확인 문제가 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/starandspace/"><h3>별과 우주</h3><p>중2 · 연주 시차, 별의 등급과 색, 우리은하. 직접 관측하기 어려운 내용을 화면에서 다룹니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/gas-properties/"><h3>기체의 성질</h3><p>중1 · 압력과 기체 압력, 보일 법칙과 샤를 법칙. 주사기에 압력 센서를 물리는 MBL 차시가 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/density-atelier/"><h3>밀도 아틀리에</h3><p>중2 · 밀도차 분리를 음료 만들기로 배웁니다. 비밀 임무를 풀면 재료 창고가 열리고, 재료가 밀도순으로 층을 이룹니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/gifted-science/"><h3>영재 · 간이 염분계 보정 탐구</h3><p>중1~2 영재 수업용. 직접 만든 간이 염분계를 굴절계 값과 맞춰 보정하는 전 과정을 다룹니다.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 연수 자료 -->
+<section class="tile t-white" id="training">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">연수 · 강의</span>
+      <h2 class="display-lg">그동안 진행한 연수 자료</h2>
+      <p class="lead">연수에서 쓴 자료를 그대로 열어 두었습니다. 참석하지 않으셨어도 내용을 따라오실 수 있게 만들었습니다.</p>
+    </div>
+    <div class="rows">
+      <a class="row" href="kkoribyeol.html"><span class="n">01</span><span class="b"><h3>말로 만드는 과학 수업</h3><p>발문과 대화로 학생의 사고를 여는 과학 수업 설계 · 꼬리별 워크숍</p></span><span class="go">↗</span></a>
+      <a class="row" href="question-workshop/"><span class="n">02</span><span class="b"><h3>질문하고 싶어지는 수업</h3><p>학생의 호기심에서 탐구 질문과 평가까지 이어 붙이는 설계 실습 · 중등 과학</p></span><span class="go">↗</span></a>
+      <a class="row" href="senedu-video/"><span class="n">03</span><span class="b"><h3>첫 장면과 끝 장면 사이</h3><p>SENEDU로 질문 유발 영상 만들기 — 재료 세트·에이전트 지시문·프롬프트 빌더</p></span><span class="go">↗</span></a>
+      <a class="row" href="lessondesignquiz.html"><span class="n">04</span><span class="b"><h3>모두가 답하는 교실</h3><p>전원이 참여하는 수업 설계 훈련 · 평가혁신 직무연수</p></span><span class="go">↗</span></a>
+      <a class="row" href="notion-notebooklm/"><span class="n">05</span><span class="b"><h3>업무경감 · 자동화</h3><p>Notion과 NotebookLM으로 공문과 자료를 가볍게 · 실습형 연수</p></span><span class="go">↗</span></a>
+      <a class="row" href="sensor-hub/"><span class="n">06</span><span class="b"><h3>센서 수업 자료실</h3><p>교육과정·교과서가 지정한 센서 탐구부터 학년별 실험 매뉴얼과 축 바꾸기까지</p></span><span class="go">↗</span></a>
+      <a class="row" href="student-data-backend/"><span class="n">07</span><span class="b"><h3>학생 데이터, 모으기 전에</h3><p>데이터를 모으기 전 꼭 짚어야 할 백엔드·개인정보·수집 설계 · 백엔드 교원연수</p></span><span class="go">↗</span></a>
+      <a class="row" href="ecosystem.html"><span class="n">08</span><span class="b"><h3>학생이 들어오는 문부터 나가는 문까지</h3><p>질문나무·칭찬 도장판·수업 페이지를 하나로 이어 붙인 수업 도구 생태계 · 사례나눔</p></span><span class="go">↗</span></a>
+      <a class="row" href="dibut/"><span class="n">09</span><span class="b"><h3>디벗 전문가 연수 · 윈도우</h3><p>학생 기기 계정 관리와 MDM 운영. 관리자 화면을 따라 해 보는 시뮬레이터가 있습니다</p></span><span class="go">↗</span></a>
+      <a class="row" href="share.html"><span class="n">10</span><span class="b"><h3>AI 디지털 영재교육</h3><p>역량중심 영재 수업을 나눈 발표 자료 · 보조강사 사례나눔</p></span><span class="go">↗</span></a>
+      <a class="row" href="personaltask.html"><span class="n">11</span><span class="b"><h3>내 아카이브 키우기</h3><p>연수 뒤에도 내 자료를 계속 키워 가는 법 · 확장 과제</p></span><span class="go">↗</span></a>
+      <a class="row" href="https://scienceisjo.github.io/githubmanual/forstudent.html"><span class="n">12</span><span class="b"><h3>GitHub Pages 게시 따라하기</h3><p>내가 만든 걸 인터넷에 올리는 법. 학생도 동료도 따라 하기 쉽게 썼습니다</p></span><span class="go">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 닫는 말 -->
+<section class="tile t-dark-3" id="hello">
+  <div class="wrap center">
+    <span class="eyebrow">그리고</span>
+    <h2 class="display-lg">이 인연이 짧게<br>끝나지 않았으면 좋겠습니다</h2>
+    <p class="lead">여기 있는 것 중 하나라도 쓸모가 있었다면 그대로 가져가 쓰셔도 됩니다.
+      고쳐 쓰셔도 되고, 학교 이름을 바꿔 다시 올리셔도 됩니다.
+      대신 언젠가 한 번은, 선생님께서 수업에 대해 하고 계신 고민을 들려주시면 좋겠습니다.</p>
+    <div class="cta-row">
+      <a class="btn btn-fill" href="#tools">자료 다시 보기</a>
+      <a class="btn btn-ghost" href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">인스타그램으로 인사하기</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <h4>교사 도구</h4>
+        <a href="https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/">과학 교육과정 나선지도</a>
+        <a href="https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/">학습지 스튜디오</a>
+        <a href="https://scienceisjo.github.io/class-tools/pdf-tool/">PDF 만능 도구</a>
+        <a href="https://scienceisjo.github.io/teacher-toolkit/sensor-guide/">센서 구매 가이드</a>
+      </div>
+      <div>
+        <h4>수업 · 학급</h4>
+        <a href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html">과학탐험월드</a>
+        <a href="https://scienceisjo.github.io/questionuri/">해누리 질문 과수원</a>
+        <a href="https://scienceisjo.github.io/class-tools/stamp-board/">과학 칭찬 도장판</a>
+        <a href="https://scienceisjo.github.io/brain-break-lab/">클래스 게임 월드</a>
+      </div>
+      <div>
+        <h4>이 페이지</h4>
+        <a href="#letter">여는 편지</a>
+        <a href="#voices">아이들이 써준 말</a>
+        <a href="#training">연수 자료</a>
+        <a href="https://www.instagram.com/science_is_jo/">인스타그램 · @science_is_jo</a>
+        <a href="https://github.com/scienceisjo">GitHub · scienceisjo</a>
+      </div>
+    </div>
+    <div id="app-credit">
+      <b>조승재</b> · 해누리중학교 과학교사<br>
+      © 2026 조승재 <span class="sep">|</span> 최종 업데이트: 2026-09-05
+    </div>
+  </div>
+</footer>
+
+<script>
+const VOICES = [
+  { label:'사람 한 명 살렸어요', text:'항상 과학이 저의 큰 걸림돌이었는데 사람 한 명 살려주셔서 감사해요!!!' },
+  { label:'없었다면 지금의 저도', text:'선생님은 중력 같습니다. 조용하지만, 늘 저를 생각의 중심으로 끌어당겨 주셨습니다. 선생님은 u쿼크와 d쿼크 같습니다. 선생님이 없었다면 지금의 저도 없었습니다.' },
+  { label:'두려운 중학교 생활', text:'선생님과 함께해서 어렵고 두려운 중학교 생활을 잘 이겨낼 수 있었어요. 선생님, 감사합니다.' },
+  { label:'과학교사라는 꿈', text:'잠깐 동안이지만 선생님을 뵈면서 과학교사라는 꿈도 가졌었어요.' },
+  { label:'오빠랑 토론해요', text:'제가 선생님께 수업을 받으면서 얻은 과학 지식을 가지고 오빠랑 과학에 대해서 토론도 하고, 서로 이게 맞다고 싸우기도 했었어요. 그만큼 과학이 너무 좋아진 것 같아요.' },
+  { label:'노력이 눈으로 보여요', text:'진짜 많이 노력해주시고 생각해주시는데 눈으로 보여요!!! 쌤만큼 학생들을 챙겨주시는 쌤은 정말 없는 것 같아요!' },
+  { label:'지금도 잘하고 계세요', text:'선생님 지금도 수업 되게 잘하고 계신 거 같은데 너무 비판적으로? 보시는 거 같기도 해서, 항상 존경하고 있다고 말씀드리고 싶었습니다.' },
+  { label:'시간표에 별표를 쳤어요', text:'선생님 덕분에 특히 우주랑 다른 과학에도 흥미가 생기게 되었고, 시간표에 과학이 들어 있으면 별표 치고 그날 수업을 기대하게 되었어요!' },
+  { label:'화살표가 보여요', text:'힘 단원을 배우고 나서는 세상 모든 물체들에게 화살표가 그려지더라구요. 너무 지나친 것 같지만 실제로 그랬습니다… 장력도 배워보고 싶어요.' },
+  { label:'최애 과목이 됐어요', text:'덕분에 과학이랑은 하나도 맞지 않다고 생각했던 제가 드디어 과학에 흥미를 느끼게 되었어요. 그냥 제 최애 과목이에요.' },
+  { label:'수업이 궁금해졌어요', text:'사실 거의 모든 내용을 선행했었거든요. 그래서 그냥 적당히 대답하고 지낼려고 했는데, 선생님이 열정적으로 어떻게든 저희를 즐겁게 가르치려고 하시는 것이 눈에 너무 잘 보이더라구요. 그 이후 항상 선생님의 수업이 궁금해졌어요.' },
+  { label:'배울 수 있어서 행복', text:'선생님께 배울 수 있어서 항상 행복했어요. 정말 감사해요.' },
+  { label:'뭘 해도 좋아해요', text:'선생님은 뭘 해도 애들이 좋아한다는 것을 꼭 기억해야 합니다.' },
+  { label:'좀 주무세요', text:'항상 감사하고 좀 주무세요. 건강 걱정됩니다 ㅠㅠ' }
+];
+(function(){
+  var chips=document.getElementById('chips'), box=document.getElementById('quotebox'),
+      q=document.getElementById('vq'), c=document.getElementById('vc');
+  VOICES.forEach(function(v,i){
+    var b=document.createElement('button');
+    b.type='button'; b.className='chip'; b.textContent=v.label;
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===0?'true':'false');
+    b.addEventListener('click', function(){ show(i); });
+    chips.appendChild(b);
+  });
+  function show(i){
+    q.textContent=VOICES[i].text; c.textContent='— 학생 편지 중에서';
+    Array.prototype.forEach.call(chips.children,function(el,j){
+      el.setAttribute('aria-selected', j===i?'true':'false');
+    });
+    box.classList.remove('swap'); void box.offsetWidth; box.classList.add('swap');
+  }
+  show(0);
+})();
+</script>
+</body>
+</html>
