@@ -485,6 +485,99 @@
     writing-mode:horizontal-tb;white-space:nowrap;}
   @media(max-width:760px){.chain{flex-direction:column;} .cscene{width:100%;}}
 
+  /* ── 30초 시뮬레이터 ─────────────────────────────────── */
+  .sim{background:var(--canvas);border:1px solid var(--line);border-radius:8px;
+    box-shadow:var(--sh-2);overflow:hidden;}
+  .simsteps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0;padding:0;list-style:none;
+    border-bottom:1px solid var(--line);}
+  .simsteps li{padding:18px 16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;
+    align-items:center;border-right:1px solid var(--line-soft);cursor:pointer;transition:.18s;
+    position:relative;min-width:0;}
+  .st,.sd{overflow-wrap:anywhere;}
+  .simsteps li:last-child{border-right:0;}
+  .simsteps li::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
+    background:var(--fill-green);transform:scaleX(0);transform-origin:left;transition:transform .35s ease;}
+  .simsteps li.on::after{transform:scaleX(1);}
+  .simsteps li.done .sn{background:var(--fill-green);color:#080808;border-color:var(--fill-green);}
+  .simsteps li.on .sn{background:var(--primary);color:var(--on-primary);border-color:var(--primary);}
+  .sn{grid-row:1/3;width:28px;height:28px;border-radius:4px;border:1.5px solid var(--line);
+    display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:var(--ink-faint);
+    transition:.18s;}
+  .st{font-size:14px;font-weight:500;letter-spacing:-.01em;color:var(--ink);}
+  .sd{font-size:12px;color:var(--ink-faint);}
+  @media(max-width:900px){
+    .simsteps{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .simsteps li{border-bottom:1px solid var(--line-soft);}
+    .sd{display:none;}
+  }
+
+  .simstage{padding:28px;min-height:360px;position:relative;}
+  .simpane{display:none;animation:simin .4s ease;}
+  .simpane.on{display:block;}
+  @keyframes simin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .simcap{margin:18px 0 0;font-size:14px;line-height:1.6;color:var(--ink-soft);
+    border-top:1px dashed var(--line);padding-top:14px;}
+  .simcap b{color:var(--ink);font-weight:500;}
+
+  /* 1 · 대화 */
+  .simchat{display:grid;gap:14px;}
+  .bubble{border-radius:8px;padding:16px 18px;max-width:92%;}
+  .bubble .who{display:block;font-size:11.5px;font-weight:550;letter-spacing:.06em;
+    color:var(--ink-faint);margin:0 0 8px;}
+  .bubble.me{background:var(--surface-2);justify-self:end;}
+  .bubble.me p{margin:0;font-size:14px;line-height:1.75;color:var(--ink-soft);}
+  .bubble.me b{color:var(--ink);font-weight:500;}
+  .bubble.ai{background:var(--canvas);border:1px solid var(--line);justify-self:start;max-width:100%;}
+  .simout{display:grid;gap:10px;}
+  .oc{background:var(--surface-2);border-radius:8px;padding:12px 14px;}
+  .oc b{display:block;font-size:12.5px;font-weight:550;letter-spacing:.02em;color:var(--purple);margin:0 0 6px;}
+  .oc p{margin:0;font-size:13.5px;line-height:1.65;color:var(--ink-soft);min-height:1.65em;
+    word-break:keep-all;}
+  .oc p.typing::after{content:"▍";color:var(--fill-purple);animation:blink .8s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0}}
+
+  /* 2 · 이미지 */
+  .simimgs{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.simimgs{grid-template-columns:1fr;}}
+  .simimg{margin:0;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;}
+  .simimg.show{opacity:1;transform:none;}
+  .simimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;
+    border:1px solid var(--line);background:var(--surface-2);}
+  .simimg figcaption{margin:8px 0 0;font-size:13px;color:var(--ink-faint);}
+  .simimg figcaption b{color:var(--ink);font-weight:500;margin-right:6px;}
+
+  /* 3 · 프레임 */
+  .simpanel{margin:0;}
+  .simslot{position:relative;overflow:hidden;transition:border-color .3s;}
+  .simslot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transform:scale(1.04);transition:opacity .5s ease,transform .5s ease;}
+  .simslot.filled{border-style:solid;border-color:var(--fill-green);}
+  .simslot.filled img{opacity:1;transform:none;}
+  .simslot.filled .uiplus,.simslot.filled em{opacity:0;}
+  .simbox{min-height:96px;font-size:13px;color:var(--ink-soft);white-space:pre-wrap;}
+  .simbox.filled{border-color:var(--fill-green);}
+
+  /* 4 · 영상 */
+  .simgen{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 18px;}
+  .simbtn{transition:.2s;}
+  .simbtn.pressed{transform:scale(.97);opacity:.7;}
+  .simwait{font-size:13.5px;color:var(--ink-faint);display:none;align-items:center;gap:4px;}
+  .simwait.on{display:inline-flex;}
+  .simwait .dot{width:6px;height:6px;border-radius:9999px;background:var(--ink-faint);
+    animation:wdot 1.2s infinite;}
+  .simwait .dot:nth-child(2){animation-delay:.2s}.simwait .dot:nth-child(3){animation-delay:.4s}
+  @keyframes wdot{0%,80%,100%{opacity:.25}40%{opacity:1}}
+  .simvid{margin:0;opacity:0;transition:opacity .6s ease;}
+  .simvid.show{opacity:1;}
+  .simvid video{display:block;width:100%;aspect-ratio:16/9;border-radius:8px;
+    border:1px solid var(--line);background:#000;}
+  .simvid figcaption{margin:8px 0 0;font-size:13px;color:var(--ink-faint);}
+
+  .simctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 28px;
+    border-top:1px solid var(--line);background:var(--surface-2);}
+  .simhint{font-size:13px;color:var(--ink-faint);margin-left:auto;}
+  @media(max-width:640px){.simhint{margin-left:0;width:100%;}}
+
   /* ── footer ───────────────────────────────────────────── */
   footer{margin:96px 0 0;padding:32px 0 64px;border-top:1px solid var(--line);}
   #app-credit{font-size:14px;color:var(--body-mid);text-align:center;line-height:1.9;}
@@ -508,6 +601,7 @@
       <span class="dot">✦</span>해누리중학교 조승재
     </a>
     <span class="spacer"></span>
+    <a class="navlink" href="#sim">한눈에</a>
     <a class="navlink" href="#howto">만드는 순서</a>
     <a class="navlink" href="#kits">재료 세트</a>
     <a class="navlink" href="#chain">장면 잇기</a>
@@ -545,19 +639,117 @@
     <div class="forks">
       <a class="fork" style="--c:var(--fill-orange)" href="#kits">
         <div class="fi">🎬</div>
-        <div class="fw">오늘 · 연수장에서</div>
-        <h4>제가 미리 만들어 놓은 자료로<br>영상 한 편 만들기</h4>
+        <div class="fw">먼저 · 만들어 둔 재료로</div>
+        <h4>주어진 자료로<br>영상 한 편 만들기</h4>
         <p>이미지 두 장과 프롬프트를 그대로 드립니다. SENEDU에 넣어 한 편 만들어 보시면 됩니다.</p>
       </a>
       <a class="fork" style="--c:var(--fill-purple)" href="#agent">
         <div class="fi">🧪</div>
-        <div class="fw">나중에 · 학교에서</div>
+        <div class="fw">그다음 · 내 단원으로</div>
         <h4>내 단원으로 직접 만들기</h4>
         <p>선생님께서 학교에서 가르치실 단원으로 직접 만들어 보겠습니다. 에이전트를 하나 만들어 두면 됩니다.</p>
       </a>
     </div>
   </div>
 </div>
+
+<!-- ══════════ 30초 시뮬레이터 ══════════ -->
+<section id="sim" style="--c:var(--fill-green)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">한눈에</span><span class="n">30초</span></div>
+    <h2>실제 과정은 이게 다입니다</h2>
+    <p class="sub">이 페이지는 길지만, 하는 일은 넷뿐입니다. <b>「재생」</b>을 누르면
+      아래 재료 하나가 영상이 되기까지를 그대로 보여 드립니다. 여기 나오는 프롬프트·이미지·영상은
+      전부 <b>실제로 만든 것</b>입니다.</p>
+
+    <div class="sim" id="simBox">
+      <ol class="simsteps">
+        <li data-step="0"><span class="sn">1</span><span class="st">에이전트에게 부탁</span><span class="sd">단원과 질문만 적습니다</span></li>
+        <li data-step="1"><span class="sn">2</span><span class="st">이미지 두 장</span><span class="sd">프롬프트를 붙여넣습니다</span></li>
+        <li data-step="2"><span class="sn">3</span><span class="st">프레임에 넣기</span><span class="sd">영상 프롬프트도 함께</span></li>
+        <li data-step="3"><span class="sn">4</span><span class="st">영상이 나옵니다</span><span class="sd">몇 분 기다리면 끝</span></li>
+      </ol>
+
+      <div class="simstage">
+
+        <!-- 1 · 에이전트 -->
+        <div class="simpane" data-pane="0">
+          <div class="simchat">
+            <div class="bubble me">
+              <span class="who">선생님</span>
+              <p>1. 학년·단원 : <b>중1 · 기체의 성질</b><br>
+                 4. 받고 싶은 학생 질문 : <b>병에 아무것도 안 넣었는데 풍선이 왜 부풀까?</b><br>
+                 5. 무대 : <b>과학실 실험대</b></p>
+            </div>
+            <div class="bubble ai">
+              <span class="who">질문 유발 영상 설계사</span>
+              <div class="simout">
+                <div class="oc"><b>【2】 첫 프레임 이미지 제작 프롬프트</b><p data-type="학교 과학실의 검은 실험대 위. 카메라는 실험대와 같은 눈높이에서 정면을 고정해 담는다. … 목에 빨간 고무풍선을 씌운 투명 페트병이 왼쪽 얼음물 통에 절반쯤 잠겨 서 있고, 풍선은 병 목에 축 늘어져 있다."></p></div>
+                <div class="oc"><b>【3】 마지막 프레임 이미지 제작 프롬프트</b><p data-type="학교 과학실의 검은 실험대 위. 카메라는 실험대와 같은 눈높이에서 정면을 고정해 담는다. … 이번에는 오른쪽 통에 절반쯤 잠겨 서 있고, 풍선은 사과만 하게 빵빵히 부풀어 곧게 서 있다."></p></div>
+                <div class="oc"><b>【4】 영상 제작 프롬프트</b><p data-type="가로 16:9, 한 번의 연속 촬영. 카메라는 삼각대에 고정하고 줌·회전·장면 전환을 하지 않는다. … 축 늘어져 있던 빨간 풍선이 서서히 일어서며 사과 정도 크기로만 부푼다. 갑자기 터지듯 커지지 않고 5~6초 동안 연속적으로 변한다. … 자막, 숫자, 화살표, 공기 입자 그림은 넣지 않는다."></p></div>
+              </div>
+            </div>
+          </div>
+          <p class="simcap">단원과 질문만 넣었는데 프롬프트 세 개가 나옵니다. 에이전트 지시문은 아래에서 복사합니다.</p>
+        </div>
+
+        <!-- 2 · 이미지 -->
+        <div class="simpane" data-pane="1">
+          <div class="simimgs">
+            <figure class="simimg" data-reveal="0">
+              <img src="img/balloon-first-thumb.jpg" alt="첫 프레임">
+              <figcaption><b>첫 프레임</b> 【2】 를 이미지 생성에 붙여넣은 결과</figcaption>
+            </figure>
+            <figure class="simimg" data-reveal="1">
+              <img src="img/balloon-last-thumb.jpg" alt="마지막 프레임">
+              <figcaption><b>마지막 프레임</b> 【3】 를 붙여넣은 결과</figcaption>
+            </figure>
+          </div>
+          <p class="simcap">배경 문장을 두 프롬프트에 똑같이 썼기 때문에 같은 실험실이 나옵니다. 달라진 건 병의 자리와 풍선뿐입니다.</p>
+        </div>
+
+        <!-- 3 · 프레임에 넣기 -->
+        <div class="simpane" data-pane="2">
+          <div class="ui uipanel simpanel">
+            <div class="uititle">AI 비디오 생성</div>
+            <div class="uilabel">프레임 이미지</div>
+            <div class="uiframes">
+              <div class="uiframe simslot" data-slot="0"><span class="uiplus">↑</span><em>첫 프레임</em></div>
+              <div class="uiframe simslot" data-slot="1"><span class="uiplus">↑</span><em>마지막 프레임</em></div>
+            </div>
+            <div class="uilabel row" style="margin-top:16px"><span>프롬프트</span><span class="uicount" id="simCount">0/1000</span></div>
+            <div class="uibox simbox" id="simPrompt"></div>
+            <div class="uirow" style="margin:14px 0 0">
+              <span class="uichip">16:9 유튜브</span><span class="uichip">768P</span><span class="uichip">10초</span>
+            </div>
+          </div>
+          <p class="simcap">이미지 두 장을 올리고 【4】 를 붙여넣습니다. 1,000자까지 들어가니 아껴 쓰지 마십시오.</p>
+        </div>
+
+        <!-- 4 · 영상 -->
+        <div class="simpane" data-pane="3">
+          <div class="simgen">
+            <div class="uibtn simbtn" id="simGen">▷ 비디오 생성</div>
+            <div class="simwait" id="simWait"><span class="dot"></span><span class="dot"></span><span class="dot"></span> 만드는 중 — 실제로는 몇 분 걸립니다</div>
+          </div>
+          <figure class="simvid" id="simVid">
+            <video src="video/balloon.mp4" muted playsinline loop controls preload="none"></video>
+            <figcaption>이 프롬프트로 실제로 나온 영상. 10초. 소리 없음.</figcaption>
+          </figure>
+          <p class="simcap">끝입니다. 이걸 수업 첫 3분에 틀고, <b>"왜 부풀까?"</b>를 학생이 묻게 하면 됩니다.</p>
+        </div>
+
+      </div>
+
+      <div class="simctl">
+        <button class="btn" id="simPlay">▷ 재생</button>
+        <button class="btn ghost" id="simNext">다음 →</button>
+        <button class="btn ghost" id="simReset">처음부터</button>
+        <span class="simhint" id="simHint">재생을 누르면 30초 동안 네 단계를 차례로 보여 줍니다.</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════ 만드는 순서 ══════════ -->
 <section id="howto" style="--c:var(--purple)">
@@ -752,8 +944,7 @@
       <b>SEN스쿨 첫 화면 도구모음</b>에 이미 깔려 있습니다. 영상 만든 곳에서 바로 이어 붙이시면 됩니다.
       <br><br>
       <b>수업에서는 이만큼만 하셔도 됩니다.</b>
-      ① 클립 순서대로 잇기 &nbsp;② 앞뒤 지저분한 부분 자르기 &nbsp;③ 반복 재생 켜기.
-      자막과 음악은 없어도 됩니다 — 오히려 <b>소리가 없어야 학생이 화면을 봅니다.</b>
+      ① 클립 순서대로 잇기 &nbsp;② 앞뒤 지저분한 부분 자르기.
     </div>
   </div>
 </section>
@@ -762,9 +953,9 @@
 <section id="kits" style="--c:var(--pink)">
   <div class="wrap">
     <div class="lbl"><span class="t">오늘 현장</span><span class="n" id="kitCount">세 세트</span></div>
-    <h2>저 먼저 영상을 만들어 보겠습니다</h2>
-    <p class="sub">제가 미리 만들어 둔 자료로 <b>영상이 어떻게 만들어지는지 그 과정을 먼저</b> 보시겠습니다.
-      아래 세트를 그대로 쓰시면 됩니다.</p>
+    <h2>만들어 둔 재료로 시작하십시오</h2>
+    <p class="sub">네 가지 세트를 통째로 드립니다. 셋은 <b>완성된 영상까지 바로 보실 수 있고</b>,
+      하나는 직접 만들어 보시는 자리입니다. 프롬프트를 복사해 그대로 쓰시면 됩니다.</p>
 
     <div class="pull">
       <p>SENEDU에서 할 일은 세 가지입니다.</p>
@@ -1334,6 +1525,7 @@ const KITS = [
     unit: '중1 · 기체의 성질', color: 'var(--fill-green)',
     title: '아무것도 안 넣었는데 부푼 풍선',
     aim: '병에 아무것도 안 넣었는데 풍선이 왜 부풀까?',
+    firstImg: 'balloon-first.png', lastImg: 'balloon-last.png',
     /** 조승재 선생님이 SENEDU 에서 직접 만든 영상 — 카드에서 바로 재생됩니다 */
     video: 'balloon.mp4',
     note:
@@ -1744,6 +1936,111 @@ renderKits();
 initSpec();
 initBuilder();
 initTheme();
+
+/* ── 30초 시뮬레이터 ─────────────────────────────────── */
+(function(){
+  const box = $('#simBox'); if(!box) return;
+  const steps = $$('.simsteps li', box);
+  const panes = $$('.simpane', box);
+  const hint  = $('#simHint');
+  let cur = 0, auto = null, timers = [];
+
+  const later = (fn, ms) => { const t = setTimeout(fn, ms); timers.push(t); return t; };
+  const clearAll = () => { timers.forEach(clearTimeout); timers = []; };
+
+  /** 한 글자씩 찍어 주는 효과 — 상자 안 p 에 data-type 으로 원문을 둡니다 */
+  function typeInto(p, text, speed, done){
+    p.textContent = ''; p.classList.add('typing');
+    const t0 = performance.now(), perMs = 3 / speed;   // speed ms 마다 3글자
+    const tick = () => {
+      const i = Math.min(text.length, Math.floor((performance.now() - t0) * perMs));
+      p.textContent = text.slice(0, i);
+      if(i < text.length) later(tick, speed);
+      else { p.classList.remove('typing'); done && done(); }
+    };
+    tick();
+  }
+
+  function reset(){
+    clearAll();
+    $$('.oc p', box).forEach(p => { p.textContent = ''; p.classList.remove('typing'); });
+    $$('.simimg', box).forEach(f => f.classList.remove('show'));
+    $$('.simslot', box).forEach(s => { s.classList.remove('filled'); const im = s.querySelector('img'); if(im) im.remove(); });
+    const sb = $('#simPrompt'); sb.textContent = ''; sb.classList.remove('filled');
+    $('#simCount').textContent = '0/1000';
+    $('#simGen').classList.remove('pressed'); $('#simWait').classList.remove('on');
+    const sv = $('#simVid'); sv.classList.remove('show');
+    const v = sv.querySelector('video'); try{ v.pause(); v.currentTime = 0; }catch(e){}
+  }
+
+  /** 각 단계의 연출 — 끝나면 다음으로 넘어갈 시간을 돌려줍니다 */
+  const acts = [
+    () => {
+      const ps = $$('.oc p', box);
+      const run = k => { if(k >= ps.length) return; typeInto(ps[k], ps[k].dataset.type, 16, () => later(() => run(k+1), 250)); };
+      run(0);
+      return 9000;
+    },
+    () => {
+      const figs = $$('.simimg', box);
+      later(() => figs[0].classList.add('show'), 200);
+      later(() => figs[1].classList.add('show'), 1400);
+      return 4200;
+    },
+    () => {
+      const slots = $$('.simslot', box);
+      const srcs = ['img/balloon-first-thumb.jpg', 'img/balloon-last-thumb.jpg'];
+      slots.forEach((s, k) => later(() => {
+        const im = document.createElement('img'); im.src = srcs[k]; im.alt = '';
+        s.appendChild(im); later(() => s.classList.add('filled'), 40);
+      }, 300 + k*900));
+      const full = KITS[3].videoPrompt;
+      later(() => {
+        const sb = $('#simPrompt'); sb.classList.add('filled');
+        const t0 = performance.now();
+        const tick = () => { const i = Math.min(full.length, Math.floor((performance.now() - t0) * 0.8));
+          sb.textContent = full.slice(0, i);
+          $('#simCount').textContent = i.toLocaleString('ko-KR') + '/1000';
+          if(i < full.length) later(tick, 18); };
+        tick();
+      }, 2200);
+      return 8000;
+    },
+    () => {
+      const b = $('#simGen'), w = $('#simWait'), sv = $('#simVid'), v = sv.querySelector('video');
+      later(() => b.classList.add('pressed'), 400);
+      later(() => w.classList.add('on'), 700);
+      later(() => { w.classList.remove('on'); sv.classList.add('show');
+        v.currentTime = 0; v.play().catch(() => {}); }, 3200);
+      return 0;
+    }
+  ];
+
+  function go(n, fromAuto){
+    if(n < 0 || n >= panes.length) return;
+    clearAll(); cur = n;
+    steps.forEach((li, k) => { li.classList.toggle('on', k === n); li.classList.toggle('done', k < n); });
+    panes.forEach((p, k) => p.classList.toggle('on', k === n));
+    const wait = acts[n]();
+    hint.textContent = ['에이전트가 프롬프트 세 개를 씁니다.', '이미지 생성 도구에 붙여넣은 결과입니다.',
+      '두 장을 올리고 영상 프롬프트를 붙여넣습니다.', '끝입니다. 이대로 수업에 씁니다.'][n];
+    if(fromAuto && wait > 0) auto = later(() => go(n+1, true), wait);
+  }
+
+  $('#simPlay').addEventListener('click', () => { reset(); go(0, true); });
+  $('#simNext').addEventListener('click', () => { if(cur < panes.length-1) go(cur+1); });
+  $('#simReset').addEventListener('click', () => { reset(); cur = -1;
+    steps.forEach(li => li.classList.remove('on','done')); panes.forEach(p => p.classList.remove('on'));
+    hint.textContent = '재생을 누르면 30초 동안 네 단계를 차례로 보여 줍니다.';
+    panes[0].classList.add('on'); steps[0].classList.add('on'); cur = 0;
+    $$('.oc p', box).forEach(p => p.textContent = p.dataset.type); });
+  steps.forEach((li, k) => li.addEventListener('click', () => { if(cur !== k){ if(k <= cur) reset(); go(k); } }));
+
+  // 처음 열면 1단계를 멈춘 채 보여 줍니다
+  panes[0].classList.add('on'); steps[0].classList.add('on');
+  $$('.oc p', box).forEach(p => p.textContent = p.dataset.type);
+})();
+
 </script>
 </body>
 </html>
