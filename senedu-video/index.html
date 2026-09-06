@@ -228,6 +228,11 @@
     padding:16px 20px;line-height:1.6;}
   .kit .aim span{font-size:12px;font-weight:550;letter-spacing:.06em;color:var(--ink-faint);
     display:block;margin:0 0 4px;}
+  .kitvid{margin:0 0 24px;}
+  .kitvid video{display:block;width:100%;border-radius:8px;border:1px solid var(--line);
+    background:#000;aspect-ratio:16/9;}
+  .kitvid figcaption{margin:10px 0 0;font-size:13px;color:var(--ink-faint);}
+
   .kitnote{margin:-8px 0 24px;font-size:14px;line-height:1.65;color:var(--ink-soft);
     border:1px solid var(--line);border-radius:8px;padding:14px 18px;}
   .kitnote b{display:block;font-size:12px;font-weight:550;letter-spacing:.06em;
@@ -1290,6 +1295,21 @@ const KITS = [
 5~8초 : 막대가 가장 가까이 내려온 순간 종이 조각들이 책상에서 튀어 올라 막대 아랫면에 다닥다닥 달라붙고, 몇 조각은 공중에 매달린 채 가볍게 흔들린다.
 배경은 오후 햇빛이 비스듬히 드는 조용한 교실의 나무 책상. 카메라는 책상과 같은 눈높이에서 옆에서 고정하고 아주 느리게 다가간다. 실사 영상, 화면에 글자나 자막 없음.
 막대가 종이에서 멀어지는 동안 종이가 달라붙는 장면은 절대 넣지 않는다. 종이는 막대가 가까워질 때만 올라온다. 영상을 거꾸로 재생한 듯한 움직임, 종이가 위에서 아래로 떨어지는 장면도 넣지 않는다.`
+  },
+  {
+    unit: '중1 · 기체의 성질', color: 'var(--fill-green)',
+    title: '아무것도 안 넣었는데 부푼 풍선',
+    aim: '병에 아무것도 안 넣었는데 풍선이 왜 부풀까?',
+    /** 조승재 선생님이 SENEDU 에서 직접 만든 영상 — 카드에서 바로 재생됩니다 */
+    video: 'balloon.mp4',
+    note:
+      '이 세트는 완성된 영상이 있습니다. 프롬프트를 그대로 넣으면 어떤 결과가 나오는지 먼저 보시고 시작하십시오.',
+    firstPrompt:
+      '학교 과학실의 검은 실험대 위. 카메라는 실험대와 같은 눈높이에서 정면을 고정해 담는다. 사실적인 사진, 화면에 글자 없음. 투명한 사각 통 두 개가 나란히 놓여 있고, 왼쪽 통에는 얼음과 물이, 오른쪽 통에는 맑은 물만 담겨 있다. 목에 빨간 고무풍선을 씌운 투명 페트병이 왼쪽 얼음물 통에 절반쯤 잠겨 서 있고, 풍선은 병 목에 축 늘어져 있다.',
+    lastPrompt:
+      '학교 과학실의 검은 실험대 위. 카메라는 실험대와 같은 눈높이에서 정면을 고정해 담는다. 사실적인 사진, 화면에 글자 없음. 투명한 사각 통 두 개가 나란히 놓여 있고, 왼쪽 통에는 얼음과 물이, 오른쪽 통에는 맑은 물만 담겨 있다. 목에 빨간 고무풍선을 씌운 투명 페트병이 이번에는 오른쪽 통에 절반쯤 잠겨 서 있고, 풍선은 사과만 하게 빵빵히 부풀어 곧게 서 있다.',
+    videoPrompt:
+      `가로 16:9, 한 번의 연속 촬영. 카메라는 삼각대에 고정하고 줌·회전·장면 전환을 하지 않는다. 시작하면 장갑 낀 성인의 두 손이 병의 몸통만 잡아 왼쪽 얼음물에서 천천히 꺼낸다. 병을 누르거나 풍선을 만지지 않는다. 물방울이 자연스럽게 떨어지고, 같은 병을 오른쪽의 따뜻한 물에 절반 정도 잠기게 놓는다. 잠시 뒤 축 늘어져 있던 빨간 풍선이 서서히 일어서며 사과 정도 크기로만 부푼다. 갑자기 터지듯 커지지 않고 5~6초 동안 연속적으로 변한다. 병은 찌그러지거나 커지지 않으며, 물은 끓거나 병 안으로 들어가지 않는다. 손은 화면 밖으로 나가고 마지막 상태를 2초간 그대로 보여준다. 처음과 끝 프레임의 병·풍선·수조·책상·배경·조명은 동일하게 유지한다. 자막, 숫자, 설명 음성, 화살표, 공기 입자 그림, 특수효과, 로고는 넣지 않는다.`
   }
 ];
 
@@ -1502,8 +1522,13 @@ function renderKits(){
           연수 강사가 만든 이미지 두 장 받기
         </button>
         <span class="kitdl-note">받으신 두 장을 SENEDU 영상 생성의 시작·끝 프레임으로 올리시면 됩니다.</span>
-      </p>` : `
-      <p class="kitdl-none">이미지는 연수 당일에 올려 둡니다. 그때까지는 아래 이미지 프롬프트로 직접 만들어 보실 수 있습니다.</p>`}
+      </p>` : (k.video ? '' : `
+      <p class="kitdl-none">이미지는 연수 당일에 올려 둡니다. 그때까지는 아래 이미지 프롬프트로 직접 만들어 보실 수 있습니다.</p>`)}
+      ${k.video ? `
+      <figure class="kitvid">
+        <video src="video/${esc(k.video)}" controls playsinline preload="metadata"></video>
+        <figcaption>이 프롬프트로 실제로 만든 영상입니다. SENEDU 에서 생성했습니다.</figcaption>
+      </figure>` : ''}
       <div class="shots">
         ${shotBlock('첫 프레임', '변화가 일어나기 전', k.firstImg, k.firstPrompt, i, 'first', k.title + ' 첫 프레임.png')}
         ${shotBlock('끝 프레임', '변화가 일어난 뒤',   k.lastImg,  k.lastPrompt,  i, 'last',  k.title + ' 끝 프레임.png')}
