@@ -204,6 +204,8 @@ img{max-width:100%}
 .grid{display:grid;gap:20px;grid-template-columns:1fr}
 @media(min-width:641px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1069px){.grid{grid-template-columns:repeat(3,1fr)}}
+.grid-2{max-width:900px;margin:0 auto}
+@media(min-width:1069px){.grid-2{grid-template-columns:repeat(2,1fr)}}
 .card{
   background:var(--canvas);color:var(--ink);
   border:1px solid var(--hairline);border-radius:var(--r-lg);
@@ -246,6 +248,28 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
 #app-credit{margin-top:var(--s-lg);font-size:12px;line-height:1.9;letter-spacing:-.12px;color:var(--ink-48)}
 #app-credit b{color:var(--ink-80);font-weight:600}
 #app-credit .sep{margin:0 8px;opacity:.5}
+
+/* ══════════════ 하단에 떠 있는 바 ══════════════ */
+.stickybar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(245,245,247,.8);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-top:1px solid rgba(0,0,0,.08);
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.25,.46,.45,.94);
+}
+.stickybar.on{transform:none}
+.stickybar .inner{display:flex;align-items:center;gap:var(--s-md);
+  min-height:64px;padding-top:12px;padding-bottom:12px}
+.stickybar .url{font-size:14px;letter-spacing:-.224px;color:var(--ink-80);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stickybar .url b{color:var(--ink);font-weight:600}
+.stickybar .sp{flex:1}
+.stickybar .btn{font-size:14px;padding:9px 18px;min-height:40px;flex:0 0 auto}
+body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
+@media(max-width:520px){.stickybar .url{display:none}
+  .stickybar .inner{justify-content:center}
+  .stickybar .btn{flex:1}}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}}
@@ -290,7 +314,7 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
       <a class="btn btn-ghost" href="#letter">먼저 인사드리겠습니다</a>
     </div>
     <div class="stats">
-      <div><b>23</b><span>웹 도구 · 수업 앱</span></div>
+      <div><b>15</b><span>웹 도구 · 수업 앱</span></div>
       <div><b>12</b><span>연수 · 강의 자료</span></div>
       <div><b>0원</b><span>전부 무료 공개</span></div>
     </div>
@@ -404,23 +428,6 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
   </div>
 </section>
 
-<!-- 학급 운영 -->
-<section class="tile t-white" id="room">
-  <div class="wrap">
-    <div class="tile-head">
-      <span class="eyebrow">학급 운영</span>
-      <h2 class="display-lg">담임을 하면서 필요해서</h2>
-      <p class="lead">과학과 상관없이, 어느 학급에서나 쓰실 수 있습니다.</p>
-    </div>
-    <div class="grid">
-      <a class="card" href="https://scienceisjo.github.io/class-tools/notice-board/"><h3>공지 알리미</h3><p>복도·교실 전자칠판에 상시 띄우는 학교 공지판. 급식·시간표·학사일정은 나이스에서 자동으로 올라오고, 긴급공지·디데이·청소당번까지 붙습니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/class-tools/rolling-paper/"><h3>롤링페이퍼</h3><p>전학·졸업 가는 친구에게. QR을 몰래 뿌려 메시지를 남기면 전시 화면에 모입니다. 사진을 얹어 PDF로 저장하면 그대로 인쇄됩니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/class-tools/election/"><h3>학급 임원 선거</h3><p>유의사항·규칙·후보자를 입력하면 PPT 없이 선거를 진행합니다. 소견발표 타이머부터 개표와 당선자 발표까지.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/class-tools/memory-village/"><h3>우리 반 추억의 숲</h3><p>내 캐릭터로 걸어 다니는 진짜 3D 학급 공간. 다짐·명장면·행사·1인 1역을 남기고 친구 마음에 공감을 누릅니다.</p><span class="go">열어보기 ↗</span></a>
-    </div>
-  </div>
-</section>
-
 <!-- 단원 웹앱 -->
 <section class="tile t-dark-2" id="units">
   <div class="wrap">
@@ -429,13 +436,16 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
       <h2 class="display-lg">단원을 통째로 만든 수업 웹앱</h2>
       <p class="lead">교과서 차시 순서대로 도입·활동·시뮬레이션·정리를 한 페이지에 담았습니다. 그대로 수업에 띄우셔도 됩니다.</p>
     </div>
-    <div class="grid">
-      <a class="card" href="https://scienceisjo.github.io/lightandwave/hubpage.html"><h3>빛과 파동</h3><p>중2 · 물체를 보는 과정부터 빛의 반사·굴절, 파동과 소리까지. 시뮬레이터 갤러리가 딸려 있습니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/electricity/"><h3>전기와 자기</h3><p>중2 · 에디슨 연구실을 테마로 한 8차시 전체. 전압계·전구 시뮬레이션과 확인 문제가 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
+    <div class="grid grid-2">
       <a class="card" href="https://scienceisjo.github.io/starandspace/"><h3>별과 우주</h3><p>중2 · 연주 시차, 별의 등급과 색, 우리은하. 직접 관측하기 어려운 내용을 화면에서 다룹니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/gas-properties/"><h3>기체의 성질</h3><p>중1 · 압력과 기체 압력, 보일 법칙과 샤를 법칙. 주사기에 압력 센서를 물리는 MBL 차시가 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/density-atelier/"><h3>밀도 아틀리에</h3><p>중2 · 밀도차 분리를 음료 만들기로 배웁니다. 비밀 임무를 풀면 재료 창고가 열리고, 재료가 밀도순으로 층을 이룹니다.</p><span class="go">열어보기 ↗</span></a>
-      <a class="card" href="https://scienceisjo.github.io/gifted-science/"><h3>영재 · 간이 염분계 보정 탐구</h3><p>중1~2 영재 수업용. 직접 만든 간이 염분계를 굴절계 값과 맞춰 보정하는 전 과정을 다룹니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card" href="https://scienceisjo.github.io/electricity/"><h3>전기와 자기</h3><p>중2 · 에디슨 연구실을 테마로 한 8차시 전체. 전압계·전구 시뮬레이션과 확인 문제가 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+    <div class="center" style="margin-top:var(--s-xxl)">
+      <p class="lead">빛과 파동, 기체의 성질, 밀도, 지권, 물질의 구성 같은 나머지 단원과<br>
+        시뮬레이션 서른여 종은 과학탐험월드에 모여 있습니다.</p>
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html">과학탐험월드에서 더 보기</a>
+      </div>
     </div>
   </div>
 </section>
@@ -491,7 +501,7 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
         <a href="https://scienceisjo.github.io/teacher-toolkit/sensor-guide/">센서 구매 가이드</a>
       </div>
       <div>
-        <h4>수업 · 학급</h4>
+        <h4>수업</h4>
         <a href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html">과학탐험월드</a>
         <a href="https://scienceisjo.github.io/questionuri/">해누리 질문 과수원</a>
         <a href="https://scienceisjo.github.io/class-tools/stamp-board/">과학 칭찬 도장판</a>
@@ -512,6 +522,14 @@ footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
     </div>
   </div>
 </footer>
+
+<div class="stickybar" id="stickybar">
+  <div class="wrap inner">
+    <span class="url">조승재 · 해누리중학교 과학교사 <b>scienceisjo.github.io/growing-teachers</b></span>
+    <span class="sp"></span>
+    <button class="btn btn-fill" type="button" id="copyBtn">이 페이지 주소 복사</button>
+  </div>
+</div>
 
 <script>
 const VOICES = [
@@ -548,6 +566,41 @@ const VOICES = [
     box.classList.remove('swap'); void box.offsetWidth; box.classList.add('swap');
   }
   show(0);
+})();
+
+/* ───── 하단 바: 히어로를 지나면 올라오고, 주소를 복사 ───── */
+(function(){
+  var bar = document.getElementById('stickybar');
+  var btn = document.getElementById('copyBtn');
+  var reveal = 560;
+
+  function sync(){
+    var on = window.scrollY > reveal;
+    bar.classList.toggle('on', on);
+    document.body.classList.toggle('has-bar', on);
+  }
+  window.addEventListener('scroll', sync, {passive:true});
+  sync();
+
+  btn.addEventListener('click', function(){
+    var url = location.href.split('#')[0];
+    function done(){
+      var was = btn.textContent;
+      btn.textContent = '복사했습니다';
+      setTimeout(function(){ btn.textContent = was; }, 1600);
+    }
+    function fallback(){
+      var t = document.createElement('textarea');
+      t.value = url; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); }
+      catch (err) { window.prompt('주소를 복사하세요', url); }
+      document.body.removeChild(t);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, fallback);
+    } else { fallback(); }
+  });
 })();
 </script>
 </body>
