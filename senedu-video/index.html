@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>첫 장면과 끝 장면 사이</title>
-<meta name="description" content="SENEDU로 만드는 질문 유발 영상 — 재료 세트, 에이전트 지시문, 프롬프트 빌더">
+<title>생성형 AI 수업 영상 만들기</title>
+<meta name="description" content="생성형 AI로 수업 도입 영상 만들기 — 지역별 플랫폼, 만드는 순서, 재료 세트, 에이전트 지시문, 장면 잇기와 편집">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inconsolata:wght@400;500&display=swap">
@@ -110,6 +110,26 @@
   .lede{font-size:clamp(17px,2vw,20px);line-height:1.6;letter-spacing:-.01em;
     color:var(--ink-soft);max-width:56ch;margin:0 0 40px;}
   .lede b{color:var(--ink);font-weight:500;}
+
+  /* 이 페이지가 만드는 것과 만들지 않는 것 */
+  .purpose{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 40px;}
+  @media(max-width:720px){.purpose{grid-template-columns:1fr;}}
+  .pno,.pyes{border-radius:8px;padding:24px;}
+  .pno{background:var(--surface-2);border:1px solid var(--line);}
+  .pyes{background:var(--primary);color:var(--on-primary);}
+  .ptag{display:inline-block;font-size:12px;font-weight:550;letter-spacing:.06em;
+    padding:4px 10px;border-radius:4px;margin:0 0 14px;}
+  .pno .ptag{background:var(--canvas);color:var(--ink-faint);border:1px solid var(--line);}
+  .pyes .ptag{background:color-mix(in srgb,var(--on-primary) 16%,transparent);color:var(--on-primary);}
+  .pno p,.pyes p{margin:0;font-size:19px;font-weight:500;line-height:1.4;letter-spacing:-.01em;}
+  .pno p{color:var(--ink-faint);}
+  .pno p b{color:var(--ink-soft);font-weight:500;}
+  .pyes p{color:var(--on-primary);}
+  .pyes p b{color:var(--on-primary);}
+  .pwhy{margin-top:10px !important;font-size:14.5px !important;font-weight:400 !important;
+    line-height:1.6 !important;}
+  .pno .pwhy{color:var(--ink-faint) !important;}
+  .pyes .pwhy{color:color-mix(in srgb,var(--on-primary) 72%,transparent) !important;}
 
   /* 두 갈래 — 브랜드의 서명인 원색 채움 카드 */
   .forks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0;}
@@ -337,6 +357,106 @@
   .reason p{margin:0;font-size:15px;color:var(--ink-soft);line-height:1.65;}
   .reason p b{color:var(--ink);font-weight:500;}
 
+  /* ── 지역별 플랫폼 ────────────────────────────────────── */
+  .subh{font-size:clamp(20px,2.6vw,28px);font-weight:600;letter-spacing:-.01em;
+    margin:56px 0 12px;line-height:1.3;}
+  .plat{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0;}
+  @media(max-width:860px){.plat{grid-template-columns:1fr;}}
+  .pcard{background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:28px;}
+  .pcard.on{box-shadow:var(--sh-2);}
+  .phead{display:flex;align-items:center;gap:10px;margin:0 0 14px;flex-wrap:wrap;}
+  .pregion{font-size:12px;font-weight:550;letter-spacing:.06em;color:#fff;
+    background:var(--primary);padding:4px 10px;border-radius:4px;}
+  .pstate{font-size:12px;font-weight:550;letter-spacing:.04em;padding:4px 10px;border-radius:4px;}
+  .pstate.ok{background:var(--mint-bg);color:var(--mint);}
+  .pstate.wait{background:var(--surface-2);color:var(--ink-faint);}
+  .pcard h3{margin:0 0 10px;font-size:24px;font-weight:500;letter-spacing:-.01em;line-height:1.3;}
+  .pcard p{margin:0 0 10px;font-size:15px;line-height:1.65;color:var(--ink-soft);}
+  .pcard p:last-child{margin-bottom:0;}
+  .pcard b{color:var(--ink);font-weight:500;}
+  .pcard dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:16px 0;
+    padding:16px 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
+  .pcard dl > div{display:contents;}
+  .pcard dt{font-size:13px;font-weight:550;color:var(--ink-faint);letter-spacing:.04em;}
+  .pcard dd{margin:0;font-size:14px;color:var(--ink);}
+  .pnote{font-size:13.5px !important;color:var(--ink-faint) !important;}
+  .pnote.wide{margin-top:16px;background:var(--surface-2);border-radius:8px;padding:14px 18px;}
+
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0;}
+  @media(max-width:860px){.tools{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.tools{grid-template-columns:1fr;}}
+  .tool{background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:20px;}
+  .tool b{display:block;font-size:17px;font-weight:500;letter-spacing:-.01em;}
+  .tool span{display:block;font-size:12px;font-weight:550;letter-spacing:.05em;
+    color:var(--blue);margin:3px 0 10px;}
+  .tool p{margin:0;font-size:14px;line-height:1.6;color:var(--ink-soft);}
+
+  /* ── 경고 띠 ──────────────────────────────────────────── */
+  .warn{background:var(--fill-orange);color:#fff;border-radius:8px;padding:24px 28px;
+    margin:0 0 32px;font-size:15.5px;line-height:1.7;}
+  .warn b{color:#fff;font-weight:600;}
+  .warn i{font-style:normal;background:color-mix(in srgb,#fff 22%,transparent);
+    padding:1px 7px;border-radius:4px;}
+
+  /* ── 그려 넣은 화면 ──────────────────────────────────── */
+  .steps.big li{padding-bottom:40px;}
+  .ui{margin:16px 0 0;border:1px solid var(--line);border-radius:8px;
+    background:var(--surface-2);overflow:hidden;}
+  .uibar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:12px 16px;background:var(--canvas);}
+  .uilogo{font-size:14px;font-weight:600;letter-spacing:-.02em;margin-right:10px;}
+  .uitab{font-size:13px;color:var(--ink-faint);padding:5px 9px;border-radius:4px;white-space:nowrap;}
+  .uitab.hit{background:var(--fill-purple);color:#fff;font-weight:500;
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--fill-purple) 22%,transparent);}
+  .uipanel{padding:20px;}
+  .uititle{font-size:14px;font-weight:600;margin:0 0 14px;}
+  .uilabel{font-size:12px;font-weight:550;letter-spacing:.05em;color:var(--ink-faint);margin:0 0 8px;}
+  .uilabel.row{display:flex;justify-content:space-between;align-items:baseline;}
+  .uicount{font-variant-numeric:tabular-nums;color:var(--ink-faint);font-weight:400;}
+  .uiframes{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:340px;}
+  .uiframe{aspect-ratio:4/3;border:1.5px dashed var(--line);border-radius:8px;background:var(--canvas);
+    display:grid;place-items:center;align-content:center;gap:6px;}
+  .uiframe.hit{border-color:var(--fill-purple);border-style:solid;
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--fill-purple) 18%,transparent);}
+  .uiplus{font-size:18px;color:var(--fill-purple);}
+  .uiframe em{font-style:normal;font-size:12px;color:var(--ink-faint);}
+  .uilink{margin:12px 0 0;font-size:12.5px;color:var(--blue);}
+  .uibox{background:var(--canvas);border:1.5px solid var(--line);border-radius:8px;
+    padding:14px;font-size:13.5px;line-height:1.7;color:var(--ink-soft);}
+  .uibox.hit{border-color:var(--fill-purple);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--fill-purple) 18%,transparent);}
+  .uirow{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px;}
+  .uichip{font-size:13px;border:1.5px solid var(--line);background:var(--canvas);
+    padding:7px 13px;border-radius:4px;color:var(--ink-soft);}
+  .uichip.hit{border-color:var(--fill-purple);color:var(--ink);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--fill-purple) 18%,transparent);}
+  .uislider{position:relative;height:20px;display:flex;align-items:center;max-width:300px;}
+  .uitrack{position:absolute;left:0;right:0;height:3px;border-radius:9999px;
+    background:linear-gradient(90deg,var(--fill-purple) 36%,var(--line) 36%);}
+  .uiknob{position:absolute;left:34%;width:14px;height:14px;border-radius:9999px;
+    background:var(--canvas);border:2px solid var(--fill-purple);}
+  .uibtn{display:inline-block;background:var(--primary);color:var(--on-primary);
+    font-size:15px;font-weight:500;padding:12px 22px;border-radius:4px;}
+  .uibtn.hit{box-shadow:0 0 0 4px color-mix(in srgb,var(--fill-purple) 30%,transparent);}
+
+  /* ── 장면 잇기 ────────────────────────────────────────── */
+  .chain{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin:0;}
+  .cscene{background:var(--canvas);border:1px solid var(--line);border-radius:8px;
+    padding:20px;text-align:center;flex:1 1 190px;min-width:180px;}
+  .cno{display:inline-block;font-size:12px;font-weight:550;letter-spacing:.06em;
+    color:var(--amber);background:var(--amber-bg);padding:3px 9px;border-radius:4px;margin:0 0 12px;}
+  .cframes{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 12px;}
+  .cf{width:44px;height:33px;border-radius:4px;border:1.5px solid var(--line);
+    display:grid;place-items:center;font-size:14px;font-weight:600;color:var(--ink-faint);
+    background:var(--surface-2);}
+  .cf.on{background:var(--fill-orange);border-color:var(--fill-orange);color:#fff;}
+  .cf.on2{background:var(--fill-purple);border-color:var(--fill-purple);color:#fff;}
+  .carrow{color:var(--ink-faint);font-size:13px;}
+  .cscene p{margin:0;font-size:13px;color:var(--ink-faint);line-height:1.55;}
+  .cscene p b{color:var(--ink);font-weight:500;}
+  .clink{font-size:12px;font-weight:550;letter-spacing:.04em;color:var(--amber);
+    writing-mode:horizontal-tb;white-space:nowrap;}
+  @media(max-width:760px){.chain{flex-direction:column;} .cscene{width:100%;}}
+
   /* ── footer ───────────────────────────────────────────── */
   footer{margin:96px 0 0;padding:32px 0 64px;border-top:1px solid var(--line);}
   #app-credit{font-size:14px;color:var(--body-mid);text-align:center;line-height:1.9;}
@@ -357,10 +477,13 @@
 <header>
   <div class="wrap hbar">
     <a class="brand" href="https://scienceisjo.github.io/growing-teachers/">
-      <span class="dot">✦</span>Growing Teachers
+      <span class="dot">✦</span>해누리중학교 조승재
     </a>
     <span class="spacer"></span>
+    <a class="navlink" href="#where">어디서</a>
+    <a class="navlink" href="#howto">만드는 순서</a>
     <a class="navlink" href="#kits">재료 세트</a>
+    <a class="navlink" href="#chain">장면 잇기</a>
     <a class="navlink" href="#agent">에이전트</a>
     <a class="navlink" href="#whyspec">지시문 읽기</a>
     <a class="navlink" href="#builder">빌더</a>
@@ -371,11 +494,25 @@
 <!-- ══════════ 표지 ══════════ -->
 <div class="hero">
   <div class="wrap inner">
-    <p class="eyebrow"><span class="live"></span>학생 질문 중심 수업·평가 선도교원 연수 · 2교시 실습</p>
-    <h1>첫 장면과 끝 장면<br><span class="u">사이</span>가 질문이 됩니다</h1>
-    <p class="lede">SENEDU는 <b>시작 프레임과 끝 프레임</b> 두 장을 받아서 그 사이를 영상으로 채웁니다.
-      그래서 만드는 사람이 정할 것은 <b>무엇이 어떻게 달라지는가</b> 하나입니다.
-      그 몇 초를 학생이 보고 묻게 만드는 것이 오늘 할 일입니다.</p>
+    <p class="eyebrow"><span class="live"></span>과학 수업 · 생성형 AI 영상 제작</p>
+    <h1>생성형 AI로 만드는<br><span class="u">수업 도입</span> 영상</h1>
+    <p class="lede">교육청 AI 플랫폼으로 짧은 영상을 만들어 <b>수업 첫 3분</b>에 씁니다.
+      만드는 법부터 여러 장면을 이어 붙이는 것까지, 순서대로 담았습니다.</p>
+
+    <div class="purpose">
+      <div class="pno">
+        <span class="ptag">이 페이지가 만들지 않는 것</span>
+        <p><b>개념을 설명하는 영상</b></p>
+        <p class="pwhy">입자 모형, 힘의 방향, 원리 해설. 생성형 AI가 조용히 틀리는 자리이고,
+          이미 잘 만들어진 시뮬레이션과 교과서가 있습니다.</p>
+      </div>
+      <div class="pyes">
+        <span class="ptag">이 페이지가 만드는 것</span>
+        <p><b>학생이 “어? 왜 저러지?” 하게 되는 영상</b></p>
+        <p class="pwhy">현상 하나를 설명 없이 보여 줍니다. 수업 도입에서 학생의 호기심을 건드려
+          <b>질문이 나오게</b> 하는 것이 목적입니다.</p>
+      </div>
+    </div>
 
     <div class="forks">
       <a class="fork" style="--c:var(--fill-orange)" href="#kits">
@@ -393,6 +530,252 @@
     </div>
   </div>
 </div>
+
+<!-- ══════════ 어디서 만드나 ══════════ -->
+<section id="where" style="--c:var(--blue)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">어디서 만드나</span><span class="n">지역마다 다릅니다</span></div>
+    <h2>내 지역에도 있을 수 있습니다</h2>
+    <p class="sub">서울은 교육청 플랫폼 안에 영상 생성이 들어 있습니다. 다른 지역은 사정이 다릅니다 —
+      상용 도구를 계정으로 묶어 주는 곳도 있고, 아직 확인이 안 된 곳도 있습니다.
+      <b>확인된 것만 확인됐다고 적었습니다.</b></p>
+
+    <div class="plat">
+      <article class="pcard on">
+        <div class="phead"><span class="pregion">서울</span><span class="pstate ok">영상 생성 있음</span></div>
+        <h3>SEN스쿨 · SenGPT</h3>
+        <p>로그인은 <b>senedu.kr</b>, 그 안에서 SenGPT로 넘어갑니다.
+          상단 <b>「비디오」</b> 탭이 영상 생성입니다. 엔진은 <b>웍스AI</b>.</p>
+        <dl>
+          <div><dt>프롬프트</dt><dd>1,000자</dd></div>
+          <div><dt>길이</dt><dd>4~15초</dd></div>
+          <div><dt>해상도</dt><dd>768P · 2K</dd></div>
+          <div><dt>비율</dt><dd>16:9 · 9:16 · 1:1 · 4:3 · 3:4 · 21:9</dd></div>
+        </dl>
+        <p class="pnote">@sen.go.kr 계정을 가진 교직원이 씁니다.</p>
+      </article>
+
+      <article class="pcard on">
+        <div class="phead"><span class="pregion">부산</span><span class="pstate ok">상용 도구 묶음</span></div>
+        <h3>펜즈 (PENZ)</h3>
+        <p>2026년 9월 개통. 계정 하나로 <b>제미나이 · MS 코파일럿 · 어도비 파이어플라이 ·
+          챗GPT · 캔바 교육용</b>을 씁니다.</p>
+        <p class="pnote">초1~고3과 교직원 전체. 전학·진학해도 같은 계정을 씁니다.
+          영상은 위 도구들 안에서 만듭니다.</p>
+      </article>
+
+      <article class="pcard">
+        <div class="phead"><span class="pregion">경기</span><span class="pstate wait">영상 생성 확인 필요</span></div>
+        <h3>하이러닝</h3>
+        <p>AI 교수학습 플랫폼. 도내 전 학교로 넓히는 중입니다.
+          진단·콘텐츠 추천과 수업 운영 도구가 중심입니다.</p>
+      </article>
+
+      <article class="pcard">
+        <div class="phead"><span class="pregion">그 밖</span><span class="pstate wait">시범 운영</span></div>
+        <h3>11개 시도 교수학습 플랫폼</h3>
+        <p>서울·인천·광주·대전·울산·세종·강원·전북·전남·경북·제주가
+          인공지능 교수학습 플랫폼을 시범 운영 중입니다.
+          인천은 <b>인천교육플랫폼</b>과 AI융합교육원을 따로 두고 있습니다.</p>
+        <p class="pnote">영상 생성 기능이 있는지는 로그인 안쪽이라 밖에서 확인되지 않습니다.
+          선생님 지역에서 확인되면 알려 주십시오. 여기에 더하겠습니다.</p>
+      </article>
+    </div>
+
+    <div class="callout">
+      <b>지역 플랫폼에 영상 생성이 없다면</b> 아래 상용 도구를 쓰시면 됩니다.
+      대부분 무료 체험이 있고, 만드는 방법과 프롬프트 쓰는 법은 이 페이지 그대로 통합니다.
+    </div>
+
+    <h3 class="subh">돈을 내고 쓰는 도구</h3>
+    <p class="sub">시작·끝 프레임을 받는 도구는 <b>이 페이지의 방법을 그대로</b> 쓸 수 있습니다.
+      가격과 기능은 자주 바뀌니 쓰시기 전에 한 번 확인하십시오.</p>
+    <div class="tools">
+      <div class="tool"><b>Runway</b><span>Gen-4</span><p>시작·끝 프레임 지원. 영상 편집 기능까지 한곳에.</p></div>
+      <div class="tool"><b>Kling</b><span>클링</span><p>시작·끝 프레임 지원. 무료 크레딧이 넉넉한 편.</p></div>
+      <div class="tool"><b>Luma</b><span>Dream Machine</span><p>시작·끝 프레임 지원. 자연스러운 움직임.</p></div>
+      <div class="tool"><b>Google Veo</b><span>Gemini · Flow</span><p>시작·끝 프레임 지원. 화질이 좋습니다.</p></div>
+      <div class="tool"><b>Pika</b><span>피카</span><p>짧은 장면과 효과에 강합니다.</p></div>
+      <div class="tool"><b>Hailuo</b><span>MiniMax</span><p>사람 동작 표현이 좋은 편.</p></div>
+    </div>
+    <p class="pnote wide">부산처럼 교육청이 상용 도구를 묶어 주는 곳이라면,
+      <b>제미나이(Veo)</b>가 이미 계정 안에 들어 있을 수 있습니다. 먼저 확인해 보십시오.</p>
+  </div>
+</section>
+
+<!-- ══════════ 만드는 순서 ══════════ -->
+<section id="howto" style="--c:var(--purple)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">만드는 순서</span><span class="n">서울 SEN스쿨 기준</span></div>
+    <h2>여섯 걸음이면 한 편이 나옵니다</h2>
+    <p class="sub">아래 그림은 실제 화면을 그대로 옮겨 그린 것입니다.
+      <b>이번에 눌러야 할 자리</b>만 색으로 표시했습니다.</p>
+
+    <div class="warn">
+      <b>시작하기 전에 — 팝업 차단부터 풀어 주십시오.</b>
+      「비디오」 탭을 누르면 <b>새 창</b>으로 열립니다. 크롬 기본 설정에서는 이게 막혀서
+      <i>"앱을 여는 팝업이 차단되었어요"</i> 만 뜨고 아무 일도 일어나지 않습니다.
+      주소창 오른쪽 끝 <b>팝업 차단 아이콘</b>을 눌러 <b>항상 허용</b>으로 바꾸십시오.
+      이 한 줄을 안 짚으면 여기서 절반이 멈춥니다.
+    </div>
+
+    <ol class="steps big">
+      <li>
+        <h4>senedu.kr 로 들어가 로그인합니다</h4>
+        <p>SEN스쿨 첫 화면에서 <b>교사</b>로 들어갑니다. @sen.go.kr 계정이 필요합니다.</p>
+      </li>
+      <li>
+        <h4>위쪽 「비디오」 탭을 누릅니다</h4>
+        <p>SenGPT 화면 맨 위에 탭이 줄지어 있습니다. 넷째 칸이 비디오입니다.</p>
+        <div class="ui uibar">
+          <span class="uilogo">SenGPT</span>
+          <span class="uitab">에이전트</span><span class="uitab">워크플로우</span>
+          <span class="uitab">이미지</span><span class="uitab hit">비디오</span>
+          <span class="uitab">회의록</span><span class="uitab">슬라이드</span>
+          <span class="uitab">문서 작성</span><span class="uitab">웍스+</span>
+        </div>
+        <p class="hint">여기서 새 창이 뜹니다. 안 뜨면 위의 팝업 차단을 확인하십시오.</p>
+      </li>
+      <li>
+        <h4>첫 프레임과 마지막 프레임을 올립니다</h4>
+        <p>왼쪽 맨 위 두 칸입니다. 이미지가 아직 없으시면 바로 아래
+          <b>「이미지 생성 도구」</b>로 먼저 두 장을 만드십시오.</p>
+        <div class="ui uipanel">
+          <div class="uititle">AI 비디오 생성</div>
+          <div class="uilabel">프레임 이미지</div>
+          <div class="uiframes">
+            <div class="uiframe hit"><span class="uiplus">↑</span><em>첫 프레임</em></div>
+            <div class="uiframe hit"><span class="uiplus">↑</span><em>마지막 프레임</em></div>
+          </div>
+          <div class="uilink">🖼 이미지 생성 도구로 프레임 이미지를 제작해 보세요</div>
+        </div>
+      </li>
+      <li>
+        <h4>영상 프롬프트를 붙여 넣습니다</h4>
+        <p>칸이 <b>1,000자</b>까지 들어갑니다. 아껴 쓰지 마십시오 —
+          짧으면 움직임의 순서를 모델이 제멋대로 정합니다.</p>
+        <div class="ui uipanel">
+          <div class="uilabel row"><span>프롬프트</span><span class="uicount">475/1000</span></div>
+          <div class="uibox hit">0~2초 : 나무 책상 위에 흰 종이 조각들이 흩어져 있고 …<br>
+            2~5초 : 막대가 종이 쪽으로 아주 천천히 내려온다 …<br>
+            5~8초 : 종이 조각들이 튀어 올라 막대 아랫면에 달라붙고 …</div>
+        </div>
+      </li>
+      <li>
+        <h4>비율·해상도·길이를 정합니다</h4>
+        <p>수업에서 틀 거라면 <b>16:9 · 768P</b> 로 충분합니다.
+          길이는 <b>4초에서 15초</b>까지 늘릴 수 있습니다.</p>
+        <div class="ui uipanel">
+          <div class="uirow">
+            <span class="uichip hit">16:9 유튜브</span>
+            <span class="uichip hit">768P</span>
+          </div>
+          <div class="uilabel row"><span>길이</span><span class="uicount">8초</span></div>
+          <div class="uislider"><span class="uitrack"></span><span class="uiknob"></span></div>
+        </div>
+        <p class="hint">해상도를 2K로 올리면 오래 걸립니다. 연수장에서는 768P 로 두십시오.</p>
+      </li>
+      <li>
+        <h4>「비디오 생성」을 누르고 기다립니다</h4>
+        <p>몇 분 걸립니다. 오른쪽 <b>내 비디오</b> 목록에 쌓이고,
+          카드의 <b>재사용</b>을 누르면 같은 설정으로 다시 만들 수 있습니다.</p>
+        <div class="ui uipanel">
+          <div class="uibtn hit">▷ 비디오 생성</div>
+        </div>
+        <p class="hint">기다리는 동안 옆 선생님 프롬프트를 읽고
+          “이 영상 보면 학생이 뭘 물을까”를 적어 보시면 시간이 아깝지 않습니다.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 장면 잇기 ══════════ -->
+<section id="chain" style="--c:var(--amber)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">길게 만들기</span><span class="n">장면 잇기</span></div>
+    <h2>15초로 모자랄 때</h2>
+    <p class="sub">한 번에 만들 수 있는 건 15초까지입니다. 더 긴 이야기를 담고 싶으면
+      <b>여러 편을 만들어 이어 붙입니다.</b> 요령은 하나뿐입니다 —
+      <b>앞 영상의 끝 프레임을 다음 영상의 첫 프레임으로</b> 씁니다.</p>
+
+    <div class="chain">
+      <div class="cscene">
+        <span class="cno">1편</span>
+        <div class="cframes"><span class="cf">A</span><span class="carrow">→</span><span class="cf on">B</span></div>
+        <p>첫 프레임 <b>A</b> · 끝 프레임 <b>B</b></p>
+      </div>
+      <span class="clink">B를 그대로</span>
+      <div class="cscene">
+        <span class="cno">2편</span>
+        <div class="cframes"><span class="cf on">B</span><span class="carrow">→</span><span class="cf on2">C</span></div>
+        <p>첫 프레임 <b>B</b> · 끝 프레임 <b>C</b></p>
+      </div>
+      <span class="clink">C를 그대로</span>
+      <div class="cscene">
+        <span class="cno">3편</span>
+        <div class="cframes"><span class="cf on2">C</span><span class="carrow">→</span><span class="cf">D</span></div>
+        <p>첫 프레임 <b>C</b> · 끝 프레임 <b>D</b></p>
+      </div>
+    </div>
+    <p class="becomes">이어 붙이면 <b>4초 × 3편 = 12초</b>가 아니라,
+      <b>끊기지 않는 한 장면</b>이 됩니다.</p>
+
+    <div class="duo">
+      <div class="card good">
+        <h3>✓ 이렇게 하십시오</h3>
+        <ul>
+          <li><b>같은 이미지 파일을 그대로 쓰십시오.</b> 비슷하게 다시 만들면 안 이어집니다</li>
+          <li><b>장소·조명·카메라를 편마다 똑같이</b> 적으십시오. 프롬프트의 배경 문장을 복사해 씁니다</li>
+          <li><b>편마다 변화는 하나씩.</b> 1편은 다가오고, 2편은 붙고, 3편은 떨어지고</li>
+          <li><b>먼저 이야기를 세 칸으로 나눠 적고</b> 나서 이미지를 만드십시오</li>
+        </ul>
+      </div>
+      <div class="card bad">
+        <h3>✕ 이러면 어긋납니다</h3>
+        <ul>
+          <li>편마다 <b>다른 각도</b>로 찍기 — 이어 붙이면 튑니다</li>
+          <li>중간에 <b>사람 얼굴</b>이 크게 나오기 — 편마다 다른 사람이 됩니다</li>
+          <li>한 편에 <b>변화를 두 개씩</b> 넣기 — 4~15초로는 모자랍니다</li>
+          <li><b>끝 프레임을 안 받아 두고</b> 다음 편 만들기 — 이어 붙일 다리가 사라집니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 합치고 다듬기 ══════════ -->
+<section id="edit" style="--c:var(--mint)">
+  <div class="wrap">
+    <div class="lbl"><span class="t">합치기</span><span class="n">설치 없이도 됩니다</span></div>
+    <h2>만든 영상을 잇고 다듬기</h2>
+    <p class="sub">편집 프로그램을 새로 배우실 필요 없습니다.
+      <b>붙이고, 자르고, 자막 넣는 것</b>만 되면 수업에는 충분합니다.</p>
+
+    <div class="tools">
+      <div class="tool"><b>Clipchamp</b><span>윈도우 기본</span>
+        <p>윈도우 11에 이미 깔려 있습니다. 끌어다 놓고 이어 붙이면 끝.
+          학교 컴퓨터에서 설치 없이 바로 쓰는 게 가장 큰 장점입니다.</p></div>
+      <div class="tool"><b>캔바</b><span>브라우저</span>
+        <p>교육용 계정이 있으면 무료. 여러 클립을 올려 잇고 자막·음악까지.
+          부산 펜즈에는 이미 들어 있습니다.</p></div>
+      <div class="tool"><b>CapCut</b><span>PC · 모바일</span>
+        <p>자동 자막이 잘 됩니다. 학생 작품 편집에도 씁니다.</p></div>
+      <div class="tool"><b>사진 앱</b><span>윈도우 기본</span>
+        <p>클립 몇 개를 잇고 다듬는 정도라면 이것으로도 됩니다.</p></div>
+      <div class="tool"><b>VLC</b><span>무료</span>
+        <p>편집은 아니지만, 수업에서 <b>구간 반복 재생</b>할 때 편합니다.</p></div>
+      <div class="tool"><b>파워포인트</b><span>이미 있는 것</span>
+        <p>영상을 슬라이드에 넣고 자동 재생·반복으로 두면 도입 자료가 됩니다.
+          새 도구를 안 배워도 됩니다.</p></div>
+    </div>
+
+    <div class="callout">
+      <b>수업에서는 이만큼만 하셔도 됩니다.</b>
+      ① 클립 순서대로 잇기 &nbsp;② 앞뒤 지저분한 부분 자르기 &nbsp;③ 반복 재생 켜기.
+      자막과 음악은 없어도 됩니다 — 오히려 <b>소리가 없어야 학생이 화면을 봅니다.</b>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════ 재료 세트 ══════════ -->
 <section id="kits" style="--c:var(--pink)">
