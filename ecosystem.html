@@ -9,44 +9,56 @@
 <style>
 /* =====================================================================
    수업 도구 생태계 발표 덱
-   디자인 언어: getdesign.md — Notion DESIGN.md (MIT, VoltAgent/awesome-design-md)
+   디자인 언어: getdesign.md — Apple DESIGN.md (MIT, VoltAgent/awesome-design-md)
+   흰 캔버스와 검은 타일이 번갈아 서고, 상호작용 색은 액션 블루 하나뿐입니다.
+   장식용 그림자·테두리·그러데이션을 쓰지 않습니다.
    제작: 해누리중학교 조승재
    ===================================================================== */
 
 :root{
-  --primary:#5645d4; --primary-pressed:#4534b3; --primary-deep:#3a2a99;
+  /* ── Apple DESIGN.md colors ── */
+  --primary:#0066cc; --primary-pressed:#0071e3; --primary-on-dark:#2997ff;
   --on-primary:#ffffff;
-  --brand-navy:#0a1530; --brand-navy-deep:#070f24; --brand-navy-mid:#1a2a52;
-  --link-blue:#0075de;
-  --brand-orange:#dd5b00; --brand-orange-deep:#793400;
-  --brand-pink:#ff64c8; --brand-pink-deep:#a02e6d;
-  --brand-purple:#7b3ff2; --brand-purple-300:#d6b6f6; --brand-purple-800:#391c57;
-  --brand-teal:#2a9d99; --brand-green:#1aae39; --brand-yellow:#f5d75e; --brand-brown:#523410;
 
-  --tint-peach:#ffe8d4; --tint-rose:#fde0ec; --tint-mint:#d9f3e1;
-  --tint-lavender:#e6e0f5; --tint-sky:#dcecfa; --tint-yellow:#fef7d6;
-  --tint-yellow-bold:#f9e79f; --tint-cream:#f8f5e8; --tint-gray:#f0eeec;
+  --ink:#1d1d1f; --charcoal:#1d1d1f; --slate:#333333; --steel:#7a7a7a; --stone:#86868b;
+  --muted:#a1a1a6;
 
-  --canvas:#ffffff; --surface:#f6f5f4; --surface-soft:#fafaf9;
-  --hairline:#e5e3df; --hairline-soft:#ede9e4; --hairline-strong:#c8c4be;
-  --ink:#1a1a1a; --charcoal:#37352f; --slate:#5d5b54; --steel:#787671;
-  --stone:#a4a097; --muted:#bbb8b1;
-  --on-dark:#ffffff; --on-dark-muted:#a4a097;
-  --error:#e03131;
+  --canvas:#ffffff; --parchment:#f5f5f7; --pearl:#fafafc;
+  --surface:#f5f5f7; --surface-soft:#fafafc;
+  --hairline:#e0e0e0; --hairline-soft:#f0f0f0; --hairline-strong:#d2d2d7;
 
-  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:20px; --r-3xl:24px; --r-full:9999px;
+  --tile:#272729; --tile-2:#2a2a2c; --tile-3:#252527; --black:#000000;
+  --on-dark:#ffffff; --on-dark-muted:#cccccc;
 
-  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-  --font-num: "Pretendard Variable", Pretendard, "Segoe UI", system-ui, sans-serif;
+  /* 옛 이름 유지 — 본문의 var() 참조가 그대로 살아 있습니다 */
+  --brand-navy:#000000; --brand-navy-deep:#000000; --brand-navy-mid:#1d1d1f;
+  --brand-purple-300:#2997ff; --brand-purple:#0066cc;
+  --brand-orange-deep:#7a7a7a; --brand-yellow:#f5f5f7;
+  /* 파스텔 틴트는 애플 체계에 없습니다 — 전부 한 가지 표면색으로 */
+  --tint-peach:#f5f5f7; --tint-rose:#f5f5f7; --tint-mint:#f5f5f7;
+  --tint-lavender:#f5f5f7; --tint-sky:#f5f5f7; --tint-yellow:#f5f5f7;
+  --tint-yellow-bold:#f5f5f7; --tint-cream:#f5f5f7; --tint-gray:#f0f0f0;
+
+  /* 상태색은 iOS 시스템 색만, 타이머에만 */
+  --sys-red:#ff3b30; --sys-amber:#ff9f0a;
+
+  /* ── rounded ── */
+  --r-xs:5px; --r-sm:8px; --r-md:11px; --r-lg:18px; --r-xl:18px; --r-2xl:18px; --r-3xl:18px;
+  --r-full:9999px;
+
+  --font:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Pretendard Variable",Pretendard,
+         "Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+  --font-num:"SF Pro Display",-apple-system,BlinkMacSystemFont,
+             "Pretendard Variable",Pretendard,"Segoe UI",system-ui,sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:var(--font);
-  background:var(--brand-navy-deep);
-  color:var(--charcoal);
+  background:var(--black);
+  color:var(--ink);
   overflow:hidden;
   -webkit-font-smoothing:antialiased;
   display:flex;align-items:center;justify-content:center;
@@ -56,308 +68,321 @@ body{
 #stage{
   width:1280px;height:720px;flex:none;
   transform-origin:center center;position:relative;
-  background:var(--canvas);border-radius:var(--r-lg);overflow:hidden;
-  box-shadow:0 24px 80px rgba(0,0,0,.45);
+  background:var(--canvas);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  /* 애플 체계에는 UI 그림자가 없습니다 — 검은 바탕이 경계를 만듭니다 */
 }
 
 .slide{
   position:absolute;inset:0;
-  padding:66px 72px 76px;
+  padding:64px 76px 76px;
   display:none;flex-direction:column;
   background:var(--canvas);
 }
-.slide.on{display:flex;animation:fade .28s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide.on{display:flex;animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 
 /* ── 타이포 ── */
 .eyebrow{
-  font-size:12px;font-weight:600;letter-spacing:.12em;color:var(--steel);
-  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--steel);
+  display:flex;align-items:center;gap:10px;margin-bottom:16px;
 }
-.eyebrow .dot{width:8px;height:8px;border-radius:var(--r-full);background:var(--primary);flex:none}
+.eyebrow .dot{width:6px;height:6px;border-radius:var(--r-full);background:var(--primary);flex:none}
 .eyebrow .live{
-  background:var(--error);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;
-  padding:3px 9px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;font-size:12px;font-weight:600;letter-spacing:-.01em;
+  padding:3px 11px;border-radius:var(--r-full);
 }
-h1.title{font-size:46px;font-weight:700;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+h1.title{font-size:46px;font-weight:600;line-height:1.09;letter-spacing:-.012em;color:var(--ink)}
 h1.title .accent{color:var(--primary)}
-h1.title.sm{font-size:39px}
-p.lede{font-size:20px;line-height:1.6;color:var(--slate);margin-top:14px;max-width:1000px}
-.small{font-size:15px;line-height:1.55;color:var(--steel)}
-.small b{color:var(--charcoal);font-weight:600}
+h1.title.sm{font-size:38px;line-height:1.14}
+p.lede{font-size:23px;font-weight:300;line-height:1.45;color:var(--slate);margin-top:16px;max-width:1000px}
+p.lede b{font-weight:600;color:var(--ink)}
+.small{font-size:15px;line-height:1.5;color:var(--steel);letter-spacing:-.01em}
+.small b{color:var(--ink);font-weight:600}
 
 /* ── 표지 ── */
-.cover{padding:0;background:var(--brand-navy);justify-content:center}
-.cover-inner{position:relative;z-index:2;padding:0 84px}
-.cover h1{font-size:68px;font-weight:700;line-height:1.14;letter-spacing:-.035em;color:var(--on-dark)}
-.cover h1 .line2{display:block;color:var(--brand-purple-300)}
-.cover .sub{font-size:23px;font-weight:500;color:#cfd4e2;margin-top:26px;letter-spacing:-.01em}
-.cover .who{margin-top:42px;display:flex;align-items:center;gap:14px;color:var(--on-dark);font-size:19px;font-weight:600}
-.cover .who .badge{background:var(--primary);color:#fff;padding:9px 18px;border-radius:var(--r-full);font-size:15px;font-weight:600}
-.cover .who .sep{width:1px;height:20px;background:rgba(255,255,255,.28)}
-.cover .who .role{color:var(--on-dark-muted);font-weight:500;font-size:17px}
-.dots{position:absolute;inset:0;z-index:1;pointer-events:none}
-.dots span{position:absolute;border-radius:var(--r-full);opacity:.9}
+.cover{padding:0;background:var(--black);justify-content:center}
+.cover-inner{position:relative;z-index:2;padding:0 88px}
+.cover h1{font-size:66px;font-weight:600;line-height:1.06;letter-spacing:-.018em;color:var(--on-dark)}
+.cover h1 .line2{display:block;color:var(--primary-on-dark)}
+.cover .sub{font-size:26px;font-weight:300;color:var(--on-dark-muted);margin-top:22px;letter-spacing:0}
+.cover .who{margin-top:44px;display:flex;align-items:center;gap:14px;color:var(--on-dark);font-size:18px;font-weight:400}
+.cover .who .badge{
+  background:transparent;color:var(--primary-on-dark);
+  padding:0;border-radius:0;font-size:18px;font-weight:600;
+}
+.cover .who .sep{width:1px;height:16px;background:rgba(255,255,255,.28)}
+.cover .who .role{color:var(--on-dark-muted);font-weight:300;font-size:18px}
+/* 장식 점은 애플 체계에 없습니다 */
+.dots{display:none}
 
-/* ── 어두운 강조 슬라이드 ── */
-.dark-slide{background:var(--brand-navy)}
-.dark-slide .eyebrow{color:#9aa3ba}
-.dark-slide .eyebrow .dot{background:var(--brand-purple-300)}
+/* ── 어두운 타일 슬라이드 ── */
+.dark-slide{background:var(--tile)}
+.dark-slide .eyebrow{color:#a1a1a6}
+.dark-slide .eyebrow .dot{background:var(--primary-on-dark)}
 .dark-slide h1.title{color:var(--on-dark)}
-.dark-slide h1.title .accent{color:var(--brand-purple-300)}
-.dark-slide p.lede{color:#c8cddb}
-.dark-slide .small{color:#98a0b5}
-.dark-slide .small b{color:#dfe3ee}
-.dark-slide .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.dark-slide h1.title .accent{color:var(--primary-on-dark)}
+.dark-slide p.lede{color:var(--on-dark-muted)}
+.dark-slide p.lede b{color:#fff}
+.dark-slide .small{color:#a1a1a6}
+.dark-slide .small b{color:#fff}
+.dark-slide .card{background:var(--tile-2);border-color:rgba(255,255,255,.12)}
 .dark-slide .card h3{color:#fff}
-.dark-slide .card p{color:#c3cadb}
-.dark-slide .card .tag{background:rgba(255,255,255,.14);color:#e2e6f0}
-.dark-slide .feat li{color:#dbe0ed}
+.dark-slide .card p{color:var(--on-dark-muted)}
+.dark-slide .card .tag{background:rgba(255,255,255,.12);color:#e8e8ed}
+.dark-slide .feat li{color:var(--on-dark-muted)}
 .dark-slide .feat li b{color:#fff}
 
-/* ── 카드 ── */
+/* ── 카드 (store-utility-card: 흰 바탕 · 1px 헤어라인 · 18px · 그림자 없음) ── */
 .grid{display:grid;gap:18px;flex:1 1 auto;align-content:center}
 .g2{grid-template-columns:repeat(2,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
 .card{
-  background:var(--surface-soft);border:1px solid var(--hairline);
-  border-radius:var(--r-xl);padding:24px 24px 22px;
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);padding:26px 24px 24px;
   display:flex;flex-direction:column;gap:9px;
 }
-.card .ic{font-size:26px;line-height:1}
-.card h3{font-size:20px;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
-.card p{font-size:15.5px;line-height:1.55;color:var(--slate)}
+.card .ic{font-size:27px;line-height:1;margin-bottom:2px}
+.card h3{font-size:19px;font-weight:600;letter-spacing:-.015em;color:var(--ink);line-height:1.26}
+.card p{font-size:15.5px;font-weight:400;line-height:1.5;color:var(--slate);letter-spacing:-.012em}
+.card p b{font-weight:600;color:var(--ink)}
 .card .tag{
-  align-self:flex-start;margin-top:2px;font-size:12px;font-weight:600;
-  padding:4px 10px;border-radius:var(--r-full);background:var(--tint-gray);color:var(--charcoal);
+  align-self:flex-start;margin-top:4px;font-size:12.5px;font-weight:400;letter-spacing:-.01em;
+  padding:4px 11px;border-radius:var(--r-full);background:var(--parchment);color:var(--steel);
 }
-.card.tint-peach{background:var(--tint-peach);border-color:#f7d5b8}
-.card.tint-rose{background:var(--tint-rose);border-color:#f5c9dd}
-.card.tint-mint{background:var(--tint-mint);border-color:#bfe6cd}
-.card.tint-lav{background:var(--tint-lavender);border-color:#cfc5ea}
-.card.tint-sky{background:var(--tint-sky);border-color:#c3ddf2}
-.card.tint-yellow{background:var(--tint-yellow);border-color:#f2e4a8}
-.card.tint-cream{background:var(--tint-cream);border-color:#eae4cf}
+/* 파스텔 계열 클래스는 이름만 남기고 전부 같은 흰 카드로 */
+.card.tint-peach,.card.tint-rose,.card.tint-mint,.card.tint-lav,
+.card.tint-sky,.card.tint-yellow,.card.tint-cream{
+  background:var(--canvas);border-color:var(--hairline);
+}
+.dark-slide .card.tint-peach,.dark-slide .card.tint-rose,.dark-slide .card.tint-mint,
+.dark-slide .card.tint-lav,.dark-slide .card.tint-sky,.dark-slide .card.tint-yellow,
+.dark-slide .card.tint-cream{background:var(--tile-2);border-color:rgba(255,255,255,.12)}
 
 /* ── 좌우 분할 ── */
-.split{display:grid;grid-template-columns:1.08fr .92fr;gap:34px;margin-top:24px;flex:1;min-height:0}
-.feat{display:flex;flex-direction:column;gap:14px;padding-top:4px}
-.feat li{list-style:none;display:flex;gap:12px;align-items:flex-start;font-size:17.5px;line-height:1.5;color:var(--charcoal)}
-.feat li b{color:var(--ink);font-weight:700}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;margin-top:24px;flex:1;min-height:0}
+.feat{display:flex;flex-direction:column;gap:15px;padding-top:6px}
+.feat li{list-style:none;display:flex;gap:13px;align-items:flex-start;font-size:17px;line-height:1.44;color:var(--slate);letter-spacing:-.012em}
+.feat li b{color:var(--ink);font-weight:600}
 .feat li .k{
-  flex:none;width:24px;height:24px;border-radius:var(--r-full);
-  background:var(--primary);color:#fff;font-size:12px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;margin-top:2px;
+  flex:none;width:23px;height:23px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;letter-spacing:0;
 }
 .scene{
-  border-radius:var(--r-xl);padding:26px;border:1px solid transparent;
-  display:flex;flex-direction:column;gap:12px;justify-content:center;
+  border-radius:var(--r-lg);padding:30px 28px;
+  background:var(--parchment) !important;border:none !important;
+  display:flex;flex-direction:column;gap:13px;justify-content:center;
 }
-.scene .lab{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--brand-orange-deep)}
-.scene .quote{font-size:21px;line-height:1.5;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
-.scene .beat{font-size:16px;line-height:1.55;color:var(--charcoal);opacity:.86}
+.scene .lab{font-size:13px;font-weight:600;letter-spacing:-.005em;color:var(--steel)}
+.scene .quote{font-size:24px;font-weight:600;line-height:1.28;letter-spacing:-.015em;color:var(--ink)}
+.scene .beat{font-size:16px;font-weight:400;line-height:1.5;color:var(--slate);letter-spacing:-.012em}
+.scene .beat b{font-weight:600;color:var(--ink)}
 .scene .when{
-  margin-top:4px;align-self:flex-start;font-size:13px;font-weight:700;
-  padding:5px 12px;border-radius:var(--r-full);background:rgba(255,255,255,.72);color:var(--charcoal);
+  margin-top:6px;align-self:flex-start;font-size:13px;font-weight:400;letter-spacing:-.01em;
+  padding:5px 13px;border-radius:var(--r-full);background:var(--canvas);color:var(--steel);
 }
+.dark-slide .scene{background:var(--tile-2) !important}
+.dark-slide .scene .lab{color:#a1a1a6}
+.dark-slide .scene .quote{color:#fff}
+.dark-slide .scene .beat{color:var(--on-dark-muted)}
+.dark-slide .scene .when{background:rgba(255,255,255,.12);color:#e8e8ed}
 
-/* ── 링크 pill ── */
-.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+/* ── 단추 (button-primary: 액션 블루 알약 하나) ── */
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .pill{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:13.5px;font-weight:600;text-decoration:none;
-  padding:8px 15px;border-radius:var(--r-full);
-  background:var(--primary);color:var(--on-primary);transition:background .15s;
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:400;letter-spacing:-.012em;text-decoration:none;
+  padding:9px 19px;border-radius:var(--r-full);
+  background:var(--primary);color:var(--on-primary);
+  border:1px solid var(--primary);transition:background .18s,border-color .18s;
 }
-.pill:hover{background:var(--primary-pressed)}
-.pill.ghost{background:var(--canvas);color:var(--charcoal);border:1px solid var(--hairline-strong)}
-.pill.ghost:hover{background:var(--surface)}
-.pill.big{font-size:16px;padding:13px 24px}
-.pill .u{font-family:var(--font-num);font-weight:500;opacity:.82;font-size:12.5px}
-.dark-slide .pill.ghost{background:rgba(255,255,255,.08);color:#e6e9f2;border-color:rgba(255,255,255,.24)}
+.pill:hover{background:var(--primary-pressed);border-color:var(--primary-pressed)}
+.pill.ghost{background:var(--canvas);color:var(--primary);border-color:var(--hairline-strong)}
+.pill.ghost:hover{background:var(--parchment);border-color:var(--hairline-strong)}
+.pill.big{font-size:17px;padding:12px 24px}
+.pill .u{font-family:var(--font-num);font-weight:400;opacity:.72;font-size:13px}
+.dark-slide .pill.ghost{background:transparent;color:var(--primary-on-dark);border-color:rgba(255,255,255,.28)}
+.dark-slide .pill.ghost:hover{background:rgba(255,255,255,.08)}
 
-/* ── 학생 인용 ── */
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;flex:1 1 auto;align-content:center}
+/* ── 인용 ── */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1 1 auto;align-content:center}
 .q{
-  background:var(--surface-soft);border:1px solid var(--hairline);
-  border-radius:var(--r-xl);padding:26px 24px;
+  background:var(--parchment) !important;border:none !important;
+  border-radius:var(--r-lg);padding:28px 26px;
   display:flex;flex-direction:column;gap:14px;
 }
-.q .mark{font-family:Georgia,serif;font-size:40px;line-height:.7;color:var(--brand-purple-300)}
-.q .txt{font-size:18px;line-height:1.55;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
-.q .by{margin-top:auto;font-size:13px;color:var(--steel);font-weight:500}
-.q.tall .txt{font-size:16.5px;line-height:1.6}
+.q .mark{font-family:Georgia,"Times New Roman",serif;font-size:38px;line-height:.7;color:var(--hairline-strong)}
+.q .txt{font-size:18px;font-weight:600;line-height:1.44;letter-spacing:-.015em;color:var(--ink)}
+.q .by{margin-top:auto;font-size:13px;color:var(--steel);font-weight:400;letter-spacing:-.01em}
+.q.tall .txt{font-size:16.5px;line-height:1.52}
 
 /* 요약 띠 + 전문 열기 */
-.sumbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
-.chip2{
-  font-size:13.5px;font-weight:600;padding:7px 13px;border-radius:var(--r-full);
-  background:var(--tint-gray);color:var(--charcoal);border:1px solid var(--hairline);
+.sumbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:20px}
+.chip2,.chip2.a,.chip2.b,.chip2.c,.chip2.d{
+  font-size:13.5px;font-weight:400;letter-spacing:-.012em;padding:7px 14px;border-radius:var(--r-full);
+  background:var(--parchment);color:var(--slate);border:none;
 }
-.chip2.a{background:var(--tint-mint);border-color:#bfe6cd}
-.chip2.b{background:var(--tint-sky);border-color:#c3ddf2}
-.chip2.c{background:var(--tint-peach);border-color:#f7d5b8}
-.chip2.d{background:var(--tint-lavender);border-color:#cfc5ea}
 .openall{
   margin-left:auto;cursor:pointer;font-family:var(--font);
   display:inline-flex;align-items:center;gap:8px;
-  font-size:13.5px;font-weight:700;padding:9px 17px;border-radius:var(--r-full);
-  background:var(--primary);color:#fff;border:none;transition:background .15s;
+  font-size:15px;font-weight:400;letter-spacing:-.012em;padding:9px 19px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;border:none;transition:background .18s;
 }
 .openall:hover{background:var(--primary-pressed)}
 
 /* ── 학생 답변 전문 ── */
-#answers{
-  position:absolute;inset:0;z-index:41;background:#070f24;
-  display:none;flex-direction:column;
-}
+#answers{position:absolute;inset:0;z-index:41;background:var(--black);display:none;flex-direction:column}
 #answers.on{display:flex}
 #answers .ahead{
   flex:none;display:flex;align-items:center;gap:14px;
-  padding:22px 40px 16px;border-bottom:1px solid rgba(255,255,255,.14);
+  padding:24px 44px 18px;border-bottom:1px solid rgba(255,255,255,.14);
 }
-#answers .ahead h4{color:#fff;font-size:19px;font-weight:700;letter-spacing:-.015em}
-#answers .ahead .sub{font-size:13px;color:#8f98af}
+#answers .ahead h4{color:#fff;font-size:21px;font-weight:600;letter-spacing:-.015em}
+#answers .ahead .sub{font-size:14px;color:#86868b;font-weight:300}
 #answers .close{
   margin-left:auto;cursor:pointer;font-family:var(--font);
-  font-size:13px;font-weight:700;padding:8px 15px;border-radius:var(--r-full);
-  background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);
+  font-size:14px;font-weight:400;letter-spacing:-.012em;padding:8px 17px;border-radius:var(--r-full);
+  background:transparent;color:var(--primary-on-dark);border:1px solid rgba(255,255,255,.28);
 }
-#answers .close:hover{background:rgba(255,255,255,.2)}
-#answers .abody{flex:1;overflow-y:auto;padding:22px 40px 34px}
-#answers .agroup{margin-bottom:26px}
+#answers .close:hover{background:rgba(255,255,255,.08)}
+#answers .abody{flex:1;overflow-y:auto;padding:24px 44px 36px}
+#answers .agroup{margin-bottom:28px}
 #answers .agroup > h5{
-  font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--brand-purple-300);
-  margin-bottom:12px;
+  font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--primary-on-dark);margin-bottom:13px;
 }
-#answers .alist{columns:2;column-gap:16px}
+#answers .alist{columns:2;column-gap:18px}
 #answers .a{
-  break-inside:avoid;margin-bottom:14px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
-  border-radius:var(--r-lg);padding:16px 18px;
-  font-size:14.5px;line-height:1.65;color:#e2e6f0;white-space:pre-line;
+  break-inside:avoid;margin-bottom:16px;
+  background:var(--tile);border:none;
+  border-radius:var(--r-lg);padding:18px 20px;
+  font-size:15px;font-weight:400;line-height:1.6;letter-spacing:-.012em;
+  color:#e8e8ed;white-space:pre-line;
 }
-#answers .a.long{columns:1;column-span:all;background:rgba(86,69,212,.18);border-color:rgba(163,148,247,.4)}
+#answers .a.long{columns:1;column-span:all;background:var(--tile-2);color:#fff}
 #answers .abody::-webkit-scrollbar{width:10px}
-#answers .abody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:var(--r-full)}
+#answers .abody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:var(--r-full)}
 
 /* ── 여정 지도 ── */
 .journey{display:flex;align-items:stretch;margin:auto 0;padding:8px 0}
-.stop{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 6px}
+.stop{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 6px}
 .stop .bub{
-  width:72px;height:72px;border-radius:var(--r-full);
-  display:flex;align-items:center;justify-content:center;font-size:30px;
-  border:1px solid var(--hairline);background:var(--surface);position:relative;z-index:2;
+  width:70px;height:70px;border-radius:var(--r-full);
+  display:flex;align-items:center;justify-content:center;font-size:29px;
+  background:var(--parchment) !important;border:none !important;position:relative;z-index:2;
 }
-.stop .nm{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;text-align:center}
-.stop .de{font-size:13px;line-height:1.45;color:var(--steel);text-align:center}
-.stop::after{content:"";position:absolute;top:36px;left:50%;width:100%;height:2px;background:var(--hairline);z-index:1}
+.stop .nm{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.015em;text-align:center}
+.stop .de{font-size:13px;font-weight:400;line-height:1.42;color:var(--steel);text-align:center;letter-spacing:-.01em}
+.stop::after{content:"";position:absolute;top:35px;left:50%;width:100%;height:1px;background:var(--hairline);z-index:1}
 .stop:last-child::after{display:none}
 
-/* ── 세 가지 이유 (마무리) ── */
+/* ── 세 가지 이유 ── */
 .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1 1 auto;align-content:center}
 .reason{
-  border-radius:var(--r-xl);padding:30px 26px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--r-lg);padding:34px 28px;
+  background:var(--tile-2);border:1px solid rgba(255,255,255,.12);
   display:flex;flex-direction:column;gap:10px;
 }
 .reason.key{background:var(--primary);border-color:var(--primary)}
-.reason .no{font-family:var(--font-num);font-size:14px;font-weight:700;color:var(--brand-purple-300);letter-spacing:.08em}
-.reason.key .no{color:#dcd6f7}
-.reason h3{font-size:26px;font-weight:700;letter-spacing:-.02em;color:#fff}
-.reason p{font-size:15.5px;line-height:1.55;color:#c3cadb}
-.reason.key p{color:#e4e0fa}
+.reason .no{font-size:14px;font-weight:600;color:#a1a1a6;letter-spacing:-.01em}
+.reason.key .no{color:rgba(255,255,255,.72)}
+.reason h3{font-size:30px;font-weight:600;letter-spacing:-.018em;color:#fff;line-height:1.1}
+.reason p{font-size:15.5px;font-weight:400;line-height:1.5;color:var(--on-dark-muted);letter-spacing:-.012em}
+.reason.key p{color:rgba(255,255,255,.86)}
 
 /* ── 마무리 ── */
-.closing{background:var(--brand-navy);justify-content:center;padding:0 84px}
-.closing h1{font-size:48px;font-weight:700;line-height:1.22;letter-spacing:-.03em;color:var(--on-dark)}
-.closing h1 em{font-style:normal;color:var(--brand-purple-300)}
-.closing p{font-size:19px;line-height:1.65;color:#c8cddb;margin-top:20px;max-width:860px}
+.closing{background:var(--black);justify-content:center;padding:0 88px}
+.closing h1{font-size:48px;font-weight:600;line-height:1.14;letter-spacing:-.018em;color:var(--on-dark)}
+.closing h1 em{font-style:normal;color:var(--primary-on-dark)}
+.closing p{font-size:21px;font-weight:300;line-height:1.5;color:var(--on-dark-muted);margin-top:24px;max-width:880px}
 
 #app-credit{
-  margin-top:30px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16);
-  font-size:13px;line-height:1.6;color:var(--on-dark-muted);
+  margin-top:34px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);
+  font-size:13px;font-weight:300;line-height:1.65;color:#86868b;letter-spacing:-.01em;
 }
-#app-credit b{color:#e5e7ee;font-weight:600}
+#app-credit b{color:#e8e8ed;font-weight:600}
 
 /* ── 크롬 ── */
-#bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--hairline-soft);z-index:20}
-#bar i{display:block;height:100%;width:0;background:var(--primary);transition:width .3s ease}
+#bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--hairline-soft);z-index:20}
+#bar i{display:block;height:100%;width:0;background:var(--primary);transition:width .35s ease}
 #chrome{
-  position:absolute;left:0;right:0;bottom:14px;
+  position:absolute;left:0;right:0;bottom:16px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 30px;z-index:21;pointer-events:none;
+  padding:0 34px;z-index:21;pointer-events:none;
 }
-#chrome .left{font-size:12.5px;font-weight:600;color:var(--stone);letter-spacing:.02em}
+#chrome .left{font-size:13px;font-weight:400;color:var(--stone);letter-spacing:-.01em}
 #chrome .right{display:flex;align-items:center;gap:8px;pointer-events:auto}
 .nb{
-  width:32px;height:32px;border-radius:var(--r-full);
-  border:1px solid var(--hairline);background:var(--canvas);color:var(--charcoal);
-  font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;
+  width:30px;height:30px;border-radius:var(--r-full);
+  border:1px solid var(--hairline);background:var(--canvas);color:var(--slate);
+  font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s;
 }
-.nb:hover{background:var(--surface)}
-#num{font-family:var(--font-num);font-size:12.5px;font-weight:600;color:var(--steel);padding:0 6px}
-#stage.dark #chrome .left,#stage.dark #num{color:var(--on-dark-muted)}
-#stage.dark .nb{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff}
-#stage.dark .nb:hover{background:rgba(255,255,255,.16)}
+.nb:hover{background:var(--parchment)}
+#num{font-family:var(--font-num);font-size:13px;font-weight:400;color:var(--stone);padding:0 6px;letter-spacing:0}
+#stage.dark #chrome .left,#stage.dark #num{color:#86868b}
+#stage.dark .nb{background:transparent;border-color:rgba(255,255,255,.22);color:#fff}
+#stage.dark .nb:hover{background:rgba(255,255,255,.1)}
 #stage.dark #bar{background:rgba(255,255,255,.14)}
 
 /* ── 타이머 ── */
 #timer{
-  position:absolute;top:20px;right:24px;z-index:22;
-  font-family:var(--font-num);font-size:14px;font-weight:700;
-  padding:7px 14px;border-radius:var(--r-full);
-  background:var(--surface);color:var(--slate);border:1px solid var(--hairline);
+  position:absolute;top:22px;right:28px;z-index:22;
+  font-family:var(--font-num);font-size:14px;font-weight:400;letter-spacing:-.01em;
+  padding:7px 15px;border-radius:var(--r-full);
+  background:var(--parchment);color:var(--steel);border:none;
   cursor:pointer;user-select:none;
 }
-#timer.run{background:var(--tint-mint);border-color:#bfe6cd;color:#146b2b}
-#timer.warn{background:var(--tint-yellow-bold);border-color:#efd98a;color:var(--brand-orange-deep)}
-#timer.over{background:#fde2e2;border-color:#f5bcbc;color:var(--error)}
-#stage.dark #timer{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#d7dbe6}
+#timer.run{background:rgba(0,102,204,.1);color:var(--primary)}
+#timer.warn{background:rgba(255,159,10,.14);color:#b26a00}
+#timer.over{background:rgba(255,59,48,.14);color:var(--sys-red)}
+#stage.dark #timer{background:rgba(255,255,255,.12);color:#e8e8ed}
+#stage.dark #timer.run{background:rgba(41,151,255,.2);color:var(--primary-on-dark)}
 
 /* ── 발표자 대본 ── */
 #notes{
   position:absolute;left:0;right:0;bottom:0;z-index:30;
-  background:var(--brand-navy-deep);color:#dfe3ee;
-  padding:16px 210px 18px 30px;
-  font-size:15px;line-height:1.55;border-top:2px solid var(--primary);display:none;
+  background:var(--black);color:#e8e8ed;
+  padding:18px 210px 20px 34px;
+  font-size:15px;font-weight:400;line-height:1.55;letter-spacing:-.012em;
+  border-top:1px solid rgba(255,255,255,.18);display:none;
 }
 #notes.on{display:block}
-#notes b{color:var(--brand-purple-300);font-weight:700}
+#notes b{color:var(--primary-on-dark);font-weight:600}
 #stage.notes #chrome{z-index:31}
 #stage.notes #chrome .left{display:none}
-#stage.notes #num{color:#c3c8d6}
-#stage.notes .nb{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24);color:#fff}
-#stage.notes .nb:hover{background:rgba(255,255,255,.2)}
+#stage.notes #num{color:#86868b}
+#stage.notes .nb{background:transparent;border-color:rgba(255,255,255,.24);color:#fff}
+#stage.notes .nb:hover{background:rgba(255,255,255,.12)}
 
 /* ── 목차 ── */
-#overview{position:absolute;inset:0;z-index:40;background:rgba(10,21,48,.97);display:none;padding:36px 40px;overflow:auto}
+#overview{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.96);display:none;padding:40px 44px;overflow:auto}
 #overview.on{display:block}
-#overview h4{color:#fff;font-size:17px;font-weight:700;margin-bottom:18px;letter-spacing:-.01em}
+#overview h4{color:#fff;font-size:19px;font-weight:600;margin-bottom:20px;letter-spacing:-.015em}
 #ovGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .ov{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
-  border-radius:var(--r-lg);padding:14px 15px;cursor:pointer;text-align:left;
-  color:#e6e9f2;font-family:var(--font);transition:background .15s;
+  background:var(--tile);border:none;
+  border-radius:var(--r-md);padding:15px 16px;cursor:pointer;text-align:left;
+  color:#e8e8ed;font-family:var(--font);transition:background .18s;
 }
-.ov:hover{background:rgba(255,255,255,.16)}
-.ov .i{font-family:var(--font-num);font-size:11px;font-weight:700;color:var(--brand-purple-300)}
-.ov .t{font-size:14px;font-weight:600;margin-top:6px;line-height:1.35;letter-spacing:-.01em}
+.ov:hover{background:var(--tile-2)}
+.ov .i{font-family:var(--font-num);font-size:12px;font-weight:600;color:var(--primary-on-dark)}
+.ov .t{font-size:14px;font-weight:400;margin-top:6px;line-height:1.35;letter-spacing:-.012em}
 
 /* ── 도움말 ── */
 #help{
-  position:absolute;left:24px;top:18px;z-index:22;
-  font-size:12px;color:var(--stone);
-  background:var(--surface);border:1px solid var(--hairline);
-  padding:6px 12px;border-radius:var(--r-full);transition:opacity .5s ease;
+  position:absolute;left:28px;top:22px;z-index:22;
+  font-size:12.5px;font-weight:400;color:var(--stone);letter-spacing:-.01em;
+  background:var(--parchment);border:none;
+  padding:7px 14px;border-radius:var(--r-full);transition:opacity .5s ease;
 }
 #help.hide{opacity:0;pointer-events:none}
-#stage.dark #help{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#c3c8d6}
+#stage.dark #help{background:rgba(255,255,255,.1);color:#c7c7cc}
 kbd{
-  font-family:var(--font-num);font-size:11px;font-weight:700;
+  font-family:var(--font-num);font-size:11.5px;font-weight:600;
   background:var(--canvas);border:1px solid var(--hairline-strong);
-  border-bottom-width:2px;border-radius:var(--r-xs);padding:1px 5px;color:var(--charcoal);
+  border-radius:var(--r-xs);padding:1px 6px;color:var(--slate);
 }
 #stage.dark kbd{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:#fff}
 </style>
@@ -421,17 +446,17 @@ kbd{
     <div class="eyebrow"><span class="dot"></span>제 소개 대신</div>
     <h1 class="title sm">제가 말하는 저보다,<br><span class="accent">학생들이 해준 말로 소개하겠습니다.</span></h1>
     <div class="quotes" style="margin-top:18px">
-      <div class="q tall" style="background:var(--tint-lavender);border-color:#cfc5ea">
+      <div class="q tall">
         <div class="mark">“</div>
         <div class="txt">선생님 덕분에 저의 적이었던 과학 이라는 과목한테 더 쉽게 다가가고 시도해볼 수 있었던 것 같아서 정말 감사해요. … 잠깐동안이지만 선생님을 뵈면서 과학교사라는 꿈도 가졌었어요.</div>
         <div class="by">— 과학이 ‘적’이었던 학생</div>
       </div>
-      <div class="q tall" style="background:var(--tint-sky);border-color:#c3ddf2">
+      <div class="q tall">
         <div class="mark">“</div>
         <div class="txt">저는 사실 거의 모든 내용을 선행했었거든요.그래서 그냥 수업 때 적당히 대답하고 지낼려고 했는데 선생님의 수업을 듣고 조금 생각이 바뀌었어요</div>
         <div class="by">— 이미 다 배우고 온 학생</div>
       </div>
-      <div class="q tall" style="background:var(--tint-peach);border-color:#f7d5b8">
+      <div class="q tall">
         <div class="mark">“</div>
         <div class="txt">모든 학생들한테 진심으로 대해주시고 열정적인 모습 너무 좋아요.</div>
         <div class="by">— 수업 설문에서</div>
@@ -477,40 +502,42 @@ kbd{
     <div class="eyebrow"><span class="dot"></span>오늘 이야기</div>
     <h1 class="title">도구를 나열하지 않고,<br><span class="accent">하나로 이어지는 흐름을 보여드립니다.</span></h1>
     <div class="journey">
-      <div class="stop"><div class="bub" style="background:var(--tint-sky);border-color:#c3ddf2">🚪</div><div class="nm">들어오기</div><div class="de">주소 하나로<br>수업에 접속</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-mint);border-color:#bfe6cd">🌱</div><div class="nm">질문나무</div><div class="de">질문 유발 자료 →<br>학생 질문</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-yellow);border-color:#f2e4a8">🏅</div><div class="nm">도장</div><div class="de">좋은 질문에<br>도장 찍기</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-rose);border-color:#f5c9dd">📋</div><div class="nm">도장판</div><div class="de">차시별<br>관찰 기록</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-lavender);border-color:#cfc5ea">🔬</div><div class="nm">수업 페이지</div><div class="de">그 차시<br>웹앱</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-mint);border-color:#bfe6cd">🎯</div><div class="nm">혼자 탐구</div><div class="de">자기 속도로<br>진행이 기록됨</div></div>
-      <div class="stop"><div class="bub" style="background:var(--tint-cream);border-color:#eae4cf">📝</div><div class="nm">세특 근거</div><div class="de">학기 말에<br>그대로 쓰임</div></div>
+      <div class="stop"><div class="bub">🚪</div><div class="nm">들어오기</div><div class="de">주소 하나로<br>수업에 접속</div></div>
+      <div class="stop"><div class="bub">🌱</div><div class="nm">질문나무</div><div class="de">질문 유발 자료 →<br>학생 질문</div></div>
+      <div class="stop"><div class="bub">🏅</div><div class="nm">도장</div><div class="de">좋은 질문에<br>도장 찍기</div></div>
+      <div class="stop"><div class="bub">📋</div><div class="nm">도장판</div><div class="de">차시별<br>관찰 기록</div></div>
+      <div class="stop"><div class="bub">🔬</div><div class="nm">수업 페이지</div><div class="de">그 차시<br>웹앱</div></div>
+      <div class="stop"><div class="bub">🎯</div><div class="nm">혼자 탐구</div><div class="de">자기 속도로<br>진행이 기록됨</div></div>
+      <div class="stop"><div class="bub">📝</div><div class="nm">세특 근거</div><div class="de">학기 말에<br>그대로 쓰임</div></div>
     </div>
     <p class="small">따로 만든 도구들이 아니라, <b>같은 문·같은 계정·같은 학생</b>을 가리키는 하나의 생태계입니다.</p>
   </section>
 
   <!-- ══════════ 6 · 질문나무 ══════════ -->
   <section class="slide" data-name="① 질문나무 [시연]"
-    data-note="<b>여기서 사이트를 직접 엽니다.</b> 보여줄 순서 — ① 제가 올린 질문 유발 자료 ② 학생들이 달아 놓은 질문 목록 ③ 좋은 질문에 도장을 찍는 화면. 화면 전환 시간을 감안해 <b>3분</b> 정도.">
+    data-note="<b>여기서 사이트를 직접 엽니다.</b> 보여줄 순서 — ① 제가 올린 질문 유발 자료 ② 학생들이 달아 놓은 질문 목록 ③ 좋은 질문에 도장을 찍는 화면. — 도장을 찍어 보이면서 <b>여기가 ‘생태계’라는 말을 쓰는 이유</b>라고 말씀하세요. 질문나무와 도장판은 따로 있는 앱이 아니라 <b>같은 계정·같은 데이터베이스</b>를 씁니다. 제가 질문에 도장을 찍으면 <b>그 학생의 도장판에 바로 쌓입니다.</b> 학생은 로그인을 한 번만 합니다. 화면 전환까지 <b>4분</b> 정도.">
     <div class="eyebrow"><span class="dot"></span>① 수업을 여는 도구<span class="live">직접 시연</span></div>
     <h1 class="title">해누리 질문 과수원</h1>
     <div class="split">
       <div>
-        <p class="lede">제가 질문 유발 자료를 올리면, 학생들이 그 아래에 질문을 답니다. 수업의 도입이 여기서 시작합니다.</p>
-        <ul class="feat" style="margin-top:18px">
+        <p class="lede">제가 질문 유발 자료를 올리면,<br>학생들이 그 아래에 질문을 답니다.</p>
+        <ul class="feat" style="margin-top:16px">
           <li><span class="k">1</span><span>교사가 <b>질문 유발 자료</b>를 차시에 맞춰 올립니다</span></li>
           <li><span class="k">2</span><span>학생이 그 자료를 보고 <b>자기 질문</b>을 답니다</span></li>
           <li><span class="k">3</span><span>질문이 쌓이면 <b>나무가 자라고 열매가 열립니다</b></span></li>
-          <li><span class="k">4</span><span>좋은 질문에는 제가 <b>도장을 찍습니다</b> → 다음 장</span></li>
+          <li><span class="k">4</span><span>좋은 질문에는 제가 <b>도장을 찍습니다</b></span></li>
+          <li><span class="k">5</span><span>그 도장이 <b>그 학생의 도장판에 그대로 쌓입니다</b></span></li>
         </ul>
         <div class="links">
           <a class="pill big" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문 과수원 열기 <span class="u">questionuri</span></a>
+          <a class="pill ghost" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">이어지는 도장판</a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-mint);border-color:#bfe6cd">
-        <div class="lab">지금 화면에서 보여드릴 것</div>
-        <div class="quote">① 제가 올린 질문 유발 자료<br>② 학생들이 달아 놓은 질문<br>③ 도장을 찍는 화면</div>
-        <div class="beat">손 드는 학생 몇 명만 말하던 도입이, 반 전체가 한 줄씩 쓰는 시간이 됩니다.</div>
-        <div class="when">시연 3분</div>
+      <div class="scene">
+        <div class="lab">여기가 ‘생태계’인 이유</div>
+        <div class="quote">질문나무와 도장판은<br>따로 있는 앱이 아닙니다.</div>
+        <div class="beat">두 도구가 <b>같은 계정, 같은 데이터베이스</b>를 씁니다. 제가 질문에 도장을 찍으면 그 학생의 도장판에 바로 쌓이고, 학생은 로그인을 한 번만 합니다.</div>
+        <div class="when">시연 4분</div>
       </div>
     </div>
   </section>
@@ -534,7 +561,7 @@ kbd{
           <a class="pill ghost" href="https://scienceisjo.github.io/growing-teachers/ai-video-agent/" target="_blank" rel="noopener">전 교과용 에이전트</a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-yellow);border-color:#f2e4a8">
+      <div class="scene">
         <div class="lab">지금 틀어 드릴 것</div>
         <div class="quote">병에 아무것도 안 넣었는데<br>풍선이 왜 부풀까?</div>
         <div class="beat">중1 기체의 성질 도입 영상입니다. 이 영상 하나를 질문나무에 올리면, 그 아래로 학생 질문이 쌓입니다. 만드는 데 프롬프트 세 개면 됩니다.</div>
@@ -543,37 +570,10 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 8 · 질문 → 도장 연결 ══════════ -->
-  <section class="slide" data-name="③ 질문이 도장으로 이어집니다"
-    data-note="여기가 <b>‘생태계’라는 말을 쓰는 이유</b>입니다. 질문나무와 도장판이 따로 있는 앱이 아니라, 제가 질문에 도장을 찍으면 <b>그 학생의 도장판에 바로 쌓입니다</b>. 로그인도 한 번뿐입니다.">
-    <div class="eyebrow"><span class="dot"></span>③ 이어지는 지점</div>
-    <h1 class="title">좋은 질문에 도장을 찍으면,<br><span class="accent">그 학생의 도장판에 쌓입니다.</span></h1>
-    <div class="grid g3">
-      <div class="card tint-mint">
-        <div class="ic">🌱</div>
-        <h3>질문나무에서</h3>
-        <p>학생이 올린 질문 중 좋은 것에 제가 도장을 찍습니다.</p>
-        <span class="tag">교사가 누르는 곳</span>
-      </div>
-      <div class="card tint-yellow">
-        <div class="ic">➡️</div>
-        <h3>같은 데이터베이스</h3>
-        <p>두 도구가 같은 계정·같은 학생을 가리킵니다. 옮겨 적을 일이 없습니다.</p>
-        <span class="tag">따로 만든 앱이 아님</span>
-      </div>
-      <div class="card tint-rose">
-        <div class="ic">🏅</div>
-        <h3>도장판에 도착</h3>
-        <p>학생 화면에는 도장이 늘고 캐릭터가 자랍니다.</p>
-        <span class="tag">학생이 보는 곳</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ 9 · 도장판 → 세특 ══════════ -->
-  <section class="slide" data-name="④ 칭찬 도장판 → 세특 근거"
+  <!-- ══════════ 8 · 도장판 → 세특 ══════════ -->
+  <section class="slide" data-name="③ 칭찬 도장판 → 세특 근거"
     data-note="<b>오늘 가장 하고 싶은 이야기</b>입니다. 골든벨을 하면서도 도장을 주고, 도장판에 <b>차시를 미리 넣어 둡니다</b>. 그날 <b>쉬는 시간에</b> 그 차시에서 어떤 학생이 무엇을 잘했는지 적어 두면, 학기 말에 그게 그대로 <b>세특 근거</b>가 됩니다. (행발이 아니라 세특입니다.)">
-    <div class="eyebrow"><span class="dot"></span>④ 수업을 닫는 도구</div>
+    <div class="eyebrow"><span class="dot"></span>③ 수업을 닫는 도구</div>
     <h1 class="title">칭찬 도장판 —<br><span class="accent">겉은 도장판, 속은 관찰 기록부</span></h1>
     <div class="split">
       <div>
@@ -587,7 +587,7 @@ kbd{
           <a class="pill big" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">도장판 열기 <span class="u">stamp-board</span></a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-rose);border-color:#f5c9dd">
+      <div class="scene">
         <div class="lab">제가 얻은 것</div>
         <div class="quote">“기록해야지” 하고<br>따로 앉는 시간이 없어졌습니다.</div>
         <div class="beat">학생에게는 캐릭터가 자라는 보상이고, 저에게는 그날 그 학생을 봤다는 증거입니다. 같은 화면, 다른 목적입니다.</div>
@@ -596,10 +596,10 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 10 · 수업 페이지 ══════════ -->
-  <section class="slide" data-name="⑤ 수업 페이지 — 만드는 방식"
+  <!-- ══════════ 9 · 수업 페이지 ══════════ -->
+  <section class="slide" data-name="④ 수업 페이지 — 만드는 방식"
     data-note="만드는 방법은 단순합니다. <b>메모장을 켜고, 제가 수업에서 설명하는 방식 그대로 쭉 씁니다.</b> 그 다음 Claude에게 그대로 구현해 달라고 합니다. — 다만 이 방식은 <b>토큰이 많아야 가능한</b> 방법입니다. 그리고 솔직히 말씀드리면 <b>지금도 계속 고치고 있습니다.</b> 수업 직전까지 수정됩니다. 그래서 섣불리 공유하기가 조심스럽습니다.">
-    <div class="eyebrow"><span class="dot"></span>⑤ 차시마다 여는 수업 페이지</div>
+    <div class="eyebrow"><span class="dot"></span>④ 차시마다 여는 수업 페이지</div>
     <h1 class="title">만드는 방식은 하나입니다</h1>
     <div class="split">
       <div>
@@ -615,7 +615,7 @@ kbd{
           <a class="pill ghost" href="https://scienceisjo.github.io/gas-properties/" target="_blank" rel="noopener">기체의 성질</a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-cream);border-color:#eae4cf">
+      <div class="scene">
         <div class="lab">솔직하게 말씀드리면</div>
         <div class="quote">지금도 계속 고치고 있습니다.</div>
         <div class="beat">만들어 둔 것들이 수업 직전까지 수정됩니다. 그래서 아직 섣불리 공유해 드리기가 조심스럽습니다.</div>
@@ -623,10 +623,10 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 11 · 혼자 탐구 모드 ══════════ -->
-  <section class="slide" data-name="⑥ 혼자 탐구 모드"
+  <!-- ══════════ 10 · 혼자 탐구 모드 ══════════ -->
+  <section class="slide" data-name="⑤ 혼자 탐구 모드"
     data-note="<b>왜 넣었는지부터.</b> ① 학생마다 학습 속도가 다릅니다. ② 강의식 수업을 지겨워할 때가 있습니다. ③ 진행 상황이 보이면 <b>더딘 학생에게 더 친절하게 다가갈 수 있고</b>, 수업 내용으로 모자란 학생은 「더 알아보기」로 직접 공부하게 할 수 있습니다. — 같은 페이지에 모드 버튼 하나입니다. 강의식 ↔ 혼자 탐구. 그리고 <b>평가 쪽 이야기</b>: 문항별로 첫 시도 정오까지 남아서, 교사 대시보드에 학생×문항 정오표가 그려집니다.">
-    <div class="eyebrow"><span class="dot"></span>⑥ 같은 페이지, 두 가지 모드</div>
+    <div class="eyebrow"><span class="dot"></span>⑤ 같은 페이지, 두 가지 모드</div>
     <h1 class="title">혼자 탐구 모드</h1>
     <div class="split">
       <div>
@@ -641,7 +641,7 @@ kbd{
           <a class="pill ghost" href="https://scienceisjo.github.io/electricity/04-ohm-teacher.html" target="_blank" rel="noopener">교사 대시보드</a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-mint);border-color:#bfe6cd">
+      <div class="scene">
         <div class="lab">평가 쪽에서 남는 것</div>
         <div class="quote">누가 어디서 막혔는지가<br>문항 단위로 남습니다.</div>
         <div class="beat">확인 문제는 <b>첫 시도의 정오·시도 수·고른 답</b>까지 기록됩니다. 교사 화면에는 학생×문항 정오표가 그려지고, 학생은 자기 결과를 <b>PDF</b>로 받습니다. 넘어간 단계도 ⚠️로 남습니다.</div>
@@ -650,10 +650,10 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 12 · 학습지 스튜디오 [시연] ══════════ -->
-  <section class="slide" data-name="⑦ 학습지 스튜디오 [시연]"
+  <!-- ══════════ 11 · 학습지 스튜디오 [시연] ══════════ -->
+  <section class="slide" data-name="⑥ 학습지 스튜디오 [시연]"
     data-note="<b>여기서 도구를 직접 엽니다.</b> 보여줄 순서 — ① 문항을 넣는 화면 ② 여백·줄 간격이 자동으로 잡히는 것 ③ 인쇄 미리보기(A4에 그대로 떨어지는지). — 만든 이유: 한글 문서에서 표와 그림이 밀려서 <b>내용보다 조판에 시간을 더 쓰고 있었습니다.</b> 화면용 도구는 많은데 <b>종이로 나가는 학습지</b>를 위한 건 없더군요.">
-    <div class="eyebrow"><span class="dot"></span>⑦ 종이로 나가는 것<span class="live">직접 시연</span></div>
+    <div class="eyebrow"><span class="dot"></span>⑥ 종이로 나가는 것<span class="live">직접 시연</span></div>
     <h1 class="title">학습지 스튜디오</h1>
     <div class="split">
       <div>
@@ -667,7 +667,7 @@ kbd{
           <a class="pill big" href="https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/" target="_blank" rel="noopener">학습지 스튜디오 열기 <span class="u">worksheet-studio</span></a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-cream);border-color:#eae4cf">
+      <div class="scene">
         <div class="lab">지금 화면에서 보여드릴 것</div>
         <div class="quote">① 문항 넣기<br>② 자동으로 잡히는 조판<br>③ 인쇄 미리보기</div>
         <div class="beat">내용을 고민할 시간을 조판에 쓰고 있던 게 아까워서 만들었습니다.</div>
@@ -676,18 +676,18 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 13 · 아이들이 하는 말 ══════════ -->
+  <!-- ══════════ 12 · 아이들이 하는 말 ══════════ -->
   <section class="slide" data-name="학생들의 반응 ①"
     data-note="여기는 가볍고 즐겁게. 아이들이 실제로 하는 말들입니다. — <b>“나무가 자랐어!”, “도토리로 내 나무 꾸몄어!”, “나 부화했어!”, “나 진화했어!”</b> 이런 걸 하면서 <b>수업 태도가 정말 많이 좋아졌습니다.</b>">
     <div class="eyebrow"><span class="dot"></span>학생들의 반응 ①</div>
     <h1 class="title">아이들이 실제로 하는 말</h1>
     <div class="quotes" style="grid-template-columns:repeat(2,1fr);margin-top:18px">
-      <div class="q" style="background:var(--tint-mint);border-color:#bfe6cd">
+      <div class="q">
         <div class="mark">“</div>
         <div class="txt">나무가 자랐어!<br>도토리로 내 나무 꾸몄어!</div>
         <div class="by">— 질문나무에서</div>
       </div>
-      <div class="q" style="background:var(--tint-rose);border-color:#f5c9dd">
+      <div class="q">
         <div class="mark">“</div>
         <div class="txt">나 부화했어!<br>나 진화했어!</div>
         <div class="by">— 칭찬 도장판에서</div>
@@ -696,7 +696,7 @@ kbd{
     <p class="small" style="margin-top:20px">이런 말을 하면서 <b>수업 태도가 정말 많이 좋아졌습니다.</b></p>
   </section>
 
-  <!-- ══════════ 14 · 제가 느낀 변화 ══════════ -->
+  <!-- ══════════ 13 · 제가 느낀 변화 ══════════ -->
   <section class="slide" data-name="학생들의 반응 ② — 눈빛"
     data-note="<b>여기서 속도를 늦추세요.</b> 두 가지입니다. ① “선생님 어디 들어가요?”가 사라졌습니다 — 페이지 하나에 모든 자료가 연결되니까. ② 질문나무에 올라온 질문 중 <b>오늘 학습목표와 가장 맞는 두 개</b>를 옆에 띄워 놓고 수업했더니, <b>아이들 눈빛이 달라지는 걸 정말 많이 느꼈습니다.</b> 지난 시간이 후회될 정도였습니다.">
     <div class="eyebrow"><span class="dot"></span>학생들의 반응 ② · 제가 느낀 변화</div>
@@ -716,10 +716,10 @@ kbd{
     <p class="small" style="margin-top:20px"><b>지난 시간이 후회될 정도였습니다.</b> 그 정도로 많은 것을 느끼고 있습니다.</p>
   </section>
 
-  <!-- ══════════ 15 · 나선 교육과정 지도 ══════════ -->
-  <section class="slide" data-name="⑧ 과학 나선 교육과정 지도"
+  <!-- ══════════ 14 · 나선 교육과정 지도 ══════════ -->
+  <section class="slide" data-name="⑦ 과학 나선 교육과정 지도"
     data-note="<b>이건 꼭 말씀드리고 싶었던 것</b>입니다. 수업 때마다 ‘이 아이들이 어디까지 배우고 왔지, 어디까지 배워야 하지, 이게 나중에 어떻게 확장되지’를 알아야 하는데 매번 교육과정 문서를 뒤지기가 어려웠습니다. 그래서 문서를 통째로 넣고 만들었습니다. — 학생들에게 보여주면 <b>“우리가 여기까지 배웠고 여기까지 배울 거야”</b>라고 목표를 정확히 말해줄 수 있고, 지금 배우는 게 나중에 이렇게 연결되니 이 수업을 들어야 한다고 <b>설득이 됩니다.</b>">
-    <div class="eyebrow"><span class="dot"></span>⑧ 꼭 말씀드리고 싶은 것</div>
+    <div class="eyebrow"><span class="dot"></span>⑦ 꼭 말씀드리고 싶은 것</div>
     <h1 class="title">과학 나선 교육과정 지도</h1>
     <div class="split">
       <div>
@@ -733,7 +733,7 @@ kbd{
           <a class="pill big" href="https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/" target="_blank" rel="noopener">나선 지도 열기 <span class="u">science-curriculum-map</span></a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-lavender);border-color:#cfc5ea">
+      <div class="scene">
         <div class="lab">학생에게 보여줄 때</div>
         <div class="quote">“우리가 여기까지 배웠고,<br>이제 여기까지 배울 거야.”</div>
         <div class="beat">목표를 정확히 말해 줄 수 있고, 지금 배우는 것이 나중에 이렇게 이어지니 이 수업을 들어야 한다는 <b>설득이 됩니다.</b></div>
@@ -741,10 +741,10 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 16 · MBL 클래스 허브 ══════════ -->
-  <section class="slide" data-name="⑨ MBL 클래스 허브"
+  <!-- ══════════ 15 · MBL 클래스 허브 ══════════ -->
+  <section class="slide" data-name="⑧ MBL 클래스 허브"
     data-note="지능형 과학실이나 기존 데이터 분석 도구가 쓰기에 아쉬운 부분이 있어서, <b>그 실험에 맞는 분석</b>을 할 수 있게 만들었습니다. — <b>솔직히 아직 학교에서 직접 써보지는 않았습니다.</b> 더 다듬어야 할 부분입니다.">
-    <div class="eyebrow"><span class="dot"></span>⑨ 만들어 두었지만 아직 다듬는 중</div>
+    <div class="eyebrow"><span class="dot"></span>⑧ 만들어 두었지만 아직 다듬는 중</div>
     <h1 class="title">MBL 클래스 허브</h1>
     <div class="split">
       <div>
@@ -758,7 +758,7 @@ kbd{
           <a class="pill big" href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">MBL 허브 열기 <span class="u">mblclasshub</span></a>
         </div>
       </div>
-      <div class="scene" style="background:var(--tint-gray);border-color:#e0dcd7">
+      <div class="scene">
         <div class="lab">솔직하게</div>
         <div class="quote">아직 학교에서<br>직접 써보지는 않았습니다.</div>
         <div class="beat">제가 계속 더 다듬어야 하는 부분입니다. 만들어 놓은 것과 수업에서 검증된 것은 다르다고 생각합니다.</div>
@@ -766,7 +766,7 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 14 · 그밖에 만든 것들 ══════════ -->
+  <!-- ══════════ 16 · 그밖에 만든 것들 ══════════ -->
   <section class="slide" data-name="그밖에 만든 것들"
     data-note="빠르게 훑기. ① <b>편지 메이커</b> — 시험기간에 반 아이들 한 명 한 명 편지를 써주는데 손이 너무 아파서. ② <b>롤링페이퍼</b> — 전학 가는 친구를 위해 몰래 하려고, ‘학교 만족도 조사’라고 하고 그 친구만 빼고 돌렸습니다. ③ <b>PDF 도구</b> — 병합·분할. ④ <b>CLASS GAME WORLD</b> — 진도가 빨리 끝났거나 쉬어갈 수 있을 때 반 단합용. — 그리고 <b>고쳐야 하는 것도 많고, 오랫동안 안 고쳐진 것도 꽤 있습니다.</b>">
     <div class="eyebrow"><span class="dot"></span>그밖에, 필요해서 만든 것들</div>
@@ -782,7 +782,7 @@ kbd{
         <h3>롤링페이퍼</h3>
         <p>전학 가는 친구를 위해 몰래 하려고, ‘학교 만족도 조사’라고 하고 그 친구만 빼고 돌렸습니다.</p>
       </div>
-      <div class="card tint-gray" style="background:var(--tint-gray);border-color:#e0dcd7">
+      <div class="card tint-gray">
         <div class="ic">📄</div>
         <h3>PDF 도구</h3>
         <p>병합하고 분할하는 도구입니다. 파일이 밖으로 나가지 않습니다.</p>
@@ -802,7 +802,7 @@ kbd{
     <p class="small" style="margin-top:14px">솔직히 <b>고쳐야 하는 것도 많고, 오랫동안 안 고쳐진 것도 꽤 있습니다.</b></p>
   </section>
 
-  <!-- ══════════ 15 · 무엇이 가능하게 했나 ══════════ -->
+  <!-- ══════════ 17 · 무엇이 가능하게 했나 ══════════ -->
   <section class="slide dark-slide" data-dark data-name="무엇이 이걸 가능하게 했나"
     data-note="정리입니다. 제가 이렇게 할 수 있었던 건 세 가지 때문입니다. 첫째 <b>시간</b>이 많았고, 둘째 <b>아이디어</b>가 있었고, 그리고 <b>가장 중요한 건 토큰이 있었기 때문</b>입니다. 이 세 번째를 빼면 나머지는 실현되지 않았을 겁니다.">
     <div class="eyebrow"><span class="dot"></span>정리 · 무엇이 이걸 가능하게 했나</div>
@@ -826,7 +826,7 @@ kbd{
     </div>
   </section>
 
-  <!-- ══════════ 16 · 가장 경계하는 것 ══════════ -->
+  <!-- ══════════ 18 · 가장 경계하는 것 ══════════ -->
   <section class="slide closing" data-dark data-name="가장 경계하는 것"
     data-note="마지막입니다. 제가 <b>가장 경계하는 것은, AI가 만든 산출물을 제가 했다고 자만하는 것</b>입니다. 그래서 요즘은 질문 유발 자료나 수업 도입에 쓸 실험을 준비할 때, 오히려 <b>교과 내용과 과학사 공부</b>를 정말 많이 하고 있습니다. AI를 쓰는 것보다요. — 이상으로 발표를 마치겠습니다. 감사합니다.">
     <div class="dots">
@@ -847,7 +847,7 @@ kbd{
 
   <!-- ══════════ 크롬 ══════════ -->
   <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>A</kbd> 학생 말 전문 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
-  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">15:00</div>
+  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">30:00</div>
 
   <div id="chrome">
     <div class="left" id="stageName">표지</div>
@@ -978,9 +978,9 @@ kbd{
     ovGrid.appendChild(b);
   });
 
-  /* 발표 타이머 — 기본 15분, 주소에 ?min=30 처럼 붙이면 그 시간으로 */
+  /* 발표 타이머 — 기본 30분, 주소에 ?min=15 처럼 붙이면 그 시간으로 */
   var qMin = parseInt((location.search.match(/[?&]min=(\d+)/) || [])[1], 10);
-  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 15) * 60, left = TOTAL, tick = null;
+  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 30) * 60, left = TOTAL, tick = null;
   var tEl = document.getElementById('timer');
   function paint(){
     var neg = left < 0, v = Math.abs(left);
