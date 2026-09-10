@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 테크니션 오프닝 보드</title>
+<style>
+:root{
+  --pri:#2F6BFF; --pri2:#1F54D6; --bg:#F3F5F9; --card:#fff; --line:#E3E7EF;
+  --tx:#1F2735; --tx2:#5B6472; --tx3:#8A93A2; --coffee:#8C5A2B; --coffeebg:#F5EBDF;
+  --ok:#16A34A; --warn:#C43E1C;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;
+  font-family:'Segoe UI',Pretendard,-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}
+.mono{font-family:Consolas,'Cascadia Mono',monospace}
+button{font:inherit;cursor:pointer}
+
+.topbar{background:#1B3A5F;color:#fff;padding:12px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar .sym{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2F6BFF,#55C1E8);
+  display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none}
+.topbar b{font-size:15.5px;letter-spacing:-.2px}
+.topbar .tag{background:#C43E1C;border-radius:4px;font-size:11px;font-weight:700;padding:2px 8px}
+.topbar .sp{flex:1}
+.topbar .st{font-size:12px;opacity:.85}
+
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+.wrap.board{max-width:1500px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px;margin-bottom:14px}
+h1{margin:4px 0 6px;font-size:21px;letter-spacing:-.4px}
+.sub{color:var(--tx2);font-size:13px;margin:0 0 4px}
+.fld{margin:14px 0}
+.fld label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.fld .hint{font-weight:400;color:var(--tx3);font-size:12px}
+.fld input[type=text],.fld input[type=number],.fld select{width:100%;height:46px;border:1.5px solid #CBD3E0;
+  border-radius:10px;padding:0 12px;font-size:15px;background:#fff}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{border:1.5px solid #CBD3E0;border-radius:10px;padding:10px 8px;text-align:center;font-size:13.5px;
+  background:#fff;color:var(--tx2)}
+.opt.on{border-color:var(--pri);background:#EEF3FF;color:var(--pri);font-weight:700}
+.go{width:100%;height:50px;border:0;border-radius:11px;background:var(--pri);color:#fff;font-weight:800;font-size:16px;margin-top:6px}
+.coffee{background:var(--coffeebg);border:1px solid #E4D2BC;border-radius:12px;padding:14px}
+.coffee b{color:var(--coffee)}
+.done{text-align:center;padding:30px 10px}
+.done .big{font-size:52px}
+.note-mini{color:var(--tx3);font-size:12px;text-align:center;margin-top:10px}
+.err{background:#FDECEC;border:1px solid #F2C4C4;color:#A33;border-radius:10px;padding:10px 12px;
+  font-size:13px;margin-bottom:12px;display:none}
+.err.on{display:block}
+
+/* ── 보드 ── */
+.bgrid{display:grid;grid-template-columns:340px 1fr 380px;gap:14px;align-items:start}
+@media(max-width:1100px){.bgrid{grid-template-columns:1fr}}
+.qrbox{text-align:center}
+.qrbox img{width:250px;height:250px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
+.qrbox .url{font-size:13px;color:var(--tx2);margin-top:8px;word-break:break-all}
+.bignum{font-size:44px;font-weight:800;letter-spacing:-1px}
+.bignum small{font-size:15px;color:var(--tx3);font-weight:600}
+.bar-row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:14px}
+.bar-row .lb{flex:0 0 120px;text-align:right;color:var(--tx2);font-weight:700;font-size:13px}
+.bar-row .tr{flex:1;background:#EDF0F6;border-radius:999px;height:22px;overflow:hidden}
+.bar-row .tr i{display:block;height:100%;background:var(--pri);border-radius:999px;min-width:4px;transition:width .5s}
+.bar-row .n{flex:0 0 34px;font-weight:800}
+.hopes{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:520px;overflow:auto}
+@media(max-width:1100px){.hopes{grid-template-columns:1fr 1fr 1fr}}
+.hope{background:#fff;border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:10px;
+  padding:10px 12px;font-size:13.5px}
+.hope .who{color:var(--tx3);font-size:11.5px;font-weight:700;margin-bottom:2px}
+.guessline{display:flex;align-items:flex-end;gap:3px;height:110px;margin:12px 0 4px}
+.guessline .gcol{flex:1;background:#D9E3FA;border-radius:4px 4px 0 0;position:relative;min-width:6px}
+.guessline .gcol.hot{background:var(--pri)}
+.gaxis{display:flex;justify-content:space-between;color:var(--tx3);font-size:11px}
+.reveal-btn{width:100%;height:48px;border:0;border-radius:11px;background:var(--coffee);color:#fff;font-weight:800;font-size:15px}
+.answer{display:none;text-align:center;padding:14px 8px 4px}
+.answer.on{display:block}
+.answer .a{font-size:56px;font-weight:900;color:var(--coffee);letter-spacing:-1px}
+.winner{margin-top:8px;font-size:15px}
+.winner b{background:#FFF3C9;border-radius:6px;padding:2px 8px}
+.teaser{margin-top:10px;background:#EEF3FF;border:1px solid #CBDCFF;color:#234C9A;border-radius:10px;
+  padding:10px 12px;font-size:13.5px;text-align:left}
+footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;
+  font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="sym">SEN</span><b>디벗 전문가[테크니션] 직무연수 — 오프닝 보드</b>
+  <span class="tag">윈도우 Admin · MDM</span>
+  <span class="sp"></span><span class="st" id="connSt">·</span>
+</div>
+
+<div class="wrap" id="viewWrite">
+  <div class="err" id="errW">서버 연결이 안 됩니다 — 잠시 후 다시 제출해 주세요.</div>
+  <div class="card">
+    <h1>예비 강사님, 환영합니다 👋</h1>
+    <p class="sub">30초면 됩니다. 답은 앞 화면 보드에 실시간으로 모입니다(별명만 표시, 익명).</p>
+    <div class="fld">
+      <label>별명 <span class="hint">— 커피 당첨자 확인용, 실명 말고 별명으로!</span></label>
+      <input type="text" id="fNick" maxlength="10" placeholder="예: 윈도우요정">
+    </div>
+    <div class="fld">
+      <label>디벗 업무, 얼마나 해보셨나요?</label>
+      <div class="opts" id="fCareer">
+        <button class="opt" data-v="올해 처음">올해 처음</button>
+        <button class="opt" data-v="1년차">1년차</button>
+        <button class="opt" data-v="2~3년차">2~3년차</button>
+        <button class="opt" data-v="이미 강사급">이미 강사급 🔥</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label>강사가 되면, 선생님들께 <u>제일 먼저</u> 알려주고 싶은 것 한 가지?</label>
+      <input type="text" id="fHope" maxlength="60" placeholder="예: 암호 초기화 40명씩 하는 법">
+    </div>
+    <div class="coffee">
+      <b>☕ 커피 내기 퀴즈</b>
+      <div style="font-size:13.5px;margin:4px 0 8px">강사(조승재)네 학교 <b>MDM에 등록된 디벗</b>은 모두 몇 대일까요? <span class="hint">가장 가깝게 맞힌 분께 커피!</span></div>
+      <input type="number" id="fGuess" min="0" max="9999" placeholder="숫자만 (예: 500)">
+    </div>
+    <button class="go" id="btnSubmit">제출하기</button>
+    <div class="note-mini">개인정보는 수집하지 않습니다 · 별명·응답만 저장됩니다</div>
+  </div>
+  <div class="card done" id="doneBox" style="display:none">
+    <div class="big">☕</div>
+    <h1>접수 완료!</h1>
+    <p class="sub" id="doneMsg"></p>
+    <p class="sub">정답은 강의 중에 공개됩니다 — 앞 화면을 봐 주세요.</p>
+  </div>
+</div>
+
+<div class="wrap board" id="viewBoard" style="display:none">
+  <div class="err" id="errB">서버 연결 대기 중 — Supabase SETUP SQL이 실행되어 있는지 확인하세요.</div>
+  <div class="bgrid">
+    <div>
+      <div class="card qrbox">
+        <h1 style="font-size:17px">📱 접속해 주세요</h1>
+        <img id="qrImg" alt="QR">
+        <div class="url" id="urlTxt"></div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="sub">지금까지 참여</div>
+        <div class="bignum"><span id="cnt">0</span><small> 명</small></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h1 style="font-size:17px">디벗 업무 경력</h1>
+        <div id="careerBars"></div>
+      </div>
+      <div class="card">
+        <h1 style="font-size:17px">강사가 되면 제일 먼저 알려주고 싶은 것</h1>
+        <div class="hopes" id="hopeCards"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h1 style="font-size:17px">☕ 우리 학교 MDM 디벗은 몇 대?</h1>
+        <p class="sub">제출된 예상값 분포 · 평균 <b id="gAvg">-</b>대</p>
+        <div class="guessline" id="gBars"></div>
+        <div class="gaxis"><span>0</span><span>500</span><span>1000</span><span>1500+</span></div>
+        <button class="reveal-btn" id="btnReveal">☕ 정답 공개 (강사용)</button>
+        <div class="answer" id="ansBox">
+          <div class="a">1,008<span style="font-size:20px">대</span></div>
+          <div class="winner" id="winnerLine"></div>
+          <div class="teaser">그런데 <b>디벗 관리 시스템(DBS)</b>에는 우리 학교가 <b>760대</b>로 나옵니다.
+          같은 학교인데 왜 두 숫자가 다를까요? — 답은 오늘 강의 안에 있습니다. 🎯</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 오프닝 보드<br>
+<span style="font-size:11px;opacity:.85;">응답은 익명(별명)으로 수집되며 연수 진행에만 사용됩니다 · 최종 업데이트: 2026-09-10</span></footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+var SB_URL="https://vbvtnmnodeoocbbjauap.supabase.co";
+var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
+var TBL="dibut_open26", ANSWER=1008;
+var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json"};
+
+var isBoard=/[?&]mode=board/.test(location.search);
+if(isBoard){$("#viewWrite").style.display="none";$("#viewBoard").style.display="block";}
+
+/* ───── 입력 모드 ───── */
+var career="";
+$("#fCareer").addEventListener("click",function(e){
+  var b=e.target.closest(".opt");if(!b)return;
+  career=b.getAttribute("data-v");
+  document.querySelectorAll("#fCareer .opt").forEach(function(x){x.classList.toggle("on",x===b);});
+});
+$("#btnSubmit").addEventListener("click",function(){
+  var nick=($("#fNick").value||"").trim();
+  var hope=($("#fHope").value||"").trim();
+  var guess=parseInt($("#fGuess").value,10);
+  if(!nick){alert("별명을 적어 주세요! (커피 받으셔야죠 ☕)");return;}
+  if(!career){alert("디벗 업무 경력을 골라 주세요.");return;}
+  if(isNaN(guess)){alert("커피 퀴즈 숫자를 넣어 주세요!");return;}
+  $("#btnSubmit").disabled=true;$("#btnSubmit").textContent="제출 중…";
+  fetch(SB_URL+"/rest/v1/"+TBL,{method:"POST",headers:H,
+    body:JSON.stringify({nick:nick,career:career,hope:hope,guess:guess})})
+  .then(function(r){
+    if(!r.ok)throw new Error(r.status);
+    $("#viewWrite").querySelector(".card").style.display="none";
+    $("#doneBox").style.display="block";
+    $("#doneMsg").textContent=nick+" 님의 예상: "+guess.toLocaleString()+"대";
+  })
+  .catch(function(){
+    $("#errW").classList.add("on");
+    $("#btnSubmit").disabled=false;$("#btnSubmit").textContent="제출하기";
+  });
+});
+
+/* ───── 보드 모드 ───── */
+var CAREERS=["올해 처음","1년차","2~3년차","이미 강사급"];
+var revealed=false, rows=[];
+function todayKST(){
+  var n=new Date(Date.now()+9*3600*1000);
+  return n.toISOString().slice(0,10);
+}
+function fetchRows(){
+  fetch(SB_URL+"/rest/v1/"+TBL+"?select=nick,career,hope,guess,created_at&order=created_at.desc&limit=300",{headers:H})
+  .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+  .then(function(js){
+    var td=todayKST();
+    rows=js.filter(function(x){return String(x.created_at||"").slice(0,10)>=td;});
+    $("#errB").classList.remove("on");$("#connSt").textContent="● 실시간 연결";
+    paint();
+  })
+  .catch(function(){$("#errB").classList.add("on");$("#connSt").textContent="○ 연결 안 됨";});
+}
+function paint(){
+  $("#cnt").textContent=rows.length;
+  var mx=1;
+  var cc=CAREERS.map(function(c){var n=rows.filter(function(r){return r.career===c;}).length;mx=Math.max(mx,n);return n;});
+  $("#careerBars").innerHTML=CAREERS.map(function(c,i){
+    return '<div class="bar-row"><span class="lb">'+esc(c)+'</span><span class="tr"><i style="width:'+(cc[i]/mx*100)+'%"></i></span><span class="n">'+cc[i]+"</span></div>";
+  }).join("");
+  $("#hopeCards").innerHTML=rows.filter(function(r){return r.hope;}).slice(0,40).map(function(r){
+    return '<div class="hope"><div class="who">'+esc(r.nick)+" · "+esc(r.career)+"</div>"+esc(r.hope)+"</div>";
+  }).join("")||'<div class="sub">아직 응답이 없습니다 — QR로 접속해 주세요!</div>';
+  var gs=rows.map(function(r){return r.guess;}).filter(function(g){return typeof g==="number";});
+  $("#gAvg").textContent=gs.length?Math.round(gs.reduce(function(a,b){return a+b;},0)/gs.length).toLocaleString():"-";
+  var BIN=15,bins=Array(BIN).fill(0);
+  gs.forEach(function(g){var i=Math.min(BIN-1,Math.floor(g/1500*BIN));bins[Math.max(0,i)]++;});
+  var bm=Math.max.apply(null,bins.concat([1]));
+  var ansBin=Math.min(BIN-1,Math.floor(ANSWER/1500*BIN));
+  $("#gBars").innerHTML=bins.map(function(n,i){
+    return '<div class="gcol'+((revealed&&i===ansBin)?" hot":"")+'" style="height:'+(n/bm*100)+'%" title="'+n+'명"></div>';
+  }).join("");
+  if(revealed){
+    var best=rows.slice().filter(function(r){return typeof r.guess==="number";})
+      .sort(function(a,b){return Math.abs(a.guess-ANSWER)-Math.abs(b.guess-ANSWER);}).slice(0,2);
+    $("#winnerLine").innerHTML=best.length
+      ?"☕ 가장 근접: "+best.map(function(b){return "<b>"+esc(b.nick)+"</b> ("+b.guess.toLocaleString()+"대)";}).join(" · ")
+      :"제출된 예상이 없습니다.";
+  }
+}
+if(isBoard){
+  var writeUrl=location.origin+location.pathname;
+  $("#urlTxt").textContent=writeUrl.replace(/^https?:\/\//,"");
+  $("#qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=460x460&data="+encodeURIComponent(writeUrl);
+  $("#btnReveal").addEventListener("click",function(){
+    revealed=true;$("#ansBox").classList.add("on");$("#btnReveal").style.display="none";paint();
+  });
+  fetchRows();setInterval(fetchRows,2500);
+}
+})();
+</script>
+</body>
+</html>
