@@ -435,13 +435,29 @@ function pgAS(){
   AS.map(function(a,i){
     return '<tr class="click" data-as="'+i+'"><td>'+a.no+"</td><td>"+a.req+"</td><td>"+a.acc+"</td><td>"+a.gen+"</td><td>"+chip(a.st)+"</td><td>"+esc(a.mgr)+"</td><td>[강동송파] 디벗중학교</td><td>"+esc(mask(a.stu))+"</td><td>"+(S.masked?"*/**/*":a.cls)+"</td><td>"+a.os+'</td><td class="mono">'+a.sn+'</td><td>▦</td><td>'+esc(mask(a.who))+"</td><td>"+esc(a.trouble)+"</td><td>-</td><td>"+(a.st==="완료"?"보기":"")+"</td></tr>";
   }).join("")+"</tbody></table></div>"+
-  '<div style="display:flex;gap:8px;align-items:center;margin-top:10px"><button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button><button class="btn" data-nope="엑셀 다운로드(콜센터완료포함)">엑셀 다운로드(콜센터완료포함) ⭳</button><span style="color:var(--tx3);font-size:12.5px;margin-left:auto">전체 8건</span></div></div>';
+  '<div style="display:flex;gap:8px;align-items:center;margin-top:10px"><button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button><button class="btn" data-nope="엑셀 다운로드(콜센터완료포함)">엑셀 다운로드(콜센터완료포함) ⭳</button><span style="color:var(--tx3);font-size:12.5px;margin-left:auto">전체 8건</span></div></div>'+costCard();
 }
 
+function costCard(){
+ /* 근거: 디벗 수리비 지원 기준 변경 계획(창의미래교육과-4523, 2026.3.20.) + 통합 유지보수 안내(-4746, 2026.3.24.) */
+ return '<div class="card"><b style="font-size:15.5px">💰 수리비, 누가 얼마나 내나요? <span style="font-weight:400;color:var(--tx3);font-size:12px">— 2026 변경 기준(교육청 공문 요약)</span></b>'+
+  '<div class="tbl-wrap" style="margin-top:10px"><table class="tb"><thead><tr><th style="width:90px">구분</th><th>내용</th><th style="width:190px">사용자(학부모) 부담</th></tr></thead><tbody>'+
+  '<tr><td rowspan="4"><span class="chip c-recv"><i></i>무상</span></td><td style="text-align:left">물리적 충격·침수 없이 발생한 고장 / OS 초기화·재설치 등 소프트웨어 기술지원</td><td><b>0원</b></td></tr>'+
+  '<tr><td style="text-align:left"><b>4~6년 차 본체</b> 유상 수리 <b>최초 1회 면제</b> <span style="color:var(--tx3)">(고의·심한 부주의 제외 · ’25.9.23.부터)</span></td><td><b>0원</b> (1회)</td></tr>'+
+  '<tr><td style="text-align:left">과실 없이 전원이 안 켜지는 본체 고장의 <b>메인보드·배터리 교체</b> <span style="color:var(--tx3)">(’22·’23년 보급분)</span></td><td><b>0원</b></td></tr>'+
+  '<tr><td style="text-align:left"><b>[신규] 6년 차</b>: 수업 지장 + 학교 예비기기 소진 시 학교가 수리 신청 <span style="color:var(--tx3)">(’22년 기기는 ’27.3.1.부터)</span></td><td><b>0원</b></td></tr>'+
+  '<tr><td rowspan="3"><span class="chip c-in"><i></i>유상</span></td><td style="text-align:left">파손·침수 수리 (본체·전용펜 동일)</td><td>수리비의 <b>20%</b> · 최대 <b>4만 원</b></td></tr>'+
+  '<tr><td style="text-align:left">도난·분실 재구입 — 연차별 감가 적용<br><span style="color:var(--tx2)">1년차 90% → 2년차 80% → 3년차 70% → 4년차 50% → 5년차 30% → 6년차 10%</span> <span style="color:var(--tx3)">(취약계층 1~3년차 50%)</span></td><td>구입비 × 감가율</td></tr>'+
+  '<tr><td style="text-align:left">전용펜 도난·분실 재구입</td><td>구입비의 <b>90%</b></td></tr>'+
+  '</tbody></table></div>'+
+  '<div class="note-r" style="margin-top:10px">※ <b>수리 요청 기준 정립</b> — 기능 작동·수업 활용에 문제없는 가벼운 파손(외관 찍힘·긁힘 등)은 <b>수리 없이 사용</b>이 원칙이며, 기준 미달 건은 접수가 제한됩니다. 6년 차 기기는 수리 대신 학교 예비기기를 우선 활용합니다.</div>'+
+  '<div class="note-b" style="margin-top:8px">사용 연차(2026학년도 기준): ’22년 보급=5년 차 · ’23년=4년 차 · ’24년=3년 차 · ’25년=2년 차 · ’26년=1년 차 — 취약계층은 수리 자부담금 1회 면제가 별도로 있습니다.</div></div>';
+}
 function pgUnsettled(){
  return '<div class="card"><b style="font-size:16px">총 미정산 금액: 0원</b></div>'+
   '<div class="card"><div class="tbl-wrap"><table class="tb"><thead><tr><th>연번</th><th>[지원청]학교명</th><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>부담금 청구일</th><th>부담금</th><th>지연일</th></tr></thead></table></div>'+
-  emptyBox()+'<button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button></div>';
+  emptyBox()+'<button class="btn" data-nope="엑셀 다운로드">엑셀 다운로드 ⭳</button>'+
+  '<div class="note-b" style="margin-top:10px">여기 뜨는 <b>부담금</b>이 유상 수리의 사용자 부담분입니다 — 파손·침수는 수리비의 <b>20%(최대 4만 원)</b>, 도난·분실 재구입은 연차별 감가(90→80→70→50→30→10%). 자세한 기준은 [AS 관리] 아래 수리비 표를 보세요.</div></div>';
 }
 function pgUnreturned(){
  return '<div class="card" style="background:#FFF6DD;border-color:#F0DFA0"><div style="display:flex;gap:12px;align-items:center">'+
@@ -578,7 +594,11 @@ function popAsDetail(i){
   (a.fin?"<tr><td>수리 완료일</td><td><b>"+a.fin+"</b></td></tr>"
         :"<tr><td>완료 예정</td><td><b>"+esc(a.due||"확인 중")+"</b></td></tr>")+
   "</table>"+
-  '<div class="note-b">“내 디벗 언제 와요?”라는 질문에는 이 화면의 진행 단계와 완료(예정)일로 답하면 됩니다.</div></div>'+
+  '<div class="note-b">“내 디벗 언제 와요?”라는 질문에는 이 화면의 진행 단계와 완료(예정)일로 답하면 됩니다.</div>'+
+  (a.trouble.indexOf("하드웨어")===0
+    ?'<div class="note-r" style="margin-top:8px">💰 파손·침수 수리는 사용자 부담 <b>수리비의 20%(최대 4만 원)</b> — 단, 4~6년 차 본체는 최초 1회 면제(’25.9.23.부터).</div>'
+    :'<div class="note-b" style="margin-top:8px">💰 소프트웨어 기술지원(OS 초기화·재설치 등)과 물리적 충격 없는 고장은 <b>무상</b>입니다.</div>')+
+  '</div>'+
   '<div class="ft"><button class="btn pri" data-close>확인</button></div>');
  if(a.st!=="완료")done("d1");
 }
