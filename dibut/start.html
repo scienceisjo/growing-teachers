@@ -116,8 +116,8 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
     </div>
     <div class="coffee">
       <b>☕ 커피 내기 퀴즈</b>
-      <div style="font-size:13.5px;margin:4px 0 8px">강사(조승재)네 학교 <b>MDM에 등록된 디벗</b>은 모두 몇 대일까요? <span class="hint">가장 가깝게 맞힌 분께 커피!</span></div>
-      <input type="number" id="fGuess" min="0" max="9999" placeholder="숫자만 (예: 500)"
+      <div style="font-size:13.5px;margin:4px 0 8px">강사(조승재)네 학교 디벗, <b>올해 수리 요청</b>은 모두 몇 건일까요? <span class="hint">(3월~지금 접수 누적 · 가장 가깝게 맞힌 분께 커피!)</span></div>
+      <input type="number" id="fGuess" min="0" max="9999" placeholder="숫자만 (예: 80)"
         style="width:100%;height:46px;border:1.5px solid #D8C5AB;border-radius:10px;padding:0 12px;font-size:15px;background:#fff">
     </div>
     <button class="go" id="btnSubmit">제출하기</button>
@@ -157,16 +157,17 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
     </div>
     <div>
       <div class="card">
-        <h1 style="font-size:17px">☕ 우리 학교 MDM 디벗은 몇 대?</h1>
-        <p class="sub">제출된 예상값 분포 · 평균 <b id="gAvg">-</b>대</p>
+        <h1 style="font-size:17px">☕ 올해 우리 학교 수리 요청은 몇 건?</h1>
+        <p class="sub">제출된 예상값 분포 · 평균 <b id="gAvg">-</b>건</p>
         <div class="guessline" id="gBars"></div>
-        <div class="gaxis"><span>0</span><span>500</span><span>1000</span><span>1500+</span></div>
+        <div class="gaxis"><span>0</span><span>250</span><span>500+</span></div>
         <button class="reveal-btn" id="btnReveal">☕ 정답 공개 (강사용)</button>
         <div class="answer" id="ansBox">
-          <div class="a">1,008<span style="font-size:20px">대</span></div>
+          <div class="a"><span id="ansNum">207</span><span style="font-size:20px">건</span></div>
           <div class="winner" id="winnerLine"></div>
-          <div class="teaser">그런데 <b>디벗 관리 시스템(DBS)</b>에는 우리 학교가 <b>760대</b>로 나옵니다.
-          같은 학교인데 왜 두 숫자가 다를까요? — 답은 오늘 강의 안에 있습니다. 🎯</div>
+          <div class="teaser">한 달에 서른 건꼴입니다. 무엇이 고장 나서 올까요? — 1위는 <b>화면(액정) 파손</b>,
+          그다음이 전원 안 켜짐·블루스크린·앱 실행 불가·계정 문제. 이 207건이 모이는 화면과
+          <b>접수하는 법(원클릭 접수)</b>을 오늘 직접 눌러봅니다. 🎯</div>
         </div>
       </div>
     </div>
@@ -183,7 +184,9 @@ var $=function(s){return document.querySelector(s);};
 function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 var SB_URL="https://vbvtnmnodeoocbbjauap.supabase.co";
 var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
-var TBL="dibut_open26", ANSWER=1008;
+var TBL="dibut_open26";
+/* 정답 = 올해 수리 요청 누적(DBS AS 관리 '전체 n건'). 당일 확정치가 다르면 주소에 &ans=숫자 로 덮어쓰기 */
+var ANSWER=(function(){var m=location.search.match(/[?&]ans=(\d+)/);return m?parseInt(m[1],10):207;})();
 var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json"};
 
 var isBoard=/[?&]mode=board/.test(location.search);
@@ -210,7 +213,7 @@ $("#btnSubmit").addEventListener("click",function(){
     if(!r.ok)throw new Error(r.status);
     $("#viewWrite").querySelector(".card").style.display="none";
     $("#doneBox").style.display="block";
-    $("#doneMsg").textContent=nick+" 님의 예상: "+guess.toLocaleString()+"대";
+    $("#doneMsg").textContent=nick+" 님의 예상: "+guess.toLocaleString()+"건";
   })
   .catch(function(){
     $("#errW").classList.add("on");
@@ -248,10 +251,10 @@ function paint(){
   }).join("")||'<div class="sub">아직 응답이 없습니다 — QR로 접속해 주세요!</div>';
   var gs=rows.map(function(r){return r.guess;}).filter(function(g){return typeof g==="number";});
   $("#gAvg").textContent=gs.length?Math.round(gs.reduce(function(a,b){return a+b;},0)/gs.length).toLocaleString():"-";
-  var BIN=15,bins=Array(BIN).fill(0);
-  gs.forEach(function(g){var i=Math.min(BIN-1,Math.floor(g/1500*BIN));bins[Math.max(0,i)]++;});
+  var BIN=15,MAXG=500,bins=Array(BIN).fill(0);
+  gs.forEach(function(g){var i=Math.min(BIN-1,Math.floor(g/MAXG*BIN));bins[Math.max(0,i)]++;});
   var bm=Math.max.apply(null,bins.concat([1]));
-  var ansBin=Math.min(BIN-1,Math.floor(ANSWER/1500*BIN));
+  var ansBin=Math.min(BIN-1,Math.floor(ANSWER/MAXG*BIN));
   $("#gBars").innerHTML=bins.map(function(n,i){
     return '<div class="gcol'+((revealed&&i===ansBin)?" hot":"")+'" style="height:'+(n/bm*100)+'%" title="'+n+'명"></div>';
   }).join("");
@@ -259,7 +262,7 @@ function paint(){
     var best=rows.slice().filter(function(r){return typeof r.guess==="number";})
       .sort(function(a,b){return Math.abs(a.guess-ANSWER)-Math.abs(b.guess-ANSWER);}).slice(0,2);
     $("#winnerLine").innerHTML=best.length
-      ?"☕ 가장 근접: "+best.map(function(b){return "<b>"+esc(b.nick)+"</b> ("+b.guess.toLocaleString()+"대)";}).join(" · ")
+      ?"☕ 가장 근접: "+best.map(function(b){return "<b>"+esc(b.nick)+"</b> ("+b.guess.toLocaleString()+"건)";}).join(" · ")
       :"제출된 예상이 없습니다.";
   }
 }
@@ -267,6 +270,7 @@ if(isBoard){
   var writeUrl=location.origin+location.pathname;
   $("#urlTxt").textContent=writeUrl.replace(/^https?:\/\//,"");
   $("#qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=460x460&data="+encodeURIComponent(writeUrl);
+  $("#ansNum").textContent=ANSWER.toLocaleString();
   $("#btnReveal").addEventListener("click",function(){
     revealed=true;$("#ansBox").classList.add("on");$("#btnReveal").style.display="none";paint();
   });
