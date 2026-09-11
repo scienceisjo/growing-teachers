@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPT 대신 링크 하나 — SENEDU로 시작하는 바이브코딩</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#f5f6fa; --card:#ffffff; --line:#e5e8f0; --ink:#1b2430; --sub:#5b667a;
+  --acc:#4650e5; --acc-soft:#eef0ff; --acc-line:#c9cdf7;
+  --ok:#0f9d6a; --ok-soft:#e8f7f0; --warn:#b45309; --warn-soft:#fff7e8; --danger:#d43d3d; --danger-soft:#fdeeee;
+  --code-bg:#101828; --code-ink:#e6ebf5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 80px}
+
+/* ── header ── */
+header{padding:46px 0 8px}
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.badge{font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.badge.ghost{background:#fff;color:var(--sub);border-color:var(--line)}
+h1{font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.25}
+h1 .accent{color:var(--acc)}
+.lede{margin-top:12px;font-size:16px;color:var(--sub);max-width:720px}
+.recursive{margin-top:18px;display:inline-flex;align-items:center;gap:10px;background:#111a2e;color:#fff;border-radius:14px;padding:12px 18px;font-size:14.5px;font-weight:600}
+.recursive .dot{width:9px;height:9px;border-radius:50%;background:#4ade80;flex:none;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ── nav ── */
+nav{position:sticky;top:0;z-index:50;background:rgba(245,246,250,.92);backdrop-filter:blur(8px);padding:14px 0 10px;margin-top:26px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}
+.tab-btn{border:1px solid var(--line);background:#fff;color:var(--sub);font-family:inherit;font-size:13.5px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.15s}
+.tab-btn:hover{border-color:var(--acc-line);color:var(--acc)}
+.tab-btn.on{background:var(--acc);border-color:var(--acc);color:#fff}
+
+/* ── sections ── */
+section{display:none;padding-top:30px}
+section.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2 .no{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:var(--acc);color:#fff;font-size:15px;margin-right:10px;vertical-align:-4px}
+.sect-sub{color:var(--sub);font-size:14.5px;margin-bottom:22px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.card p{font-size:14px;color:var(--sub)}
+.card .big{font-size:15px;color:var(--ink)}
+.note{border-radius:14px;padding:14px 18px;font-size:14px;margin-top:14px;border:1px solid}
+.note.ok{background:var(--ok-soft);border-color:#bfe6d6;color:#0b6b49}
+.note.warn{background:var(--warn-soft);border-color:#f2ddb0;color:var(--warn)}
+.note.danger{background:var(--danger-soft);border-color:#f2c4c4;color:#a12f2f}
+.note b{font-weight:800}
+
+/* steps */
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.step{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;align-items:flex-start}
+.step .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.step b{font-size:15px}
+.step p{font-size:13.5px;color:var(--sub);margin-top:3px}
+.step .kbd{display:inline-block;background:#f1f3f9;border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:12.5px;font-weight:700;color:var(--ink)}
+
+/* flow diagram */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;margin-top:16px}
+.flow .f{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.flow .f .ico{font-size:26px}
+.flow .f b{display:block;font-size:14.5px;margin-top:6px}
+.flow .f span{font-size:12.5px;color:var(--sub)}
+.flow .arr{align-self:center;color:#aeb6c8;font-size:18px;font-weight:800}
+@media(max-width:760px){.flow{flex-direction:column}.flow .arr{transform:rotate(90deg);align-self:center}}
+
+/* code / prompt blocks */
+.codeblock{position:relative;margin-top:14px}
+.codeblock pre{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:18px 18px 16px;font-size:13px;line-height:1.6;overflow-x:auto;white-space:pre-wrap;font-family:'Pretendard',sans-serif}
+.codeblock pre.mono{font-family:Consolas,'Courier New',monospace;white-space:pre;font-size:12px}
+.codeblock .label{position:absolute;top:-9px;left:16px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:800;padding:2px 10px;border-radius:999px}
+.copy-btn{position:absolute;top:10px;right:10px;background:#232f47;color:#cdd6e8;border:1px solid #35435f;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;cursor:pointer;transition:.15s}
+.copy-btn:hover{background:#2d3b58}
+.copy-btn.done{background:var(--ok);border-color:var(--ok);color:#fff}
+
+/* fix-dictionary cards */
+.fix-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media(max-width:760px){.fix-grid{grid-template-columns:1fr}}
+.fix{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.fix h4{font-size:14px;font-weight:800;margin-bottom:8px}
+.fix h4 .tag{font-size:11px;background:var(--acc-soft);color:var(--acc);border-radius:999px;padding:2px 9px;margin-right:6px;vertical-align:1px}
+.fix .codeblock{margin-top:8px}
+.fix pre{padding:13px 14px;font-size:12.5px}
+
+/* timetable */
+table{width:100%;border-collapse:collapse;margin-top:14px;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+th{background:#f0f2f8;font-size:13px;color:var(--sub);text-align:left;padding:10px 16px;font-weight:800}
+td{padding:12px 16px;font-size:13.5px;border-top:1px solid var(--line);vertical-align:top}
+td .t{font-weight:800;color:var(--acc);white-space:nowrap;font-family:Consolas,monospace;font-size:12.5px}
+td small{color:var(--sub);display:block;margin-top:2px}
+
+/* checklist */
+.check{list-style:none;margin-top:12px}
+.check li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 16px;font-size:14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.check li::before{content:"☐";color:var(--acc);font-weight:800}
+
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:14px}
+summary{font-weight:800;font-size:15px;cursor:pointer;color:var(--acc)}
+details[open] summary{margin-bottom:10px}
+
+.link-card{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-decoration:none;color:inherit;transition:.15s;margin-top:10px}
+.link-card:hover{border-color:var(--acc-line);transform:translateY(-1px)}
+.link-card .ico{font-size:24px}
+.link-card b{font-size:14.5px;display:block}
+.link-card span{font-size:12.5px;color:var(--sub)}
+
+/* floating helper */
+#helperFab{position:fixed;right:22px;bottom:22px;z-index:90;background:var(--acc);color:#fff;border:none;border-radius:999px;font-family:inherit;font-size:14.5px;font-weight:800;padding:14px 22px;cursor:pointer;box-shadow:0 8px 24px rgba(70,80,229,.35);transition:.15s}
+#helperFab:hover{transform:translateY(-2px)}
+#helperOv{position:fixed;inset:0;z-index:100;background:rgba(15,20,35,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+#helperOv[hidden]{display:none!important}
+.helper{background:#fff;border-radius:20px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;padding:26px 28px}
+.helper h3{font-size:18px;font-weight:800}
+.helper .hint{font-size:13px;color:var(--sub);margin:6px 0 12px}
+.helper textarea{width:100%;height:200px;border:1.5px solid var(--line);border-radius:14px;padding:14px;font-family:Consolas,monospace;font-size:12px;resize:vertical;background:#fafbfe}
+.helper textarea:focus{outline:none;border-color:var(--acc)}
+.helper .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.helper input[type=text]{flex:1;min-width:160px;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;font-family:inherit;font-size:14px}
+.btn{border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:800;padding:11px 18px;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--acc);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:#fff;color:var(--sub);border:1.5px solid var(--line)}
+.btn.ghost:hover{color:var(--acc);border-color:var(--acc-line)}
+.btn.green{background:var(--ok);color:#fff}
+#helperMsg{font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
+#helperMsg.ok{color:var(--ok)} #helperMsg.bad{color:var(--danger)}
+
+footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--line);text-align:center;font-size:12.5px;color:#9aa3b5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="badge-row">
+    <span class="badge">디지털 역량 연수</span>
+    <span class="badge ghost">90분 · 실습 중심</span>
+    <span class="badge ghost">준비물: SEN에듀 계정 + 노트북</span>
+  </div>
+  <h1>PPT 대신 <span class="accent">링크 하나</span>.<br>SENEDU로 시작하는 바이브코딩</h1>
+  <p class="lede">서울시교육청 SEN에듀 계정 하나로, 내 연수·수업 자료를 <b>웹페이지</b>로 만들어 링크로 나눠 주는 방법을 90분 안에 익힙니다. 코딩 지식은 필요 없습니다 — <b>말로 시키면</b> 됩니다.</p>
+  <div class="recursive"><span class="dot"></span>지금 보고 계신 이 페이지가, 오늘 여러분이 만들 바로 그 형식입니다.</div>
+</header>
+
+<nav>
+  <div class="tabs">
+    <button class="tab-btn on" data-tab="s1">🏁 시작</button>
+    <button class="tab-btn" data-tab="s2">🤖 SenGPT 열기</button>
+    <button class="tab-btn" data-tab="s3">🪄 원리</button>
+    <button class="tab-btn" data-tab="s4">🧪 실습① 첫 페이지</button>
+    <button class="tab-btn" data-tab="s5">🎨 실습② 내 자료로</button>
+    <button class="tab-btn" data-tab="s6">🛠 고치기 사전</button>
+    <button class="tab-btn" data-tab="s7">🚀 링크로 배포</button>
+    <button class="tab-btn" data-tab="s8">📋 진행표(강사)</button>
+  </div>
+</nav>
+
+<!-- ═══════════ 1. 시작 ═══════════ -->
+<section id="s1" class="on">
+  <h2><span class="no">1</span>왜 '링크 하나'인가</h2>
+  <p class="sect-sub">연수를 다니는 강사에게 자료의 형태는 곧 무기입니다.</p>
+
+  <div class="grid g3">
+    <div class="card"><h3>📦 설치가 없다</h3><p class="big">USB도, 파일 전달도, 버전 관리도 없습니다. 어느 연수장에 가든 <b>주소 하나 치면 시작</b>됩니다.</p></div>
+    <div class="card"><h3>📱 전원이 같은 화면</h3><p class="big">참가자들이 각자 노트북·태블릿·휴대폰으로 같은 자료를 봅니다. QR 하나면 배포 끝.</p></div>
+    <div class="card"><h3>📖 강의가 끝나도 남는다</h3><p class="big">슬라이드는 닫히면 끝이지만, 페이지는 <b>매뉴얼</b>로 남습니다. 못 따라온 부분은 집에서 링크를 다시 열면 됩니다.</p></div>
+  </div>
+
+  <div class="note ok"><b>오늘의 목표는 하나입니다.</b> 90분 뒤, 여러분 각자의 연수 페이지 1장이 <b>인터넷 주소</b>로 살아 있게 만드는 것. 그 주소를 QR로 만들어 다음 연수에서 바로 쓰는 것.</div>
+
+  <h2 style="margin-top:38px"><span class="no">2</span>실물 증거</h2>
+  <p class="sect-sub">"정말 이 방법으로 그런 걸 만들 수 있나요?" — 아래는 전부 같은 방법(AI에게 말로 시키기)으로 만든 실제 연수 자료입니다.</p>
+  <a class="link-card" href="https://scienceisjo.github.io/growing-teachers/dibut/" target="_blank" rel="noopener"><span class="ico">🖥️</span><span><b>디벗 전문가 실습 허브</b><span>시뮬레이터 4종 + 42개 미션 — 서울시교육청 디벗 테크니션 연수 실습장</span></span></a>
+  <a class="link-card" href="https://scienceisjo.github.io/growing-teachers/" target="_blank" rel="noopener"><span class="ico">🌱</span><span><b>Growing Teachers</b><span>수업·연수 자료 전체 모음 — 오늘 만드는 페이지도 이런 식으로 쌓입니다</span></span></a>
+
+  <h2 style="margin-top:38px"><span class="no">3</span>오늘의 흐름</h2>
+  <div class="flow">
+    <div class="f"><div class="ico">🤖</div><b>SenGPT 접속</b><span>SEN에듀 계정으로</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">💬</div><b>말로 시키기</b><span>프롬프트 카드 복사</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">📄</div><b>파일로 열기</b><span>이 페이지의 🧰 도우미로</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">🚀</div><b>링크로 배포</b><span>GitHub Pages + QR</span></div>
+  </div>
+  <div class="note warn"><b>시작 전 점검 2가지</b> — ① SEN에듀(senedu.kr)에 로그인되는지 ② 크롬 <b>팝업 차단 해제</b>(SenGPT 도구가 새 창으로 열립니다). 옆 탭 「🤖 SenGPT 열기」에서 같이 합니다.</div>
+</section>
+
+<!-- ═══════════ 2. SenGPT ═══════════ -->
+<section id="s2">
+  <h2><span class="no">1</span>SenGPT까지 가는 길</h2>
+  <p class="sect-sub">서울시교육청 선생님이라면 이미 계정이 있습니다. 새로 가입할 것이 없다는 게 오늘의 가장 큰 장점입니다. <span style="color:#9aa3b5">(경로는 2026. 9. 기준 — 메뉴 이름이 바뀌었으면 '도구모음'에서 비슷한 것을 찾으세요.)</span></p>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b><span class="kbd">senedu.kr</span> 접속 → 로그인</b><p>SEN에듀(SEN스쿨) — 평소 쓰시는 서울시교육청 통합 계정으로 로그인합니다.</p></div></div>
+    <div class="step"><span class="n">2</span><div><b>도구모음에서 <span class="kbd">SenGPT</span> 클릭</b><p>중간에 '도구모음'을 거쳐야 합니다. 이 단계를 빠뜨리고 헤매는 경우가 가장 많습니다.</p></div></div>
+    <div class="step"><span class="n">3</span><div><b>새 창(팝업)으로 열림 — 차단되면 허용</b><p>주소창 오른쪽에 팝업 차단 아이콘(⧉)이 뜨면 클릭 → <span class="kbd">항상 허용</span>을 선택합니다. 연수장에서 전원이 이 단계를 함께 통과하고 시작하는 것이 좋습니다.</p></div></div>
+    <div class="step"><span class="n">4</span><div><b>대화창에 인사 한 번</b><p>"안녕?" 한마디로 응답이 오는지 확인되면 준비 끝입니다.</p></div></div>
+  </div>
+
+  <div class="note ok"><b>참고</b> — SEN에듀 도구모음에는 캔바·미리캔버스도 함께 들어 있습니다. 오늘 만든 페이지에 쓸 이미지·QR도 여기서 해결할 수 있습니다. 다른 시도 선생님이 오셨다면: 각 시도교육청 AI 플랫폼(AIEP)에도 같은 계열의 도구가 있습니다.</div>
+
+  <details>
+    <summary>💡 한 단계 더 — 나만의 '페이지 제작 도우미' 에이전트 만들기</summary>
+    <p style="font-size:14px;color:var(--sub)">SenGPT의 에이전트(챗봇 만들기) 기능에 아래 지시문을 붙여 넣으면, 매번 조건을 설명할 필요 없이 <b>"○○ 연수 페이지 만들어 줘"</b> 한마디로 통하는 전용 도우미가 됩니다. 오늘 실습은 에이전트 없이도 충분하니, 익숙해진 뒤에 만들어 보세요.</p>
+    <div class="codeblock"><span class="label">에이전트 지시문 (전체 복사)</span><button class="copy-btn" data-copy="agentPrompt">📋 복사</button>
+<pre id="agentPrompt">너는 '연수 페이지 제작 도우미'다. 교사가 말로 요청하면 웹페이지를 만들어 준다.
+
+규칙:
+1. 항상 HTML 한 파일로 완성해서 준다. CSS와 자바스크립트도 그 파일 안에 넣는다. 외부 파일·라이브러리·이미지 링크는 쓰지 않는다.
+2. 코드는 하나의 코드 블록으로, 처음(&lt;!DOCTYPE html&gt;)부터 끝(&lt;/html&gt;)까지 빠짐없이 준다.
+3. 휴대폰에서도 잘 보이게 만든다(viewport 설정, 넉넉한 글자 크기와 여백).
+4. 글꼴은 시스템 기본을 쓰고, 색은 요청이 없으면 흰 바탕에 파란 포인트로 깔끔하게.
+5. 내용을 지어내지 않는다. 사용자가 주지 않은 정보(날짜·이름·장소)는 ○○로 표시하고, 무엇을 채워야 하는지 알려 준다.
+6. 수정 요청을 받으면 파일 전체를 처음부터 끝까지 다시 준다. 바뀐 부분만 주지 않는다.
+7. 답이 길어서 중간에 끊기면, 사용자가 "이어서"라고 할 때 끊긴 지점부터 이어서 출력한다.</pre></div>
+  </details>
+</section>
+
+<!-- ═══════════ 3. 원리 ═══════════ -->
+<section id="s3">
+  <h2><span class="no">1</span>바이브코딩이 뭔가요</h2>
+  <p class="sect-sub">코드를 '쓰는' 게 아니라, AI에게 <b>말로 시키고 결과물을 받아 쓰는</b> 방식입니다. 우리는 기획자가 되고, 타자는 AI가 칩니다.</p>
+  <div class="flow">
+    <div class="f"><div class="ico">💬</div><b>① 말로 시킨다</b><span>"연수 안내 페이지 만들어 줘"</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">📋</div><b>② 코드를 받는다</b><span>코드 블록 전체 복사</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">👁️</div><b>③ 파일로 연다</b><span>🧰 도우미에 붙여넣기</span></div>
+    <div class="arr">→</div>
+    <div class="f"><div class="ico">🔁</div><b>④ 다시 말로 고친다</b><span>"제목 더 크게" → ②로</span></div>
+  </div>
+  <p style="margin-top:12px;font-size:14px;color:var(--sub)">이 ①→④ 루프를 도는 것이 전부입니다. 한 바퀴에 1~2분, 서너 바퀴면 쓸 만한 페이지가 나옵니다.</p>
+
+  <h2 style="margin-top:38px"><span class="no">2</span>실패하지 않는 규칙 셋</h2>
+  <div class="grid g3">
+    <div class="card"><h3>1️⃣ "한 파일로 완성본"</h3><p class="big">항상 <b>"HTML 한 파일로, 처음부터 끝까지"</b>를 요구하세요. 파일이 여러 개로 쪼개지는 순간 초보자는 길을 잃습니다.</p></div>
+    <div class="card"><h3>2️⃣ 한 번에 하나만</h3><p class="big">"색도 바꾸고 표도 넣고 퀴즈도…"를 한꺼번에 시키면 뒤죽박죽이 됩니다. <b>한 바퀴에 한 가지</b>만 고치세요.</p></div>
+    <div class="card"><h3>3️⃣ 항상 전체를 다시 받기</h3><p class="big">"이 부분만 바꾸세요"라며 조각 코드를 주면 어디에 끼울지 몰라 막힙니다. <b>"파일 전체를 다시 줘"</b>가 안전합니다.</p></div>
+  </div>
+  <div class="note warn"><b>오류가 나면?</b> 당황할 것 없습니다. 화면이 하얗거나 버튼이 안 눌리면, 증상(또는 오류 메시지)을 <b>그대로 복사해서 AI에게 붙여넣고</b> "고쳐서 전체 다시 줘"라고 하면 됩니다. 오류 해결도 말로 합니다.</div>
+  <div class="note danger"><b>넣지 말아야 할 것</b> — 학생 실명·사진·연락처 등 개인정보. 오늘 만드는 페이지는 <b>공개 인터넷</b>에 올라간다는 것을 전제로 내용을 고르세요.</div>
+</section>
+
+<!-- ═══════════ 4. 실습 1 ═══════════ -->
+<section id="s4">
+  <h2><span class="no">1</span>첫 페이지, 10분 안에</h2>
+  <p class="sect-sub">아래 프롬프트를 복사 → SenGPT에 붙여넣기 전에, ○○ 자리만 내 것으로 바꿔서 보내세요.</p>
+  <div class="codeblock"><span class="label">첫 프롬프트 (복사해서 ○○만 바꾸기)</span><button class="copy-btn" data-copy="firstPrompt">📋 복사</button>
+<pre id="firstPrompt">연수 안내 웹페이지를 만들어 줘.
+
+조건:
+- HTML 한 파일로, CSS와 자바스크립트를 파일 안에 포함해서 &lt;!DOCTYPE html&gt;부터 &lt;/html&gt;까지 완성본으로 줘
+- 외부 이미지나 외부 라이브러리는 쓰지 마
+- 휴대폰에서도 잘 보이게 만들어 줘
+- 흰 바탕에 파란 포인트 색, 글자는 시원시원하게
+
+들어갈 내용:
+- 제목: ○○○○ 연수
+- 부제: ○○○○○○○○
+- 강사: ○○○ (○○학교)
+- 오늘의 목표 3가지: ①○○ ②○○ ③○○
+- 진행 순서 표 (시간 / 내용, 4줄): ○○
+- 맨 아래에 "질문은 언제든 환영합니다" 안내 카드</pre></div>
+
+  <h2 style="margin-top:38px"><span class="no">2</span>받은 코드를 화면으로</h2>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b>SenGPT 답변의 코드 블록에서 <span class="kbd">전체 복사</span></b><p>코드 블록 오른쪽 위에 복사 버튼이 있습니다. 없다면 코드 부분을 드래그해서 복사하세요.</p></div></div>
+    <div class="step"><span class="n">2</span><div><b>오른쪽 아래 <span class="kbd">🧰 코드 도우미</span> 버튼 클릭 → 붙여넣기</b><p>이 페이지 어느 화면에서든 항상 떠 있는 보라색 버튼입니다. 설명 문장이 섞여 들어가도 괜찮습니다 — 도우미가 코드 부분만 알아서 골라냅니다.</p></div></div>
+    <div class="step"><span class="n">3</span><div><b><span class="kbd">👁 미리보기</span>로 확인 → <span class="kbd">⬇ .html로 저장</span></b><p>미리보기는 새 탭에 즉시 열립니다. 마음에 들면 파일 이름을 정하고 저장하세요. 저장된 파일은 더블클릭하면 언제든 다시 열립니다.</p></div></div>
+    <div class="step"><span class="n">4</span><div><b>한 가지만 고쳐 보기</b><p>SenGPT로 돌아가 <span class="kbd">"제목을 더 크게 하고, 전체 여백을 시원하게. 파일 전체를 다시 줘"</span> — 새 코드를 받아 2~3번을 반복합니다. 이 루프가 몸에 붙으면 끝난 겁니다.</p></div></div>
+  </div>
+  <div class="note ok"><b>여기까지 되면 오늘의 절반이 끝났습니다.</b> 옆 사람과 서로 미리보기 화면을 보여 주세요 — 같은 프롬프트인데 다른 페이지가 나온 것도 재미있는 관찰거리입니다.</div>
+  <details>
+    <summary>🗒 도우미 없이 저장하고 싶다면 (메모장 방법)</summary>
+    <p style="font-size:14px;color:var(--sub)">① 메모장을 열고 코드 붙여넣기 → ② <b>파일 &gt; 다른 이름으로 저장</b> → ③ 파일 형식을 <b>"모든 파일"</b>로 바꾸고 이름을 <b>연수.html</b> 처럼 <b>.html로 끝나게</b> → ④ 인코딩 <b>UTF-8</b> 확인 → 저장 → 더블클릭. (.txt로 저장되는 것이 최다 실패 원인입니다.)</p>
+  </details>
+</section>
+
+<!-- ═══════════ 5. 실습 2 ═══════════ -->
+<section id="s5">
+  <h2><span class="no">1</span>이번엔 진짜 내 자료로</h2>
+  <p class="sect-sub">빈손 프롬프트보다 <b>잘 만든 견본을 주고 내용만 갈아 끼우게</b> 하는 편이 훨씬 안정적입니다. 아래 스타터 템플릿을 통째로 복사해 프롬프트와 함께 보내세요.</p>
+
+  <div class="codeblock"><span class="label">개조 프롬프트 (이걸 먼저 쓰고, 바로 아래 템플릿을 이어 붙이기)</span><button class="copy-btn" data-copy="remixPrompt">📋 복사</button>
+<pre id="remixPrompt">아래 HTML 템플릿의 디자인과 구조는 그대로 유지하고, 내용만 다음으로 바꿔 줘.
+바꾼 결과는 HTML 한 파일 완성본으로, 처음부터 끝까지 전체를 다시 줘.
+
+바꿀 내용:
+- 연수 제목: ○○○○
+- 부제: ○○○○
+- 강사: ○○○ (○○학교) / 일시: ○○
+- 목표 3가지: ①○○ ②○○ ③○○
+- 진행 순서: ○○ (표의 줄 수는 내용에 맞게 조절해도 됨)
+- 준비물: ○○
+- 포인트 색을 ○○색 계열로
+
+--- 아래가 템플릿 ---
+(여기에 스타터 템플릿 코드를 붙여넣기)</pre></div>
+
+  <div class="codeblock"><span class="label">스타터 템플릿 — 연수 안내 1페이지</span><button class="copy-btn" data-copy-template="1">📋 템플릿 전체 복사</button>
+<pre class="mono" id="tplView" style="max-height:340px;overflow:auto"></pre></div>
+  <p style="margin-top:10px;font-size:13.5px;color:var(--sub)">👀 템플릿이 어떻게 생겼는지 먼저 보고 싶다면: <button class="btn ghost" style="padding:7px 14px;font-size:13px" onclick="previewTemplate()">👁 템플릿 미리보기</button></p>
+
+  <h2 style="margin-top:38px"><span class="no">2</span>내 것으로 만드는 순서</h2>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b>내가 실제로 하게 될 연수(또는 수업) 하나를 정하기</b><p>디벗 사용법 안내, 학부모 연수, 신학기 오리엔테이션, 우리 부서 업무 안내… 무엇이든 <b>진짜 쓸 것</b>으로.</p></div></div>
+    <div class="step"><span class="n">2</span><div><b>개조 프롬프트의 ○○ 채우기 → 템플릿 붙여서 전송</b><p>내용이 정해져 있을수록 결과가 좋아집니다. 프롬프트에 쓰는 시간이 아깝지 않습니다.</p></div></div>
+    <div class="step"><span class="n">3</span><div><b>🧰 도우미로 미리보기 → 두세 바퀴 다듬기</b><p>「🛠 고치기 사전」 탭의 카드를 골라 쓰면 됩니다. 한 번에 하나씩!</p></div></div>
+    <div class="step"><span class="n">4</span><div><b>완성본을 .html로 저장</b><p>파일 이름은 영어나 숫자로 짧게(예: training.html) — 다음 탭에서 인터넷에 올릴 때 편합니다.</p></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. 고치기 사전 ═══════════ -->
+<section id="s6">
+  <h2><span class="no">1</span>말로 고치는 문장 사전</h2>
+  <p class="sect-sub">수정 요청은 아래 카드를 복사해 그대로 쓰거나 살짝 바꿔 쓰세요. 모든 카드 끝에 "전체를 다시 줘"가 붙어 있는 이유는 「🪄 원리」의 규칙 3번입니다.</p>
+  <div class="fix-grid">
+    <div class="fix"><h4><span class="tag">디자인</span>글자·여백</h4><div class="codeblock"><button class="copy-btn" data-copy="f1">📋</button><pre id="f1">제목 글자를 더 크게 하고, 전체 여백을 지금보다 시원하게 바꿔 줘. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">디자인</span>색 바꾸기</h4><div class="codeblock"><button class="copy-btn" data-copy="f2">📋</button><pre id="f2">포인트 색을 파란색 대신 초록색 계열로 통일해 줘. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">내용</span>섹션 추가</h4><div class="codeblock"><button class="copy-btn" data-copy="f3">📋</button><pre id="f3">'자주 묻는 질문' 섹션을 진행 순서 아래에 추가해 줘. 질문과 답 3개는 다음과 같아: ①○○ ②○○ ③○○. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">기능</span>OX 퀴즈</h4><div class="codeblock"><button class="copy-btn" data-copy="f4">📋</button><pre id="f4">OX 퀴즈 3문항 섹션을 넣어 줘. 정답을 누르면 초록색으로 '정답!', 오답이면 빨간색으로 표시되게. 문항과 정답: ①○○(O) ②○○(X) ③○○(O). 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">기능</span>타이머</h4><div class="codeblock"><button class="copy-btn" data-copy="f5">📋</button><pre id="f5">화면 위쪽에 5분 타이머를 넣어 줘. 시작·정지·초기화 버튼이 있고, 끝나면 화면이 잠깐 깜빡이게. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">화면</span>휴대폰 대응</h4><div class="codeblock"><button class="copy-btn" data-copy="f6">📋</button><pre id="f6">휴대폰에서 보면 표가 잘려 보여. 휴대폰 화면에서도 잘리지 않고 보기 좋게 고쳐 줘. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">구조</span>탭으로 나누기</h4><div class="codeblock"><button class="copy-btn" data-copy="f7">📋</button><pre id="f7">내용이 길어졌으니 위쪽에 탭 메뉴를 만들어서 '안내 / 실습 / 마무리' 세 화면으로 나눠 줘. 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">응급</span>끊겼을 때</h4><div class="codeblock"><button class="copy-btn" data-copy="f8">📋</button><pre id="f8">코드가 중간에 끊겼어. 끊긴 지점부터 이어서 출력해 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">응급</span>화면이 이상할 때</h4><div class="codeblock"><button class="copy-btn" data-copy="f9">📋</button><pre id="f9">저장해서 열었더니 (증상: 화면이 하얗게 나와 / 버튼이 안 눌려 / 글자가 깨져 보여). 원인을 찾아 고친 뒤 파일 전체를 다시 줘.</pre></div></div>
+    <div class="fix"><h4><span class="tag">마무리</span>인쇄·배포용 정리</h4><div class="codeblock"><button class="copy-btn" data-copy="f10">📋</button><pre id="f10">맨 아래에 만든 사람과 날짜가 들어간 작은 안내 줄을 추가하고, 인쇄했을 때도 깔끔하게 나오도록 정리해 줘. 파일 전체를 다시 줘.</pre></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 7. 배포 ═══════════ -->
+<section id="s7">
+  <h2><span class="no">1</span>파일을 '주소'로 바꾸기 — GitHub Pages</h2>
+  <p class="sect-sub">GitHub는 전 세계에서 가장 널리 쓰이는 무료 코드 저장소입니다. 여기 올린 HTML은 공짜로, 기한 없이, 인터넷 주소가 됩니다.</p>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b><span class="kbd">github.com</span> 가입</b><p>이메일 하나면 됩니다(영어 화면이지만 가입 → 이메일 인증까지 3분). 아이디는 주소에 들어가니 깔끔한 영문으로. <b>연수 전에 미리 가입해 오면 가장 좋습니다.</b></p></div></div>
+    <div class="step"><span class="n">2</span><div><b>저장소 만들기: 오른쪽 위 <span class="kbd">＋</span> → <span class="kbd">New repository</span></b><p>Repository name에 <b>my-training</b> 처럼 영문 이름 → <b>Public</b> 선택 → <span class="kbd">Create repository</span>.</p></div></div>
+    <div class="step"><span class="n">3</span><div><b>파일 올리기: <span class="kbd">uploading an existing file</span> 클릭</b><p>만든 .html 파일을 끌어다 놓습니다. 이때 파일 이름을 <b>index.html</b>로 바꿔 올리면 주소가 짧고 깔끔해집니다. 아래 <span class="kbd">Commit changes</span> 클릭.</p></div></div>
+    <div class="step"><span class="n">4</span><div><b>Pages 켜기: <span class="kbd">Settings</span> → 왼쪽 <span class="kbd">Pages</span></b><p>Branch를 <b>main</b>, 폴더 <b>/ (root)</b>로 놓고 <span class="kbd">Save</span>.</p></div></div>
+    <div class="step"><span class="n">5</span><div><b>1~2분 뒤 주소 확인</b><p><span class="kbd">https://아이디.github.io/my-training/</span> — 이 주소가 여러분의 연수 자료입니다. 휴대폰으로 직접 열어 확인하세요.</p></div></div>
+    <div class="step"><span class="n">6</span><div><b>QR 만들기</b><p>네이버에서 <b>"QR코드 만들기"</b> 검색 → 주소 붙여넣기 → 이미지 저장. 다음 연수 첫 화면에 이 QR 하나면 배포가 끝납니다.</p></div></div>
+  </div>
+  <div class="note ok"><b>수정하고 싶어지면?</b> 파일을 고쳐서 같은 이름으로 다시 올리면(Add file → Upload) 1~2분 안에 같은 주소에 새 내용이 반영됩니다. <b>주소는 그대로</b>라서 이미 나눠 준 QR도 계속 살아 있습니다.</div>
+  <div class="note warn"><b>오늘 여기서 막히는 분은</b> — 괜찮습니다. 완성한 .html 파일을 강사에게 보내 주시면 모아서 올려 드리고 주소를 돌려드립니다(대행 배포). 가입은 집에서 천천히 하셔도 됩니다.</div>
+</section>
+
+<!-- ═══════════ 8. 진행표 ═══════════ -->
+<section id="s8">
+  <h2><span class="no">1</span>90분 진행표</h2>
+  <p class="sect-sub">강사용입니다. 시간이 밀리면 ⑤(배포)를 시연 + 대행으로 전환하는 것이 기본 대응입니다.</p>
+  <table>
+    <tr><th style="width:110px">시간</th><th>내용</th></tr>
+    <tr><td><span class="t">00–10</span></td><td><b>오프닝 — 왜 링크인가</b><small>실물 증거(디벗 허브)를 직접 열어 보여 주기 · "지금 보는 이 교안도 같은 방법으로 만들었다"</small></td></tr>
+    <tr><td><span class="t">10–20</span></td><td><b>전원 SenGPT 접속</b><small>senedu.kr 로그인 → 도구모음 → SenGPT · 팝업 차단 해제 · "안녕?" 응답 확인이 관문 — 전원 통과 후 진행</small></td></tr>
+    <tr><td><span class="t">20–30</span></td><td><b>원리 + 라이브 시연</b><small>강사가 즉석에서 첫 프롬프트 → 코드 → 🧰 도우미 → 미리보기까지 한 바퀴를 보여 준다(실패해도 고치는 과정 자체가 교육)</small></td></tr>
+    <tr><td><span class="t">30–50</span></td><td><b>실습① 첫 페이지</b><small>프롬프트 카드 복사 → 각자 첫 페이지 · 옆 사람과 화면 비교 · 한 가지 수정 루프 경험</small></td></tr>
+    <tr><td><span class="t">50–70</span></td><td><b>실습② 내 자료로</b><small>스타터 템플릿 + 개조 프롬프트 · 각자 실제로 쓸 연수 주제로 · 고치기 사전 활용</small></td></tr>
+    <tr><td><span class="t">70–85</span></td><td><b>배포</b><small>GitHub Pages 6걸음 · 막히는 분은 대행 폴백 · 완성 주소를 휴대폰으로 열어 보기</small></td></tr>
+    <tr><td><span class="t">85–90</span></td><td><b>링크 갤러리 + 마무리</b><small>완성 링크를 모아 전자칠판에서 함께 열람 · "오늘 만든 주소는 평생 무료로 살아 있습니다"</small></td></tr>
+  </table>
+
+  <h2 style="margin-top:38px"><span class="no">2</span>강사 준비 체크리스트</h2>
+  <ul class="check">
+    <li><b>리허설 1회</b> — 연수 전날, 본인 SEN에듀 계정으로 실습①을 처음부터 끝까지 실제로 1회 통과해 보기 (SenGPT 화면·기능은 업데이트로 달라질 수 있음)</li>
+    <li><b>팝업 차단 해제 안내</b>를 첫 화면에 띄울 준비 (전원 통과가 첫 관문)</li>
+    <li><b>파일 제출 통로</b> 준비 — 대행 배포용 (메일·메신저·공유폴더 중 하나)</li>
+    <li><b>사전 안내문</b>에 "github.com 가입해 오시면 좋습니다" 한 줄 넣기</li>
+    <li>연수장 와이파이 확인 · 여분 노트북 1대</li>
+    <li>이 교안 주소의 <b>QR</b>을 첫 슬라이드(또는 칠판)에 크게</li>
+  </ul>
+  <div class="note ok"><b>이 교안 자체가 배포 모델입니다.</b> 참가자에게 "이 페이지 주소를 저장해 두세요 — 오늘 못 끝낸 부분은 집에서 이 순서 그대로 따라 하면 됩니다"라고 안내하세요.</div>
+</section>
+
+<footer id="app-credit">ⓒ 조승재 (해누리중학교) · 서울시교육청 SEN에듀 기반 바이브코딩 연수 교안 · 최종 업데이트 2026-09-11</footer>
+</div>
+
+<!-- floating code helper -->
+<button id="helperFab">🧰 코드 도우미</button>
+<div id="helperOv" hidden>
+  <div class="helper">
+    <h3>🧰 코드 도우미 — 붙여넣으면 페이지가 됩니다</h3>
+    <p class="hint">SenGPT가 준 답변을 <b>통째로</b> 붙여넣어도 됩니다. 코드 앞뒤의 설명 문장은 자동으로 걸러냅니다.</p>
+    <textarea id="pasteArea" placeholder="여기에 붙여넣기 (Ctrl+V)"></textarea>
+    <div class="row">
+      <button class="btn primary" onclick="doPreview()">👁 미리보기</button>
+      <input type="text" id="fileName" value="my-training.html" spellcheck="false">
+      <button class="btn green" onclick="doSave()">⬇ .html로 저장</button>
+      <button class="btn ghost" onclick="closeHelper()">닫기</button>
+    </div>
+    <div id="helperMsg"></div>
+  </div>
+</div>
+
+<!-- starter template (kept out of the DOM parser) -->
+<script type="text/template" id="tplSrc"><!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○○○ 연수</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;background:#f5f7fb;color:#1c2433;line-height:1.7;word-break:keep-all}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 60px}
+  .hero{background:#2a55e0;color:#fff;border-radius:22px;padding:38px 32px}
+  .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:999px;padding:4px 14px;font-size:13px;font-weight:700;margin-bottom:12px}
+  .hero h1{font-size:30px;line-height:1.3}
+  .hero p{margin-top:10px;font-size:15px;opacity:.92}
+  .meta{margin-top:16px;font-size:14px;font-weight:700}
+  h2{font-size:19px;margin:34px 0 12px;color:#2a55e0}
+  .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:600px){.goals{grid-template-columns:1fr}}
+  .goal{background:#fff;border:1px solid #e3e7f2;border-radius:16px;padding:18px;font-size:14.5px}
+  .goal b{display:block;font-size:22px;color:#2a55e0;margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e3e7f2}
+  th{background:#eef2fc;padding:10px 14px;font-size:13px;text-align:left;color:#4a5a7a}
+  td{padding:12px 14px;font-size:14px;border-top:1px solid #e3e7f2}
+  td:first-child{font-weight:700;color:#2a55e0;white-space:nowrap}
+  ul{padding-left:20px;font-size:14.5px}
+  .end{background:#fff;border:1px solid #e3e7f2;border-radius:16px;padding:20px;text-align:center;font-size:15px;margin-top:36px}
+  footer{text-align:center;font-size:12px;color:#98a2b8;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="tag">교원 연수</span>
+    <h1>○○○○ 연수</h1>
+    <p>○○○○○○○○○○○○ (한 줄 소개)</p>
+    <div class="meta">강사 ○○○ (○○학교) · ○월 ○일 ○○:○○ · ○○실</div>
+  </div>
+  <h2>오늘의 목표</h2>
+  <div class="goals">
+    <div class="goal"><b>①</b>○○○○○○○○</div>
+    <div class="goal"><b>②</b>○○○○○○○○</div>
+    <div class="goal"><b>③</b>○○○○○○○○</div>
+  </div>
+  <h2>진행 순서</h2>
+  <table>
+    <tr><th>시간</th><th>내용</th></tr>
+    <tr><td>00–10</td><td>○○○○</td></tr>
+    <tr><td>10–40</td><td>○○○○</td></tr>
+    <tr><td>40–80</td><td>○○○○</td></tr>
+    <tr><td>80–90</td><td>정리 및 질의응답</td></tr>
+  </table>
+  <h2>준비물</h2>
+  <ul><li>○○○○</li><li>○○○○</li></ul>
+  <div class="end">💬 질문은 언제든 환영합니다!</div>
+  <footer>만든 사람 ○○○ · ○○○○년 ○월</footer>
+</div>
+</body>
+</html></script>
+
+<script>
+/* ── tabs ── */
+var btns=document.querySelectorAll(".tab-btn"),secs=document.querySelectorAll("section");
+btns.forEach(function(b){b.addEventListener("click",function(){
+  btns.forEach(function(x){x.classList.remove("on")});
+  secs.forEach(function(s){s.classList.remove("on")});
+  b.classList.add("on");document.getElementById(b.dataset.tab).classList.add("on");
+  window.scrollTo({top:0,behavior:"smooth"});
+});});
+
+/* ── template: show escaped, copy raw ── */
+var TPL=document.getElementById("tplSrc").textContent.trim();
+document.getElementById("tplView").textContent=TPL;
+
+/* ── copy buttons ── */
+function copyText(txt,btn){
+  function done(){var old=btn.textContent;btn.textContent="✅ 복사됨";btn.classList.add("done");
+    setTimeout(function(){btn.textContent=old;btn.classList.remove("done")},1600);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done,function(){fallback()});
+  }else{fallback()}
+  function fallback(){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){}document.body.removeChild(ta);}
+}
+document.querySelectorAll("[data-copy]").forEach(function(b){
+  b.addEventListener("click",function(){copyText(document.getElementById(b.dataset.copy).textContent.trim(),b)});
+});
+document.querySelectorAll("[data-copy-template]").forEach(function(b){
+  b.addEventListener("click",function(){copyText(TPL,b)});
+});
+
+/* ── helper modal ── */
+var ov=document.getElementById("helperOv"),msg=document.getElementById("helperMsg");
+document.getElementById("helperFab").addEventListener("click",function(){ov.hidden=false;document.getElementById("pasteArea").focus();});
+function closeHelper(){ov.hidden=true;}
+ov.addEventListener("click",function(e){if(e.target===ov)closeHelper();});
+
+function extractHtml(raw){
+  if(!raw)return null;
+  var s=raw.indexOf("<!DOCTYPE"),s2=raw.indexOf("<!doctype");
+  if(s<0||(s2>=0&&s2<s))s=s2;
+  if(s<0)s=raw.indexOf("<html");
+  var e=raw.lastIndexOf("</html>");
+  if(s>=0&&e>s)return raw.slice(s,e+7);
+  if(/<[a-z!][\s\S]*>/i.test(raw))return raw; /* looks like markup fragment — pass through */
+  return null;
+}
+function getCode(){
+  var code=extractHtml(document.getElementById("pasteArea").value);
+  if(!code){msg.textContent="⚠ HTML 코드를 찾지 못했어요. <!DOCTYPE html>부터 </html>까지 들어 있는지 확인하세요.";msg.className="bad";return null;}
+  msg.textContent="";msg.className="";return code;
+}
+function doPreview(){
+  var code=getCode();if(!code)return;
+  var url=URL.createObjectURL(new Blob([code],{type:"text/html;charset=utf-8"}));
+  var w=window.open(url,"_blank");
+  if(!w){msg.textContent="⚠ 팝업이 차단되었어요. 주소창 오른쪽 아이콘에서 허용해 주세요.";msg.className="bad";return;}
+  msg.textContent="✅ 새 탭에 미리보기를 열었습니다.";msg.className="ok";
+}
+function doSave(){
+  var code=getCode();if(!code)return;
+  var name=(document.getElementById("fileName").value.trim()||"my-training.html");
+  if(!/\.html?$/i.test(name))name+=".html";
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([code],{type:"text/html;charset=utf-8"}));
+  a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);
+  msg.textContent="✅ "+name+" 저장! 다운로드 폴더에서 더블클릭하면 열립니다.";msg.className="ok";
+}
+function previewTemplate(){
+  var url=URL.createObjectURL(new Blob([TPL],{type:"text/html;charset=utf-8"}));
+  window.open(url,"_blank");
+}
+</script>
+</body>
+</html>
