@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>실습 전에, 현실부터 — 윈도우 ADMIN · MDM</title>
+<title>Windows ADMIN, MDM(Argos) 사용법 연수</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -11,7 +11,7 @@
    디벗 연수 · 실습 전 이야기 덱 (입문 파트)
    디자인 언어: design-md/01_Apple.design.md
    흰 캔버스와 근접흑색 타일이 번갈아 서고, 누를 것은 액션 블루 하나뿐입니다.
-   그림자·그러데이션 없음. 경계는 1px 헤어라인, 리듬은 면 색이 만듭니다.
+   그림자·그러데이션 없음(제품 아이콘 안쪽만 예외). 경계는 1px 헤어라인, 리듬은 면 색이 만듭니다.
    서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — OS2 윈도우
    ===================================================================== */
 :root{
@@ -44,12 +44,14 @@ body{font-family:var(--font);background:var(--black);color:var(--ink);overflow:h
 .eyebrow .dot{width:6px;height:6px;border-radius:var(--r-full);background:var(--primary);flex:none}
 h1.title{font-size:44px;font-weight:600;line-height:1.09;letter-spacing:-.018em;color:var(--ink)}
 h1.title .accent{color:var(--primary)}
+h1.title .vs{font-size:26px;font-weight:600;color:var(--steel);margin:0 14px;letter-spacing:.02em;vertical-align:middle}
 p.lede{font-size:21px;font-weight:300;line-height:1.45;color:var(--slate);margin-top:12px;max-width:1040px;letter-spacing:-.008em}
 p.lede b{font-weight:600;color:var(--ink)}
 .small{font-size:14px;line-height:1.5;color:var(--steel);letter-spacing:-.01em}
 .small b{color:var(--ink);font-weight:600}
 .num{font-family:var(--font-num);letter-spacing:0}
 .src{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--stone);letter-spacing:-.01em}
+.src b{color:var(--slate);font-weight:600}
 
 /* ── 어두운 타일 ── */
 .dark{background:var(--tile)}
@@ -57,17 +59,19 @@ p.lede b{font-weight:600;color:var(--ink)}
 .dark .eyebrow .dot{background:var(--primary-on-dark)}
 .dark h1.title{color:var(--on-dark)}
 .dark h1.title .accent{color:var(--primary-on-dark)}
+.dark h1.title .vs{color:#a1a1a6}
 .dark p.lede{color:var(--on-dark-muted)}
 .dark p.lede b{color:#fff}
 .dark .small{color:#a1a1a6}
 .dark .small b{color:#fff}
 .dark .src{color:#86868b}
+.dark .src b{color:#e8e8ed}
 
 /* ── 표지·마무리 ── */
 .cover{padding:0;background:var(--black);justify-content:center}
 .cover-inner{position:relative;z-index:2;padding:0 88px}
 .cover .eyebrow{color:#a1a1a6}
-.cover h1{font-size:64px;font-weight:600;line-height:1.06;letter-spacing:-.02em;color:var(--on-dark)}
+.cover h1{font-size:62px;font-weight:600;line-height:1.08;letter-spacing:-.02em;color:var(--on-dark)}
 .cover h1 .line2{display:block;color:var(--primary-on-dark)}
 .cover .sub{font-size:24px;font-weight:300;color:var(--on-dark-muted);margin-top:22px;letter-spacing:0;max-width:980px;line-height:1.4}
 .cover .who{margin-top:42px;display:flex;align-items:center;gap:14px;color:var(--on-dark);font-size:18px}
@@ -105,6 +109,25 @@ p.lede b{font-weight:600;color:var(--ink)}
 .card.key .k{color:rgba(255,255,255,.72)}
 .card.key h3,.card.key p,.card.key li,.card.key p b,.card.key li b{color:#fff}
 .card.key li::before{background:#fff}
+.cards.c4 .card{padding:26px 24px 24px;gap:12px}
+.cards.c4 .card h3{font-size:21.5px}
+.cards.c4 .card p{font-size:16.5px;line-height:1.55}
+.cards.c4 .card .no{font-family:var(--font-num);font-size:13px;font-weight:600;color:var(--primary);letter-spacing:0}
+.dark .cards.c4 .card .no{color:var(--primary-on-dark)}
+.cards.c4 .card.key .no{color:rgba(255,255,255,.75)}
+
+/* ── Admin VS MDM ── */
+.vsgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;flex:1 1 auto;align-content:start}
+.vsgrid .card{padding:32px 32px 30px;gap:14px}
+.vsgrid .head{display:flex;align-items:center;gap:18px}
+.vsgrid .ico{width:96px;height:96px;flex:none;border-radius:22px}
+.vsgrid .head .k{margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.vsgrid .head h3{font-size:28px;line-height:1.15}
+.vsgrid .head h3 .accent{color:var(--primary-on-dark)}
+.vsgrid ul{margin-top:6px;gap:9px}
+.vsgrid li{font-size:18px}
+.vsgrid .go{margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.vsgrid .go .small{font-size:13px}
 
 /* ── 큰 숫자 ── */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}
@@ -126,17 +149,39 @@ p.lede b{font-weight:600;color:var(--ink)}
 
 /* ── 문장 목록(번호 원) ── */
 .feat{display:flex;flex-direction:column;gap:14px;margin-top:22px}
-.feat.two{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;row-gap:14px}
-.feat.big{gap:24px;margin-top:34px}
-.feat.big li{font-size:21px;line-height:1.45}
-.feat.big li .k{width:30px;height:30px;font-size:14px;margin-top:3px}
+.feat.two{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;row-gap:16px}
 .feat li{list-style:none;display:flex;gap:14px;align-items:flex-start;font-size:18px;line-height:1.42;color:var(--slate);letter-spacing:-.012em}
 .feat li b{color:var(--ink);font-weight:600}
 .feat li .k{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--primary);color:#fff;font-family:var(--font-num);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
-.feat li .x{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--bad);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
-.feat li .o{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--ok);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.feat li .tg{display:inline-flex;align-items:center;gap:6px;margin-left:8px;vertical-align:middle;cursor:pointer;font-family:var(--font);
+  font-size:13.5px;font-weight:400;letter-spacing:-.01em;padding:5px 13px;border-radius:var(--r-full);background:var(--primary);color:#fff;border:none}
+.feat li .tg:hover{background:var(--primary-pressed)}
+.feat li .tg:active{transform:scale(.95)}
 .dark .feat li{color:var(--on-dark-muted)}
 .dark .feat li b{color:#fff}
+
+/* ── CSV 실제 예시(토글) ── */
+#csvPanel{position:absolute;left:76px;right:76px;top:198px;bottom:66px;z-index:35;display:none;overflow:auto;
+  background:var(--canvas);border:1px solid var(--hairline-strong);border-radius:var(--r-lg);padding:22px 28px 24px}
+#csvPanel.on{display:block}
+#csvPanel .cp-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+#csvPanel .cp-head h4{font-size:21px;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
+#csvPanel .cp-head .sub{font-size:14px;color:var(--steel);letter-spacing:-.01em}
+#csvPanel .cp-head .x{margin-left:auto;cursor:pointer;font-family:var(--font);font-size:14px;padding:8px 17px;border-radius:var(--r-full);
+  background:var(--canvas);color:var(--primary);border:1px solid var(--hairline-strong)}
+#csvPanel .cp-head .x:hover{background:var(--parchment)}
+table.csv{border-collapse:collapse;width:100%;font-size:16px;letter-spacing:-.01em}
+table.csv td{border:1px solid var(--hairline);padding:9px 14px;color:var(--ink);background:var(--canvas)}
+table.csv tr.h td{background:var(--parchment);font-weight:600;color:var(--slate)}
+table.csv td.rn{width:44px;text-align:center;color:var(--stone);background:var(--parchment);font-family:var(--font-num);font-size:13px}
+table.csv td.num{font-family:var(--font-num)}
+table.csv tr.blank td{background:#f9eae9;color:var(--bad);font-weight:600}
+table.csv tr.blank td.rn{color:var(--bad)}
+#csvPanel .rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+#csvPanel .rules span{font-size:13.5px;letter-spacing:-.01em;padding:6px 13px;border-radius:var(--r-full);background:var(--parchment);color:var(--slate)}
+#csvPanel .rules span b{font-weight:600;color:var(--ink)}
+#csvPanel .rules span.fix{background:var(--primary);color:#fff}
+#csvPanel .rules span.fix b{color:#fff}
 
 /* ── 전화 표 ── */
 .phones{display:flex;flex-direction:column;gap:14px;margin-top:26px}
@@ -175,11 +220,12 @@ p.lede b{font-weight:600;color:var(--ink)}
 .pill.ghost:hover{background:rgba(255,255,255,.08)}
 .pill:active{transform:scale(.95)}
 .pill .u{font-family:var(--font-num);font-size:13px;opacity:.72;letter-spacing:0}
+.pill.url{font-family:var(--font-num);letter-spacing:0;font-size:15px}
 
 /* ── 마무리 ── */
 .closing{background:var(--black);justify-content:center;padding:0 88px}
-.closing h1{font-size:52px;font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--on-dark)}
-.closing h1 em{font-style:normal;color:var(--primary-on-dark)}
+.closing h1{font-size:50px;font-weight:600;line-height:1.14;letter-spacing:-.02em;color:var(--on-dark)}
+.closing h1 em{font-style:normal;color:var(--primary-on-dark);display:block}
 .closing p{font-size:21px;font-weight:300;line-height:1.5;color:var(--on-dark-muted);margin-top:22px;max-width:900px}
 .closing .url{margin-top:30px;font-family:var(--font-num);font-size:30px;font-weight:600;color:#fff;letter-spacing:-.01em;word-break:break-all}
 .closing .url span{color:var(--primary-on-dark)}
@@ -216,7 +262,7 @@ p.lede b{font-weight:600;color:var(--ink)}
 #overview{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.96);display:none;padding:40px 44px;overflow:auto}
 #overview.on{display:block}
 #overview h4{color:#fff;font-size:19px;font-weight:600;margin-bottom:20px;letter-spacing:-.015em}
-#ovGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#ovGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .ov{background:var(--tile);border:none;border-radius:var(--r-md);padding:15px 16px;cursor:pointer;text-align:left;color:#e8e8ed;font-family:var(--font);transition:background .18s}
 .ov:hover{background:var(--tile-2)}
 .ov .i{font-family:var(--font-num);font-size:12px;font-weight:600;color:var(--primary-on-dark)}
@@ -235,86 +281,131 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
 
   <!-- ══════════ 1 · 표지 ══════════ -->
   <section class="slide cover on" data-dark data-name="표지"
-    data-note="<b>[0:30]</b> 방금 퀴즈 정답 <b>207건</b> 보셨죠. 올해 우리 학교에서 수리 접수한 건수입니다. 실습 들어가기 전에 10분만, 화면 뒤에 있는 현실 이야기를 먼저 하겠습니다. 이 파트의 결론은 한 줄입니다 — <b>매뉴얼보다 전화번호.</b>">
+    data-note="<b>[0:30]</b> 안녕하십니까! 해누리중학교 조승재입니다. 방금 퀴즈 정답 <b>207건</b> 보셨죠 — 올해 저희 학교에서 수리 접수한 건수입니다. 실습 들어가기 전에 10분만, 제가 이 연수를 어떻게 준비했는지, 그리고 화면 뒤에 있는 현실을 먼저 말씀드리겠습니다. 결론은 한 줄입니다 — <b>막히시면 매뉴얼보다 전화입니다!</b>">
     <div class="cover-inner">
-      <div class="eyebrow"><span class="dot"></span>디벗 강사(자문·지원) 양성 테크니션 직무연수 · OS2 윈도우</div>
-      <h1>실습 전에, 현실부터.<span class="line2">매뉴얼보다 전화번호.</span></h1>
-      <p class="sub">윈도우 ADMIN과 MDM — 무엇이고, 무엇이 안 되고, 강사가 되시면 무엇을 가르칠지</p>
+      <div class="eyebrow"><span class="dot"></span>서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 · OS2 윈도우</div>
+      <h1>Windows ADMIN, MDM(Argos)<span class="line2">사용법 연수</span></h1>
+      <p class="sub">MS 계정과 디벗 기기 — 오늘 저와 함께 직접 만져 보시겠습니다!</p>
       <div class="who">
         <span class="badge">해누리중학교</span>
         <span>조승재</span>
         <span class="sep"></span>
-        <span class="role">10분 · 그다음 실습</span>
+        <span class="role">잘 부탁드립니다!</span>
       </div>
     </div>
   </section>
 
-  <!-- ══════════ 2 · 오늘의 약속 ══════════ -->
-  <section class="slide" data-name="오늘의 약속"
-    data-note="<b>[1:00]</b> 오늘 오신 분들 중에 당장 다음 주부터 디벗을 맡으실 분은 안 계신 걸로 압니다. 여러분은 수강생이 아니라 <b>이걸 가르칠 분들</b>이죠. 그래서 세 가지 약속. 첫째, 실습은 다 못 합니다. 허브에 42개 미션이 있는데 <b>필수 4개</b>만 같이 하고 나머지는 하고 싶은 걸 고르시게 할 겁니다. 둘째, 실습 사이트 다섯 개는 그대로 가져가서 <b>여러분 강의</b>에 쓰시면 됩니다. 셋째, 매뉴얼 149쪽 대신 <b>전화번호 세 개</b>를 들고 나가실 겁니다.">
-    <div class="eyebrow"><span class="dot"></span>여러분은 수강생이 아니라 예비 강사</div>
-    <h1 class="title">오늘 이 자리의 <span class="accent">약속 셋</span></h1>
-    <p class="lede">당장 담당자가 되실 분보다, 담당자를 <b>가르칠 분</b>의 눈으로 들어 주세요.</p>
-    <div class="cards c3">
+  <!-- ══════════ 2 · 연수 준비 과정 ══════════ -->
+  <section class="slide" data-name="이 연수, 이렇게 준비했습니다"
+    data-note="<b>[1:00]</b> 준비 과정부터 솔직하게 말씀드리겠습니다. 교수요목 7항목을 받아 보니 6개는 M365 관리 센터, 1개가 MDM이었습니다. 그런데 오늘 오시는 분들은 <b>Argos 책임관리자 계정</b>이 없으시죠. 실제 화면을 열 수 없으니, Argos 실제 화면 소스와 사용자매뉴얼 149쪽, M365 관리 센터 매뉴얼을 바탕으로 <b>실습 사이트 다섯 개</b>를 직접 만들었습니다. 강현욱 선생님의 msadmin, 송세호 선생님의 디벗 업무 도우미를 많이 참고했습니다. 만든 뒤에는 실제 관리 화면을 옆에 놓고 메뉴·문구·숫자를 맞췄고, 저희 학교에서 직접 부딪힌 것만 담았습니다. 이 사이트들은 연수 후에도 그대로 쓰실 수 있습니다 — <b>선생님들의 강의 도구로 가져가 주시면 감사하겠습니다!</b>">
+    <div class="eyebrow"><span class="dot"></span>연수 준비 과정</div>
+    <h1 class="title">이 연수, <span class="accent">이렇게 준비했습니다!</span></h1>
+    <p class="lede">수강생 계정으로는 실제 관리 화면을 열 수 없어서, <b>직접 만져 볼 수 있는 실습 사이트</b>를 만들었습니다.</p>
+    <div class="cards c4">
       <div class="card">
-        <div class="k">하나</div>
-        <h3>실습은 다 못 합니다</h3>
-        <p>허브 미션 42개 중 <b>필수 4개</b>만 같이 합니다. 나머지는 연습 꾸러미에서 하고 싶은 것을 고르세요.</p>
+        <div class="no">01</div>
+        <h3>교수요목 → 화면 2개</h3>
+        <p>7항목(계정 생성 · 비번 초기화 · 팀 설정 · 승급 · MFA · 라이선스 · MDM)을 실제 화면 2개로 묶었습니다. <b>6개는 M365 Admin, 1개는 Argos</b>입니다.</p>
       </div>
       <div class="card">
-        <div class="k">둘</div>
-        <h3>화면은 여러분 것입니다</h3>
-        <p>M365 · Argos · DBS · 생성기 · 허브 — 실습 사이트 다섯 개를 <b>강의 도구로 물려드립니다.</b></p>
+        <div class="no">02</div>
+        <h3>실습 사이트 5개 제작</h3>
+        <p>Argos 실제 화면 소스 + 사용자매뉴얼 v4.1(149쪽) + M365 관리 센터 매뉴얼로 <b>M365 · Argos · DBS · 관리대장 생성기 · 인수인계</b> 실습기를 만들었습니다.</p>
+      </div>
+      <div class="card">
+        <div class="no">03</div>
+        <h3>실제 화면과 대조</h3>
+        <p>실제 Argos · DBS 관리 화면을 옆에 두고 메뉴 · 문구 · 숫자를 맞췄습니다. <b>261대 중 232대 적용</b> 같은 수치도 실제 그대로입니다.</p>
       </div>
       <div class="card key">
-        <div class="k">셋</div>
-        <h3>매뉴얼 대신 전화번호</h3>
-        <p>149쪽 매뉴얼을 가르치지 않습니다. 어떤 상황에 <b>어디로 전화</b>할지 세 개만 외워 갑니다.</p>
+        <div class="no">04</div>
+        <h3>직접 겪은 것만</h3>
+        <p>2학년 343명 승급, 수리 207건, 단말 1008대 — 저희 학교에서 <b>직접 부딪힌 것</b>만 담았습니다.</p>
       </div>
     </div>
+    <div class="src"><b>참고</b>: 강현욱 선생님 M365 가상 실습 사이트(msadmin) · 송세호 선생님 「디벗 업무 도우미」 — 실습 사이트는 연수 후에도 그대로 쓰실 수 있습니다!</div>
   </section>
 
-  <!-- ══════════ 3 · 화면 두 개, 일 두 가지 ══════════ -->
-  <section class="slide dark" data-dark data-name="화면 두 개 · 일 두 가지"
-    data-note="<b>[1:30]</b> 이름부터. 교수요목의 「윈도우 ADMIN」은 <b>Microsoft 365 관리 센터</b>입니다. 학생이 디벗에 로그인하는 그 계정(아이디@학교.ms.kr)을 만들고, 암호 풀어주고, 라이선스 붙이고, 학년 올라가면 표시이름 바꾸는 곳 — <b>사람을 다루는 화면</b>. 「MDM」은 Mobile Device Management, 나눠준 기기를 서버에서 한꺼번에 다루는 겁니다. 서울은 <b>Argos Edu Manager</b>를 씁니다. 안드로이드·아이패드·윈도우 다 같은 화면이고, <b>Intune이 아닙니다</b>. 어느 기기가 누구 건지, 카메라·USB·사이트 막기, 잃어버리면 위치, 빌려주기 — <b>기기를 다루는 화면</b>. 세 번째 화면 DBS는 수리 관리인데 업체 시스템이라 실습에서 잠깐 보여드립니다. 그리고 Argos 관리자 웹은 <b>학내망이나 eVPN에서만</b> 열립니다. 집에서 안 열려요.">
-    <div class="eyebrow"><span class="dot"></span>이름부터 정리</div>
-    <h1 class="title">화면 두 개, <span class="accent">일 두 가지</span></h1>
-    <p class="lede">하나는 <b>사람(계정)</b>을 다루고, 하나는 <b>기기</b>를 다룹니다.</p>
-    <div class="cards c2">
+  <!-- ══════════ 3 · M365 Admin VS MDM ══════════ -->
+  <section class="slide dark" data-dark data-name="M365 Admin VS MDM"
+    data-note="<b>[1:30]</b> 먼저 이름부터 정리하겠습니다. 교수요목의 「윈도우 ADMIN」은 <b>Microsoft 365 관리 센터</b>입니다. 학생이 디벗·팀즈·오피스에 로그인하는 <b>MS 계정</b>을 여기서 만들고, 암호를 풀어주고, 라이선스를 붙이고, 학년이 올라가면 표시 이름을 바꿉니다. 「MDM」은 Mobile Device Management — 나눠준 <b>기기</b>를 서버에서 한꺼번에 관리하는 것입니다. 서울은 <b>Argos Edu Manager</b>를 씁니다. 안드로이드·아이패드·윈도우가 같은 화면입니다. 어느 기기가 누구 것인지, 카메라·USB·사이트 차단, 잃어버리면 위치, 빌려주기까지 여기서 합니다. 주소는 두 개입니다 — Argos 관리자 웹은 <b>학내망이나 eVPN에서만</b> 열립니다. 세 번째 화면 DBS는 수리 관리인데 업체 시스템이라 실습에서 잠깐 보여드리겠습니다.">
+    <div class="eyebrow"><span class="dot"></span>먼저 이름부터 정리하겠습니다</div>
+    <h1 class="title">M365 Admin <span class="vs">VS</span> MDM</h1>
+    <div class="vsgrid">
       <div class="card">
-        <div class="k">윈도우 ADMIN = Microsoft 365 관리 센터</div>
-        <h3>계정을 만드는 곳</h3>
-        <p>학생이 디벗·팀즈·오피스에 로그인하는 <b>그 계정</b>을 여기서 만듭니다.</p>
+        <div class="head">
+          <svg class="ico" viewBox="0 0 96 96" aria-label="Microsoft 365 관리 센터 아이콘">
+            <rect width="96" height="96" rx="22" fill="#0F6CBD"/>
+            <circle cx="42" cy="35" r="12.5" fill="#fff"/>
+            <path d="M18 76c0-14 10.5-23 24-23s24 9 24 23v2H18z" fill="#fff"/>
+            <circle cx="68" cy="64" r="17" fill="#0F6CBD"/>
+            <g transform="translate(68 64)" fill="#fff">
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(45)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(90)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(135)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(180)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(225)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(270)"/>
+              <rect x="-3" y="-15.5" width="6" height="7" rx="1.5" transform="rotate(315)"/>
+              <circle r="10.5"/>
+              <circle r="4.5" fill="#0F6CBD"/>
+            </g>
+          </svg>
+          <div>
+            <div class="k"><svg viewBox="0 0 21 21" width="15" height="15" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>Windows ADMIN = Microsoft 365 관리 센터</div>
+            <h3>MS <span class="accent">계정</span>을 관리하는 곳입니다!</h3>
+          </div>
+        </div>
         <ul>
-          <li><b>계정 만들기</b> — 개별 · CSV 일괄</li>
+          <li>학생 계정 만들기 — <b>개별 · CSV 일괄</b></li>
           <li><b>암호 초기화</b> · <b>라이선스</b> 붙이기</li>
-          <li>표시이름 바꾸기 = <b>승급</b> · 그룹(팀)</li>
-          <li>관리자 역할 · MFA</li>
+          <li>표시 이름 바꾸기 = <b>승급</b> · 그룹(팀) · 관리자 역할 · MFA</li>
+          <li>학생이 디벗 · 팀즈 · 오피스에 로그인하는 <b>그 계정</b>입니다</li>
         </ul>
+        <div class="go">
+          <a class="pill url" href="https://admin.cloud.microsoft" target="_blank" rel="noopener">admin.cloud.microsoft ↗</a>
+          <span class="small">학교 관리자 계정으로 로그인</span>
+        </div>
       </div>
       <div class="card">
-        <div class="k">MDM = Argos Edu Manager · mdm.sen.go.kr</div>
-        <h3>기기를 다루는 곳</h3>
-        <p><b>Mobile Device Management</b> — 나눠준 기기를 서버에서 한꺼번에. Android·iPad·Windows 같은 화면, <b>Intune 아님</b>.</p>
+        <div class="head">
+          <svg class="ico" viewBox="0 0 96 96" aria-label="Argos Edu Manager 아이콘">
+            <defs><linearGradient id="argosG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0367B0"/><stop offset="1" stop-color="#01B5D1"/></linearGradient></defs>
+            <rect width="96" height="96" rx="22" fill="url(#argosG)"/>
+            <path d="M48 14l26 9.5V45c0 17-10.8 29.5-26 36-15.2-6.5-26-19-26-36V23.5z" fill="#fff"/>
+            <rect x="35" y="35" width="26" height="17" rx="2.5" fill="#0367B0"/>
+            <rect x="30" y="55" width="36" height="4.5" rx="2.25" fill="#0367B0"/>
+            <path d="M42 43.5l4 4 8-8.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div>
+            <div class="k">MDM = Argos Edu Manager</div>
+            <h3><span class="accent">기기</span>를 관리하는 곳입니다!</h3>
+          </div>
+        </div>
         <ul>
           <li><b>단말현황</b> — 어느 기기가 누구 것인지</li>
-          <li><b>통합설정</b> — 카메라·USB·사이트 차단</li>
-          <li><b>분실</b> 위치·잠금 · <b>대여</b> · 앱 배포</li>
-          <li>관리자 웹은 <b>학내망·eVPN 전용</b></li>
+          <li><b>통합설정</b> — 카메라 · USB · 사이트 차단</li>
+          <li><b>분실</b> 위치 · 잠금 · <b>대여</b> · 앱 배포</li>
+          <li>Android · iPad · Windows 모두 <b>같은 화면</b>입니다</li>
         </ul>
+        <div class="go">
+          <a class="pill url" href="https://mdm.sen.go.kr" target="_blank" rel="noopener">mdm.sen.go.kr ↗</a>
+          <span class="small"><b style="color:#fff">학내망 · eVPN</b>에서만 열립니다</span>
+        </div>
       </div>
     </div>
-    <div class="src">+ 세 번째 화면 <b>DBS</b>(dbs.edu-portal.ai) = 수리 접수·추적, 명렬표 — 업체(케이원) 시스템. 실습 ⑨에서 잠깐.</div>
+    <div class="src">+ 수리는 <b>DBS</b>(dbs.edu-portal.ai) — 업체(케이원) 시스템입니다. 실습 ⑨에서 잠깐 보여드리겠습니다.</div>
   </section>
 
-  <!-- ══════════ 4 · MDM의 현실 ① ══════════ -->
-  <section class="slide" data-name="MDM의 현실 ① 보냈다 ≠ 적용됐다"
-    data-note="<b>[2:00]</b> MDM에서 제일 먼저 부딪히는 현실. 정책을 「보냈다」와 「적용됐다」는 다릅니다. 이 숫자는 <b>우리 학교 실제 화면</b>입니다. 기본 디벗 정책을 261대에 지정했는데 적용은 232대. 재배포를 돌리면 261대 중 9대 실패. 매뉴얼에 이렇게 써 있습니다 — <b>「단말을 제어하기 위해서는 항상 연결 상태에서 명령 처리가 가능합니다」</b>. 기기가 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아서 서버에 접속하는 순간에만 처리됩니다. 처리이력을 열면 총·발송중·접속대기중·진행중·실패·성공 단계가 보이는데, 꺼져 있거나 가방 속 기기는 <b>「접속대기중」</b>에 계속 남아요. 함정 하나 더 — 단말현황의 「연결」 표시는 <b>마지막 통신 후 5일까지</b> 그대로입니다. 초록불 = 지금 켜져 있다가 아닙니다. 그래서 배포하면 끝이 아니라 <b>적용현황 숫자를 읽고, 미적용 재배포·재실행</b>을 하는 게 담당자의 일상입니다.">
-    <div class="eyebrow"><span class="dot"></span>MDM의 현실 ①</div>
-    <h1 class="title">「보냈다」 ≠ <span class="accent">「적용됐다」</span></h1>
-    <p class="lede">명령은 단말이 <b>서버에 접속하는 순간</b>에만 처리됩니다. 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아 있어야.</p>
+  <!-- ══════════ 4 · MDM 미리 알아 두실 것 ① ══════════ -->
+  <section class="slide" data-name="「보냈다」와 「적용됐다」는 다릅니다"
+    data-note="<b>[2:00]</b> MDM에서 제일 먼저 만나는 현실입니다. 정책을 「보냈다」와 「적용됐다」는 다릅니다. 이 숫자는 <b>저희 학교 실제 화면</b>입니다. 기본 디벗 정책을 261대에 지정했는데 적용은 232대. 재배포를 돌리면 261대 중 9대 실패. 매뉴얼에 이렇게 써 있습니다 — <b>「단말을 제어하기 위해서는 항상 연결 상태에서 명령 처리가 가능합니다」</b>. 기기가 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아서 서버에 접속하는 순간에만 처리됩니다. 처리이력을 열면 총·발송중·접속대기중·진행중·실패·성공 단계가 보이는데, 꺼져 있거나 가방 속 기기는 <b>「접속대기중」</b>에 계속 남습니다. 함정 하나 더 — 단말현황의 「연결」 표시는 <b>마지막 통신 후 5일까지</b> 그대로입니다. 초록불이 「지금 켜져 있음」은 아닙니다. 그래서 배포하면 끝이 아니라 <b>적용현황 숫자를 읽고, 미적용 재배포·재실행</b>을 하는 것이 담당자의 일상입니다!">
+    <div class="eyebrow"><span class="dot"></span>MDM, 미리 알아 두실 것 ①</div>
+    <h1 class="title">「보냈다」와 「적용됐다」는 <span class="accent">다릅니다!</span></h1>
+    <p class="lede">명령은 단말이 <b>서버에 접속하는 순간</b>에만 처리됩니다. 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아 있어야 합니다.</p>
     <div class="stats">
-      <div class="stat"><div class="v num">261<small>대 지정</small></div><div class="l">우리 학교 기본 디벗 정책 — 통합설정에 지정한 단말 수</div></div>
+      <div class="stat"><div class="v num">261<small>대 지정</small></div><div class="l">저희 학교 기본 디벗 정책 — 통합설정에 지정한 단말 수</div></div>
       <div class="stat warn"><div class="v num">232<small>대 적용</small></div><div class="l">실제로 정책을 받은 단말. 나머지 29대는 「접속대기중」</div></div>
       <div class="stat bad"><div class="v num">9<small>대 실패</small></div><div class="l">「미적용 재배포」 261대 중 실패 → 처리이력에서 [재실행]</div></div>
     </div>
@@ -324,28 +415,28 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
       <span class="st now">접속대기중</span><span class="ar">›</span>
       <span class="st">진행중</span><span class="ar">›</span>
       <span class="st bad">처리실패</span><span class="ar">/</span><span class="st ok">처리성공</span>
-      <span class="cap">← 처리이력 상세의 단계. 꺼진 기기는 여기서 멈춥니다</span>
+      <span class="cap">← 처리이력 상세의 단계입니다. 꺼진 기기는 여기서 멈춥니다</span>
     </div>
     <ul class="feat">
-      <li><span class="k">!</span><span>단말현황의 <b>「연결」 표시는 마지막 통신 후 5일간 유지</b>됩니다 — 초록불이 「지금 켜져 있음」은 아닙니다.</span></li>
-      <li><span class="k">→</span><span>그래서 배포하면 끝이 아니라, <b>적용현황 숫자를 읽고 → 미적용 재배포 → 처리이력 재실행</b>이 일상입니다.</span></li>
+      <li><span class="k">!</span><span>단말현황의 <b>「연결」 표시는 마지막 통신 후 5일간 유지</b>됩니다 — 초록불이 「지금 켜져 있음」은 아닙니다!</span></li>
+      <li><span class="k">→</span><span>그래서 배포하면 끝이 아니라, <b>적용현황 숫자를 읽고 → 미적용 재배포 → 처리이력 재실행</b>까지가 한 세트입니다!</span></li>
     </ul>
-    <div class="src">근거: Argos 사용자매뉴얼 v4.1 — 5.3 단말 ICON(「항상 연결 상태에서 명령 처리」·5일 표시) · 15.4 통합설정 적용현황 · 26.3 처리이력 상세. 숫자는 2026-09 실제 관리 화면.</div>
+    <div class="src">근거: Argos 사용자매뉴얼 v4.1 — 5.3 단말 ICON(「항상 연결 상태에서 명령 처리」·5일 표시) · 15.4 통합설정 적용현황 · 26.3 처리이력 상세. 숫자는 2026-09 실제 관리 화면입니다.</div>
   </section>
 
-  <!-- ══════════ 5 · MDM의 현실 ② ══════════ -->
-  <section class="slide dark" data-dark data-name="MDM의 현실 ② 안 되는 것"
-    data-note="<b>[1:30]</b> 안 되는 것도 알고 가야 합니다. 첫째, <b>에이전트가 없는 기기는 아무것도 못 합니다.</b> 미설치·미등록은 재배포도 안 되고, 공장초기화하면 에이전트도 같이 지워져서 다시 깔아야 합니다. 둘째, 윈도우에서 되는 것과 안 되는 것 — 분실 위치, 앱 차단, 사이트 차단, 공장초기화는 되고, <b>암호 초기화·앱 데이터 초기화·사용시간 제한은 안 됩니다.</b> Windows Pro·Education 에디션만 됩니다. 셋째, 관리자 웹은 학내망 전용, 비밀번호는 3개월마다 만료, 5번 틀리면 잠기고 푸는 건 기술지원센터만. 넷째, <b>숫자가 서로 안 맞습니다.</b> Argos엔 우리 학교 단말이 1008대인데 DBS엔 760대. 졸업·전출 기기가 Argos에 남아 있어서 그렇습니다. 알고 있으면 당황하지 않습니다.">
-    <div class="eyebrow"><span class="dot"></span>MDM의 현실 ②</div>
-    <h1 class="title">안 되는 것을 <span class="accent">먼저</span> 알기</h1>
+  <!-- ══════════ 5 · MDM 미리 알아 두실 것 ② ══════════ -->
+  <section class="slide dark" data-dark data-name="미리 알아 두시면 당황하지 않으십니다"
+    data-note="<b>[1:30]</b> 안 되는 것도 미리 알고 가시면 당황하지 않으십니다. 첫째, <b>에이전트가 없는 기기는 아무것도 못 합니다.</b> 미설치·미등록은 재배포도 안 되고, 공장초기화하면 에이전트도 같이 지워져서 다시 깔아야 합니다. 둘째, 윈도우에서 되는 것과 안 되는 것 — 분실 위치, 앱 차단, 사이트 차단, 공장초기화는 되고, <b>암호 초기화·앱 데이터 초기화·사용시간 제한은 안 됩니다.</b> Windows Pro·Education 에디션만 됩니다. 셋째, 관리자 웹은 학내망 전용이고 비밀번호는 3개월마다 만료, 5번 틀리면 잠기고 푸는 건 기술지원센터만 가능합니다. 넷째, <b>숫자가 서로 안 맞습니다.</b> Argos엔 저희 학교 단말이 1008대인데 DBS엔 760대. 졸업·전출 기기가 Argos에 남아 있어서 그렇습니다. 알고 계시면 당황하지 않으십니다!">
+    <div class="eyebrow"><span class="dot"></span>MDM, 미리 알아 두실 것 ②</div>
+    <h1 class="title">미리 알아 두시면 <span class="accent">당황하지 않으십니다!</span></h1>
     <p class="lede">담당자가 당황하는 순간은 대부분 이 넷 중 하나입니다.</p>
     <div class="cards c2">
       <div class="card">
         <div class="k">에이전트</div>
         <h3>에이전트 없는 기기는 아무것도 못 합니다</h3>
         <ul>
-          <li><b>미설치·미등록</b> 단말은 정책도, 재배포도 불가</li>
-          <li><b>공장초기화</b>하면 에이전트도 지워짐 → 다시 설치(정보나눔터 가이드)</li>
+          <li><b>미설치·미등록</b> 단말은 정책도, 재배포도 불가합니다</li>
+          <li><b>공장초기화</b>하면 에이전트도 지워집니다 → 다시 설치(정보나눔터 가이드)</li>
         </ul>
       </div>
       <div class="card">
@@ -354,14 +445,14 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
         <ul>
           <li><b class="o">O</b> 분실 위치 · 앱 차단 · 사이트 차단 · 공장초기화</li>
           <li><b class="x">X</b> 암호 초기화 · 앱 데이터 초기화 · 사용시간 제한</li>
-          <li>Windows <b>Pro · Education</b> 에디션만</li>
+          <li>Windows <b>Pro · Education</b> 에디션만 지원됩니다</li>
         </ul>
       </div>
       <div class="card">
         <div class="k">관리자 웹</div>
-        <h3>학내망 전용, 비밀번호는 예민</h3>
+        <h3>학내망 전용, 비밀번호는 예민합니다</h3>
         <ul>
-          <li>집에서 안 열림 — <b>학내망 · eVPN</b>만</li>
+          <li>집에서는 안 열립니다 — <b>학내망 · eVPN</b>만</li>
           <li>비밀번호 <b>3개월 만료</b> · 5회 틀리면 잠김 → 해제는 기술지원센터만</li>
         </ul>
       </div>
@@ -369,48 +460,33 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
         <div class="k">숫자</div>
         <h3>Argos <span class="num">1008</span>대 vs DBS <span class="num">760</span>대</h3>
         <ul>
-          <li>같은 학교인데 다릅니다 — Argos엔 <b>졸업·전출 기기</b>가 남아 있음</li>
-          <li>대장은 <b>내 눈으로 세는 수</b>가 기준. 두 화면은 참고</li>
+          <li>같은 학교인데 다릅니다 — Argos엔 <b>졸업·전출 기기</b>가 남아 있습니다</li>
+          <li>대장은 <b>내 눈으로 세는 수</b>가 기준입니다. 두 화면은 참고!</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- ══════════ 6 · ADMIN의 현실 ══════════ -->
-  <section class="slide" data-name="ADMIN의 현실"
-    data-note="<b>[1:30]</b> 관리 센터 쪽 현실. 계정을 만들 때 <b>암호를 우리가 정할 수 없습니다.</b> 만들고 나서 초기화해야 하는데, 한 번에 <b>40명까지</b>만 됩니다. 그래서 반 단위로 검색해서 40명씩 — 이게 실습 ②입니다. CSV 일괄 등록은 <b>맨 아래 빈 줄 하나</b>면 통째로 실패합니다. 아이디는 <b>입학연도+입학 당시 학번</b>으로 만들고 졸업까지 안 바꿉니다. 학년이 올라가면 <b>표시이름만</b> 바꾸는데, 방법이 셋 — 한 명씩 노가다, MS 스토어의 <b>ClassSync</b>, 그리고 클래스이음. 에이마스에서는 클래스이음으로 승급이 된다고 하는데, 저희가 해보니 「성공」만 뜨고 <b>반영이 안 됐습니다.</b> PowerShell은 2025년에 모듈이 은퇴돼서 막혔고요. 오늘은 방법 <b>소개만</b>. 그리고 관리자 계정 자체를 만들거나 MFA·라이선스가 막히면 — 다음 장.">
-    <div class="eyebrow"><span class="dot"></span>ADMIN(M365 관리 센터)의 현실</div>
-    <h1 class="title">계정 쪽에서 <span class="accent">부딪히는 다섯 가지</span></h1>
-    <ul class="feat big">
-      <li><span class="k">1</span><span>계정을 만들 때 <b>암호를 정할 수 없습니다.</b> 만들고 나서 초기화 — 그런데 한 번에 <b>40명까지</b>. 반 단위로 검색해서 40명씩.</span></li>
-      <li><span class="k">2</span><span>CSV 일괄 등록은 <b>맨 아래 빈 줄 하나</b>로 통째로 실패합니다. 성=학번, 표시이름=학번+이름.</span></li>
-      <li><span class="k">3</span><span>아이디는 <b>입학연도+입학 학번</b>(예 <span class="num">202610101</span>@학교.ms.kr), 졸업까지 안 바꿉니다. 승급 = <b>표시이름만</b> 바꾸는 일.</span></li>
-      <li><span class="k">4</span><span>표시이름 바꾸는 법 — 한 명씩 노가다 · MS Store <b>ClassSync</b> · 클래스이음은 「된다」지만 <b>실제 반영 안 됨</b>(2026-09 경험). PowerShell은 2025년 은퇴.</span></li>
-      <li><span class="k">5</span><span>관리자 계정 만들기 · MFA · 라이선스에서 막히면 <b>혼자 붙들지 말고 전화</b> — 다음 장.</span></li>
-    </ul>
-    <div class="src">실습 ①·② 에서 1·2·3 을 직접 해 봅니다. 4 는 소개만.</div>
-  </section>
-
-  <!-- ══════════ 7 · 매뉴얼 말고, 전화 ══════════ -->
-  <section class="slide dark" data-dark data-name="매뉴얼 말고, 전화"
-    data-note="<b>[2:00]</b> 오늘 제일 중요한 장입니다. 매뉴얼 뒤지지 말고 전화하세요. 첫째, 학생 디벗이 고장나면 <b>통합콜센터 1566-6647</b>. ARS에서 업체를 고릅니다 — 우리 학교 2·3학년 기기는 <b>케이원</b>. 접수와 수리 추적은 <b>dbs.edu-portal.ai</b>에서 합니다. 1학년은 올해 보급된 <b>티지에스</b> 기기라 다른 번호인데, 티지에스 쪽은 아직 접수 사이트가 없어서 전화로 합니다. 여러분 학교는 <b>도입 연도</b>로 업체가 갈립니다 — 22년 케이원, 23년 티지에스, 24·25년 케이원, 26년 티지에스. 둘째, 관리 센터 <b>관리자 계정</b>을 만들거나, MFA·라이선스처럼 「이게 뭔지 모르겠다」 싶으면 무조건 <b>에이마스 02-6123-4184</b>. 셋째, <b>Argos</b> — 계정·비밀번호·잠김·미등록 단말·정책이 안 먹을 때 <b>1666-6493</b>. 정보나눔터에 문의글 올리고 기다리지 말고 <b>바로 전화</b>하세요. 평일 8시~12시 반, 1시 반~6시.">
-    <div class="eyebrow"><span class="dot"></span>제일 중요한 한 장</div>
-    <h1 class="title">매뉴얼 말고, <span class="accent">전화.</span></h1>
+  <!-- ══════════ 6 · 막히시면 전화 ══════════ -->
+  <section class="slide dark" data-dark data-name="막히시면 매뉴얼보다 전화가 빠릅니다"
+    data-note="<b>[2:00]</b> 오늘 제일 중요한 장입니다. 막히시면 매뉴얼 뒤지지 마시고 전화하시면 됩니다! 첫째, 학생 디벗이 고장나면 <b>통합콜센터 1566-6647</b>. ARS에서 업체를 고릅니다 — 저희 학교 2·3학년 기기는 <b>케이원</b>입니다. 접수와 수리 추적은 <b>dbs.edu-portal.ai</b>에서 합니다. 1학년은 올해 보급된 <b>티지에스</b> 기기라 다른 번호인데, 티지에스 쪽은 아직 접수 사이트가 없어서 전화로 합니다. 선생님들 학교는 <b>도입 연도</b>로 업체가 갈립니다 — 22년 케이원, 23년 티지에스, 24·25년 케이원, 26년 티지에스. 둘째, 관리 센터 <b>관리자 계정</b>을 만들거나, MFA·라이선스처럼 「이게 뭔지 모르겠다」 싶으시면 무조건 <b>에이마스 02-6123-4184</b>입니다. 셋째, <b>Argos</b> — 계정·비밀번호·잠김·미등록 단말·정책이 안 먹을 때 <b>1666-6493</b>. 정보나눔터에 문의글 올리고 기다리지 마시고 <b>바로 전화</b>하시는 게 빠릅니다. 평일 8시~12시 반, 1시 반~6시입니다.">
+    <div class="eyebrow"><span class="dot"></span>제일 중요한 한 장입니다</div>
+    <h1 class="title">막히시면 매뉴얼보다 <span class="accent">전화가 빠릅니다!</span></h1>
     <div class="phones">
       <div class="ph">
         <div class="when">학생 디벗이 고장났다 · 수리<small>2·3학년(2022·2024 도입) = 케이원 관리</small></div>
         <div class="tel num">1566-6647<small>통합콜센터 · ARS에서 업체 선택</small></div>
-        <div class="then">ARS <b>케이원</b> 선택 → 접수·수리 추적은 <b><span class="u">dbs.edu-portal.ai</span></b>(DBS)에서. 1학년(2026 도입)은 <b>티지에스</b> 선택 — 접수 사이트는 아직 없음, 전화로.</div>
+        <div class="then">ARS <b>케이원</b> 선택 → 접수·수리 추적은 <b><span class="u">dbs.edu-portal.ai</span></b>(DBS)에서 하시면 됩니다. 1학년(2026 도입)은 <b>티지에스</b> 선택 — 접수 사이트는 아직 없어 전화로 합니다.</div>
       </div>
       <div class="ph">
         <div class="when">관리자 계정을 만들어야 한다 · MFA · 라이선스<small>M365 관리 센터에서 「이게 뭔지 모르겠다」 전부</small></div>
         <div class="tel num">02-6123-4184<small>에이마스 · 서울교육청 M365 지원</small></div>
-        <div class="then"><b>관리자(schooladmin) 계정 발급·재설정</b>, 2차 인증이 막힐 때, 라이선스가 모자랄 때. 혼자 붙들지 말고 <b>바로 전화</b>.</div>
+        <div class="then"><b>관리자(schooladmin) 계정 발급·재설정</b>, 2차 인증이 막힐 때, 라이선스가 모자랄 때. 혼자 붙들지 마시고 <b>바로 전화</b>하시면 됩니다!</div>
       </div>
       <div class="ph">
         <div class="when">Argos가 안 된다 · 계정 · 잠김 · 미등록 단말<small>정책이 안 먹을 때, 비밀번호 5회 틀려 잠겼을 때</small></div>
         <div class="tel num">1666-6493<small>MDM 기술지원센터 · 평일 08:00~12:30 / 13:30~18:00</small></div>
-        <div class="then">접속 계정·비밀번호 확인, <b>잠금 해제는 여기서만</b>, 미등록 단말 처리. 정보나눔터에 <b>문의글 올리지 말고 전화</b>가 빠릅니다.</div>
+        <div class="then">접속 계정·비밀번호 확인, <b>잠금 해제는 여기서만</b> 됩니다. 미등록 단말 처리도요. 정보나눔터에 <b>문의글 올리지 마시고 전화</b>가 빠릅니다!</div>
       </div>
     </div>
     <div class="years">업체는 <b style="color:#fff">도입 연도</b>로 갈립니다 →
@@ -419,43 +495,66 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 8 · 강사가 되신다면 ══════════ -->
-  <section class="slide" data-name="강사가 되신다면, 이것만"
-    data-note="<b>[1:00]</b> 그래서 강사가 되시면 149쪽 매뉴얼을 가르치지 마세요. 담당자가 1년에 정말 손대는 건 <b>이 여섯 개</b>입니다. 계정 만들기, 라이선스, 암호 초기화 40명, 표시이름·승급은 소개만, MDM은 통합설정 하나 만들고 사이트 차단하고 <b>적용현황 숫자 읽기</b>, 그리고 전화번호 세 개. 실수를 줄이는 도구로 <b>관리대장 생성기</b>를 드립니다 — 명렬 붙여넣고 버튼 하나면 대응표·라벨·계정 CSV가 나옵니다.">
-    <div class="eyebrow"><span class="dot"></span>강사가 되신다면</div>
-    <h1 class="title">담당자가 1년에 <span class="accent">정말 손대는 것</span>만</h1>
-    <p class="lede">이 여섯 개를 중심에 두면, 나머지는 「전화」로 해결됩니다.</p>
+  <!-- ══════════ 7 · 오늘, 저와 함께 하실 내용들 ══════════ -->
+  <section class="slide" data-name="오늘, 저와 함께 하실 내용들!"
+    data-note="<b>[1:30]</b> 오늘 저와 함께 하실 내용입니다. 디벗 담당자가 1년 동안 가장 자주 사용하는, 꼭 알아야 하는 기능 <b>여섯 가지</b>입니다. ① 학생 계정 만들기 — CSV로 한 번에 만듭니다. 아이디는 <b>입학연도+학번</b>으로 정하고 졸업까지 그대로 씁니다. [CSV 실제 예시 보기]를 누르면 엑셀에서 저장한 그대로가 나오는데, <b>맨 아래 빈 줄 하나</b>가 실무 오류 1위입니다 — 실습기에서 직접 겪어 보시겠습니다. ② 라이선스는 사용자 추가 마법사 2단계에서 붙입니다. ③ 암호 초기화 — 계정 만들 때는 암호를 정할 수 없어서, 만든 뒤 반 단위로 검색해 <b>40명씩</b> 초기화합니다. ④ 승급은 아이디가 아니라 <b>표시 이름만</b> 바꾸는 일입니다 — 한 명씩 수동, 또는 MS Store의 ClassSync. 방법만 소개해 드리겠습니다. ⑤ MDM은 딱 둘 — 통합설정 하나 만들고 사이트 차단, 그리고 적용현황 숫자 읽기. ⑥ 전화번호 세 개. 그리고 실수를 줄여 주는 <b>관리대장 생성기</b>를 드리겠습니다 — 명렬 붙여넣고 버튼 하나면 대응표·라벨·계정 CSV가 나옵니다!">
+    <div class="eyebrow"><span class="dot"></span>오늘의 실습 내용</div>
+    <h1 class="title">오늘, 저와 함께 <span class="accent">하실 내용들!</span></h1>
+    <p class="lede">디벗 담당자가 1년 동안 가장 자주 사용하여, <b>꼭! 알아야 하는 기능들</b>입니다.</p>
     <ul class="feat two">
-      <li><span class="k">1</span><span><b>학생 계정 만들기</b> — CSV로. 아이디 규칙(입학연도+학번)부터 정하고.</span></li>
-      <li><span class="k">4</span><span><b>표시이름 · 승급</b> — 방법만 소개(노가다 · ClassSync). 아이디는 안 바뀐다는 것.</span></li>
-      <li><span class="k">2</span><span><b>라이선스 붙이기</b> — 사용자 추가 2단계, 또는 활성 사용자 ⋯ 라이선스.</span></li>
-      <li><span class="k">5</span><span><b>MDM은 딱 둘</b> — 통합설정 하나 만들기 + 사이트 차단. 그리고 적용현황 숫자 읽기.</span></li>
-      <li><span class="k">3</span><span><b>암호 초기화</b> — 40명씩, 반 단위 검색. 담임 배부용 표까지.</span></li>
+      <li><span class="k">1</span><span><b>학생 계정 만들기</b> — CSV로 한 번에. 아이디 규칙(입학연도+학번)부터 정합니다. <button class="tg" id="csvOpen" type="button">CSV 실제 예시 보기</button></span></li>
+      <li><span class="k">4</span><span><b>표시 이름 · 승급</b> — 아이디는 졸업까지 그대로, 표시 이름만 바꿉니다(수동 · ClassSync). 방법만 소개해 드립니다.</span></li>
+      <li><span class="k">2</span><span><b>라이선스 붙이기</b> — 사용자 추가 2단계, 또는 활성 사용자 ⋯ 라이선스에서 합니다.</span></li>
+      <li><span class="k">5</span><span><b>MDM은 딱 둘</b> — 통합설정 하나 만들기 + 사이트 차단. 그리고 적용현황 숫자 읽기!</span></li>
+      <li><span class="k">3</span><span><b>암호 초기화</b> — 계정을 만들 때는 암호를 정할 수 없어서, 반 단위로 검색해 <b>40명씩</b> 초기화합니다.</span></li>
       <li><span class="k">6</span><span><b>전화번호 3개</b> — <span class="num">1566-6647</span> · <span class="num">02-6123-4184</span> · <span class="num">1666-6493</span></span></li>
     </ul>
-    <div class="cards c2" style="margin-top:22px">
+    <div class="cards c2" style="margin-top:24px">
       <div class="card">
-        <div class="k">실수를 줄이는 도구</div>
+        <div class="k">실수를 줄여 주는 도구</div>
         <h3>관리대장 생성기</h3>
-        <p>명렬 붙여넣고 버튼 하나 → <b>시리얼–학번 대응표 · 라벨 · 반납확인서 · Argos 이름표 · M365 계정 CSV</b>(빈 줄 없이).</p>
+        <p>명렬 붙여넣고 버튼 하나 → <b>시리얼–학번 대응표 · 라벨 · 반납확인서 · Argos 이름표 · M365 계정 CSV</b>(빈 줄 없이)가 나옵니다.</p>
       </div>
       <div class="card">
-        <div class="k">가르치지 않아도 되는 것</div>
-        <h3>Intune · 조건부 액세스 · PowerShell</h3>
-        <p>서울 디벗 윈도우는 Intune을 쓰지 않습니다. 앱 배포·대여·기능표는 <b>언급만</b>. 막히면 전화.</p>
+        <div class="k">실습 방식</div>
+        <h3>전원이 같은 화면으로!</h3>
+        <p>필수 4개는 제 화면을 보시며 <b>함께 클릭</b>합니다. 그다음은 허브 42개 미션 중 <b>원하시는 것</b>을 고르시면 됩니다.</p>
+      </div>
+    </div>
+
+    <!-- CSV 실제 예시 (토글) -->
+    <div id="csvPanel">
+      <div class="cp-head">
+        <h4>CSV 일괄 등록 — 실제 예시</h4>
+        <span class="sub">엑셀에서 「CSV(쉼표로 분리)」로 저장하면 이렇게 생깁니다</span>
+        <button class="x" id="csvClose" type="button">닫기</button>
+      </div>
+      <table class="csv">
+        <tr class="h"><td class="rn">1</td><td>사용자 이름</td><td>이름</td><td>성</td><td>표시 이름</td><td>직함 … 국가 또는 지역</td></tr>
+        <tr><td class="rn">2</td><td class="num">202610101@dibeot.ms.kr</td><td>김하늘</td><td class="num">10101</td><td><span class="num">202610101</span>김하늘</td><td></td></tr>
+        <tr><td class="rn">3</td><td class="num">202610102@dibeot.ms.kr</td><td>이서준</td><td class="num">10102</td><td><span class="num">202610102</span>이서준</td><td></td></tr>
+        <tr><td class="rn">4</td><td class="num">202610103@dibeot.ms.kr</td><td>박지우</td><td class="num">10103</td><td><span class="num">202610103</span>박지우</td><td></td></tr>
+        <tr class="blank"><td class="rn">5</td><td colspan="5">(빈 줄) ← 엑셀이 저장하며 붙인 마지막 줄바꿈입니다. 관리 센터는 이것을 「내용 없는 사용자 1명」으로 읽어 <u>업로드가 통째로 실패</u>합니다!</td></tr>
+      </table>
+      <div class="rules">
+        <span><b>사용자 이름</b> = 입학연도+학번@도메인</span>
+        <span><b>이름</b> = 학생 이름</span>
+        <span><b>성</b> = 학번 5자리</span>
+        <span><b>표시 이름</b> = 아이디 9자리+이름</span>
+        <span class="fix"><b>해결</b> = 메모장으로 열어 마지막 줄바꿈 삭제 → 실습기에서 직접 겪어 보시겠습니다!</span>
       </div>
     </div>
   </section>
 
-  <!-- ══════════ 9 · 오늘은 이렇게 ══════════ -->
-  <section class="slide dark" data-dark data-name="오늘은 이렇게"
-    data-note="<b>[0:45]</b> 오늘 진행. 지금 이야기 끝나면 <b>필수 실습 4개</b> — CSV 계정+라이선스, 암호 40명, 윈도우 통합설정+사이트 차단, 시간 되면 적용현황과 재배포. 그다음은 허브 42개 미션 중에 <b>하고 싶은 걸 고르세요</b> — 승급, 생성기, 대여·분실, DBS 수리·마스킹, 인수인계. 마지막에 이 사이트들을 여러분 강의 도구로 드리는 방법까지.">
+  <!-- ══════════ 8 · 오늘은 이렇게 진행하겠습니다 ══════════ -->
+  <section class="slide dark" data-dark data-name="오늘은 이렇게 진행하겠습니다"
+    data-note="<b>[0:45]</b> 오늘 진행입니다. 지금 이야기가 끝나면 <b>필수 실습 4개</b>를 전원이 같은 화면으로 함께 합니다 — CSV 계정+라이선스, 암호 40명, 윈도우 통합설정+사이트 차단, 시간이 되면 적용현황과 재배포까지. 그다음은 허브 42개 미션 중에 <b>원하시는 것을 고르시면 됩니다</b> — 승급, 생성기, 대여·분실, DBS 수리·마스킹, 인수인계. 마지막에 이 사이트들을 선생님들 강의 도구로 가져가시는 방법까지 말씀드리겠습니다!">
     <div class="eyebrow"><span class="dot"></span>남은 시간</div>
-    <h1 class="title">오늘은 <span class="accent">이렇게</span> 갑니다</h1>
+    <h1 class="title">오늘은 <span class="accent">이렇게</span> 진행하겠습니다!</h1>
     <div class="flow">
-      <div class="step now"><div class="n">지금</div><h4>이야기</h4><p>현실 · 전화번호 · 가르칠 것</p></div>
+      <div class="step now"><div class="n">지금</div><h4>이야기</h4><p>준비 과정 · 현실 · 전화번호</p></div>
       <div class="step"><div class="n">다음 40분</div><h4>필수 실습 4</h4><p>전원이 같은 화면으로</p></div>
-      <div class="step"><div class="n">그다음</div><h4>골라서 실습</h4><p>허브 42미션 중 원하는 것</p></div>
+      <div class="step"><div class="n">그다음</div><h4>골라서 실습</h4><p>허브 42미션 중 원하시는 것</p></div>
       <div class="step"><div class="n">마지막</div><h4>물려드리기</h4><p>사이트 5개를 강의 도구로</p></div>
     </div>
     <div class="must">
@@ -473,23 +572,23 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 10 · 브릿지 ══════════ -->
-  <section class="slide closing" data-dark data-name="화면을 엽니다"
-    data-note="<b>[0:15]</b> 자, 화면 엽니다. 주소는 오프닝 QR과 같습니다. 각자 노트북에서 허브를 열어 주세요.">
-    <h1>이제 화면을 <em>엽니다.</em></h1>
-    <p>오프닝에서 찍은 QR과 같은 주소입니다. 각자 노트북에서 허브를 열어 주세요.</p>
+  <!-- ══════════ 9 · 브릿지 ══════════ -->
+  <section class="slide closing" data-dark data-name="화면을 열어 주시면 감사하겠습니다"
+    data-note="<b>[0:15]</b> 이제 화면을 열어서 아래 링크로 들어와 주시면 감사하겠습니다! 오프닝에서 찍으신 QR과 같은 주소입니다. 각자 노트북에서 허브를 열어 주시면 바로 시작하겠습니다!">
+    <h1>이제 화면을 열어서<em>아래 링크로 들어와 주시면 감사하겠습니다!</em></h1>
+    <p>오프닝에서 찍으신 QR과 같은 주소입니다. 각자 노트북에서 허브를 열어 주시면 바로 시작하겠습니다!</p>
     <div class="url">scienceisjo.github.io/growing-teachers/<span>dibut/</span></div>
-    <footer id="app-credit">서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — <b>윈도우 ADMIN · MDM UI 안내</b> · 실습 전 이야기 · 최종 업데이트 2026-09-12</footer>
+    <footer id="app-credit">서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — <b>Windows ADMIN, MDM(Argos) 사용법 연수</b> · 실습 전 이야기 · 최종 업데이트 2026-09-12</footer>
   </section>
 
-  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
-  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">12:00</div>
+  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>C</kbd> CSV 예시 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
+  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">11:00</div>
 
   <div id="chrome">
     <div class="left" id="stageName">표지</div>
     <div class="right">
       <button class="nb" id="prev" aria-label="이전">◀</button>
-      <span id="num">1 / 10</span>
+      <span id="num">1 / 9</span>
       <button class="nb" id="next" aria-label="다음">▶</button>
     </div>
   </div>
@@ -513,6 +612,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
   var notesEl = document.getElementById('notes');
   var ovEl    = document.getElementById('overview');
   var ovGrid  = document.getElementById('ovGrid');
+  var csvEl   = document.getElementById('csvPanel');
   var i = 0, notesOn = false;
 
   /* 1280×720 무대를 창에 맞춰 배율 조정 (전자칠판 왼쪽 몰림 방지) */
@@ -534,6 +634,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     nameEl.textContent = labelOf(cur, i);
     bar.style.width = (i / (slides.length - 1) * 100) + '%';
     notesEl.innerHTML = cur.getAttribute('data-note') || '<span style="opacity:.5">이 슬라이드에는 대본이 없습니다.</span>';
+    csvEl.classList.remove('on');
     try { history.replaceState(null, '', '#s' + (i + 1)); } catch (e) {}
   }
   function go(d){ show(i + d); }
@@ -546,9 +647,18 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     ovGrid.appendChild(b);
   });
 
-  /* 발표 타이머 — 기본 12분, 주소에 ?min=10 처럼 붙이면 그 시간으로 */
+  /* CSV 실제 예시 토글 — 버튼, C 키, Esc */
+  function toggleCsv(force){
+    var on = (typeof force === 'boolean') ? force : !csvEl.classList.contains('on');
+    if (on && !slides[i].contains(csvEl)) show(slides.indexOf(csvEl.closest('.slide')));
+    csvEl.classList.toggle('on', on);
+  }
+  document.getElementById('csvOpen').onclick = function(e){ e.stopPropagation(); toggleCsv(true); };
+  document.getElementById('csvClose').onclick = function(e){ e.stopPropagation(); toggleCsv(false); };
+
+  /* 발표 타이머 — 기본 11분, 주소에 ?min=10 처럼 붙이면 그 시간으로 */
   var qMin = parseInt((location.search.match(/[?&]min=(\d+)/) || [])[1], 10);
-  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 12) * 60, left = TOTAL, tick = null;
+  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 11) * 60, left = TOTAL, tick = null;
   var tEl = document.getElementById('timer');
   function paint(){
     var neg = left < 0, v = Math.abs(left);
@@ -571,7 +681,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
 
   addEventListener('keydown', function(e){
     var k = e.key;
-    if (k === 'Escape'){ ovEl.classList.remove('on'); return; }
+    if (k === 'Escape'){ ovEl.classList.remove('on'); csvEl.classList.remove('on'); return; }
     if (ovEl.classList.contains('on') && k !== 'o' && k !== 'O' && k !== 'ㅐ') return;
     if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); go(1); }
     else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); go(-1); }
@@ -581,12 +691,12 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     else if (k === 'n' || k === 'N' || k === 'ㅜ'){ notesOn = !notesOn; notesEl.classList.toggle('on', notesOn); stage.classList.toggle('notes', notesOn); }
     else if (k === 't' || k === 'T' || k === 'ㅅ'){ toggleTimer(); }
     else if (k === 'r' || k === 'R' || k === 'ㄱ'){ resetTimer(); }
+    else if (k === 'c' || k === 'C' || k === 'ㅊ'){ toggleCsv(); }
     else if (k >= '1' && k <= '9'){ show(parseInt(k, 10) - 1); }
-    else if (k === '0'){ show(9); }
   });
 
   stage.addEventListener('click', function(e){
-    if (e.target.closest('a, button, #timer, #overview, #notes')) return;
+    if (e.target.closest('a, button, #timer, #overview, #notes, #csvPanel')) return;
     go(1);
   });
 
