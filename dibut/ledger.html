@@ -301,6 +301,7 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
 
   <!-- M365 -->
   <div class="tp hidden" data-tp="m365">
+    <div class="note i noprint"><b>열 규칙.</b> <b>성</b> 칸에는 <b>학번</b>을, <b>이름</b> 칸에는 <b>성을 포함한 이름 전체</b>를 넣습니다(예: 성 <span class="mono">10601</span> · 이름 <b>조승재</b> · 표시 이름 <span class="mono">202510601조승재</span>). 성을 한 글자 떼어 「승재」로 넣지 않습니다 — 남궁·황보처럼 두 글자 성이 있어 잘못 잘리고, 표시 이름과도 어긋납니다.</div>
     <div class="note w noprint"><b>머리글(첫 줄)은 한 글자도 바꾸지 마세요.</b> 관리 센터가 첫 줄로 열을 인식합니다. 그리고 파일 <b>맨 아래 빈 줄</b>이 있으면 「내용 없는 사용자 1명」으로 읽혀 업로드가 통째로 실패합니다 — 이 도구는 빈 줄 없이 저장합니다.</div>
     <div class="note i noprint">먼저 <b>5명만</b> 남긴 파일로 시험 업로드하고, 정상 생성을 확인한 뒤 전체를 올리세요. 업로드 후에는 <b>라이선스 할당</b>과 <b>암호 초기화</b>가 남습니다.</div>
     <div class="btnrow noprint">
@@ -506,7 +507,7 @@ function render(info){
 
   /* M365 */
   tbl($("#m365Tbl"),["사용자 이름","이름","성","표시 이름"],
-    ROWS.map(r=>['<span class="mono">'+esc(r.account)+"</span>",esc(r.name.slice(1)||r.name),
+    ROWS.map(r=>['<span class="mono">'+esc(r.account)+"</span>",esc(r.name),
       '<span class="mono">'+r.hakbun+"</span>",'<span class="mono">'+esc(r.disp)+"</span>"]));
 
   /* 라벨 · 확인서 */
@@ -583,7 +584,7 @@ const SETS={
     .concat(ROWS.filter(r=>r.serial).map(r=>[r.serial,"",r.dev].map(q).join(",")));},
   m365:function(n){const rs=n?ROWS.slice(0,n):ROWS;
     return [["사용자 이름","이름","성","표시 이름"].join(",")]
-    .concat(rs.map(r=>[r.account,r.name.slice(1)||r.name,r.hakbun,r.disp].map(q).join(",")));}
+    .concat(rs.map(r=>[r.account,r.name,r.hakbun,r.disp].map(q).join(",")));}
 };
 
 /* ── 이벤트 ── */

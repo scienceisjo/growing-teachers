@@ -198,13 +198,13 @@ const ARGOS="argos.html";
 const GEN="ledger.html";
 const HAND="handover.html";
 const DBS="dbs.html";
-const KEY_M="m365_sim_v4", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1", KEY_D="dibut_dbs_v1";
+const KEY_M="m365_sim_v5", KEY_A="argos_sim_v7", KEY_G="dibut_gen_missions_v1", KEY_H="dibut_hub_v1", KEY_D="dibut_dbs_v1";
 
 /* 미션 사전 — app: M(M365)/A(Argos)/G(생성기)/H(인수인계) */
 const DEF={
  "M:m7":"신입생 계정 만들기(개별)","M:m8":"여러 사용자 추가(CSV)","M:m12":"개인 비밀번호 초기화",
  "M:m9":"단체 암호 초기화(40명)","M:m14":"표시 이름 통일","M:m11":"학급 그룹 만들기",
- "M:m15":"학생 MFA 일괄 해제","M:m13":"저장용량 변경",
+ "M:m13":"저장용량 변경",
  "M:m17":"계정 전체 내보내기","M:m16":"별칭으로 아이디 변경","M:m3":"학년 일괄 진급",
  "M:m4":"신입생 CSV 일괄 생성","M:m10":"담당교사 권한 위임",
  "A:m1":"미설치 단말 찾기","A:m2":"사용자 이름 변경(개별)","A:m3":"이름 일괄 변경 템플릿",
@@ -223,8 +223,8 @@ const DEF={
 
 const STAGES=[
  {id:"s1",label:"STAGE 1",name:"3월",season:"개학",
-  desc:"동의서 확인 → 계정 세팅. 신입생을 만들고 비번을 뿌리고 그룹·MFA까지.",
-  ms:["M:m7","M:m8","M:m12","M:m9","M:m14","M:m11","M:m15"]},
+  desc:"동의서 확인 → 계정 세팅. 신입생을 만들고 비번을 뿌리고 학급 그룹까지.",
+  ms:["M:m7","M:m8","M:m12","M:m9","M:m14","M:m11"]},
  {id:"s2",label:"STAGE 2",name:"4월",season:"보급",
   desc:"1학년 배부의 달. 생성기로 대응표·라벨을 뽑고 Argos 단말 이름을 맞춥니다.",
   ms:["G:make","G:map","G:label","A:m2","A:m3"]},
