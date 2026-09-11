@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 크롬OS 전환 검토</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#F6F8F7;
+  --surface:#FFFFFF;
+  --surface-2:#EEF2F0;
+  --ink:#141C1B;
+  --ink-2:#3E4B49;
+  --ink-3:#6B7A77;
+  --line:#DCE3E0;
+  --line-2:#C3CEC9;
+  --accent:#1C5F5A;
+  --accent-soft:#E2EFEC;
+  --accent-ink:#14413E;
+  --caution:#9B5116;
+  --caution-soft:#F6EBE0;
+  --alert:#8E2F33;
+  --alert-soft:#F6E5E4;
+  --shadow:0 1px 2px rgba(20,28,27,.05), 0 8px 24px -16px rgba(20,28,27,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1413;
+    --surface:#161E1D;
+    --surface-2:#1D2725;
+    --ink:#E7EDEB;
+    --ink-2:#B7C3C0;
+    --ink-3:#879793;
+    --line:#27322F;
+    --line-2:#35433F;
+    --accent:#68C0B5;
+    --accent-soft:#17302E;
+    --accent-ink:#9BD8CF;
+    --caution:#DFA164;
+    --caution-soft:#2C221A;
+    --alert:#E08A8A;
+    --alert-soft:#2E1D1D;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1413;
+  --surface:#161E1D;
+  --surface-2:#1D2725;
+  --ink:#E7EDEB;
+  --ink-2:#B7C3C0;
+  --ink-3:#879793;
+  --line:#27322F;
+  --line-2:#35433F;
+  --accent:#68C0B5;
+  --accent-soft:#17302E;
+  --accent-ink:#9BD8CF;
+  --caution:#DFA164;
+  --caution-soft:#2C221A;
+  --alert:#E08A8A;
+  --alert-soft:#2E1D1D;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-weight:400;
+  font-size:15.5px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+h1,h2,h3,h4{font-family:"Noto Serif KR",Georgia,serif;font-weight:700;line-height:1.32;text-wrap:balance;margin:0;letter-spacing:-.01em;}
+p{margin:0;}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0;}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--line);background:var(--surface);}
+.masthead .wrap{padding-block:44px 38px;}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+}
+.eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--line-2);}
+.stage{
+  display:inline-flex;align-items:center;gap:7px;background:var(--accent-soft);color:var(--accent-ink);
+  padding:3px 10px;border-radius:2px;letter-spacing:.08em;
+}
+h1{font-size:clamp(31px,5.2vw,48px);margin-top:18px;max-width:17ch;}
+.dek{margin-top:16px;max-width:62ch;color:var(--ink-2);font-size:17px;line-height:1.68;font-weight:300;}
+.credits{
+  margin-top:26px;padding-top:20px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:8px 28px;font-size:13px;color:var(--ink-3);
+}
+.credits b{color:var(--ink-2);font-weight:500;}
+
+/* ---------- layout ---------- */
+.shell{display:grid;grid-template-columns:196px minmax(0,1fr);gap:52px;align-items:start;}
+.rail{position:sticky;top:20px;padding-block:44px;display:flex;flex-direction:column;gap:2px;}
+.rail a{
+  display:flex;gap:11px;align-items:baseline;text-decoration:none;color:var(--ink-3);
+  font-size:13.5px;padding:7px 10px;border-radius:3px;border-left:2px solid transparent;
+}
+.rail a:hover{color:var(--ink);background:var(--surface-2);}
+.rail a.on{color:var(--accent-ink);border-left-color:var(--accent);background:var(--accent-soft);font-weight:500;}
+.rail .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);}
+.rail a.on .n{color:var(--accent);}
+.main{padding-block:44px 72px;min-width:0;display:flex;flex-direction:column;gap:64px;}
+
+.mobnav{display:none;}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:16px;}
+.sec-head{display:flex;flex-direction:column;gap:8px;margin-bottom:26px;padding-bottom:16px;border-bottom:2px solid var(--ink);}
+.sec-num{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;}
+.sec-head h2{font-size:clamp(23px,3.4vw,29px);}
+.sec-head .sub{font-size:13.5px;color:var(--ink-3);}
+h3{font-size:18.5px;margin-top:6px;}
+h4{font-size:15.5px;font-family:"IBM Plex Sans KR",sans-serif;font-weight:600;letter-spacing:0;}
+.stack{display:flex;flex-direction:column;gap:20px;}
+.stack-lg{display:flex;flex-direction:column;gap:36px;}
+.lede{font-size:16.5px;color:var(--ink-2);max-width:64ch;font-weight:300;}
+
+/* ---------- decision panel ---------- */
+.decide{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);overflow:hidden;}
+.decide-top{padding:22px 24px 18px;border-bottom:1px solid var(--line);}
+.decide-top h3{margin:0;font-size:19px;}
+.decide-top p{margin-top:6px;font-size:13.5px;color:var(--ink-3);}
+.qlist{display:flex;flex-direction:column;}
+.q{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:14px 24px;border-bottom:1px solid var(--line);}
+.q:last-child{border-bottom:0;}
+.q .qn{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);padding-top:2px;}
+.q .qt{font-size:14.5px;color:var(--ink);}
+.q .qw{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-3);white-space:nowrap;padding-top:3px;}
+
+/* ---------- ledger ---------- */
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+.led{background:var(--surface);padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px;}
+.led-h{display:flex;align-items:center;gap:9px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;}
+.led-h .bar{width:22px;height:3px;border-radius:2px;}
+.led ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px;}
+.led li{font-size:14.5px;line-height:1.6;padding-left:15px;position:relative;color:var(--ink-2);}
+.led li::before{content:"";position:absolute;left:0;top:.66em;width:5px;height:5px;border-radius:50%;}
+.led li b{color:var(--ink);font-weight:600;}
+.led-gain .led-h{color:var(--accent);}
+.led-gain .bar{background:var(--accent);}
+.led-gain li::before{background:var(--accent);}
+.led-cost .led-h{color:var(--caution);}
+.led-cost .bar{background:var(--caution);}
+.led-cost li::before{background:var(--caution);}
+
+/* ---------- generic blocks ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px 24px;}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink);padding:14px 18px;border-radius:0 3px 3px 0;font-size:14px;}
+.warn{border-left:3px solid var(--caution);background:var(--caution-soft);color:var(--ink);padding:14px 18px;border-radius:0 3px 3px 0;font-size:14px;}
+.warn b,.note b{font-weight:600;}
+
+table{width:100%;border-collapse:collapse;font-size:14px;}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+thead th{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;background:var(--surface-2);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0;}
+td b{font-weight:600;}
+.num{font-variant-numeric:tabular-nums;}
+
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+.spec{background:var(--surface);padding:16px 16px 18px;display:flex;flex-direction:column;gap:4px;}
+.spec .v{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+.spec .k{font-size:12.5px;color:var(--ink-3);line-height:1.45;}
+
+.limits{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+.limit{background:var(--surface);padding:18px 20px;display:grid;grid-template-columns:30px minmax(0,1fr);gap:16px;}
+.limit .ln{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--caution);font-weight:500;}
+.limit h4{margin-bottom:5px;color:var(--ink);}
+.limit p{font-size:14px;color:var(--ink-2);}
+.limit .field{margin-top:9px;font-size:13px;color:var(--caution);border-top:1px dashed var(--line-2);padding-top:9px;}
+.limit .field b{color:var(--caution);}
+
+/* ---------- student copy ---------- */
+.slides{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+.slide{
+  background:var(--surface);border:1px solid var(--line-2);border-radius:3px;padding:18px;
+  display:flex;flex-direction:column;gap:9px;min-height:0;
+}
+.slide .sn{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;}
+.slide .st{font-family:"Noto Serif KR",serif;font-weight:700;font-size:17px;line-height:1.35;}
+.slide .sb{font-size:13.5px;color:var(--ink-2);line-height:1.62;}
+.slide.hot{border-color:var(--caution);background:var(--caution-soft);}
+.slide.hot .sn{color:var(--caution);}
+.poster{
+  background:var(--ink);color:var(--ground);border-radius:4px;padding:34px 30px;
+  display:flex;flex-direction:column;gap:12px;align-items:flex-start;
+}
+.poster .pk{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.62;}
+.poster .ph{font-family:"Noto Serif KR",serif;font-weight:700;font-size:clamp(26px,5vw,38px);line-height:1.2;}
+.poster .pl{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.04em;opacity:.85;}
+.poster .pr{font-size:14px;opacity:.8;border-top:1px solid rgba(127,150,145,.35);padding-top:14px;width:100%;margin-top:6px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:6px 12px;border-radius:2px;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);
+}
+
+/* ---------- checklist ---------- */
+.phase{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--surface);}
+.phase-h{
+  display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);
+}
+.phase-h .pn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);}
+.phase-h .pt{font-weight:600;font-size:15px;}
+.phase-h .cnt{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;}
+.items{display:flex;flex-direction:column;}
+.item{display:flex;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);align-items:flex-start;cursor:pointer;}
+.item:last-child{border-bottom:0;}
+.item:hover{background:var(--surface-2);}
+.item input{margin:5px 0 0;width:15px;height:15px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer;}
+.item span{font-size:14px;color:var(--ink-2);line-height:1.6;}
+.item input:checked + span{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--line-2);}
+.item .tag{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;color:var(--caution);
+  border:1px solid var(--caution);padding:1px 5px;border-radius:2px;margin-left:6px;white-space:nowrap;text-decoration:none;display:inline-block;
+}
+.reset{
+  background:none;border:1px solid var(--line-2);color:var(--ink-3);font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;padding:5px 11px;border-radius:2px;cursor:pointer;align-self:flex-start;
+}
+.reset:hover{color:var(--ink);border-color:var(--ink-3);}
+
+/* ---------- risks ---------- */
+.riskgroup{display:flex;flex-direction:column;gap:14px;}
+.riskgroup-h{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1px solid var(--line-2);}
+.riskgroup-h .gl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;}
+.riskgroup-h h3{font-size:17px;}
+.risk{
+  background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--caution);
+  border-radius:0 4px 4px 0;padding:18px 20px;display:flex;flex-direction:column;gap:11px;
+}
+.risk.privacy{border-left-color:var(--alert);}
+.risk-h{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;}
+.risk-h .rid{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--caution);letter-spacing:.05em;}
+.risk.privacy .rid{color:var(--alert);}
+.risk-h h4{font-size:16px;font-family:"Noto Serif KR",serif;font-weight:700;letter-spacing:-.01em;}
+.risk p{font-size:14px;color:var(--ink-2);}
+.fix{background:var(--accent-soft);border-radius:3px;padding:13px 16px;display:flex;flex-direction:column;gap:7px;}
+.fix .fh{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);}
+.fix ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px;}
+.fix li{font-size:13.5px;color:var(--accent-ink);line-height:1.6;}
+
+/* ---------- account ---------- */
+.equation{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 18px;
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:26px 20px;text-align:center;
+}
+.eq-box{display:flex;flex-direction:column;gap:4px;min-width:150px;}
+.eq-box .t{font-family:"IBM Plex Mono",monospace;font-size:15px;color:var(--ink);letter-spacing:.02em;}
+.eq-box .d{font-size:12.5px;color:var(--ink-3);}
+.eq-op{font-family:"IBM Plex Mono",monospace;font-size:20px;color:var(--accent);}
+.qa{display:flex;flex-direction:column;gap:6px;padding:16px 0;border-bottom:1px solid var(--line);}
+.qa:last-child{border-bottom:0;}
+.qa .qq{font-weight:600;font-size:15px;color:var(--ink);}
+.qa .aa{font-size:14px;color:var(--ink-2);}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);background:var(--surface);}
+footer .wrap{padding-block:34px 46px;display:flex;flex-direction:column;gap:14px;}
+footer h4{font-size:13px;font-family:"IBM Plex Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);font-weight:500;}
+footer ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
+footer li{font-size:13.5px;color:var(--ink-2);}
+.disclaimer{font-size:12.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:16px;margin-top:6px;line-height:1.7;}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;}
+  .rail{display:none;}
+  .mobnav{
+    display:block;position:sticky;top:0;z-index:20;background:var(--surface);
+    border-bottom:1px solid var(--line);margin-inline:-20px;padding-inline:20px;
+  }
+  .mobnav .scroll{display:flex;gap:6px;overflow-x:auto;padding-block:11px;scrollbar-width:none;}
+  .mobnav .scroll::-webkit-scrollbar{display:none;}
+  .mobnav a{
+    white-space:nowrap;font-size:13px;text-decoration:none;color:var(--ink-3);
+    padding:5px 11px;border-radius:2px;background:var(--surface-2);border:1px solid var(--line);
+  }
+  .mobnav a.on{color:var(--accent-ink);background:var(--accent-soft);border-color:var(--accent);font-weight:500;}
+  .main{padding-block:32px 60px;gap:52px;}
+  .ledger{grid-template-columns:1fr;}
+  .q{grid-template-columns:26px minmax(0,1fr);}
+  .q .qw{grid-column:2;padding-top:0;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+</style>
+<style>
+html{color-scheme:light dark;}
+body{margin:0;}
+img{max-width:100%;}
+[hidden]{display:none!important;}
+</style>
+</head>
+<body>
+
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span class="stage">검토 · 의사결정 단계</span>
+      <span class="dot"></span>
+      <span>서울시교육청 × 구글코리아 온라인 설명회 정리</span>
+      <span class="dot"></span>
+      <span>Surface Go 3 → ChromeOS Flex</span>
+    </div>
+    <h1>디벗의 윈도우를 지울 것인가</h1>
+    <p class="dek">
+      서피스고 기반 디벗의 속도 문제를, 기기 교체가 아니라 운영체제 교체로 푸는 사업입니다.
+      얻는 것과 잃는 것이 모두 분명합니다. 이 문서는 설명회에서 실제로 나온 내용과,
+      설명회에서 다루지 않았지만 학교가 먼저 답을 정해야 할 것들을 구분해 정리했습니다.
+    </p>
+    <div class="credits">
+      <span><b>사업 취지</b> 이봉 장학관 (AI미래교육팀)</span>
+      <span><b>진행·신청</b> 최정혁 장학사</span>
+      <span><b>기술·제약</b> 김남규 (구글코리아)</span>
+      <span><b>수업 적용</b> 사라 (구글코리아)</span>
+      <span><b>시범학교</b> 이동현 교사 (장평중)</span>
+      <span><b>계정</b> 윤석현 연구사 (교육연구정보원)</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="mobnav" aria-label="섹션 바로가기">
+    <div class="scroll">
+      <a href="#s1">1 교직원 안내</a>
+      <a href="#s2">2 학생 게시</a>
+      <a href="#s3">3 담당자 상세</a>
+      <a href="#s4">4 준비 체크리스트</a>
+      <a href="#s5">5 우려·대응</a>
+      <a href="#s6">6 계정 문제</a>
+    </div>
+  </nav>
+
+  <div class="shell">
+    <nav class="rail" aria-label="목차">
+      <a href="#s1"><span class="n">01</span><span>교직원 안내</span></a>
+      <a href="#s2"><span class="n">02</span><span>학생 게시 문구</span></a>
+      <a href="#s3"><span class="n">03</span><span>담당자 상세</span></a>
+      <a href="#s4"><span class="n">04</span><span>준비 체크리스트</span></a>
+      <a href="#s5"><span class="n">05</span><span>우려·대응</span></a>
+      <a href="#s6"><span class="n">06</span><span>계정 문제</span></a>
+    </nav>
+
+    <main class="main">
+
+      <!-- 판단 패널 -->
+      <section id="top" class="stack">
+        <div class="decide">
+          <div class="decide-top">
+            <h3>결정 전에 답을 확보해야 할 5가지</h3>
+            <p>설명회에서 답이 나오지 않은 항목입니다. 이 다섯 칸이 채워지기 전에는 전면 도입 결정을 내리지 마십시오.</p>
+          </div>
+          <div class="qlist">
+            <div class="q"><span class="qn">01</span><span class="qt">우리 학교 수업에서 카메라·QR 의존도는 실제로 얼마나 되는가</span><span class="qw">교과별 설문</span></div>
+            <div class="q"><span class="qn">02</span><span class="qt">웹으로 대체할 수 없는 안드로이드 전용 앱을 쓰는 교과가 있는가</span><span class="qw">앱 인벤토리</span></div>
+            <div class="q"><span class="qn">03</span><span class="qt">서피스고 3는 언제까지 크롬 OS 플렉스 업데이트를 받는가 <b>(EOL)</b></span><span class="qw">교육청 · 구글</span></div>
+            <div class="q"><span class="qn">04</span><span class="qt">전환 후 윈도우 원복이 가능한가, 비용은 누가 부담하는가</span><span class="qw">교육청 · 업체</span></div>
+            <div class="q"><span class="qn">05</span><span class="qt">CEU 라이선스는 누가, 언제까지 부담하는가</span><span class="qw">교육청</span></div>
+          </div>
+        </div>
+
+        <div class="ledger">
+          <div class="led led-gain">
+            <div class="led-h"><span class="bar"></span>얻는 것</div>
+            <ul>
+              <li><b>부팅 10초 미만</b>, 초기화 2분 미만. 시범학교는 "기기 사양은 그대로인데 새 기기를 쓰는 느낌"이라고 보고</li>
+              <li><b>속도가 유지됨</b> — 클라우드 기반이라 2~3년 뒤에도 부팅 속도가 비슷</li>
+              <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이 사용</li>
+              <li><b>백신 불필요</b> — 2011년 이후 약 15년간 전 세계 랜섬웨어 피해 0건</li>
+              <li><b>수업 통제 도구</b> — 클래스툴즈 3단계 모드, 화면 미러링, 실시간 자막·번역</li>
+              <li><b>기기 통합 관리</b> — 앱 일괄 배포, 사이트 차단, 원격 잠금을 하나의 콘솔에서</li>
+            </ul>
+          </div>
+          <div class="led led-cost">
+            <div class="led-h"><span class="bar"></span>잃는 것</div>
+            <ul>
+              <li><b>카메라 초점</b> — 전·후면 중 한쪽. 시범학교에서는 <b>QR 인식 문제</b>가 실제로 발생</li>
+              <li><b>구글 플레이스토어</b> — 안드로이드 앱 설치 전면 불가</li>
+              <li><b>기기 로컬 파일 전부</b> — 기존 OS를 삭제하는 방식</li>
+              <li><b>되돌릴 경로</b> — 원복 절차·비용이 설명회에서 다뤄지지 않음</li>
+              <li><b>담당자 시간</b> — 계정 생성은 1회성이지만, 계정 <b>관리</b>는 매 학년 반복</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1 -->
+      <section id="s1" class="stack">
+        <div class="sec-head">
+          <span class="sec-num">01 — 교직원 협의 자료</span>
+          <h2>학내 구성원에게 어떻게 설명할 것인가</h2>
+          <span class="sub">교직원회의·부장회의에서 5분 분량. 장점과 제약을 반드시 함께 제시하십시오.</span>
+        </div>
+
+        <div class="note">
+          <b>한 줄 요약</b> — 디벗(서피스고 3)의 윈도우를 지우고 크롬 OS 플렉스로 바꾸면, 기기 교체 없이 속도 문제를 해결하고 기기 관리를 클라우드에서 일괄 처리할 수 있습니다. 대신 카메라 일부 기능과 안드로이드 앱을 포기해야 합니다.
+        </div>
+
+        <div class="stack">
+          <h3>왜 이 이야기가 나왔나</h3>
+          <p>초기 보급된 서피스고 기반 디벗이 무겁고 느려 수업 중 민원이 반복된다는 현장 의견이 누적되었고, 교육청이 구글 및 외부 전문가와 협의해 <b>기기 교체가 아닌 OS 전환</b>이라는 해법을 마련해 희망 학교에 제안한 것입니다. 강제가 아니라 <b>학교가 교육공동체 협의를 거쳐 선택</b>하는 사업입니다.</p>
+          <div class="specs">
+            <div class="spec"><span class="v">10초</span><span class="k">미만 부팅</span></div>
+            <div class="spec"><span class="v">2분</span><span class="k">미만 초기화(파워워시)</span></div>
+            <div class="spec"><span class="v">4주</span><span class="k">1회 자동 업데이트</span></div>
+            <div class="spec"><span class="v">20%</span><span class="k">에너지 사용량 절감</span></div>
+            <div class="spec"><span class="v">3분</span><span class="k">기기 1대 전환 소요</span></div>
+            <div class="spec"><span class="v">67%</span><span class="k">서울 초3~6 크롬북 선택률</span></div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>MS 도구를 쓰던 선생님께</h3>
+          <p>당장 구글 생태계로 전부 옮기라는 것이 아닙니다. 크롬 브라우저로 <b>Microsoft 365에 접속하면 Teams·Excel·PowerPoint를 웹 기반으로 기존과 거의 동일하게</b> 사용할 수 있고, 원드라이브의 엑셀·파워포인트 파일도 깨짐 없이 열립니다. OS가 가벼워져 오히려 기존 윈도우 환경보다 잘 돌아간다는 것이 발표자 설명입니다.</p>
+        </div>
+
+        <div class="stack">
+          <h3>협의해서 결정할 것</h3>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>쟁점</th><th>판단 기준</th></tr></thead>
+              <tbody>
+                <tr><td><b>카메라를 포기할 수 있는가</b></td><td>우리 학교 디벗 활용의 주된 형태가 촬영·QR 중심인가?</td></tr>
+                <tr><td><b>안드로이드 앱 의존 수업이 있는가</b></td><td>교과별 사용 앱 조사가 선행되어야 함</td></tr>
+                <tr><td><b>계정 업무를 누가 맡는가</b></td><td>1회성이 아니라 매 학년 반복되는 업무</td></tr>
+                <tr><td><b>언제 작업할 것인가</b></td><td>방학 중 권장. 학기 중은 교육과정 결손</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section id="s2" class="stack">
+        <div class="sec-head">
+          <span class="sec-num">02 — 학생 안내</span>
+          <h2>게시용 슬라이드·포스터 문구</h2>
+          <span class="sub">교실 TV·게시판·복도 모니터용. 날짜와 담당 부서만 채워 쓰시면 됩니다.</span>
+        </div>
+
+        <div class="poster">
+          <span class="pk">디벗 크롬 OS 전환 안내</span>
+          <span class="ph">여러분의 디벗이<br>빨라집니다</span>
+          <span class="pl">켜는 데 10초 · 느려짐 없이 계속</span>
+          <span class="pr">
+            <b>바뀌는 것</b> 디벗을 켰을 때 나오는 화면(운영체제) &nbsp;·&nbsp;
+            <b>안 바뀌는 것</b> 기계 그 자체. 지금 쓰던 디벗 그대로입니다.<br>
+            작업 예정 ○월 ○일 ~ ○월 ○일 &nbsp;·&nbsp; 문의 ○○부 ○○○ 선생님
+          </span>
+        </div>
+
+        <div class="stack">
+          <h3>교실 TV 순환 재생용 6장</h3>
+          <div class="slides">
+            <div class="slide">
+              <span class="sn">Slide 01 — 표지</span>
+              <span class="st">디벗이 달라집니다</span>
+              <span class="sb">크롬 OS 전환 안내 · ○○중학교</span>
+            </div>
+            <div class="slide">
+              <span class="sn">Slide 02 — 무엇이 바뀌나</span>
+              <span class="st">겉모습은 그대로,<br>속이 바뀝니다</span>
+              <span class="sb">디벗을 새것으로 바꾸는 것이 아닙니다. 지금 쓰는 디벗의 <b>운영체제(OS)만</b> 가벼운 것으로 교체합니다.</span>
+            </div>
+            <div class="slide">
+              <span class="sn">Slide 03 — 좋아지는 점</span>
+              <span class="st">이렇게 달라져요</span>
+              <span class="sb">
+                ⚡ <b>부팅 10초</b> — 수업 시작하자마자 바로 사용<br>
+                🔋 <b>배터리 20% 더 오래</b> — 하루 종일 충전 없이<br>
+                🐢 <b>느려지지 않아요</b> — 2~3년 뒤에도 지금 속도 그대로<br>
+                🛡️ <b>백신 없이도 안전</b>
+              </span>
+            </div>
+            <div class="slide hot">
+              <span class="sn">Slide 04 — 알아둘 점</span>
+              <span class="st">미리 알아두세요</span>
+              <span class="sb">
+                📷 <b>카메라 초점이 잘 안 맞을 수 있어요</b> — QR 코드가 잘 안 읽힐 수 있습니다<br>
+                📱 <b>앱스토어는 못 써요</b> — 대신 인터넷으로 대부분 해결됩니다<br>
+                💾 <b>디벗에 저장해 둔 파일은 사라집니다</b>
+              </span>
+            </div>
+            <div class="slide hot">
+              <span class="sn">Slide 05 — 가장 중요</span>
+              <span class="st">디벗에 저장한 내 파일,<br>지금 옮기세요</span>
+              <span class="sb">전환 작업을 하면 디벗 안에 있던 파일이 <b>모두 지워집니다.</b> 남기고 싶은 과제·사진·작품은 <b>○월 ○일까지</b> 클라우드나 USB로 옮겨 주세요.</span>
+            </div>
+            <div class="slide">
+              <span class="sn">Slide 06 — 새 아이디</span>
+              <span class="st">새 아이디로 로그인해요</span>
+              <span class="sb">학교에서 나눠 주는 <b>교육용 계정</b>으로 로그인합니다. 아이디는 디벗에 스티커로 붙여 드려요. 비밀번호는 첫 로그인 때 나만의 것으로 바꾸고 <b>꼭 기억하세요.</b> 개인 계정으로는 로그인되지 않습니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>배너·스티커·전광판용 짧은 문구</h3>
+          <div class="chips">
+            <span class="chip">디벗, 10초 만에 켜집니다</span>
+            <span class="chip">기계는 그대로. 속도만 새것처럼.</span>
+            <span class="chip">작업 전 백업, 지금 하세요</span>
+            <span class="chip">새 아이디는 디벗에 붙어 있어요</span>
+            <span class="chip">비밀번호는 첫 로그인 때 바꾸고 꼭 기억하기</span>
+            <span class="chip">앱스토어 대신 인터넷으로</span>
+          </div>
+        </div>
+
+        <div class="warn">
+          <b>게시할 때</b> — 카메라 제약과 파일 삭제는 <b>반드시 좋은 점과 함께</b> 게시하십시오. 장점만 안내하면 전환 직후 항의성 문의가 담당자에게 몰립니다. 백업 안내는 작업 2주 전부터 게시·조회·가정통신문으로 3중 반복하고, 아이디 스티커는 <b>이름 없이 아이디만</b> 인쇄해 부착하십시오.
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section id="s3" class="stack-lg">
+        <div class="sec-head">
+          <span class="sec-num">03 — 실무 상세</span>
+          <h2>업무 담당자가 알아야 할 내용</h2>
+          <span class="sub">설명회에서 실제로 언급된 내용만 담았습니다.</span>
+        </div>
+
+        <div class="stack">
+          <h3>크롬 OS 플렉스란</h3>
+          <p class="lede">오래되거나 속도가 느려진 기존 윈도우·맥 기기를 <b>클라우드 기반 운영체제로 재탄생시키는 구글의 솔루션</b>입니다. 하드웨어는 그대로 두고 OS만 교체합니다. 전 세계 K-12에서 가장 많이 쓰이는 교육용 기기로, 5,000만 명 이상의 학생·교사가 사용 중입니다.</p>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>항목</th><th>내용</th></tr></thead>
+              <tbody>
+                <tr><td><b>보안</b></td><td>백신 설치 불필요(OS 내장). 2011년 출시 이후 약 15년간 전 세계 랜섬웨어 공격 사례 0건</td></tr>
+                <tr><td><b>계정 이동성</b></td><td>구글 계정만 있으면 다른 크롬 OS 기기에서 로그인해도 기존 환경 그대로 유지</td></tr>
+                <tr><td><b>성능 지속성</b></td><td>OS가 가벼워 오래 사용해도 느려짐 현상이 크게 나타나지 않음</td></tr>
+                <tr><td><b>저장 구조</b></td><td>파일을 로컬 하드디스크에 저장하는 구조가 아님 → 기기 저장 공간이 크게 필요하지 않음</td></tr>
+                <tr><td><b>오프라인</b></td><td>인터넷 없이도 문서 도구 작업·파일 열람 가능. 단, 수정 내용은 연결 후 클라우드에 최종 동기화</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>CEU — 기기 관리 라이선스</h3>
+          <p>Chrome Education Upgrade. 크롬북이 교육용 기기로 가장 많이 보급된 이유로 지목된 관리 기능입니다.</p>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>기능</th><th>설명</th></tr></thead>
+              <tbody>
+                <tr><td><b>앱 일괄 배포</b></td><td>수업 시작 전 필요한 앱을 학생 기기에 일괄 설치</td></tr>
+                <tr><td><b>사이트 차단</b></td><td>유해 사이트·VPN 차단. 우회 경로(검색 결과 링크 등)로도 접근 불가</td></tr>
+                <tr><td><b>계정 제한</b></td><td>개인 지메일 등 교육용 외 계정으로 로그인할 수 없도록 설정</td></tr>
+                <tr><td><b>분실·도난 대응</b></td><td>관리 콘솔에서 원격 잠금. 습득자가 사용 불가</td></tr>
+                <tr><td><b>시험 잠금</b></td><td>온라인 시험·퀴즈 중 다른 작업·부정행위 차단</td></tr>
+                <tr><td><b>수업 관리</b></td><td>클래스툴즈(수업 도구) — 최근 출시</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>클래스툴즈 — 3단계 모드</h3>
+          <p>포커스팡과 가장 유사한 도구. 별도 설치 없이 센스쿨 관리 콘솔에서 이미 설정되어 배포됩니다. 구글 클래스룸 명단을 불러오면 <b>학생 기기에서 아무 조작을 하지 않아도</b> 교사가 세션을 실행시킬 수 있습니다. 리소스는 ① 클래스룸 과제 ② 교사가 열어둔 탭 ③ 일반 링크 3가지를 넣을 수 있습니다.</p>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>모드</th><th>학생 기기 상태</th></tr></thead>
+              <tbody>
+                <tr><td><b>집중 모드</b></td><td>하단 런처가 사라지고 교사가 지정한 자료에만 접근 가능. 다른 앱·크롬은 접근 자체가 차단</td></tr>
+                <tr><td><b>탐색 모드</b></td><td>약 5초 후 런처가 다시 나타나 자유롭게 사용 가능</td></tr>
+                <tr><td><b>잠금 모드</b></td><td>학생 기기가 즉시 잠김</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>이와 별도로 <b>학생 화면 실시간 미러링</b>(지연 거의 없음), 현재 페이지 텍스트 표시, <b>실시간 자막 + 다국어 번역</b>(다문화 학급 활용)이 제공되며, 플렉스 전환 기기에서도 정상 작동함이 데모로 확인되었습니다. 세션을 종료하면 학생 기기는 원래 상태로 복귀합니다.</p>
+          <div class="note">
+            <b>시험 잠금 모드는 클래스툴즈와 다릅니다</b> — 잠금 모드가 설정된 구글 폼즈에서 '계속'을 누르면 제출 전까지 다른 앱을 쓸 수 없습니다. 결정적 차이는 <b>실시간 상황이 교사 이메일로 전송</b>된다는 점입니다. 몇 분에 접속했고 몇 시까지 풀었고 몇 분에 기기를 닫았는지가 기록으로 남아, 평가 이의제기 대응 근거가 됩니다.
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>도입 전 반드시 확인할 3가지 제한사항</h3>
+          <div class="limits">
+            <div class="limit">
+              <span class="ln">01</span>
+              <div>
+                <h4>카메라 기능 제약</h4>
+                <p>서피스고 3를 전환하면 <b>카메라 초점이 맞지 않는 현상</b>이 발생합니다. 보통 전면·후면 중 한쪽에 생깁니다. 화상수업·촬영 중심 수업이 아니라면 일반 교과·탐구 활동에는 큰 지장이 없었다는 것이 시범학교 결론입니다.</p>
+                <p class="field"><b>시범학교 실제</b> — 일부 기기에서 카메라가 아예 작동하지 않아 QR 접근에 문제가 발생했습니다.</p>
+              </div>
+            </div>
+            <div class="limit">
+              <span class="ln">02</span>
+              <div>
+                <h4>구글 플레이스토어 사용 불가</h4>
+                <p>일반 크롬북과 달리 플레이스토어를 쓸 수 없어 <b>안드로이드 앱 설치가 불가능</b>합니다. 웹 브라우저 기반 이용과 크롬 웹스토어 확장 프로그램으로 대체합니다. 센스쿨 내 교육용 콘텐츠는 모두 웹 기반이라 100% 구동 가능합니다.</p>
+              </div>
+            </div>
+            <div class="limit">
+              <span class="ln">03</span>
+              <div>
+                <h4>센스쿨 계정 사용 필수</h4>
+                <p>기기 관리와 보안을 위한 전제 조건입니다. 계정이 없는 학교는 담당 장학사 문의 또는 교육연구정보원 기존 공문을 참조하십시오. → <a href="#s6">6장에서 상세히</a></p>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:14px;color:var(--ink-3);">
+            <b>제약이 생기는 이유</b> — 정품 크롬북은 제조사가 설계 단계부터 구글 글로벌 크롬 OS 팀의 조건을 충족해야 승인·출시됩니다. 서피스고 3는 타사 OS로 제조되어 모델별로 일부 기능 제약이 발생합니다. 다만 이 제한이 학습 목적 사용에 치명적이지 않아, 해외 교육기관에서도 서피스고 3는 크롬 OS 플렉스 전환의 대표 모델입니다.
+          </p>
+        </div>
+
+        <div class="stack">
+          <h3>전환 작업 방식과 시범학교 5단계</h3>
+          <p>크롬 OS 플렉스 파일이 담긴 USB를 꽂아 기존 윈도우를 지우고 설치합니다. 기기당 약 <b>3분</b>, 다수 기기 동시 작업이 가능합니다. <b>구글 파트너사가 학교를 직접 방문</b>해 OS와 CEU까지 설치하므로 교사가 직접 설치할 일은 없습니다. 학교 몫은 계정 생성과 공간·기기 준비입니다.</p>
+          <div class="tbl">
+            <table>
+              <thead><tr><th style="width:34px;">#</th><th>장평중학교 진행 흐름</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">1</td><td><b>준비</b> — 방과후 과학정보부 교사들이 모여, 스마트튜터 교사의 도움으로 디벗을 한 곳에 모아 충전</td></tr>
+                <tr><td class="mono">2</td><td><b>업체 방문</b> — OS 전환 및 관리 프로그램 사용법을 담당 교사 대상으로 상세 안내. 이후에도 필요 시 재방문 연수 가능</td></tr>
+                <tr><td class="mono">3</td><td><b>학교 계정 준비</b> — 센스쿨 학생 계정 생성</td></tr>
+                <tr><td class="mono">4</td><td><b>1개 학급 테스트</b> — 로그인 → 구글 클래스룸 → 메뉴 하나하나 확인. 패들렛 접속 속도만 비교해도 월등한 개선 확인</td></tr>
+                <tr><td class="mono">5</td><td><b>CEU 기능 테스트</b> — 퀴즈 잠금 기능이 특히 유용</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="note">
+            <b>시범학교 종합 판단</b> — "초기의 행정적 번거로움과 세팅 시간, 카메라 같은 일부 호환성 문제를 감내하더라도 <b>기기 성능 향상과 수업 몰입도 확보라는 실익이 훨씬 크다</b>고 판단했습니다. 학생 계정 준비 같은 실무 절차도 생각보다 어렵지 않았습니다." (이동현 교사)
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>센스쿨 학생 계정 생성 절차</h3>
+          <div class="tbl">
+            <table>
+              <thead><tr><th style="width:34px;">#</th><th>절차</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">1</td><td>학교별 <b>센스쿨 관리자 계정</b> 확인 — 이미 공문으로 수령되어 과학정보부·정보 담당 부서가 보유 중</td></tr>
+                <tr><td class="mono">2</td><td>관리자 페이지 → <b>학생 일괄 등록</b> 메뉴</td></tr>
+                <tr><td class="mono">3</td><td>센스쿨 홈페이지에서 <b>엑셀 일괄 등록 양식</b> 다운로드</td></tr>
+                <tr><td class="mono">4</td><td>필수 입력: <b>학년 / 반 / 번호 / 성 / 이름 / 성별 / 생년월일</b></td></tr>
+                <tr><td class="mono">5</td><td>업로드 → 아이디 일괄 생성</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>원자료 구하는 법</b> — 학적 담당 또는 나이스 권한을 가진 교사에게 요청하면 나이스에서 쉽게 다운로드할 수 있습니다.</p>
+          <div class="specs">
+            <div class="spec"><span class="v">10~15분</span><span class="k">한 학급 등록 (시행착오 이후)</span></div>
+            <div class="spec"><span class="v">10분 이내</span><span class="k">학교 전체 단위 생성</span></div>
+            <div class="spec"><span class="v">1~1.5시간</span><span class="k">한 반 분량 기기 세팅</span></div>
+          </div>
+          <div class="note">
+            <b>연구사 권고 — 학급 단위보다 학년/학교 전체 단위로</b><br>
+            학급 단위보다 학년 또는 학교 전체 단위로 생성하는 것이 계정 관리에 훨씬 편합니다. 학급 단위로 하면 성과 이름을 분리해야 하지만, <b>학년·학교 전체 단위로 하면 그 절차 자체가 없고</b> 학교 전체를 10분 이내에 만들 수 있습니다. 전환을 계획 중이라면 이참에 조직원 동의를 구해 학년/학교 전체 단위 전환을 추천합니다. (윤석현 연구사)
+          </div>
+          <div class="warn">
+            <b>시범학교 현장 팁 2가지</b><br>
+            ① <b>아이디 라벨 부착</b> — 자동 생성 아이디가 학생에게 헷갈리는 형태라 라벨로 출력해 개인 디벗에 붙였습니다. 일괄 등록용 엑셀이 이미 있어 오래 걸리지 않았고, "제 아이디 뭐예요?" 문의가 확실히 줄었습니다.<br>
+            ② <b>초기 비밀번호 강제 변경</b> — 자동 생성된 초기 비밀번호를 그대로 쓰는 것이 보안상 적절하지 않다고 판단해, 첫 로그인 시 학생이 본인 비밀번호로 바로 바꾸도록 설정·안내했습니다.
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>신청 절차와 교육청 지원</h3>
+          <div class="warn">
+            <b>일정 주의</b> — 아래 일정은 설명회 당시(여름방학 직전) 기준입니다. 현재 시점에서는 이미 지난 일정이므로, 신규 신청 시 담당 장학사에게 <b>최신 일정을 반드시 재확인</b>하십시오.
+          </div>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>구분</th><th>내용</th></tr></thead>
+              <tbody>
+                <tr><td><b>신청 경로</b></td><td>설명회 종료 후 <b>교대통</b>에 양식 게시. 마감은 설명회 다음 주 금요일</td></tr>
+                <tr><td><b>신청 내용</b></td><td>① 전환 작업 희망 일자 <b>3지망</b> ② 학교 보유 대수 ③ 연수 희망 여부</td></tr>
+                <tr><td><b>작업 시간</b></td><td>오전(9~12시) / 오후(13~17시) 단위로만 접수. 예: "8월 5일 오전"</td></tr>
+                <tr><td><b>권장 시기</b></td><td><b>방학 중</b> — 학기 중에는 교사가 수업 후 작업 지원까지 하기 부담</td></tr>
+                <tr><td><b>필수 조건</b></td><td><b>작업 당일 담당 교사 학교 상주</b> — 문의 대응 및 CEU 적용을 위한 학교 계정 협조 필요</td></tr>
+                <tr><td><b>연수</b></td><td>역삼역 인근 <b>구글코리아</b>, 회당 최대 <b>35명 선착순</b>. 교대통 하단 구글폼으로 신청</td></tr>
+                <tr><td><b>컨설팅</b></td><td>교대통 구글폼 신청 → 기술 지원/수업 활용 중 성격 판단 → 전문가 매칭 → 개별 연락(온·오프라인)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>전환 학교 대상 연수 체계</th><th>내용</th></tr></thead>
+              <tbody>
+                <tr><td><b>① 기능 연수</b></td><td>크롬 OS 기능 전반. <b>담임교사 대상 / 학교 관리자 대상</b>으로 구분 운영</td></tr>
+                <tr><td><b>② 수업·평가 설계</b></td><td>구글 에듀케이션 도구를 활용한 수업 설계 및 평가 제작</td></tr>
+                <tr><td><b>③ AI 에듀케이터 시리즈</b></td><td>신규 런칭된 구글 AI 활용 연수 프로그램</td></tr>
+                <tr><td><b>④ 맞춤형</b></td><td>"우리 학교는 이런 연수가 필요하다"고 요청하면 가능한 선에서 최대한 반영</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section id="s4" class="stack">
+        <div class="sec-head">
+          <span class="sec-num">04 — 준비</span>
+          <h2>담당자 체크리스트</h2>
+          <span class="sub">체크 상태는 이 브라우저에만 저장됩니다. <span class="mono" style="color:var(--caution);border:1px solid var(--caution);padding:0 4px;border-radius:2px;font-size:10.5px;">확인필요</span> 표시는 설명회에서 답이 나오지 않아 별도 확인이 필요한 항목입니다.</span>
+        </div>
+
+        <div class="stack" id="checklist"></div>
+        <button class="reset" id="resetBtn" type="button">전체 초기화</button>
+      </section>
+
+      <!-- 5 -->
+      <section id="s5" class="stack-lg">
+        <div class="sec-head">
+          <span class="sec-num">05 — 자체 분석</span>
+          <h2>예상 부작용과 대응방안</h2>
+          <span class="sub">설명회에서 다루지 않은 내용입니다. 설명회 전반을 근거로 별도 도출했습니다.</span>
+        </div>
+
+        <div class="riskgroup">
+          <div class="riskgroup-h"><span class="gl">A</span><h3>수업·교육과정</h3></div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-1</span><h4>카메라 문제의 파급 범위가 과소평가될 수 있음</h4></div>
+            <p>설명회에서는 "촬영 중심 수업이 아니면 지장 없다"로 정리되었지만, 실제 학교에서 카메라는 촬영보다 <b>QR 코드 진입 경로</b>로 훨씬 많이 쓰입니다. 패들렛·띵커벨·멘티미터 접속, 출석 체크, 학습지 링크 배포, 도서관 대출. 여기에 과학과 실험 관찰 기록, 미술과 작품 촬영, 체육과 동작 분석, 자유학기 진로활동 산출물 촬영이 더해집니다. 시범학교도 실제로 "QR 접근에 문제가 생겼다"고 보고했습니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>전환 <b>전</b>에 교과별 카메라·QR 의존도를 5분 설문으로 조사</li>
+              <li>학교 차원에서 <b>"QR 코드는 반드시 단축 URL을 병기한다"</b>를 원칙으로 공지</li>
+              <li>전환 후 카메라 불량 기기를 목록화하고 학급당 촬영용 공용 기기 1~2대 확보</li>
+              <li>촬영 과제는 학생 개인 스마트폰 + 클라우드 제출로 설계 전환</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-2</span><h4>안드로이드 앱 의존 수업의 대체재 확보 실패</h4></div>
+            <p>플레이스토어를 못 쓰면 안드로이드 전용 앱 기반 수업이 무너집니다. 특히 <b>센서 측정 앱(phyphox 등), AR 기반 학습 앱, 일부 코딩·로보틱스 앱, 오프라인 설치형 프로그램</b>이 해당됩니다. "센스쿨 콘텐츠는 100% 웹 기반"이라는 설명은 센스쿨에 한정된 이야기이며, 교사가 개별적으로 쓰던 도구는 포함되지 않습니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>전환 전 교과별 사용 앱 인벤토리를 받아 <b>웹 대체재 매핑표</b> 작성</li>
+              <li>대체 불가 앱이 확인되면 해당 교과에 한해 윈도우 기기 일부 유지 또는 공용 태블릿 확보를 협의</li>
+              <li>크롬 웹스토어 확장 프로그램 및 PWA 대체 가능성 사전 확인</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-3</span><h4>학내 무선망 병목 — "OS가 가볍다"와 "망 부하가 없다"는 다른 문제</h4></div>
+            <p>구글 측은 "저전력 OS이며 네트워크 과부하가 걸리지 않는다"고 답변했으나, 이는 <b>OS 자체의 트래픽</b>에 관한 설명입니다. 실제 병목은 다른 데서 생깁니다. 크롬 OS는 <b>로그인 자체가 클라우드 인증</b>이므로, 1교시 시작 시 30명이 동시에 로그인·동기화하는 순간 교실 AP의 동시 접속 처리량이 한계에 부딪힐 수 있습니다. 로컬 저장 구조가 아니라는 것은 곧 <b>모든 작업이 망에 의존</b>한다는 뜻이기도 합니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>전환 <b>전</b> 정보부·전산 담당과 교실별 AP 동시 접속 수용량 점검</li>
+              <li>1개 학급 시범 전환 시 <b>전원 동시 로그인 테스트</b>를 반드시 포함 (시범학교는 기능 확인 위주였음)</li>
+              <li>부족하면 전환 신청과 <b>동시에</b> 교육청에 무선망 개선 요청 — 사후 요청은 처리가 늦음</li>
+              <li>오프라인 작업 가능 범위(작업·열람 가능, 동기화만 지연)를 교사에게 미리 안내</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-4</span><h4>개학 첫 주 로그인 대란</h4></div>
+            <p>방학 중 작업이 권장되지만, 방학 중에는 학생이 없어 <b>학생 계정 첫 로그인 검증을 할 수 없습니다.</b> 개학 첫 주에 전교생이 동시에 처음 로그인하면서 아이디 오류·비밀번호 분실·계정 누락이 한꺼번에 터지고, 문의가 전부 담당자 1인에게 몰립니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>개학 첫 주에 <b>'디벗 온보딩' 차시를 공식 확보</b> (창체 또는 각 교과 1차시)</li>
+              <li><b>담임교사 사전 연수</b> — 로그인 절차, 비밀번호 재설정, 계정 누락 시 처리</li>
+              <li>비밀번호 재설정 권한을 담임·학년부에 위임할 수 있는지 확인해 창구를 분산</li>
+              <li>방학 중 학생 도우미(정보 동아리 등) 소수로 사전 로그인 테스트</li>
+            </ul></div>
+          </div>
+        </div>
+
+        <div class="riskgroup">
+          <div class="riskgroup-h"><span class="gl">B</span><h3>개인정보 · 인권</h3></div>
+
+          <div class="risk privacy">
+            <div class="risk-h"><span class="rid">P-1</span><h4>학생 개인정보 파일의 생성·이동·파기 절차 부재</h4></div>
+            <p>계정 일괄 생성을 위해 나이스에서 <b>학년·반·번호·성명·성별·생년월일</b>이 담긴 엑셀을 추출해 외부 플랫폼에 업로드합니다. 이 과정에서 개인정보 파일이 담당 교사 개인 PC와 USB에 남습니다. 설명회에서는 절차의 <b>편의성</b>만 다뤄졌고 개인정보 보호 절차는 언급되지 않았습니다. 여기에 "아이디 라벨을 기기에 부착"은, 이름과 아이디가 함께 인쇄되면 다른 학생이 남의 계정 정보를 볼 수 있는 구조가 됩니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>명부 파일은 <b>암호 설정 후</b> 다루고, 작업 완료 즉시 파기하고 <b>파기 기록</b>을 남김</li>
+              <li>학교 개인정보 보호 담당자와 사전 협의, 필요 시 개인정보 처리 현황에 반영</li>
+              <li>라벨에는 <b>아이디만 인쇄</b>(성명 제외). 또는 학생 수첩·개인 카드 형태로 배부</li>
+              <li>학부모 안내문에 어떤 정보가 어디에 등록되는지 1줄로 명시</li>
+            </ul></div>
+          </div>
+
+          <div class="risk privacy">
+            <div class="risk-h"><span class="rid">P-2</span><h4>화면 미러링·활동 기록의 학생 감시 쟁점</h4></div>
+            <p>클래스툴즈는 학생 화면을 <b>실시간 미러링</b>하고, 시험 잠금 모드는 <b>접속·이탈 시각을 교사 이메일로 전송</b>합니다. 강력한 기능인 만큼 오남용 여지도 있습니다. 수업 시간 외 사용, 가정 반출 기기에서의 사용, 사전 고지 없는 상시 모니터링은 학생 인권·사생활 침해 논란으로 이어질 수 있고, 민원이 발생하면 담당자가 아니라 <b>사용한 교사 개인</b>이 책임 부담을 지게 됩니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>학교 차원의 <b>사용 규정</b>을 문서화: 사용 시간(수업 시간 내 한정), 목적, 미러링 사전 고지 원칙, 화면 캡처·저장 금지</li>
+              <li>학생·학부모에게 "수업 중 교사가 화면을 볼 수 있음"을 <b>사전 고지</b></li>
+              <li>시험 잠금 로그는 평가 이의제기 대응 목적으로만 사용하고 보관 기간을 정함</li>
+              <li>학생생활규정 또는 디벗 사용 규정 개정 시 반영</li>
+            </ul></div>
+          </div>
+
+          <div class="risk privacy">
+            <div class="risk-h"><span class="rid">P-3</span><h4>차단 정책의 과차단(over-blocking)</h4></div>
+            <p>사이트 차단은 학교 전체에 일괄 적용됩니다. 유해 사이트를 막으면서 <b>정당한 학습 자료까지 함께 차단</b>되는 일이 반드시 생깁니다. 그때마다 해제 요청이 담당자 1인에게 몰리고, 처리 지연은 곧 수업 차질입니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li><b>예외 신청 창구와 처리 기한(예: 2일 이내)</b>을 사전에 정해 공지</li>
+              <li>초기 설정은 <b>최소 차단에서 시작해 단계적으로 조이는</b> 방향으로 — 반대로 하면 민원이 폭발</li>
+              <li>차단 정책 결정은 담당자 독단이 아니라 정보부 협의 또는 교직원 의견 수렴을 거침</li>
+            </ul></div>
+          </div>
+        </div>
+
+        <div class="riskgroup">
+          <div class="riskgroup-h"><span class="gl">C</span><h3>실무 · 행정</h3></div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-5</span><h4>계정 관리는 1회성 업무가 아님</h4></div>
+            <p>설명회는 "10분이면 학교 전체 계정 생성"에 초점이 맞춰져 있지만, 계정 업무는 최초 생성 이후에도 계속됩니다. 전입·전출, 학년 진급, 반 편성 변경, 비밀번호 분실, 기기 교체마다 처리가 필요합니다. 담당 교사가 전보를 가면 인수인계가 끊길 위험도 큽니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li><b>업무 분장표에 '디지털 기기·계정 관리'를 명시적 항목으로 신설</b></li>
+              <li>학년 초 일괄 처리 루틴과 연간 업무 일정표 작성</li>
+              <li>센스쿨의 <b>학적 자동 반영(SIS 연동)</b>이 어디까지 되는지 확인해 수작업 범위를 줄임</li>
+              <li>관리자 계정 접근 권한을 <b>최소 2인</b>이 보유, 인수인계 문서 상시 유지</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-6</span><h4>전환의 비가역성 — 원복 경로 미확인</h4></div>
+            <p>이 작업은 기존 윈도우를 <b>삭제</b>하고 크롬 OS를 설치합니다. 전환 후 "역시 윈도우가 필요하다"는 판단이 서면 어떻게 되는지, 윈도우 라이선스와 복구 이미지가 남는지, 원복 비용을 누가 부담하는지가 설명회에서 다뤄지지 않았습니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li><b>전면 도입 전 1~2개 학급 파일럿</b>을 먼저 진행하고 한 학기 운영 후 확대 결정</li>
+              <li>신청 전에 교육청·업체에 원복 가능 여부·절차·비용을 <b>서면으로 확인</b></li>
+              <li><b>서피스고 3의 크롬 OS 플렉스 지원 종료(EOL) 시점</b>을 반드시 확인 — 인증 모델별로 업데이트 지원 기간이 정해져 있고, 종료 후에는 보안 업데이트가 끊깁니다. 설명회에서 언급되지 않은 중요 항목입니다.</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-7</span><h4>학생 로컬 파일 소실</h4></div>
+            <p>전환 작업은 기존 OS를 삭제하므로 <b>디벗 로컬에 저장된 학생의 과제·사진·작품이 전부 사라집니다.</b> 학기 중 제작한 산출물이 남아 있는 기기에서 이 문제가 발생하면 작업 자체가 학교에 대한 항의 사유가 됩니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>작업 <b>2주 전부터</b> 백업 안내를 게시·조회·가정통신문으로 3중 반복</li>
+              <li>백업 마감일을 명시하고, 마감 후에는 복구 불가함을 분명히 고지</li>
+              <li>학급별 수합 시 <b>"백업 완료 확인"</b>을 담임이 받도록 절차화</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-8</span><h4>작업 당일 기기 관리 리스크</h4></div>
+            <p>전교생 기기를 한 장소에 모아 두는 상황은 <b>분실·파손·혼동의 위험이 가장 높은 순간</b>입니다. 충전이 안 된 기기는 작업에서 누락되고, 누락 사실은 개학 후에야 발견됩니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>기기 대장 기반 <b>수합 체크리스트</b> 작성, 학급별 대수를 작업 전후로 확인해 서명</li>
+              <li>개별 기기에 학급·번호 표식 부착 (없으면 이번 기회에)</li>
+              <li>작업 공간은 <b>잠금 가능한 공간</b>으로 지정, 야간 보관 시 시건 확인</li>
+              <li>작업 종료 후 <b>전 기기 부팅 테스트</b> 후 반납 — 누락 기기 즉시 발견</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-9</span><h4>MS 도구 병행 학교의 계정 이중화 혼란</h4></div>
+            <p>Teams·OneDrive를 쓰던 학교는 전환 후에도 웹으로 계속 쓸 수 있지만, 학생은 <b>MS 계정과 센스쿨(구글) 계정 두 개를 관리</b>하게 됩니다. 기기 로그인은 구글 계정, 수업 자료는 MS 계정이라는 구조는 중학생에게 상당한 혼란이고, 로그인 문의가 두 배가 됩니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li><b>"어느 계정을 언제 쓰는지" 1장짜리 안내 카드</b> 제작·배부</li>
+              <li>가능하면 학기 또는 학년 단위로 도구를 한쪽으로 수렴시키는 중기 계획 수립</li>
+              <li>교과별 사용 도구를 통일해 학생이 교과마다 다른 도구를 쓰지 않도록 조정</li>
+            </ul></div>
+          </div>
+        </div>
+
+        <div class="riskgroup">
+          <div class="riskgroup-h"><span class="gl">D</span><h3>구조적 고려</h3></div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-10</span><h4>기기 자체의 물리적 수명은 늘지 않음</h4></div>
+            <p>OS 전환은 <b>소프트웨어 성능 문제</b>를 해결할 뿐, 배터리 열화, 힌지·키보드 커버 파손, 액정 손상, 충전 단자 마모는 그대로입니다. "새 기기를 쓰는 느낌"이라는 기대가 과도하게 형성되면, 전환 후에도 계속되는 하드웨어 고장이 <b>전환 사업에 대한 불신</b>으로 이어집니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>안내 시 <b>"바뀌는 것은 운영체제이지 기기가 아니다"</b>를 명확히 표현</li>
+              <li>전환 시점에 <b>배터리 열화 상태를 함께 점검</b>해 교체 필요 기기 파악</li>
+              <li>전환 이후에도 기기 교체 예산 계획을 <b>별도로 유지</b></li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-11</span><h4>플랫폼 종속(lock-in)</h4></div>
+            <p>크롬 OS + 구글 워크스페이스 + 센스쿨 + CEU로 묶이면 학교의 디지털 인프라가 단일 생태계에 깊이 결합됩니다. 향후 교육청 정책이나 라이선스 비용 구조가 바뀔 때 전환 비용이 커집니다. <b>CEU 라이선스의 비용 부담 주체와 지원 기간</b>이 설명회에서 명확히 언급되지 않았습니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li>CEU 라이선스의 <b>부담 주체·유효 기간·갱신 계획</b>을 교육청에 서면 확인</li>
+              <li>학생 산출물은 <b>표준 포맷(PDF·docx·이미지)으로 내보내기 가능한 형태</b>로 축적하도록 지도</li>
+              <li>특정 도구에 종속된 평가 설계를 피하고, 도구 교체가 가능한 수업 설계 유지</li>
+            </ul></div>
+          </div>
+
+          <div class="risk">
+            <div class="risk-h"><span class="rid">R-12</span><h4>절차적 정당성 부족 시 책임이 담당자에게 집중</h4></div>
+            <p>전환은 학교 디지털 인프라의 기반을 바꾸는 결정입니다. 정보부 또는 담당 교사 주도로 추진되었다고 인식되면, 이후 발생하는 모든 불편(카메라, 앱, 로그인)에 대한 불만이 <b>담당자 개인에게 향합니다.</b> 장학관도 "OS를 바꾼다는 것은 큰 용기"이며 교육공동체 협의와 보고를 거치라고 강조했고, 장학사도 교감·교장 참석을 권장했습니다.</p>
+            <div class="fix"><span class="fh">대응</span><ul>
+              <li><b>교직원회의 정식 안건</b>으로 상정하고 회의록에 남김 — 장점과 제약을 반드시 함께 제시</li>
+              <li>교감·교장 보고 및 승인 문서화, 학교운영위원회 보고 여부 검토</li>
+              <li><b>학부모 안내문 발송</b> — 특히 카메라 제약과 파일 백업은 사전 고지가 필수</li>
+              <li>결정 전 <b>컨설팅 신청</b>을 활용해 교육청·전문가 의견을 공식 절차에 포함</li>
+            </ul></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section id="s6" class="stack-lg">
+        <div class="sec-head">
+          <span class="sec-num">06 — 계정</span>
+          <h2>SENEDU 계정은 꼭 써야 하는가</h2>
+          <span class="sub">SENEDU와 SEN스쿨(SENSCHOOL)의 관계, 그리고 필수인 이유</span>
+        </div>
+
+        <div class="stack">
+          <h3>결론 ① 둘은 다른 계정 체계가 아닙니다</h3>
+          <p class="lede">설명회에서 "센스쿨 계정", "센에듀 계정", "<span class="mono">.kr</span> 계정"이 번갈아 나오는데, 이는 <b>같은 대상을 가리키는 다른 호칭</b>입니다.</p>
+          <div class="equation">
+            <div class="eq-box"><span class="t">SEN스쿨</span><span class="d">서울교육학습플랫폼</span></div>
+            <span class="eq-op">=</span>
+            <div class="eq-box"><span class="t">senedu.kr</span><span class="d">그 플랫폼의 공식 도메인</span></div>
+            <span class="eq-op">→</span>
+            <div class="eq-box"><span class="t">학생 계정</span><span class="d">SEN스쿨에서 발급</span></div>
+          </div>
+          <p>SEN스쿨은 <b>SSO(통합 인증)</b> 방식으로 운영되어, 한 번 로그인하면 서울시교육청 AI 교육 서비스(12종), 서울교육포털, 센진학나침판, 전자도서관, 서울미래역량평가 시스템 등에 연결됩니다. 또한 <b>구글 클래스룸·네이버 웨일클래스 등 민간 플랫폼을 선택해 연동</b>할 수 있고, 학교 등록 인증 정보를 바탕으로 <b>학적 변동이 자동 반영</b>되는 SIS 기반으로 운영됩니다.</p>
+          <div class="warn">
+            <b>확인 필요</b> — 학생 계정의 <b>정확한 도메인 문자열</b>(<span class="mono">@senedu.kr</span> 형태인지, 다른 하위 도메인인지)은 학교별 발급 방식에 따라 다를 수 있습니다. 센스쿨 관리자 매뉴얼 또는 교육연구정보원 담당 연구사에게 확인하십시오. 위 설명은 계정 <b>체계의 관계</b>에 관한 것입니다.
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>결론 ② 전환하려면 사실상 필수입니다</h3>
+          <p>설명회에서 구글 측이 명시한 <b>3대 제한사항 중 세 번째</b>가 바로 "기기 관리와 보안을 위해 반드시 센스쿨 계정을 사용해야 한다"였습니다. 선택 사항이 아니라 <b>전환의 전제 조건</b>입니다.</p>
+          <h4>기술적 이유 — CEU는 조직(도메인) 단위로 작동합니다</h4>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>CEU 기능</th><th>학교 관리 도메인 계정이 없으면</th></tr></thead>
+              <tbody>
+                <tr><td>앱 일괄 배포</td><td>대상 조직이 없어 불가</td></tr>
+                <tr><td>유해 사이트·VPN 차단</td><td>정책 적용 대상이 없어 불가</td></tr>
+                <tr><td>교육용 외 계정 로그인 차단</td><td>기준이 되는 도메인이 없어 불가</td></tr>
+                <tr><td>분실·도난 기기 원격 잠금</td><td>기기–조직 결속이 없어 불가</td></tr>
+                <tr><td>클래스툴즈 자동 배포</td><td>관리 콘솔 설정이 적용되지 않음</td></tr>
+                <tr><td>시험 잠금 모드</td><td>관리 정책 미적용</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>즉 <b>개인 지메일로 로그인하는 크롬 OS 기기</b>는 그냥 빠른 브라우저 기기일 뿐이고, 학교가 기대하는 관리·통제 기능은 하나도 작동하지 않습니다. 데모에서 "클래스툴즈는 별도 설치가 필요 없다 — <b>센스쿨 관리 콘솔에서 이미 설정되어 있기 때문</b>"이라고 설명된 것이 이 구조를 그대로 보여 줍니다.</p>
+          <h4>정책적 이유</h4>
+          <p>구글과 서울시교육청은 센스쿨 도입과 함께 <b>학생 데이터가 안전하게 처리되도록 교육청 관리 도메인 계정 사용을 관내 학교에 권장</b>해 왔습니다. 학생 개인 지메일 사용은 미성년자 개인정보 처리·보호자 동의 문제를 학교가 직접 떠안게 됩니다. 교육청 관리 계정은 이 부담을 기관 차원에서 처리합니다.</p>
+        </div>
+
+        <div class="stack">
+          <h3>자주 나올 질문</h3>
+          <div class="panel">
+            <div class="qa">
+              <span class="qq">센스쿨 앱이 크롬 OS에서 돌아가나요?</span>
+              <span class="aa">모두 됩니다. 센스쿨 앱들은 설치형이 아니라 <b>웹 기반</b>이며, 센스쿨 접속 자체도 앱이 아닙니다. 크롬·엣지·네이버 웨일 어디서든 접속 가능하고, 센스쿨에서 연결되는 다른 에듀테크와 구글 클래스룸도 모두 웹으로 넘어갑니다. <span style="color:var(--ink-3);">(윤석현 연구사)</span></span>
+            </div>
+            <div class="qa">
+              <span class="qq">이미 학교에서 구글 워크스페이스를 따로 쓰고 있는데, 그걸 쓰면 안 되나요?</span>
+              <span class="aa">설명회는 센스쿨 계정 사용을 전제로 진행되었고, 학교 자체 도메인 운영에 대한 언급은 없었습니다. 기존 도메인이 있는 학교는 <b>CEU 적용 대상 도메인을 무엇으로 할지 사전에 반드시 협의</b>해야 합니다. 교육청 컨설팅 신청 항목으로 적합합니다.</span>
+            </div>
+            <div class="qa">
+              <span class="qq">학생이 자기 지메일로 로그인하면 어떻게 되나요?</span>
+              <span class="aa">CEU 설정으로 <b>교육용 계정 외 로그인을 차단</b>할 수 있고, 설명회에서도 이를 주요 기능으로 소개했습니다. 학교 정책으로 차단을 권장합니다.</span>
+            </div>
+            <div class="qa">
+              <span class="qq">계정 생성이 정말 10분이면 되나요?</span>
+              <span class="aa">시범학교 기준 한 학급 등록은 초기 시행착오 후 10~15분, 학교 전체 단위로 프로세스를 타면 10분 이내라는 것이 연구사 설명입니다. 다만 <b>나이스 명부 확보와 정책 결정(비밀번호 규칙 등)에 걸리는 시간은 별도</b>입니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3>용어 정리</h3>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>용어</th><th>설명</th></tr></thead>
+              <tbody>
+                <tr><td><b>디벗</b></td><td>서울시교육청 학생 스마트기기 보급 사업 및 그 기기</td></tr>
+                <tr><td><b>크롬 OS 플렉스</b></td><td>기존 윈도우·맥 기기에 설치하는 구글의 클라우드 기반 무료 운영체제</td></tr>
+                <tr><td><b>CEU</b></td><td>Chrome Education Upgrade. 크롬 OS 기기를 중앙 관리하는 교육용 MDM 라이선스</td></tr>
+                <tr><td><b>클래스툴즈 / 수업 도구</b></td><td>크롬 OS의 수업 관리 도구. 자료 배포, 화면 미러링, 모드 제어, 자막·번역</td></tr>
+                <tr><td><b>파워워시</b></td><td>크롬 OS 기기 초기화. 2분 미만 소요</td></tr>
+                <tr><td><b>SEN스쿨 / SENSCHOOL</b></td><td>서울교육학습플랫폼 (senedu.kr)</td></tr>
+                <tr><td><b>SENEDU</b></td><td>SEN스쿨의 도메인. 학생·교사 계정 발급 기준</td></tr>
+                <tr><td><b>SIS</b></td><td>학생정보시스템. 학적 변동 자동 반영 기반</td></tr>
+                <tr><td><b>교대통</b></td><td>서울시교육청 공문·안내 유통 경로</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <h4>참고 자료</h4>
+    <ul>
+      <li>서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 온라인 설명회」 전체 녹취 스크립트 — 본 문서의 주 출처</li>
+      <li><a href="https://senedu.kr/">SEN스쿨 — AI 맞춤형 교수학습 플랫폼 (senedu.kr)</a></li>
+      <li><a href="https://webzine.serii.re.kr/%EC%97%B0%EC%86%8D-%EA%B8%B0%ED%9A%8D-%EC%97%90%EB%93%80%ED%85%8C%ED%81%AC-%EC%A0%95%EB%B3%B4%E2%91%A3%EC%84%9C%EC%9A%B8%EA%B5%90%EC%9C%A1%ED%95%99%EC%8A%B5%ED%94%8C%EB%9E%AB%ED%8F%BCsen%EC%8A%A4/">서울교육학습플랫폼(SEN스쿨)과 함께하는 새로운 배움의 여정 — 서울교육 웹진</a></li>
+      <li><a href="https://www.edupress.kr/news/articleView.html?idxno=30300">서울시교육청, 'SEN스쿨' 가입자 40만 명 돌파 — 에듀프레스</a></li>
+      <li><a href="https://www.sen.go.kr/www/website.jsp">서울특별시교육청 서울교육플랫폼 안내</a></li>
+    </ul>
+    <p class="disclaimer">
+      1~4장과 6장은 설명회에서 실제로 언급된 내용을 정리한 것이고, <b>5장은 설명회에서 다루지 않은 자체 분석</b>입니다. 신청 일정·연수 일자는 설명회 당시 기준이므로 현재 시점에서는 담당 장학사에게 재확인이 필요합니다. 체크리스트의 체크 상태는 이 브라우저에만 저장되며 다른 사람에게는 보이지 않습니다.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var PHASES = [
+    { n:"PHASE 0", t:"의사결정 전 (현재 단계)", items:[
+      ["교과별 카메라·QR 의존도 조사 — 촬영 수업, QR 활용, 화상수업 빈도",0],
+      ["교과별 사용 앱 인벤토리 작성 — 안드로이드 전용 앱 및 웹 대체재 확인",0],
+      ["교직원회의 안건 상정 — 장단점 균형 있게 공유",0],
+      ["교감·교장 보고 및 승인 문서화",0],
+      ["학교운영위원회 보고 여부 판단 / 학부모 안내 계획 수립",0],
+      ["서피스고 3의 크롬 OS 플렉스 지원 종료(EOL) 시점 서면 확인",1],
+      ["전환 후 윈도우 원복 가능 여부 및 비용 확인",1],
+      ["학내 무선망(AP) 동시 접속 수용량 점검",1],
+      ["CEU 라이선스 부담 주체·유효 기간 확인",1]
+    ]},
+    { n:"PHASE 1", t:"신청", items:[
+      ["교대통 신청 양식 확인 및 마감일 체크 (최신 일정 재확인 필요)",1],
+      ["전환 작업 희망 일자 3지망 선정 — 담당자 출근 보장 / 방학 중 권장",0],
+      ["학교 보유 디벗 정확한 대수 집계",0],
+      ["연수 참석 희망자 취합 및 구글폼 신청 (선착순 35명)",0],
+      ["필요 시 컨설팅 별도 신청",0]
+    ]},
+    { n:"PHASE 2", t:"계정 준비 — 학교 몫, 가장 중요", items:[
+      ["학교 센스쿨 관리자 계정 소재 확인 (기존 공문)",0],
+      ["센스쿨 관리자 사용 매뉴얼 다운로드·숙지",0],
+      ["학적/나이스 권한 교사에게 학생 명부 엑셀 요청",0],
+      ["학년 또는 학교 전체 단위로 일괄 생성 — 학급 단위보다 유리",0],
+      ["초기 비밀번호 정책 결정 — 첫 로그인 시 본인 변경 권장",0],
+      ["아이디 라벨 출력·부착 계획 (이름 제외, 아이디만)",0],
+      ["비밀번호 분실 시 재설정 절차 및 담당자 사전 결정",0],
+      ["개인정보 엑셀의 암호화·보관·파기 절차 수립",0]
+    ]},
+    { n:"PHASE 3", t:"작업 준비", items:[
+      ["작업 공간 확보 — 컴퓨터실, 학년부 회의실 등 넓고 잠금 가능한 장소",0],
+      ["학급별 기기 수합 계획 수립",0],
+      ["전량 충전 완료 — 미충전 기기는 작업 누락 위험",0],
+      ["기기 대장·수합 체크리스트 준비, 작업 전후 대수 확인",0],
+      ["타임테이블 작성 — 한 반당 약 1~1.5시간 기준",0],
+      ["작업 당일 담당자 상주 일정 확보",0],
+      ["학생 파일 백업 안내 — 작업 2주 전부터 3중 반복 공지",0]
+    ]},
+    { n:"PHASE 4", t:"전환 직후", items:[
+      ["1개 학급 시범 테스트 — 로그인 → 클래스룸 → 속도 체감",0],
+      ["전원 동시 로그인 테스트로 무선망 부하 확인",0],
+      ["카메라 작동 여부 기기별 점검 및 불량 기기 목록화",0],
+      ["카메라 불량 기기 용도 재배치 또는 공용 촬영기기 확보",0],
+      ["사이트 차단 정책 초기 설정 및 예외 신청 절차 공지",0],
+      ["개학 첫 주 '디벗 온보딩' 차시 확보",0],
+      ["담임교사 사전 연수 — 아이디, 비밀번호 재설정, 클래스툴즈 기본",0],
+      ["클래스툴즈·시험 잠금 모드 사용 규정 마련",0]
+    ]},
+    { n:"PHASE 5", t:"운영 정착", items:[
+      ["업무 분장에 '디지털 기기·계정 관리' 명시",0],
+      ["전입·전출·진급 시 계정 처리 루틴 수립",0],
+      ["관리자 계정 권한 최소 2인 보유, 인수인계 문서 유지",0],
+      ["차단 사이트 예외 신청 창구·처리 기한 운영",0],
+      ["추가 맞춤 연수 요청",0]
+    ]}
+  ];
+
+  var KEY = "dibut-flex-checklist-v1";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e){ state = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  var root = document.getElementById("checklist");
+  if(!root) return;
+
+  PHASES.forEach(function(ph, pi){
+    var box = document.createElement("div");
+    box.className = "phase";
+
+    var head = document.createElement("div");
+    head.className = "phase-h";
+    head.innerHTML = '<span class="pn">' + ph.n + '</span><span class="pt"></span><span class="cnt"></span>';
+    head.querySelector(".pt").textContent = ph.t;
+    box.appendChild(head);
+
+    var items = document.createElement("div");
+    items.className = "items";
+
+    ph.items.forEach(function(it, ii){
+      var id = "ck-" + pi + "-" + ii;
+      var label = document.createElement("label");
+      label.className = "item";
+      label.setAttribute("for", id);
+
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = id;
+      input.checked = !!state[id];
+
+      var span = document.createElement("span");
+      span.textContent = it[0];
+      if(it[1]){
+        var tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = "확인필요";
+        span.appendChild(tag);
+      }
+
+      input.addEventListener("change", function(){
+        state[id] = input.checked;
+        save();
+        count();
+      });
+
+      label.appendChild(input);
+      label.appendChild(span);
+      items.appendChild(label);
+    });
+
+    box.appendChild(items);
+    root.appendChild(box);
+
+    function count(){
+      var all = items.querySelectorAll('input[type="checkbox"]');
+      var done = items.querySelectorAll('input[type="checkbox"]:checked');
+      head.querySelector(".cnt").textContent = done.length + " / " + all.length;
+    }
+    box._count = count;
+    count();
+  });
+
+  var reset = document.getElementById("resetBtn");
+  if(reset){
+    reset.addEventListener("click", function(){
+      state = {};
+      save();
+      Array.prototype.forEach.call(root.querySelectorAll('input[type="checkbox"]'), function(c){ c.checked = false; });
+      Array.prototype.forEach.call(root.children, function(b){ if(b._count) b._count(); });
+    });
+  }
+
+  // scrollspy
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a, .mobnav a'));
+  var secs = ["s1","s2","s3","s4","s5","s6"].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  function spy(){
+    var best = null, bestTop = -Infinity;
+    secs.forEach(function(s){
+      var t = s.getBoundingClientRect().top - 90;
+      if(t <= 0 && t > bestTop){ bestTop = t; best = s.id; }
+    });
+    links.forEach(function(a){
+      a.classList.toggle("on", best && a.getAttribute("href") === "#" + best);
+    });
+  }
+  window.addEventListener("scroll", spy, {passive:true});
+  spy();
+})();
+</script>
+
+</body>
+</html>
