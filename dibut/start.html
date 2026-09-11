@@ -2,211 +2,272 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2F2F7">
 <title>디벗 테크니션 오프닝 보드</title>
 <style>
+/* ── iOS 디자인 언어: 그룹 리스트 · 시스템 블루 · 큰 제목 ── */
 :root{
-  --pri:#2F6BFF; --pri2:#1F54D6; --bg:#F3F5F9; --card:#fff; --line:#E3E7EF;
-  --tx:#1F2735; --tx2:#5B6472; --tx3:#8A93A2; --coffee:#8C5A2B; --coffeebg:#F5EBDF;
-  --ok:#16A34A; --warn:#C43E1C;
+  --blue:#007AFF; --blue-d:#0062CC;
+  --bg:#F2F2F7; --card:#FFFFFF; --sep:#D1D1D6;
+  --tx:#000000; --tx2:#6C6C70; --tx3:#8E8E93;
+  --green:#34C759; --orange:#FF9500; --red:#FF3B30; --purple:#5856D6;
+  --r:12px;
+  --pad:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;
-  font-family:'Segoe UI',Pretendard,-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}
-.mono{font-family:Consolas,'Cascadia Mono',monospace}
-button{font:inherit;cursor:pointer}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+img{max-width:100%}
+body{background:var(--bg);color:var(--tx);font-size:17px;line-height:1.47;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Apple SD Gothic Neo",Pretendard,"Segoe UI","Malgun Gothic",sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 
-.topbar{background:#1B3A5F;color:#fff;padding:12px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.topbar .sym{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2F6BFF,#55C1E8);
-  display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none}
-.topbar b{font-size:15.5px;letter-spacing:-.2px}
-.topbar .tag{background:#C43E1C;border-radius:4px;font-size:11px;font-weight:700;padding:2px 8px}
-.topbar .sp{flex:1}
-.topbar .st{font-size:12px;opacity:.85}
+/* 네비게이션 바 */
+.nav{position:sticky;top:0;z-index:20;background:rgba(249,249,249,.86);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:.5px solid rgba(0,0,0,.18);padding:11px 16px;display:flex;align-items:center;gap:8px}
+.nav b{font-size:15px;font-weight:600;letter-spacing:-.2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav .sp{flex:1}
+.nav .st{font-size:13px;color:var(--tx3);white-space:nowrap}
+.nav .st.on{color:var(--green)}
 
-.wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px}
-.wrap.board{max-width:1500px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px calc(48px + var(--pad))}
+.wrap.board{max-width:1480px}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px;margin-bottom:14px}
-h1{margin:4px 0 6px;font-size:21px;letter-spacing:-.4px}
-.sub{color:var(--tx2);font-size:13px;margin:0 0 4px}
-.fld{margin:14px 0}
-.fld label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
-.fld .hint{font-weight:400;color:var(--tx3);font-size:12px}
-.fld input[type=text],.fld input[type=number],.fld select{width:100%;height:46px;border:1.5px solid #CBD3E0;
-  border-radius:10px;padding:0 12px;font-size:15px;background:#fff}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.opt{border:1.5px solid #CBD3E0;border-radius:10px;padding:10px 8px;text-align:center;font-size:13.5px;
-  background:#fff;color:var(--tx2)}
-.opt.on{border-color:var(--pri);background:#EEF3FF;color:var(--pri);font-weight:700}
-.go{width:100%;height:50px;border:0;border-radius:11px;background:var(--pri);color:#fff;font-weight:800;font-size:16px;margin-top:6px}
-.coffee{background:var(--coffeebg);border:1px solid #E4D2BC;border-radius:12px;padding:14px}
-.coffee b{color:var(--coffee)}
-.ai{background:#EEF3FF;border:1px solid #CBDCFF;border-radius:12px;padding:14px;margin:14px 0}
-.ai>b{color:var(--pri2)}
-.promptbox{background:#fff;border:1px solid #CBD3E0;border-radius:10px;padding:11px 13px;font-size:12.5px;
-  line-height:1.6;color:var(--tx);white-space:pre-wrap;max-height:150px;overflow:auto}
-.copybtn{width:100%;height:40px;border:0;border-radius:9px;background:var(--pri);color:#fff;font-weight:700;
-  font-size:14px;margin-top:8px}
-.copybtn.done{background:var(--ok)}
-.ident{background:#fff;border:1px solid var(--line);border-left:4px solid #7C4DE0;border-radius:10px;
-  padding:10px 12px;font-size:13.5px}
-.ident .who{color:var(--tx3);font-size:11.5px;font-weight:700;margin-bottom:2px}
-.done{text-align:center;padding:30px 10px}
-.done .big{font-size:52px}
-.note-mini{color:var(--tx3);font-size:12px;text-align:center;margin-top:10px}
-.err{background:#FDECEC;border:1px solid #F2C4C4;color:#A33;border-radius:10px;padding:10px 12px;
-  font-size:13px;margin-bottom:12px;display:none}
+/* 큰 제목 */
+.large{padding:16px 4px 6px}
+.large h1{margin:0;font-size:34px;line-height:1.15;font-weight:700;letter-spacing:-.6px}
+.large p{margin:8px 0 0;font-size:15px;color:var(--tx2)}
+
+/* 그룹 리스트 */
+.gh{font-size:13px;color:var(--tx3);padding:26px 16px 7px;letter-spacing:-.1px}
+.grp{background:var(--card);border-radius:var(--r);overflow:hidden}
+.row{padding:12px 16px;border-top:.5px solid var(--sep)}
+.row:first-child{border-top:0}
+.row .k{font-size:15px;font-weight:500;margin-bottom:3px}
+.row .k em{font-style:normal;color:var(--tx3);font-weight:400;font-size:13px}
+.row input[type=text],.row input[type=number],.row select,.row textarea{
+  width:100%;border:0;background:transparent;padding:2px 0;font-size:17px;outline:none;resize:none}
+.row input::placeholder,.row textarea::placeholder{color:#C4C4C6}
+.row select{appearance:none;-webkit-appearance:none;padding-right:18px;max-width:100%;text-overflow:ellipsis}
+.selwrap{position:relative}
+.selwrap::after{content:"";position:absolute;right:2px;top:50%;width:8px;height:8px;margin-top:-6px;
+  border-right:2px solid var(--tx3);border-bottom:2px solid var(--tx3);transform:rotate(45deg);pointer-events:none}
+.gf{font-size:13px;color:var(--tx3);padding:7px 16px 0;line-height:1.5}
+
+/* 선택 행(체크 표시) */
+.pick{display:flex;align-items:center;gap:10px;padding:13px 16px;border:0;border-top:.5px solid var(--sep);
+  background:transparent;width:100%;text-align:left;font-size:17px}
+.pick:first-child{border-top:0}
+.pick .ck{margin-left:auto;color:var(--blue);font-weight:700;opacity:0;transition:opacity .12s}
+.pick.on .ck{opacity:1}
+.pick.on{color:var(--blue)}
+
+/* 버튼 */
+.cta{width:100%;height:50px;margin-top:28px;border:0;border-radius:var(--r);background:var(--blue);
+  color:#fff;font-size:17px;font-weight:600;letter-spacing:-.2px}
+.cta:active{background:var(--blue-d)}
+.cta:disabled{background:#B9DBFF}
+.mini{font-size:13px;color:var(--tx3);text-align:center;margin-top:12px;line-height:1.5}
+
+/* 강조 카드(AI · 커피) */
+.tint{border-radius:var(--r);padding:15px 16px}
+.tint.ai{background:rgba(88,86,214,.08)}
+.tint.cf{background:rgba(255,149,0,.10)}
+.tint h3{margin:0 0 5px;font-size:16px;font-weight:600}
+.tint.ai h3{color:var(--purple)}
+.tint.cf h3{color:#B25C00}
+.tint p{margin:0 0 10px;font-size:14px;color:var(--tx2);line-height:1.5}
+.prompt{background:var(--card);border-radius:10px;padding:12px 13px;font-size:13px;line-height:1.6;overflow-wrap:anywhere;
+  white-space:pre-wrap;max-height:146px;overflow:auto;color:#3A3A3C}
+.copy{width:100%;height:42px;margin-top:9px;border:0;border-radius:10px;background:var(--purple);color:#fff;
+  font-size:15px;font-weight:600}
+.copy.done{background:var(--green)}
+.tint input{width:100%;height:46px;margin-top:10px;border:.5px solid var(--sep);border-radius:10px;
+  padding:0 13px;background:var(--card);font-size:17px;outline:none}
+.tint input:focus{border-color:var(--blue)}
+
+/* 완료 */
+.done{text-align:center;padding:56px 16px}
+.done .big{font-size:64px;line-height:1}
+.done h2{margin:16px 0 6px;font-size:26px;font-weight:700;letter-spacing:-.4px}
+.done p{margin:0;color:var(--tx2);font-size:15px}
+
+.err{background:rgba(255,59,48,.10);color:#C9251C;border-radius:var(--r);padding:12px 15px;
+  font-size:14px;margin:14px 0;display:none;line-height:1.5}
 .err.on{display:block}
 
-/* ── 보드 ── */
-.bgrid{display:grid;grid-template-columns:340px 1fr 380px;gap:14px;align-items:start}
+/* ── 보드(전자칠판) ── */
+.bgrid{display:grid;grid-template-columns:320px 1fr 380px;gap:16px;align-items:start;padding-top:16px}
 @media(max-width:1100px){.bgrid{grid-template-columns:1fr}}
-.qrbox{text-align:center}
-.qrbox img{width:250px;height:250px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
-.qrbox .url{font-size:13px;color:var(--tx2);margin-top:8px;word-break:break-all}
-.bignum{font-size:44px;font-weight:800;letter-spacing:-1px}
-.bignum small{font-size:15px;color:var(--tx3);font-weight:600}
-.bar-row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:14px}
-.bar-row .lb{flex:0 0 120px;text-align:right;color:var(--tx2);font-weight:700;font-size:13px}
-.bar-row .tr{flex:1;background:#EDF0F6;border-radius:999px;height:22px;overflow:hidden}
-.bar-row .tr i{display:block;height:100%;background:var(--pri);border-radius:999px;min-width:4px;transition:width .5s}
-.bar-row .n{flex:0 0 34px;font-weight:800}
-.hopes{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:520px;overflow:auto}
-@media(max-width:1100px){.hopes{grid-template-columns:1fr 1fr 1fr}}
-.hope{background:#fff;border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:10px;
-  padding:10px 12px;font-size:13.5px}
-.hope .who{color:var(--tx3);font-size:11.5px;font-weight:700;margin-bottom:2px}
-.guessline{display:flex;align-items:flex-end;gap:3px;height:110px;margin:12px 0 4px}
-.guessline .gcol{flex:1;background:#D9E3FA;border-radius:4px 4px 0 0;position:relative;min-width:6px}
-.guessline .gcol.hot{background:var(--pri)}
-.gaxis{display:flex;justify-content:space-between;color:var(--tx3);font-size:11px}
-.reveal-btn{width:100%;height:48px;border:0;border-radius:11px;background:var(--coffee);color:#fff;font-weight:800;font-size:15px}
-.answer{display:none;text-align:center;padding:14px 8px 4px}
-.answer.on{display:block}
-.answer .a{font-size:56px;font-weight:900;color:var(--coffee);letter-spacing:-1px}
-.winner{margin-top:8px;font-size:15px}
-.winner b{background:#FFF3C9;border-radius:6px;padding:2px 8px}
-.teaser{margin-top:10px;background:#EEF3FF;border:1px solid #CBDCFF;color:#234C9A;border-radius:10px;
-  padding:10px 12px;font-size:13.5px;text-align:left}
-footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;
-  font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.bcard{background:var(--card);border-radius:16px;padding:18px 20px}
+.bcard h2{margin:0 0 12px;font-size:19px;font-weight:600;letter-spacing:-.3px}
+.bcard h2 span{color:var(--tx3);font-weight:400;font-size:14px}
+.qr img{width:100%;max-width:250px;border-radius:12px;display:block;margin:0 auto}
+.qr .u{font-size:13px;color:var(--tx2);text-align:center;margin-top:10px;word-break:break-all}
+.big3{font-size:64px;font-weight:700;letter-spacing:-2px;text-align:center;line-height:1.05}
+.big3 small{font-size:17px;color:var(--tx3);font-weight:500;letter-spacing:0}
+.bar{display:flex;align-items:center;gap:11px;margin:10px 0;font-size:15px}
+.bar .l{flex:0 0 112px;text-align:right;color:var(--tx2);font-size:14px}
+.bar .t{flex:1;background:#E9E9EB;border-radius:99px;height:22px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--blue);border-radius:99px;min-width:5px;transition:width .45s}
+.bar .n{flex:0 0 30px;font-weight:600;text-align:right}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:460px;overflow:auto}
+@media(max-width:1100px){.cards{grid-template-columns:1fr 1fr 1fr}}
+.mc{background:#F7F7F9;border-radius:12px;padding:11px 13px;font-size:14.5px;line-height:1.45}
+.mc .w{font-size:12px;color:var(--tx3);margin-bottom:3px}
+.mc .job{color:var(--blue)}
+.mc.id{border-left:3px solid var(--purple)}
+.hist{display:flex;align-items:flex-end;gap:3px;height:104px;margin:10px 0 5px}
+.hist i{flex:1;background:#CFE3FF;border-radius:4px 4px 0 0;min-width:5px}
+.hist i.hot{background:var(--blue)}
+.ax{display:flex;justify-content:space-between;color:var(--tx3);font-size:12px}
+.reveal{width:100%;height:48px;margin-top:12px;border:0;border-radius:var(--r);background:var(--orange);
+  color:#fff;font-size:16px;font-weight:600}
+.ans{display:none;text-align:center;padding:14px 4px 2px}
+.ans.on{display:block}
+.ans .n{font-size:60px;font-weight:700;color:var(--orange);letter-spacing:-2px}
+.win{margin-top:8px;font-size:15px}
+.win b{background:rgba(255,149,0,.18);border-radius:7px;padding:2px 8px}
+.tease{margin-top:12px;background:rgba(0,122,255,.08);color:#0B4DA2;border-radius:12px;
+  padding:12px 14px;font-size:14px;text-align:left;line-height:1.55}
+footer#app-credit{max-width:560px;margin:36px auto 0;padding:16px 16px calc(20px + var(--pad));text-align:center;
+  font-size:12.5px;line-height:1.6;color:var(--tx3);border-top:.5px solid var(--sep)}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <span class="sym">SEN</span><b>디벗 전문가[테크니션] 직무연수 — 오프닝 보드</b>
-  <span class="tag">윈도우 Admin · MDM</span>
-  <span class="sp"></span><span class="st" id="connSt">·</span>
+<div class="nav">
+  <b>디벗 전문가[테크니션] 직무연수</b>
+  <span class="sp"></span><span class="st" id="connSt"></span>
 </div>
 
+<!-- ══ 참가자 입력 ══ -->
 <div class="wrap" id="viewWrite">
-  <div class="err" id="errW">서버 연결이 안 됩니다 — 잠시 후 다시 제출해 주세요.</div>
-  <div class="card">
-    <h1>예비 강사님, 환영합니다 👋</h1>
-    <p class="sub">30초면 됩니다. 답은 앞 화면 보드에 실시간으로 모입니다(별명만 표시, 익명).</p>
-    <div class="fld">
-      <label>별명 <span class="hint">— 커피 당첨자 확인용, 실명 말고 별명으로!</span></label>
+  <div class="large">
+    <h1>예비 강사님,<br>환영합니다 👋</h1>
+    <p>30초면 됩니다. 답은 앞 화면에 실시간으로 모입니다. 별명만 표시되고 실명은 받지 않습니다.</p>
+  </div>
+  <div class="err" id="errW">서버에 닿지 않습니다 — 잠시 뒤 다시 제출해 주세요.</div>
+
+  <div class="gh">나를 어떻게 부를까요</div>
+  <div class="grp">
+    <div class="row">
+      <div class="k">별명 <em>커피 당첨자 확인용</em></div>
       <input type="text" id="fNick" maxlength="10" placeholder="예: 윈도우요정">
     </div>
-    <div class="fld">
-      <label>어떤 과목을 가르치세요?</label>
-      <select id="fSubject">
-        <option value="">— 선택 —</option>
+    <div class="row">
+      <div class="k">가르치는 과목</div>
+      <div class="selwrap"><select id="fSubject">
+        <option value="">선택해 주세요</option>
         <option>국어</option><option>영어</option><option>수학</option><option>과학</option>
         <option>사회</option><option>역사</option><option>도덕</option><option>기술·가정</option>
         <option>정보·컴퓨터</option><option>미술</option><option>음악</option><option>체육</option>
         <option>진로·상담</option><option>특수</option><option>사서·보건·영양</option>
         <option>비교과·행정</option><option>기타</option>
-      </select>
+      </select></div>
     </div>
-    <div class="fld">
-      <label>디벗 업무, 얼마나 해보셨나요?</label>
-      <div class="opts" id="fCareer">
-        <button class="opt" data-v="올해 처음">올해 처음</button>
-        <button class="opt" data-v="1년차">1년차</button>
-        <button class="opt" data-v="2~3년차">2~3년차</button>
-        <button class="opt" data-v="이미 강사급">이미 강사급 🔥</button>
-      </div>
-    </div>
-    <div class="ai">
-      <b>🤖 아이스브레이킹 — “나는 어떤 교사일까?”</b>
-      <div style="font-size:13.5px;margin:5px 0 9px">평소 쓰시는 AI(챗지피티·제미나이·SenGPT 등)에 아래 질문을 붙여 넣으면, 그동안의 대화를 바탕으로 답을 만들어 줍니다. 나온 <b>한 문장</b>만 아래에 옮겨 적어 주세요 — 앞 화면에 모입니다.</div>
-      <div class="promptbox" id="identPrompt"></div>
-      <button class="copybtn" id="btnCopyPrompt">📋 프롬프트 복사</button>
-      <input type="text" id="fIdent" maxlength="60" placeholder="이 선생님은 ______ 교사입니다"
-        style="width:100%;height:46px;border:1.5px solid #C7D0E0;border-radius:10px;padding:0 12px;font-size:15px;background:#fff;margin-top:10px">
-      <div class="hint" style="margin-top:6px">AI를 안 쓰시거나 시간이 빠듯하면 이 칸은 비워 두셔도 됩니다 · AI 답변 전체는 선생님만 보시고, 화면엔 이 한 문장만 올라갑니다.</div>
-    </div>
-    <div class="fld">
-      <label>강사가 되면, 선생님들께 <u>제일 먼저</u> 알려주고 싶은 것 한 가지?</label>
-      <input type="text" id="fHope" maxlength="60" placeholder="예: 암호 초기화 40명씩 하는 법">
-    </div>
-    <div class="coffee">
-      <b>☕ 커피 내기 퀴즈</b>
-      <div style="font-size:13.5px;margin:4px 0 8px">강사(조승재)네 학교 디벗, <b>올해 수리 요청</b>은 모두 몇 건일까요? <span class="hint">(3월~지금 접수 누적 · 가장 가깝게 맞힌 분께 커피!)</span></div>
-      <input type="number" id="fGuess" min="0" max="9999" placeholder="숫자만 (예: 80)"
-        style="width:100%;height:46px;border:1.5px solid #D8C5AB;border-radius:10px;padding:0 12px;font-size:15px;background:#fff">
-    </div>
-    <button class="go" id="btnSubmit">제출하기</button>
-    <div class="note-mini">개인정보는 수집하지 않습니다 · 별명·응답만 저장됩니다</div>
   </div>
-  <div class="card done" id="doneBox" style="display:none">
+
+  <div class="gh">디벗 업무, 얼마나 해보셨나요</div>
+  <div class="grp" id="fCareer">
+    <button class="pick" data-v="올해 처음">올해 처음<span class="ck">✓</span></button>
+    <button class="pick" data-v="1년차">1년차<span class="ck">✓</span></button>
+    <button class="pick" data-v="2~3년차">2~3년차<span class="ck">✓</span></button>
+    <button class="pick" data-v="이미 강사급">이미 강사급 🔥<span class="ck">✓</span></button>
+  </div>
+
+  <div class="gh">오늘 이 자리에 오신 이야기</div>
+  <div class="grp">
+    <div class="row">
+      <div class="k">이 연수를 신청하신 이유</div>
+      <textarea id="fHope" maxlength="70" rows="2" placeholder="예: 올해 디벗 담당이 되어서 / 강사로 나가보고 싶어서"></textarea>
+    </div>
+    <div class="row">
+      <div class="k">현재 업무 <em>선택</em></div>
+      <input type="text" id="fJob" maxlength="30" placeholder="예: 정보부 기기 담당">
+    </div>
+  </div>
+  <div class="gf">업무는 밝히고 싶지 않으시면 비워 두셔도 됩니다.</div>
+
+  <div class="gh">아이스브레이킹</div>
+  <div class="tint ai">
+    <h3>🤖 나는 어떤 교사일까?</h3>
+    <p>평소 쓰시는 AI(챗지피티·제미나이·SenGPT 등)에 아래 질문을 붙여 넣으면, 그동안의 대화를 바탕으로 답을 만들어 줍니다. 나온 <b>한 문장</b>만 아래에 옮겨 적어 주세요.</p>
+    <div class="prompt" id="identPrompt"></div>
+    <button class="copy" id="btnCopyPrompt">프롬프트 복사</button>
+    <input type="text" id="fIdent" maxlength="60" placeholder="이 선생님은 ______ 교사입니다">
+  </div>
+  <div class="gf">AI를 안 쓰시거나 시간이 빠듯하면 비워 두셔도 됩니다. AI 답변 전체는 선생님만 보시고, 화면엔 이 한 문장만 올라갑니다.</div>
+
+  <div class="gh">커피 내기</div>
+  <div class="tint cf">
+    <h3>☕ 올해 수리 요청, 몇 건일까요?</h3>
+    <p>강사(조승재)네 학교 디벗의 3월부터 지금까지 누적 접수 건수입니다. 가장 가깝게 맞히신 분께 커피를 드립니다.</p>
+    <input type="number" id="fGuess" min="0" max="9999" inputmode="numeric" placeholder="숫자만 (예: 80)">
+  </div>
+
+  <button class="cta" id="btnSubmit">제출하기</button>
+  <div class="mini">개인정보는 수집하지 않습니다 · 별명과 응답만 저장됩니다</div>
+</div>
+
+<div class="wrap" id="doneBox" style="display:none">
+  <div class="done">
     <div class="big">☕</div>
-    <h1>접수 완료!</h1>
-    <p class="sub" id="doneMsg"></p>
-    <p class="sub">정답은 강의 중에 공개됩니다 — 앞 화면을 봐 주세요.</p>
+    <h2>접수 완료!</h2>
+    <p id="doneMsg"></p>
+    <p style="margin-top:8px">정답은 강의 중에 공개됩니다 — 앞 화면을 봐 주세요.</p>
   </div>
 </div>
 
+<!-- ══ 전자칠판 보드 ══ -->
 <div class="wrap board" id="viewBoard" style="display:none">
-  <div class="err" id="errB">서버 연결 대기 중 — Supabase SETUP SQL이 실행되어 있는지 확인하세요.</div>
+  <div class="err" id="errB">서버 연결 대기 중 — Supabase SETUP SQL이 실행되었는지 확인하세요.</div>
   <div class="bgrid">
     <div>
-      <div class="card qrbox">
-        <h1 style="font-size:17px">📱 접속해 주세요</h1>
-        <img id="qrImg" alt="QR">
-        <div class="url" id="urlTxt"></div>
+      <div class="bcard qr">
+        <h2>📱 접속해 주세요</h2>
+        <img id="qrImg" alt="QR 코드">
+        <div class="u" id="urlTxt"></div>
       </div>
-      <div class="card" style="text-align:center">
-        <div class="sub">지금까지 참여</div>
-        <div class="bignum"><span id="cnt">0</span><small> 명</small></div>
+      <div class="bcard" style="margin-top:16px">
+        <h2>지금까지 참여</h2>
+        <div class="big3 num"><span id="cnt">0</span><small> 명</small></div>
       </div>
-    </div>
-    <div>
-      <div class="card">
-        <h1 style="font-size:17px">디벗 업무 경력</h1>
+      <div class="bcard" style="margin-top:16px">
+        <h2>디벗 업무 경력</h2>
         <div id="careerBars"></div>
       </div>
-      <div class="card">
-        <h1 style="font-size:17px">어떤 과목 선생님들이 오셨나</h1>
-        <div id="subjectBars"></div>
+    </div>
+    <div>
+      <div class="bcard">
+        <h2>이 연수를 신청하신 이유 <span id="hopeCnt"></span></h2>
+        <div class="cards" id="hopeCards"></div>
       </div>
-      <div class="card">
-        <h1 style="font-size:17px">강사가 되면 제일 먼저 알려주고 싶은 것</h1>
-        <div class="hopes" id="hopeCards"></div>
+      <div class="bcard" style="margin-top:16px">
+        <h2>어떤 과목 선생님들이 오셨나</h2>
+        <div id="subjectBars"></div>
       </div>
     </div>
     <div>
-      <div class="card">
-        <h1 style="font-size:17px">🤖 AI가 본 우리 강사들</h1>
-        <p class="sub">평소 쓰는 AI에게 “나는 어떤 교사?”라고 물어본 답</p>
-        <div class="hopes" id="identCards" style="grid-template-columns:1fr;max-height:300px"></div>
+      <div class="bcard">
+        <h2>🤖 AI가 본 우리 강사들</h2>
+        <div class="cards" id="identCards" style="grid-template-columns:1fr;max-height:290px"></div>
       </div>
-      <div class="card">
-        <h1 style="font-size:17px">☕ 올해 우리 학교 수리 요청은 몇 건?</h1>
-        <p class="sub">제출된 예상값 분포 · 평균 <b id="gAvg">-</b>건</p>
-        <div class="guessline" id="gBars"></div>
-        <div class="gaxis"><span>0</span><span>250</span><span>500+</span></div>
-        <button class="reveal-btn" id="btnReveal">☕ 정답 공개 (강사용)</button>
-        <div class="answer" id="ansBox">
-          <div class="a"><span id="ansNum">207</span><span style="font-size:20px">건</span></div>
-          <div class="winner" id="winnerLine"></div>
-          <div class="teaser">한 달에 서른 건꼴입니다. 무엇이 고장 나서 올까요? — 1위는 <b>화면(액정) 파손</b>,
+      <div class="bcard" style="margin-top:16px">
+        <h2>☕ 올해 수리 요청 <span>예상 분포 · 평균 <b id="gAvg">-</b>건</span></h2>
+        <div class="hist" id="gBars"></div>
+        <div class="ax"><span>0</span><span>250</span><span>500+</span></div>
+        <button class="reveal" id="btnReveal">정답 공개</button>
+        <div class="ans" id="ansBox">
+          <div class="n num"><span id="ansNum">207</span><span style="font-size:22px">건</span></div>
+          <div class="win" id="winnerLine"></div>
+          <div class="tease">한 달에 서른 건꼴입니다. 무엇이 고장 나서 올까요? — 1위는 <b>화면(액정) 파손</b>,
           그다음이 전원 안 켜짐·블루스크린·앱 실행 불가·계정 문제. 이 207건이 모이는 화면과
-          <b>접수하는 법(원클릭 접수)</b>을 오늘 직접 눌러봅니다. 🎯</div>
+          <b>접수하는 법(원클릭 접수)</b>을 오늘 직접 눌러 봅니다.</div>
         </div>
       </div>
     </div>
@@ -214,7 +275,7 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
 </div>
 
 <footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 오프닝 보드<br>
-<span style="font-size:11px;opacity:.85;">응답은 익명(별명)으로 수집되며 연수 진행에만 사용됩니다 · 최종 업데이트: 2026-09-10</span></footer>
+<span style="opacity:.85">응답은 익명(별명)으로 수집되며 연수 진행에만 사용됩니다 · 최종 업데이트: 2026-09-12</span></footer>
 
 <script>
 (function(){
@@ -224,14 +285,11 @@ function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){retur
 var SB_URL="https://vbvtnmnodeoocbbjauap.supabase.co";
 var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc";
 var TBL="dibut_open26";
-/* 정답 = 올해 수리 요청 누적(DBS AS 관리 '전체 n건'). 당일 확정치가 다르면 주소에 &ans=숫자 로 덮어쓰기 */
+/* 정답 = 올해 수리 요청 누적(DBS AS 관리 "전체 n건"). 당일 확정치가 다르면 주소에 &ans=숫자 */
 var ANSWER=(function(){var m=location.search.match(/[?&]ans=(\d+)/);return m?parseInt(m[1],10):207;})();
 var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json"};
 
-var isBoard=/[?&]mode=board/.test(location.search);
-if(isBoard){$("#viewWrite").style.display="none";$("#viewBoard").style.display="block";}
-
-/* ───── LLM 아이스브레이킹 프롬프트 (질문 연수 identity 프롬프트를 이 형식에 맞춰 각색) ───── */
+/* ── LLM 아이스브레이킹 프롬프트(질문 연수 identity 프롬프트 각색) ── */
 var IDENT_PROMPT=[
 "지금까지 우리가 나눈 대화를 바탕으로, 나를 한 명의 교사로 소개해 주세요.",
 "",
@@ -247,94 +305,103 @@ var IDENT_PROMPT=[
 ].join("\n");
 if($("#identPrompt"))$("#identPrompt").textContent=IDENT_PROMPT;
 if($("#btnCopyPrompt"))$("#btnCopyPrompt").addEventListener("click",function(){
-  var btn=this;
-  function ok(){btn.textContent="✅ 복사됐어요 — AI에 붙여넣어 보세요";btn.classList.add("done");
-    setTimeout(function(){btn.textContent="📋 프롬프트 복사";btn.classList.remove("done");},2200);}
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(IDENT_PROMPT).then(ok,fb);}else{fb();}
+  var b=this;
+  function ok(){b.textContent="복사됐어요 — AI에 붙여넣어 보세요";b.classList.add("done");
+    setTimeout(function(){b.textContent="프롬프트 복사";b.classList.remove("done");},2200);}
   function fb(){var ta=document.createElement("textarea");ta.value=IDENT_PROMPT;ta.style.position="fixed";ta.style.opacity="0";
     document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok();}catch(e){}document.body.removeChild(ta);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(IDENT_PROMPT).then(ok,fb);}else{fb();}
 });
 
-/* ───── 입력 모드 ───── */
+var isBoard=/[?&]mode=board/.test(location.search);
+if(isBoard){$("#viewWrite").style.display="none";$("#viewBoard").style.display="block";}
+
+/* ── 입력 ── */
 var career="";
-$("#fCareer").addEventListener("click",function(e){
-  var b=e.target.closest(".opt");if(!b)return;
+if($("#fCareer"))$("#fCareer").addEventListener("click",function(e){
+  var b=e.target.closest(".pick");if(!b)return;
   career=b.getAttribute("data-v");
-  document.querySelectorAll("#fCareer .opt").forEach(function(x){x.classList.toggle("on",x===b);});
+  document.querySelectorAll("#fCareer .pick").forEach(function(x){x.classList.toggle("on",x===b);});
 });
-$("#btnSubmit").addEventListener("click",function(){
+if($("#btnSubmit"))$("#btnSubmit").addEventListener("click",function(){
   var nick=($("#fNick").value||"").trim();
   var subject=($("#fSubject").value||"").trim();
-  var ident=($("#fIdent").value||"").trim();
   var hope=($("#fHope").value||"").trim();
+  var job=($("#fJob").value||"").trim();
+  var ident=($("#fIdent").value||"").trim();
   var guess=parseInt($("#fGuess").value,10);
   if(!nick){alert("별명을 적어 주세요! (커피 받으셔야죠 ☕)");return;}
   if(!subject){alert("가르치시는 과목을 골라 주세요.");return;}
   if(!career){alert("디벗 업무 경력을 골라 주세요.");return;}
+  if(!hope){alert("이 연수를 신청하신 이유를 한 줄만 적어 주세요.");return;}
   if(isNaN(guess)){alert("커피 퀴즈 숫자를 넣어 주세요!");return;}
-  $("#btnSubmit").disabled=true;$("#btnSubmit").textContent="제출 중…";
+  var btn=this;
+  btn.disabled=true;btn.textContent="제출 중…";
   fetch(SB_URL+"/rest/v1/"+TBL,{method:"POST",headers:H,
-    body:JSON.stringify({nick:nick,subject:subject,ident:ident,career:career,hope:hope,guess:guess})})
+    body:JSON.stringify({nick:nick,subject:subject,ident:ident,career:career,hope:hope,job:job,guess:guess})})
   .then(function(r){
     if(!r.ok)throw new Error(r.status);
-    $("#viewWrite").querySelector(".card").style.display="none";
+    $("#viewWrite").style.display="none";
     $("#doneBox").style.display="block";
     $("#doneMsg").textContent=nick+" 님의 예상: "+guess.toLocaleString()+"건";
+    window.scrollTo(0,0);
   })
   .catch(function(){
     $("#errW").classList.add("on");
-    $("#btnSubmit").disabled=false;$("#btnSubmit").textContent="제출하기";
+    btn.disabled=false;btn.textContent="제출하기";
   });
 });
 
-/* ───── 보드 모드 ───── */
+/* ── 보드 ── */
 var CAREERS=["올해 처음","1년차","2~3년차","이미 강사급"];
 var revealed=false, rows=[];
-function todayKST(){
-  var n=new Date(Date.now()+9*3600*1000);
-  return n.toISOString().slice(0,10);
-}
+function todayKST(){var n=new Date(Date.now()+9*3600*1000);return n.toISOString().slice(0,10);}
 function fetchRows(){
-  fetch(SB_URL+"/rest/v1/"+TBL+"?select=nick,subject,ident,career,hope,guess,created_at&order=created_at.desc&limit=300",{headers:H})
+  fetch(SB_URL+"/rest/v1/"+TBL+"?select=nick,subject,ident,career,hope,job,guess,created_at&order=created_at.desc&limit=300",{headers:H})
   .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
   .then(function(js){
     var td=todayKST();
     rows=js.filter(function(x){return String(x.created_at||"").slice(0,10)>=td;});
-    $("#errB").classList.remove("on");$("#connSt").textContent="● 실시간 연결";
+    $("#errB").classList.remove("on");
+    var st=$("#connSt");st.textContent="실시간 연결";st.className="st on";
     paint();
   })
-  .catch(function(){$("#errB").classList.add("on");$("#connSt").textContent="○ 연결 안 됨";});
+  .catch(function(){$("#errB").classList.add("on");var st=$("#connSt");st.textContent="연결 안 됨";st.className="st";});
 }
 function paint(){
   $("#cnt").textContent=rows.length;
   var mx=1;
   var cc=CAREERS.map(function(c){var n=rows.filter(function(r){return r.career===c;}).length;mx=Math.max(mx,n);return n;});
   $("#careerBars").innerHTML=CAREERS.map(function(c,i){
-    return '<div class="bar-row"><span class="lb">'+esc(c)+'</span><span class="tr"><i style="width:'+(cc[i]/mx*100)+'%"></i></span><span class="n">'+cc[i]+"</span></div>";
+    return '<div class="bar"><span class="l">'+esc(c)+'</span><span class="t"><i style="width:'+(cc[i]/mx*100)+'%"></i></span><span class="n num">'+cc[i]+"</span></div>";
   }).join("");
   /* 과목 분포 — 응답이 있는 과목만, 많은 순 */
-  var subMap={};
-  rows.forEach(function(r){if(r.subject){subMap[r.subject]=(subMap[r.subject]||0)+1;}});
-  var subArr=Object.keys(subMap).map(function(k){return [k,subMap[k]];}).sort(function(a,b){return b[1]-a[1];});
-  var smx=subArr.reduce(function(m,x){return Math.max(m,x[1]);},1);
-  $("#subjectBars").innerHTML=subArr.length?subArr.map(function(x){
-    return '<div class="bar-row"><span class="lb">'+esc(x[0])+'</span><span class="tr"><i style="width:'+(x[1]/smx*100)+'%"></i></span><span class="n">'+x[1]+"</span></div>";
-  }).join(""):'<div class="sub">아직 응답이 없습니다.</div>';
-  /* AI가 본 우리 강사들 */
+  var sm={};rows.forEach(function(r){if(r.subject)sm[r.subject]=(sm[r.subject]||0)+1;});
+  var sa=Object.keys(sm).map(function(k){return [k,sm[k]];}).sort(function(a,b){return b[1]-a[1];});
+  var smx=sa.reduce(function(m,x){return Math.max(m,x[1]);},1);
+  $("#subjectBars").innerHTML=sa.length?sa.map(function(x){
+    return '<div class="bar"><span class="l">'+esc(x[0])+'</span><span class="t"><i style="width:'+(x[1]/smx*100)+'%"></i></span><span class="n num">'+x[1]+"</span></div>";
+  }).join(""):'<div class="mini" style="text-align:left">아직 응답이 없습니다.</div>';
+  /* 신청 이유 (+ 현재 업무) */
+  var hs=rows.filter(function(r){return r.hope;});
+  $("#hopeCnt").textContent=hs.length?hs.length+"명":"";
+  $("#hopeCards").innerHTML=hs.slice(0,40).map(function(r){
+    return '<div class="mc"><div class="w">'+esc(r.nick)+" · "+esc(r.career)
+      +(r.job?' · <span class="job">'+esc(r.job)+"</span>":"")+"</div>"+esc(r.hope)+"</div>";
+  }).join("")||'<div class="mini" style="text-align:left">아직 응답이 없습니다 — QR로 접속해 주세요.</div>';
+  /* AI 한 문장 */
   $("#identCards").innerHTML=rows.filter(function(r){return r.ident;}).slice(0,30).map(function(r){
-    return '<div class="ident"><div class="who">'+esc(r.nick)+(r.subject?" · "+esc(r.subject):"")+"</div>"+esc(r.ident)+"</div>";
-  }).join("")||'<div class="sub">아직 없습니다 — AI에게 물어보고 한 문장 적어 주세요 🤖</div>';
-  $("#hopeCards").innerHTML=rows.filter(function(r){return r.hope;}).slice(0,40).map(function(r){
-    return '<div class="hope"><div class="who">'+esc(r.nick)+" · "+esc(r.career)+"</div>"+esc(r.hope)+"</div>";
-  }).join("")||'<div class="sub">아직 응답이 없습니다 — QR로 접속해 주세요!</div>';
+    return '<div class="mc id"><div class="w">'+esc(r.nick)+(r.subject?" · "+esc(r.subject):"")+"</div>"+esc(r.ident)+"</div>";
+  }).join("")||'<div class="mini" style="text-align:left">아직 없습니다 — AI에게 물어보고 한 문장 적어 주세요 🤖</div>';
+  /* 커피 분포 */
   var gs=rows.map(function(r){return r.guess;}).filter(function(g){return typeof g==="number";});
   $("#gAvg").textContent=gs.length?Math.round(gs.reduce(function(a,b){return a+b;},0)/gs.length).toLocaleString():"-";
   var BIN=15,MAXG=500,bins=Array(BIN).fill(0);
   gs.forEach(function(g){var i=Math.min(BIN-1,Math.floor(g/MAXG*BIN));bins[Math.max(0,i)]++;});
   var bm=Math.max.apply(null,bins.concat([1]));
-  var ansBin=Math.min(BIN-1,Math.floor(ANSWER/MAXG*BIN));
+  var ab=Math.min(BIN-1,Math.floor(ANSWER/MAXG*BIN));
   $("#gBars").innerHTML=bins.map(function(n,i){
-    return '<div class="gcol'+((revealed&&i===ansBin)?" hot":"")+'" style="height:'+(n/bm*100)+'%" title="'+n+'명"></div>';
+    return '<i class="'+((revealed&&i===ab)?"hot":"")+'" style="height:'+(n/bm*100)+'%" title="'+n+'명"></i>';
   }).join("");
   if(revealed){
     var best=rows.slice().filter(function(r){return typeof r.guess==="number";})
@@ -345,12 +412,12 @@ function paint(){
   }
 }
 if(isBoard){
-  var writeUrl=location.origin+location.pathname;
-  $("#urlTxt").textContent=writeUrl.replace(/^https?:\/\//,"");
-  $("#qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=460x460&data="+encodeURIComponent(writeUrl);
+  var w=location.origin+location.pathname;
+  $("#urlTxt").textContent=w.replace(/^https?:\/\//,"");
+  $("#qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=460x460&data="+encodeURIComponent(w);
   $("#ansNum").textContent=ANSWER.toLocaleString();
   $("#btnReveal").addEventListener("click",function(){
-    revealed=true;$("#ansBox").classList.add("on");$("#btnReveal").style.display="none";paint();
+    revealed=true;$("#ansBox").classList.add("on");this.style.display="none";paint();
   });
   fetchRows();setInterval(fetchRows,2500);
 }
