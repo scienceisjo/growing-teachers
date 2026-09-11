@@ -272,6 +272,60 @@ table.csv tr.blank td.rn{color:var(--bad)}
 #stage.isdark #help{background:rgba(255,255,255,.1);color:#c7c7cc}
 kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(--canvas);border:1px solid var(--hairline-strong);border-radius:var(--r-xs);padding:1px 6px;color:var(--slate)}
 #stage.isdark kbd{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:#fff}
+
+/* ── A3 타일 ── */
+.a3grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.a3{background:var(--parchment);border-radius:var(--r-lg);padding:22px 22px 20px;display:flex;flex-direction:column;gap:8px}
+.a3 .no{font-family:var(--font-num);font-size:13px;font-weight:600;color:var(--primary);letter-spacing:0}
+.a3 h3{font-size:21px;font-weight:600;letter-spacing:-.016em;line-height:1.2;color:var(--ink)}
+.a3 p{font-size:15.5px;line-height:1.5;color:var(--slate);letter-spacing:-.012em}
+.a3 p b{font-weight:600;color:var(--ink)}
+.a3.key{background:var(--primary)}
+.a3.key .no{color:rgba(255,255,255,.75)}
+.a3.key h3,.a3.key p,.a3.key p b{color:#fff}
+
+/* ── 어두운 타일 위의 큰 숫자·단계 띠 ── */
+.dark .stat{background:var(--tile-2)}
+.dark .stat .v{color:#fff}
+.dark .stat .v small{color:#a1a1a6}
+.dark .stat .l{color:var(--on-dark-muted)}
+.dark .stat.warn .v{color:#e6b94a}
+.dark .stat.bad .v{color:#ff6b62}
+.dark .strip .st{background:rgba(255,255,255,.1);color:#e8e8ed}
+.dark .strip .st.now{background:var(--warn);color:#fff}
+.dark .strip .st.ok{background:var(--ok);color:#fff}
+.dark .strip .st.bad{background:var(--bad);color:#fff}
+.dark .strip .ar{color:rgba(255,255,255,.28)}
+.dark .strip .cap{color:#a1a1a6}
+
+/* ── 보기 전환(덱 ↔ 스크롤) ── */
+#toScroll{position:absolute;top:22px;right:112px;z-index:22;cursor:pointer;font-family:var(--font);
+  font-size:13px;letter-spacing:-.01em;padding:7px 14px;border-radius:var(--r-full);
+  background:var(--parchment);color:var(--slate);border:none}
+#toScroll:hover{color:var(--primary)}
+#toScroll:active{transform:scale(.95)}
+#stage.isdark #toScroll{background:rgba(255,255,255,.12);color:#e8e8ed}
+#scrollBar{position:fixed;top:14px;right:18px;z-index:60;display:none;gap:8px}
+#scrollBar button{cursor:pointer;font-family:var(--font);font-size:13.5px;letter-spacing:-.01em;padding:8px 16px;border-radius:var(--r-full);
+  background:var(--primary);color:#fff;border:1px solid var(--primary)}
+#scrollBar button.ghost{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.28)}
+#scrollBar button:active{transform:scale(.95)}
+.snote{display:none;width:1280px;flex:none;margin:-18px 0 40px;padding:36px 34px 22px;
+  background:var(--tile-3);color:#e8e8ed;border-radius:0 0 var(--r-lg) var(--r-lg);
+  font-size:16px;line-height:1.6;letter-spacing:-.012em}
+.snote .lab{display:inline-block;font-size:12px;font-weight:600;color:var(--primary-on-dark);margin-right:10px;letter-spacing:.02em}
+.snote b{color:var(--primary-on-dark);font-weight:600}
+body.scroll{overflow:auto;display:block;height:auto;min-height:100%}
+body.scroll #viewport{position:static;display:block;overflow:visible;padding:64px 0 80px}
+body.scroll #stage{transform:none!important;margin:0 auto;width:1280px;height:auto;display:flex;flex-direction:column;
+  background:transparent;border-radius:0;overflow:visible}
+body.scroll .slide{position:relative;inset:auto;width:1280px;height:720px;flex:none;display:flex!important;
+  border-radius:var(--r-lg);overflow:hidden;animation:none;outline:1px solid rgba(255,255,255,.12);outline-offset:-1px}
+body.scroll .snote{display:block}
+body.scroll.hidenotes .snote{display:none}
+body.scroll.hidenotes .slide{margin-bottom:40px}
+body.scroll #help,body.scroll #timer,body.scroll #chrome,body.scroll #bar,body.scroll #notes,body.scroll #overview,body.scroll #toScroll{display:none!important}
+body.scroll #scrollBar{display:flex}
 </style>
 </head>
 <body>
@@ -360,7 +414,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
         <ul>
           <li>학생 계정 만들기 — <b>개별 · CSV 일괄</b></li>
           <li><b>암호 초기화</b> · <b>라이선스</b> 붙이기</li>
-          <li>표시 이름 바꾸기 = <b>승급</b> · 그룹(팀) · 관리자 역할 · MFA</li>
+          <li>표시 이름 바꾸기 = <b>승급</b> · 그룹(팀) · 관리자 역할 위임</li>
           <li>학생이 디벗 · 팀즈 · 오피스에 로그인하는 <b>그 계정</b>입니다</li>
         </ul>
         <div class="go">
@@ -398,8 +452,50 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     <div class="src">+ 수리는 <b>DBS</b>(dbs.edu-portal.ai) — 업체(케이원) 시스템입니다. 실습 ⑨에서 잠깐 보여드리겠습니다.</div>
   </section>
 
-  <!-- ══════════ 4 · MDM 미리 알아 두실 것 ① ══════════ -->
-  <section class="slide" data-name="「보냈다」와 「적용됐다」는 다릅니다"
+
+  <!-- ══════════ 4 · A3 라이선스 ══════════ -->
+  <section class="slide" data-name="A3 라이선스를 붙이면 무엇이 열립니까"
+    data-note="<b>[1:30]</b> 라이선스는 <b>계정에 서비스를 붙이는 열쇠</b>입니다. 계정만 만들고 라이선스를 안 붙이면 로그인은 되는데 Office도 OneDrive도 Teams도 안 열립니다. 2024년부터 학생 라이선스가 A1에서 <b>A3</b>로 올라갔습니다 — 교육청 계약이라 학교 부담은 없습니다. A3를 붙이면 여섯 가지가 열립니다. 첫째, <b>Office 정식 설치판</b> — Word·Excel·PowerPoint·OneNote·Outlook 최신 버전을 디벗과 개인 기기에 깔 수 있습니다. 둘째, OneDrive <b>최대 5TB</b> — 저희는 1TB로 맞춰 둡니다(실습 저장용량). 셋째, <b>Teams 가상교실</b> — 수업 팀을 만들면 과제·Class Notebook·화상회의 녹화가 되고, 학생이 낸 Word·PPT가 설치판에서 그대로 열리니 협업이 완성됩니다. 넷째, 학습 가속화 도구 — 몰입형 리더·읽기 진행·검색 코치·발표자 코치·인사이트. 다섯째가 디벗과 직결됩니다 — <b>Windows 11 Education 업그레이드</b> 권한이 들어 있는데, Argos의 윈도우 기능은 Pro·Education에서만 됩니다. 여섯째, <b>Minecraft Education</b>은 A3만 됩니다. Copilot은 18세 이상이라 중학생은 아직 해당 없고, <b>교사용 A3 좌석은 학교별로 한정</b>되어 있어 전출 교사 것을 회수해 재할당합니다.">
+    <div class="eyebrow"><span class="dot"></span>라이선스 — 계정에 서비스를 붙이는 열쇠</div>
+    <h1 class="title">학생용 A3를 붙이면, <span class="accent">무엇이 열립니까?</span></h1>
+    <p class="lede">2024년부터 학생 라이선스가 A1 → <b>A3</b>(교육청 계약, 무료)입니다. 라이선스가 없으면 로그인은 되어도 <b>Office · OneDrive · Teams가 열리지 않습니다.</b></p>
+    <div class="a3grid">
+      <div class="a3">
+        <div class="no">01 · Office</div>
+        <h3>정식 설치판이 열립니다</h3>
+        <p><b>Word · Excel · PowerPoint · OneNote · Outlook</b> 최신 버전을 디벗과 개인 기기에 설치 — PC·Mac 5대 + 태블릿 5대 + 폰 5대. 한컴 없이도 과제 OK.</p>
+      </div>
+      <div class="a3">
+        <div class="no">02 · OneDrive</div>
+        <h3>최대 <span class="num">5TB</span> 저장 공간</h3>
+        <p>기본은 <b>1TB(1024GB)</b>로 맞춰 둡니다(학교 테넌트 100TB 공유). 디벗을 바꿔도, 졸업할 때까지 파일은 그대로.</p>
+      </div>
+      <div class="a3">
+        <div class="no">03 · Teams</div>
+        <h3>가상교실이 완성됩니다</h3>
+        <p><b>수업 팀 · 과제 · Class Notebook · 화상회의 녹화</b>. 학생이 낸 Word·PPT가 설치판에서 열리고, 실시간 공동 편집까지.</p>
+      </div>
+      <div class="a3">
+        <div class="no">04 · 학습 가속화 도구</div>
+        <h3>AI 학습 도우미</h3>
+        <p><b>몰입형 리더 · 읽기 진행 · 검색 코치 · 발표자 코치 · 인사이트</b> — Teams 과제 안에서 바로 씁니다.</p>
+      </div>
+      <div class="a3 key">
+        <div class="no">05 · Windows</div>
+        <h3>Windows 11 Education 업그레이드</h3>
+        <p>디벗 Windows가 <b>Pro · Education</b>이어야 Argos 기능(사이트 차단 등)이 전부 됩니다. 디벗과 직결되는 혜택!</p>
+      </div>
+      <div class="a3">
+        <div class="no">06 · 그리고</div>
+        <h3>Minecraft Education · Clipchamp</h3>
+        <p><b>Minecraft Education은 A3만</b> 사용 가능(교육청 건축 프로젝트). Clipchamp 영상 편집도 A3에 포함.</p>
+      </div>
+    </div>
+    <div class="src"><b>Copilot</b>(데이터 보호)은 A3·A5의 18세 이상 학생과 교직원 — 중학생은 아직 해당 없습니다. <b>교사용 A3 좌석은 학교별 수량 한정</b> → 전출 교사 것을 회수해 재할당. 근거: 디벗 플랫폼 매뉴얼(팀즈) 6·12·28쪽 · 2026 교육청 MS오피스 라이선스 Q&amp;A · Minecraft Education 사용 가이드.</div>
+  </section>
+
+  <!-- ══════════ 5 · MDM 미리 알아 두실 것 ① ══════════ -->
+  <section class="slide dark" data-dark data-name="「보냈다」와 「적용됐다」는 다릅니다"
     data-note="<b>[2:00]</b> MDM에서 제일 먼저 만나는 현실입니다. 정책을 「보냈다」와 「적용됐다」는 다릅니다. 이 숫자는 <b>저희 학교 실제 화면</b>입니다. 기본 디벗 정책을 261대에 지정했는데 적용은 232대. 재배포를 돌리면 261대 중 9대 실패. 매뉴얼에 이렇게 써 있습니다 — <b>「단말을 제어하기 위해서는 항상 연결 상태에서 명령 처리가 가능합니다」</b>. 기기가 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아서 서버에 접속하는 순간에만 처리됩니다. 처리이력을 열면 총·발송중·접속대기중·진행중·실패·성공 단계가 보이는데, 꺼져 있거나 가방 속 기기는 <b>「접속대기중」</b>에 계속 남습니다. 함정 하나 더 — 단말현황의 「연결」 표시는 <b>마지막 통신 후 5일까지</b> 그대로입니다. 초록불이 「지금 켜져 있음」은 아닙니다. 그래서 배포하면 끝이 아니라 <b>적용현황 숫자를 읽고, 미적용 재배포·재실행</b>을 하는 것이 담당자의 일상입니다!">
     <div class="eyebrow"><span class="dot"></span>MDM, 미리 알아 두실 것 ①</div>
     <h1 class="title">「보냈다」와 「적용됐다」는 <span class="accent">다릅니다!</span></h1>
@@ -424,8 +520,8 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     <div class="src">근거: Argos 사용자매뉴얼 v4.1 — 5.3 단말 ICON(「항상 연결 상태에서 명령 처리」·5일 표시) · 15.4 통합설정 적용현황 · 26.3 처리이력 상세. 숫자는 2026-09 실제 관리 화면입니다.</div>
   </section>
 
-  <!-- ══════════ 5 · MDM 미리 알아 두실 것 ② ══════════ -->
-  <section class="slide dark" data-dark data-name="미리 알아 두시면 당황하지 않으십니다"
+  <!-- ══════════ 6 · MDM 미리 알아 두실 것 ② ══════════ -->
+  <section class="slide" data-name="미리 알아 두시면 당황하지 않으십니다"
     data-note="<b>[1:30]</b> 안 되는 것도 미리 알고 가시면 당황하지 않으십니다. 첫째, <b>에이전트가 없는 기기는 아무것도 못 합니다.</b> 미설치·미등록은 재배포도 안 되고, 공장초기화하면 에이전트도 같이 지워져서 다시 깔아야 합니다. 둘째, 윈도우에서 되는 것과 안 되는 것 — 분실 위치, 앱 차단, 사이트 차단, 공장초기화는 되고, <b>암호 초기화·앱 데이터 초기화·사용시간 제한은 안 됩니다.</b> Windows Pro·Education 에디션만 됩니다. 셋째, 관리자 웹은 학내망 전용이고 비밀번호는 3개월마다 만료, 5번 틀리면 잠기고 푸는 건 기술지원센터만 가능합니다. 넷째, <b>숫자가 서로 안 맞습니다.</b> Argos엔 저희 학교 단말이 1008대인데 DBS엔 760대. 졸업·전출 기기가 Argos에 남아 있어서 그렇습니다. 알고 계시면 당황하지 않으십니다!">
     <div class="eyebrow"><span class="dot"></span>MDM, 미리 알아 두실 것 ②</div>
     <h1 class="title">미리 알아 두시면 <span class="accent">당황하지 않으십니다!</span></h1>
@@ -467,9 +563,9 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 6 · 막히시면 전화 ══════════ -->
+  <!-- ══════════ 7 · 막히시면 전화 ══════════ -->
   <section class="slide dark" data-dark data-name="막히시면 매뉴얼보다 전화가 빠릅니다"
-    data-note="<b>[2:00]</b> 오늘 제일 중요한 장입니다. 막히시면 매뉴얼 뒤지지 마시고 전화하시면 됩니다! 첫째, 학생 디벗이 고장나면 <b>통합콜센터 1566-6647</b>. ARS에서 업체를 고릅니다 — 저희 학교 2·3학년 기기는 <b>케이원</b>입니다. 접수와 수리 추적은 <b>dbs.edu-portal.ai</b>에서 합니다. 1학년은 올해 보급된 <b>티지에스</b> 기기라 다른 번호인데, 티지에스 쪽은 아직 접수 사이트가 없어서 전화로 합니다. 선생님들 학교는 <b>도입 연도</b>로 업체가 갈립니다 — 22년 케이원, 23년 티지에스, 24·25년 케이원, 26년 티지에스. 둘째, 관리 센터 <b>관리자 계정</b>을 만들거나, MFA·라이선스처럼 「이게 뭔지 모르겠다」 싶으시면 무조건 <b>에이마스 02-6123-4184</b>입니다. 셋째, <b>Argos</b> — 계정·비밀번호·잠김·미등록 단말·정책이 안 먹을 때 <b>1666-6493</b>. 정보나눔터에 문의글 올리고 기다리지 마시고 <b>바로 전화</b>하시는 게 빠릅니다. 평일 8시~12시 반, 1시 반~6시입니다.">
+    data-note="<b>[2:00]</b> 오늘 제일 중요한 장입니다. 막히시면 매뉴얼 뒤지지 마시고 전화하시면 됩니다! 첫째, 학생 디벗이 고장나면 <b>통합콜센터 1566-6647</b>. ARS에서 업체를 고릅니다 — 저희 학교 2·3학년 기기는 <b>케이원</b>입니다. 접수와 수리 추적은 <b>dbs.edu-portal.ai</b>에서 합니다. 1학년은 올해 보급된 <b>티지에스</b> 기기라 다른 번호인데, 티지에스 쪽은 아직 접수 사이트가 없어서 전화로 합니다. 선생님들 학교는 <b>도입 연도</b>로 업체가 갈립니다 — 22년 케이원, 23년 티지에스, 24·25년 케이원, 26년 티지에스. 둘째, 관리 센터 <b>관리자 계정</b>을 만들거나, 2차 인증·라이선스처럼 「이게 뭔지 모르겠다」 싶으시면 무조건 <b>에이마스 02-6123-4184</b>입니다. 셋째, <b>Argos</b> — 계정·비밀번호·잠김·미등록 단말·정책이 안 먹을 때 <b>1666-6493</b>. 정보나눔터에 문의글 올리고 기다리지 마시고 <b>바로 전화</b>하시는 게 빠릅니다. 평일 8시~12시 반, 1시 반~6시입니다.">
     <div class="eyebrow"><span class="dot"></span>제일 중요한 한 장입니다</div>
     <h1 class="title">막히시면 매뉴얼보다 <span class="accent">전화가 빠릅니다!</span></h1>
     <div class="phones">
@@ -479,9 +575,9 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
         <div class="then">ARS <b>케이원</b> 선택 → 접수·수리 추적은 <b><span class="u">dbs.edu-portal.ai</span></b>(DBS)에서 하시면 됩니다. 1학년(2026 도입)은 <b>티지에스</b> 선택 — 접수 사이트는 아직 없어 전화로 합니다.</div>
       </div>
       <div class="ph">
-        <div class="when">관리자 계정을 만들어야 한다 · MFA · 라이선스<small>M365 관리 센터에서 「이게 뭔지 모르겠다」 전부</small></div>
-        <div class="tel num">02-6123-4184<small>에이마스 · 서울교육청 M365 지원</small></div>
-        <div class="then"><b>관리자(schooladmin) 계정 발급·재설정</b>, 2차 인증이 막힐 때, 라이선스가 모자랄 때. 혼자 붙들지 마시고 <b>바로 전화</b>하시면 됩니다!</div>
+        <div class="when">관리자 계정을 만들어야 한다 · 2차 인증 · 라이선스<small>M365 관리 센터에서 「이게 뭔지 모르겠다」 전부</small></div>
+        <div class="tel num">02-6123-4184<small>에이마스 · 평일 10:00~17:00(점심 12~13 제외) · 카톡 플러스친구 「에이마스」</small></div>
+        <div class="then"><b>관리자(schooladmin) 계정 발급·재설정</b>, 2차 인증이 막힐 때, 라이선스가 모자랄 때. 혼자 붙들지 마시고 <b>바로 전화</b>! 가입 인증코드 문의는 메일(<span class="u">sen@amasgroup.co.kr</span>)로 받습니다.</div>
       </div>
       <div class="ph">
         <div class="when">Argos가 안 된다 · 계정 · 잠김 · 미등록 단말<small>정책이 안 먹을 때, 비밀번호 5회 틀려 잠겼을 때</small></div>
@@ -495,7 +591,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 7 · 오늘, 저와 함께 하실 내용들 ══════════ -->
+  <!-- ══════════ 8 · 오늘, 저와 함께 하실 내용들 ══════════ -->
   <section class="slide" data-name="오늘, 저와 함께 하실 내용들!"
     data-note="<b>[1:30]</b> 오늘 저와 함께 하실 내용입니다. 디벗 담당자가 1년 동안 가장 자주 사용하는, 꼭 알아야 하는 기능 <b>여섯 가지</b>입니다. ① 학생 계정 만들기 — CSV로 한 번에 만듭니다. 아이디는 <b>입학연도+학번</b>으로 정하고 졸업까지 그대로 씁니다. [CSV 실제 예시 보기]를 누르면 엑셀에서 저장한 그대로가 나오는데, <b>맨 아래 빈 줄 하나</b>가 실무 오류 1위입니다 — 실습기에서 직접 겪어 보시겠습니다. ② 라이선스는 사용자 추가 마법사 2단계에서 붙입니다. ③ 암호 초기화 — 계정 만들 때는 암호를 정할 수 없어서, 만든 뒤 반 단위로 검색해 <b>40명씩</b> 초기화합니다. ④ 승급은 아이디가 아니라 <b>표시 이름만</b> 바꾸는 일입니다 — 한 명씩 수동, 또는 MS Store의 ClassSync. 방법만 소개해 드리겠습니다. ⑤ MDM은 딱 둘 — 통합설정 하나 만들고 사이트 차단, 그리고 적용현황 숫자 읽기. ⑥ 전화번호 세 개. 그리고 실수를 줄여 주는 <b>관리대장 생성기</b>를 드리겠습니다 — 명렬 붙여넣고 버튼 하나면 대응표·라벨·계정 CSV가 나옵니다!">
     <div class="eyebrow"><span class="dot"></span>오늘의 실습 내용</div>
@@ -546,7 +642,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 8 · 오늘은 이렇게 진행하겠습니다 ══════════ -->
+  <!-- ══════════ 9 · 오늘은 이렇게 진행하겠습니다 ══════════ -->
   <section class="slide dark" data-dark data-name="오늘은 이렇게 진행하겠습니다"
     data-note="<b>[0:45]</b> 오늘 진행입니다. 지금 이야기가 끝나면 <b>필수 실습 4개</b>를 전원이 같은 화면으로 함께 합니다 — CSV 계정+라이선스, 암호 40명, 윈도우 통합설정+사이트 차단, 시간이 되면 적용현황과 재배포까지. 그다음은 허브 42개 미션 중에 <b>원하시는 것을 고르시면 됩니다</b> — 승급, 생성기, 대여·분실, DBS 수리·마스킹, 인수인계. 마지막에 이 사이트들을 선생님들 강의 도구로 가져가시는 방법까지 말씀드리겠습니다!">
     <div class="eyebrow"><span class="dot"></span>남은 시간</div>
@@ -572,7 +668,7 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     </div>
   </section>
 
-  <!-- ══════════ 9 · 브릿지 ══════════ -->
+  <!-- ══════════ 10 · 브릿지 ══════════ -->
   <section class="slide closing" data-dark data-name="화면을 열어 주시면 감사하겠습니다"
     data-note="<b>[0:15]</b> 이제 화면을 열어서 아래 링크로 들어와 주시면 감사하겠습니다! 오프닝에서 찍으신 QR과 같은 주소입니다. 각자 노트북에서 허브를 열어 주시면 바로 시작하겠습니다!">
     <h1>이제 화면을 열어서<em>아래 링크로 들어와 주시면 감사하겠습니다!</em></h1>
@@ -581,14 +677,15 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     <footer id="app-credit">서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — <b>Windows ADMIN, MDM(Argos) 사용법 연수</b> · 실습 전 이야기 · 최종 업데이트 2026-09-12</footer>
   </section>
 
-  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>C</kbd> CSV 예시 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
-  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">11:00</div>
+  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>C</kbd> CSV 예시 &nbsp;·&nbsp; <kbd>S</kbd> 스크롤 보기 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
+  <button id="toScroll" type="button" title="S: 스크롤 보기 ↔ 덱 보기">≡ 스크롤로 보기</button>
+  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">12:00</div>
 
   <div id="chrome">
     <div class="left" id="stageName">표지</div>
     <div class="right">
       <button class="nb" id="prev" aria-label="이전">◀</button>
-      <span id="num">1 / 9</span>
+      <span id="num">1 / 10</span>
       <button class="nb" id="next" aria-label="다음">▶</button>
     </div>
   </div>
@@ -602,6 +699,11 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
 </div>
 </div>
 
+<div id="scrollBar">
+  <button type="button" class="ghost" id="toggleNotes">대본 숨기기</button>
+  <button type="button" id="toDeck">▣ 덱으로 보기</button>
+</div>
+
 <script>
 (function(){
   var stage   = document.getElementById('stage');
@@ -613,10 +715,15 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
   var ovEl    = document.getElementById('overview');
   var ovGrid  = document.getElementById('ovGrid');
   var csvEl   = document.getElementById('csvPanel');
-  var i = 0, notesOn = false;
+  var i = 0, notesOn = false, scrollMode = false;
 
   /* 1280×720 무대를 창에 맞춰 배율 조정 (전자칠판 왼쪽 몰림 방지) */
   function fit(){
+    if (scrollMode){                                   /* 스크롤 보기: 폭에만 맞추고 세로로 이어 붙임 */
+      var z = (innerWidth - 48) / 1280; if (z > 1.35) z = 1.35;
+      stage.style.zoom = z;
+      return;
+    }
     var s = Math.min((innerWidth - 28) / 1280, (innerHeight - 28) / 720);
     stage.style.transform = 'scale(' + s + ')';
   }
@@ -650,15 +757,51 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
   /* CSV 실제 예시 토글 — 버튼, C 키, Esc */
   function toggleCsv(force){
     var on = (typeof force === 'boolean') ? force : !csvEl.classList.contains('on');
-    if (on && !slides[i].contains(csvEl)) show(slides.indexOf(csvEl.closest('.slide')));
+    if (on && !scrollMode && !slides[i].contains(csvEl)) show(slides.indexOf(csvEl.closest('.slide')));
     csvEl.classList.toggle('on', on);
   }
+
+  /* ── 보기 전환: 덱(한 장씩) ↔ 스크롤(전부 이어서, 대본은 각 장 아래) ── */
+  slides.forEach(function(s){
+    var n = document.createElement('div');
+    n.className = 'snote';
+    n.innerHTML = '<span class="lab">대본</span>' + (s.getAttribute('data-note') || '');
+    s.insertAdjacentElement('afterend', n);
+  });
+  function nearestSlide(){
+    var best = 0, bd = Infinity;
+    slides.forEach(function(s, k){ var d = Math.abs(s.getBoundingClientRect().top - 64); if (d < bd){ bd = d; best = k; } });
+    return best;
+  }
+  function setMode(scroll){
+    if (scroll === scrollMode) return;
+    if (!scroll) i = nearestSlide();
+    scrollMode = !!scroll;
+    document.body.classList.toggle('scroll', scrollMode);
+    ovEl.classList.remove('on');
+    if (scrollMode){
+      fit();
+      var t = slides[i]; if (t) setTimeout(function(){ t.scrollIntoView({ block: 'start' }); }, 0);
+    } else {
+      stage.style.zoom = '';
+      scrollTo(0, 0);
+      fit(); show(i);
+    }
+    try { localStorage.setItem('dibut_intro_view', scrollMode ? 'scroll' : 'deck'); } catch (e) {}
+  }
+  document.getElementById('toScroll').onclick = function(e){ e.stopPropagation(); setMode(true); };
+  document.getElementById('toDeck').onclick = function(){ setMode(false); };
+  var notesBtn = document.getElementById('toggleNotes');
+  notesBtn.onclick = function(){
+    var hide = document.body.classList.toggle('hidenotes');
+    notesBtn.textContent = hide ? '대본 보이기' : '대본 숨기기';
+  };
   document.getElementById('csvOpen').onclick = function(e){ e.stopPropagation(); toggleCsv(true); };
   document.getElementById('csvClose').onclick = function(e){ e.stopPropagation(); toggleCsv(false); };
 
-  /* 발표 타이머 — 기본 11분, 주소에 ?min=10 처럼 붙이면 그 시간으로 */
+  /* 발표 타이머 — 기본 12분, 주소에 ?min=10 처럼 붙이면 그 시간으로 */
   var qMin = parseInt((location.search.match(/[?&]min=(\d+)/) || [])[1], 10);
-  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 11) * 60, left = TOTAL, tick = null;
+  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 12) * 60, left = TOTAL, tick = null;
   var tEl = document.getElementById('timer');
   function paint(){
     var neg = left < 0, v = Math.abs(left);
@@ -682,6 +825,12 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
   addEventListener('keydown', function(e){
     var k = e.key;
     if (k === 'Escape'){ ovEl.classList.remove('on'); csvEl.classList.remove('on'); return; }
+    if (k === 's' || k === 'S' || k === 'ㄴ'){ setMode(!scrollMode); return; }
+    if (scrollMode){                                   /* 스크롤 보기에서는 화살표가 그냥 스크롤 */
+      if (k === 'n' || k === 'N' || k === 'ㅜ') notesBtn.click();
+      else if (k === 'c' || k === 'C' || k === 'ㅊ') toggleCsv();
+      return;
+    }
     if (ovEl.classList.contains('on') && k !== 'o' && k !== 'O' && k !== 'ㅐ') return;
     if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); go(1); }
     else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); go(-1); }
@@ -693,9 +842,11 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
     else if (k === 'r' || k === 'R' || k === 'ㄱ'){ resetTimer(); }
     else if (k === 'c' || k === 'C' || k === 'ㅊ'){ toggleCsv(); }
     else if (k >= '1' && k <= '9'){ show(parseInt(k, 10) - 1); }
+    else if (k === '0'){ show(9); }
   });
 
   stage.addEventListener('click', function(e){
+    if (scrollMode) return;
     if (e.target.closest('a, button, #timer, #overview, #notes, #csvPanel')) return;
     go(1);
   });
@@ -709,6 +860,11 @@ kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(
 
   var m = (location.hash || '').match(/^#s(\d+)$/);
   show(m ? parseInt(m[1], 10) - 1 : 0);
+
+  /* 처음 열 때의 보기: 주소의 ?view=scroll 이 우선, 그다음 지난번 선택 */
+  var want = (location.search.match(/[?&]view=(scroll|deck)/) || [])[1];
+  if (!want){ try { want = localStorage.getItem('dibut_intro_view'); } catch (e) {} }
+  if (want === 'scroll') setMode(true);
 })();
 </script>
 </body>

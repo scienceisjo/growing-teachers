@@ -131,6 +131,16 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
   font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
 
 #creditOv[hidden]{display:none!important}
+
+/* ── 실습 전 이야기(강의 덱) 안내 ── */
+.intro-card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:10px;
+  padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.intro-card .ic-ico{font-size:22px;line-height:1}
+.intro-card .ic-text{flex:1;min-width:280px;font-size:13.5px;color:var(--tx2);line-height:1.5}
+.intro-card .ic-text b{color:var(--tx);font-size:14.5px}
+.ic-btn{text-decoration:none;font-size:13px;padding:7px 14px;border-radius:6px;background:var(--pri);color:#fff;border:1px solid var(--pri);white-space:nowrap}
+.ic-btn.ghost{background:var(--card);color:var(--pri)}
+.ic-btn:hover{background:var(--pri2);border-color:var(--pri2);color:#fff}
 </style>
 </head>
 <body>
@@ -155,6 +165,13 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
 
 <div class="wrap">
 
+<div class="intro-card">
+  <span class="ic-ico">📖</span>
+  <div class="ic-text"><b>실습 전 이야기 (강의 덱, 10분)</b> — 준비 과정 · M365 Admin vs MDM · A3 라이선스 · 미리 알아 둘 것 · 전화번호 3개 · 오늘 함께 하실 내용. 실습에 들어가기 전에 먼저 봅니다.</div>
+  <a class="ic-btn" href="intro.html" target="_blank" rel="noopener">▣ 덱으로 보기</a>
+  <a class="ic-btn ghost" href="intro.html?view=scroll" target="_blank" rel="noopener">≡ 스크롤로 읽기</a>
+</div>
+
 <div class="progress-card">
   <span class="lbl">전체 진행</span>
   <div class="progress-all"><i id="allBar"></i></div>
@@ -169,7 +186,7 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
 </p>
 
 <footer id="app-credit">서울특별시교육청 디벗 전문가(테크니션) 직무연수 — 「윈도우 ADMIN · MDM UI 안내」 실습 허브<br>
-<span style="font-size:11px;opacity:.85;">스테이지 구성: 송쌤과학 「디벗 업무 도우미」 월별 달력 기반 · 최종 업데이트: 2026-09-03</span></footer>
+<span style="font-size:11px;opacity:.85;">스테이지 구성: 송쌤과학 「디벗 업무 도우미」 월별 달력 기반 · 최종 업데이트: 2026-09-12</span></footer>
 </div>
 
 <div id="creditOv" style="position:fixed;inset:0;background:rgba(20,30,45,.5);z-index:90;display:flex;align-items:center;justify-content:center;padding:18px" hidden>
