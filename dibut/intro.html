@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실습 전에, 현실부터 — 윈도우 ADMIN · MDM</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* =====================================================================
+   디벗 연수 · 실습 전 이야기 덱 (입문 파트)
+   디자인 언어: design-md/01_Apple.design.md
+   흰 캔버스와 근접흑색 타일이 번갈아 서고, 누를 것은 액션 블루 하나뿐입니다.
+   그림자·그러데이션 없음. 경계는 1px 헤어라인, 리듬은 면 색이 만듭니다.
+   서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — OS2 윈도우
+   ===================================================================== */
+:root{
+  --primary:#0066cc; --primary-pressed:#0071e3; --primary-on-dark:#2997ff;
+  --ink:#1d1d1f; --slate:#333333; --steel:#7a7a7a; --stone:#86868b; --muted:#6e6e73;
+  --canvas:#ffffff; --parchment:#f5f5f7; --pearl:#fafafc;
+  --hairline:#e0e0e0; --hairline-soft:#f0f0f0; --hairline-strong:#d2d2d7;
+  --tile:#272729; --tile-2:#2a2a2c; --tile-3:#252527; --black:#000000;
+  --on-dark:#ffffff; --on-dark-muted:#cccccc;
+  /* 뜻이 있는 색 셋만 예외 */
+  --ok:#1d8a4e; --warn:#9a6b00; --bad:#b3261e;
+  --r-xs:5px; --r-sm:8px; --r-md:11px; --r-lg:18px; --r-full:9999px;
+  --font:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+  --font-num:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Pretendard Variable",Pretendard,"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--black);color:var(--ink);overflow:hidden;word-break:keep-all;
+  -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{width:1280px;height:720px;flex:none;transform-origin:center center;position:relative;
+  background:var(--canvas);border-radius:var(--r-lg);overflow:hidden}
+.slide{position:absolute;inset:0;padding:60px 76px 76px;display:none;flex-direction:column;background:var(--canvas)}
+.slide.on{display:flex;animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ── 타이포 ── */
+.eyebrow{font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--steel);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow .dot{width:6px;height:6px;border-radius:var(--r-full);background:var(--primary);flex:none}
+h1.title{font-size:44px;font-weight:600;line-height:1.09;letter-spacing:-.018em;color:var(--ink)}
+h1.title .accent{color:var(--primary)}
+p.lede{font-size:21px;font-weight:300;line-height:1.45;color:var(--slate);margin-top:12px;max-width:1040px;letter-spacing:-.008em}
+p.lede b{font-weight:600;color:var(--ink)}
+.small{font-size:14px;line-height:1.5;color:var(--steel);letter-spacing:-.01em}
+.small b{color:var(--ink);font-weight:600}
+.num{font-family:var(--font-num);letter-spacing:0}
+.src{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--stone);letter-spacing:-.01em}
+
+/* ── 어두운 타일 ── */
+.dark{background:var(--tile)}
+.dark .eyebrow{color:#a1a1a6}
+.dark .eyebrow .dot{background:var(--primary-on-dark)}
+.dark h1.title{color:var(--on-dark)}
+.dark h1.title .accent{color:var(--primary-on-dark)}
+.dark p.lede{color:var(--on-dark-muted)}
+.dark p.lede b{color:#fff}
+.dark .small{color:#a1a1a6}
+.dark .small b{color:#fff}
+.dark .src{color:#86868b}
+
+/* ── 표지·마무리 ── */
+.cover{padding:0;background:var(--black);justify-content:center}
+.cover-inner{position:relative;z-index:2;padding:0 88px}
+.cover .eyebrow{color:#a1a1a6}
+.cover h1{font-size:64px;font-weight:600;line-height:1.06;letter-spacing:-.02em;color:var(--on-dark)}
+.cover h1 .line2{display:block;color:var(--primary-on-dark)}
+.cover .sub{font-size:24px;font-weight:300;color:var(--on-dark-muted);margin-top:22px;letter-spacing:0;max-width:980px;line-height:1.4}
+.cover .who{margin-top:42px;display:flex;align-items:center;gap:14px;color:var(--on-dark);font-size:18px}
+.cover .who .badge{color:var(--primary-on-dark);font-weight:600}
+.cover .who .sep{width:1px;height:16px;background:rgba(255,255,255,.28)}
+.cover .who .role{color:var(--on-dark-muted);font-weight:300}
+
+/* ── 카드 ── */
+.cards{display:grid;gap:18px;margin-top:26px;flex:1 1 auto;align-content:start}
+.cards.c3{grid-template-columns:repeat(3,1fr)}
+.cards.c2{grid-template-columns:repeat(2,1fr)}
+.cards.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--parchment);border-radius:var(--r-lg);padding:26px 26px 24px;display:flex;flex-direction:column;gap:10px}
+.card .k{font-size:13px;font-weight:600;color:var(--steel);letter-spacing:-.005em}
+.card h3{font-size:24px;font-weight:600;letter-spacing:-.016em;line-height:1.2;color:var(--ink)}
+.card h3 .accent{color:var(--primary)}
+.card p{font-size:16px;line-height:1.5;color:var(--slate);letter-spacing:-.012em}
+.card p b{font-weight:600;color:var(--ink)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.card li{font-size:16.5px;line-height:1.45;color:var(--slate);letter-spacing:-.012em;position:relative;padding-left:15px}
+.card li::before{content:"";position:absolute;left:0;top:10px;width:5px;height:5px;border-radius:var(--r-full);background:var(--primary)}
+.card li b.o{color:var(--ok)}
+.card li b.x{color:var(--bad)}
+.card li b{font-weight:600;color:var(--ink)}
+.dark .card{background:var(--tile-2)}
+.dark .card .k{color:#a1a1a6}
+.dark .card h3{color:#fff}
+.dark .card h3 .accent{color:var(--primary-on-dark)}
+.dark .card p,.dark .card li{color:var(--on-dark-muted)}
+.dark .card p b,.dark .card li b{color:#fff}
+.dark .card li b.o{color:#4cc472}
+.dark .card li b.x{color:#ff6b62}
+.dark .card li::before{background:var(--primary-on-dark)}
+.card.key{background:var(--primary)}
+.card.key .k{color:rgba(255,255,255,.72)}
+.card.key h3,.card.key p,.card.key li,.card.key p b,.card.key li b{color:#fff}
+.card.key li::before{background:#fff}
+
+/* ── 큰 숫자 ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}
+.stat{background:var(--parchment);border-radius:var(--r-lg);padding:22px 26px 20px}
+.stat .v{font-family:var(--font-num);font-size:56px;font-weight:600;line-height:1;letter-spacing:-.02em;color:var(--ink)}
+.stat .v small{font-size:20px;font-weight:400;color:var(--steel);margin-left:6px;letter-spacing:0}
+.stat .l{margin-top:8px;font-size:15px;color:var(--slate);letter-spacing:-.012em;line-height:1.4}
+.stat.warn .v{color:var(--warn)}
+.stat.bad .v{color:var(--bad)}
+
+/* ── 처리 이력 단계 띠 ── */
+.strip{display:flex;align-items:center;gap:8px;margin-top:22px;flex-wrap:wrap}
+.strip .st{font-size:15px;font-weight:600;letter-spacing:-.012em;padding:9px 16px;border-radius:var(--r-full);background:var(--parchment);color:var(--slate)}
+.strip .st.now{background:var(--warn);color:#fff}
+.strip .st.ok{background:var(--ok);color:#fff}
+.strip .st.bad{background:var(--bad);color:#fff}
+.strip .ar{color:var(--hairline-strong);font-size:16px}
+.strip .cap{margin-left:6px;font-size:14px;color:var(--steel);letter-spacing:-.01em}
+
+/* ── 문장 목록(번호 원) ── */
+.feat{display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.feat.two{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;row-gap:14px}
+.feat.big{gap:24px;margin-top:34px}
+.feat.big li{font-size:21px;line-height:1.45}
+.feat.big li .k{width:30px;height:30px;font-size:14px;margin-top:3px}
+.feat li{list-style:none;display:flex;gap:14px;align-items:flex-start;font-size:18px;line-height:1.42;color:var(--slate);letter-spacing:-.012em}
+.feat li b{color:var(--ink);font-weight:600}
+.feat li .k{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--primary);color:#fff;font-family:var(--font-num);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.feat li .x{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--bad);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.feat li .o{flex:none;width:26px;height:26px;border-radius:var(--r-full);background:var(--ok);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.dark .feat li{color:var(--on-dark-muted)}
+.dark .feat li b{color:#fff}
+
+/* ── 전화 표 ── */
+.phones{display:flex;flex-direction:column;gap:14px;margin-top:26px}
+.ph{display:grid;grid-template-columns:1.15fr auto 1.35fr;gap:28px;align-items:center;background:var(--tile-2);border-radius:var(--r-lg);padding:24px 28px}
+.ph .when{font-size:19px;font-weight:600;color:#fff;letter-spacing:-.014em;line-height:1.35}
+.ph .when small{display:block;font-size:14px;font-weight:400;color:#a1a1a6;margin-top:4px;letter-spacing:-.01em}
+.ph .tel{font-family:var(--font-num);font-size:40px;font-weight:600;color:var(--primary-on-dark);letter-spacing:-.01em;white-space:nowrap;line-height:1}
+.ph .tel small{display:block;font-family:var(--font);font-size:13px;font-weight:400;color:#a1a1a6;margin-top:6px;letter-spacing:-.01em}
+.ph .then{font-size:16.5px;line-height:1.45;color:var(--on-dark-muted);letter-spacing:-.012em}
+.ph .then b{color:#fff;font-weight:600}
+.ph .then .u{font-family:var(--font-num);color:var(--primary-on-dark);letter-spacing:0}
+.years{margin-top:24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:#a1a1a6;letter-spacing:-.01em}
+.years .y{font-family:var(--font-num);font-weight:600;color:#fff;background:rgba(255,255,255,.1);padding:5px 12px;border-radius:var(--r-full);letter-spacing:0}
+.years .y i{font-style:normal;font-family:var(--font);font-weight:400;color:var(--on-dark-muted);margin-left:6px}
+
+/* ── 오늘 흐름 ── */
+.flow{display:flex;align-items:stretch;gap:12px;margin-top:22px}
+.flow .step{flex:1;background:var(--tile-2);border-radius:var(--r-lg);padding:24px 22px;display:flex;flex-direction:column;gap:6px;position:relative}
+.flow .step .n{font-family:var(--font-num);font-size:12px;font-weight:600;color:var(--primary-on-dark)}
+.flow .step h4{font-size:23px;font-weight:600;color:#fff;letter-spacing:-.014em;line-height:1.2}
+.flow .step p{font-size:15px;line-height:1.45;color:var(--on-dark-muted);letter-spacing:-.01em}
+.flow .step.now{background:var(--primary)}
+.flow .step.now .n{color:rgba(255,255,255,.75)}
+.flow .step.now p{color:rgba(255,255,255,.88)}
+.must{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.must .m{background:var(--tile-2);border-radius:var(--r-md);padding:20px 18px;display:flex;flex-direction:column;gap:5px}
+.must .m .t{font-size:12px;font-weight:600;color:#a1a1a6;letter-spacing:-.005em}
+.must .m .t.a{color:var(--primary-on-dark)}
+.must .m h5{font-size:18px;font-weight:600;color:#fff;letter-spacing:-.012em;line-height:1.3}
+.must .m p{font-size:14px;color:var(--on-dark-muted);line-height:1.4;letter-spacing:-.01em}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:400;letter-spacing:-.012em;text-decoration:none;
+  padding:9px 19px;border-radius:var(--r-full);background:var(--primary);color:#fff;border:1px solid var(--primary);transition:background .18s}
+.pill:hover{background:var(--primary-pressed);border-color:var(--primary-pressed)}
+.pill.ghost{background:transparent;color:var(--primary-on-dark);border-color:rgba(255,255,255,.28)}
+.pill.ghost:hover{background:rgba(255,255,255,.08)}
+.pill:active{transform:scale(.95)}
+.pill .u{font-family:var(--font-num);font-size:13px;opacity:.72;letter-spacing:0}
+
+/* ── 마무리 ── */
+.closing{background:var(--black);justify-content:center;padding:0 88px}
+.closing h1{font-size:52px;font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--on-dark)}
+.closing h1 em{font-style:normal;color:var(--primary-on-dark)}
+.closing p{font-size:21px;font-weight:300;line-height:1.5;color:var(--on-dark-muted);margin-top:22px;max-width:900px}
+.closing .url{margin-top:30px;font-family:var(--font-num);font-size:30px;font-weight:600;color:#fff;letter-spacing:-.01em;word-break:break-all}
+.closing .url span{color:var(--primary-on-dark)}
+#app-credit{margin-top:40px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:13px;font-weight:300;line-height:1.65;color:#86868b;letter-spacing:-.01em}
+#app-credit b{color:#e8e8ed;font-weight:600}
+
+/* ── 크롬 ── */
+#bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--hairline-soft);z-index:20}
+#bar i{display:block;height:100%;width:0;background:var(--primary);transition:width .35s ease}
+#chrome{position:absolute;left:0;right:0;bottom:16px;display:flex;align-items:center;justify-content:space-between;padding:0 34px;z-index:21;pointer-events:none}
+#chrome .left{font-size:13px;color:var(--stone);letter-spacing:-.01em}
+#chrome .right{display:flex;align-items:center;gap:8px;pointer-events:auto}
+.nb{width:30px;height:30px;border-radius:var(--r-full);border:1px solid var(--hairline);background:var(--canvas);color:var(--slate);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.nb:hover{background:var(--parchment)}
+.nb:active{transform:scale(.95)}
+#num{font-family:var(--font-num);font-size:13px;color:var(--stone);padding:0 6px}
+#stage.isdark #chrome .left,#stage.isdark #num{color:#86868b}
+#stage.isdark .nb{background:transparent;border-color:rgba(255,255,255,.22);color:#fff}
+#stage.isdark .nb:hover{background:rgba(255,255,255,.1)}
+#stage.isdark #bar{background:rgba(255,255,255,.14)}
+#timer{position:absolute;top:22px;right:28px;z-index:22;font-family:var(--font-num);font-size:14px;letter-spacing:-.01em;padding:7px 15px;border-radius:var(--r-full);background:var(--parchment);color:var(--steel);cursor:pointer;user-select:none}
+#timer.run{background:rgba(0,102,204,.1);color:var(--primary)}
+#timer.warn{background:rgba(154,107,0,.12);color:var(--warn)}
+#timer.over{background:rgba(179,38,30,.12);color:var(--bad)}
+#stage.isdark #timer{background:rgba(255,255,255,.12);color:#e8e8ed}
+#stage.isdark #timer.run{background:rgba(41,151,255,.2);color:var(--primary-on-dark)}
+#notes{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--black);color:#e8e8ed;padding:18px 210px 20px 34px;font-size:15px;line-height:1.55;letter-spacing:-.012em;border-top:1px solid rgba(255,255,255,.18);display:none;max-height:46%;overflow:auto}
+#notes.on{display:block}
+#notes b{color:var(--primary-on-dark);font-weight:600}
+#stage.notes #chrome{z-index:31}
+#stage.notes #chrome .left{display:none}
+#stage.notes #num{color:#86868b}
+#stage.notes .nb{background:transparent;border-color:rgba(255,255,255,.24);color:#fff}
+#overview{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.96);display:none;padding:40px 44px;overflow:auto}
+#overview.on{display:block}
+#overview h4{color:#fff;font-size:19px;font-weight:600;margin-bottom:20px;letter-spacing:-.015em}
+#ovGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ov{background:var(--tile);border:none;border-radius:var(--r-md);padding:15px 16px;cursor:pointer;text-align:left;color:#e8e8ed;font-family:var(--font);transition:background .18s}
+.ov:hover{background:var(--tile-2)}
+.ov .i{font-family:var(--font-num);font-size:12px;font-weight:600;color:var(--primary-on-dark)}
+.ov .t{font-size:14px;margin-top:6px;line-height:1.35;letter-spacing:-.012em}
+#help{position:absolute;left:28px;top:22px;z-index:22;font-size:12.5px;color:var(--stone);letter-spacing:-.01em;background:var(--parchment);padding:7px 14px;border-radius:var(--r-full);transition:opacity .5s ease}
+#help.hide{opacity:0;pointer-events:none}
+#stage.isdark #help{background:rgba(255,255,255,.1);color:#c7c7cc}
+kbd{font-family:var(--font-num);font-size:11.5px;font-weight:600;background:var(--canvas);border:1px solid var(--hairline-strong);border-radius:var(--r-xs);padding:1px 6px;color:var(--slate)}
+#stage.isdark kbd{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+  <!-- ══════════ 1 · 표지 ══════════ -->
+  <section class="slide cover on" data-dark data-name="표지"
+    data-note="<b>[0:30]</b> 방금 퀴즈 정답 <b>207건</b> 보셨죠. 올해 우리 학교에서 수리 접수한 건수입니다. 실습 들어가기 전에 10분만, 화면 뒤에 있는 현실 이야기를 먼저 하겠습니다. 이 파트의 결론은 한 줄입니다 — <b>매뉴얼보다 전화번호.</b>">
+    <div class="cover-inner">
+      <div class="eyebrow"><span class="dot"></span>디벗 강사(자문·지원) 양성 테크니션 직무연수 · OS2 윈도우</div>
+      <h1>실습 전에, 현실부터.<span class="line2">매뉴얼보다 전화번호.</span></h1>
+      <p class="sub">윈도우 ADMIN과 MDM — 무엇이고, 무엇이 안 되고, 강사가 되시면 무엇을 가르칠지</p>
+      <div class="who">
+        <span class="badge">해누리중학교</span>
+        <span>조승재</span>
+        <span class="sep"></span>
+        <span class="role">10분 · 그다음 실습</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2 · 오늘의 약속 ══════════ -->
+  <section class="slide" data-name="오늘의 약속"
+    data-note="<b>[1:00]</b> 오늘 오신 분들 중에 당장 다음 주부터 디벗을 맡으실 분은 안 계신 걸로 압니다. 여러분은 수강생이 아니라 <b>이걸 가르칠 분들</b>이죠. 그래서 세 가지 약속. 첫째, 실습은 다 못 합니다. 허브에 42개 미션이 있는데 <b>필수 4개</b>만 같이 하고 나머지는 하고 싶은 걸 고르시게 할 겁니다. 둘째, 실습 사이트 다섯 개는 그대로 가져가서 <b>여러분 강의</b>에 쓰시면 됩니다. 셋째, 매뉴얼 149쪽 대신 <b>전화번호 세 개</b>를 들고 나가실 겁니다.">
+    <div class="eyebrow"><span class="dot"></span>여러분은 수강생이 아니라 예비 강사</div>
+    <h1 class="title">오늘 이 자리의 <span class="accent">약속 셋</span></h1>
+    <p class="lede">당장 담당자가 되실 분보다, 담당자를 <b>가르칠 분</b>의 눈으로 들어 주세요.</p>
+    <div class="cards c3">
+      <div class="card">
+        <div class="k">하나</div>
+        <h3>실습은 다 못 합니다</h3>
+        <p>허브 미션 42개 중 <b>필수 4개</b>만 같이 합니다. 나머지는 연습 꾸러미에서 하고 싶은 것을 고르세요.</p>
+      </div>
+      <div class="card">
+        <div class="k">둘</div>
+        <h3>화면은 여러분 것입니다</h3>
+        <p>M365 · Argos · DBS · 생성기 · 허브 — 실습 사이트 다섯 개를 <b>강의 도구로 물려드립니다.</b></p>
+      </div>
+      <div class="card key">
+        <div class="k">셋</div>
+        <h3>매뉴얼 대신 전화번호</h3>
+        <p>149쪽 매뉴얼을 가르치지 않습니다. 어떤 상황에 <b>어디로 전화</b>할지 세 개만 외워 갑니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3 · 화면 두 개, 일 두 가지 ══════════ -->
+  <section class="slide dark" data-dark data-name="화면 두 개 · 일 두 가지"
+    data-note="<b>[1:30]</b> 이름부터. 교수요목의 「윈도우 ADMIN」은 <b>Microsoft 365 관리 센터</b>입니다. 학생이 디벗에 로그인하는 그 계정(아이디@학교.ms.kr)을 만들고, 암호 풀어주고, 라이선스 붙이고, 학년 올라가면 표시이름 바꾸는 곳 — <b>사람을 다루는 화면</b>. 「MDM」은 Mobile Device Management, 나눠준 기기를 서버에서 한꺼번에 다루는 겁니다. 서울은 <b>Argos Edu Manager</b>를 씁니다. 안드로이드·아이패드·윈도우 다 같은 화면이고, <b>Intune이 아닙니다</b>. 어느 기기가 누구 건지, 카메라·USB·사이트 막기, 잃어버리면 위치, 빌려주기 — <b>기기를 다루는 화면</b>. 세 번째 화면 DBS는 수리 관리인데 업체 시스템이라 실습에서 잠깐 보여드립니다. 그리고 Argos 관리자 웹은 <b>학내망이나 eVPN에서만</b> 열립니다. 집에서 안 열려요.">
+    <div class="eyebrow"><span class="dot"></span>이름부터 정리</div>
+    <h1 class="title">화면 두 개, <span class="accent">일 두 가지</span></h1>
+    <p class="lede">하나는 <b>사람(계정)</b>을 다루고, 하나는 <b>기기</b>를 다룹니다.</p>
+    <div class="cards c2">
+      <div class="card">
+        <div class="k">윈도우 ADMIN = Microsoft 365 관리 센터</div>
+        <h3>계정을 만드는 곳</h3>
+        <p>학생이 디벗·팀즈·오피스에 로그인하는 <b>그 계정</b>을 여기서 만듭니다.</p>
+        <ul>
+          <li><b>계정 만들기</b> — 개별 · CSV 일괄</li>
+          <li><b>암호 초기화</b> · <b>라이선스</b> 붙이기</li>
+          <li>표시이름 바꾸기 = <b>승급</b> · 그룹(팀)</li>
+          <li>관리자 역할 · MFA</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="k">MDM = Argos Edu Manager · mdm.sen.go.kr</div>
+        <h3>기기를 다루는 곳</h3>
+        <p><b>Mobile Device Management</b> — 나눠준 기기를 서버에서 한꺼번에. Android·iPad·Windows 같은 화면, <b>Intune 아님</b>.</p>
+        <ul>
+          <li><b>단말현황</b> — 어느 기기가 누구 것인지</li>
+          <li><b>통합설정</b> — 카메라·USB·사이트 차단</li>
+          <li><b>분실</b> 위치·잠금 · <b>대여</b> · 앱 배포</li>
+          <li>관리자 웹은 <b>학내망·eVPN 전용</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="src">+ 세 번째 화면 <b>DBS</b>(dbs.edu-portal.ai) = 수리 접수·추적, 명렬표 — 업체(케이원) 시스템. 실습 ⑨에서 잠깐.</div>
+  </section>
+
+  <!-- ══════════ 4 · MDM의 현실 ① ══════════ -->
+  <section class="slide" data-name="MDM의 현실 ① 보냈다 ≠ 적용됐다"
+    data-note="<b>[2:00]</b> MDM에서 제일 먼저 부딪히는 현실. 정책을 「보냈다」와 「적용됐다」는 다릅니다. 이 숫자는 <b>우리 학교 실제 화면</b>입니다. 기본 디벗 정책을 261대에 지정했는데 적용은 232대. 재배포를 돌리면 261대 중 9대 실패. 매뉴얼에 이렇게 써 있습니다 — <b>「단말을 제어하기 위해서는 항상 연결 상태에서 명령 처리가 가능합니다」</b>. 기기가 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아서 서버에 접속하는 순간에만 처리됩니다. 처리이력을 열면 총·발송중·접속대기중·진행중·실패·성공 단계가 보이는데, 꺼져 있거나 가방 속 기기는 <b>「접속대기중」</b>에 계속 남아요. 함정 하나 더 — 단말현황의 「연결」 표시는 <b>마지막 통신 후 5일까지</b> 그대로입니다. 초록불 = 지금 켜져 있다가 아닙니다. 그래서 배포하면 끝이 아니라 <b>적용현황 숫자를 읽고, 미적용 재배포·재실행</b>을 하는 게 담당자의 일상입니다.">
+    <div class="eyebrow"><span class="dot"></span>MDM의 현실 ①</div>
+    <h1 class="title">「보냈다」 ≠ <span class="accent">「적용됐다」</span></h1>
+    <p class="lede">명령은 단말이 <b>서버에 접속하는 순간</b>에만 처리됩니다. 켜져 있고, 네트워크에 붙어 있고, 에이전트가 살아 있어야.</p>
+    <div class="stats">
+      <div class="stat"><div class="v num">261<small>대 지정</small></div><div class="l">우리 학교 기본 디벗 정책 — 통합설정에 지정한 단말 수</div></div>
+      <div class="stat warn"><div class="v num">232<small>대 적용</small></div><div class="l">실제로 정책을 받은 단말. 나머지 29대는 「접속대기중」</div></div>
+      <div class="stat bad"><div class="v num">9<small>대 실패</small></div><div class="l">「미적용 재배포」 261대 중 실패 → 처리이력에서 [재실행]</div></div>
+    </div>
+    <div class="strip">
+      <span class="st">총</span><span class="ar">›</span>
+      <span class="st">발송중</span><span class="ar">›</span>
+      <span class="st now">접속대기중</span><span class="ar">›</span>
+      <span class="st">진행중</span><span class="ar">›</span>
+      <span class="st bad">처리실패</span><span class="ar">/</span><span class="st ok">처리성공</span>
+      <span class="cap">← 처리이력 상세의 단계. 꺼진 기기는 여기서 멈춥니다</span>
+    </div>
+    <ul class="feat">
+      <li><span class="k">!</span><span>단말현황의 <b>「연결」 표시는 마지막 통신 후 5일간 유지</b>됩니다 — 초록불이 「지금 켜져 있음」은 아닙니다.</span></li>
+      <li><span class="k">→</span><span>그래서 배포하면 끝이 아니라, <b>적용현황 숫자를 읽고 → 미적용 재배포 → 처리이력 재실행</b>이 일상입니다.</span></li>
+    </ul>
+    <div class="src">근거: Argos 사용자매뉴얼 v4.1 — 5.3 단말 ICON(「항상 연결 상태에서 명령 처리」·5일 표시) · 15.4 통합설정 적용현황 · 26.3 처리이력 상세. 숫자는 2026-09 실제 관리 화면.</div>
+  </section>
+
+  <!-- ══════════ 5 · MDM의 현실 ② ══════════ -->
+  <section class="slide dark" data-dark data-name="MDM의 현실 ② 안 되는 것"
+    data-note="<b>[1:30]</b> 안 되는 것도 알고 가야 합니다. 첫째, <b>에이전트가 없는 기기는 아무것도 못 합니다.</b> 미설치·미등록은 재배포도 안 되고, 공장초기화하면 에이전트도 같이 지워져서 다시 깔아야 합니다. 둘째, 윈도우에서 되는 것과 안 되는 것 — 분실 위치, 앱 차단, 사이트 차단, 공장초기화는 되고, <b>암호 초기화·앱 데이터 초기화·사용시간 제한은 안 됩니다.</b> Windows Pro·Education 에디션만 됩니다. 셋째, 관리자 웹은 학내망 전용, 비밀번호는 3개월마다 만료, 5번 틀리면 잠기고 푸는 건 기술지원센터만. 넷째, <b>숫자가 서로 안 맞습니다.</b> Argos엔 우리 학교 단말이 1008대인데 DBS엔 760대. 졸업·전출 기기가 Argos에 남아 있어서 그렇습니다. 알고 있으면 당황하지 않습니다.">
+    <div class="eyebrow"><span class="dot"></span>MDM의 현실 ②</div>
+    <h1 class="title">안 되는 것을 <span class="accent">먼저</span> 알기</h1>
+    <p class="lede">담당자가 당황하는 순간은 대부분 이 넷 중 하나입니다.</p>
+    <div class="cards c2">
+      <div class="card">
+        <div class="k">에이전트</div>
+        <h3>에이전트 없는 기기는 아무것도 못 합니다</h3>
+        <ul>
+          <li><b>미설치·미등록</b> 단말은 정책도, 재배포도 불가</li>
+          <li><b>공장초기화</b>하면 에이전트도 지워짐 → 다시 설치(정보나눔터 가이드)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="k">Windows에서</div>
+        <h3>되는 것 / 안 되는 것</h3>
+        <ul>
+          <li><b class="o">O</b> 분실 위치 · 앱 차단 · 사이트 차단 · 공장초기화</li>
+          <li><b class="x">X</b> 암호 초기화 · 앱 데이터 초기화 · 사용시간 제한</li>
+          <li>Windows <b>Pro · Education</b> 에디션만</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="k">관리자 웹</div>
+        <h3>학내망 전용, 비밀번호는 예민</h3>
+        <ul>
+          <li>집에서 안 열림 — <b>학내망 · eVPN</b>만</li>
+          <li>비밀번호 <b>3개월 만료</b> · 5회 틀리면 잠김 → 해제는 기술지원센터만</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="k">숫자</div>
+        <h3>Argos <span class="num">1008</span>대 vs DBS <span class="num">760</span>대</h3>
+        <ul>
+          <li>같은 학교인데 다릅니다 — Argos엔 <b>졸업·전출 기기</b>가 남아 있음</li>
+          <li>대장은 <b>내 눈으로 세는 수</b>가 기준. 두 화면은 참고</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 6 · ADMIN의 현실 ══════════ -->
+  <section class="slide" data-name="ADMIN의 현실"
+    data-note="<b>[1:30]</b> 관리 센터 쪽 현실. 계정을 만들 때 <b>암호를 우리가 정할 수 없습니다.</b> 만들고 나서 초기화해야 하는데, 한 번에 <b>40명까지</b>만 됩니다. 그래서 반 단위로 검색해서 40명씩 — 이게 실습 ②입니다. CSV 일괄 등록은 <b>맨 아래 빈 줄 하나</b>면 통째로 실패합니다. 아이디는 <b>입학연도+입학 당시 학번</b>으로 만들고 졸업까지 안 바꿉니다. 학년이 올라가면 <b>표시이름만</b> 바꾸는데, 방법이 셋 — 한 명씩 노가다, MS 스토어의 <b>ClassSync</b>, 그리고 클래스이음. 에이마스에서는 클래스이음으로 승급이 된다고 하는데, 저희가 해보니 「성공」만 뜨고 <b>반영이 안 됐습니다.</b> PowerShell은 2025년에 모듈이 은퇴돼서 막혔고요. 오늘은 방법 <b>소개만</b>. 그리고 관리자 계정 자체를 만들거나 MFA·라이선스가 막히면 — 다음 장.">
+    <div class="eyebrow"><span class="dot"></span>ADMIN(M365 관리 센터)의 현실</div>
+    <h1 class="title">계정 쪽에서 <span class="accent">부딪히는 다섯 가지</span></h1>
+    <ul class="feat big">
+      <li><span class="k">1</span><span>계정을 만들 때 <b>암호를 정할 수 없습니다.</b> 만들고 나서 초기화 — 그런데 한 번에 <b>40명까지</b>. 반 단위로 검색해서 40명씩.</span></li>
+      <li><span class="k">2</span><span>CSV 일괄 등록은 <b>맨 아래 빈 줄 하나</b>로 통째로 실패합니다. 성=학번, 표시이름=학번+이름.</span></li>
+      <li><span class="k">3</span><span>아이디는 <b>입학연도+입학 학번</b>(예 <span class="num">202610101</span>@학교.ms.kr), 졸업까지 안 바꿉니다. 승급 = <b>표시이름만</b> 바꾸는 일.</span></li>
+      <li><span class="k">4</span><span>표시이름 바꾸는 법 — 한 명씩 노가다 · MS Store <b>ClassSync</b> · 클래스이음은 「된다」지만 <b>실제 반영 안 됨</b>(2026-09 경험). PowerShell은 2025년 은퇴.</span></li>
+      <li><span class="k">5</span><span>관리자 계정 만들기 · MFA · 라이선스에서 막히면 <b>혼자 붙들지 말고 전화</b> — 다음 장.</span></li>
+    </ul>
+    <div class="src">실습 ①·② 에서 1·2·3 을 직접 해 봅니다. 4 는 소개만.</div>
+  </section>
+
+  <!-- ══════════ 7 · 매뉴얼 말고, 전화 ══════════ -->
+  <section class="slide dark" data-dark data-name="매뉴얼 말고, 전화"
+    data-note="<b>[2:00]</b> 오늘 제일 중요한 장입니다. 매뉴얼 뒤지지 말고 전화하세요. 첫째, 학생 디벗이 고장나면 <b>통합콜센터 1566-6647</b>. ARS에서 업체를 고릅니다 — 우리 학교 2·3학년 기기는 <b>케이원</b>. 접수와 수리 추적은 <b>dbs.edu-portal.ai</b>에서 합니다. 1학년은 올해 보급된 <b>티지에스</b> 기기라 다른 번호인데, 티지에스 쪽은 아직 접수 사이트가 없어서 전화로 합니다. 여러분 학교는 <b>도입 연도</b>로 업체가 갈립니다 — 22년 케이원, 23년 티지에스, 24·25년 케이원, 26년 티지에스. 둘째, 관리 센터 <b>관리자 계정</b>을 만들거나, MFA·라이선스처럼 「이게 뭔지 모르겠다」 싶으면 무조건 <b>에이마스 02-6123-4184</b>. 셋째, <b>Argos</b> — 계정·비밀번호·잠김·미등록 단말·정책이 안 먹을 때 <b>1666-6493</b>. 정보나눔터에 문의글 올리고 기다리지 말고 <b>바로 전화</b>하세요. 평일 8시~12시 반, 1시 반~6시.">
+    <div class="eyebrow"><span class="dot"></span>제일 중요한 한 장</div>
+    <h1 class="title">매뉴얼 말고, <span class="accent">전화.</span></h1>
+    <div class="phones">
+      <div class="ph">
+        <div class="when">학생 디벗이 고장났다 · 수리<small>2·3학년(2022·2024 도입) = 케이원 관리</small></div>
+        <div class="tel num">1566-6647<small>통합콜센터 · ARS에서 업체 선택</small></div>
+        <div class="then">ARS <b>케이원</b> 선택 → 접수·수리 추적은 <b><span class="u">dbs.edu-portal.ai</span></b>(DBS)에서. 1학년(2026 도입)은 <b>티지에스</b> 선택 — 접수 사이트는 아직 없음, 전화로.</div>
+      </div>
+      <div class="ph">
+        <div class="when">관리자 계정을 만들어야 한다 · MFA · 라이선스<small>M365 관리 센터에서 「이게 뭔지 모르겠다」 전부</small></div>
+        <div class="tel num">02-6123-4184<small>에이마스 · 서울교육청 M365 지원</small></div>
+        <div class="then"><b>관리자(schooladmin) 계정 발급·재설정</b>, 2차 인증이 막힐 때, 라이선스가 모자랄 때. 혼자 붙들지 말고 <b>바로 전화</b>.</div>
+      </div>
+      <div class="ph">
+        <div class="when">Argos가 안 된다 · 계정 · 잠김 · 미등록 단말<small>정책이 안 먹을 때, 비밀번호 5회 틀려 잠겼을 때</small></div>
+        <div class="tel num">1666-6493<small>MDM 기술지원센터 · 평일 08:00~12:30 / 13:30~18:00</small></div>
+        <div class="then">접속 계정·비밀번호 확인, <b>잠금 해제는 여기서만</b>, 미등록 단말 처리. 정보나눔터에 <b>문의글 올리지 말고 전화</b>가 빠릅니다.</div>
+      </div>
+    </div>
+    <div class="years">업체는 <b style="color:#fff">도입 연도</b>로 갈립니다 →
+      <span class="y">22<i>케이원</i></span><span class="y">23<i>티지에스</i></span><span class="y">24<i>케이원</i></span><span class="y">25<i>케이원</i></span><span class="y">26<i>티지에스</i></span>
+      <span>· 무인보관함 <b style="color:#fff">A</b>=티지에스 · <b style="color:#fff">E·M·H</b>=케이원</span>
+    </div>
+  </section>
+
+  <!-- ══════════ 8 · 강사가 되신다면 ══════════ -->
+  <section class="slide" data-name="강사가 되신다면, 이것만"
+    data-note="<b>[1:00]</b> 그래서 강사가 되시면 149쪽 매뉴얼을 가르치지 마세요. 담당자가 1년에 정말 손대는 건 <b>이 여섯 개</b>입니다. 계정 만들기, 라이선스, 암호 초기화 40명, 표시이름·승급은 소개만, MDM은 통합설정 하나 만들고 사이트 차단하고 <b>적용현황 숫자 읽기</b>, 그리고 전화번호 세 개. 실수를 줄이는 도구로 <b>관리대장 생성기</b>를 드립니다 — 명렬 붙여넣고 버튼 하나면 대응표·라벨·계정 CSV가 나옵니다.">
+    <div class="eyebrow"><span class="dot"></span>강사가 되신다면</div>
+    <h1 class="title">담당자가 1년에 <span class="accent">정말 손대는 것</span>만</h1>
+    <p class="lede">이 여섯 개를 중심에 두면, 나머지는 「전화」로 해결됩니다.</p>
+    <ul class="feat two">
+      <li><span class="k">1</span><span><b>학생 계정 만들기</b> — CSV로. 아이디 규칙(입학연도+학번)부터 정하고.</span></li>
+      <li><span class="k">4</span><span><b>표시이름 · 승급</b> — 방법만 소개(노가다 · ClassSync). 아이디는 안 바뀐다는 것.</span></li>
+      <li><span class="k">2</span><span><b>라이선스 붙이기</b> — 사용자 추가 2단계, 또는 활성 사용자 ⋯ 라이선스.</span></li>
+      <li><span class="k">5</span><span><b>MDM은 딱 둘</b> — 통합설정 하나 만들기 + 사이트 차단. 그리고 적용현황 숫자 읽기.</span></li>
+      <li><span class="k">3</span><span><b>암호 초기화</b> — 40명씩, 반 단위 검색. 담임 배부용 표까지.</span></li>
+      <li><span class="k">6</span><span><b>전화번호 3개</b> — <span class="num">1566-6647</span> · <span class="num">02-6123-4184</span> · <span class="num">1666-6493</span></span></li>
+    </ul>
+    <div class="cards c2" style="margin-top:22px">
+      <div class="card">
+        <div class="k">실수를 줄이는 도구</div>
+        <h3>관리대장 생성기</h3>
+        <p>명렬 붙여넣고 버튼 하나 → <b>시리얼–학번 대응표 · 라벨 · 반납확인서 · Argos 이름표 · M365 계정 CSV</b>(빈 줄 없이).</p>
+      </div>
+      <div class="card">
+        <div class="k">가르치지 않아도 되는 것</div>
+        <h3>Intune · 조건부 액세스 · PowerShell</h3>
+        <p>서울 디벗 윈도우는 Intune을 쓰지 않습니다. 앱 배포·대여·기능표는 <b>언급만</b>. 막히면 전화.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 9 · 오늘은 이렇게 ══════════ -->
+  <section class="slide dark" data-dark data-name="오늘은 이렇게"
+    data-note="<b>[0:45]</b> 오늘 진행. 지금 이야기 끝나면 <b>필수 실습 4개</b> — CSV 계정+라이선스, 암호 40명, 윈도우 통합설정+사이트 차단, 시간 되면 적용현황과 재배포. 그다음은 허브 42개 미션 중에 <b>하고 싶은 걸 고르세요</b> — 승급, 생성기, 대여·분실, DBS 수리·마스킹, 인수인계. 마지막에 이 사이트들을 여러분 강의 도구로 드리는 방법까지.">
+    <div class="eyebrow"><span class="dot"></span>남은 시간</div>
+    <h1 class="title">오늘은 <span class="accent">이렇게</span> 갑니다</h1>
+    <div class="flow">
+      <div class="step now"><div class="n">지금</div><h4>이야기</h4><p>현실 · 전화번호 · 가르칠 것</p></div>
+      <div class="step"><div class="n">다음 40분</div><h4>필수 실습 4</h4><p>전원이 같은 화면으로</p></div>
+      <div class="step"><div class="n">그다음</div><h4>골라서 실습</h4><p>허브 42미션 중 원하는 것</p></div>
+      <div class="step"><div class="n">마지막</div><h4>물려드리기</h4><p>사이트 5개를 강의 도구로</p></div>
+    </div>
+    <div class="must">
+      <div class="m"><div class="t a">필수 ① · M365</div><h5>여러 사용자 추가(CSV) + 라이선스</h5><p>빈 줄 함정까지 겪어 보기</p></div>
+      <div class="m"><div class="t a">필수 ② · M365</div><h5>단체 암호 초기화 40명</h5><p>반 검색 → 담임 배부용 표</p></div>
+      <div class="m"><div class="t a">필수 ③ · Argos</div><h5>Windows 통합설정 + 사이트 차단</h5><p>차단 7항목 · Black List</p></div>
+      <div class="m"><div class="t">시간 되면 ④ · Argos</div><h5>통합설정 적용 → 적용현황</h5><p>미적용 재배포 · 재실행</p></div>
+    </div>
+    <div class="small" style="margin-top:20px;font-size:15.5px">골라서: 승급(별칭 · ClassSync) · 관리대장 생성기 · 예비 디벗 대여 · 분실 위치 · DBS 수리·마스킹 해제 · 원클릭 A/S 접수 · 인수인계 대시보드</div>
+    <div class="links">
+      <a class="pill" href="./" target="_blank" rel="noopener">실습 허브 열기</a>
+      <a class="pill ghost" href="m365.html" target="_blank" rel="noopener">M365 실습기</a>
+      <a class="pill ghost" href="argos.html" target="_blank" rel="noopener">Argos 실습기</a>
+      <a class="pill ghost" href="ledger.html" target="_blank" rel="noopener">관리대장 생성기</a>
+    </div>
+  </section>
+
+  <!-- ══════════ 10 · 브릿지 ══════════ -->
+  <section class="slide closing" data-dark data-name="화면을 엽니다"
+    data-note="<b>[0:15]</b> 자, 화면 엽니다. 주소는 오프닝 QR과 같습니다. 각자 노트북에서 허브를 열어 주세요.">
+    <h1>이제 화면을 <em>엽니다.</em></h1>
+    <p>오프닝에서 찍은 QR과 같은 주소입니다. 각자 노트북에서 허브를 열어 주세요.</p>
+    <div class="url">scienceisjo.github.io/growing-teachers/<span>dibut/</span></div>
+    <footer id="app-credit">서울특별시교육청 디벗 강사(자문·지원) 양성 테크니션 직무연수 — <b>윈도우 ADMIN · MDM UI 안내</b> · 실습 전 이야기 · 최종 업데이트 2026-09-12</footer>
+  </section>
+
+  <div id="help"><kbd>←</kbd> <kbd>→</kbd> 넘기기 &nbsp;·&nbsp; <kbd>O</kbd> 목차 &nbsp;·&nbsp; <kbd>N</kbd> 대본 &nbsp;·&nbsp; <kbd>T</kbd> 타이머 &nbsp;·&nbsp; <kbd>H</kbd> 이 안내</div>
+  <div id="timer" title="클릭 또는 T: 시작/멈춤 · R: 되돌리기">12:00</div>
+
+  <div id="chrome">
+    <div class="left" id="stageName">표지</div>
+    <div class="right">
+      <button class="nb" id="prev" aria-label="이전">◀</button>
+      <span id="num">1 / 10</span>
+      <button class="nb" id="next" aria-label="다음">▶</button>
+    </div>
+  </div>
+  <div id="bar"><i></i></div>
+  <div id="notes"></div>
+  <div id="overview">
+    <h4>목차 — 눌러서 이동</h4>
+    <div id="ovGrid"></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var stage   = document.getElementById('stage');
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var bar     = document.querySelector('#bar i');
+  var numEl   = document.getElementById('num');
+  var nameEl  = document.getElementById('stageName');
+  var notesEl = document.getElementById('notes');
+  var ovEl    = document.getElementById('overview');
+  var ovGrid  = document.getElementById('ovGrid');
+  var i = 0, notesOn = false;
+
+  /* 1280×720 무대를 창에 맞춰 배율 조정 (전자칠판 왼쪽 몰림 방지) */
+  function fit(){
+    var s = Math.min((innerWidth - 28) / 1280, (innerHeight - 28) / 720);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  addEventListener('resize', fit);
+  fit();
+
+  function labelOf(sl, idx){ return sl.getAttribute('data-name') || ('슬라이드 ' + (idx + 1)); }
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    var cur = slides[i];
+    stage.classList.toggle('isdark', cur.hasAttribute('data-dark'));
+    numEl.textContent = (i + 1) + ' / ' + slides.length;
+    nameEl.textContent = labelOf(cur, i);
+    bar.style.width = (i / (slides.length - 1) * 100) + '%';
+    notesEl.innerHTML = cur.getAttribute('data-note') || '<span style="opacity:.5">이 슬라이드에는 대본이 없습니다.</span>';
+    try { history.replaceState(null, '', '#s' + (i + 1)); } catch (e) {}
+  }
+  function go(d){ show(i + d); }
+
+  slides.forEach(function(s, k){
+    var b = document.createElement('button');
+    b.className = 'ov';
+    b.innerHTML = '<div class="i">' + String(k + 1).padStart(2, '0') + '</div><div class="t">' + labelOf(s, k) + '</div>';
+    b.onclick = function(){ ovEl.classList.remove('on'); show(k); };
+    ovGrid.appendChild(b);
+  });
+
+  /* 발표 타이머 — 기본 12분, 주소에 ?min=10 처럼 붙이면 그 시간으로 */
+  var qMin = parseInt((location.search.match(/[?&]min=(\d+)/) || [])[1], 10);
+  var TOTAL = (qMin > 0 && qMin <= 300 ? qMin : 12) * 60, left = TOTAL, tick = null;
+  var tEl = document.getElementById('timer');
+  function paint(){
+    var neg = left < 0, v = Math.abs(left);
+    tEl.textContent = (neg ? '+' : '') + String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0');
+    tEl.classList.toggle('run',  !!tick && left > 120);
+    tEl.classList.toggle('warn', !!tick && left <= 120 && left >= 0);
+    tEl.classList.toggle('over', left < 0);
+  }
+  function toggleTimer(){
+    if (tick){ clearInterval(tick); tick = null; }
+    else { tick = setInterval(function(){ left--; paint(); }, 1000); }
+    paint();
+  }
+  function resetTimer(){ clearInterval(tick); tick = null; left = TOTAL; paint(); }
+  tEl.onclick = toggleTimer;
+  paint();
+
+  document.getElementById('prev').onclick = function(){ go(-1); };
+  document.getElementById('next').onclick = function(){ go(1); };
+
+  addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'Escape'){ ovEl.classList.remove('on'); return; }
+    if (ovEl.classList.contains('on') && k !== 'o' && k !== 'O' && k !== 'ㅐ') return;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); go(1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); go(-1); }
+    else if (k === 'Home'){ show(0); }
+    else if (k === 'End'){ show(slides.length - 1); }
+    else if (k === 'o' || k === 'O' || k === 'ㅐ'){ ovEl.classList.toggle('on'); }
+    else if (k === 'n' || k === 'N' || k === 'ㅜ'){ notesOn = !notesOn; notesEl.classList.toggle('on', notesOn); stage.classList.toggle('notes', notesOn); }
+    else if (k === 't' || k === 'T' || k === 'ㅅ'){ toggleTimer(); }
+    else if (k === 'r' || k === 'R' || k === 'ㄱ'){ resetTimer(); }
+    else if (k >= '1' && k <= '9'){ show(parseInt(k, 10) - 1); }
+    else if (k === '0'){ show(9); }
+  });
+
+  stage.addEventListener('click', function(e){
+    if (e.target.closest('a, button, #timer, #overview, #notes')) return;
+    go(1);
+  });
+
+  /* 도움말 배지는 6초 뒤 사라지고, H 로 다시 볼 수 있습니다 */
+  var helpEl = document.getElementById('help');
+  var helpTimer = setTimeout(function(){ helpEl.classList.add('hide'); }, 6000);
+  addEventListener('keydown', function(e){
+    if (e.key === 'h' || e.key === 'H' || e.key === 'ㅗ'){ clearTimeout(helpTimer); helpEl.classList.toggle('hide'); }
+  });
+
+  var m = (location.hash || '').match(/^#s(\d+)$/);
+  show(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+</body>
+</html>
