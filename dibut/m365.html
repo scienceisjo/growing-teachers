@@ -388,7 +388,27 @@ html[data-theme="dark"] #guideBar{background:#3A2E00}
 .pwrow .eye{position:absolute;right:8px;border:0;background:none;color:var(--txx2);cursor:pointer;font-size:15px;line-height:1}
 .wf-foot{flex:0 0 auto;border-top:1px solid var(--hair);padding:13px 22px;display:flex;gap:10px;align-items:center;background:var(--panel)}
 .wf-foot .sp{flex:1}
-@media(max-width:760px){.wf-steps{display:none}.wf-main{padding:22px 18px}.wf-grid2,.wf-urow{grid-template-columns:1fr}.wf-urow .at{display:none}}
+/* 여러 사용자 추가 마법사 — 실물(2026-09) 배치 */
+.bw-row{display:grid;grid-template-columns:1fr 1fr 1.5fr auto 1.4fr;gap:10px;align-items:center;max-width:820px;margin-bottom:10px}
+.bw-row input,.bw-row select{height:32px;border:1px solid #8A8886;border-radius:3px;padding:0 10px;background:#fff;width:100%;font-size:13.5px}
+.bw-row input:focus,.bw-row select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.bw-at{color:var(--txx2);font-weight:600;padding:0 2px}
+.bw-info{display:flex;gap:10px;align-items:flex-start;background:#faf9f8;border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:13.2px;max-width:820px;margin:18px 0 10px;color:var(--txx)}
+.bw-info .bw-ic{flex:none;font-size:15px;line-height:1.3}
+.bw-info .bw-fold{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--txx2);font-size:12px;padding:0 2px}
+.bw-info.slim{padding:8px 14px;color:var(--txx2)}
+.bw-link{display:block;width:max-content;color:var(--brand);font-size:14.5px;margin:16px 0;cursor:pointer;text-decoration:none}
+.bw-link:hover{text-decoration:underline}
+.bw-uplabel{font-weight:600;font-size:14px;margin:18px 0 8px}
+.bw-up{display:flex;gap:10px;max-width:640px}
+.bw-up input{flex:1;height:34px;border:1px solid #8A8886;border-radius:3px;padding:0 10px;background:#fff;font-size:13px;color:var(--txx)}
+.fpitem{display:block;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:4px;background:#fff;margin-bottom:8px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;color:var(--txx)}
+.fpitem span{display:block;font-size:12.5px;color:var(--txx2);font-weight:400;margin-top:3px}
+.fpitem:hover{border-color:var(--brand)}
+html[data-theme="dark"] .bw-row input,html[data-theme="dark"] .bw-row select,html[data-theme="dark"] .bw-up input{background:var(--panel);border-color:var(--hair);color:var(--txx)}
+html[data-theme="dark"] .bw-info{background:var(--panel);border-color:var(--hair)}
+html[data-theme="dark"] .fpitem{background:var(--panel);border-color:var(--hair)}
+@media(max-width:760px){.wf-steps{display:none}.wf-main{padding:22px 18px}.wf-grid2,.wf-urow{grid-template-columns:1fr}.wf-urow .at{display:none}.bw-row{grid-template-columns:1fr 1fr}.bw-at{display:none}}
 
 </style>
 </head>
@@ -1415,47 +1435,200 @@ function popAddUser(){
   paint();
 }
 function popBulkAdd(){
-  modal({title:"여러 사용자 추가 (CSV)",wide:true,
-    body:'<div class="note i"><b>순서.</b> ① 빈 CSV 서식 내려받기 → ② 나이스 반편성 자료에서 앞 4개 열만 옮기기 → ③ <b>CSV UTF-8(쉼표로 분리)</b>로 저장 → ④ 업로드(여기서는 붙여넣기).</div>'
-     +'<div class="tblbox" style="margin:10px 0"><table class="tbl"><thead><tr><th>열 이름</th><th>넣는 값</th><th>예시</th></tr></thead><tbody>'
-       +'<tr><td>사용자 이름</td><td>계정 아이디 (도메인까지)</td><td class="mono">'+SCHOOLYEAR+'10101@'+DOMAIN+'</td></tr>'
-       +'<tr><td>이름</td><td>학생 이름</td><td>하늘</td></tr>'
-       +'<tr><td>성</td><td><b>학번</b>을 넣습니다</td><td class="mono">10101</td></tr>'
-       +'<tr><td>표시 이름</td><td>명단에 보일 이름 (학번 + 이름)</td><td class="mono">'+SCHOOLYEAR+'10101김하늘</td></tr>'
-       +'<tr><td>나머지 열</td><td colspan="2">비워 둡니다</td></tr>'
-     +'</tbody></table></div>'
-     +'<div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap"><button class="btn sm" data-bsample>샘플 채우기</button><button class="btn sm" data-bdl>'+I.dl+' 빈 CSV 서식 내려받기</button></div>'
-     +'<div class="field" style="max-width:100%"><label>CSV 내용 (사용자 이름,이름,성,표시 이름)</label><textarea id="bcsv" placeholder="'+SCHOOLYEAR+'10931@'+DOMAIN+',전입,10931,'+SCHOOLYEAR+'10931김전입"></textarea></div>'
-     +'<div id="bmsg"></div>'
-     +'<div class="note d" style="margin-top:8px"><b>일괄 생성은 암호를 지정할 수 없습니다.</b> 무작위 임시 암호가 걸리므로, 생성 직후 [암호 초기화]로 초기 비밀번호를 만들어 배부해야 학생이 로그인할 수 있습니다.</div>'
-     +'<div class="note w"><b>머리글(첫 줄)은 한 글자도 바꾸지 마세요.</b> 관리 센터가 첫 줄로 열을 인식합니다. 그리고 <b>맨 아래 빈 줄</b>이 있으면 「내용 없는 사용자 1명」으로 읽혀 업로드가 통째로 실패합니다 — 실무 오류 1위입니다.</div>'
-     +'<div class="note i"><b>먼저 5명으로 시험 업로드.</b> 160명을 한 번에 올렸다가 실패하면 원인을 찾기 어렵습니다. 5줄만 남겨 올려 보고 정상 생성을 확인한 뒤 전체를 올리세요.</div>',
-    foot:'<button class="btn" data-close>취소</button><button class="btn pri" data-ok>추가</button>',
-    onMount:function(ov,close){
-      ov.querySelector("[data-bsample]").addEventListener("click",function(){ov.querySelector("#bcsv").value=SAMPLE;});
-      ov.querySelector("[data-bdl]").addEventListener("click",function(){
-        const b=new Blob(["\ufeff사용자 이름,이름,성,표시 이름\n"],{type:"text/csv;charset=utf-8"});
-        const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="사용자_일괄등록_서식.csv";a.click();
-        setTimeout(function(){URL.revokeObjectURL(a.href);},1500);toast("서식을 내려받았습니다. 저장할 때 CSV UTF-8(쉼표로 분리)!","ok");});
-      ov.querySelector("[data-ok]").addEventListener("click",function(){
-        const r=parseCsv(ov.querySelector("#bcsv").value);
-        if(r.err.length){ov.querySelector("#bmsg").innerHTML='<div class="note d">'+r.err.join(" · ")+"</div>";return;}
-        if(!r.rows.length){toast("추가할 내용이 없습니다.","no");return;}
-        const dup=r.rows.filter(x=>S.users.some(u=>u.upn===x.upn));
-        if(dup.length){ov.querySelector("#bmsg").innerHTML='<div class="note d">이미 있는 사용자 이름: '+esc(dup.map(x=>x.upn).join(", "))+"</div>";return;}
-        if(r.rows.length>CAP[LIC_S]-used(LIC_S)){toast("학생용 라이선스 잔여가 부족합니다.","no");return;}
-        const ids=[];
-        r.rows.forEach(function(x,i){
-          const grade=gradeFromId(x.upn),cn=clsNoFromId(x.upn);
-          const id="b"+Date.now()+"_"+i;ids.push(id);
-          S.users.push({id:id,last:x.last,first:x.first,name:x.first,disp:x.disp,upn:x.upn,dom:DOMAIN,
-            alias:[],quota:QUOTA_DEF,grade:grade,cls:cn.cls,no:cn.no,group:GRP[grade],role:"사용자",
-            license:LIC_S,mfa:"사용 안 함",signIn:"허용",seen:"-"});
+  /* 실제 관리 센터의 [여러 사용자 추가] — 전체 화면 마법사(기본 사항·라이선스·마침) 재현.
+     2026-09 실물 대조: 수동 3행 + CSV 체크박스 + 빈 서식·예제 다운로드 + 파일 업로드 배치 동일 */
+  const B={step:1,csv:false,info:true,file:"",parsed:[],perr:[],
+           rows:[{l:"",f:"",u:"",d:DOMAIN},{l:"",f:"",u:"",d:DOMAIN},{l:"",f:"",u:"",d:DOMAIN}],
+           loc:"한국",lic:"s"};
+  const HEAD16="사용자 이름,이름,성,표시 이름,직함,부서,사무실 번호,사무실 전화,휴대폰,팩스,대체 전자 메일 주소,주소,구/군/시,시/도,우편 번호,국가 또는 지역";
+  const MSROW="chrisgreen@contoso.com,Chris,녹색,Chris Green,IT 관리자,IT,123451,123-555-1211,123-555-6641,123-555-9821,chrisgreen@contoso.com,1 Microsoft Way,Redmond,Wa,98052,미국";
+  const SCHOOLCSV=HEAD16+"\n"+[["202610301","새봄","김새봄"],["202610302","한결","이한결"],["202610303","누리","박누리"],["202610304","이든","최이든"],["202610305","보람","정보람"]]
+    .map(function(r){return r[0]+"@"+DOMAIN+","+r[1]+","+r[0].slice(4)+","+r[0]+r[2]+",학생,1-3,,,,,,,,,,";}).join("\n");
+  const root=document.createElement("div");root.className="wizfull";
+  $("#modalRoot").appendChild(root);
+  const closeW=function(){root.remove();};
+  const STEPS=["기본 사항","라이선스","마침"];
+  function parseUserFile(txt){
+    const err=[],rows=[];
+    const lines=String(txt).replace(/^﻿/,"").replace(/\r/g,"").split("\n");
+    while(lines.length&&!lines[lines.length-1].trim())lines.pop();
+    if(!lines.length){err.push("파일이 비어 있습니다.");return{rows:rows,err:err};}
+    const h=lines[0].split(",").map(x=>x.trim());
+    if(h[0]!=="사용자 이름"||h[1]!=="이름"||h[2]!=="성"||h[3]!=="표시 이름")
+      err.push("머리글(1행)이 서식과 다릅니다 — 서식 파일의 첫 줄은 한 글자도 바꾸지 말고 그대로 두세요.");
+    else for(let i=1;i<lines.length;i++){
+      const c=lines[i].split(",").map(x=>x.trim());
+      if(!c.join("")){err.push((i+1)+"행이 빈 줄입니다 — Excel이 저장하며 남긴 줄입니다. 그 줄을 지우고 다시 저장하세요 (업로드 통째 실패의 실무 원인 1위).");continue;}
+      const upn=c[0]||"";
+      if(upn.indexOf("@")<0){err.push((i+1)+"행: 사용자 이름에 @도메인이 없습니다 (예: 202610301@"+DOMAIN+").");continue;}
+      const id=upn.split("@")[0],dom=upn.split("@")[1];
+      if(dom!==DOMAIN&&dom!==DOM2){err.push((i+1)+"행: 도메인 '"+dom+"'은 조직의 확인된 도메인이 아닙니다 (우리 도메인: "+DOMAIN+"). Microsoft 예제 파일을 그대로 올리면 이렇게 됩니다.");continue;}
+      rows.push({upn:id,dom:dom,first:c[1]||"",last:c[2]||"",disp:c[3]||((c[2]||"")+(c[1]||""))||id});
+    }
+    if(!rows.length&&!err.length)err.push("추가할 사용자 행이 없습니다.");
+    return{rows:rows,err:err};
+  }
+  function dlCsv(name,txt){
+    const b=new Blob(["﻿"+txt+"\n"],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+  }
+  function manualRows(){return B.rows.filter(r=>r.u.trim()||r.f.trim()||r.l.trim());}
+  function canNext(){
+    if(B.step===1){
+      if(B.csv)return B.parsed.length>0&&!B.perr.length;
+      const act=manualRows();
+      if(!act.length)return false;
+      return act.every(r=>r.u.trim()&&r.u.indexOf("@")<0);
+    }
+    return true;
+  }
+  function applyFile(name,txt){
+    B.file=name;
+    const r=parseUserFile(txt);B.parsed=r.rows;B.perr=r.err;
+    paint();
+  }
+  function pickFile(){
+    /* 시뮬레이터용 파일 선택 창 — 준비된 예제로 파일 없이도 실습이 되게 */
+    modal({title:"업로드할 CSV 파일 선택",
+      body:'<button class="fpitem" data-pickfile="school">&#128196; 신입생_명단_2026.csv<span>시뮬레이터에 준비된 예제 — 신입생 5명 (학번 규칙 · '+DOMAIN+')</span></button>'
+       +'<button class="fpitem" data-pickfile="ms">&#128196; Import_User_Sample.csv<span>Microsoft 예제 그대로 — 그대로 올리면 무엇이 걸리는지 확인해 보세요</span></button>'
+       +'<button class="fpitem" data-pickfile="real">&#128187; 내 컴퓨터에서 선택…<span>직접 만든 CSV 업로드 (저장은 꼭 CSV UTF-8(쉼표로 분리)로)</span></button>',
+      foot:'<button class="btn" data-close>취소</button>',
+      onMount:function(ov,close){
+        ov.addEventListener("click",function(e){
+          const p=e.target.closest("[data-pickfile]");if(!p)return;
+          const k=p.getAttribute("data-pickfile");close();
+          if(k==="real"){const fi=root.querySelector("#bwFile");if(fi)fi.click();return;}
+          if(k==="school")applyFile("신입생_명단_2026.csv",SCHOOLCSV);
+          else applyFile("Import_User_Sample.csv",HEAD16+"\n"+MSROW);
         });
-        S.ui.page="users";S.ui.sel=ids;done("m8");save();close();render();
-        modal({title:r.rows.length+"명이 추가되었습니다",
-          body:'<div class="note w"><b>지금 이 계정들의 암호는 아무도 모릅니다.</b> 방금 만든 '+r.rows.length+'명이 목록에 선택된 상태입니다 — 바로 [암호 초기화]를 눌러 초기 비밀번호를 만들고 담임 배부용 파일을 내려받으세요.</div>',
-          foot:'<button class="btn pri" data-close>확인</button>'});});}});
+      }});
+  }
+  function stepHtml(){
+    if(B.step===1){
+      const rowsH=B.rows.map(function(r,i){
+        return '<div class="bw-row"><input data-bl="'+i+'" placeholder="성" value="'+esc(r.l)+'">'
+         +'<input data-bf="'+i+'" placeholder="이름" value="'+esc(r.f)+'">'
+         +'<input data-bu="'+i+'" placeholder="사용자 이름" value="'+esc(r.u)+'">'
+         +'<span class="bw-at">@</span>'
+         +'<select data-bd="'+i+'"><option'+(r.d===DOMAIN?" selected":"")+'>'+DOMAIN+'</option><option'+(r.d===DOM2?" selected":"")+'>'+DOM2+"</option></select></div>";
+      }).join("");
+      let csvH="";
+      if(B.csv){
+        csvH=(B.info
+           ?'<div class="bw-info"><span class="bw-ic">&#9432;</span><span>아래 파일 중 하나를 다운로드합니다. Excel 또는 유사한 앱에서 파일을 열고 사용자 정보를 추가하고 저장하고 업로드합니다.</span><button class="bw-fold" data-binfo title="접기">&#8964;&#8964;</button></div>'
+           :'<div class="bw-info slim"><span class="bw-ic">&#9432;</span><span>파일 다운로드 안내</span><button class="bw-fold" data-binfo title="펼치기">&#8963;&#8963;</button></div>')
+         +'<a class="bw-link" data-bdl="tpl">필수 헤더가 포함된 빈 CSV 파일 다운로드</a>'
+         +'<a class="bw-link" data-bdl="sample">예제 사용자 정보가 포함된 CSV 파일 다운로드</a>'
+         +'<div class="bw-uplabel">사용자 정보로 CSV 파일 업로드 <span class="req">*</span></div>'
+         +'<div class="bw-up"><input id="bwPath" readonly value="'+esc(B.file)+'"><button class="btn pri" id="bwBrowse">찾아보기</button></div>'
+         +'<input type="file" id="bwFile" accept=".csv,text/csv" style="display:none">'
+         +'<div id="bwMsg" style="max-width:760px;margin-top:12px">'
+           +(B.perr.length?'<div class="note d">'+B.perr.map(esc).join("<br>")+"</div>"
+             :(B.parsed.length?'<div class="note g">&#10004; <b>'+B.parsed.length+'명</b>의 사용자를 확인했습니다 — [다음]을 누르세요.</div>':""))
+         +"</div>";
+      }
+      return '<h2>기본 사항</h2><p class="wdesc">사용자를 직접 입력하거나, CSV 파일로 한 번에 업로드합니다.</p>'
+       +rowsH
+       +'<label class="wchk" style="margin-top:18px"><input type="checkbox" id="bwCsvChk"'+(B.csv?" checked":"")+'><span>사용자 정보가 포함된 CSV를 업로드하고 싶습니다.</span></label>'
+       +csvH;
+    }
+    if(B.step===2){
+      const n=B.parsed.length;
+      const seatsS=CAP[LIC_S]-used(LIC_S),seatsT=CAP[LIC_T]-used(LIC_T);
+      return '<h2>라이선스 할당</h2><p class="wdesc">이 사용자 '+n+'명에게 할당할 제품 라이선스를 선택합니다.</p>'
+       +'<div class="field" style="max-width:300px"><label>위치 선택 <span class="req">*</span></label><select id="bwLoc">'
+         +["한국","미국","일본"].map(x=>"<option"+(B.loc===x?" selected":"")+">"+x+"</option>").join("")+"</select></div>"
+       +'<div class="wf-hr"></div>'
+       +'<div class="wf-sec">라이선스 <span class="req">*</span></div>'
+       +'<label class="opt'+(B.lic==="s"?" on":"")+'"><input type="radio" name="bwl" value="s"'+(B.lic==="s"?" checked":"")+'><span><b>'+LIC_S+"</b><span>잔여 "+seatsS+"석</span></span></label>"
+       +'<label class="opt'+(B.lic==="t"?" on":"")+'"><input type="radio" name="bwl" value="t"'+(B.lic==="t"?" checked":"")+'><span><b>'+LIC_T+"</b><span"+(seatsT<10?' style="color:#A80000"':"")+">잔여 "+seatsT+"석 — 학교별 수량 한정</span></span></label>"
+       +'<label class="opt'+(B.lic==="none"?" on":"")+'"><input type="radio" name="bwl" value="none"'+(B.lic==="none"?" checked":"")+'><span><b>제품 라이선스 없이 사용자 만들기(권장하지 않음)</b><span>라이선스를 할당하기 전까지는 Microsoft 365에 액세스할 수 없거나 액세스가 제한될 수 있습니다.</span></span></label>';
+    }
+    const licName=B.lic==="s"?LIC_S:(B.lic==="t"?LIC_T:"없음(권장하지 않음)");
+    const kv=(k,v)=>'<div class="wf-rev"><div class="k">'+k+'</div><div class="v">'+v+"</div></div>";
+    const prev=B.parsed.slice(0,5).map(x=>'<span class="mono">'+esc(x.disp)+" · "+esc(x.upn+"@"+x.dom)+"</span>").join("<br>")
+      +(B.parsed.length>5?'<br><span style="color:var(--txx2)">… 외 '+(B.parsed.length-5)+"명</span>":"");
+    return '<h2>검토 후 마침</h2><p class="wdesc">사용자 추가를 완료하기 전에 정보를 검토하세요.</p>'
+     +kv("추가할 사용자","<b>"+B.parsed.length+"명</b>"+(B.file?' · <span class="mono">'+esc(B.file)+"</span>":"")+"<br>"+prev)
+     +kv("제품 라이선스","위치: "+esc(B.loc)+"<br>"+esc(licName))
+     +'<div class="note d" style="max-width:660px;margin-top:16px"><b>일괄 생성은 암호를 지정할 수 없습니다.</b> 전원에게 무작위 임시 암호가 걸립니다 — 추가가 끝나면 바로 [암호 초기화]로 초기 비밀번호를 만들어 배부하세요. 일괄 생성과 암호 초기화는 한 세트입니다.</div>'
+     +'<div class="note i" style="max-width:660px"><b>실무 팁 — 먼저 5명으로 시험 업로드.</b> 160명을 한 번에 올렸다가 실패하면 원인을 찾기 어렵습니다. 5줄만 올려 정상 생성을 확인한 뒤 전체를 올리세요.</div>';
+  }
+  function paint(){
+    root.innerHTML='<div class="wf-top"><span style="font-weight:400;color:var(--txx2)">활성 사용자</span><span style="color:var(--txx2);margin:0 8px">&#8250;</span>여러 사용자 추가</div>'
+     +'<div class="wf-body"><div class="wf-steps">'
+     +STEPS.map((s2,i)=>'<div class="wf-step'+(B.step===i+1?" on":(B.step>i+1?" done":""))+'"><span class="dot"></span><span class="lb">'+s2+"</span></div>").join("")
+     +'</div><div class="wf-main">'+stepHtml()+"</div></div>"
+     +'<div class="wf-foot">'
+     +(B.step>1?'<button class="btn" id="bwBack">뒤로</button>':"")
+     +(B.step<3?'<button class="btn pri" id="bwNext"'+(canNext()?"":" disabled")+">다음</button>"
+               :'<button class="btn pri" id="bwFin">사용자 추가</button>')
+     +'<span class="sp"></span><button class="btn" id="bwCancel">취소</button></div>';
+    if(GD)guidePaint();
+  }
+  root.addEventListener("input",function(e){
+    const t=e.target;
+    if(t.hasAttribute("data-bl"))B.rows[+t.getAttribute("data-bl")].l=t.value;
+    else if(t.hasAttribute("data-bf"))B.rows[+t.getAttribute("data-bf")].f=t.value;
+    else if(t.hasAttribute("data-bu"))B.rows[+t.getAttribute("data-bu")].u=t.value.trim();
+    else return;
+    const nx=root.querySelector("#bwNext");if(nx)nx.disabled=!canNext();
+  });
+  root.addEventListener("change",function(e){
+    const t=e.target;
+    if(t.id==="bwCsvChk"){B.csv=t.checked;paint();return;}
+    if(t.id==="bwLoc"){B.loc=t.value;return;}
+    if(t.name==="bwl"){B.lic=t.value;paint();return;}
+    if(t.hasAttribute("data-bd")){B.rows[+t.getAttribute("data-bd")].d=t.value;return;}
+    if(t.id==="bwFile"&&t.files&&t.files[0]){
+      const f=t.files[0],rd=new FileReader();
+      rd.onload=function(){applyFile(f.name,String(rd.result||""));};
+      rd.readAsText(f,"utf-8");
+    }
+  });
+  root.addEventListener("click",function(e){
+    if(e.target.closest("#bwCancel")){closeW();return;}
+    if(e.target.closest("#bwBack")){B.step--;paint();return;}
+    if(e.target.closest("[data-binfo]")){B.info=!B.info;paint();return;}
+    if(e.target.closest("[data-bdl='tpl']")){dlCsv("Import_User_Template.csv",HEAD16);toast("빈 서식(필수 헤더 16열)을 내려받았습니다.","ok");return;}
+    if(e.target.closest("[data-bdl='sample']")){dlCsv("Import_User_Sample.csv",HEAD16+"\n"+MSROW);toast("예제 CSV를 내려받았습니다 — 예제 도메인(contoso.com)은 그대로 올리면 걸립니다!","ok");return;}
+    if(e.target.closest("#bwBrowse")){pickFile();return;}
+    if(e.target.closest("#bwNext")){
+      if(!canNext())return;
+      if(B.step===1){
+        if(!B.csv)B.parsed=manualRows().map(r=>({upn:r.u.trim(),dom:r.d,first:r.f.trim(),last:r.l.trim(),disp:(r.l.trim()+r.f.trim())||r.u.trim()}));
+        const dup=B.parsed.filter(x=>S.users.some(u=>u.upn===x.upn));
+        if(dup.length){toast("이미 있는 사용자 이름: "+dup.map(x=>x.upn).join(", "),"no");return;}
+        const seen={};
+        for(let i=0;i<B.parsed.length;i++){const k=B.parsed[i].upn;
+          if(seen[k]){toast("같은 사용자 이름이 두 번 있습니다: "+k,"no");return;}seen[k]=1;}
+      }
+      B.step++;paint();return;
+    }
+    if(e.target.closest("#bwFin")){
+      const n2=B.parsed.length;
+      if(B.lic==="s"&&n2>CAP[LIC_S]-used(LIC_S)){toast("학생용 라이선스 잔여가 부족합니다.","no");return;}
+      if(B.lic==="t"&&n2>CAP[LIC_T]-used(LIC_T)){toast("교직원용 라이선스 잔여가 부족합니다.","no");return;}
+      const dup=B.parsed.filter(x=>S.users.some(u=>u.upn===x.upn));
+      if(dup.length){toast("이미 있는 사용자 이름: "+dup.map(x=>x.upn).join(", "),"no");return;}
+      const ids=[];
+      B.parsed.forEach(function(x,i){
+        const grade=gradeFromId(x.upn),cn=clsNoFromId(x.upn);
+        const id="b"+Date.now()+"_"+i;ids.push(id);
+        S.users.push({id:id,last:x.last,first:x.first,name:x.first,disp:x.disp,upn:x.upn,dom:x.dom||DOMAIN,
+          alias:[],quota:QUOTA_DEF,grade:grade,cls:cn.cls,no:cn.no,group:GRP[grade]||GRP[1],role:"사용자",
+          license:B.lic==="s"?LIC_S:(B.lic==="t"?LIC_T:""),mfa:"사용 안 함",signIn:"허용",seen:"-"});
+      });
+      S.ui.page="users";S.ui.sel=ids;done("m8");save();closeW();render();
+      modal({title:n2+"명이 추가되었습니다",
+        body:'<div class="note w"><b>지금 이 계정들의 암호는 아무도 모릅니다.</b> 방금 만든 '+n2+'명이 목록에 선택된 상태입니다 — 바로 [암호 초기화]를 눌러 초기 비밀번호를 만들고 담임 배부용 파일을 내려받으세요.</div>',
+        foot:'<button class="btn pri" data-close>확인</button>'});
+      return;
+    }
+  });
+  paint();
 }
 function pwReset(){
   const ids=S.ui.sel.slice();if(!ids.length)return;
@@ -1550,7 +1723,7 @@ function diffModal(){
      +'<tr><td style="width:150px;color:var(--tx2)">도메인</td><td><span class="mono">'+DOMAIN+"</span> 은 예시입니다. 실제 도메인은 학교마다 다릅니다.</td></tr>"
      +'<tr><td style="color:var(--tx2)">사용자</td><td>42명 모두 가상 데이터입니다. 실제 학생 정보가 아닙니다.</td></tr>'
      +'<tr><td style="color:var(--tx2)">진급 처리</td><td>실제 관리 센터에는 「진급 처리」 전용 메뉴가 없습니다. 사용자 삭제 · 그룹 관리 · 여러 사용자 추가(CSV)를 <b>순서대로</b> 하는 작업을, 순서를 익히기 쉽게 한 화면으로 묶은 것입니다.</td></tr>'
-     +'<tr><td style="color:var(--tx2)">계정·그룹 화면</td><td>사용자 추가 마법사·CSV 일괄 생성·암호 초기화(40명 제한)·역할 할당·M365 그룹 추가의 <b>단계와 제한</b>을 요약 재현했습니다. 실제 화면 배치와는 다를 수 있습니다.</td></tr>'
+     +'<tr><td style="color:var(--tx2)">계정·그룹 화면</td><td>암호 초기화(40명 제한)·역할 할당·M365 그룹 추가의 <b>단계와 제한</b>을 요약 재현했습니다. [사용자 추가]·[여러 사용자 추가] 마법사는 실물 화면(2026-09 대조)과 같은 단계·배치(수동 입력 3행 + CSV 업로드)입니다.</td></tr>'
      +'<tr><td style="color:var(--tx2)">MFA</td><td>실제로는 사용자별 MFA(레거시) 외에 <b>보안 기본값</b>과 <b>조건부 액세스</b>로도 설정합니다. 교육청 테넌트 정책에 따라 학교에서 못 바꾸는 항목이 있을 수 있습니다.</td></tr>'
      +'<tr><td style="color:var(--tx2)">반영 속도</td><td>실제로는 그룹·라이선스 변경이 반영되는 데 시간이 걸립니다. 여기서는 즉시 반영됩니다.</td></tr>'
      +'<tr><td style="color:var(--tx2)">저장 위치</td><td>이 브라우저에만 저장됩니다(localStorage).</td></tr>'
@@ -1762,9 +1935,13 @@ const GUIDE={
   {sel:"#wNext",t:"설정은 기본값으로 [다음]",d:"역할은 '사용자'가 기본 — 관리자 역할은 담임 위임 때만."},
   {sel:"#wFin",t:"[추가 완료] 클릭",d:"검토 화면을 확인하고 완료 — 임시 암호는 메모해 전달!"}]},
  m8:{n:"실습 ② 여러 사용자 추가(CSV)",steps:[
-  {page:"users",sel:"[data-act='bulku']",t:"[여러 사용자 추가] 클릭",d:"실무에선 나이스 반편성 자료로 CSV를 만듭니다."},
-  {sel:"[data-bsample]",t:"[샘플 채우기] 클릭",d:"사용자 이름=아이디@도메인 · 성=학번 · 표시 이름=학번+이름. 맨 아래 빈 줄이 실패 원인 1위!"},
-  {sel:".modal [data-ok]",t:"[추가] 클릭",d:"일괄 생성은 암호를 지정할 수 없습니다 — 생성 직후 암호 초기화가 한 세트."},
+  {page:"users",sel:"[data-act='bulku']",t:"[여러 사용자 추가] 클릭",d:"실제와 같은 전체 화면 마법사(기본 사항·라이선스·마침)가 열립니다."},
+  {sel:"#bwCsvChk",t:"[CSV를 업로드하고 싶습니다] 체크",d:"두세 명은 위 칸에 직접 입력, 한 학년 전체는 CSV로 — 실무에선 나이스 반편성 자료로 만듭니다."},
+  {sel:"#bwBrowse",t:"[찾아보기] 클릭",d:"빈 서식·예제 CSV는 위의 파란 링크로 내려받을 수 있습니다."},
+  {sel:"[data-pickfile='school']",t:"준비된 예제 명단 선택",d:"머리글 16열은 그대로 두고 앞 4열만 채운 파일입니다. 성=학번 · 표시 이름=학번+이름. 맨 아래 빈 줄이 실패 원인 1위!"},
+  {sel:"#bwNext",t:"검증 메시지 확인 후 [다음]",d:"'5명의 사용자를 확인했습니다'가 떴다면 통과."},
+  {sel:"#bwNext",t:"학생용 A3 확인 후 [다음]",d:"라이선스가 없으면 '로그인은 되는데 아무것도 안 돼요'가 됩니다."},
+  {sel:"#bwFin",t:"[사용자 추가] 클릭",d:"일괄 생성은 암호를 지정할 수 없습니다 — 생성 직후 암호 초기화가 한 세트."},
   {sel:".modal [data-close]",t:"[확인]으로 닫기",d:"방금 만든 계정들이 선택된 상태입니다. 이어서 미션 ③(암호 초기화)으로!"}]},
  m12:{n:"실습 ③-1 개인 비밀번호 초기화",steps:[
   {page:"users",sel:".uname",t:"학생 이름 하나 클릭",d:"개인 초기화는 상세 화면에서 합니다."},

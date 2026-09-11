@@ -1407,7 +1407,11 @@ function bulk(kind){
     pop({title:"단말 초기화",body:cnt
      +'<div class="opt-bx" style="cursor:pointer"><dl class="opd-dl"><dt><label class="label-check-circle"><input type="radio" name="rk" value="WIPE" checked><i></i><span>공장 초기화</span></label></dt><dd style="margin:6px 0 0 30px;color:var(--tx2);font-size:13px">공장 출시 상태로 초기화를 진행합니다. (Agent 또한 삭제되어 향후 재 설치 필요)</dd></dl></div>'
      +'<div class="opt-bx" style="cursor:pointer"><dl class="opd-dl"><dt><label class="label-check-circle"><input type="radio" name="rk" value="KEEP"><i></i><span>공장 초기화(사용자 및 유저 데이터 유지)</span></label></dt><dd style="margin:6px 0 0 30px;color:var(--tx2);font-size:13px">사용자 및 사용자 데이터를 유지하며 공장 출시 상태로 초기화를 진행합니다.</dd></dl></div>'
-     +'<p class="bottom-txt-alert">※ Windows 단말은 위 두 가지만 제공되며 “비밀번호 초기화”는 제공하지 않습니다(비밀번호 분실 시 제조사 지원 필요).<br><b class="cc-red">※ 공장 초기화를 진행하면 더 이상 데이터 복구가 안 됩니다.</b></p>',
+     +'<p class="bottom-txt-alert">※ Windows 단말은 위 두 가지만 제공되며 “비밀번호 초기화”는 제공하지 않습니다(비밀번호 분실 시 제조사 지원 필요).<br><b class="cc-red">※ 공장 초기화를 진행하면 더 이상 데이터 복구가 안 됩니다.</b></p>'
+     +'<div class="msg-box msg-w" style="margin-top:12px;margin-bottom:0"><b>⚠ 실무 조언 — 원격 공장 초기화는 마지막 카드입니다.</b><br>'
+       +'① 초기화가 끝나면 단말은 윈도우 첫 설정 → <b>MS 로그인 화면</b>부터 다시 시작되고, <b>프로그램이 하나도 없는 맨 윈도우</b>가 됩니다. 에이전트부터 수업용 프로그램까지 전부 재설치해야 합니다.<br>'
+       +'② 초기화 과정에서 윈도우가 최신 업데이트(24H2 등)로 올라가는데, 버전마다 요구 사양이 달라 <b>Surface Go 3 사양이 버티지 못해 오히려 더 버벅일 수 있습니다.</b><br>'
+       +'③ “느려졌어요·이상해요”는 <b>AS(수리) 입고 포맷</b>으로 — 업체 표준 구성으로 포맷되어 <b>로그인만 하면 되는 상태</b>로 돌아옵니다. 원격 초기화는 분실 단말의 개인정보 삭제처럼 <b>지금 당장 원격으로 비워야 할 때</b>의 수단입니다.</div>',
      btns:'<button class="btn--st pill" data-close>취소</button><button class="btn--st pill btn-major-outline" data-ok>적용</button>',
      mount:(el,c)=>{el.querySelector("[data-ok]").addEventListener("click",function(){
        const k=el.querySelector("input[name=rk]:checked").value;
@@ -2511,6 +2515,7 @@ const FAQ=[
  ["단말에 설정 된 비밀번호를 분실 한 경우?","재부팅 한 적이 없다면 단말현황에서 “초기화 &gt; 비밀번호 초기화”로 해제 가능합니다. 재부팅 이력이 있으면 최초 비밀번호 1회 입력 전까지 MDM으로 해제 불가하며 제조사 서비스 센터를 통해야 합니다. (Windows는 비밀번호 초기화 미제공)"],
  ["학교에 납품된 단말 이름을 손쉽게 바꾸는 방법이 있을까요?","학생이 단말의 에이전트 앱에서 연필 아이콘으로 직접 변경하면 MDM에 바로 반영됩니다. 또는 단말현황의 “이름 변경(일괄)” 엑셀 기능을 사용합니다."],
  ["공장 초기화 후 “스마트단말 관리에이전트”는 어떻게 설치 하나요?","공장초기화 시 모든 앱이 초기 상태로 돌아가므로 에이전트도 재설치해야 합니다. 설치 파일과 방법은 정보나눔터의 설치·가이드 매뉴얼 모음을 참고하세요."],
+ ["단말이 느려졌어요 — 공장 초기화를 하면 되나요?","권장하지 않습니다. ① 초기화 후엔 프로그램이 하나도 없는 맨 윈도우(MS 로그인 화면)로 시작해 에이전트·수업용 프로그램을 전부 재설치해야 하고 ② 그 과정에서 최신 업데이트(24H2 등)로 올라가 Surface Go 3 사양이 버티지 못해 오히려 더 버벅일 수 있습니다. 이런 증상은 AS(수리) 입고 포맷이 정답 — 업체 표준 구성으로 포맷되어 로그인만 하면 되는 상태로 돌아옵니다. 원격 공장 초기화는 분실 단말 개인정보 삭제처럼 즉시 원격으로 비워야 할 때만 쓰세요."],
  ["앱 배포 했는데 단말에 앱이 설치 되지 않습니다.","모든 단말에서 안 되면 앱 등록 시 설치·동작 확인 후 등록한 앱인지 확인이 필요합니다. 특정 단말만 안 되면 설정 &gt; 어플리케이션 &gt; “특별한 접근” &gt; “모든 파일 접근 권한” 해제 여부를 확인하세요."],
  ["통합설정으로 App 과 사이트를 차단하려면 어떻게 하나요?","차단 목록 관리가 어렵다면 White List 사용을 추천합니다. 앱은 패키지명을 확인해 허용 앱에 등록하고, 사이트는 정확한 URL을 허용 사이트에 등록 후 정책을 적용합니다. 이 경우 실시간 DB 연동 유해 차단은 함께 사용할 수 없습니다."]
 ];

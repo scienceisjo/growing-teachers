@@ -43,6 +43,16 @@ h1{margin:4px 0 6px;font-size:21px;letter-spacing:-.4px}
 .go{width:100%;height:50px;border:0;border-radius:11px;background:var(--pri);color:#fff;font-weight:800;font-size:16px;margin-top:6px}
 .coffee{background:var(--coffeebg);border:1px solid #E4D2BC;border-radius:12px;padding:14px}
 .coffee b{color:var(--coffee)}
+.ai{background:#EEF3FF;border:1px solid #CBDCFF;border-radius:12px;padding:14px;margin:14px 0}
+.ai>b{color:var(--pri2)}
+.promptbox{background:#fff;border:1px solid #CBD3E0;border-radius:10px;padding:11px 13px;font-size:12.5px;
+  line-height:1.6;color:var(--tx);white-space:pre-wrap;max-height:150px;overflow:auto}
+.copybtn{width:100%;height:40px;border:0;border-radius:9px;background:var(--pri);color:#fff;font-weight:700;
+  font-size:14px;margin-top:8px}
+.copybtn.done{background:var(--ok)}
+.ident{background:#fff;border:1px solid var(--line);border-left:4px solid #7C4DE0;border-radius:10px;
+  padding:10px 12px;font-size:13.5px}
+.ident .who{color:var(--tx3);font-size:11.5px;font-weight:700;margin-bottom:2px}
 .done{text-align:center;padding:30px 10px}
 .done .big{font-size:52px}
 .note-mini{color:var(--tx3);font-size:12px;text-align:center;margin-top:10px}
@@ -102,6 +112,17 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
       <input type="text" id="fNick" maxlength="10" placeholder="예: 윈도우요정">
     </div>
     <div class="fld">
+      <label>어떤 과목을 가르치세요?</label>
+      <select id="fSubject">
+        <option value="">— 선택 —</option>
+        <option>국어</option><option>영어</option><option>수학</option><option>과학</option>
+        <option>사회</option><option>역사</option><option>도덕</option><option>기술·가정</option>
+        <option>정보·컴퓨터</option><option>미술</option><option>음악</option><option>체육</option>
+        <option>진로·상담</option><option>특수</option><option>사서·보건·영양</option>
+        <option>비교과·행정</option><option>기타</option>
+      </select>
+    </div>
+    <div class="fld">
       <label>디벗 업무, 얼마나 해보셨나요?</label>
       <div class="opts" id="fCareer">
         <button class="opt" data-v="올해 처음">올해 처음</button>
@@ -109,6 +130,15 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
         <button class="opt" data-v="2~3년차">2~3년차</button>
         <button class="opt" data-v="이미 강사급">이미 강사급 🔥</button>
       </div>
+    </div>
+    <div class="ai">
+      <b>🤖 아이스브레이킹 — “나는 어떤 교사일까?”</b>
+      <div style="font-size:13.5px;margin:5px 0 9px">평소 쓰시는 AI(챗지피티·제미나이·SenGPT 등)에 아래 질문을 붙여 넣으면, 그동안의 대화를 바탕으로 답을 만들어 줍니다. 나온 <b>한 문장</b>만 아래에 옮겨 적어 주세요 — 앞 화면에 모입니다.</div>
+      <div class="promptbox" id="identPrompt"></div>
+      <button class="copybtn" id="btnCopyPrompt">📋 프롬프트 복사</button>
+      <input type="text" id="fIdent" maxlength="60" placeholder="이 선생님은 ______ 교사입니다"
+        style="width:100%;height:46px;border:1.5px solid #C7D0E0;border-radius:10px;padding:0 12px;font-size:15px;background:#fff;margin-top:10px">
+      <div class="hint" style="margin-top:6px">AI를 안 쓰시거나 시간이 빠듯하면 이 칸은 비워 두셔도 됩니다 · AI 답변 전체는 선생님만 보시고, 화면엔 이 한 문장만 올라갑니다.</div>
     </div>
     <div class="fld">
       <label>강사가 되면, 선생님들께 <u>제일 먼저</u> 알려주고 싶은 것 한 가지?</label>
@@ -151,11 +181,20 @@ footer#app-credit{width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14p
         <div id="careerBars"></div>
       </div>
       <div class="card">
+        <h1 style="font-size:17px">어떤 과목 선생님들이 오셨나</h1>
+        <div id="subjectBars"></div>
+      </div>
+      <div class="card">
         <h1 style="font-size:17px">강사가 되면 제일 먼저 알려주고 싶은 것</h1>
         <div class="hopes" id="hopeCards"></div>
       </div>
     </div>
     <div>
+      <div class="card">
+        <h1 style="font-size:17px">🤖 AI가 본 우리 강사들</h1>
+        <p class="sub">평소 쓰는 AI에게 “나는 어떤 교사?”라고 물어본 답</p>
+        <div class="hopes" id="identCards" style="grid-template-columns:1fr;max-height:300px"></div>
+      </div>
       <div class="card">
         <h1 style="font-size:17px">☕ 올해 우리 학교 수리 요청은 몇 건?</h1>
         <p class="sub">제출된 예상값 분포 · 평균 <b id="gAvg">-</b>건</p>
@@ -192,6 +231,30 @@ var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/
 var isBoard=/[?&]mode=board/.test(location.search);
 if(isBoard){$("#viewWrite").style.display="none";$("#viewBoard").style.display="block";}
 
+/* ───── LLM 아이스브레이킹 프롬프트 (질문 연수 identity 프롬프트를 이 형식에 맞춰 각색) ───── */
+var IDENT_PROMPT=[
+"지금까지 우리가 나눈 대화를 바탕으로, 나를 한 명의 교사로 소개해 주세요.",
+"",
+"단, 이름·나이·가족·건강·사는 곳·정치나 종교 성향 같은 개인적이거나 민감한 정보는 빼고,",
+"수업·학생·교육에 대한 고민과 실천이 드러나는 대화만 근거로 삼아 주세요.",
+"",
+"미리 정해진 기준에 맞춰 평가하지 말고, 대화에서 반복적으로 나타난 관심사·질문하는 방식·",
+"고민·선택·시도를 종합해서 \"이 사람은 어떤 교사인가\"를 짚어 주세요.",
+"",
+"마지막에 \"이 선생님은 ______ 교사입니다.\" 한 문장으로 정리해 주세요.",
+"",
+"— 오늘 연수에서는 이 마지막 한 문장만 앞 화면에 함께 올립니다. 나머지 소개는 저만 봅니다."
+].join("\n");
+if($("#identPrompt"))$("#identPrompt").textContent=IDENT_PROMPT;
+if($("#btnCopyPrompt"))$("#btnCopyPrompt").addEventListener("click",function(){
+  var btn=this;
+  function ok(){btn.textContent="✅ 복사됐어요 — AI에 붙여넣어 보세요";btn.classList.add("done");
+    setTimeout(function(){btn.textContent="📋 프롬프트 복사";btn.classList.remove("done");},2200);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(IDENT_PROMPT).then(ok,fb);}else{fb();}
+  function fb(){var ta=document.createElement("textarea");ta.value=IDENT_PROMPT;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok();}catch(e){}document.body.removeChild(ta);}
+});
+
 /* ───── 입력 모드 ───── */
 var career="";
 $("#fCareer").addEventListener("click",function(e){
@@ -201,14 +264,17 @@ $("#fCareer").addEventListener("click",function(e){
 });
 $("#btnSubmit").addEventListener("click",function(){
   var nick=($("#fNick").value||"").trim();
+  var subject=($("#fSubject").value||"").trim();
+  var ident=($("#fIdent").value||"").trim();
   var hope=($("#fHope").value||"").trim();
   var guess=parseInt($("#fGuess").value,10);
   if(!nick){alert("별명을 적어 주세요! (커피 받으셔야죠 ☕)");return;}
+  if(!subject){alert("가르치시는 과목을 골라 주세요.");return;}
   if(!career){alert("디벗 업무 경력을 골라 주세요.");return;}
   if(isNaN(guess)){alert("커피 퀴즈 숫자를 넣어 주세요!");return;}
   $("#btnSubmit").disabled=true;$("#btnSubmit").textContent="제출 중…";
   fetch(SB_URL+"/rest/v1/"+TBL,{method:"POST",headers:H,
-    body:JSON.stringify({nick:nick,career:career,hope:hope,guess:guess})})
+    body:JSON.stringify({nick:nick,subject:subject,ident:ident,career:career,hope:hope,guess:guess})})
   .then(function(r){
     if(!r.ok)throw new Error(r.status);
     $("#viewWrite").querySelector(".card").style.display="none";
@@ -229,7 +295,7 @@ function todayKST(){
   return n.toISOString().slice(0,10);
 }
 function fetchRows(){
-  fetch(SB_URL+"/rest/v1/"+TBL+"?select=nick,career,hope,guess,created_at&order=created_at.desc&limit=300",{headers:H})
+  fetch(SB_URL+"/rest/v1/"+TBL+"?select=nick,subject,ident,career,hope,guess,created_at&order=created_at.desc&limit=300",{headers:H})
   .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
   .then(function(js){
     var td=todayKST();
@@ -246,6 +312,18 @@ function paint(){
   $("#careerBars").innerHTML=CAREERS.map(function(c,i){
     return '<div class="bar-row"><span class="lb">'+esc(c)+'</span><span class="tr"><i style="width:'+(cc[i]/mx*100)+'%"></i></span><span class="n">'+cc[i]+"</span></div>";
   }).join("");
+  /* 과목 분포 — 응답이 있는 과목만, 많은 순 */
+  var subMap={};
+  rows.forEach(function(r){if(r.subject){subMap[r.subject]=(subMap[r.subject]||0)+1;}});
+  var subArr=Object.keys(subMap).map(function(k){return [k,subMap[k]];}).sort(function(a,b){return b[1]-a[1];});
+  var smx=subArr.reduce(function(m,x){return Math.max(m,x[1]);},1);
+  $("#subjectBars").innerHTML=subArr.length?subArr.map(function(x){
+    return '<div class="bar-row"><span class="lb">'+esc(x[0])+'</span><span class="tr"><i style="width:'+(x[1]/smx*100)+'%"></i></span><span class="n">'+x[1]+"</span></div>";
+  }).join(""):'<div class="sub">아직 응답이 없습니다.</div>';
+  /* AI가 본 우리 강사들 */
+  $("#identCards").innerHTML=rows.filter(function(r){return r.ident;}).slice(0,30).map(function(r){
+    return '<div class="ident"><div class="who">'+esc(r.nick)+(r.subject?" · "+esc(r.subject):"")+"</div>"+esc(r.ident)+"</div>";
+  }).join("")||'<div class="sub">아직 없습니다 — AI에게 물어보고 한 문장 적어 주세요 🤖</div>';
   $("#hopeCards").innerHTML=rows.filter(function(r){return r.hope;}).slice(0,40).map(function(r){
     return '<div class="hope"><div class="who">'+esc(r.nick)+" · "+esc(r.career)+"</div>"+esc(r.hope)+"</div>";
   }).join("")||'<div class="sub">아직 응답이 없습니다 — QR로 접속해 주세요!</div>';
