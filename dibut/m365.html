@@ -443,7 +443,7 @@ html[data-theme="dark"] .fpitem{background:var(--panel);border-color:var(--hair)
     <button class="si wide" title="실습 허브로" onclick="location.href='./'">실습 허브</button>
     <button class="si" title="실제와 다른 점" id="btnDiff">
       <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.6A2.3 2.3 0 1 1 10 10v1.4"/><circle cx="10" cy="14.6" r=".7" fill="currentColor"/></svg></button>
-    <span class="suite-ava" title="조승재 · 전역 관리자">조</span>
+    <span class="suite-ava" title="박지훈 · 전역 관리자">박</span>
   </div>
 </header>
 
@@ -543,11 +543,11 @@ function seed(){
         grade:g,cls:cls,no:no,group:GRP[g],license:LIC_S,role:"사용자",signIn:"허용",seen:mkDate(Math.floor(rnd()*20))});
     }
   });
-  [["강현욱","hyunwook",DOM2],["김현정","hyunjung",DOMAIN],["조승재","seungjae",DOMAIN],
-   ["이상민","sangmin",DOM2],["한지영","jiyoung",DOMAIN],["박서준","seojun",DOMAIN]].forEach(function(t){
+  [["김서연","seoyeon",DOM2],["이준호","junho",DOMAIN],["박지훈","jihun",DOMAIN],
+   ["최은영","eunyoung",DOM2],["정다인","dain",DOMAIN],["한태윤","taeyun",DOMAIN]].forEach(function(t){
     out.push({id:"u"+(++n),last:t[0].charAt(0),first:t[0].slice(1),name:t[0],disp:t[0],
       upn:t[1],dom:t[2],alias:[],quota:QUOTA_DEF,grade:0,cls:0,no:0,group:GRP[0],
-      license:LIC_T,role:t[0]==="조승재"?"전역 관리자":"사용자",signIn:"허용",seen:mkDate(Math.floor(rnd()*4))});
+      license:LIC_T,role:t[0]==="박지훈"?"전역 관리자":"사용자",signIn:"허용",seen:mkDate(Math.floor(rnd()*4))});
   });
   /* 라이선스 없는 시스템 계정 — 실제 목록에도 섞여 있어 "학생만 골라내기"를 어렵게 만든다 */
   [["1학기 상담","G5975f5ca89d947bdaea95558d6162481"],
@@ -560,7 +560,7 @@ function seed(){
 }
 const KEY="m365_sim_v5";
 let S=null,CREDIT=null;
-function fresh(){return {users:seed(),groups:[{n:"2026 3-1",owner:"강현욱",email:"20263-1@"+DOMAIN,priv:"비공개",mem:12,made:"2026년 3월 2일"}],missions:{},log:[],ui:{page:"home",sel:[],q:"",fg:""},wz:null};}
+function fresh(){return {users:seed(),groups:[{n:"2026 3-1",owner:"김서연",email:"20263-1@"+DOMAIN,priv:"비공개",mem:12,made:"2026년 3월 2일"}],missions:{},log:[],ui:{page:"home",sel:[],q:"",fg:""},wz:null};}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.users&&o.users.length)return o;}}catch(e){}return fresh();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
@@ -1889,7 +1889,7 @@ const GUIDE={
   {sel:"[data-wstep='5']",t:"[5. 검토 후 실행] 탭 클릭",d:"미리보기에서 몇 명이 만들어질지 확인."},
   {sel:"[data-wrun]",t:"[진급 처리 실행]",d:"신입생 계정 생성까지 한 번에!"}]},
  m10:{n:"담당교사 권한 위임",steps:[
-  {page:"users",sel:"#uq",ev:"input",min:2,t:"교사 이름 검색(예: 김현정)",d:"비번 민원을 나눌 담당·부장 교사를 찾습니다."},
+  {page:"users",sel:"#uq",ev:"input",min:2,t:"교사 이름 검색(예: 이준호)",d:"비번 민원을 나눌 담당·부장 교사를 찾습니다."},
   {sel:"[data-pick]",t:"교사 왼쪽 체크",d:"한 명만 선택하면 됩니다."},
   {sel:"[data-act='more']",t:"[⋯] 클릭",d:"역할 관리는 추가 작업 메뉴 안에."},
   {sel:"[data-act='role']",t:"[역할 관리] 클릭",d:"실제 경로는 [역할]→[역할 할당]입니다."},
