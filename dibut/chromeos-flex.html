@@ -314,13 +314,33 @@ td.mono{font-family:inherit;font-size:14px;color:var(--ink-48);font-variant-nume
   border:1px solid var(--hairline);padding:2px 9px;border-radius:var(--r-pill);margin-left:8px;
   white-space:nowrap;text-decoration:none;display:inline-block;vertical-align:1px;
 }
-.reset{
+.reset,.btn-ghost{
   background:transparent;border:1px solid var(--blue);color:var(--blue);
   font-size:14px;letter-spacing:-.224px;line-height:1.29;padding:8px 16px;border-radius:var(--r-pill);
   cursor:pointer;align-self:flex-start;transition:transform .15s ease;
 }
-.reset:hover{background:var(--blue);color:var(--on-blue);}
-.reset:active{transform:scale(.95);}
+.reset:hover,.btn-ghost:hover{background:var(--blue);color:var(--on-blue);}
+.reset:active,.btn-ghost:active{transform:scale(.95);}
+
+/* ---------- 교직원 회의 5분 안내 ---------- */
+.brief{
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);
+  padding:28px 28px 24px;display:flex;flex-direction:column;gap:18px;
+}
+.brief-h{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start;justify-content:space-between;}
+.brief-h > div{flex:1 1 360px;min-width:0;}
+.brief-h .k{display:block;font-size:14px;font-weight:600;letter-spacing:-.224px;line-height:1.29;color:var(--ink-60);margin-bottom:6px;}
+.brief-h h3{font-size:21px;}
+.brief-h p{margin-top:6px;font-size:14px;letter-spacing:-.224px;line-height:1.5;color:var(--ink-60);}
+.brief h4{font-size:17px;margin-top:4px;}
+.brief > p{max-width:none;}
+.brief ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;}
+.brief .cmp td:first-child{white-space:nowrap;}
+.brief .check{
+  font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-80);
+  background:var(--parchment);border-radius:var(--r-sm);padding:12px 16px;
+}
+.brief .check b{color:var(--ink);}
 
 /* ---------- risks: 일반 = 흰 카드, 개인정보 = 짙은 타일 ---------- */
 .riskgroup{display:flex;flex-direction:column;gap:16px;}
@@ -404,6 +424,27 @@ footer li{font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-
   .poster{padding:32px 22px;}
   .equation{padding:22px 16px;}
   .limit{grid-template-columns:26px minmax(0,1fr);gap:12px;}
+}
+@media (max-width:640px){
+  .brief{padding:20px 18px 18px;}
+}
+@media print{
+  @page{margin:14mm;}
+  /* '이 안내만 인쇄': 브리프의 조상 사슬만 남기고 형제는 모두 숨김 */
+  body.print-brief > :not(.wrap){display:none;}
+  body.print-brief > .wrap > :not(.shell){display:none;}
+  body.print-brief .shell{display:block;}
+  body.print-brief .shell > :not(.main){display:none;}
+  body.print-brief .main{display:block;padding:0;}
+  body.print-brief .main > :not(#s1){display:none;}
+  body.print-brief #s1 > :not(.brief){display:none;}
+  body.print-brief .brief{border:0;padding:0;font-size:14px;gap:14px;}
+  body.print-brief .brief .btn-ghost{display:none;}
+  body.print-brief .brief table{font-size:12px;}
+  body.print-brief .brief h4{font-size:15px;}
+  body.print-brief .brief .note,body.print-brief .brief .check,body.print-brief .brief .warn{font-size:13px;padding:10px 14px;}
+  .brief .warn{background:none;color:var(--ink);border:1px solid var(--ink);}
+  .brief .warn b{color:var(--ink);}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 html{scroll-behavior:smooth;}
@@ -518,8 +559,68 @@ img{max-width:100%;}
           <span class="sub">교직원회의·부장회의에서 5분 분량. 장점과 제약을 반드시 함께 제시하십시오.</span>
         </div>
 
-        <div class="note">
-          <b>한 줄 요약</b> — 디벗(서피스고 3)의 윈도우를 지우고 크롬 OS 플렉스로 바꾸면, 기기 교체 없이 속도 문제를 해결하고 기기 관리를 클라우드에서 일괄 처리할 수 있습니다. 대신 카메라 일부 기능과 안드로이드 앱을 포기해야 합니다.
+        <!-- 교직원 회의 5분 안내 — 이 블록만 인쇄 가능 -->
+        <div class="brief" id="brief">
+          <div class="brief-h">
+            <div>
+              <span class="k">5분용 정리본</span>
+              <h3>디벗 크롬 OS 플렉스 전환 — 교직원 회의 안내</h3>
+              <p>교직원회의·부장회의에서 이대로 읽으면 5분입니다. 표 1·2와 절차는 설명회 내용이고, '확인 중' 항목은 5장 자체 분석입니다.</p>
+            </div>
+            <button class="btn-ghost" id="printBrief" type="button">이 안내만 인쇄</button>
+          </div>
+
+          <div class="note">
+            <b>한 줄 요약</b> — 디벗(서피스고 3)의 윈도우를 지우고 크롬 OS 플렉스로 바꾸면, 기기 교체 없이 속도 문제를 해결하고 기기 관리를 클라우드에서 일괄 처리할 수 있습니다. 대신 카메라 일부 기능과 안드로이드 앱을 포기해야 합니다.
+          </div>
+
+          <p>서피스고 3 디벗의 <b>기기는 그대로 두고 운영체제만</b> 윈도우 → 크롬 OS 플렉스로 바꾸는 교육청 사업입니다. 강제가 아니라 학교가 협의해 선택하고, 설치는 구글 파트너사가 방문해 기기당 약 3분, 방학 중 권장입니다.</p>
+
+          <h4>표 1. 전환하면 무엇이 달라지나</h4>
+          <div class="tbl">
+            <table class="cmp">
+              <thead><tr><th>항목</th><th>지금 (윈도우)</th><th>전환 후 (크롬 OS 플렉스)</th></tr></thead>
+              <tbody>
+                <tr><td><b>기기</b></td><td>서피스고 3</td><td>그대로. OS만 교체</td></tr>
+                <tr><td><b>속도</b></td><td>무겁고 느려 민원 반복</td><td>부팅 10초 미만, 초기화 2분 미만. 2~3년 뒤에도 유지</td></tr>
+                <tr><td><b>배터리</b></td><td>현재 수준</td><td>현재보다 약 20% 절감</td></tr>
+                <tr><td><b>보안</b></td><td>백신 필요</td><td>백신 불필요(OS 내장), 4주 1회 자동 업데이트</td></tr>
+                <tr><td><b>파일</b></td><td>기기에 저장</td><td>클라우드 저장. <b>전환 때 기기 안 파일 전부 삭제</b></td></tr>
+                <tr><td><b>카메라</b></td><td>정상</td><td>전·후면 중 한쪽 초점 불량 가능. <b>QR 인식 문제</b>(시범학교 실제 발생)</td></tr>
+                <tr><td><b>앱</b></td><td>윈도우 프로그램</td><td>웹·크롬 확장만. 설치형 프로그램·안드로이드 앱 불가</td></tr>
+                <tr><td><b>MS 도구</b></td><td>설치판</td><td>크롬에서 M365 웹판. Teams·Excel·PPT 거의 동일, 원드라이브 파일 그대로 열림</td></tr>
+                <tr><td><b>로그인</b></td><td>기존 계정</td><td>센스쿨 계정 필수. 개인 지메일 차단</td></tr>
+                <tr><td><b>수업·기기 관리</b></td><td>—</td><td>클래스툴즈(집중·탐색·잠금)·화면 미러링·시험 잠금 / 앱 일괄 배포·사이트 차단·원격 잠금</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>표 2. 협의해서 결정할 것</h4>
+          <div class="tbl">
+            <table>
+              <thead><tr><th>쟁점</th><th>판단 기준</th></tr></thead>
+              <tbody>
+                <tr><td><b>카메라를 포기할 수 있는가</b></td><td>우리 학교 디벗 활용의 주된 형태가 촬영·QR 중심인가?</td></tr>
+                <tr><td><b>안드로이드 앱 의존 수업이 있는가</b></td><td>교과별 사용 앱 조사가 선행되어야 함</td></tr>
+                <tr><td><b>계정 업무를 누가 맡는가</b></td><td>1회성이 아니라 매 학년 반복되는 업무</td></tr>
+                <tr><td><b>언제 작업할 것인가</b></td><td>방학 중 권장. 학기 중은 교육과정 결손</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="check"><b>교육청에 확인 중</b>(설명회에서 답이 없었음) — 서피스고 3 플렉스 지원 종료(EOL) 시점 · 윈도우 원복 가능 여부와 비용 · CEU 라이선스 부담 주체</p>
+
+          <h4>선생님께 부탁드리는 것 — ○월 ○일까지, 5분 설문</h4>
+          <ol>
+            <li>우리 교과 수업에서 카메라·QR 코드를 얼마나 쓰는지</li>
+            <li>수업에 쓰는 앱·프로그램 목록(안드로이드 전용·설치형 포함)</li>
+          </ol>
+
+          <h4>절차</h4>
+          <p>교대통 신청(희망일 3지망, 오전/오후) → 센스쿨 학생 계정 일괄 등록(학교 몫) → 방학 중 방문 설치(당일 담당자 상주) → 1개 학급 시범 → 개학 첫 주 로그인 안내 차시</p>
+
+          <div class="warn">
+            <b>주의</b> — 학생·학부모 안내 때 장점만 알리지 말고 카메라 제약·파일 삭제를 함께 안내하고, 백업 안내는 작업 2주 전부터 시작하십시오.
+          </div>
         </div>
 
         <div class="stack">
@@ -540,20 +641,6 @@ img{max-width:100%;}
           <p>당장 구글 생태계로 전부 옮기라는 것이 아닙니다. 크롬 브라우저로 <b>Microsoft 365에 접속하면 Teams·Excel·PowerPoint를 웹 기반으로 기존과 거의 동일하게</b> 사용할 수 있고, 원드라이브의 엑셀·파워포인트 파일도 깨짐 없이 열립니다. OS가 가벼워져 오히려 기존 윈도우 환경보다 잘 돌아간다는 것이 발표자 설명입니다.</p>
         </div>
 
-        <div class="stack">
-          <h3>협의해서 결정할 것</h3>
-          <div class="tbl">
-            <table>
-              <thead><tr><th>쟁점</th><th>판단 기준</th></tr></thead>
-              <tbody>
-                <tr><td><b>카메라를 포기할 수 있는가</b></td><td>우리 학교 디벗 활용의 주된 형태가 촬영·QR 중심인가?</td></tr>
-                <tr><td><b>안드로이드 앱 의존 수업이 있는가</b></td><td>교과별 사용 앱 조사가 선행되어야 함</td></tr>
-                <tr><td><b>계정 업무를 누가 맡는가</b></td><td>1회성이 아니라 매 학년 반복되는 업무</td></tr>
-                <tr><td><b>언제 작업할 것인가</b></td><td>방학 중 권장. 학기 중은 교육과정 결손</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </section>
 
       <!-- 2 -->
@@ -1266,6 +1353,16 @@ img{max-width:100%;}
   }
   window.addEventListener("scroll", spy, {passive:true});
   spy();
+
+  // 5분 안내만 인쇄
+  var pb = document.getElementById("printBrief");
+  if(pb){
+    pb.addEventListener("click", function(){
+      document.body.classList.add("print-brief");
+      window.print();
+    });
+    window.addEventListener("afterprint", function(){ document.body.classList.remove("print-brief"); });
+  }
 })();
 </script>
 
