@@ -322,25 +322,60 @@ td.mono{font-family:inherit;font-size:14px;color:var(--ink-48);font-variant-nume
 .reset:hover,.btn-ghost:hover{background:var(--blue);color:var(--on-blue);}
 .reset:active,.btn-ghost:active{transform:scale(.95);}
 
-/* ---------- 교직원 회의 5분 안내 ---------- */
-.brief{
-  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);
-  padding:28px 28px 24px;display:flex;flex-direction:column;gap:18px;
+/* ---------- 1장: 교직원 안내 발표 카드 ---------- */
+.pres-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.pres-tools .btn-ghost[aria-pressed="true"]{background:var(--blue);color:var(--on-blue);}
+.cards{display:flex;flex-direction:column;gap:12px;}
+details.card{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);scroll-margin-top:24px;}
+details.card > summary{
+  list-style:none;cursor:pointer;display:grid;grid-template-columns:40px minmax(0,1fr) 28px;
+  gap:6px 16px;align-items:start;padding:22px 24px;border-radius:var(--r-lg);
 }
-.brief-h{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start;justify-content:space-between;}
-.brief-h > div{flex:1 1 360px;min-width:0;}
-.brief-h .k{display:block;font-size:14px;font-weight:600;letter-spacing:-.224px;line-height:1.29;color:var(--ink-60);margin-bottom:6px;}
-.brief-h h3{font-size:21px;}
-.brief-h p{margin-top:6px;font-size:14px;letter-spacing:-.224px;line-height:1.5;color:var(--ink-60);}
-.brief h4{font-size:17px;margin-top:4px;}
-.brief > p{max-width:none;}
-.brief ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;}
-.brief .cmp td:first-child{white-space:nowrap;}
-.brief .check{
-  font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-80);
-  background:var(--parchment);border-radius:var(--r-sm);padding:12px 16px;
+details.card > summary::-webkit-details-marker{display:none;}
+details.card > summary:focus-visible{outline:2px solid var(--blue-focus);outline-offset:2px;}
+details.card[open] > summary{border-bottom:1px solid var(--divider-soft);border-radius:var(--r-lg) var(--r-lg) 0 0;}
+.card .cn{grid-column:1;grid-row:1;font-size:14px;font-weight:600;letter-spacing:-.224px;line-height:1.5;color:var(--ink-48);font-variant-numeric:tabular-nums;padding-top:6px;}
+.card .ct{grid-column:2;grid-row:1;font-size:clamp(22px,2.6vw,28px);font-weight:600;line-height:1.2;letter-spacing:-.374px;color:var(--ink);text-wrap:balance;}
+.card .chev{
+  grid-column:3;grid-row:1;justify-self:center;width:12px;height:12px;margin-top:10px;
+  border-right:2px solid var(--ink-48);border-bottom:2px solid var(--ink-48);transform:rotate(45deg);transition:transform .2s ease;
 }
-.brief .check b{color:var(--ink);}
+details.card[open] > summary .chev{transform:rotate(-135deg);margin-top:16px;}
+.card .ch{grid-column:2;grid-row:2;font-size:17px;line-height:1.5;color:var(--ink-60);}
+.card-b{padding:20px 24px 24px 80px;display:flex;flex-direction:column;gap:16px;}
+.card-b ul,.card-b ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;}
+.card-b li{font-size:17px;line-height:1.55;color:var(--ink);}
+.card-b li b{color:var(--ink);}
+.card-b > p{font-size:17px;color:var(--ink);}
+.card-b .cmp td:first-child{white-space:nowrap;}
+.pnote{
+  display:none;font-size:14px;letter-spacing:-.224px;line-height:1.5;color:var(--ink-80);
+  background:var(--parchment);border-radius:var(--r-sm);padding:10px 14px;
+}
+.pnote::before{content:"발표자 메모 · ";color:var(--ink-48);font-weight:600;}
+body.notes .pnote{display:block;}
+
+/* 발표 모드: 1장만 남기고 글자 키움 */
+body.present .masthead,body.present .mobnav,body.present .rail,body.present #top,
+body.present #s2,body.present #s3,body.present #s4,body.present #s5,body.present #s6,body.present footer{display:none;}
+body.present .wrap{max-width:1180px;}
+body.present .shell{grid-template-columns:minmax(0,1fr);gap:0;}
+body.present .main{padding-block:32px 80px;}
+body.present #s1 .sec-num{display:none;}
+body.present #s1 .sec-head h2{font-size:clamp(32px,4.4vw,52px);}
+body.present #s1 .sec-head .sub,body.present #s1 .lede{font-size:21px;line-height:1.5;max-width:none;}
+body.present .card .ct{font-size:clamp(26px,3.2vw,36px);}
+body.present .card .ch{font-size:21px;}
+body.present .card .cn{font-size:17px;padding-top:10px;}
+body.present details.card > summary{grid-template-columns:48px minmax(0,1fr) 28px;padding:26px 28px;}
+body.present .card-b{padding:24px 28px 28px 92px;gap:18px;}
+body.present .card-b li,body.present .card-b > p{font-size:21px;line-height:1.55;}
+body.present .card-b table{font-size:17px;}
+body.present .card-b th,body.present .card-b td{padding:14px 18px;}
+body.present .card-b thead th{font-size:14px;}
+body.present .spec .v{font-size:36px;}
+body.present .spec .k{font-size:17px;}
+body.present .pnote{font-size:17px;}
 
 /* ---------- risks: 일반 = 흰 카드, 개인정보 = 짙은 타일 ---------- */
 .riskgroup{display:flex;flex-direction:column;gap:16px;}
@@ -426,25 +461,40 @@ footer li{font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-
   .limit{grid-template-columns:26px minmax(0,1fr);gap:12px;}
 }
 @media (max-width:640px){
-  .brief{padding:20px 18px 18px;}
+  details.card > summary{grid-template-columns:30px minmax(0,1fr) 20px;gap:6px 12px;padding:18px 18px;}
+  .card .chev{width:10px;height:10px;}
+  .card-b{padding:16px 18px 20px 18px;}
+  body.present .card-b{padding:18px 18px 20px 18px;}
 }
 @media print{
   @page{margin:14mm;}
-  /* '이 안내만 인쇄': 브리프의 조상 사슬만 남기고 형제는 모두 숨김 */
+  /* '이 안내만 인쇄': 1장의 조상 사슬만 남기고 형제는 모두 숨김. 카드는 인쇄 전에 JS가 전부 펼침 */
   body.print-brief > :not(.wrap){display:none;}
   body.print-brief > .wrap > :not(.shell){display:none;}
   body.print-brief .shell{display:block;}
   body.print-brief .shell > :not(.main){display:none;}
   body.print-brief .main{display:block;padding:0;}
   body.print-brief .main > :not(#s1){display:none;}
-  body.print-brief #s1 > :not(.brief){display:none;}
-  body.print-brief .brief{border:0;padding:0;font-size:14px;gap:14px;}
-  body.print-brief .brief .btn-ghost{display:none;}
-  body.print-brief .brief table{font-size:12px;}
-  body.print-brief .brief h4{font-size:15px;}
-  body.print-brief .brief .note,body.print-brief .brief .check,body.print-brief .brief .warn{font-size:13px;padding:10px 14px;}
-  .brief .warn{background:none;color:var(--ink);border:1px solid var(--ink);}
-  .brief .warn b{color:var(--ink);}
+  body.print-brief #s1 .sec-num,body.print-brief .pres-tools{display:none;}
+  body.print-brief #s1 .sec-head{margin-bottom:16px;}
+  body.print-brief #s1 .sec-head h2{font-size:26px;}
+  body.print-brief #s1 .sec-head .sub,body.print-brief #s1 .lede{font-size:13px;}
+  body.print-brief .cards{gap:8px;}
+  body.print-brief details.card{break-inside:avoid;}
+  body.print-brief details.card > summary{padding:10px 14px;grid-template-columns:28px minmax(0,1fr) 0;}
+  body.print-brief .card .ct{font-size:16px;}
+  body.print-brief .card .ch{font-size:12px;}
+  body.print-brief .card .cn{font-size:12px;padding-top:3px;}
+  body.print-brief .card .chev{display:none;}
+  body.print-brief .card-b{padding:8px 14px 12px 42px;gap:8px;}
+  body.print-brief .card-b li,body.print-brief .card-b > p{font-size:12.5px;line-height:1.5;}
+  body.print-brief .card-b table{font-size:11px;}
+  body.print-brief .card-b th,body.print-brief .card-b td{padding:6px 10px;}
+  body.print-brief .specs{gap:6px;}
+  body.print-brief .spec{padding:10px 12px;}
+  body.print-brief .spec .v{font-size:18px;}
+  body.print-brief .spec .k{font-size:11px;}
+  body.print-brief .pnote{font-size:11px;padding:6px 10px;}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 html{scroll-behavior:smooth;}
@@ -551,96 +601,219 @@ img{max-width:100%;}
         </div>
       </section>
 
-      <!-- 1 -->
+      <!-- 1 · 교직원 안내: 화면에 띄워 놓고 카드를 하나씩 열며 설명하는 장 -->
       <section id="s1" class="stack">
         <div class="sec-head">
-          <span class="sec-num">01 — 교직원 협의 자료</span>
-          <h2>학내 구성원에게 어떻게 설명할 것인가</h2>
-          <span class="sub">교직원회의·부장회의에서 5분 분량. 장점과 제약을 반드시 함께 제시하십시오.</span>
-        </div>
-
-        <!-- 교직원 회의 5분 안내 — 이 블록만 인쇄 가능 -->
-        <div class="brief" id="brief">
-          <div class="brief-h">
-            <div>
-              <span class="k">5분용 정리본</span>
-              <h3>디벗 크롬 OS 플렉스 전환 — 교직원 회의 안내</h3>
-              <p>교직원회의·부장회의에서 이대로 읽으면 5분입니다. 표 1·2와 절차는 설명회 내용이고, '확인 중' 항목은 5장 자체 분석입니다.</p>
-            </div>
+          <span class="sec-num">01 — 교직원 안내</span>
+          <h2>해누리중 2학년 디벗 Surface Go 3<br>윈도우 → 크롬 OS Flex로의 전환</h2>
+          <span class="sub">교직원회의 · 2026년 ○월 ○일 · 자료 기준: 서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 설명회」</span>
+          <div class="pres-tools">
+            <button class="btn-ghost" id="presBtn" type="button" aria-pressed="false">발표 모드</button>
+            <button class="btn-ghost" id="allBtn" type="button">모두 열기</button>
+            <button class="btn-ghost" id="notesBtn" type="button" aria-pressed="false">발표자 메모</button>
             <button class="btn-ghost" id="printBrief" type="button">이 안내만 인쇄</button>
           </div>
-
-          <div class="note">
-            <b>한 줄 요약</b> — 디벗(서피스고 3)의 윈도우를 지우고 크롬 OS 플렉스로 바꾸면, 기기 교체 없이 속도 문제를 해결하고 기기 관리를 클라우드에서 일괄 처리할 수 있습니다. 대신 카메라 일부 기능과 안드로이드 앱을 포기해야 합니다.
-          </div>
-
-          <p>서피스고 3 디벗의 <b>기기는 그대로 두고 운영체제만</b> 윈도우 → 크롬 OS 플렉스로 바꾸는 교육청 사업입니다. 강제가 아니라 학교가 협의해 선택하고, 설치는 구글 파트너사가 방문해 기기당 약 3분, 방학 중 권장입니다.</p>
-
-          <h4>표 1. 전환하면 무엇이 달라지나</h4>
-          <div class="tbl">
-            <table class="cmp">
-              <thead><tr><th>항목</th><th>지금 (윈도우)</th><th>전환 후 (크롬 OS 플렉스)</th></tr></thead>
-              <tbody>
-                <tr><td><b>기기</b></td><td>서피스고 3</td><td>그대로. OS만 교체</td></tr>
-                <tr><td><b>속도</b></td><td>무겁고 느려 민원 반복</td><td>부팅 10초 미만, 초기화 2분 미만. 2~3년 뒤에도 유지</td></tr>
-                <tr><td><b>배터리</b></td><td>현재 수준</td><td>현재보다 약 20% 절감</td></tr>
-                <tr><td><b>보안</b></td><td>백신 필요</td><td>백신 불필요(OS 내장), 4주 1회 자동 업데이트</td></tr>
-                <tr><td><b>파일</b></td><td>기기에 저장</td><td>클라우드 저장. <b>전환 때 기기 안 파일 전부 삭제</b></td></tr>
-                <tr><td><b>카메라</b></td><td>정상</td><td>전·후면 중 한쪽 초점 불량 가능. <b>QR 인식 문제</b>(시범학교 실제 발생)</td></tr>
-                <tr><td><b>앱</b></td><td>윈도우 프로그램</td><td>웹·크롬 확장만. 설치형 프로그램·안드로이드 앱 불가</td></tr>
-                <tr><td><b>MS 도구</b></td><td>설치판</td><td>크롬에서 M365 웹판. Teams·Excel·PPT 거의 동일, 원드라이브 파일 그대로 열림</td></tr>
-                <tr><td><b>로그인</b></td><td>기존 계정</td><td>센스쿨 계정 필수. 개인 지메일 차단</td></tr>
-                <tr><td><b>수업·기기 관리</b></td><td>—</td><td>클래스툴즈(집중·탐색·잠금)·화면 미러링·시험 잠금 / 앱 일괄 배포·사이트 차단·원격 잠금</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h4>표 2. 협의해서 결정할 것</h4>
-          <div class="tbl">
-            <table>
-              <thead><tr><th>쟁점</th><th>판단 기준</th></tr></thead>
-              <tbody>
-                <tr><td><b>카메라를 포기할 수 있는가</b></td><td>우리 학교 디벗 활용의 주된 형태가 촬영·QR 중심인가?</td></tr>
-                <tr><td><b>안드로이드 앱 의존 수업이 있는가</b></td><td>교과별 사용 앱 조사가 선행되어야 함</td></tr>
-                <tr><td><b>계정 업무를 누가 맡는가</b></td><td>1회성이 아니라 매 학년 반복되는 업무</td></tr>
-                <tr><td><b>언제 작업할 것인가</b></td><td>방학 중 권장. 학기 중은 교육과정 결손</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="check"><b>교육청에 확인 중</b>(설명회에서 답이 없었음) — 서피스고 3 플렉스 지원 종료(EOL) 시점 · 윈도우 원복 가능 여부와 비용 · CEU 라이선스 부담 주체</p>
-
-          <h4>선생님께 부탁드리는 것 — ○월 ○일까지, 5분 설문</h4>
-          <ol>
-            <li>우리 교과 수업에서 카메라·QR 코드를 얼마나 쓰는지</li>
-            <li>수업에 쓰는 앱·프로그램 목록(안드로이드 전용·설치형 포함)</li>
-          </ol>
-
-          <h4>절차</h4>
-          <p>교대통 신청(희망일 3지망, 오전/오후) → 센스쿨 학생 계정 일괄 등록(학교 몫) → 방학 중 방문 설치(당일 담당자 상주) → 1개 학급 시범 → 개학 첫 주 로그인 안내 차시</p>
-
-          <div class="warn">
-            <b>주의</b> — 학생·학부모 안내 때 장점만 알리지 말고 카메라 제약·파일 삭제를 함께 안내하고, 백업 안내는 작업 2주 전부터 시작하십시오.
-          </div>
         </div>
 
-        <div class="stack">
-          <h3>왜 이 이야기가 나왔나</h3>
-          <p>초기 보급된 서피스고 기반 디벗이 무겁고 느려 수업 중 민원이 반복된다는 현장 의견이 누적되었고, 교육청이 구글 및 외부 전문가와 협의해 <b>기기 교체가 아닌 OS 전환</b>이라는 해법을 마련해 희망 학교에 제안한 것입니다. 강제가 아니라 <b>학교가 교육공동체 협의를 거쳐 선택</b>하는 사업입니다.</p>
-          <div class="specs">
-            <div class="spec"><span class="v">10초</span><span class="k">미만 부팅</span></div>
-            <div class="spec"><span class="v">2분</span><span class="k">미만 초기화(파워워시)</span></div>
-            <div class="spec"><span class="v">4주</span><span class="k">1회 자동 업데이트</span></div>
-            <div class="spec"><span class="v">20%</span><span class="k">에너지 사용량 절감</span></div>
-            <div class="spec"><span class="v">3분</span><span class="k">기기 1대 전환 소요</span></div>
-            <div class="spec"><span class="v">67%</span><span class="k">서울 초3~6 크롬북 선택률</span></div>
-          </div>
-        </div>
+        <p class="lede">디벗(서피스고 3)의 윈도우를 지우고 크롬 OS 플렉스로 바꾸면, 기기 교체 없이 속도 문제를 해결하고 기기 관리를 클라우드에서 일괄 처리할 수 있습니다. 대신 카메라 일부 기능과 안드로이드 앱을 포기해야 합니다.</p>
 
-        <div class="stack">
-          <h3>MS 도구를 쓰던 선생님께</h3>
-          <p>당장 구글 생태계로 전부 옮기라는 것이 아닙니다. 크롬 브라우저로 <b>Microsoft 365에 접속하면 Teams·Excel·PowerPoint를 웹 기반으로 기존과 거의 동일하게</b> 사용할 수 있고, 원드라이브의 엑셀·파워포인트 파일도 깨짐 없이 열립니다. OS가 가벼워져 오히려 기존 윈도우 환경보다 잘 돌아간다는 것이 발표자 설명입니다.</p>
-        </div>
+        <div class="cards">
 
+          <details class="card">
+            <summary>
+              <span class="cn">01</span>
+              <span class="ct">전환 사업 개요</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">기기 교체 없이 운영체제만 교체 · 서울시교육청·구글코리아 지원 사업 · 학교 선택</span>
+            </summary>
+            <div class="card-b">
+              <ul>
+                <li><b>대상 기기</b> — 2학년 디벗 Surface Go 3. 기기는 그대로, 운영체제(OS)만 Windows → 크롬 OS Flex</li>
+                <li><b>배경</b> — 서피스고 기반 디벗이 무겁고 느려 수업 중 민원이 반복. 교육청이 구글·외부 전문가와 협의해 기기 교체가 아닌 OS 전환을 해법으로 제안</li>
+                <li><b>성격</b> — 강제가 아니라 학교가 교육공동체 협의를 거쳐 선택하는 사업</li>
+                <li><b>설치</b> — 구글 파트너사가 학교를 방문해 USB로 설치. 기기당 약 3분, 다수 기기 동시 작업. 교사가 직접 설치할 일은 없음</li>
+                <li><b>시기</b> — 방학 중 권장(학기 중은 교육과정 결손). 작업 당일 담당 교사 상주</li>
+              </ul>
+              <p class="pnote">5분 배분 — 01~04에 3분, 05~09에 2분. 03 다음에 04를 바로 이어서 열 것.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">02</span>
+              <span class="ct">현재 운영체제 Windows와 전환 후 크롬 OS 플렉스 비교</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">기기 · 속도 · 배터리 · 보안 · 파일 · 카메라 · 앱 · MS 도구 · 계정 · 관리</span>
+            </summary>
+            <div class="card-b">
+              <div class="tbl">
+                <table class="cmp">
+                  <thead><tr><th>항목</th><th>현재 · Windows</th><th>전환 후 · 크롬 OS 플렉스</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>기기</b></td><td>Surface Go 3</td><td>그대로. OS만 교체</td></tr>
+                    <tr><td><b>속도</b></td><td>무겁고 느려 민원 반복</td><td>부팅 10초 미만, 초기화 2분 미만. 2~3년 뒤에도 유지</td></tr>
+                    <tr><td><b>배터리</b></td><td>현재 수준</td><td>현재보다 약 20% 절감</td></tr>
+                    <tr><td><b>보안</b></td><td>백신 필요</td><td>백신 불필요(OS 내장), 4주 1회 자동 업데이트</td></tr>
+                    <tr><td><b>파일</b></td><td>기기에 저장</td><td>클라우드 저장. <b>전환 때 기기 안 파일 전부 삭제</b></td></tr>
+                    <tr><td><b>카메라</b></td><td>정상</td><td>전·후면 중 한쪽 초점 불량 가능. <b>QR 인식 문제</b>(시범학교 실제 발생)</td></tr>
+                    <tr><td><b>앱</b></td><td>윈도우 프로그램</td><td>웹·크롬 확장만. 설치형 프로그램·안드로이드 앱 불가</td></tr>
+                    <tr><td><b>MS 도구</b></td><td>설치판</td><td>크롬에서 M365 웹판. Teams·Excel·PPT 거의 동일, 원드라이브 파일 그대로 열림</td></tr>
+                    <tr><td><b>로그인</b></td><td>기존 계정</td><td>센스쿨 계정 필수. 개인 지메일 차단</td></tr>
+                    <tr><td><b>수업·기기 관리</b></td><td>—</td><td>클래스툴즈(집중·탐색·잠금)·화면 미러링·시험 잠금 / 앱 일괄 배포·사이트 차단·원격 잠금</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="pnote">표는 훑기만. 근거와 숫자는 03·04에서.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">03</span>
+              <span class="ct">기대 효과</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">부팅 10초 미만 · 배터리 약 20% 절감 · 백신 불필요 · 수업 통제 도구</span>
+            </summary>
+            <div class="card-b">
+              <div class="specs">
+                <div class="spec"><span class="v">10초</span><span class="k">미만 부팅</span></div>
+                <div class="spec"><span class="v">2분</span><span class="k">미만 초기화(파워워시)</span></div>
+                <div class="spec"><span class="v">4주</span><span class="k">1회 자동 업데이트</span></div>
+                <div class="spec"><span class="v">20%</span><span class="k">에너지 사용량 절감</span></div>
+                <div class="spec"><span class="v">3분</span><span class="k">기기 1대 전환 소요</span></div>
+                <div class="spec"><span class="v">67%</span><span class="k">서울 초3~6 크롬북 선택률</span></div>
+              </div>
+              <ul>
+                <li><b>부팅 10초 미만, 초기화 2분 미만</b> — 시범학교: "기기 사양은 그대로인데 새 기기를 쓰는 느낌"</li>
+                <li><b>속도 유지</b> — 클라우드 기반이라 2~3년 뒤에도 부팅 속도가 비슷</li>
+                <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이 사용</li>
+                <li><b>백신 불필요</b> — 2011년 이후 약 15년간 전 세계 랜섬웨어 피해 0건</li>
+                <li><b>수업 통제 도구</b> — 클래스툴즈 3단계 모드(집중·탐색·잠금), 화면 미러링, 실시간 자막·번역, 시험 잠금</li>
+                <li><b>기기 통합 관리</b> — 앱 일괄 배포, 사이트 차단, 원격 잠금을 하나의 콘솔에서</li>
+              </ul>
+              <p class="pnote">기기 자체의 수명(배터리·힌지·액정)은 늘지 않음 — "새 기기" 기대가 과열되지 않게(5장 R-10).</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">04</span>
+              <span class="ct">제약 사항</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">카메라 초점 · 안드로이드 앱 · 기기 저장 파일 삭제 · 새 계정 · 되돌리기</span>
+            </summary>
+            <div class="card-b">
+              <ul>
+                <li><b>카메라 초점</b> — 전·후면 중 한쪽 초점 불량 가능. 시범학교에서 QR 인식 문제가 실제로 발생</li>
+                <li><b>구글 플레이스토어 없음</b> — 안드로이드 앱 설치 불가. 웹 브라우저와 크롬 확장 프로그램으로 대체</li>
+                <li><b>기기 저장 파일 전부 삭제</b> — 기존 OS를 지우는 방식. 전환 전 백업 필수</li>
+                <li><b>센스쿨(SEN스쿨) 계정 필수</b> — 기기 관리·보안의 전제 조건. 개인 지메일 로그인 차단</li>
+                <li><b>되돌리기</b> — 윈도우 원복 절차·비용은 설명회에서 다뤄지지 않음(확인 중)</li>
+                <li><b>계정 관리 업무</b> — 생성은 1회지만, 관리는 매 학년 반복</li>
+              </ul>
+              <p class="pnote">학생 안내에서도 카메라·파일 삭제는 좋은 점과 반드시 함께(2장 게시 문구).</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">05</span>
+              <span class="ct">Microsoft 365 사용</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">크롬 브라우저에서 Teams · Excel · PowerPoint 웹 버전 — 기존과 거의 동일</span>
+            </summary>
+            <div class="card-b">
+              <ul>
+                <li>당장 구글 생태계로 전부 옮기는 것이 아님</li>
+                <li>크롬 브라우저로 <b>Microsoft 365에 접속하면 Teams·Excel·PowerPoint를 웹 기반으로 기존과 거의 동일하게</b> 사용</li>
+                <li>원드라이브의 엑셀·파워포인트 파일도 깨짐 없이 열림</li>
+                <li>OS가 가벼워져 오히려 기존 윈도우 환경보다 잘 돌아간다는 것이 발표자(구글코리아) 설명</li>
+                <li>단, 설치형 프로그램은 사용 불가 → 웹 버전 대체 여부 확인 필요</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">06</span>
+              <span class="ct">협의·결정 사항</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">카메라 포기 가능 여부 · 안드로이드 앱 의존 수업 · 계정 업무 담당 · 작업 시기</span>
+            </summary>
+            <div class="card-b">
+              <div class="tbl">
+                <table>
+                  <thead><tr><th>쟁점</th><th>판단 기준</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>카메라를 포기할 수 있는가</b></td><td>우리 학교 디벗 활용의 주된 형태가 촬영·QR 중심인가?</td></tr>
+                    <tr><td><b>안드로이드 앱 의존 수업이 있는가</b></td><td>교과별 사용 앱 조사가 선행되어야 함</td></tr>
+                    <tr><td><b>계정 업무를 누가 맡는가</b></td><td>1회성이 아니라 매 학년 반복되는 업무</td></tr>
+                    <tr><td><b>언제 작업할 것인가</b></td><td>방학 중 권장. 학기 중은 교육과정 결손</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="pnote">결정은 오늘이 아님 — 08 설문 결과가 나온 뒤.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">07</span>
+              <span class="ct">교육청 확인 중인 사항</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">지원 종료 시점 · 원복 가능 여부와 비용 · CEU 라이선스 부담 · 무선망 · 사용 규정</span>
+            </summary>
+            <div class="card-b">
+              <ul>
+                <li>Surface Go 3의 크롬 OS Flex 업데이트(보안 포함) <b>지원 종료(EOL) 시점</b></li>
+                <li>전환 후 Windows <b>원복</b> 가능 여부, 절차, 비용 부담 주체</li>
+                <li><b>CEU</b>(기기 관리 라이선스) 비용 부담 주체와 유효 기간</li>
+                <li>30명 동시 클라우드 로그인 시 교실 <b>무선망</b> 부하, 무선망 개선 요청 병행 가능 여부</li>
+                <li>화면 미러링·시험 잠금 기록에 관한 교육청 <b>사용 규정</b> 유무</li>
+              </ul>
+              <p>설명회에서 답이 나오지 않아 교육청·구글코리아에 확인 요청 중입니다. 답을 받기 전에는 전면 도입을 결정하지 않습니다.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">08</span>
+              <span class="ct">교과별 협조 요청 사항</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">5분 설문 2건 · 카메라·QR 활용도 · 사용 앱·프로그램 목록 · ○월 ○일까지</span>
+            </summary>
+            <div class="card-b">
+              <ol>
+                <li><b>카메라·QR 활용도</b> — 우리 교과 수업에서 촬영과 QR 코드 접속(패들렛·띵커벨·멘티미터·출석·학습지 링크)을 얼마나 쓰는지</li>
+                <li><b>사용 앱·프로그램 목록</b> — 안드로이드 전용 앱, 설치형 프로그램 포함(센서 측정·AR·코딩·로보틱스 등)</li>
+                <li><b>(전환 확정 시) 학급별 학생 파일 백업 안내·확인</b> — 작업 2주 전부터</li>
+              </ol>
+              <p>판단 근거는 설명회 답변이 아니라 우리 학교 수업 실태입니다. 두 설문 결과가 06 협의의 근거가 됩니다.</p>
+              <p class="pnote">마감일을 지금 정해서 말하기. 설문 결과 = 06 근거.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">09</span>
+              <span class="ct">추진 절차 및 일정</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">신청 → 계정 준비 → 방학 중 설치 → 시범 학급 → 개학 첫 주 안내</span>
+            </summary>
+            <div class="card-b">
+              <ol>
+                <li><b>교대통 신청</b> — 희망 작업일 3지망(오전/오후 단위), 보유 대수, 연수 희망 여부</li>
+                <li><b>센스쿨 학생 계정 일괄 등록</b> — 학교 몫. 나이스 명부 기반, 학년·학교 전체 단위 권장</li>
+                <li><b>방학 중 방문 설치</b> — 기기 전량 수합·충전, 당일 담당자 상주</li>
+                <li><b>1개 학급 시범</b> — 로그인 → 클래스룸 → 속도·카메라·동시 로그인 확인</li>
+                <li><b>개학 첫 주</b> — 학생 로그인 안내 차시, 담임 사전 연수</li>
+              </ol>
+              <p>설명회 당시 신청 마감은 지났습니다. 다음 신청·작업 일정은 교육청에 확인 중입니다.</p>
+              <p class="pnote">정식 안건으로 회의록에 남기고 교감·교장 보고(5장 R-12).</p>
+            </div>
+          </details>
+
+        </div>
       </section>
 
       <!-- 2 -->
@@ -1354,15 +1527,70 @@ img{max-width:100%;}
   window.addEventListener("scroll", spy, {passive:true});
   spy();
 
-  // 5분 안내만 인쇄
-  var pb = document.getElementById("printBrief");
-  if(pb){
-    pb.addEventListener("click", function(){
-      document.body.classList.add("print-brief");
-      window.print();
-    });
-    window.addEventListener("afterprint", function(){ document.body.classList.remove("print-brief"); });
+  // 1장 교직원 안내: 발표 모드 · 모두 열기 · 발표자 메모 · 인쇄 · 키보드(→/PageDown 다음 카드, ←/PageUp 닫기, Esc 종료)
+  var s1 = document.getElementById("s1");
+  var cards = s1 ? Array.prototype.slice.call(s1.querySelectorAll("details.card")) : [];
+  var presBtn = document.getElementById("presBtn");
+  var allBtn = document.getElementById("allBtn");
+  var notesBtn = document.getElementById("notesBtn");
+  var printBtn = document.getElementById("printBrief");
+
+  function setPresent(on){
+    document.body.classList.toggle("present", on);
+    if(presBtn){
+      presBtn.textContent = on ? "발표 모드 종료" : "발표 모드";
+      presBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    }
+    if(on && s1) s1.scrollIntoView({block:"start"});
+    if(!on) spy();
   }
+  function syncAllBtn(){
+    if(!allBtn) return;
+    var anyClosed = cards.some(function(d){ return !d.open; });
+    allBtn.textContent = anyClosed ? "모두 열기" : "모두 닫기";
+  }
+  if(presBtn) presBtn.addEventListener("click", function(){ setPresent(!document.body.classList.contains("present")); });
+  if(allBtn) allBtn.addEventListener("click", function(){
+    var anyClosed = cards.some(function(d){ return !d.open; });
+    cards.forEach(function(d){ d.open = anyClosed; });
+    syncAllBtn();
+  });
+  if(notesBtn) notesBtn.addEventListener("click", function(){
+    var on = document.body.classList.toggle("notes");
+    notesBtn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  cards.forEach(function(d){ d.addEventListener("toggle", syncAllBtn); });
+
+  document.addEventListener("keydown", function(e){
+    if(!document.body.classList.contains("present")) return;
+    if(e.target && /INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.tagName)) return;
+    if(e.key === "Escape"){ setPresent(false); return; }
+    if(e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown"){
+      var next = cards.filter(function(d){ return !d.open; })[0];
+      if(next){ e.preventDefault(); next.open = true; next.scrollIntoView({block:"start"}); }
+    }else if(e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp"){
+      var opened = cards.filter(function(d){ return d.open; });
+      var last = opened[opened.length - 1];
+      if(last){ e.preventDefault(); last.open = false; last.scrollIntoView({block:"start"}); }
+    }
+  });
+
+  // 인쇄: 카드를 전부 펼쳐서 찍고, 끝나면 원래대로
+  var closedBeforePrint = [];
+  window.addEventListener("beforeprint", function(){
+    closedBeforePrint = cards.filter(function(d){ return !d.open; });
+    closedBeforePrint.forEach(function(d){ d.open = true; });
+  });
+  window.addEventListener("afterprint", function(){
+    closedBeforePrint.forEach(function(d){ d.open = false; });
+    closedBeforePrint = [];
+    document.body.classList.remove("print-brief");
+    syncAllBtn();
+  });
+  if(printBtn) printBtn.addEventListener("click", function(){
+    document.body.classList.add("print-brief");
+    window.print();
+  });
 })();
 </script>
 
