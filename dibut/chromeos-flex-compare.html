@@ -38,6 +38,25 @@ svg text{font-family:inherit;}
 h1{margin:calc(var(--u)*.9) 0 0;font-size:calc(var(--u)*3.8);font-weight:600;line-height:1.12;letter-spacing:-.02em;}
 h1 small{display:block;font-size:calc(var(--u)*1.9);font-weight:400;color:var(--ink-60);margin-top:calc(var(--u)*.5);letter-spacing:-.01em;}
 h2{margin:0 0 calc(var(--u)*1.1);font-size:calc(var(--u)*2.3);font-weight:600;letter-spacing:-.02em;line-height:1.2;}
+.top{display:flex;gap:calc(var(--u)*2);align-items:flex-start;justify-content:space-between;}
+.top-l{min-width:0;flex:1;}
+.top-r{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u)*.8);padding-top:calc(var(--u)*.2);}
+.meet{font-size:calc(var(--u)*1.5);font-weight:600;letter-spacing:-.02em;color:var(--ink);background:var(--parchment);border-radius:999px;padding:calc(var(--u)*.55) calc(var(--u)*1.3);white-space:nowrap;}
+
+/* ---------- 발표 5분 타이머 ---------- */
+.timer{position:relative;display:flex;align-items:center;gap:calc(var(--u)*.7);background:var(--canvas);border:1px solid var(--hairline);border-radius:999px;padding:calc(var(--u)*.45) calc(var(--u)*.6) calc(var(--u)*.45) calc(var(--u)*1.3);overflow:hidden;}
+.tlabel{font-size:calc(var(--u)*1.25);font-weight:600;letter-spacing:-.02em;color:var(--ink-60);white-space:nowrap;}
+.tdigits{font-size:calc(var(--u)*2.6);font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;min-width:calc(var(--u)*6);text-align:center;}
+.tbtn{width:calc(var(--u)*3);height:calc(var(--u)*3);min-width:36px;min-height:36px;border-radius:50%;border:0;background:var(--parchment);color:var(--ink);font-size:calc(var(--u)*1.3);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s ease;font-family:var(--sf);}
+.tbtn:active{transform:scale(.95);}
+.tbtn:focus-visible{outline:2px solid var(--blue-focus);outline-offset:2px;}
+.timer.running #tstart{background:var(--blue);color:#fff;}
+.tbar{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--divider);}
+.tbar i{display:block;height:100%;width:0;background:var(--blue);transition:width .25s linear;}
+.timer.done{border-color:var(--ink);}
+.timer.done .tdigits{color:var(--blue);animation:tpulse 1s ease-in-out infinite;}
+.timer.done .tbar i{background:var(--ink);}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* ---------- 카드(개요·절차): 3열 × 2줄 ---------- */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*1.1);margin:0;padding:0;list-style:none;}
@@ -123,6 +142,9 @@ dialog.kind-fig .pop-body{--u:min(1.9vw,2.8vh);}
   body{padding:16px 16px 28px;}
   .slide{--u:3.1vw;padding:22px 18px;gap:22px;border-radius:18px;}
   h1{font-size:26px;} h1 small{font-size:15px;} h2{font-size:19px;}
+  .top{flex-direction:column;gap:14px;} .top-r{align-items:flex-start;flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .meet{font-size:13px;padding:6px 12px;}
+  .timer{gap:8px;padding:6px 8px 6px 14px;} .tlabel{font-size:12px;} .tdigits{font-size:24px;min-width:64px;} .tbtn{width:36px;height:36px;font-size:14px;}
   .grid3{grid-template-columns:1fr;gap:10px;}
   .card{padding:14px 16px;border-radius:14px;} .card b{font-size:17px;} .card span{font-size:15px;}
   .step{padding-left:40px;} .step i{left:16px;top:15px;font-size:15px;}
@@ -139,25 +161,39 @@ dialog.kind-fig .pop-body{--u:min(1.9vw,2.8vh);}
 }
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none;}
-  [data-pop],.pbtn{transition:none;}
+  [data-pop],.pbtn,.tbtn{transition:none;}
+  .timer.done .tdigits{animation:none;}
 }
 @media print{
   @page{size:A4 portrait;margin:12mm;}
   body{background:none;padding:0;}
   .slide{--u:7px;width:100%;border:0;border-radius:0;padding:0;gap:14px;}
   .reveal{opacity:1;transform:none;}
-  .hint,dialog{display:none;}
+  .hint,dialog,.timer{display:none;}
+  .top{display:block;} .meet{display:inline-block;margin-top:8px;font-size:11px;}
   .tblwrap{border-color:var(--ink);} th{border-bottom-color:var(--ink);}
 }
 </style>
 </head>
 <body>
 <main class="slide">
-  <header class="reveal">
-    <div class="eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>교직원 협의 안건 · 전환 여부는 교직원 협의로 결정</span></div>
-    <h1>2학년 디벗 Surface Go 3 · 윈도우 → 크롬 OS Flex 전환 검토
-      <small>기기는 그대로 두고 운영체제만 교체 · 자료 기준: 서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 설명회」</small>
-    </h1>
+  <header class="reveal top">
+    <div class="top-l">
+      <div class="eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>교직원 회의 안건 · 전환 여부는 교직원 투표(설문)로 결정</span></div>
+      <h1>2학년 디벗 Surface Go 3 · 윈도우 → 크롬 OS Flex 전환 검토
+        <small>기기는 그대로 두고 운영체제만 교체 · 자료 기준: 서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 설명회」</small>
+      </h1>
+    </div>
+    <aside class="top-r">
+      <div class="meet">9월 토론이 있는 교직원 회의</div>
+      <div class="timer" id="timer" role="group" aria-label="발표 시간 5분 타이머" title="T 키로도 시작·정지">
+        <span class="tlabel">발표 5분</span>
+        <span class="tdigits" id="tdigits">5:00</span>
+        <button class="tbtn" id="tstart" type="button" aria-label="시작 / 일시정지">▶</button>
+        <button class="tbtn" id="treset" type="button" aria-label="처음으로">↺</button>
+        <span class="tbar" aria-hidden="true"><i id="tfill"></i></span>
+      </div>
+    </aside>
   </header>
   <p class="hint reveal">카드나 표를 누르면 크게 보이고, ← → 로 넘길 수 있습니다.</p>
 
@@ -327,6 +363,40 @@ dialog.kind-fig .pop-body{--u:min(1.9vw,2.8vh);}
     else if(e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp"){ e.preventDefault(); show(cur - 1); }
     else if(e.key === "Escape"){ e.preventDefault(); pop.close(); }
   });
+
+  // 발표 5분 타이머: ▶ 시작·일시정지, ↺ 처음으로, T 키로도 시작·정지
+  var TOTAL = 5 * 60, left = TOTAL, running = false, tick = null, endAt = 0;
+  var timer = document.getElementById("timer");
+  var digits = document.getElementById("tdigits");
+  var fill = document.getElementById("tfill");
+  var startBtn = document.getElementById("tstart");
+  var resetBtn = document.getElementById("treset");
+  function fmt(sec){ var m = Math.floor(sec / 60), r = sec % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+  function render(){
+    digits.textContent = fmt(left);
+    fill.style.width = ((TOTAL - left) / TOTAL * 100) + "%";
+    timer.classList.toggle("done", left === 0);
+    timer.classList.toggle("running", running);
+    startBtn.textContent = running ? "❚❚" : "▶";
+  }
+  function stopTimer(){ running = false; clearInterval(tick); tick = null; render(); }
+  function startTimer(){
+    if(left === 0 || running) return;
+    running = true; endAt = Date.now() + left * 1000;
+    tick = setInterval(function(){
+      left = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+      render();
+      if(left === 0) stopTimer();
+    }, 250);
+    render();
+  }
+  startBtn.addEventListener("click", function(){ running ? stopTimer() : startTimer(); });
+  resetBtn.addEventListener("click", function(){ stopTimer(); left = TOTAL; render(); });
+  document.addEventListener("keydown", function(e){
+    if(pop.open || (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName))) return;
+    if(e.key === "t" || e.key === "T"){ e.preventDefault(); running ? stopTimer() : startTimer(); }
+  });
+  render();
 
   // 스크롤 등장: 같은 묶음 안에서는 순서대로 조금씩 늦게
   var rev = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
