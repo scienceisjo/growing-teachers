@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>디벗 크롬 OS 전환 — 장점·단점 한 장 · 해누리중 과학정보부</title>
+<title>디벗 크롬 OS 전환 — 장점·단점 비교표 · 해누리중 과학정보부</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
@@ -28,30 +28,24 @@ body{
   width:min(100vw - 32px, calc((100vh - 32px) * 16 / 9));
   aspect-ratio:16 / 9;
   background:var(--canvas);border-radius:18px;border:1px solid var(--hairline);
-  padding:4.2cqw 4.6cqw 3.4cqw;display:flex;flex-direction:column;
+  padding:3.4cqw 4.6cqw 3cqw;display:flex;flex-direction:column;
 }
 .eyebrow{font-size:1.25cqw;font-weight:600;letter-spacing:-.02em;color:var(--ink-60);display:flex;gap:1cqw;align-items:center;}
 .eyebrow .stage{background:var(--ink);color:#fff;padding:.45cqw 1cqw;border-radius:.7cqw;}
-h1{margin:.9cqw 0 0;font-size:3.2cqw;font-weight:600;line-height:1.12;letter-spacing:-.02em;}
+h1{margin:.8cqw 0 0;font-size:3cqw;font-weight:600;line-height:1.12;letter-spacing:-.02em;}
 h1 small{display:block;font-size:1.55cqw;font-weight:400;color:var(--ink-60);margin-top:.5cqw;letter-spacing:-.01em;}
 
-.cmp{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;margin-top:2.2cqw;flex:1;min-height:0;}
-.col{border-radius:1.4cqw;padding:1.8cqw 2cqw 1.6cqw;display:flex;flex-direction:column;min-height:0;}
-.col.gain{background:var(--canvas);border:1px solid var(--hairline);}
-.col.cost{background:var(--tile);color:var(--on-tile);}
-.col h2{margin:0 0 1.1cqw;font-size:2cqw;font-weight:600;letter-spacing:-.02em;line-height:1.2;}
-.col h2 span{font-size:1.25cqw;font-weight:400;color:var(--ink-60);margin-left:.7cqw;}
-.col.cost h2 span{color:var(--on-tile-muted);}
-.col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.95cqw;}
-.col li{font-size:1.5cqw;line-height:1.45;letter-spacing:-.01em;padding-left:1.4cqw;position:relative;color:var(--ink);}
-.col li::before{content:"";position:absolute;left:0;top:.62em;width:.42cqw;height:.42cqw;border-radius:50%;background:var(--ink-48);}
-.col li b{font-weight:600;}
-.col.cost li{color:var(--on-tile-muted);}
-.col.cost li b{color:var(--on-tile);}
-.col.cost li::before{background:var(--on-tile-muted);}
+.cmp{margin-top:1.6cqw;flex:1;min-height:0;}
+table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--hairline);border-radius:1.4cqw;overflow:hidden;}
+th{font-size:1.6cqw;font-weight:600;letter-spacing:-.02em;text-align:left;padding:.8cqw 1.8cqw;background:var(--parchment);color:var(--ink);border-bottom:1px solid var(--hairline);}
+th+th,td+td{border-left:1px solid var(--divider);}
+td{vertical-align:top;padding:.7cqw 1.8cqw;border-bottom:1px solid var(--divider);}
+tr:last-child td{border-bottom:0;}
+td b{display:block;font-size:1.45cqw;font-weight:600;letter-spacing:-.02em;line-height:1.3;color:var(--ink);}
+td span{display:block;font-size:1.15cqw;line-height:1.4;letter-spacing:-.01em;color:var(--ink-60);margin-top:.2cqw;}
 
 .foot{
-  margin-top:1.8cqw;padding-top:1.1cqw;border-top:1px solid var(--hairline);
+  margin-top:1.2cqw;padding-top:.9cqw;border-top:1px solid var(--hairline);
   display:flex;flex-wrap:wrap;gap:.5cqw 2cqw;align-items:baseline;justify-content:space-between;
   font-size:1.2cqw;letter-spacing:-.01em;color:var(--ink-60);
 }
@@ -63,18 +57,17 @@ h1 small{display:block;font-size:1.55cqw;font-weight:400;color:var(--ink-60);mar
   .slide{width:100%;aspect-ratio:auto;padding:22px 18px;border-radius:18px;}
   .eyebrow{font-size:13px;gap:8px;} .eyebrow .stage{padding:4px 9px;border-radius:8px;}
   h1{font-size:24px;margin-top:10px;} h1 small{font-size:15px;margin-top:6px;}
-  .cmp{grid-template-columns:1fr;gap:12px;margin-top:18px;}
-  .col{padding:16px;border-radius:18px;} .col h2{font-size:19px;margin-bottom:10px;} .col h2 span{font-size:13px;margin-left:6px;}
-  .col ul{gap:8px;} .col li{font-size:15px;padding-left:14px;} .col li::before{width:5px;height:5px;}
+  .cmp{margin-top:18px;overflow-x:auto;}
+  table{min-width:560px;border-radius:14px;}
+  th{font-size:15px;padding:10px 14px;} td{padding:10px 14px;}
+  td b{font-size:15px;} td span{font-size:13px;margin-top:3px;}
   .foot{margin-top:16px;padding-top:12px;font-size:12px;gap:6px 16px;}
 }
 @media print{
   @page{size:A4 landscape;margin:10mm;}
   body{background:none;padding:0;min-height:0;display:block;}
   .slide{width:100%;border:0;border-radius:0;aspect-ratio:auto;padding:0;}
-  .col.cost{background:none;color:var(--ink);border:1px solid var(--ink);}
-  .col.cost li,.col.cost li b,.col.cost h2 span{color:var(--ink);}
-  .col.cost li::before{background:var(--ink);}
+  table{border-color:var(--ink);} th{border-bottom-color:var(--ink);}
 }
 </style>
 </head>
@@ -86,28 +79,35 @@ h1 small{display:block;font-size:1.55cqw;font-weight:400;color:var(--ink-60);mar
   </h1>
 
   <div class="cmp">
-    <section class="col gain" aria-labelledby="h-gain">
-      <h2 id="h-gain">장점 <span>좋아지는 점</span></h2>
-      <ul>
-        <li><b>켜면 10초 안에 수업 시작</b> — 초기화도 2분. 시범학교 "새 기기를 쓰는 느낌"</li>
-        <li><b>쓸수록 느려지지 않음</b> — 프로그램·파일을 기기에 쌓지 않아 2~3년 뒤에도 같은 속도</li>
-        <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이</li>
-        <li><b>백신 없이도 안전</b> — 운영체제가 잠겨 있어 이상한 파일을 눌러도 설치 안 됨</li>
-        <li><b>수업 통제 도구</b> — 학생 화면을 「이 자료만」·「자유」·「잠금」으로, 화면 미러링·시험 잠금</li>
-        <li><b>기기 관리가 실제로 됨</b> — 앱 한 번에 설치·사이트 차단·사용 시간 관리(지금 MDM은 잘 안 됨)</li>
-      </ul>
-    </section>
-    <section class="col cost" aria-labelledby="h-cost">
-      <h2 id="h-cost">단점 <span>감수할 점</span></h2>
-      <ul>
-        <li><b>카메라 초점</b> — 한쪽이 흐려질 수 있음. QR 코드 인식 문제(시범학교 실제 발생)</li>
-        <li><b>스마트폰용 앱·설치형 프로그램 불가</b> — 인터넷 사이트로 되는 것만 사용</li>
-        <li><b>디벗 안에 저장한 파일 전부 삭제</b> — 전환 전 백업 필요</li>
-        <li><b>되돌리기</b> — 윈도우로 돌아가는 방법·비용은 아직 확인 중</li>
-        <li><b>센스쿨 계정으로만 로그인</b> — 개인 지메일 차단, 아이디 라벨 배부</li>
-        <li><b>윈도우와 다른 조작</b> — 단축키·탭 방식이 달라 적응 기간 필요</li>
-      </ul>
-    </section>
+    <table>
+      <thead><tr><th>장점</th><th>단점</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>수업 준비 시간 단축</b><span>껐다 켜는 데 걸리는 시간 단축 — 부팅 10초 내외, 초기화 2분</span></td>
+          <td><b>카메라 기능 제약</b><span>전·후면 중 한쪽 초점 불량 가능. QR 코드 인식 문제 발생 사례</span></td>
+        </tr>
+        <tr>
+          <td><b>속도 유지</b><span>사용 기간이 길어져도 처리 속도 유지</span></td>
+          <td><b>앱·프로그램 제한</b><span>안드로이드 앱, 설치형 프로그램 사용 불가. 웹 기반만 사용</span></td>
+        </tr>
+        <tr>
+          <td><b>사용 전력 절감</b><span>약 20%</span></td>
+          <td><b>기기 저장 파일 삭제</b><span>전환 시 기기 내 파일 전부 삭제. 사전 백업 필요</span></td>
+        </tr>
+        <tr>
+          <td><b>보안</b><span>백신 불필요, 자동 업데이트</span></td>
+          <td><b>원복 절차 미확인</b><span>윈도우 복귀 방법·비용 확인 중</span></td>
+        </tr>
+        <tr>
+          <td><b>수업 활용 가능한 통제 도구</b><span>화면 집중·잠금, 미러링, 시험 잠금</span></td>
+          <td><b>계정 체계 변경</b><span>센스쿨 계정으로만 로그인</span></td>
+        </tr>
+        <tr>
+          <td><b>기기 일괄 관리</b><span>앱 배포, 사이트 차단, 사용 시간, 원격 잠금을 관리 콘솔에서</span></td>
+          <td><b>조작 방식 차이</b><span>단축키·탭 전환 등 윈도우와 다름. 적응 기간 필요</span></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="foot">
