@@ -157,16 +157,12 @@ button{font-family:inherit;letter-spacing:inherit;}
   display:inline-flex;align-items:center;background:var(--ink-fill);color:var(--on-ink-fill);
   font-size:14px;line-height:1.29;letter-spacing:-.224px;padding:6px 12px;border-radius:var(--r-sm);
 }
-h1{font-size:clamp(34px,5.6vw,56px);line-height:1.07;letter-spacing:-.28px;margin-top:28px;max-width:12em;}
+h1{font-size:clamp(30px,4.6vw,48px);line-height:1.12;letter-spacing:-.28px;margin-top:28px;}
 .dek{
   margin-top:20px;max-width:var(--readw);color:var(--ink);
   font-size:clamp(19px,2.3vw,24px);font-weight:300;line-height:1.5;letter-spacing:0;
 }
-.credits{
-  margin-top:40px;padding-top:20px;border-top:1px solid var(--hairline);
-  display:flex;flex-wrap:wrap;gap:8px 28px;font-size:14px;letter-spacing:-.224px;color:var(--ink-60);
-}
-.credits b{color:var(--ink);font-weight:600;}
+.dek-2{margin-top:14px;font-size:clamp(17px,1.8vw,19px);font-weight:400;color:var(--ink-80);}
 
 /* ---------- layout ---------- */
 .shell{display:grid;grid-template-columns:184px minmax(0,1fr);gap:48px;align-items:start;}
@@ -519,20 +515,15 @@ img{max-width:100%;}
       <span class="dot"></span>
       <span>Surface Go 3 → ChromeOS Flex</span>
     </div>
-    <h1>디벗의 윈도우를 지울 것인가</h1>
+    <h1>2학년 디벗 운영체제<br>윈도우에서 크롬 OS 플렉스로의 전환</h1>
     <p class="dek">
-      서피스고 기반 디벗의 속도 문제를, 기기 교체가 아니라 운영체제 교체로 푸는 사업입니다.
-      얻는 것과 잃는 것이 모두 분명합니다. 이 문서는 설명회에서 실제로 나온 내용과,
-      설명회에서 다루지 않았지만 학교가 먼저 답을 정해야 할 것들을 구분해 정리했습니다.
+      현재 2학년 디벗은 노후화로 수리 요청이 많이 발생하고, 속도 문제로 수업에 어려움을 겪고 있습니다.
+      그러나 예산상 기기 전체를 교체할 수 없기 때문에, 디벗의 운영체제를 교체해 속도 문제를 해결하려는 사업입니다.
     </p>
-    <div class="credits">
-      <span><b>사업 취지</b> 이봉 장학관 (AI미래교육팀)</span>
-      <span><b>진행·신청</b> 최정혁 장학사</span>
-      <span><b>기술·제약</b> 김남규 (구글코리아)</span>
-      <span><b>수업 적용</b> 사라 (구글코리아)</span>
-      <span><b>시범학교</b> 이동현 교사 (장평중)</span>
-      <span><b>계정</b> 윤석현 연구사 (교육연구정보원)</span>
-    </div>
+    <p class="dek dek-2">
+      느려진 원인 중 하나는 윈도우 디벗의 관리 프로그램(MDM)이 기기 용량을 크게 차지하는 것입니다.
+      이 시스템을 걷어내고 크롬 OS 플렉스로 옮기면, 기기 관리는 구글의 관리 체계(CEU)가 대신 맡습니다.
+    </p>
   </div>
 </header>
 
@@ -564,15 +555,12 @@ img{max-width:100%;}
       <section id="top" class="stack">
         <div class="decide">
           <div class="decide-top">
-            <h3>결정 전에 답을 확보해야 할 5가지</h3>
-            <p>설명회에서 답이 나오지 않은 항목입니다. 이 다섯 칸이 채워지기 전에는 전면 도입 결정을 내리지 마십시오.</p>
+            <h3>결정 전에 답을 확보해야 할 2가지</h3>
+            <p>설명회가 아니라 우리 학교 수업 실태에 달린 항목입니다. 두 가지가 확인되기 전에는 전면 도입을 결정하지 않습니다.</p>
           </div>
           <div class="qlist">
-            <div class="q"><span class="qn">01</span><span class="qt">우리 학교 수업에서 카메라·QR 의존도는 실제로 얼마나 되는가</span><span class="qw">교과별 설문</span></div>
-            <div class="q"><span class="qn">02</span><span class="qt">웹으로 대체할 수 없는 안드로이드 전용 앱을 쓰는 교과가 있는가</span><span class="qw">앱 인벤토리</span></div>
-            <div class="q"><span class="qn">03</span><span class="qt">서피스고 3는 언제까지 크롬 OS 플렉스 업데이트를 받는가 <b>(EOL)</b></span><span class="qw">교육청 · 구글</span></div>
-            <div class="q"><span class="qn">04</span><span class="qt">전환 후 윈도우 원복이 가능한가, 비용은 누가 부담하는가</span><span class="qw">교육청 · 업체</span></div>
-            <div class="q"><span class="qn">05</span><span class="qt">CEU 라이선스는 누가, 언제까지 부담하는가</span><span class="qw">교육청</span></div>
+            <div class="q"><span class="qn">01</span><span class="qt">우리 학교 수업에서 카메라·QR 코드를 실제로 얼마나 쓰는가</span><span class="qw">교과별 설문</span></div>
+            <div class="q"><span class="qn">02</span><span class="qt">인터넷 사이트로 대체할 수 없는 스마트폰용(안드로이드) 앱을 쓰는 교과가 있는가</span><span class="qw">교과별 앱 목록</span></div>
           </div>
         </div>
 
@@ -580,22 +568,22 @@ img{max-width:100%;}
           <div class="led led-gain">
             <div class="led-h"><span class="bar"></span>얻는 것</div>
             <ul>
-              <li><b>부팅 10초 미만</b>, 초기화 2분 미만. 시범학교는 "기기 사양은 그대로인데 새 기기를 쓰는 느낌"이라고 보고</li>
-              <li><b>속도가 유지됨</b> — 클라우드 기반이라 2~3년 뒤에도 부팅 속도가 비슷</li>
+              <li><b>켜면 10초 안에 수업 시작</b> — 초기화도 2분. 시범학교는 "기기 사양은 그대로인데 새 기기를 쓰는 느낌"이라고 보고</li>
+              <li><b>쓸수록 느려지지 않음</b> — 프로그램과 파일을 기기 안에 쌓아 두지 않고 인터넷(구글 서버)에서 불러 쓰는 방식이라, 오래 쓴 스마트폰처럼 점점 느려지는 일이 없음. 2~3년 뒤에도 켜는 속도가 비슷</li>
               <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이 사용</li>
-              <li><b>백신 불필요</b> — 2011년 이후 약 15년간 전 세계 랜섬웨어 피해 0건</li>
-              <li><b>수업 통제 도구</b> — 클래스툴즈 3단계 모드, 화면 미러링, 실시간 자막·번역</li>
-              <li><b>기기 통합 관리</b> — 앱 일괄 배포, 사이트 차단, 원격 잠금을 하나의 콘솔에서</li>
+              <li><b>백신 없이도 안전</b> — 운영체제 자체가 잠겨 있어 이상한 파일을 눌러도 설치되지 않음. 2011년 이후 약 15년간 전 세계 랜섬웨어 피해 0건</li>
+              <li><b>수업 통제 도구</b> — 교사 화면에서 학생 디벗을 「이 자료만」(집중)·「자유」(탐색)·「잠금」으로 바꾸고, 학생 화면을 교사 화면에 띄워 봄(미러링). 말하는 내용이 자막·번역으로 학생 화면에 표시</li>
+              <li><b>기기 관리가 실제로 됨(CEU)</b> — 담당자 컴퓨터에서 전교생 디벗에 앱(캔바 등)을 한 번에 깔아 주고, 홈페이지 차단·사용 시간 관리·분실 기기 원격 잠금이 적용됨. 지금 윈도우 MDM은 앱 배포와 통합설정(사용 시간·페이지 차단)이 잘 적용되지 않는 상태</li>
             </ul>
           </div>
           <div class="led led-cost">
             <div class="led-h"><span class="bar"></span>잃는 것</div>
             <ul>
-              <li><b>카메라 초점</b> — 전·후면 중 한쪽. 시범학교에서는 <b>QR 인식 문제</b>가 실제로 발생</li>
-              <li><b>구글 플레이스토어</b> — 안드로이드 앱 설치 전면 불가</li>
-              <li><b>기기 로컬 파일 전부</b> — 기존 OS를 삭제하는 방식</li>
-              <li><b>되돌릴 경로</b> — 원복 절차·비용이 설명회에서 다뤄지지 않음</li>
-              <li><b>담당자 시간</b> — 계정 생성은 1회성이지만, 계정 <b>관리</b>는 매 학년 반복</li>
+              <li><b>카메라 초점</b> — 전·후면 중 한쪽이 흐릿해질 수 있음. 시범학교에서는 패들렛·띵커벨 접속용 <b>QR 코드를 못 읽는 문제</b>가 실제로 발생</li>
+              <li><b>스마트폰용 앱</b> — 안드로이드 앱을 깔 수 없음. 인터넷 사이트로 되는 것만 사용</li>
+              <li><b>디벗 안에 저장한 파일</b> — 전환 때 모두 지워짐. 작업 전에 백업 필요</li>
+              <li><b>되돌리기</b> — 다시 윈도우로 돌아가는 방법과 비용이 설명회에서 다뤄지지 않음</li>
+              <li><b>담당자 시간</b> — 계정 만들기는 1회지만, 계정 <b>관리</b>는 매 학년 반복</li>
             </ul>
           </div>
         </div>
@@ -629,12 +617,12 @@ img{max-width:100%;}
             <div class="card-b">
               <ul>
                 <li><b>대상 기기</b> — 2학년 디벗 Surface Go 3. 기기는 그대로, 운영체제(OS)만 Windows → 크롬 OS Flex</li>
-                <li><b>배경</b> — 서피스고 기반 디벗이 무겁고 느려 수업 중 민원이 반복. 교육청이 구글·외부 전문가와 협의해 기기 교체가 아닌 OS 전환을 해법으로 제안</li>
+                <li><b>배경</b> — 2학년 디벗은 노후화로 수리 요청이 많고 속도 문제로 수업에 지장. 느려진 원인 중 하나는 윈도우 관리 프로그램(MDM)이 기기 용량을 크게 차지하는 것. 예산상 기기 전체 교체는 불가 → 교육청이 구글과 협의해 기기 교체가 아닌 OS 전환을 해법으로 제안</li>
                 <li><b>성격</b> — 강제가 아니라 학교가 교육공동체 협의를 거쳐 선택하는 사업</li>
                 <li><b>설치</b> — 구글 파트너사가 학교를 방문해 USB로 설치. 기기당 약 3분, 다수 기기 동시 작업. 교사가 직접 설치할 일은 없음</li>
                 <li><b>시기</b> — 방학 중 권장(학기 중은 교육과정 결손). 작업 당일 담당 교사 상주</li>
               </ul>
-              <p class="pnote">5분 배분 — 01~04에 3분, 05~09에 2분. 03 다음에 04를 바로 이어서 열 것.</p>
+              <p class="pnote">5분 배분 — 01~05에 3분, 06~10에 2분. 03 다음에 04를 바로 이어서 열 것.</p>
             </div>
           </details>
 
@@ -651,15 +639,16 @@ img{max-width:100%;}
                   <thead><tr><th>항목</th><th>현재 · Windows</th><th>전환 후 · 크롬 OS 플렉스</th></tr></thead>
                   <tbody>
                     <tr><td><b>기기</b></td><td>Surface Go 3</td><td>그대로. OS만 교체</td></tr>
-                    <tr><td><b>속도</b></td><td>무겁고 느려 민원 반복</td><td>부팅 10초 미만, 초기화 2분 미만. 2~3년 뒤에도 유지</td></tr>
+                    <tr><td><b>속도</b></td><td>무겁고 느려 민원 반복</td><td>켜면 10초, 초기화 2분. 쓸수록 느려지지 않아 2~3년 뒤에도 비슷</td></tr>
                     <tr><td><b>배터리</b></td><td>현재 수준</td><td>현재보다 약 20% 절감</td></tr>
                     <tr><td><b>보안</b></td><td>백신 필요</td><td>백신 불필요(OS 내장), 4주 1회 자동 업데이트</td></tr>
                     <tr><td><b>파일</b></td><td>기기에 저장</td><td>클라우드 저장. <b>전환 때 기기 안 파일 전부 삭제</b></td></tr>
                     <tr><td><b>카메라</b></td><td>정상</td><td>전·후면 중 한쪽 초점 불량 가능. <b>QR 인식 문제</b>(시범학교 실제 발생)</td></tr>
-                    <tr><td><b>앱</b></td><td>윈도우 프로그램</td><td>웹·크롬 확장만. 설치형 프로그램·안드로이드 앱 불가</td></tr>
+                    <tr><td><b>앱</b></td><td>윈도우 프로그램 설치</td><td>인터넷 사이트로 되는 것만. 설치형 프로그램·스마트폰용(안드로이드) 앱 불가</td></tr>
                     <tr><td><b>MS 도구</b></td><td>설치판</td><td>크롬에서 M365 웹판. Teams·Excel·PPT 거의 동일, 원드라이브 파일 그대로 열림</td></tr>
-                    <tr><td><b>로그인</b></td><td>기존 계정</td><td>센스쿨 계정 필수. 개인 지메일 차단</td></tr>
-                    <tr><td><b>수업·기기 관리</b></td><td>—</td><td>클래스툴즈(집중·탐색·잠금)·화면 미러링·시험 잠금 / 앱 일괄 배포·사이트 차단·원격 잠금</td></tr>
+                    <tr><td><b>로그인</b></td><td>기존 계정</td><td>센스쿨 계정으로만. 개인 지메일 차단</td></tr>
+                    <tr><td><b>기기 관리</b></td><td>MDM(아르고스). 앱 배포·통합설정(사용 시간·페이지 차단)이 잘 적용되지 않음</td><td>CEU. 앱(캔바 등) 한 번에 설치, 홈페이지 차단·사용 시간 관리·원격 잠금 적용</td></tr>
+                    <tr><td><b>수업 통제</b></td><td>—</td><td>클래스툴즈(집중·탐색·잠금)·화면 미러링·자막 번역·시험 잠금</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -684,12 +673,12 @@ img{max-width:100%;}
                 <div class="spec"><span class="v">67%</span><span class="k">서울 초3~6 크롬북 선택률</span></div>
               </div>
               <ul>
-                <li><b>부팅 10초 미만, 초기화 2분 미만</b> — 시범학교: "기기 사양은 그대로인데 새 기기를 쓰는 느낌"</li>
-                <li><b>속도 유지</b> — 클라우드 기반이라 2~3년 뒤에도 부팅 속도가 비슷</li>
+                <li><b>켜면 10초 안에 수업 시작</b> — 초기화도 2분. 시범학교: "기기 사양은 그대로인데 새 기기를 쓰는 느낌"</li>
+                <li><b>쓸수록 느려지지 않음</b> — 프로그램과 파일을 기기 안에 쌓지 않고 인터넷에서 불러 쓰는 방식. 오래 쓴 스마트폰처럼 점점 느려지는 일이 없어 2~3년 뒤에도 켜는 속도가 비슷</li>
                 <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이 사용</li>
-                <li><b>백신 불필요</b> — 2011년 이후 약 15년간 전 세계 랜섬웨어 피해 0건</li>
-                <li><b>수업 통제 도구</b> — 클래스툴즈 3단계 모드(집중·탐색·잠금), 화면 미러링, 실시간 자막·번역, 시험 잠금</li>
-                <li><b>기기 통합 관리</b> — 앱 일괄 배포, 사이트 차단, 원격 잠금을 하나의 콘솔에서</li>
+                <li><b>백신 없이도 안전</b> — 운영체제가 잠겨 있어 이상한 파일을 눌러도 설치되지 않음. 15년간 전 세계 랜섬웨어 피해 0건</li>
+                <li><b>수업 통제 도구</b> — 학생 디벗을 「이 자료만」·「자유」·「잠금」으로 바꾸고, 학생 화면을 교사 화면에 띄워 봄. 말하는 내용이 자막·번역으로 표시. 시험 중 다른 화면 잠금</li>
+                <li><b>기기 관리가 실제로 됨</b> — 다음 카드(05)</li>
               </ul>
               <p class="pnote">기기 자체의 수명(배터리·힌지·액정)은 늘지 않음 — "새 기기" 기대가 과열되지 않게(5장 R-10).</p>
             </div>
@@ -705,10 +694,10 @@ img{max-width:100%;}
             <div class="card-b">
               <ul>
                 <li><b>카메라 초점</b> — 전·후면 중 한쪽 초점 불량 가능. 시범학교에서 QR 인식 문제가 실제로 발생</li>
-                <li><b>구글 플레이스토어 없음</b> — 안드로이드 앱 설치 불가. 웹 브라우저와 크롬 확장 프로그램으로 대체</li>
-                <li><b>기기 저장 파일 전부 삭제</b> — 기존 OS를 지우는 방식. 전환 전 백업 필수</li>
-                <li><b>센스쿨(SEN스쿨) 계정 필수</b> — 기기 관리·보안의 전제 조건. 개인 지메일 로그인 차단</li>
-                <li><b>되돌리기</b> — 윈도우 원복 절차·비용은 설명회에서 다뤄지지 않음(확인 중)</li>
+                <li><b>스마트폰용 앱 사용 불가</b> — 안드로이드 앱을 깔 수 없음. 인터넷 사이트로 되는 것만 사용(패들렛·띵커벨·캔바 등은 사이트라 그대로)</li>
+                <li><b>디벗 안에 저장한 파일 전부 삭제</b> — 기존 OS를 지우는 방식. 전환 전 백업 필수</li>
+                <li><b>센스쿨(SEN스쿨) 계정으로만 로그인</b> — 학교가 관리하는 계정이라야 차단·앱 설치 같은 관리가 적용됨. 개인 지메일은 차단</li>
+                <li><b>되돌리기</b> — 다시 윈도우로 돌아가는 방법·비용은 설명회에서 다뤄지지 않음(확인 중)</li>
                 <li><b>계정 관리 업무</b> — 생성은 1회지만, 관리는 매 학년 반복</li>
               </ul>
               <p class="pnote">학생 안내에서도 카메라·파일 삭제는 좋은 점과 반드시 함께(2장 게시 문구).</p>
@@ -718,6 +707,23 @@ img{max-width:100%;}
           <details class="card">
             <summary>
               <span class="cn">05</span>
+              <span class="ct">기기 관리 체계 — 현재 MDM과 전환 후 CEU</span>
+              <span class="chev" aria-hidden="true"></span>
+              <span class="ch">"MDM을 버리면 관리는?" → 앱 설치·홈페이지 차단·사용 시간 관리가 지금보다 잘 적용됨</span>
+            </summary>
+            <div class="card-b">
+              <ul>
+                <li><b>현재 · 윈도우 MDM(아르고스)</b> — 앱 배포가 안 되고, 통합설정(사용 시간·페이지 차단)이 기기에 잘 적용되지 않아 관리 페이지가 정리되지 않은 상태. 관리 프로그램 자체가 기기 용량을 크게 차지</li>
+                <li><b>전환 후 · 구글 CEU</b> — 담당자 콘솔에서 전교생 디벗에 앱(예: 캔바)을 한 번에 설치. 홈페이지 차단·사용 시간 관리가 실제로 적용됨. 분실 기기 원격 잠금, 시험 잠금</li>
+                <li><b>조건</b> — 센스쿨 계정으로 로그인한 기기만 관리 대상. 개인 지메일로 로그인한 기기는 그냥 빠른 브라우저 기기</li>
+              </ul>
+              <p class="pnote">MDM 문제는 우리 학교 경험(설명회 내용 아님). 수치 말고 "다들 겪은 그것" 정도로.</p>
+            </div>
+          </details>
+
+          <details class="card">
+            <summary>
+              <span class="cn">06</span>
               <span class="ct">Microsoft 365 사용</span>
               <span class="chev" aria-hidden="true"></span>
               <span class="ch">크롬 브라우저에서 Teams · Excel · PowerPoint 웹 버전 — 기존과 거의 동일</span>
@@ -735,7 +741,7 @@ img{max-width:100%;}
 
           <details class="card">
             <summary>
-              <span class="cn">06</span>
+              <span class="cn">07</span>
               <span class="ct">협의·결정 사항</span>
               <span class="chev" aria-hidden="true"></span>
               <span class="ch">카메라 포기 가능 여부 · 안드로이드 앱 의존 수업 · 계정 업무 담당 · 작업 시기</span>
@@ -752,22 +758,22 @@ img{max-width:100%;}
                   </tbody>
                 </table>
               </div>
-              <p class="pnote">결정은 오늘이 아님 — 08 설문 결과가 나온 뒤.</p>
+              <p class="pnote">결정은 오늘이 아님 — 09 설문 결과가 나온 뒤.</p>
             </div>
           </details>
 
           <details class="card">
             <summary>
-              <span class="cn">07</span>
+              <span class="cn">08</span>
               <span class="ct">교육청 확인 중인 사항</span>
               <span class="chev" aria-hidden="true"></span>
               <span class="ch">지원 종료 시점 · 원복 가능 여부와 비용 · CEU 라이선스 부담 · 무선망 · 사용 규정</span>
             </summary>
             <div class="card-b">
               <ul>
-                <li>Surface Go 3의 크롬 OS Flex 업데이트(보안 포함) <b>지원 종료(EOL) 시점</b></li>
-                <li>전환 후 Windows <b>원복</b> 가능 여부, 절차, 비용 부담 주체</li>
-                <li><b>CEU</b>(기기 관리 라이선스) 비용 부담 주체와 유효 기간</li>
+                <li>Surface Go 3가 <b>언제까지 업데이트를 받는지</b>(지원 종료 시점)</li>
+                <li>다시 윈도우로 <b>되돌릴 수 있는지</b>, 된다면 절차와 비용은 누가 부담하는지</li>
+                <li>기기 관리 라이선스(<b>CEU</b>) 비용을 누가, 언제까지 부담하는지</li>
                 <li>30명 동시 클라우드 로그인 시 교실 <b>무선망</b> 부하, 무선망 개선 요청 병행 가능 여부</li>
                 <li>화면 미러링·시험 잠금 기록에 관한 교육청 <b>사용 규정</b> 유무</li>
               </ul>
@@ -777,7 +783,7 @@ img{max-width:100%;}
 
           <details class="card">
             <summary>
-              <span class="cn">08</span>
+              <span class="cn">09</span>
               <span class="ct">교과별 협조 요청 사항</span>
               <span class="chev" aria-hidden="true"></span>
               <span class="ch">5분 설문 2건 · 카메라·QR 활용도 · 사용 앱·프로그램 목록 · ○월 ○일까지</span>
@@ -788,14 +794,14 @@ img{max-width:100%;}
                 <li><b>사용 앱·프로그램 목록</b> — 안드로이드 전용 앱, 설치형 프로그램 포함(센서 측정·AR·코딩·로보틱스 등)</li>
                 <li><b>(전환 확정 시) 학급별 학생 파일 백업 안내·확인</b> — 작업 2주 전부터</li>
               </ol>
-              <p>판단 근거는 설명회 답변이 아니라 우리 학교 수업 실태입니다. 두 설문 결과가 06 협의의 근거가 됩니다.</p>
-              <p class="pnote">마감일을 지금 정해서 말하기. 설문 결과 = 06 근거.</p>
+              <p>판단 근거는 설명회 답변이 아니라 우리 학교 수업 실태입니다. 두 설문 결과가 07 협의의 근거가 됩니다.</p>
+              <p class="pnote">마감일을 지금 정해서 말하기. 설문 결과 = 07 근거.</p>
             </div>
           </details>
 
           <details class="card">
             <summary>
-              <span class="cn">09</span>
+              <span class="cn">10</span>
               <span class="ct">추진 절차 및 일정</span>
               <span class="chev" aria-hidden="true"></span>
               <span class="ch">신청 → 계정 준비 → 방학 중 설치 → 시범 학급 → 개학 첫 주 안내</span>
@@ -1373,7 +1379,7 @@ img{max-width:100%;}
       <li><a href="https://www.sen.go.kr/www/website.jsp">서울특별시교육청 서울교육플랫폼 안내</a></li>
     </ul>
     <p class="disclaimer">
-      1~4장과 6장은 설명회에서 실제로 언급된 내용을 정리한 것이고, <b>5장은 설명회에서 다루지 않은 자체 분석</b>입니다. 신청 일정·연수 일자는 설명회 당시 기준이므로 현재 시점에서는 담당 장학사에게 재확인이 필요합니다. 체크리스트의 체크 상태는 이 브라우저에만 저장되며 다른 사람에게는 보이지 않습니다.
+      1~4장과 6장은 설명회에서 실제로 언급된 내용을 정리한 것이고, <b>5장은 설명회에서 다루지 않은 자체 분석</b>입니다. 머리글의 사업 배경(노후화·수리·MDM 부담)과 현재 MDM 상태는 우리 학교가 자체 파악한 내용입니다. 신청 일정·연수 일자는 설명회 당시 기준이므로 현재 시점에서는 담당 장학사에게 재확인이 필요합니다. 체크리스트의 체크 상태는 이 브라우저에만 저장되며 다른 사람에게는 보이지 않습니다.
     </p>
   </div>
 </footer>
