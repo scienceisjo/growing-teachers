@@ -162,7 +162,7 @@ h1{font-size:clamp(30px,4.6vw,48px);line-height:1.12;letter-spacing:-.28px;margi
   margin-top:20px;max-width:var(--readw);color:var(--ink);
   font-size:clamp(19px,2.3vw,24px);font-weight:300;line-height:1.5;letter-spacing:0;
 }
-.dek-2{margin-top:14px;font-size:clamp(17px,1.8vw,19px);font-weight:400;color:var(--ink-80);}
+.hero-cards{margin-top:28px;}
 .byline{margin-top:28px;padding-top:16px;border-top:1px solid var(--hairline);font-size:14px;letter-spacing:-.224px;color:var(--ink-60);}
 .byline b{color:var(--ink);font-weight:600;}
 
@@ -381,11 +381,15 @@ footer .who{font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px;}
 footer .who b{font-weight:600;}
 
 /* 발표 모드: 1장만 남기고 글자 키움 */
-body.present .masthead,body.present .mobnav,body.present .rail,body.present #top,
+body.present .mobnav,body.present .rail,body.present #top,
 body.present #s2,body.present #s3,body.present #s4,body.present #s5,body.present #s6,body.present footer{display:none;}
 body.present .wrap{max-width:1180px;}
 body.present .shell{grid-template-columns:minmax(0,1fr);gap:0;}
 body.present .main{padding-block:32px 80px;}
+body.present .masthead .wrap{padding-block:40px 32px;}
+body.present .eyebrow{font-size:17px;}
+body.present h1{font-size:clamp(32px,4.4vw,52px);}
+body.present .byline{font-size:17px;}
 body.present #s1 .sec-num{display:none;}
 body.present #s1 .sec-head h2{font-size:clamp(32px,4.4vw,52px);}
 body.present #s1 .sec-head .sub,body.present #s1 .lede{font-size:21px;line-height:1.5;max-width:none;}
@@ -500,7 +504,14 @@ footer li{font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-
 @media print{
   @page{margin:14mm;}
   /* '이 안내만 인쇄': 1장의 조상 사슬만 남기고 형제는 모두 숨김. 카드는 인쇄 전에 JS가 전부 펼침 */
-  body.print-brief > :not(.wrap){display:none;}
+  body.print-brief > :not(.wrap):not(.masthead){display:none;}
+  body.print-brief .masthead{background:none;}
+  body.print-brief .masthead .wrap{padding:0 0 14px;}
+  body.print-brief .stage{background:none;color:var(--ink);border:1px solid var(--ink);}
+  body.print-brief h1{font-size:24px;margin-top:10px;}
+  body.print-brief .hero-cards{margin-top:14px;gap:8px;}
+  body.print-brief .byline{margin-top:10px;padding-top:8px;font-size:11px;}
+  body.print-brief #s1 .sec-head h2{display:none;}
   body.print-brief > .wrap > :not(.shell){display:none;}
   body.print-brief .shell{display:block;}
   body.print-brief .shell > :not(.main){display:none;}
@@ -562,14 +573,77 @@ img{max-width:100%;}
       <span>Surface Go 3 → ChromeOS Flex</span>
     </div>
     <h1>2학년 디벗 운영체제<br>윈도우에서 크롬 OS 플렉스로의 전환</h1>
-    <p class="dek">
-      현재 2학년 디벗은 노후화로 수리 요청이 많이 발생하고, 속도 문제로 수업에 어려움을 겪고 있습니다.
-      그러나 예산상 기기 전체를 교체할 수 없기 때문에, 디벗의 운영체제를 교체해 속도 문제를 해결하려는 사업입니다.
-    </p>
-    <p class="dek dek-2">
-      느려진 원인 중 하나는 윈도우 디벗의 관리 프로그램(MDM)이 기기 용량을 크게 차지하는 것입니다.
-      이 시스템을 걷어내고 크롬 OS 플렉스로 옮기면, 기기 관리는 구글의 관리 체계(CEU)가 대신 맡습니다.
-    </p>
+    <div class="cards hero-cards">
+
+      <details class="card">
+        <summary>
+          <span class="cn">1</span>
+          <span class="ct">왜 지금 이 이야기가 나왔나</span>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="ch">2학년 디벗 노후화 · 수리 요청 증가 · 속도 문제 → 예산상 기기 전체 교체는 불가</span>
+        </summary>
+        <div class="card-b">
+          <ul>
+            <li><b>현재</b> — 2학년 디벗(서피스고 3)은 노후화로 수리 요청이 많이 발생하고, 속도 문제로 수업에 어려움을 겪고 있습니다</li>
+            <li><b>예산</b> — 기기 전체를 새로 사는 것은 예산상 불가능합니다</li>
+            <li><b>그래서</b> — 기기는 그대로 두고 <b>운영체제만 교체</b>해 속도 문제를 해결하려는 사업입니다. 서울시교육청·구글코리아가 지원하고, 할지 말지는 학교가 정합니다</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary>
+          <span class="cn">2</span>
+          <span class="ct">운영체제만 바꾼다는 것</span>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="ch">이사는 안 갑니다. 집은 그대로 두고 살림만 통째로 바꿉니다</span>
+        </summary>
+        <div class="card-b">
+          <ul>
+            <li><b>집 = 기기</b> — 서피스고 3 그대로. 화면·키보드·배터리 전부 그대로</li>
+            <li><b>살림 = 운영체제</b> — 지금은 윈도우 살림, 바꾸면 크롬 OS 플렉스 살림. 켜면 나오는 화면, 프로그램 쓰는 방식, 파일 두는 곳이 전부 바뀝니다</li>
+            <li><b>윈도우 살림</b>은 짐을 집 안에 쌓아 두는 방식이라 쌓일수록 좁아지고 느려집니다. <b>크롬 살림</b>은 짐을 창고(구글 서버, 클라우드)에 맡기고 집에는 꼭 필요한 것만 둡니다. 그래서 몇 년을 써도 처음 속도가 유지됩니다</li>
+            <li><b>겉은 서피스고, 속은 크롬북.</b> 이사(기기 교체)를 안 하니 예산이 들지 않고, 대신 집 안에 있던 짐(디벗에 저장한 파일)은 전부 비워야 합니다 → 백업</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary>
+          <span class="cn">3</span>
+          <span class="ct">왜 이렇게 느려졌나</span>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="ch">윈도우 관리 프로그램(MDM)이 기기 힘을 먼저 잡아먹습니다</span>
+        </summary>
+        <div class="card-b">
+          <ul>
+            <li><b>MDM이란</b> — 학교 기기를 원격으로 관리하려고 기기 안에 깔아 두는 프로그램(우리 학교는 아르고스). 켜져 있는 내내 서버에 보고하고(어디 접속했는지, 무슨 앱을 쓰는지), 차단 규칙을 매번 검사하고, 기록을 남깁니다</li>
+            <li><b>왜 무거운가</b> — 24시간 상주하는 감시·보고 프로그램이라 메모리와 CPU를 항상 씁니다. 서피스고 3처럼 힘이 약한 기기에서는 윈도우 + 백신 + MDM이 먼저 자리를 차지해, 정작 수업 프로그램이 쓸 몫이 줄어듭니다</li>
+            <li><b>비유</b> — 집에 관리인이 상주하면서 방 하나를 차지하고 하루 종일 점검 보고서를 쓰는 격입니다. 집이 좁아지고 시끄러워집니다</li>
+            <li>크롬 OS에는 이런 상주 프로그램이 없습니다. 관리 기능이 운영체제 안에 이미 들어 있고, 규칙은 로그인할 때 받아옵니다</li>
+          </ul>
+          <p class="pnote">MDM 원인은 우리 학교 자체 파악(설명회 내용 아님). 수치 말고 "다들 겪은 그것" 정도로.</p>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary>
+          <span class="cn">4</span>
+          <span class="ct">관리 체계란 — 그리고 CEU</span>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="ch">기기 수백 대를 한 자리에서 다루는 규칙표. 윈도우는 MDM, 크롬 OS는 CEU</span>
+        </summary>
+        <div class="card-b">
+          <ul>
+            <li><b>관리 체계</b> = 학생 기기에 적용하는 규칙표 다섯 줄 — ① 누가 로그인할 수 있나 ② 무엇을 깔 수 있나 ③ 어디에 접속할 수 있나 ④ 언제까지 쓸 수 있나(사용 시간) ⑤ 잃어버리면 잠그기</li>
+            <li><b>MDM(아르고스)</b> — 규칙을 지키게 하려고 기기마다 관리인을 상주시키는 방식(3번 카드)</li>
+            <li><b>CEU</b>(Chrome Education Upgrade) — 관리사무소(구글 클라우드)에서 규칙만 내려보내는 방식. 기기에 따로 깔리는 것이 없고, 담당자 컴퓨터 한 곳에서 전교생 디벗을 다룹니다</li>
+            <li>전환하면 이 규칙표를 CEU가 대신 맡습니다. 지금 되는 것·안 되는 것은 아래 1장 05 카드에서</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
     <p class="byline"><b>작성</b> 해누리중학교 과학정보부 조승재 &nbsp;·&nbsp; <b>문의</b> 과학정보부</p>
   </div>
 </header>
@@ -664,7 +738,7 @@ img{max-width:100%;}
             <div class="card-b">
               <ul>
                 <li><b>대상 기기</b> — 2학년 디벗 Surface Go 3. 기기는 그대로, 운영체제(OS)만 Windows → 크롬 OS Flex</li>
-                <li><b>배경</b> — 2학년 디벗은 노후화로 수리 요청이 많고 속도 문제로 수업에 지장. 느려진 원인 중 하나는 윈도우 관리 프로그램(MDM)이 기기 용량을 크게 차지하는 것. 예산상 기기 전체 교체는 불가 → 교육청이 구글과 협의해 기기 교체가 아닌 OS 전환을 해법으로 제안</li>
+                <li><b>배경</b> — 노후화·수리 요청 증가·속도 문제, 예산상 기기 전체 교체 불가(머리글 카드 1~3). 교육청이 구글과 협의해 기기 교체가 아닌 OS 전환을 해법으로 제안</li>
                 <li><b>성격</b> — 강제가 아니라 학교가 교육공동체 협의를 거쳐 선택하는 사업</li>
                 <li><b>설치</b> — 구글 파트너사가 학교를 방문해 USB로 설치. 기기당 약 3분, 다수 기기 동시 작업. 교사가 직접 설치할 일은 없음</li>
                 <li><b>시기</b> — 방학 중 권장(학기 중은 교육과정 결손). 작업 당일 담당 교사 상주</li>
@@ -1716,7 +1790,7 @@ img{max-width:100%;}
 
   // 1장 교직원 안내: 발표 모드 · 모두 열기 · 발표자 메모 · 인쇄 · 키보드(→/PageDown 다음 카드, ←/PageUp 닫기, Esc 종료)
   var s1 = document.getElementById("s1");
-  var cards = s1 ? Array.prototype.slice.call(s1.querySelectorAll("details.card")) : [];
+  var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
   var faqs = s1 ? Array.prototype.slice.call(s1.querySelectorAll("details.faq")) : [];
   var presBtn = document.getElementById("presBtn");
   var allBtn = document.getElementById("allBtn");
@@ -1729,7 +1803,7 @@ img{max-width:100%;}
       presBtn.textContent = on ? "발표 모드 종료" : "발표 모드";
       presBtn.setAttribute("aria-pressed", on ? "true" : "false");
     }
-    if(on && s1) s1.scrollIntoView({block:"start"});
+    if(on) window.scrollTo(0, 0);
     if(!on) spy();
   }
   function syncAllBtn(){
