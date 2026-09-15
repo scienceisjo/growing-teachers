@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>디벗 크롬OS 전환 검토</title>
+<title>해누리중 2학년 디벗 크롬 OS 전환 · 과학정보부</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&display=swap">
@@ -163,6 +163,8 @@ h1{font-size:clamp(30px,4.6vw,48px);line-height:1.12;letter-spacing:-.28px;margi
   font-size:clamp(19px,2.3vw,24px);font-weight:300;line-height:1.5;letter-spacing:0;
 }
 .dek-2{margin-top:14px;font-size:clamp(17px,1.8vw,19px);font-weight:400;color:var(--ink-80);}
+.byline{margin-top:28px;padding-top:16px;border-top:1px solid var(--hairline);font-size:14px;letter-spacing:-.224px;color:var(--ink-60);}
+.byline b{color:var(--ink);font-weight:600;}
 
 /* ---------- layout ---------- */
 .shell{display:grid;grid-template-columns:184px minmax(0,1fr);gap:48px;align-items:start;}
@@ -351,6 +353,33 @@ details.card[open] > summary .chev{transform:rotate(-135deg);margin-top:16px;}
 .pnote::before{content:"발표자 메모 · ";color:var(--ink-48);font-weight:600;}
 body.notes .pnote{display:block;}
 
+/* ---------- 1장 FAQ: 질문 줄, 누르면 답 ---------- */
+.faq-wrap{margin-top:40px;display:flex;flex-direction:column;gap:4px;}
+.faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.faq-head h3{font-size:clamp(24px,3vw,32px);line-height:1.15;}
+.faq-head p{font-size:17px;color:var(--ink-60);max-width:var(--readw);}
+.faq-g{font-size:14px;font-weight:600;letter-spacing:-.224px;color:var(--ink-48);margin-top:24px;padding-bottom:8px;border-bottom:1px solid var(--hairline);}
+details.faq{border-bottom:1px solid var(--divider-soft);}
+details.faq > summary{
+  list-style:none;cursor:pointer;display:grid;grid-template-columns:28px minmax(0,1fr) 20px;gap:12px;align-items:start;
+  padding:14px 4px;font-size:17px;font-weight:600;line-height:1.45;letter-spacing:-.374px;color:var(--ink);
+}
+details.faq > summary::-webkit-details-marker{display:none;}
+details.faq > summary::before{content:"Q";font-size:14px;font-weight:600;color:var(--ink-48);padding-top:3px;}
+details.faq > summary::after{
+  content:"";width:9px;height:9px;margin-top:8px;justify-self:center;
+  border-right:2px solid var(--ink-48);border-bottom:2px solid var(--ink-48);transform:rotate(45deg);transition:transform .2s ease;
+}
+details.faq[open] > summary::after{transform:rotate(-135deg);margin-top:12px;}
+details.faq > summary:focus-visible{outline:2px solid var(--blue-focus);outline-offset:2px;}
+.faq-a{padding:0 4px 18px 40px;display:flex;flex-direction:column;gap:12px;}
+.faq-a p,.faq-a li{font-size:17px;line-height:1.6;color:var(--ink);}
+.faq-a ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;}
+.faq-foot{margin-top:20px;font-size:17px;color:var(--ink-60);}
+.faq-foot b{color:var(--ink);}
+footer .who{font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px;}
+footer .who b{font-weight:600;}
+
 /* 발표 모드: 1장만 남기고 글자 키움 */
 body.present .masthead,body.present .mobnav,body.present .rail,body.present #top,
 body.present #s2,body.present #s3,body.present #s4,body.present #s5,body.present #s6,body.present footer{display:none;}
@@ -372,6 +401,10 @@ body.present .card-b thead th{font-size:14px;}
 body.present .spec .v{font-size:36px;}
 body.present .spec .k{font-size:17px;}
 body.present .pnote{font-size:17px;}
+body.present .faq-head h3{font-size:36px;}
+body.present details.faq > summary{font-size:21px;padding:16px 4px;}
+body.present .faq-a p,body.present .faq-a li{font-size:21px;}
+body.present .faq-g{font-size:17px;}
 
 /* ---------- risks: 일반 = 흰 카드, 개인정보 = 짙은 타일 ---------- */
 .riskgroup{display:flex;flex-direction:column;gap:16px;}
@@ -461,6 +494,8 @@ footer li{font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-
   .card .chev{width:10px;height:10px;}
   .card-b{padding:16px 18px 20px 18px;}
   body.present .card-b{padding:18px 18px 20px 18px;}
+  details.faq > summary{grid-template-columns:22px minmax(0,1fr) 16px;gap:10px;}
+  .faq-a{padding-left:32px;}
 }
 @media print{
   @page{margin:14mm;}
@@ -491,6 +526,15 @@ footer li{font-size:14px;letter-spacing:-.224px;line-height:1.6;color:var(--ink-
   body.print-brief .spec .v{font-size:18px;}
   body.print-brief .spec .k{font-size:11px;}
   body.print-brief .pnote{font-size:11px;padding:6px 10px;}
+  body.print-brief .faq-wrap{margin-top:16px;break-before:page;}
+  body.print-brief .faq-head h3{font-size:20px;}
+  body.print-brief .faq-head p,body.print-brief .faq-foot{font-size:12px;}
+  body.print-brief details.faq > summary{font-size:13px;padding:8px 2px;}
+  body.print-brief details.faq > summary::after{display:none;}
+  body.print-brief .faq-a{padding:0 2px 10px 30px;gap:6px;}
+  body.print-brief .faq-a p,body.print-brief .faq-a li{font-size:12px;line-height:1.5;}
+  body.print-brief details.faq{break-inside:avoid;}
+  body.print-brief #app-credit{display:none;}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 html{scroll-behavior:smooth;}
@@ -509,9 +553,11 @@ img{max-width:100%;}
 <header class="masthead">
   <div class="wrap">
     <div class="eyebrow">
-      <span class="stage">검토 · 의사결정 단계</span>
+      <span class="stage">해누리중학교 과학정보부</span>
       <span class="dot"></span>
-      <span>서울시교육청 × 구글코리아 온라인 설명회 정리</span>
+      <span>검토 · 의사결정 단계</span>
+      <span class="dot"></span>
+      <span>서울시교육청 × 구글코리아 설명회 정리</span>
       <span class="dot"></span>
       <span>Surface Go 3 → ChromeOS Flex</span>
     </div>
@@ -524,6 +570,7 @@ img{max-width:100%;}
       느려진 원인 중 하나는 윈도우 디벗의 관리 프로그램(MDM)이 기기 용량을 크게 차지하는 것입니다.
       이 시스템을 걷어내고 크롬 OS 플렉스로 옮기면, 기기 관리는 구글의 관리 체계(CEU)가 대신 맡습니다.
     </p>
+    <p class="byline"><b>작성</b> 해누리중학교 과학정보부 조승재 &nbsp;·&nbsp; <b>문의</b> 과학정보부</p>
   </div>
 </header>
 
@@ -594,7 +641,7 @@ img{max-width:100%;}
         <div class="sec-head">
           <span class="sec-num">01 — 교직원 안내</span>
           <h2>해누리중 2학년 디벗 Surface Go 3<br>윈도우 → 크롬 OS Flex로의 전환</h2>
-          <span class="sub">교직원회의 · 2026년 ○월 ○일 · 자료 기준: 서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 설명회」</span>
+          <span class="sub">해누리중학교 교직원회의 · 2026년 ○월 ○일 · 과학정보부 조승재 · 자료 기준: 서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 설명회」</span>
           <div class="pres-tools">
             <button class="btn-ghost" id="presBtn" type="button" aria-pressed="false">발표 모드</button>
             <button class="btn-ghost" id="allBtn" type="button">모두 열기</button>
@@ -786,7 +833,7 @@ img{max-width:100%;}
               <span class="cn">09</span>
               <span class="ct">교과별 협조 요청 사항</span>
               <span class="chev" aria-hidden="true"></span>
-              <span class="ch">5분 설문 2건 · 카메라·QR 활용도 · 사용 앱·프로그램 목록 · ○월 ○일까지</span>
+              <span class="ch">5분 설문 2건 · 카메라·QR 활용도 · 사용 앱·프로그램 목록 · ○월 ○일까지 과학정보부로</span>
             </summary>
             <div class="card-b">
               <ol>
@@ -794,7 +841,7 @@ img{max-width:100%;}
                 <li><b>사용 앱·프로그램 목록</b> — 안드로이드 전용 앱, 설치형 프로그램 포함(센서 측정·AR·코딩·로보틱스 등)</li>
                 <li><b>(전환 확정 시) 학급별 학생 파일 백업 안내·확인</b> — 작업 2주 전부터</li>
               </ol>
-              <p>판단 근거는 설명회 답변이 아니라 우리 학교 수업 실태입니다. 두 설문 결과가 07 협의의 근거가 됩니다.</p>
+              <p>판단 근거는 설명회 답변이 아니라 우리 학교 수업 실태입니다. 두 설문 결과가 07 협의의 근거가 됩니다. 회신은 과학정보부 조승재에게 주시면 됩니다.</p>
               <p class="pnote">마감일을 지금 정해서 말하기. 설문 결과 = 07 근거.</p>
             </div>
           </details>
@@ -814,11 +861,142 @@ img{max-width:100%;}
                 <li><b>1개 학급 시범</b> — 로그인 → 클래스룸 → 속도·카메라·동시 로그인 확인</li>
                 <li><b>개학 첫 주</b> — 학생 로그인 안내 차시, 담임 사전 연수</li>
               </ol>
-              <p>설명회 당시 신청 마감은 지났습니다. 다음 신청·작업 일정은 교육청에 확인 중입니다.</p>
+              <p>설명회 당시 신청 마감은 지났습니다. 다음 신청·작업 일정은 교육청에 확인 중이며, 진행은 과학정보부(조승재)가 맡습니다.</p>
               <p class="pnote">정식 안건으로 회의록에 남기고 교감·교장 보고(5장 R-12).</p>
             </div>
           </details>
 
+        </div>
+
+        <!-- 해누리중 선생님 FAQ: 질문을 누르면 답이 열림 -->
+        <div class="faq-wrap" id="faq">
+          <div class="faq-head">
+            <span class="sec-num">FAQ · 해누리중학교 과학정보부</span>
+            <h3>선생님들이 물어보실 것</h3>
+            <p>과학정보부 조승재가 미리 답을 적어 두었습니다. 회의에서 새로 나온 질문은 여기에 추가합니다.</p>
+          </div>
+
+          <h4 class="faq-g">계정 · 클래스룸</h4>
+          <details class="faq">
+            <summary>senedu 계정을 쓰면 기존 구글 워크스페이스·구글 클래스룸은 사용 불가한가요?</summary>
+            <div class="faq-a">
+              <p><b>아닙니다. 기존 계정을 얹어 쓰면 됩니다.</b> 디벗에 로그인하는 계정은 senedu 하나지만, 로그인한 뒤 <b>설정 → 계정 → 계정 추가</b>(또는 구글 사이트 오른쪽 위 계정 전환)로 기존 워크스페이스 계정을 추가하면 드라이브·문서·지메일을 그 계정으로 전환해 그대로 쓸 수 있습니다.</p>
+              <ul>
+                <li><b>조건</b> — 관리 콘솔에서 교사 기기의 "보조 계정 추가"를 허용해 두어야 합니다. 학생 기기는 차단, 교사 기기는 허용으로 나눠 설정할 수 있고, 이 설정은 과학정보부가 맡습니다.</li>
+                <li><b>드라이브</b> — 파일 앱에 붙는 드라이브는 senedu 계정 것만 보입니다. 기존 계정 드라이브는 drive.google.com으로 들어가면 됩니다. 어느 계정에 저장했는지만 신경 쓰시면 됩니다.</li>
+                <li><b>클래스룸</b> — 학생은 senedu 계정으로 들어오기 때문에, 기존 도메인에 만든 클래스에 학생이 참여하려면 양쪽 도메인 관리자가 "다른 도메인 사용자 참여"를 허용해야 합니다. 실무적으로는 <b>클래스룸을 senedu 계정으로 새로 여는 것</b>이 안전합니다. 기존 과제·자료는 드라이브에서 복사해 재사용하면 됩니다.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>학생이 개인 지메일로 로그인하면 안 되나요?</summary>
+            <div class="faq-a"><p>안 됩니다. 학생 기기는 senedu 계정 외 로그인을 차단합니다. 개인 지메일로 들어간 기기는 차단·앱 설치·수업 통제가 하나도 적용되지 않는 "그냥 빠른 브라우저 기기"가 되기 때문입니다. 설명회에서 구글이 제시한 세 가지 조건 중 하나이기도 합니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>학생이 비밀번호를 잊으면 누가 풀어 주나요?</summary>
+            <div class="faq-a"><p>센스쿨 관리자 화면에서 재설정합니다. 기본은 과학정보부이고, 담임·학년부에 재설정 권한을 나눌 수 있는지 교육연구정보원에 확인 중입니다. 첫 로그인 때 학생이 본인 비밀번호로 바꾸고 기억하도록 안내하는 것이 가장 큰 예방책입니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>전입·전출 학생 계정은 어떻게 하나요?</summary>
+            <div class="faq-a"><p>센스쿨은 학적(SIS)과 연동되어 학적 변동이 자동 반영된다는 것이 설명회 설명입니다. 어디까지 자동인지는 확인 중이며, 수작업이 필요하면 과학정보부에 알려 주시면 처리합니다.</p></div>
+          </details>
+
+          <h4 class="faq-g">프로그램 · 수업 도구</h4>
+          <details class="faq">
+            <summary>설치해서 쓰던 프로그램(exe)은 어떻게 되나요?</summary>
+            <div class="faq-a">
+              <p>파일은 받아지지만 <b>실행이 안 됩니다.</b> 크롬 OS에는 윈도우 프로그램을 돌릴 윈도우가 없기 때문입니다. 사이트로 쓰는 것은 전부 그대로이고, 설치형만 웹 버전으로 바꾸면 됩니다.</p>
+              <div class="tbl">
+                <table>
+                  <thead><tr><th>지금 설치해서 쓰던 것</th><th>크롬 OS에서</th></tr></thead>
+                  <tbody>
+                    <tr><td>한글(HWP) 프로그램</td><td>한컴독스(웹). .hwp 파일 자체는 열림</td></tr>
+                    <tr><td>Teams·Office 설치판</td><td>웹판. 거의 동일</td></tr>
+                    <tr><td>엔트리 오프라인, 스크래치 데스크톱</td><td>엔트리 웹, 스크래치 웹 — 그대로</td></tr>
+                    <tr><td>알집·반디집</td><td>zip은 기본 내장</td></tr>
+                    <tr><td>곰믹스 같은 영상 편집</td><td>캔바·Clipchamp·CapCut 웹판</td></tr>
+                    <tr><td>네이버 웨일·엣지 브라우저</td><td>설치 불가. 크롬만 있고, 사이트는 크롬으로 접속</td></tr>
+                    <tr><td>게임 exe</td><td>안 됨 (관리 입장에선 장점)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>마이크로비트·아두이노·센서 수업은 되나요?</summary>
+            <div class="faq-a">
+              <ul>
+                <li><b>마이크로비트</b> — 됩니다. MakeCode·파이썬 에디터가 웹이고, USB로 꽂으면 바로 굽습니다(WebUSB). 서피스고 3는 USB-C 단자라 USB-C↔마이크로 USB 케이블이 필요한데, 이건 지금도 같습니다. 단 <b>엔트리로 마이크로비트를 연결</b>하는 방식은 「엔트리 하드웨어 연결」이 설치형이라 확인이 필요합니다.</li>
+                <li><b>센서(MBL)</b> — 사이언스큐브·파스코·이지메이커 모두 브라우저에서 돌아갑니다. 그 밖의 장비는 개별 확인.</li>
+                <li><b>아두이노</b> — 설치형 IDE는 안 되고 웹 에디터 지원 여부를 확인해야 합니다.</li>
+                <li>관리 콘솔에서 USB 저장장치·WebUSB가 막혀 있으면 안 되므로, 전환 후 한 대로 먼저 테스트합니다.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>패들렛·띵커벨·멘티미터·캔바는 그대로 되나요?</summary>
+            <div class="faq-a"><p>됩니다. 전부 사이트라서 바뀌는 게 없습니다. 다만 <b>QR 코드로 접속시키던 방식</b>은 카메라 문제 때문에 단축 URL을 함께 적거나, 클래스룸 링크로 배포하거나, 클래스툴즈로 교사가 학생 화면에 자료를 직접 띄우는 방식으로 바꾸는 것이 안전합니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>AI 디지털교과서·센스쿨 콘텐츠는요?</summary>
+            <div class="faq-a"><p>모두 웹 기반이라 100% 구동된다는 것이 설명회 설명입니다. 센스쿨 접속 자체도 앱이 아니라 사이트입니다.</p></div>
+          </details>
+
+          <h4 class="faq-g">카메라 · QR · 파일</h4>
+          <details class="faq">
+            <summary>카메라가 안 된다는데, 사진·영상 촬영 과제는 어떻게 하나요?</summary>
+            <div class="faq-a"><p>전·후면 중 한쪽 초점이 흐려질 수 있고, 시범학교에서는 아예 안 되는 기기도 있었습니다. 촬영 과제는 <b>학생 개인 스마트폰으로 찍어 클라우드에 제출</b>하는 방식으로 설계하고, 학급당 촬영용 공용 기기 1~2대를 확보할 계획입니다. 전환 후 기기별 카메라 상태를 점검해 목록을 만들어 드립니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>학생이 디벗에 저장해 둔 파일은요?</summary>
+            <div class="faq-a"><p><b>전환 때 전부 지워집니다.</b> 작업 2주 전부터 백업 안내를 게시·조회·가정통신문으로 반복하고, 학급별 수합 때 담임 선생님이 "백업 완료"를 확인해 주시면 됩니다. 전환 뒤에는 클라우드(구글 드라이브·원드라이브) 저장이 기본이라 이 문제가 다시 생기지 않습니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>인터넷이 끊기면 수업이 멈추나요?</summary>
+            <div class="faq-a"><p>로그인에는 인터넷이 필요합니다. 이미 로그인된 상태라면 문서 작성·파일 열람은 오프라인에서도 되고, 연결되면 저장됩니다. 걱정되는 건 오히려 <b>1교시에 30명이 동시에 로그인할 때 교실 무선망 부하</b>라서, 시범 학급 전환 때 전원 동시 로그인 테스트를 하고 필요하면 교육청에 무선망 개선을 요청합니다.</p></div>
+          </details>
+
+          <h4 class="faq-g">수업 통제 · 차단</h4>
+          <details class="faq">
+            <summary>학생 화면을 볼 수 있다는데, 학생·학부모가 반발하지 않을까요?</summary>
+            <div class="faq-a"><p>규정 없이 쓰면 그렇게 됩니다. 그래서 <b>수업 시간 내 사용, 사전 고지, 화면 캡처·저장 금지</b>를 학교 규정으로 먼저 정하고 학생·학부모에게 "수업 중 교사가 화면을 볼 수 있음"을 알린 뒤에 씁니다. 교육청 차원 가이드가 있는지도 확인 중입니다. 민원이 생기면 담당자가 아니라 사용한 교사 개인이 책임을 지게 되므로, 규정이 선생님을 보호하는 장치입니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>수행평가·형성평가 때 다른 화면이나 AI를 못 쓰게 할 수 있나요?</summary>
+            <div class="faq-a"><p>됩니다. 구글 폼에 <b>잠금 모드</b>를 걸면 제출 전까지 다른 앱·탭을 열 수 없고, 접속·이탈 시각이 교사 메일로 옵니다(이의제기 대응 근거). 평소에는 사이트 차단 정책으로 특정 AI 사이트를 막을 수도 있습니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>유해 사이트 차단이 너무 세서 수업 자료까지 막히면요?</summary>
+            <div class="faq-a"><p>반드시 생기는 일입니다. 과학정보부에 <b>예외 신청 창구와 처리 기한</b>을 두고, 교과에서 자주 쓰는 사이트는 전환 전에 미리 등록합니다. 신청은 이 페이지 아래 체크리스트의 창구로 받습니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>MDM 때문에 느리다면서, 구글 관리(CEU)는 안 무거운가요?</summary>
+            <div class="faq-a"><p>CEU는 기기에 깔리는 프로그램이 아닙니다. 크롬 OS에 관리 기능이 들어 있고, 로그인할 때 정책만 받아옵니다. 그래서 "관리 프로그램이 기기를 잡아먹는" 지금의 구조가 반복되지 않습니다.</p></div>
+          </details>
+
+          <h4 class="faq-g">기기 · 일정</h4>
+          <details class="faq">
+            <summary>전환 작업은 언제, 얼마나 걸리나요? 수업에 지장은요?</summary>
+            <div class="faq-a"><p>방학 중에 업체가 학교로 와서 합니다. 기기당 약 3분, 한 반 분량이 1~1.5시간이라 수업 결손은 없습니다. 학교가 할 일은 기기 수합·충전과 학생 계정 준비이고, 작업 당일에는 과학정보부가 상주합니다. 정확한 날짜는 교육청 다음 신청 일정에 맞춰 알려 드립니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>기기가 새것처럼 되나요? 고장 난 것도 나아지나요?</summary>
+            <div class="faq-a"><p>바뀌는 것은 운영체제이지 기기가 아닙니다. 속도는 새것처럼 빨라지지만, 배터리 열화·힌지·액정·충전 단자 고장은 그대로입니다. 수리 요청은 지금과 같은 경로로 하시면 되고, 전환 시점에 배터리 상태를 함께 점검해 교체가 필요한 기기를 가려낼 계획입니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>해 보고 안 맞으면 다시 윈도우로 돌아갈 수 있나요?</summary>
+            <div class="faq-a"><p>설명회에서 다뤄지지 않아 교육청·업체에 확인 중입니다. 그래서 전면 도입 전에 <b>1~2개 학급만 먼저 전환해 한 학기 써 보고</b> 확대 여부를 결정하는 방식으로 진행하려 합니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>1·3학년 기기도 바뀌나요?</summary>
+            <div class="faq-a"><p>아닙니다. 이번 대상은 <b>2학년 서피스고 3</b>뿐입니다. 1·3학년 기기(갤럭시북)는 해당되지 않습니다.</p></div>
+          </details>
+          <details class="faq">
+            <summary>디벗을 집에 가져가면 관리가 풀리나요?</summary>
+            <div class="faq-a"><p>아닙니다. 관리 정책이 클라우드에서 적용되기 때문에 사이트 차단·사용 시간 관리는 집에서도 그대로입니다. 화면 미러링 같은 수업 통제 기능은 규정상 수업 시간에만 씁니다.</p></div>
+          </details>
+
+          <p class="faq-foot">여기 없는 질문은 <b>과학정보부 조승재</b>에게 주세요. 답을 찾아 이 목록에 넣겠습니다.</p>
         </div>
       </section>
 
@@ -837,7 +1015,7 @@ img{max-width:100%;}
           <span class="pr">
             <b>바뀌는 것</b> 디벗을 켰을 때 나오는 화면(운영체제) &nbsp;·&nbsp;
             <b>안 바뀌는 것</b> 기계 그 자체. 지금 쓰던 디벗 그대로입니다.<br>
-            작업 예정 ○월 ○일 ~ ○월 ○일 &nbsp;·&nbsp; 문의 ○○부 ○○○ 선생님
+            작업 예정 ○월 ○일 ~ ○월 ○일 &nbsp;·&nbsp; 문의 과학정보부 조승재 선생님
           </span>
         </div>
 
@@ -847,7 +1025,7 @@ img{max-width:100%;}
             <div class="slide">
               <span class="sn">Slide 01 — 표지</span>
               <span class="st">디벗이 달라집니다</span>
-              <span class="sb">크롬 OS 전환 안내 · ○○중학교</span>
+              <span class="sb">크롬 OS 전환 안내 · 해누리중학교 과학정보부</span>
             </div>
             <div class="slide">
               <span class="sn">Slide 02 — 무엇이 바뀌나</span>
@@ -1370,6 +1548,8 @@ img{max-width:100%;}
 
 <footer>
   <div class="wrap">
+    <h4>작성</h4>
+    <p class="who">해누리중학교 과학정보부 <b>조승재</b> — 2학년 디벗 크롬 OS 플렉스 전환 검토·교직원 안내·계정 준비 담당. 질문과 설문 회신은 과학정보부로.</p>
     <h4>참고 자료</h4>
     <ul>
       <li>서울시교육청·구글코리아 「디벗 크롬 OS 플렉스 전환 온라인 설명회」 전체 녹취 스크립트 — 본 문서의 주 출처</li>
@@ -1383,6 +1563,7 @@ img{max-width:100%;}
     </p>
   </div>
 </footer>
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-15</span></footer>
 
 <script>
 (function(){
@@ -1536,6 +1717,7 @@ img{max-width:100%;}
   // 1장 교직원 안내: 발표 모드 · 모두 열기 · 발표자 메모 · 인쇄 · 키보드(→/PageDown 다음 카드, ←/PageUp 닫기, Esc 종료)
   var s1 = document.getElementById("s1");
   var cards = s1 ? Array.prototype.slice.call(s1.querySelectorAll("details.card")) : [];
+  var faqs = s1 ? Array.prototype.slice.call(s1.querySelectorAll("details.faq")) : [];
   var presBtn = document.getElementById("presBtn");
   var allBtn = document.getElementById("allBtn");
   var notesBtn = document.getElementById("notesBtn");
@@ -1584,7 +1766,7 @@ img{max-width:100%;}
   // 인쇄: 카드를 전부 펼쳐서 찍고, 끝나면 원래대로
   var closedBeforePrint = [];
   window.addEventListener("beforeprint", function(){
-    closedBeforePrint = cards.filter(function(d){ return !d.open; });
+    closedBeforePrint = cards.concat(faqs).filter(function(d){ return !d.open; });
     closedBeforePrint.forEach(function(d){ d.open = true; });
   });
   window.addEventListener("afterprint", function(){
