@@ -27,37 +27,38 @@ body{
   background:var(--canvas);border-radius:18px;border:1px solid var(--hairline);
   padding:3.2cqw 4.2cqw 2.6cqw;display:flex;flex-direction:column;gap:2cqw;
 }
-.eyebrow{font-size:1.15cqw;font-weight:600;letter-spacing:-.02em;color:var(--ink-60);display:flex;flex-wrap:wrap;gap:.6cqw 1cqw;align-items:center;}
+.eyebrow{font-size:1.55cqw;font-weight:600;letter-spacing:-.02em;color:var(--ink-60);display:flex;flex-wrap:wrap;gap:.6cqw 1cqw;align-items:center;}
 .eyebrow .stage{background:var(--ink);color:#fff;padding:.4cqw 1cqw;border-radius:.7cqw;}
-h1{margin:.7cqw 0 0;font-size:2.8cqw;font-weight:600;line-height:1.12;letter-spacing:-.02em;}
-h1 small{display:block;font-size:1.4cqw;font-weight:400;color:var(--ink-60);margin-top:.45cqw;letter-spacing:-.01em;}
-h2{margin:0 0 .8cqw;font-size:1.55cqw;font-weight:600;letter-spacing:-.02em;line-height:1.2;}
+h1{margin:.9cqw 0 0;font-size:3.8cqw;font-weight:600;line-height:1.12;letter-spacing:-.02em;}
+h1 small{display:block;font-size:1.9cqw;font-weight:400;color:var(--ink-60);margin-top:.45cqw;letter-spacing:-.01em;}
+h2{margin:0 0 1.1cqw;font-size:2.3cqw;font-weight:600;letter-spacing:-.02em;line-height:1.2;}
 
 /* 개요·절차: 다섯 칸 */
 .facts,.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:.9cqw;margin:0;padding:0;list-style:none;}
-.facts > div,.steps > li{background:var(--parchment);border-radius:1cqw;padding:.9cqw 1.1cqw;min-width:0;}
-.facts b,.steps b{display:block;font-size:1.2cqw;font-weight:600;letter-spacing:-.02em;line-height:1.3;color:var(--ink);}
-.facts span,.steps span{display:block;font-size:1.05cqw;line-height:1.42;letter-spacing:-.01em;color:var(--ink-60);margin-top:.25cqw;}
-.steps > li{position:relative;padding-left:2.6cqw;}
-.steps i{position:absolute;left:1cqw;top:.95cqw;font-style:normal;font-size:1.1cqw;font-weight:600;color:var(--ink-48);font-variant-numeric:tabular-nums;}
+.facts > div,.steps > li{background:var(--parchment);border-radius:1cqw;padding:1.1cqw 1.3cqw;min-width:0;}
+.facts b,.steps b{display:block;font-size:1.75cqw;font-weight:600;letter-spacing:-.02em;line-height:1.3;color:var(--ink);}
+.facts span,.steps span{display:block;font-size:1.5cqw;line-height:1.42;letter-spacing:-.01em;color:var(--ink-60);margin-top:.25cqw;}
+.steps > li{position:relative;padding-left:3.6cqw;}
+.steps i{position:absolute;left:1.3cqw;top:1.2cqw;font-style:normal;font-size:1.6cqw;font-weight:600;color:var(--ink-48);font-variant-numeric:tabular-nums;}
 
 /* 장단점 표 */
 table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--hairline);border-radius:1.2cqw;overflow:hidden;}
-th{font-size:1.45cqw;font-weight:600;letter-spacing:-.02em;text-align:left;padding:.75cqw 1.6cqw;background:var(--parchment);color:var(--ink);border-bottom:1px solid var(--hairline);}
+th{font-size:2.1cqw;font-weight:600;letter-spacing:-.02em;text-align:left;padding:.9cqw 1.8cqw;background:var(--parchment);color:var(--ink);border-bottom:1px solid var(--hairline);}
 th+th,td+td{border-left:1px solid var(--divider);}
-td{vertical-align:top;padding:.65cqw 1.6cqw;border-bottom:1px solid var(--divider);}
-tr:last-child td{border-bottom:0;}
-td b{display:block;font-size:1.35cqw;font-weight:600;letter-spacing:-.02em;line-height:1.3;color:var(--ink);}
-td span{display:block;font-size:1.1cqw;line-height:1.4;letter-spacing:-.01em;color:var(--ink-60);margin-top:.2cqw;}
+td{vertical-align:top;padding:0 1.8cqw;}
+.item{padding:1.05cqw 0;border-bottom:1px solid var(--divider);}
+.item:last-child{border-bottom:0;}
+td b{display:block;font-size:2cqw;font-weight:600;letter-spacing:-.02em;line-height:1.3;color:var(--ink);}
+td span{display:block;font-size:1.65cqw;line-height:1.4;letter-spacing:-.01em;color:var(--ink-60);margin-top:.25cqw;}
 
 /* 체험 한 줄 */
-.try p{margin:0;font-size:1.3cqw;line-height:1.5;letter-spacing:-.01em;background:var(--parchment);border-radius:1cqw;padding:1cqw 1.4cqw;}
+.try p{margin:0;font-size:1.85cqw;line-height:1.5;letter-spacing:-.01em;background:var(--parchment);border-radius:1cqw;padding:1cqw 1.4cqw;}
 .try b{font-weight:600;}
 
 .foot{
   padding-top:.9cqw;border-top:1px solid var(--hairline);
   display:flex;flex-wrap:wrap;gap:.5cqw 2cqw;align-items:baseline;justify-content:space-between;
-  font-size:1.1cqw;letter-spacing:-.01em;color:var(--ink-60);
+  font-size:1.45cqw;letter-spacing:-.01em;color:var(--ink-60);
 }
 .foot b{color:var(--ink);font-weight:600;}
 .foot a{color:var(--blue);text-decoration:none;}
@@ -73,7 +74,7 @@ td span{display:block;font-size:1.1cqw;line-height:1.4;letter-spacing:-.01em;col
   .facts b,.steps b{font-size:15px;} .facts span,.steps span{font-size:13.5px;margin-top:3px;}
   .steps > li{padding-left:36px;} .steps i{left:14px;top:13px;font-size:14px;}
   .cmp{overflow-x:auto;} table{min-width:560px;border-radius:14px;}
-  th{font-size:15px;padding:10px 14px;} td{padding:10px 14px;}
+  th{font-size:15px;padding:10px 14px;} td{padding:0 14px;} .item{padding:10px 0;}
   td b{font-size:15px;} td span{font-size:13px;margin-top:3px;}
   .try p{font-size:15px;padding:12px 14px;border-radius:12px;}
   .foot{padding-top:12px;font-size:12px;gap:6px 16px;}
@@ -87,7 +88,7 @@ td span{display:block;font-size:1.1cqw;line-height:1.4;letter-spacing:-.01em;col
   .facts,.steps{gap:6px;} .facts > div,.steps > li{padding:6px 8px;}
   .facts b,.steps b{font-size:10.5px;} .facts span,.steps span{font-size:9.5px;}
   .steps > li{padding-left:22px;} .steps i{left:7px;top:6px;font-size:9.5px;}
-  table{border-color:var(--ink);} th{font-size:11px;padding:5px 8px;border-bottom-color:var(--ink);} td{padding:5px 8px;}
+  table{border-color:var(--ink);} th{font-size:11px;padding:5px 8px;border-bottom-color:var(--ink);} td{padding:0 8px;} .item{padding:5px 0;}
   td b{font-size:10.5px;} td span{font-size:9.5px;}
   .try p{font-size:10.5px;padding:7px 9px;}
   .foot{font-size:9.5px;padding-top:6px;}
@@ -120,28 +121,21 @@ td span{display:block;font-size:1.1cqw;line-height:1.4;letter-spacing:-.01em;col
       <thead><tr><th>장점</th><th>단점</th></tr></thead>
       <tbody>
         <tr>
-          <td><b>수업 준비 시간 단축</b><span>껐다 켜는 데 걸리는 시간 단축 — 부팅 10초 내외, 초기화 2분</span></td>
-          <td><b>카메라 기능 제약</b><span>전·후면 중 한쪽 초점 불량 가능. QR 코드 인식 문제 발생 사례</span></td>
-        </tr>
-        <tr>
-          <td><b>속도 유지</b><span>사용 기간이 길어져도 처리 속도 유지</span></td>
-          <td><b>앱·프로그램 제한</b><span>안드로이드 앱, 설치형 프로그램 사용 불가. 웹 기반만 사용</span></td>
-        </tr>
-        <tr>
-          <td><b>사용 전력 절감</b><span>약 20%</span></td>
-          <td><b>기기 저장 파일 삭제</b><span>전환 시 기기 내 파일 전부 삭제. 사전 백업 필요</span></td>
-        </tr>
-        <tr>
-          <td><b>보안</b><span>백신 불필요, 자동 업데이트</span></td>
-          <td><b>원복 절차 미확인</b><span>윈도우 복귀 방법·비용 확인 중</span></td>
-        </tr>
-        <tr>
-          <td><b>수업 활용 가능한 통제 도구</b><span>화면 집중·잠금, 미러링, 시험 잠금</span></td>
-          <td><b>계정 체계 변경</b><span>센스쿨 계정으로만 로그인</span></td>
-        </tr>
-        <tr>
-          <td><b>기기 일괄 관리</b><span>앱 배포, 사이트 차단, 사용 시간, 원격 잠금을 관리 콘솔에서</span></td>
-          <td><b>조작 방식 차이</b><span>단축키·탭 전환 등 윈도우와 다름. 적응 기간 필요</span></td>
+          <td>
+            <div class="item"><b>디벗 부팅 시간 단축</b><span>껐다 켜는 데 걸리는 시간 단축 — 부팅 10초 내외, 초기화 2분</span></div>
+            <div class="item"><b>속도 향상</b><span>상주 관리 프로그램(MDM)이 차지하던 메모리·CPU 여유 확보. 사용 기간이 길어져도 유지</span></div>
+            <div class="item"><b>사용 전력 절감</b><span>약 20%</span></div>
+            <div class="item"><b>보안</b><span>백신 불필요, 자동 업데이트</span></div>
+            <div class="item"><b>수업 활용 가능한 통제 도구</b><span>화면 집중·잠금, 미러링, 시험 잠금</span></div>
+            <div class="item"><b>기기 일괄 관리</b><span>앱 배포, 사이트 차단, 사용 시간, 원격 잠금을 관리 콘솔에서</span></div>
+          </td>
+          <td>
+            <div class="item"><b>카메라 기능 제약</b><span>전·후면 중 한쪽 초점 불량 가능. QR 코드 인식 문제 발생 사례</span></div>
+            <div class="item"><b>앱·프로그램 제한</b><span>안드로이드 앱, 설치형 프로그램 사용 불가. 웹 기반만 사용</span></div>
+            <div class="item"><b>기기 저장 파일 삭제</b><span>전환 시 기존 기기에 있는 파일은 모두 삭제됩니다 (수업 자료 유실 위험)</span></div>
+            <div class="item"><b>계정 체계 변경</b><span>센스쿨 계정으로만 로그인</span></div>
+            <div class="item"><b>조작 방식 차이</b><span>단축키·탭 전환 등 윈도우와 다름. 적응 기간 필요</span></div>
+          </td>
         </tr>
       </tbody>
     </table>
