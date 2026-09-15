@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디벗 크롬 OS 전환 — 장점·단점 한 장 · 해누리중 과학정보부</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
+<style>
+/* 교직원회의용 한 장 — 어느 화면이든 16:9 한 장에 맞춰 글자가 같이 커짐(cqw) */
+:root{
+  --blue:#0066cc; --ink:#1d1d1f; --ink-60:#6e6e73; --ink-48:#7a7a7a;
+  --canvas:#ffffff; --parchment:#f5f5f7; --hairline:#e0e0e0; --divider:#f0f0f0;
+  --tile:#272729; --on-tile:#ffffff; --on-tile-muted:#cccccc;
+  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{
+  background:var(--parchment);color:var(--ink);font-family:var(--sf);
+  -webkit-font-smoothing:antialiased;word-break:keep-all;
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:0 16px;
+}
+.slide{
+  container-type:inline-size;
+  width:min(100vw - 32px, calc((100vh - 32px) * 16 / 9));
+  aspect-ratio:16 / 9;
+  background:var(--canvas);border-radius:18px;border:1px solid var(--hairline);
+  padding:4.2cqw 4.6cqw 3.4cqw;display:flex;flex-direction:column;
+}
+.eyebrow{font-size:1.25cqw;font-weight:600;letter-spacing:-.02em;color:var(--ink-60);display:flex;gap:1cqw;align-items:center;}
+.eyebrow .stage{background:var(--ink);color:#fff;padding:.45cqw 1cqw;border-radius:.7cqw;}
+h1{margin:.9cqw 0 0;font-size:3.2cqw;font-weight:600;line-height:1.12;letter-spacing:-.02em;}
+h1 small{display:block;font-size:1.55cqw;font-weight:400;color:var(--ink-60);margin-top:.5cqw;letter-spacing:-.01em;}
+
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;margin-top:2.2cqw;flex:1;min-height:0;}
+.col{border-radius:1.4cqw;padding:1.8cqw 2cqw 1.6cqw;display:flex;flex-direction:column;min-height:0;}
+.col.gain{background:var(--canvas);border:1px solid var(--hairline);}
+.col.cost{background:var(--tile);color:var(--on-tile);}
+.col h2{margin:0 0 1.1cqw;font-size:2cqw;font-weight:600;letter-spacing:-.02em;line-height:1.2;}
+.col h2 span{font-size:1.25cqw;font-weight:400;color:var(--ink-60);margin-left:.7cqw;}
+.col.cost h2 span{color:var(--on-tile-muted);}
+.col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.95cqw;}
+.col li{font-size:1.5cqw;line-height:1.45;letter-spacing:-.01em;padding-left:1.4cqw;position:relative;color:var(--ink);}
+.col li::before{content:"";position:absolute;left:0;top:.62em;width:.42cqw;height:.42cqw;border-radius:50%;background:var(--ink-48);}
+.col li b{font-weight:600;}
+.col.cost li{color:var(--on-tile-muted);}
+.col.cost li b{color:var(--on-tile);}
+.col.cost li::before{background:var(--on-tile-muted);}
+
+.foot{
+  margin-top:1.8cqw;padding-top:1.1cqw;border-top:1px solid var(--hairline);
+  display:flex;flex-wrap:wrap;gap:.5cqw 2cqw;align-items:baseline;justify-content:space-between;
+  font-size:1.2cqw;letter-spacing:-.01em;color:var(--ink-60);
+}
+.foot b{color:var(--ink);font-weight:600;}
+.foot a{color:var(--blue);text-decoration:none;}
+
+@media (max-width:640px){
+  body{align-items:flex-start;padding:16px;}
+  .slide{width:100%;aspect-ratio:auto;padding:22px 18px;border-radius:18px;}
+  .eyebrow{font-size:13px;gap:8px;} .eyebrow .stage{padding:4px 9px;border-radius:8px;}
+  h1{font-size:24px;margin-top:10px;} h1 small{font-size:15px;margin-top:6px;}
+  .cmp{grid-template-columns:1fr;gap:12px;margin-top:18px;}
+  .col{padding:16px;border-radius:18px;} .col h2{font-size:19px;margin-bottom:10px;} .col h2 span{font-size:13px;margin-left:6px;}
+  .col ul{gap:8px;} .col li{font-size:15px;padding-left:14px;} .col li::before{width:5px;height:5px;}
+  .foot{margin-top:16px;padding-top:12px;font-size:12px;gap:6px 16px;}
+}
+@media print{
+  @page{size:A4 landscape;margin:10mm;}
+  body{background:none;padding:0;min-height:0;display:block;}
+  .slide{width:100%;border:0;border-radius:0;aspect-ratio:auto;padding:0;}
+  .col.cost{background:none;color:var(--ink);border:1px solid var(--ink);}
+  .col.cost li,.col.cost li b,.col.cost h2 span{color:var(--ink);}
+  .col.cost li::before{background:var(--ink);}
+}
+</style>
+</head>
+<body>
+<main class="slide">
+  <div class="eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>교직원 협의 안건 · 전환 여부는 교직원 협의로 결정</span></div>
+  <h1>2학년 디벗 Surface Go 3 · 윈도우 → 크롬 OS Flex 전환 검토
+    <small>기기는 그대로 두고 운영체제만 교체 · 학기 중 하루 만에 전환 · 자료 기준: 서울시교육청·구글코리아 설명회</small>
+  </h1>
+
+  <div class="cmp">
+    <section class="col gain" aria-labelledby="h-gain">
+      <h2 id="h-gain">장점 <span>좋아지는 점</span></h2>
+      <ul>
+        <li><b>켜면 10초 안에 수업 시작</b> — 초기화도 2분. 시범학교 "새 기기를 쓰는 느낌"</li>
+        <li><b>쓸수록 느려지지 않음</b> — 프로그램·파일을 기기에 쌓지 않아 2~3년 뒤에도 같은 속도</li>
+        <li><b>배터리 약 20% 절감</b> — 하루 일과 중 추가 충전 없이</li>
+        <li><b>백신 없이도 안전</b> — 운영체제가 잠겨 있어 이상한 파일을 눌러도 설치 안 됨</li>
+        <li><b>수업 통제 도구</b> — 학생 화면을 「이 자료만」·「자유」·「잠금」으로, 화면 미러링·시험 잠금</li>
+        <li><b>기기 관리가 실제로 됨</b> — 앱 한 번에 설치·사이트 차단·사용 시간 관리(지금 MDM은 잘 안 됨)</li>
+      </ul>
+    </section>
+    <section class="col cost" aria-labelledby="h-cost">
+      <h2 id="h-cost">단점 <span>감수할 점</span></h2>
+      <ul>
+        <li><b>카메라 초점</b> — 한쪽이 흐려질 수 있음. QR 코드 인식 문제(시범학교 실제 발생)</li>
+        <li><b>스마트폰용 앱·설치형 프로그램 불가</b> — 인터넷 사이트로 되는 것만 사용</li>
+        <li><b>디벗 안에 저장한 파일 전부 삭제</b> — 전환 전 백업 필요</li>
+        <li><b>되돌리기</b> — 윈도우로 돌아가는 방법·비용은 아직 확인 중</li>
+        <li><b>센스쿨 계정으로만 로그인</b> — 개인 지메일 차단, 아이디 라벨 배부</li>
+        <li><b>윈도우와 다른 조작</b> — 단축키·탭 방식이 달라 적응 기간 필요</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span><b>다음 단계</b> 추석 전 쿨메신저 설문 2건(카메라·QR 활용도 · 사용 앱·프로그램 목록) → 교데통 신청 → 학기 중 하루 전환</span>
+    <span><b>담당</b> 과학정보부 조승재 · 자세한 내용 <a href="chromeos-flex.html">chromeos-flex.html</a></span>
+  </div>
+</main>
+</body>
+</html>

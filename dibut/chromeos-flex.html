@@ -315,11 +315,12 @@ td.mono{font-family:inherit;font-size:14px;color:var(--ink-48);font-variant-nume
   white-space:nowrap;text-decoration:none;display:inline-block;vertical-align:1px;
 }
 .reset,.btn-ghost{
+  display:inline-flex;align-items:center;text-decoration:none;
   background:transparent;border:1px solid var(--blue);color:var(--blue);
   font-size:14px;letter-spacing:-.224px;line-height:1.29;padding:8px 16px;border-radius:var(--r-pill);
   cursor:pointer;align-self:flex-start;transition:transform .15s ease;
 }
-.reset:hover,.btn-ghost:hover{background:var(--blue);color:var(--on-blue);}
+.reset:hover,.btn-ghost:hover{background:var(--blue);color:var(--on-blue);text-decoration:none;}
 .reset:active,.btn-ghost:active{transform:scale(.95);}
 
 /* ---------- 1장: 교직원 안내 발표 카드 ---------- */
@@ -690,6 +691,7 @@ img{max-width:100%;}
             <button class="btn-ghost" id="allBtn" type="button">모두 열기</button>
             <button class="btn-ghost" id="notesBtn" type="button" aria-pressed="false">발표자 메모</button>
             <button class="btn-ghost" id="printBrief" type="button">이 안내만 인쇄</button>
+            <a class="btn-ghost" href="chromeos-flex-compare.html">회의용 한 장(장점·단점)</a>
           </div>
         </div>
 
