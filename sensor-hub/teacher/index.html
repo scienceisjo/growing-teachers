@@ -552,6 +552,21 @@ input[type=search]:focus{outline:2px solid var(--blue-focus);outline-offset:2px}
 .bsel{font-family:var(--sf);font-size:15px;letter-spacing:-.224px;color:var(--ink);border:1px solid var(--chip);border-radius:var(--r-pill);padding:7px 32px 7px 14px;cursor:pointer;appearance:none;-webkit-appearance:none;
   background:var(--canvas) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%231d1d1f' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 13px center}
 
+/* ══ 측정 데이터 올리기 ══ */
+.upgrid{display:flex;gap:14px 18px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.uptxt{font-family:var(--sf);font-size:15px;letter-spacing:-.224px;border:1px solid var(--chip);border-radius:var(--r-pill);padding:7px 14px;width:150px;background:var(--canvas);color:var(--ink)}
+.uptxt:focus{outline:2px solid var(--blue-focus);outline-offset:1px}
+.upfile{display:inline-flex;align-items:center;gap:10px}
+.upfile input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.upname{font-size:14px;letter-spacing:-.224px;color:var(--ink-48)}
+.uparea{display:block;width:100%;margin-top:12px;font-family:var(--mono);font-size:13px;line-height:1.5;border:1px solid var(--chip);border-radius:var(--r-md);padding:10px 12px;background:var(--canvas);color:var(--ink);resize:vertical}
+.uparea:focus{outline:2px solid var(--blue-focus);outline-offset:1px}
+.upmsg{font-size:14px;letter-spacing:-.224px;color:var(--ink-80)}
+.upmsg.ok{color:var(--ok)} .upmsg.bad{color:var(--bad)}
+.upbtn{font-family:var(--sf);font-size:13px;letter-spacing:-.224px;color:var(--blue);background:var(--canvas);border:1px solid var(--chip);border-radius:var(--r-pill);padding:5px 12px;cursor:pointer}
+.upbtn:hover{border-color:var(--blue)} .upbtn:active{transform:scale(.95)}
+#upList td{vertical-align:middle;font-variant-numeric:tabular-nums}
+
 /* ══ 마무리 줄 ══ */
 #app-credit{background:var(--parchment)!important;margin:0!important;padding:var(--s-xl) 22px 40px!important;border-top:1px solid var(--hairline)!important;
   color:var(--ink-48)!important;font-family:var(--sf)!important;font-size:12px!important;letter-spacing:-.12px!important;line-height:1.9!important}
@@ -622,6 +637,7 @@ body[data-view="hub"] #app-credit{border-top-color:transparent!important}
 const TABS = [
   {id:'setup', em:'', name:'출발 준비',      min:10},
   {id:'today', em:'📋', name:'오늘',            min:7},
+  {id:'upload',em:'📤', name:'측정 데이터 올리기', min:0},
   {id:'why',   em:'🔭', name:'왜 디지털 도구인가', min:10},
   {id:'lose',  em:'⚖️', name:'무엇을 잃는가',    min:18},
   {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
@@ -1056,8 +1072,8 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
 <div class="startrow" data-k="dl">
   <div><span class="no">02</span><span class="chk" role="checkbox" tabindex="0" aria-checked="false" aria-label="2번 완료 표시"></span></div>
   <div class="st-body">
-    <h4>사이언스샵 내려받기 — 학교 기기에 맞춰 하나만</h4>
-    <p class="sd">브라우저판으로 오늘은 충분합니다. 다만 <b>실험 콘텐츠와 보고서 양식</b>은 설치판에만 들어 있어서, 학교로 돌아가 수업에 쓰시려면 미리 받아 두시는 편이 낫습니다. 디벗 학교는 크롬북용, 과학실 데스크톱은 윈도우용입니다.</p>
+    <h4>사이언스샵 내려받기 — 오늘은 <b>설치판</b>으로</h4>
+    <p class="sd">오늘은 <b>윈도우 설치판(사이언스샵 for Windows)</b>으로 합니다 — <b>실험 콘텐츠와 보고서 양식</b>이 설치판에만 들어 있습니다. 브라우저판(on.sciencecube.com)은 크롬북·설치 권한이 없는 기기일 때 쓰십시오.</p>
     <div class="urls">
       <a class="ulink dl" href="https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/318/" target="_blank" rel="noopener"><b>크롬북용</b></a>
       <a class="ulink dl" href="https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/139/" target="_blank" rel="noopener"><b>윈도우용</b></a>
@@ -1208,33 +1224,24 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
 <tr><td><b>0–6</b></td><td>열기</td><td>만화 4컷 → "무엇을 보고 있었을까요" · 오늘 두 가지 — <b>써 보기 · 살 계획</b></td></tr>
 <tr><td><b>6–14</b></td><td>왜 센서인가</td><td>교육과정 원문 세 줄 = <b>품의서 '목적'에 붙일 근거</b> · 13개 중 2개 · 센서는 종속변인만 잰다</td></tr>
-<tr style="background:var(--teal-soft)"><td><b>14–45</b></td><td><b>공동활동 ①</b><br>이지 나노 + 밝기</td><td>거리에 따른 빛의 세기 — 연결 6 · 그냥 보기 3 · 측정 9 · <b>1/r²</b> 5 · <b>MBL 수업허브 8</b><br><span style="font-size:.86rem;color:var(--ink-soft)">허브 sm-09 · 모둠마다 맡은 거리 하나 → 합쳐야 곡선</span></td></tr>
-<tr style="background:var(--teal-soft)"><td><b>45–76</b></td><td><b>공동활동 ②</b><br>큐브 압력 + 보일</td><td>켜면 끝 2 · 수동수집 설정 5 · 측정 9 · <b>1/V</b> 5 · <b>MBL 수업허브 8</b> · 두 회사 비교 2<br><span style="font-size:.86rem;color:var(--ink-soft)">허브 sm-05 · 맡은 부피 구간 → P×V 일정</span></td></tr>
+<tr style="background:var(--teal-soft)"><td><b>14–45</b></td><td><b>공동활동 ①</b><br>이지 나노 + 밝기</td><td>거리에 따른 빛의 세기 — 연결 6 · 그냥 보기 3 · 측정 9 · <b>1/r²</b> 5 · <b>CSV 올리기 → 강사 화면에서 합쳐 분석 8</b><br><span style="font-size:.86rem;color:var(--ink-soft)">「측정 데이터 올리기」 절에 파일 올리기 · 모둠마다 맡은 거리 하나 → 합쳐야 곡선</span></td></tr>
+<tr style="background:var(--teal-soft)"><td><b>45–76</b></td><td><b>공동활동 ②</b><br>큐브 압력 + 보일</td><td>켜면 끝 2 · 수동수집 설정 5 · 측정 9 · <b>1/V</b> 5 · <b>CSV 올리기 → 강사 화면에서 합쳐 분석 8</b> · 두 회사 비교 2<br><span style="font-size:.86rem;color:var(--ink-soft)">맡은 부피 구간 → 합치면 P×V 일정</span></td></tr>
 <tr><td><b>76–81</b></td><td>휴식</td><td></td></tr>
 <tr style="background:var(--coral-soft)"><td><b>81–101</b></td><td><b>구매 계획 세우기</b></td><td>수요 조사표 5 · 수량 규칙 3 · <b>구매 계획 생성기</b> 7 · 500만원 사례 + 0원 사다리 5<br><span style="font-size:.86rem;color:var(--ink-soft)">「센서 구매 계획 세우기」 절 — 표에 숫자를 넣으면 수량이 나옵니다</span></td></tr>
 <tr><td><b>101–113</b></td><td>자유 활용</td><td><b>계획에 적은 센서 하나만</b> 골라 만져 보기 · 값이 나오면 허브의 같은 실험에 넣기 · AI 프롬프트 카드</td></tr>
 <tr><td><b>113–120</b></td><td>닫기</td><td>생성기 결과 인쇄/PDF를 그 자리에서 · <b>사고 나서 쓸 서류 셋</b>(정산서·결과보고서) 1분 · 만족도 · 편지</td></tr>
 </table></div>
 
-<h3 class="subh">MBL 수업허브 — <b>연수에서 쓰는 순서</b></h3>
-<p>허브의 자리는 측정이 아니라 <b>측정 이후</b>입니다. 업체 프로그램으로 잰 값을 넣어 반 전체 한 그래프로 합치고, 축을 바꾸고, 결론 문장까지 갑니다.</p>
+<h3 class="subh">데이터는 <b>올려 주시면</b> 제가 합칩니다</h3>
 <div class="tablewrap"><table>
 <tr><th>언제</th><th>누가</th><th>하는 일</th></tr>
-<tr><td>전날</td><td>강사</td><td>교사 화면에서 수업 2개 만들기 — <b>sm-09</b> 거리–빛의 세기 · <b>sm-05</b> 보일 · <b>나눠 맡기기</b> 켜기 · 참여코드 2개 인쇄</td></tr>
-<tr><td>공동활동 시작</td><td>강사</td><td>전자칠판에 참여코드 · 자동 발표모드(present) 열어 두기</td></tr>
-<tr><td>측정 직후</td><td>모둠(2인 1조)</td><td>참여코드 → 모둠 번호 → <b>PIN 4자리</b>(모둠이 정함) → 데이터 입력 탭에 <b>맡은 값만</b></td></tr>
-<tr><td>입력 뒤</td><td>모둠</td><td><b>학생이 먼저 관문</b> — 예상 한 문장 → 파생열(1/r², 1/V) 첫 두 줄 직접 계산 → 직선으로 펴는 가로축 고르기. 그다음에야 앱이 그립니다</td></tr>
-<tr><td>두 모둠 이상 올라오면</td><td>전체</td><td>공유 탭 <b>「반 전체 한 그래프」</b> — 모둠 산점도 + 전체 추세선, 발표모드로 전자칠판에</td></tr>
-<tr><td>마무리</td><td>강사</td><td>데이터 실험실에서 <b>축 바꾸기·변환</b>(n = −2, n = −1) 시연 · 보고서/생기부 탭은 30초</td></tr>
+<tr><td>측정 끝</td><td>선생님</td><td>「측정 데이터 올리기」 절에 <b>CSV 파일 또는 붙여넣기</b> + 모둠 이름 → [올리기]</td></tr>
+<tr><td>올라오면</td><td>강사</td><td>목록에서 [복사] → 내 화면(MBL 수업허브 데이터 실험실)에 붙여 넣고 <b>반 전체 그래프 · 축 바꾸기</b>를 전자칠판에</td></tr>
+<tr><td>안 올라오면</td><td>강사</td><td>허브의 [예시 데이터 넣기]로 같은 흐름</td></tr>
 </table></div>
-<div class="callout"><b>연결이 안 되는 모둠은 [예시 데이터 넣기]</b>로 같은 흐름을 탑니다. 센서 없는 학교라 이 단추가 오늘 더 중요합니다.</div>
-<div class="urls" style="margin:10px 0 16px">
-  <a class="ulink" href="https://scienceisjo.github.io/mblclasshub/?exp=sm-09" target="_blank" rel="noopener"><b>허브 · 거리–빛의 세기 (sm-09)</b></a>
-  <a class="ulink" href="https://scienceisjo.github.io/mblclasshub/?exp=sm-05" target="_blank" rel="noopener"><b>허브 · 보일의 법칙 (sm-05)</b></a>
-  <a class="ulink" href="https://scienceisjo.github.io/mblclasshub/teacher.html" target="_blank" rel="noopener"><b>교사 화면 · 수업 만들기</b></a>
-</div>
-<div class="script">"여러분이 방금 통과한 관문 — 예상하고, 1/r²를 손으로 계산하고, 축을 고른 것 — 그게 <b>센서가 가져간 자리에 되돌려 넣은 것</b>입니다. 앱이 그래프를 그려 주는 게 아니라, 여러분이 고른 축으로 그립니다."</div>
-<div class="note">허브를 처음부터 설명하지 마십시오. <b>참여코드 치고 값 넣는 데서 시작</b>합니다. 교사 화면은 마무리에 30초.<br><br>시연용으로 관문을 끄는 스위치가 기기마다 있지만(<code>localStorage.mbl_an_sf='0'</code>) <b>오늘은 켜 두는 게 낫습니다.</b> 관문이 곧 오늘의 논지입니다.</div>
+<div class="ctl" style="margin:6px 0 16px"><button class="btn" data-go="upload">측정 데이터 올리기 절로</button></div>
+<div class="script">"선생님들은 재기만 하시고, 파일만 올려 주십시오. 합치고 축을 바꾸는 건 제가 화면에서 보여 드리겠습니다 — 학생과 하실 때는 이 자리가 학생 몫입니다."</div>
+<div class="note">모둠마다 파일 하나면 됩니다. 올라오는 순서대로 복사해 허브에 붙여 넣으십시오. 3모둠이면 충분히 곡선이 됩니다.</div>
 <div class="callout ok"><b>드릴 자료 넷</b><br>
 · <b>이 페이지</b> — 실험 33건의 매뉴얼 쪽수와 축·수집 모드, 그리고 <b>구매 수량 계산</b><br>
 · <b>센서 구매 가이드</b> — 가격표 · 구매 계획 생성기 · 사례<br>
@@ -1252,6 +1259,31 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <div class="note"><b>만화를 띄우고 말을 얹지 마십시오.</b> 30초쯤 조용히 두시면 다들 알아서 읽으십니다. 설명을 붙이면 그림을 안 보십니다.<br><br>
 "물을 보고 있었습니까, 표를 보고 있었습니까"에 <b>대답을 기다리세요.</b> 강사가 답을 말해 버리면 효과가 절반입니다.<br><br>
 4컷의 <b>빈 손</b>을 짚어 주시면 좋습니다 — 적을 것이 없어졌다는 뜻입니다.</div>`,
+
+/* ───── 측정 데이터 올리기 ───── */
+upload: head('📤 측정 데이터','잰 값을 <b>여기에 올려 주세요</b>',
+  '올라온 파일을 강사가 한 화면에서 합쳐 분석해 드립니다')
++ `<div class="lab" id="upBox">
+  <h4>CSV 올리기</h4>
+  <div class="cap">EZ·ON은 [데이터 분석] → 내보내기(CSV), Science#는 툴바 [차트를 CSV로 저장]. 파일이 없으면 표를 복사해 아래 칸에 붙여 넣으셔도 됩니다.</div>
+  <div class="upgrid">
+    <label class="bl">실험 <select class="bsel" id="upExp"><option>거리–빛의 세기</option><option>보일의 법칙</option><option>옴의 법칙</option><option>기타</option></select></label>
+    <label class="bl">모둠 <input type="text" id="upTeam" class="uptxt" placeholder="예: 1모둠" maxlength="30"></label>
+    <span class="upfile"><input type="file" id="upFile" accept=".csv,.txt,text/csv,text/plain"><label for="upFile" class="btn ghost" style="min-height:38px;padding:8px 18px;font-size:15px">파일 고르기</label> <span id="upName" class="upname">파일 없음</span></span>
+  </div>
+  <textarea id="upText" class="uparea" rows="5" placeholder="또는 표를 복사해 여기에 붙여 넣기 — 첫 줄이 머리글(예: 거리(cm),밝기)"></textarea>
+  <div class="ctl" style="margin:12px 0 0"><button class="btn" id="upSend">올리기</button><span id="upMsg" class="upmsg"></span></div>
+</div>
+
+<h3 class="subh">올라온 데이터 <span id="upCount" style="font-weight:400;color:var(--ink-48);font-size:17px"></span></h3>
+<div class="ctl" style="margin-bottom:12px">
+  <select class="bsel" id="upFilter"><option value="">모든 실험</option><option>거리–빛의 세기</option><option>보일의 법칙</option><option>옴의 법칙</option><option>기타</option></select>
+  <button class="btn ghost" id="upRefresh" style="min-height:38px;padding:8px 18px;font-size:15px">새로고침</button>
+  <button class="btn ghost" id="upMerge" style="min-height:38px;padding:8px 18px;font-size:15px">이 실험 전부 합쳐 복사</button>
+</div>
+<div class="tablewrap"><table id="upList"><tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr><tr><td colspan="6" style="color:var(--ink-48)">불러오는 중…</td></tr></table></div>
+<div class="callout" id="upHint"><b>강사</b> — [복사] 뒤 MBL 수업허브의 <b>데이터 실험실</b>(또는 시트)에 붙여 넣으면 됩니다. 「이 실험 전부 합쳐 복사」는 모둠 열을 앞에 붙여 한 표로 만듭니다(머리글이 같을 때).</div>
+<div class="note">파일은 Supabase(과학이조선생 프로젝트) <code>sensor_uploads</code> 표에 들어갑니다. 지우려면 Supabase 대시보드에서. 이 절은 <b>scienceisjo.github.io 주소로 열었을 때만</b> 서버에 닿습니다(아티팩트 사본에서는 안 됨).</div>`,
 
 /* ───── 왜 ───── */
 why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일까요?',
@@ -3025,6 +3057,7 @@ function mark(id){
 const HUBD = {
   setup:'사이언스# · EZ·ON 열고 자료집 받기 · 이지메이커 가이드북',
   today:'만화 4컷으로 여는 질문',
+  upload:'잰 값을 CSV로 올리면 강사가 한 화면에서 합쳐 분석',
   why:'교육과정과 교과서가 센서를 어디에 적어 두었나',
   lose:'센서가 가져간 자리에 무엇을 넣을 것인가 — 오늘의 중심',
   gain:'센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷',
@@ -3125,6 +3158,10 @@ hubEl.addEventListener('click',function(e){
   else setView('one', b.dataset.go);
 });
 document.getElementById('toHub').addEventListener('click',()=>setView('hub'));
+document.getElementById('panels').addEventListener('click',function(e){
+  const b=e.target.closest('button[data-go]'); if(!b) return;
+  setView('one', b.dataset.go);
+});
 document.querySelector('.hero').addEventListener('click',function(e){
   const b=e.target.closest('[data-go]'); if(!b) return;
   if(b.dataset.go==='__all') setView('all');
@@ -3976,10 +4013,91 @@ function initPaper(){
   });
 }
 
+/* ═══════════════ 측정 데이터 올리기 — Supabase A · sensor_uploads ═══════════════
+   SETUP SQL: 수업HTML/_템플릿/센서연수_업로드_SETUP.sql (A 프로젝트에서 1회 Run) */
+var SB_URL='https://vbvtnmnodeoocbbjauap.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc';
+function initUpload(){
+  var P=document.querySelector('.tabpanel[data-tab="upload"]'); if(!P) return;
+  var $=function(s){ return P.querySelector(s); };
+  var H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+  var TBL=SB_URL+'/rest/v1/sensor_uploads';
+  var sess=function(){ return document.body.dataset.school||'yeoksam'; };
+  var msg=$('#upMsg'), list=$('#upList'), fileName='';
+  function say(s,cls){ msg.textContent=s; msg.className='upmsg'+(cls?' '+cls:''); }
+  function decode(buf){ try{ return new TextDecoder('utf-8',{fatal:true}).decode(buf); }catch(e){ return new TextDecoder('euc-kr').decode(buf); } }
+  function lines(s){ return s.replace(/^\uFEFF/,'').split(/\r?\n/).filter(function(l){ return l.trim(); }); }
+  $('#upFile').addEventListener('change',function(e){
+    var f=e.target.files[0]; if(!f) return;
+    fileName=f.name; $('#upName').textContent=f.name+' · '+(Math.round(f.size/102.4)/10)+'KB';
+    f.arrayBuffer().then(function(b){ $('#upText').value=decode(b); say('파일을 읽었습니다. 모둠 이름을 적고 [올리기]'); });
+  });
+  $('#upSend').addEventListener('click',function(){
+    var team=$('#upTeam').value.trim(), exp=$('#upExp').value, csv=$('#upText').value.replace(/^\uFEFF/,'').trim();
+    if(!team){ say('모둠 이름을 적어 주십시오.','bad'); $('#upTeam').focus(); return; }
+    if(lines(csv).length<2){ say('데이터가 없습니다 — 파일을 고르거나 표를 붙여 넣어 주십시오.','bad'); return; }
+    if(csv.length>200000){ say('파일이 너무 큽니다(200KB 넘음). 수집 간격을 줄여 다시 내보내 주십시오.','bad'); return; }
+    var body={session:sess(),exp:exp,team:team,filename:fileName||'(붙여넣기)',rows:lines(csv).length-1,csv:csv};
+    say('올리는 중…'); $('#upSend').disabled=true;
+    fetch(TBL,{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},H),body:JSON.stringify(body)})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); say('올렸습니다 — '+team+' · '+exp+' · '+body.rows+'행','ok'); $('#upText').value=''; $('#upFile').value=''; fileName=''; $('#upName').textContent='파일 없음'; load(); })
+      .catch(function(e){ say('올리지 못했습니다('+e.message+'). 인터넷·주소(scienceisjo.github.io)·SQL 실행 여부를 확인해 주십시오.','bad'); })
+      .then(function(){ $('#upSend').disabled=false; });
+  });
+  var rowsCache=[];
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function hhmm(iso){ var d=new Date(iso); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  function load(){
+    var f=$('#upFilter').value;
+    var q=TBL+'?select=id,created_at,exp,team,filename,rows&session=eq.'+encodeURIComponent(sess())+'&order=created_at.desc&limit=80'+(f?'&exp=eq.'+encodeURIComponent(f):'');
+    fetch(q,{headers:H}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(rows){
+      rowsCache=rows;
+      $('#upCount').textContent=rows.length?'· '+rows.length+'건':'';
+      var html='<tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr>';
+      if(!rows.length) html+='<tr><td colspan="6" style="color:var(--ink-48)">아직 올라온 데이터가 없습니다.</td></tr>';
+      rows.forEach(function(r){
+        html+='<tr><td>'+hhmm(r.created_at)+'</td><td><b>'+esc(r.team)+'</b></td><td>'+esc(r.exp)+'</td><td>'+(r.rows||'')+'</td><td style="color:var(--ink-48)">'+esc(r.filename)+'</td>'
+            +'<td style="white-space:nowrap"><button class="upbtn" data-copy="'+r.id+'">복사</button> <button class="upbtn" data-dl="'+r.id+'">받기</button></td></tr>';
+      });
+      list.innerHTML=html;
+    }).catch(function(e){
+      list.innerHTML='<tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr><tr><td colspan="6" style="color:var(--bad)">서버에 닿지 않습니다('+e.message+'). scienceisjo.github.io 주소로 열었는지, SETUP SQL을 실행했는지 확인해 주십시오.</td></tr>';
+    });
+  }
+  function getCsv(id){ return fetch(TBL+'?select=csv,team,exp,filename&id=eq.'+id,{headers:H}).then(function(r){ return r.json(); }).then(function(a){ return a[0]; }); }
+  function copyText(s){
+    if(navigator.clipboard&&window.isSecureContext) return navigator.clipboard.writeText(s);
+    var ta=document.createElement('textarea'); ta.value=s; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return Promise.resolve();
+  }
+  function dl(name,s){ var b=new Blob(['\uFEFF'+s],{type:'text/csv;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+  list.addEventListener('click',function(e){
+    var c=e.target.closest('[data-copy]'), d=e.target.closest('[data-dl]');
+    if(c){ getCsv(c.dataset.copy).then(function(r){ return copyText(r.csv); }).then(function(){ c.textContent='복사됨'; setTimeout(function(){ c.textContent='복사'; },1500); }); }
+    if(d){ getCsv(d.dataset.dl).then(function(r){ dl((r.team+'_'+r.exp).replace(/[\\/:*?"<>|]/g,'_')+'.csv', r.csv); }); }
+  });
+  $('#upMerge').addEventListener('click',function(){
+    var f=$('#upFilter').value||$('#upExp').value;
+    var rows=rowsCache.filter(function(r){ return r.exp===f; });
+    if(!rows.length){ say('합칠 데이터가 없습니다 — 위 목록의 실험을 고르십시오.','bad'); return; }
+    Promise.all(rows.map(function(r){ return getCsv(r.id); })).then(function(all){
+      var head=null, out=[], same=true;
+      all.forEach(function(r){ var L=lines(r.csv); if(head===null) head=L[0]; else if(L[0]!==head) same=false; });
+      if(same){ out.push('모둠,'+head); all.forEach(function(r){ lines(r.csv).slice(1).forEach(function(l){ out.push(r.team+','+l); }); }); }
+      else { all.forEach(function(r){ out.push('## '+r.team+' · '+r.filename); out=out.concat(lines(r.csv)); out.push(''); }); }
+      return copyText(out.join('\n')).then(function(){ say((same?'모둠 열을 붙여 한 표로 ':'머리글이 달라 모둠별로 이어 붙여 ')+all.length+'건을 복사했습니다.','ok'); });
+    });
+  });
+  $('#upRefresh').addEventListener('click',load);
+  $('#upFilter').addEventListener('change',load);
+  load();
+  setInterval(function(){ if(document.visibilityState==='visible' && document.body.dataset.view!=='hub') load(); },15000);
+}
+
 initSheetPrint();
 initTerms();
 initBuy();
 initPaper();
+initUpload();
 initSetup();
 initPorts();
 initBasics();
@@ -3988,6 +4106,6 @@ initKit();
 initAxis();
 </script>
 
-<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재 · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-14</span></footer>
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재 · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-17</span></footer>
 </body>
 </html>
