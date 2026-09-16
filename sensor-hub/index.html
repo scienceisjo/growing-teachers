@@ -643,6 +643,7 @@ const TABS = [
   {id:'gain',  em:'🎁', name:'학생이 얻는 것',   min:6},
   {id:'mykit', em:'🧪', name:'오늘 가져온 센서로 할 수 있는 것', min:0},
   {id:'axis',  em:'📈', name:'축을 바꾸면 보인다', min:0},
+  {id:'collect',em:'🎚', name:'수동수집 vs 자동수집', min:0},
   {id:'axislab',em:'🛠', name:'축 바꾸기 — 어디를 누르나', min:0},
   {id:'classgraph',em:'📊', name:'우리 반 보일의 법칙 그래프', min:0},
   {id:'classroom',em:'🗂', name:'반 전체 데이터 모으기 — 클래스룸', min:0},
@@ -1212,27 +1213,26 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 </details>
 
 <details class="fold" data-school-only="yeoksam" open style="margin:18px 0"><summary>역삼중 FLOW CHART</summary>
-<div class="callout"><b>역삼중은 아직 센서가 없으시지요!</b> 그래서 오늘은 두 회사 센서를 다 만져 보신 뒤 <b>구매 계획</b>을 세우고, 계획에 적은 센서를 다시 만져 봅니다 🙂 두 공동활동 끝에 모둠 값을 올려 주시면 제가 <b>반 전체 그래프</b>로 합쳐 보여 드리겠습니다.</div>
+<div class="callout"><b>역삼중은 아직 센서가 없으시지요!</b> 그래서 오늘은 딱 두 가지만 합니다 🙂 <b>사이언스큐브로 우리 반 보일의 법칙 그래프</b>를 만들어 보고, <b>이지메이커는 연결 → 예제 코드 → 업로드 → 수집</b>까지만 해 봅니다. 데이터 분석·축 바꾸기는 오늘 하지 않습니다.</div>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
 <tr><td><b>0–6</b></td><td>열기</td><td>만화 4컷 → "무엇을 보고 있었을까요" · 오늘 두 가지 — <b>써 보기 · 살 계획</b></td></tr>
-<tr><td><b>6–14</b></td><td>왜 센서인가</td><td>교육과정 원문 세 줄 = <b>품의서 '목적'에 붙일 근거</b> · 13개 중 2개 · 센서는 종속변인만 잰다</td></tr>
-<tr style="background:var(--teal-soft)"><td><b>14–45</b></td><td><b>공동활동 ①</b><br>이지 나노 + 밝기</td><td>거리에 따른 빛의 세기 — 연결 6 · 그냥 보기 3 · 측정 9 · <b>1/r²</b> 5 · <b>CSV 올리기 → 강사 화면에서 합쳐 분석 8</b><br><span style="font-size:.86rem;color:var(--ink-soft)">「측정 데이터 올리기」 절에 파일 올리기 · 모둠마다 맡은 거리 하나 → 합쳐야 곡선</span></td></tr>
-<tr style="background:var(--teal-soft)"><td><b>45–76</b></td><td><b>공동활동 ②</b><br>큐브 압력 + 보일</td><td>켜면 끝 2 · 수동수집 설정 5 · 측정 9 · <b>1/V</b> 5 · <b>CSV 올리기 → 강사 화면에서 합쳐 분석 8</b> · 두 회사 비교 2<br><span style="font-size:.86rem;color:var(--ink-soft)">맡은 부피 구간 → 합치면 P×V 일정</span></td></tr>
-<tr><td><b>76–81</b></td><td>휴식</td><td></td></tr>
-<tr style="background:var(--coral-soft)"><td><b>81–101</b></td><td><b>구매 계획 세우기</b></td><td>수요 조사표 5 · 수량 규칙 3 · <b>구매 계획 생성기</b> 7 · 500만원 사례 + 0원 사다리 5<br><span style="font-size:.86rem;color:var(--ink-soft)">「센서 구매 계획 세우기」 절 — 표에 숫자를 넣으면 수량이 나옵니다</span></td></tr>
-<tr><td><b>101–113</b></td><td>자유 활용</td><td><b>계획에 적은 센서 하나만</b> 골라 만져 보기 · 값이 나오면 허브의 같은 실험에 넣기 · AI 프롬프트 카드</td></tr>
-<tr><td><b>113–120</b></td><td>닫기</td><td>생성기 결과 인쇄/PDF를 그 자리에서 · <b>사고 나서 쓸 서류 셋</b>(정산서·결과보고서) 1분 · 만족도 · 편지</td></tr>
+<tr><td><b>6–14</b></td><td>왜 센서인가</td><td>교육과정 원문 세 줄 = <b>품의서 '목적'에 붙일 근거</b> · 센서는 종속변인만 잰다</td></tr>
+<tr style="background:var(--teal-soft)"><td><b>14–55</b></td><td><b>① 사이언스큐브</b><br>우리 반 보일의 법칙 그래프</td><td>켜면 끝 3 · 실험 설정 <b>수동수집 · X축 텍스트</b> 5 · 모둠마다 <b>맡은 부피 세트</b> 측정 15 · 값 모으기(칠판 · 시트 · 올리기) 8 · <b>반 전체 그래프 · P×V</b> 7 · 정리 3<br><span style="font-size:.86rem;color:var(--ink-soft)">「우리 반 보일의 법칙 그래프」 절 · 「수동수집 vs 자동수집」 절</span></td></tr>
+<tr><td><b>55–60</b></td><td>휴식</td><td></td></tr>
+<tr style="background:var(--teal-soft)"><td><b>60–95</b></td><td><b>② 이지메이커</b><br>연결 · 예제 코드 · 수집</td><td>보드 + 센서 연결(가이드북) 8 · ezon.ai 로그인 · 프로젝트 · <b>[예제 코드 열기]</b> · 업로드 12 · 데이터 분석 <b>[보드 연결]</b> → 수집해서 그래프 보기 10 · 센서 바꿔 끼워 보기(공기압·전압·밝기) 5<br><span style="font-size:.86rem;color:var(--ink-soft)">「센서 하나씩 익히기」 절의 EZ·ON 연결 순서 · 축 바꾸기·분석은 안 함</span></td></tr>
+<tr style="background:var(--coral-soft)"><td><b>95–113</b></td><td><b>구매 계획 세우기</b></td><td><b>구매 계획 생성기</b> 10 · 0원 사다리 · 원칙 둘 8</td></tr>
+<tr><td><b>113–120</b></td><td>닫기</td><td><b>사고 나서 쓸 서류 셋</b> 링크 1분 · 만족도 · 편지</td></tr>
 </table></div>
 
-<h3 class="subh">데이터는 <b>올려 주시면</b> 제가 합칩니다</h3>
+<h3 class="subh">보일 값은 <b>올려 주시면</b> 제가 합칩니다</h3>
 <div class="tablewrap"><table>
 <tr><th>언제</th><th>누가</th><th>하는 일</th></tr>
-<tr><td>측정 끝</td><td>선생님</td><td>「측정 데이터 올리기」 절에 <b>CSV 파일 또는 붙여넣기</b> + 모둠 이름 → [올리기]</td></tr>
-<tr><td>올라오면</td><td>강사</td><td>목록에서 [복사] → 내 화면(MBL 수업허브 데이터 실험실)에 붙여 넣고 <b>반 전체 그래프 · 축 바꾸기</b>를 전자칠판에</td></tr>
-<tr><td>안 올라오면</td><td>강사</td><td>허브의 [예시 데이터 넣기]로 같은 흐름</td></tr>
+<tr><td>측정 끝</td><td>선생님</td><td>「측정 데이터 올리기」 절에 <b>CSV 파일 또는 붙여넣기</b> + 모둠 이름 → [올리기] (칠판·시트에 적으셔도 됩니다)</td></tr>
+<tr><td>올라오면</td><td>강사</td><td>목록에서 [복사] → 제 화면에서 <b>반 전체 한 그래프 · P×V</b>를 전자칠판에</td></tr>
+<tr><td>안 올라오면</td><td>강사</td><td>제가 가진 예시 데이터로 같은 흐름</td></tr>
 </table></div>
-<div class="ctl" style="margin:6px 0 16px"><button class="btn" data-go="upload">측정 데이터 올리기 절로</button></div>
+<div class="ctl" style="margin:6px 0 16px"><button class="btn" data-go="upload">측정 데이터 올리기 절로</button><button class="btn ghost" data-go="collect">수동수집 vs 자동수집 절로</button></div>
 <div class="callout ok"><b>드릴 자료 넷</b><br>
 · <b>이 페이지</b> — 실험 33건의 매뉴얼 쪽수와 축·수집 모드, 그리고 <b>구매 수량 계산</b><br>
 · <b>센서 구매 가이드</b> — 가격표 · 구매 계획 생성기 · 사례<br>
@@ -1748,6 +1748,52 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
 
 `,
 
+
+/* ───── 수동수집 vs 자동수집 ───── */
+collect: head('🎚 수집 방식','<b>수동수집</b>과 <b>자동수집</b>, 언제 무엇을',
+  '가로축이 시간이면 자동, 사람이 넣는 값이면 수동 — 실험마다 정해져 있습니다 🙂')
++ `<div class="punch">
+  <div class="q">센서는 시간을 따라 잽니다.<br>그런데 가로축이 <b>시간이 아닌 실험</b>이 절반입니다.</div>
+  <div class="cap">부피 · 거리 · 질량 · 저항 · 나무토막 개수 — 센서가 못 재는 값이 가로축일 때는 사람이 넣습니다</div>
+</div>
+
+<div class="versus">
+  <div class="vs-card"><span class="tag">자동수집</span><h3>시간이 가로축</h3>
+    <p>수집 간격(Hz)과 시간(초)만 정하면 센서가 알아서 점을 찍습니다. <b>변화의 모양</b>을 보는 실험 — 식는 곡선, 열평형, 끓는점, CO₂가 줄어드는 기울기.</p>
+    <p style="margin-top:8px;font-size:14px;color:var(--ink-48)">큐브: 실험 설정 → 자동수집 · 1Hz · 600초면 넉넉 / 이지: 기본 모드·분석 모드</p></div>
+  <div class="vs-card ez"><span class="tag">수동수집</span><h3>사람이 넣는 값이 가로축</h3>
+    <p>값을 하나 맞출 때마다 <b>점 하나</b>. 부피를 5 mL 바꾸고, 거리를 10 cm 옮기고, 추를 하나 더 걸고 — 그때마다 숫자를 넣고 한 점씩 찍습니다. <b>관계</b>를 보는 실험.</p>
+    <p style="margin-top:8px;font-size:14px;color:var(--ink-48)">큐브: 실험 설정 → 수동수집 / 이지: 수동 모드</p></div>
+</div>
+
+<h3 class="subh">어느 실험이 <b>어느 쪽</b>인가 — 실험 카드의 수집 모드를 모은 것</h3>
+<div class="cardgrid" id="collectLists"></div>
+<div class="callout"><b>가르는 기준은 하나입니다.</b> "가로축에 놓을 값을 센서가 재는가?" 재면 자동, 못 재면 수동. 둘 다 센서가 재는데 시간이 아닌 것끼리 보고 싶으면(옴의 법칙) 자동으로 모은 뒤 <b>축을 바꿉니다</b> — 그건 「축 바꾸기 — 어디를 누르나」 절에.</div>
+
+<h3 class="subh">두 회사의 수동수집 — <b>순서가 반대</b>입니다</h3>
+<div class="versus">
+  <div class="vs-card"><span class="tag">Science# · 사이언스큐브</span><h3>값을 적고 → [수집]</h3>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>오른쪽 위 메뉴 → <b>실험 설정</b></li>
+      <li>데이터 수집방법 → <b>수동수집</b></li>
+      <li>X축 데이터 타입 → <b>텍스트</b>로 두고, 시작</li>
+      <li>주사기를 맞춘 뒤 <b>그 텍스트 칸에 숫자(부피)를 적고</b> → [수집]</li>
+      <li>다음 부피로 맞추고 다시 숫자 → [수집] … 점이 하나씩 찍힙니다</li>
+    </ol>
+    <p style="margin-top:8px;font-size:14px;color:var(--ink-48)">숫자 입력 타입도 있지만, 저는 텍스트로 두고 숫자를 적는 쪽을 씁니다. 종이 색·불꽃 부위처럼 글자가 가로축일 때도 같은 자리입니다.</p></div>
+  <div class="vs-card ez"><span class="tag">EZ·ON · 이지메이커</span><h3>[수집]을 누르고 → 값을 적기</h3>
+    <ol style="margin:6px 0 0 18px;color:var(--ink)">
+      <li>[예제 코드 열기] → 업로드 → 데이터 분석 → <b>[보드 연결]</b></li>
+      <li><b>수동 모드</b>로 바꿉니다 — 수동 입력 항목 = 부피, 센서 항목 = 공기압</li>
+      <li>주사기를 맞춘 뒤 <b>먼저 [수집]을 누르고</b></li>
+      <li><b>그 다음에 X축에 들어갈 값(부피)을 적습니다</b></li>
+      <li>다음 부피로 맞추고 [수집] → 값 … 순서가 큐브와 반대입니다</li>
+    </ol>
+    <p style="margin-top:8px;font-size:14px;color:var(--ink-48)">자료집 원문: "수동 입력 부분을 '부피', 센서 측정 부분을 '압력' 혹은 '공기압'으로 지정한다."</p></div>
+</div>
+<div class="callout warn"><b>학생이 제일 많이 틀리는 곳이 여기입니다.</b> 큐브에서 숫자를 안 적고 [수집]부터 누르거나, 이지에서 값부터 적고 [수집]을 안 누르거나. 첫 두 점은 제가 옆에서 같이 찍어 줍니다 🙂</div>
+
+`,
 
 /* ───── 축 바꾸기 실습 ───── */
 axislab: head('🛠 실습','축을 바꾸려면 <b>어디를 누를까요</b>',
@@ -2946,6 +2992,7 @@ const HUBD = {
   share:'오늘 가져가실 것',
   mykit:'오늘 가져온 센서로 되는 실험 · 실험 수업 요령',
   axis:'축 바꾸기 · 축 변환 · 요약값 뽑기',
+  collect:'어느 실험이 수동이고 어느 실험이 자동인가 · 두 회사 조작 순서(반대!)',
   axislab:'EZ·ON 과 Science# 에서 실제로 어느 단추를 누르나',
   classgraph:'모둠마다 다른 부피를 맡아 반 전체가 곡선 하나를 완성',
   classroom:'이지메이커는 시트로 바로, 큐브는 CSV로 — 구글 클래스룸 설계',
@@ -2974,7 +3021,7 @@ const hubEl=document.getElementById('hub'), secfoot=document.getElementById('sec
 const SCHOOLS={
   songrye:{name:'송례중학교', when:'8월 24일(월)', note:'이지메이커 공통 실험 둘 — 보일의 법칙 · 옴의 법칙'},
   wiresol:{name:'위례솔중학교', when:'8월 26일(수)', note:'사이언스큐브 · 이지메이커 반반 — 중1 기체 단원(압력·부피, 온도·부피) 중심'},
-  yeoksam:{name:'역삼중학교', when:'9월 17일(목)', note:'오늘은 밝기(이지 나노)와 보일의 법칙(큐브)을 직접 해 보시고, 우리 학교 센서 구매 계획까지 세워 봅니다 🙂'}
+  yeoksam:{name:'역삼중학교', when:'9월 17일(목)', note:'오늘은 사이언스큐브로 우리 반 보일의 법칙 그래프를 만들어 보고, 이지메이커는 연결·예제 코드·수집까지 해 봅니다 🙂'}
 };
 const schoolSel=document.getElementById('school');
 function setSchool(id){
@@ -3970,11 +4017,32 @@ function initUpload(){
   setInterval(function(){ if(document.visibilityState==='visible' && document.body.dataset.view!=='hub') load(); },15000);
 }
 
+/* 수동수집 vs 자동수집 — HOWTO 의 cb(Science#) 문구로 실험을 가릅니다 */
+function initCollect(){
+  var P=document.querySelector('.tabpanel[data-tab="collect"]'); if(!P) return;
+  var box=P.querySelector('#collectLists'); if(!box) return;
+  var man=[], auto=[], both=[];
+  Object.keys(HOWTO).forEach(function(k){
+    var h=HOWTO[k], cb=h.cb||'', ez=h.ez||'';
+    if(/수동수집/.test(cb)){
+      var sub=/텍스트 입력/.test(cb)?'텍스트':(/자동 증가수/.test(cb)?'자동 증가수':'숫자');
+      man.push({t:k, sub:sub, to:h.to||''});
+    } else if(/X축 탭/.test(ez)) both.push({t:k, to:h.to||''});
+    else if(/자동수집|SPARKvue/.test(cb)) auto.push({t:k, to:h.to||''});
+  });
+  function li(x){ return '<li style="margin-bottom:6px"><b>'+x.t+'</b>'+(x.sub?' <span class="bd src">'+x.sub+'</span>':'')+'<br><span style="font-size:13px;color:var(--ink-48)">'+x.to.replace(/<[^>]+>/g,'')+'</span></li>'; }
+  box.innerHTML=
+    '<div class="pcard"><h3>수동수집 <span style="font-weight:400;color:var(--ink-48);font-size:15px">'+man.length+'</span></h3><ol style="margin:6px 0 0 18px;font-size:15px">'+man.map(li).join('')+'</ol></div>'
+   +'<div class="pcard"><h3>자동수집 <span style="font-weight:400;color:var(--ink-48);font-size:15px">'+auto.length+'</span></h3><ol style="margin:6px 0 0 18px;font-size:15px">'+auto.map(li).join('')+'</ol></div>'
+   +'<div class="pcard"><h3>센서 둘 · 자동 뒤 축 바꾸기 <span style="font-weight:400;color:var(--ink-48);font-size:15px">'+both.length+'</span></h3><ol style="margin:6px 0 0 18px;font-size:15px">'+both.map(li).join('')+'</ol></div>';
+}
+
 initSheetPrint();
 initTerms();
 initBuy();
 initPaper();
 initUpload();
+initCollect();
 initSetup();
 initPorts();
 initBasics();
