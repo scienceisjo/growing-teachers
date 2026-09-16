@@ -648,7 +648,7 @@ const TABS = [
   {id:'classroom',em:'🗂', name:'반 전체 데이터 모으기 — 클래스룸', min:0},
   {id:'textbook',em:'📚', name:'교과서가 지정한 탐구', min:0},
   {id:'basics', em:'📖', name:'센서 하나씩 익히기', min:0},
-  {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나', min:9},
+  {id:'ports', em:'🔌', name:'센서는 어떻게 전달하나 — 이지메이커', min:9},
   {id:'g1',    em:'1️⃣', name:'중1 실험',        min:36, tkey:'lab'},
   {id:'g2',    em:'2️⃣', name:'중2 실험',        min:36, tkey:'lab'},
   {id:'g3',    em:'3️⃣', name:'중3 실험',        min:36, tkey:'lab'},
@@ -1190,7 +1190,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><td><b>15–25</b></td><td>왜 디지털 도구인가</td><td>교육과정이 <b>중1 기체 단원</b>에 뭐라고 적어 두었는지 · 모둠 데이터 공유도 적혀 있다</td></tr>
 <tr><td><b>25–41</b></td><td><b>무엇을 잃는가</b></td><td>센서가 가져간 자리에 무엇을 넣을 것인가 <b>← 오늘의 중심</b><br><span style="font-size:.86rem;color:var(--ink-soft)">보일의 법칙으로 바로 이어집니다 — 압력은 센서가, <b>부피는 학생이</b></span></td></tr>
 <tr><td><b>41–47</b></td><td>학생이 얻는 것</td><td>센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷</td></tr>
-<tr><td><b>47–56</b></td><td>축 바꾸기 — 어디를 누르나</td><td><b>Science# 는 수집 전에</b> 실험 설정에서, <b>EZ·ON 은 수집 뒤에도</b><br><span style="font-size:.86rem;color:var(--ink-soft)">실습 직전에 여는 절입니다</span></td></tr>
+<tr><td><b>47–56</b></td><td>축 바꾸기 — 어디를 누르나</td><td><b>Science# 는 수집 전에</b> 실험 설정에서, <b>EZ·ON 은 센서가 둘일 때만 수집 뒤에도</b><br><span style="font-size:.86rem;color:var(--ink-soft)">실습 직전에 여는 절입니다</span></td></tr>
 <tr style="background:var(--teal-soft)"><td><b>56–86</b></td><td><b>공통 실습</b> · 큐브 압력<br>30분</td><td><b>「우리 반 보일의 법칙 그래프」</b><br>모둠마다 다른 부피를 맡아 점 하나씩 → 반 전체가 곡선 완성 → <b>축 바꿔 직선</b><br><span style="font-size:.86rem;color:var(--ink-soft)">학생 기록지를 그대로 쓰면서 해 봅니다</span></td></tr>
 <tr style="background:var(--coral-soft)"><td><b>86–106</b></td><td><b>갈라서</b><br>20분</td><td><b>이지메이커 조</b> — 같은 보일 실험을 보드 + 공기압으로. <b>수동 모드</b>와 오른쪽 아래 <b>X축 탭</b>을 직접<br><b>큐브 조</b> — <b>기체의 온도와 부피</b>(샤를) 또는 <b>용수철의 탄성력</b>(힘 센서 4개라 네 조가 한 번에)</td></tr>
 <tr><td><b>106–114</b></td><td>데이터를 반 전체로</td><td>구글 클래스룸으로 모으는 설계 · <b>큐브는 CSV</b>, <b>이지는 구글 시트</b></td></tr>
@@ -1392,7 +1392,7 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
 `,
 
 /* ───── 지능형 과학실 ON ───── */
-smartlab: head('🏫 지능형 과학실','우리가 지금 <b>앉아 있는 이 방</b> 이야기입니다',
+smartlab: head('🏫 지능형 과학실','<b>지능형 과학실</b>은 무엇을 말할까요',
   '공간은 이미 있습니다. 그 위의 플랫폼이 하나 더')
 + `
 <div class="punch">
@@ -1755,8 +1755,8 @@ axislab: head('🛠 실습','축을 바꾸려면 <b>어디를 누를까요</b>',
 
 <div class="callout warn"><b>가장 큰 차이 한 가지</b><br>
 <b>Science#</b> 는 <b>수집을 시작하기 전에</b> 축을 정합니다. 시작하고 나면 못 바꿉니다.<br>
-<b>EZ·ON</b> 은 <b>수집한 뒤에도</b> 센서끼리 축을 바꿔 볼 수 있습니다.<br>
-그래서 큐브로 보일의 법칙을 하실 때는 <b>실험 설정을 먼저 손봐야</b> 합니다.</div>
+<b>EZ·ON</b> 은 <b>센서를 두 개 이상 붙여 수집했을 때만</b>, 수집한 뒤 수동 모드의 X축 탭으로 한 센서를 가로축에 둘 수 있습니다(자료집 원문). 센서 하나면 그 길이 없고, 데이터 분석 보드 자체가 불편한 편이라 <b>수동 입력 칸에 계산한 값을 넣는 쪽</b>이 빠릅니다.<br>
+그래서 큐브로 보일의 법칙을 할 때는 <b>실험 설정을 먼저 손봐야</b> 하고, 이지로 할 때는 <b>처음부터 수동 모드</b>로 갑니다.</div>
 
 <h3 class="subh">EZ·ON <b>이지메이커</b></h3>
 <p>모드가 셋인데, 축을 정하는 자리가 모드마다 다릅니다.</p>
@@ -2210,8 +2210,8 @@ classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 �
 <tr><td><b>전날 <span style="color:var(--coral-deep)">두 번</span> 보내 보기</b></td><td>같은 시트에 <b>다른 시작 셀로 두 번</b> 보내 봅니다. 겹치지 않는지, 권한 창이 어디서 뜨는지를 미리 봐 둡니다</td></tr>
 </table></div>
 
-<div class="callout ok"><b>시트도 CSV도 번거로우시면 — MBL 수업허브</b><br>
-모둠이 <b>참여코드</b>로 들어와 값을 넣으면 반 전체 그래프가 <b>자동으로 합쳐집니다.</b> 시트를 만들 필요도, 권한을 손볼 필요도 없습니다.<br>
+<div class="callout"><b>MBL 수업허브 — 오늘은 제 화면으로만.</b><br>
+제가 만든 것이라 <b>제 서버(Supabase)</b>에 붙어 있습니다. 모둠이 참여코드로 값을 넣으면 반 전체 그래프가 합쳐지지만, 학교에서 그대로 쓰려면 <b>학교 몫의 Supabase 프로젝트를 하나 만들어 연결</b>해야 합니다(무료, 설치 안내 있음). 그래서 오늘 바로 권하지는 않고, <b>시트·클래스룸이 현실적인 길</b>입니다. 관심 있으시면 링크는 여기.<br>
 <a class="ulink" style="margin-top:9px" href='https://scienceisjo.github.io/mblclasshub/' target="_blank" rel="noopener"><b>scienceisjo.github.io/mblclasshub</b></a></div>
 
 <div class="callout"><b>센스쿨을 함께 쓰신다면</b> 링크와 파일을 올리는 자리만 클래스룸 대신 센스쿨로 바꾸시면 됩니다 — <b>설계는 그대로</b>입니다. 데이터가 모이는 곳은 어차피 구글 시트 하나입니다.</div>
@@ -2291,8 +2291,9 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
 <div class="kv">
   <div class="item"><div class="k">교과서 등장 횟수 1위</div><div class="v c">온도</div></div>
   <div class="item"><div class="k">2위</div><div class="v c">압력</div></div>
-  <div class="item"><div class="k">3위</div><div class="v">CO₂</div></div>
-  <div class="item"><div class="k">4위</div><div class="v">전압·전류</div></div>
+  <div class="item"><div class="k">3위</div><div class="v">힘·가속도</div></div>
+  <div class="item"><div class="k">4위</div><div class="v">CO₂</div></div>
+  <div class="item"><div class="k">5위</div><div class="v">전압·전류</div></div>
 </div>
 <div class="callout ok" style="margin-bottom:0"><b>세 근거가 같은 답</b> — 별책9 탐구활동 · 서울 자료집 10사례 · 교과서 수록표 → <b>온도 1위, 압력 2위</b></div>
 
@@ -2320,8 +2321,8 @@ basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
 `,
 
 /* ───── 센서는 어떻게 전달하나 ───── */
-ports: head('🔌 잠깐','센서는 측정값을 <b>어떻게</b> 보드에 전달할까',
-  '포트 이름이 아니라 왜 저기에 꽂는지')
+ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻게</b> 보드에 전달할까',
+  '이지메이커 보드 이야기입니다 — 포트 이름이 아니라 왜 저기에 꽂는지')
 + `
 <div class="qz" id="qzPort">
   <div class="qh">온도는 0 아니면 1이 아닌데,<br>왜 <b>온습도 센서는 D 포트</b>에 꽂을까요?</div>
@@ -2935,7 +2936,7 @@ const HUBD = {
   why:'교육과정과 교과서가 센서를 어디에 적어 두었나',
   lose:'센서가 가져간 자리에 무엇을 넣을 것인가 — 오늘의 중심',
   gain:'센서라야 되는 것 넷, 더 잘되게 해 주는 것 넷',
-  ports:'A · D · I2C · UART를 왜 갈라 꽂나',
+  ports:'이지메이커 보드 이야기 — A · D · I2C · UART를 왜 갈라 꽂나',
   g1:'중1 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
   g2:'중2 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
   g3:'중3 실험 전체 — 매뉴얼 쪽수와 축·수집 모드',
@@ -3208,7 +3209,8 @@ function initBasics(){
       +'<h4>'+s.nm+' 센서</h4></div>'
       +'<div class="body">'
       +(s.hook?'<div class="tip" style="background:var(--coral-soft);color:#1d1d1f;margin:0 0 11px">'
-        +'<b style="display:block;font-size:.76rem;letter-spacing:.3px;margin-bottom:3px">이렇게 엽니다</b>'+s.hook+'</div>':'')
+        +'<b style="display:block;font-size:.76rem;letter-spacing:.3px;margin-bottom:3px">이렇게 엽니다</b>'+s.hook
+        +'<span style="display:block;font-size:12px;color:var(--ink-48);margin-top:6px">이 부분은 인공지능이 작성한 부분이라 어색합니다.</span></div>':'')
       +'<details class="fold"><summary>설정 · 주의 · 해석</summary>'
       +'<div class="row"><span class="k">설정</span><span class="v">'+s.set+' · '+s.cyc+'</span></div>'
       +(s.tips.length?'<ol>'+s.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol>':'')
