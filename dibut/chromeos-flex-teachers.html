@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>해누리중 2학년 디벗 크롬 OS 전환 — 선생님 안내 · 과학정보부</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&display=swap">
+<style>
+/* 선생님께 쿨메신저로 보내는 페이지 — 본문(교직원 안내 1장·FAQ·최종 요약 7장)은
+   chromeos-flex.html 에서 그대로 가져와 보여 준다(한 곳만 고치면 됨). 여기엔 머리글·링크·푸터만. */
+:root{
+  --blue:#0066cc; --ink:#1d1d1f; --ink-60:#6e6e73; --ink-48:#7a7a7a;
+  --canvas:#ffffff; --parchment:#f5f5f7; --hairline:#e0e0e0;
+  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sf);font-size:17px;line-height:1.6;letter-spacing:-.374px;-webkit-font-smoothing:antialiased;word-break:keep-all;}
+.tp-head{background:var(--parchment);}
+.tp-wrap{max-width:1040px;margin:0 auto;padding:56px 22px 44px;}
+.tp-eyebrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;font-size:14px;letter-spacing:-.224px;color:var(--ink-60);}
+.tp-eyebrow .stage{display:inline-flex;background:var(--ink);color:#fff;font-size:14px;line-height:1.29;padding:6px 12px;border-radius:8px;}
+.tp-head h1{margin:26px 0 0;font-size:clamp(28px,4.4vw,44px);font-weight:600;line-height:1.12;letter-spacing:-.28px;}
+.tp-head p{margin:18px 0 0;max-width:692px;font-size:clamp(17px,1.9vw,21px);font-weight:300;line-height:1.55;letter-spacing:0;}
+.tp-head p b{font-weight:600;}
+.tp-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+.tp-links a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:15px;letter-spacing:-.224px;line-height:1.29;padding:11px 18px;border-radius:9999px;border:1px solid var(--blue);color:var(--blue);background:transparent;transition:transform .15s ease;}
+.tp-links a.primary{background:var(--blue);color:#fff;}
+.tp-links a:active{transform:scale(.95);}
+.tp-links a:focus-visible{outline:2px solid #0071e3;outline-offset:2px;}
+.tp-deck{max-width:1040px;margin:40px auto 0;padding:0 22px;}
+.tp-deck a{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;text-decoration:none;color:var(--ink);background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:22px 24px;}
+.tp-deck b{font-size:21px;font-weight:600;letter-spacing:-.374px;}
+.tp-deck span{font-size:15px;color:var(--ink-60);letter-spacing:-.224px;}
+.tp-deck em{margin-left:auto;font-style:normal;color:var(--blue);font-size:15px;white-space:nowrap;}
+#content{min-height:200px;}
+.tp-loading{max-width:1040px;margin:0 auto;padding:40px 22px;color:var(--ink-60);font-size:15px;}
+.tp-fallback a{color:var(--blue);}
+/* 가져온 1장에서 발표용 도구는 감춤(발표 모드·인쇄·메모 버튼) */
+#content .pres-tools{display:none!important;}
+#content .rail,#content .mobnav{display:none!important;}
+footer.tp-foot{background:var(--parchment);}
+footer.tp-foot .tp-wrap{padding:36px 22px 40px;display:flex;flex-direction:column;gap:8px;font-size:14px;letter-spacing:-.224px;color:var(--ink-60);}
+footer.tp-foot b{color:var(--ink);font-weight:600;}
+footer.tp-foot a{color:var(--blue);text-decoration:none;}
+@media print{ .tp-links,.tp-deck{display:none;} }
+</style>
+</head>
+<body>
+
+<header class="tp-head">
+  <div class="tp-wrap">
+    <div class="tp-eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>선생님 안내</span><span>·</span><span>2학년 디벗 Surface Go 3</span></div>
+    <h1>2학년 디벗 크롬 OS Flex 전환 검토<br>선생님 안내</h1>
+    <p>교직원회의에서 말씀드린 내용을 한곳에 모았습니다. 전환 여부는 <b>추석 연휴 전 쿨메신저 설문(투표)</b>으로 결정합니다. 전환된 디벗은 <b>과학정보부 교무실</b>에서 직접 써 보실 수 있습니다.</p>
+    <nav class="tp-links" aria-label="바로가기">
+      <a class="primary" href="chromeos-flex-compare.html">오늘 발표자료</a>
+      <a href="#s1">교직원 안내</a>
+      <a href="#faq">FAQ</a>
+      <a href="#s7">최종 결론</a>
+    </nav>
+  </div>
+</header>
+
+<div class="tp-deck">
+  <a href="chromeos-flex-compare.html">
+    <b>오늘 발표자료</b>
+    <span>회의에서 띄운 한 장 — 사업 개요 · 우리 학교가 겪는 문제 · 장점·단점 표 · 직접 써 보기 · 추진 절차. 카드를 누르면 크게 보입니다</span>
+    <em>열기 →</em>
+  </a>
+</div>
+
+<div id="content">
+  <div class="tp-loading">불러오는 중…</div>
+</div>
+
+<footer class="tp-foot">
+  <div class="tp-wrap">
+    <span><b>담당</b> 해누리중학교 과학정보부 조승재 — 질문은 과학정보부로 주시면 됩니다.</span>
+    <span>전체 검토 자료(담당자용 상세 포함): <a href="chromeos-flex.html">chromeos-flex.html</a></span>
+  </div>
+</footer>
+<footer id="app-credit" style="width:100%;box-sizing:border-box;margin:0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-16</span></footer>
+
+<script>
+(function(){
+  var box = document.getElementById("content");
+  var SRC = "chromeos-flex.html";
+  function fallback(){
+    box.innerHTML = '<div class="tp-loading tp-fallback">본문을 불러오지 못했습니다. 아래 링크로 바로 가시면 됩니다.<br>'
+      + '<a href="' + SRC + '#s1">교직원 안내</a> · <a href="' + SRC + '#faq">FAQ</a> · <a href="' + SRC + '#s7">최종 결론</a></div>';
+  }
+  fetch(SRC, {cache: "no-cache"}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); }).then(function(html){
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var s1 = doc.getElementById("s1"), s7 = doc.getElementById("s7");
+    if(!s1 || !s7) throw new Error("sections");
+    // 원본 스타일(토큰·카드·FAQ·표)을 그대로 가져옴 — 이 페이지의 머리글 규칙은 tp- 접두사라 충돌 없음
+    Array.prototype.forEach.call(doc.querySelectorAll("head style"), function(st){
+      var c = document.createElement("style"); c.textContent = st.textContent; document.head.appendChild(c);
+    });
+    var wrap = document.createElement("div"); wrap.className = "wrap";
+    var main = document.createElement("main"); main.className = "main";
+    main.appendChild(s1); main.appendChild(s7);
+    wrap.appendChild(main);
+    box.innerHTML = ""; box.appendChild(wrap);
+    Array.prototype.forEach.call(box.querySelectorAll(".pres-tools, .pnote"), function(el){ el.remove(); });
+    Array.prototype.forEach.call(box.querySelectorAll(".card-g"), function(el){ el.textContent = "기타"; });
+    // 링크로 들어온 경우(#faq 등) 위치로 이동
+    if(location.hash){ var t = document.querySelector(location.hash); if(t) t.scrollIntoView(); }
+  }).catch(function(){ fallback(); });
+
+  // 인쇄 때는 카드·FAQ를 모두 펼쳐서
+  var closed = [];
+  window.addEventListener("beforeprint", function(){
+    closed = Array.prototype.filter.call(document.querySelectorAll("details"), function(d){ return !d.open; });
+    closed.forEach(function(d){ d.open = true; });
+  });
+  window.addEventListener("afterprint", function(){ closed.forEach(function(d){ d.open = false; }); closed = []; });
+})();
+</script>
+</body>
+</html>
