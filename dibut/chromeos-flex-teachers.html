@@ -31,7 +31,10 @@ body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sf);fo
 .tp-links a.primary{background:var(--blue);color:#fff;}
 .tp-links a:active{transform:scale(.95);}
 .tp-links a:focus-visible{outline:2px solid #0071e3;outline-offset:2px;}
-.tp-deck{max-width:1040px;margin:40px auto 0;padding:0 22px;}
+.tp-try{max-width:1040px;margin:40px auto 0;padding:0 22px;}
+.tp-try h2{margin:0 0 12px;font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.374px;line-height:1.15;}
+.tp-try:empty,.tp-try #try-slot:empty{display:none;}
+.tp-deck{max-width:1040px;margin:28px auto 0;padding:0 22px;}
 .tp-deck a{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;text-decoration:none;color:var(--ink);background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:22px 24px;}
 .tp-deck b{font-size:21px;font-weight:600;letter-spacing:-.374px;}
 .tp-deck span{font-size:15px;color:var(--ink-60);letter-spacing:-.224px;}
@@ -55,7 +58,7 @@ footer.tp-foot a{color:var(--blue);text-decoration:none;}
   <div class="tp-wrap">
     <div class="tp-eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>선생님 안내</span><span>·</span><span>2학년 디벗 Surface Go 3</span></div>
     <h1>2학년 디벗 크롬 OS Flex 전환 검토<br>선생님 안내</h1>
-    <p>교직원회의에서 말씀드린 내용을 한곳에 모았습니다. 전환 여부는 <b>추석 연휴 전 쿨메신저 설문(투표)</b>으로 결정합니다. 전환된 디벗은 <b>과학정보부 교무실</b>에서 직접 써 보실 수 있습니다.</p>
+    <p><b>9월 16일 교직원회의</b>에서 말씀드린 내용을 한곳에 모았습니다. 전환 여부는 <b>추석 연휴 전 쿨메신저 설문(투표)</b>으로 결정합니다. 전환된 디벗은 <b>과학정보부 교무실</b>에서 직접 써 보실 수 있습니다.</p>
     <nav class="tp-links" aria-label="바로가기">
       <a class="primary" href="chromeos-flex-compare.html">오늘 발표자료</a>
       <a href="#s1">교직원 안내</a>
@@ -64,6 +67,11 @@ footer.tp-foot a{color:var(--blue);text-decoration:none;}
     </nav>
   </div>
 </header>
+
+<section class="tp-try" id="try-top" aria-labelledby="h-try-top">
+  <h2 id="h-try-top">먼저, 직접 써 보기</h2>
+  <div id="try-slot"></div>
+</section>
 
 <div class="tp-deck">
   <a href="chromeos-flex-compare.html">
@@ -108,6 +116,16 @@ footer.tp-foot a{color:var(--blue);text-decoration:none;}
     box.innerHTML = ""; box.appendChild(wrap);
     Array.prototype.forEach.call(box.querySelectorAll(".pres-tools, .pnote"), function(el){ el.remove(); });
     Array.prototype.forEach.call(box.querySelectorAll(".card-g"), function(el){ el.textContent = "기타"; });
+    // 「직접 써 보기」 카드는 맨 위로 옮겨 펼쳐 둔다
+    var tryCard = Array.prototype.filter.call(box.querySelectorAll("#s1 details.card"), function(d){
+      var ct = d.querySelector(".ct"); return ct && ct.textContent.indexOf("직접 써 보기") === 0;
+    })[0];
+    if(tryCard){
+      var slot = document.getElementById("try-slot");
+      slot.appendChild(tryCard); tryCard.open = true;
+      var cn = tryCard.querySelector(".cn"); if(cn) cn.textContent = "★";
+      Array.prototype.forEach.call(box.querySelectorAll("#s1 details.card .cn"), function(n, i){ n.textContent = (i + 1 < 10 ? "0" : "") + (i + 1); });
+    }
     // 링크로 들어온 경우(#faq 등) 위치로 이동
     if(location.hash){ var t = document.querySelector(location.hash); if(t) t.scrollIntoView(); }
   }).catch(function(){ fallback(); });
