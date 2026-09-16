@@ -31,9 +31,14 @@ body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sf);fo
 .tp-links a.primary{background:var(--blue);color:#fff;}
 .tp-links a:active{transform:scale(.95);}
 .tp-links a:focus-visible{outline:2px solid #0071e3;outline-offset:2px;}
-.tp-try{max-width:1040px;margin:40px auto 0;padding:0 22px;}
-.tp-try h2{margin:0 0 12px;font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.374px;line-height:1.15;}
-.tp-try:empty,.tp-try #try-slot:empty{display:none;}
+.tp-decide{max-width:1040px;margin:40px auto 0;padding:0 22px;display:flex;flex-direction:column;gap:16px;}
+.tp-decide h2,.tp-rest{margin:0 0 4px;font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.374px;line-height:1.15;}
+.tp-rest{max-width:1040px;margin:56px auto 0;padding:24px 22px 0;border-top:1px solid var(--hairline);color:var(--ink-60);font-size:21px;}
+.tp-speed{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:22px 24px;font-size:19px;line-height:1.55;letter-spacing:-.2px;}
+.tp-speed b{display:block;font-size:24px;font-weight:600;letter-spacing:-.374px;margin-bottom:6px;}
+.tp-speed strong{font-weight:600;color:var(--blue);}
+.tp-decide > div:empty{display:none;}
+.tp-decide .ledger{margin:0;}
 .tp-deck{max-width:1040px;margin:28px auto 0;padding:0 22px;}
 .tp-deck a{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;text-decoration:none;color:var(--ink);background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:22px 24px;}
 .tp-deck b{font-size:21px;font-weight:600;letter-spacing:-.374px;}
@@ -58,20 +63,28 @@ footer.tp-foot a{color:var(--blue);text-decoration:none;}
   <div class="tp-wrap">
     <div class="tp-eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>선생님 안내</span><span>·</span><span>2학년 디벗 Surface Go 3</span></div>
     <h1>2학년 디벗 크롬 OS Flex 전환 검토<br>선생님 안내</h1>
-    <p><b>9월 16일 교직원회의</b>에서 말씀드린 내용을 한곳에 모았습니다. 전환 여부는 <b>추석 연휴 전 쿨메신저 설문(투표)</b>으로 결정합니다. 전환된 디벗은 <b>과학정보부 교무실</b>에서 직접 써 보실 수 있습니다.</p>
+    <p>전환 여부는 <b>추석 연휴 전 쿨메신저 설문(투표)</b>으로 결정합니다. 판단에 필요한 것(속도·장단점·안 되는 것·직접 써 보기)을 맨 위에 두고, 나머지 안내는 아래로 내렸습니다. <b>9월 16일 교직원회의</b> 내용 기준입니다.</p>
     <nav class="tp-links" aria-label="바로가기">
-      <a class="primary" href="chromeos-flex-compare.html">오늘 발표자료</a>
-      <a href="#s1">교직원 안내</a>
+      <a class="primary" href="#decide-top">판단에 필요한 것</a>
       <a href="#faq">FAQ</a>
-      <a href="#s7">최종 결론</a>
+      <a href="chromeos-flex-compare.html">오늘 발표자료</a>
     </nav>
   </div>
 </header>
 
-<section class="tp-try" id="try-top" aria-labelledby="h-try-top">
-  <h2 id="h-try-top">먼저, 직접 써 보기</h2>
-  <div id="try-slot"></div>
+<section class="tp-decide" id="decide-top" aria-labelledby="h-decide">
+  <h2 id="h-decide">판단에 필요한 것부터</h2>
+  <div class="tp-speed">
+    <b>속도 — 직접 점검했습니다.</b>
+    아주중학교에서 대여한 전환 완료 디벗을 기존 디벗과 나란히 켜 보았습니다. 켜는 시간, 로그인 뒤 반응, 사이트 여는 속도 모두 <strong>확실히, 매우 빨라집니다.</strong> 과학정보부 교무실에서 직접 확인해 보실 수 있습니다.
+  </div>
+  <div id="slot-ledger"></div>
+  <div id="slot-cmp"></div>
+  <div id="slot-limit"></div>
+  <div id="slot-try"></div>
 </section>
+
+<h2 class="tp-rest">그 밖의 안내</h2>
 
 <div class="tp-deck">
   <a href="chromeos-flex-compare.html">
@@ -116,16 +129,22 @@ footer.tp-foot a{color:var(--blue);text-decoration:none;}
     box.innerHTML = ""; box.appendChild(wrap);
     Array.prototype.forEach.call(box.querySelectorAll(".pres-tools, .pnote"), function(el){ el.remove(); });
     Array.prototype.forEach.call(box.querySelectorAll(".card-g"), function(el){ el.textContent = "기타"; });
-    // 「직접 써 보기」 카드는 맨 위로 옮겨 펼쳐 둔다
-    var tryCard = Array.prototype.filter.call(box.querySelectorAll("#s1 details.card"), function(d){
-      var ct = d.querySelector(".ct"); return ct && ct.textContent.indexOf("직접 써 보기") === 0;
-    })[0];
-    if(tryCard){
-      var slot = document.getElementById("try-slot");
-      slot.appendChild(tryCard); tryCard.open = true;
-      var cn = tryCard.querySelector(".cn"); if(cn) cn.textContent = "★";
-      Array.prototype.forEach.call(box.querySelectorAll("#s1 details.card .cn"), function(n, i){ n.textContent = (i + 1 < 10 ? "0" : "") + (i + 1); });
+    // 판단에 필요한 것들을 맨 위로: 얻는 것·잃는 것(7장) → 비교표(02) → 제약(04) → 직접 써 보기(06), 전부 펼쳐서
+    function cardStarting(text){
+      return Array.prototype.filter.call(box.querySelectorAll("#s1 details.card"), function(d){
+        var ct = d.querySelector(".ct"); return ct && ct.textContent.indexOf(text) === 0;
+      })[0];
     }
+    function hoist(el, slotId){
+      if(!el) return;
+      document.getElementById(slotId).appendChild(el);
+      if(el.tagName === "DETAILS"){ el.open = true; var cn = el.querySelector(".cn"); if(cn) cn.textContent = "★"; }
+    }
+    hoist(box.querySelector("#s7 .ledger"), "slot-ledger");
+    hoist(cardStarting("현재 운영체제"), "slot-cmp");
+    hoist(cardStarting("제약 사항"), "slot-limit");
+    hoist(cardStarting("직접 써 보기"), "slot-try");
+    Array.prototype.forEach.call(box.querySelectorAll("#s1 details.card .cn"), function(n, i){ n.textContent = (i + 1 < 10 ? "0" : "") + (i + 1); });
     // 링크로 들어온 경우(#faq 등) 위치로 이동
     if(location.hash){ var t = document.querySelector(location.hash); if(t) t.scrollIntoView(); }
   }).catch(function(){ fallback(); });
