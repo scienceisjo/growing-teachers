@@ -1089,6 +1089,7 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
     <div class="urls">
       <a class="ulink" href="https://ezon.ai/" target="_blank" rel="noopener">ezon.ai</a>
       <a class="ulink" href="https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=28" target="_blank" rel="noopener"><b>처음 쓸 때 확인사항</b></a>
+      <a class="ulink dl" href="https://ezmaker.co.kr/bbs/board.php?bo_table=notice&wr_id=69" target="_blank" rel="noopener"><b>유선·무선 보드 연결 가이드북 (PDF)</b></a>
     </div>
   </div>
 </div>
@@ -2411,7 +2412,7 @@ basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
 
 <div class="callout gold" style="margin-top:22px"><b>하드웨어는 같은 EZMAKER 센서입니다.</b> 질문·주의·해석은 그대로, <b>연결만 EZ·ON으로.</b></div>
 
-<div class="callout"><b>EZ·ON 연결 순서</b><br>① 표시된 포트에 센서 → ② USB + <b>보드 전원 ON</b> → ③ <code>ezon.ai</code> 로그인(구글·웨일)<br>④ 프로젝트 만들기 · 보드 <b>[EZMAKER v1]</b> → ⑤ 블록 코딩 → <b>[예제 코드 열기]</b><br>⑥ 업로드 → 데이터 분석 → <b>[보드 연결] 한 번 더</b> → 수집</div>
+<div class="callout"><b>EZ·ON 연결 순서</b><br>① 표시된 포트에 센서 → ② USB + <b>보드 전원 ON</b> → ③ <code>ezon.ai</code> 로그인(구글·웨일)<br>④ 프로젝트 만들기 · 보드 <b>[EZMAKER v1]</b> → ⑤ 블록 코딩 → <b>[예제 코드 열기]</b><br>⑥ 업로드 → 데이터 분석 → <b>[보드 연결] 한 번 더</b> → 수집<br><span style="font-size:14px;color:var(--ink-48)">그림으로 보시려면 이지메이커 <a href="https://ezmaker.co.kr/bbs/board.php?bo_table=notice&wr_id=69" target="_blank" rel="noopener">「유선·무선 보드 연결 가이드북」(PDF)</a> — 무선(나노) 보드 순서도 여기 있습니다</span></div>
 <div class="note">⚠️ <b>블록을 직접 짜게 하지 마십시오.</b> [예제 코드 열기]면 충분하고, 연수에서 코딩을 시키면 시간이 다 갑니다.<br>⚠️ 태블릿은 웹이 아니라 <b>플레이스토어 ezon 앱</b>으로 해야 코드가 올라갑니다.<br>⚠️ 시리얼포트 에러는 <b>CH341 드라이버</b> — UNINSTALL 먼저, 그다음 INSTALL.</div>
 
 <div class="script">"이 19장은 제가 만든 게 아니라 자료집에 있는 겁니다. 다른 프로그램용 자료인데, <b>센서가 같아서</b> 그대로 씁니다. 그런데 제가 이걸 왜 넣었냐면, <b>첫 문장이 다 질문이거든요.</b><br><br>
@@ -3372,6 +3373,7 @@ const LINKS = [
   {t:'지능형 과학실 ON', u:'https://science-on.kosac.re.kr/main.do', d:'탐구 개설·데이터·보고서·포트폴리오. 한국과학창의재단', tag:'지능형 과학실 온 포털 science-on'}
  ]},
  {g:'이지메이커 — 처음 쓸 때', items:[
+  {t:'유선보드·무선보드 연결 가이드북 (PDF 7.2MB)', u:'https://ezmaker.co.kr/bbs/board.php?bo_table=notice&wr_id=69', d:'이지메이커 공지(2026-08-23) 첨부. 유선 메인보드와 무선(나노) 보드에 코드 올리고 센서 잇는 순서 — 오늘 밝기 실험의 나노 보드는 이걸로', tag:'가이드북 연결 업로드 유선 무선 나노 보드 PDF 코드 올리기'},
   {t:'처음 사용할 경우 확인사항', u:'https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=28', d:'센서 연결부터 EZ·ON 사용까지 그림 두 장으로. 가장 먼저 볼 것', tag:'시작 기초 연결'},
   {t:'EZ·ON 접속하기', u:'https://haict.kr/bbs/board.php?bo_table=info&wr_id=12', d:'크롬북·웨일북·맥북에서 쓸 수 있다는 안내가 여기 있습니다', tag:'접속 크롬북 웨일북'},
   {t:'⚠️ 보드 드라이버 (CH341)', u:'https://haict.kr/bbs/board.php?bo_table=down&wr_id=6', d:'시리얼포트 에러로 연결이 안 될 때. UNINSTALL 먼저, 그다음 INSTALL', tag:'드라이버 시리얼 포트 에러 연결안됨 CH341'},
