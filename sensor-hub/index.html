@@ -1230,7 +1230,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 <tr><th>언제</th><th>누가</th><th>하는 일</th></tr>
 <tr><td>측정 끝</td><td>선생님</td><td>「측정 데이터 올리기」 절에 <b>CSV 파일 또는 붙여넣기</b> + 모둠 이름 → [올리기] (칠판·시트에 적으셔도 됩니다)</td></tr>
 <tr><td>올라오면</td><td>강사</td><td>목록에서 [복사] → 제 화면에서 <b>반 전체 한 그래프 · P×V</b>를 전자칠판에</td></tr>
-<tr><td>안 올라오면</td><td>강사</td><td>제가 가진 예시 데이터로 같은 흐름</td></tr>
+<tr><td>안 올라오면</td><td>강사</td><td>「측정 데이터 올리기」의 <b>[예시 데이터 5모둠 넣기]</b> → [그래프 그리기] → 1/부피 — 같은 흐름</td></tr>
 </table></div>
 <div class="ctl" style="margin:6px 0 16px"><button class="btn" data-go="upload">측정 데이터 올리기 절로</button><button class="btn ghost" data-go="collect">수동수집 vs 자동수집 절로</button></div>
 <div class="callout ok"><b>드릴 자료 넷</b><br>
@@ -1268,6 +1268,20 @@ upload: head('📤 측정 데이터','잰 값을 <b>여기에 올려 주세요</
 </div>
 <div class="tablewrap"><table id="upList"><tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr><tr><td colspan="6" style="color:var(--ink-48)">불러오는 중…</td></tr></table></div>
 <div class="callout" id="upHint"><b>강사</b> — [복사] 뒤 MBL 수업허브의 <b>데이터 실험실</b>(또는 시트)에 붙여 넣으면 됩니다. 「이 실험 전부 합쳐 복사」는 모둠 열을 앞에 붙여 한 표로 만듭니다(머리글이 같을 때).</div>
+<div class="callout gold"><b>예시 데이터 — 서버에 아무것도 안 올라와도 시연이 됩니다.</b> 보일의 법칙 5모둠, 30 mL에서 막고 모둠마다 다른 부피 세트(1모둠 60→10 · 2모둠 58→13 · 3모둠 56→11 · 4모둠 54→14 · 5모둠 52→12), 3모둠에 튀는 점 하나. 목록에 <b>예시</b> 표시로 들어오고 [복사]·[받기]·합치기·아래 그래프까지 똑같이 됩니다. [새로고침]을 누르면 사라집니다.<br>
+<div class="ctl" style="margin:10px 0 0"><button class="btn ghost" id="upDemo" style="min-height:38px;padding:8px 18px;font-size:15px">예시 데이터 5모둠 넣기</button></div></div>
+
+<h3 class="subh">모아서 <b>그려 보기</b> — 반 전체 한 그래프</h3>
+<p>위 목록에서 고른 실험의 파일을 전부 읽어 한 그래프에 겹칩니다. 앞의 두 숫자 열을 가로·세로로 씁니다(보일이면 부피·압력).</p>
+<div class="lab" id="upChartBox">
+  <div class="ctl">
+    <button class="btn" id="upDraw" style="min-height:38px;padding:8px 18px;font-size:15px">그래프 그리기</button>
+    <label class="bl">가로축 <select class="bsel" id="upAxis"><option value="x">그대로 (부피)</option><option value="inv">1 ÷ 가로축 (1/부피)</option></select></label>
+    <span id="upChartMsg" class="upmsg"></span>
+  </div>
+  <svg id="upChart" viewBox="0 0 900 470" style="width:100%;height:auto;display:block;margin-top:8px" aria-label="반 전체 산점도"></svg>
+  <div id="upPV" style="margin-top:12px"></div>
+</div>
 `,
 
 /* ───── 왜 ───── */
@@ -3968,27 +3982,129 @@ function initUpload(){
       .catch(function(e){ say('올리지 못했습니다('+e.message+'). 인터넷·주소(scienceisjo.github.io)·SQL 실행 여부를 확인해 주십시오.','bad'); })
       .then(function(){ $('#upSend').disabled=false; });
   });
-  var rowsCache=[];
+  var rowsCache=[], demoOn=false;
+  /* ── 예시 데이터: 보일의 법칙 5모둠 (30 mL 에서 막음 → P ≈ 30/V atm, 잡음 ±0.02, 3모둠 21 mL 에 튀는 점) ── */
+  var DEMO={};
+  (function(){
+    var sets=[[1,60,10],[2,58,13],[3,56,11],[4,54,14],[5,52,12]];
+    var seed=7; function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280-0.5; }
+    sets.forEach(function(s){
+      var lines=['부피(mL),압력(atm)'];
+      for(var v=s[1]; v>=s[2]; v-=5){
+        var p=30/v*(1+rnd()*0.04);
+        if(s[0]===3 && v===21) p-=0.18;          /* 마개가 덜 막힌 척 */
+        lines.push(v+','+p.toFixed(2));
+      }
+      DEMO['demo-'+s[0]]={id:'demo-'+s[0],created_at:new Date().toISOString(),exp:'보일의 법칙',team:s[0]+'모둠(예시)',filename:'예시',rows:lines.length-1,csv:lines.join('\n')};
+    });
+  })();
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function hhmm(iso){ var d=new Date(iso); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
   function load(){
     var f=$('#upFilter').value;
     var q=TBL+'?select=id,created_at,exp,team,filename,rows&session=eq.'+encodeURIComponent(sess())+'&order=created_at.desc&limit=80'+(f?'&exp=eq.'+encodeURIComponent(f):'');
     fetch(q,{headers:H}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(rows){
-      rowsCache=rows;
-      $('#upCount').textContent=rows.length?'· '+rows.length+'건':'';
-      var html='<tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr>';
-      if(!rows.length) html+='<tr><td colspan="6" style="color:var(--ink-48)">아직 올라온 데이터가 없습니다.</td></tr>';
-      rows.forEach(function(r){
-        html+='<tr><td>'+hhmm(r.created_at)+'</td><td><b>'+esc(r.team)+'</b></td><td>'+esc(r.exp)+'</td><td>'+(r.rows||'')+'</td><td style="color:var(--ink-48)">'+esc(r.filename)+'</td>'
-            +'<td style="white-space:nowrap"><button class="upbtn" data-copy="'+r.id+'">복사</button> <button class="upbtn" data-dl="'+r.id+'">받기</button></td></tr>';
-      });
-      list.innerHTML=html;
+      rowsCache=(demoOn?Object.keys(DEMO).map(function(k){ return DEMO[k]; }):[]).concat(rows); render();
     }).catch(function(e){
       list.innerHTML='<tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr><tr><td colspan="6" style="color:var(--bad)">서버에 닿지 않습니다('+e.message+'). scienceisjo.github.io 주소로 열었는지, SETUP SQL을 실행했는지 확인해 주십시오.</td></tr>';
     });
   }
-  function getCsv(id){ return fetch(TBL+'?select=csv,team,exp,filename&id=eq.'+id,{headers:H}).then(function(r){ return r.json(); }).then(function(a){ return a[0]; }); }
+  function render(){
+    var rows=rowsCache;
+    $('#upCount').textContent=rows.length?'· '+rows.length+'건':'';
+    var html='<tr><th>시간</th><th>모둠</th><th>실험</th><th>행</th><th>파일</th><th></th></tr>';
+    if(!rows.length) html+='<tr><td colspan="6" style="color:var(--ink-48)">아직 올라온 데이터가 없습니다.</td></tr>';
+    rows.forEach(function(r){
+      var demo=!!DEMO[r.id];
+      html+='<tr'+(demo?' style="background:var(--parchment)"':'')+'><td>'+hhmm(r.created_at)+'</td><td><b>'+esc(r.team)+'</b>'+(demo?' <span class="bd src">예시</span>':'')+'</td><td>'+esc(r.exp)+'</td><td>'+(r.rows||'')+'</td><td style="color:var(--ink-48)">'+esc(r.filename)+'</td>'
+          +'<td style="white-space:nowrap"><button class="upbtn" data-copy="'+r.id+'">복사</button> <button class="upbtn" data-dl="'+r.id+'">받기</button></td></tr>';
+    });
+    list.innerHTML=html;
+  }
+  $('#upDemo').addEventListener('click',function(){
+    var f=$('#upFilter'); if(f.value && f.value!=='보일의 법칙'){ f.value='보일의 법칙'; }
+    demoOn=true;
+    rowsCache=Object.keys(DEMO).map(function(k){ return DEMO[k]; }).concat(rowsCache.filter(function(r){ return !DEMO[r.id]; }));
+    render(); say('예시 5모둠을 목록에 넣었습니다 — 서버에는 올라가지 않습니다. [새로고침]을 누르면 빠집니다.','ok');
+  });
+
+  /* ── 모아서 그려 보기 ── */
+  var COLORS=['#0066cc','#1d8a4e','#b3261e','#9a6b00','#5e5ce6','#d55b00','#007a8a','#6e6e73'];
+  function parseCsv(csv){
+    var L=lines(csv), head=L[0].split(/[,\t;]/).map(function(s){ return s.trim(); });
+    var rows=L.slice(1).map(function(l){ return l.split(/[,\t;]/).map(function(s){ return s.trim(); }); });
+    var numCols=[]; head.forEach(function(h,i){ var ok=rows.filter(function(r){ return r[i]!==undefined && r[i]!=='' && !isNaN(parseFloat(r[i])); }).length; if(ok>=Math.max(2,rows.length*0.6)) numCols.push(i); });
+    if(numCols.length<2) return null;
+    var xi=numCols[0], yi=numCols[1];
+    var ix=head.findIndex(function(h){ return /부피|V\b/i.test(h); }), iy=head.findIndex(function(h){ return /압력|P\b/i.test(h); });
+    if(ix>=0 && iy>=0){ xi=ix; yi=iy; }
+    var pts=rows.map(function(r){ return [parseFloat(r[xi]),parseFloat(r[yi])]; }).filter(function(p){ return isFinite(p[0])&&isFinite(p[1]); });
+    return {xl:head[xi], yl:head[yi], pts:pts};
+  }
+  function fmt(v){ return Math.abs(v)>=100?v.toFixed(0):(Math.abs(v)>=10?v.toFixed(1):v.toFixed(3).replace(/0+$/,'').replace(/\.$/,'')); }
+  function drawChart(groups, inv){
+    var svg=$('#upChart'); var W=900,H=470,L=70,R=24,T=44,B=58;
+    var all=[]; groups.forEach(function(g){ g.pts.forEach(function(p){ var x=inv?(p[0]?1/p[0]:NaN):p[0]; if(isFinite(x)) all.push([x,p[1]]); }); });
+    if(!all.length){ svg.innerHTML=''; return; }
+    var xs=all.map(function(p){return p[0];}), ys=all.map(function(p){return p[1];});
+    var x0=Math.min.apply(null,xs), x1=Math.max.apply(null,xs), y0=Math.min.apply(null,ys), y1=Math.max.apply(null,ys);
+    if(inv){ x0=0; } else { x0=Math.max(0,x0-(x1-x0)*0.08); }
+    var padY=(y1-y0)*0.1||0.1; y0=Math.max(0,y0-padY); y1=y1+padY; x1=x1+(x1-x0)*0.05;
+    function nice(lo,hi){ var span=hi-lo||1, raw=span/5, mag=Math.pow(10,Math.floor(Math.log10(raw))), r=raw/mag, step=(r<1.5?1:(r<3.5?2:(r<7.5?5:10)))*mag; var a=Math.floor(lo/step)*step, b=Math.ceil(hi/step)*step; var ticks=[]; for(var v=a; v<=b+step/2; v+=step) ticks.push(+v.toFixed(10)); return {lo:a,hi:b,ticks:ticks}; }
+    var nx=nice(x0,x1), ny=nice(y0,y1); x0=nx.lo; x1=nx.hi; y0=ny.lo; y1=ny.hi;
+    var sx=function(x){ return L+(x-x0)/(x1-x0)*(W-L-R); }, sy=function(y){ return H-B-(y-y0)/(y1-y0)*(H-T-B); };
+    var out=[];
+    out.push('<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#fff"/>');
+    out.push('<clipPath id="upClip"><rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'"/></clipPath>');
+    nx.ticks.forEach(function(gx){
+      out.push('<line x1="'+sx(gx)+'" y1="'+(H-B)+'" x2="'+sx(gx)+'" y2="'+T+'" stroke="#f0f0f0"/>');
+      out.push('<text x="'+sx(gx)+'" y="'+(H-B+20)+'" text-anchor="middle" font-size="12" fill="#6e6e73">'+fmt(gx)+'</text>');
+    });
+    ny.ticks.forEach(function(gy){
+      out.push('<line x1="'+L+'" y1="'+sy(gy)+'" x2="'+(W-R)+'" y2="'+sy(gy)+'" stroke="#f0f0f0"/>');
+      out.push('<text x="'+(L-8)+'" y="'+(sy(gy)+4)+'" text-anchor="end" font-size="12" fill="#6e6e73">'+fmt(gy)+'</text>');
+    });
+    out.push('<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#1d1d1f"/>');
+    out.push('<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#1d1d1f"/>');
+    out.push('<text x="'+((L+W-R)/2)+'" y="'+(H-14)+'" text-anchor="middle" font-size="13" fill="#1d1d1f">'+esc(inv?'1 ÷ '+groups[0].xl:groups[0].xl)+'</text>');
+    out.push('<text transform="translate(16,'+((T+H-B)/2)+') rotate(-90)" text-anchor="middle" font-size="13" fill="#1d1d1f">'+esc(groups[0].yl)+'</text>');
+    if(inv){ /* 최소제곱 직선 */
+      var n=all.length, mx=0,my=0; all.forEach(function(p){ mx+=p[0]; my+=p[1]; }); mx/=n; my/=n;
+      var sxx=0,sxy=0; all.forEach(function(p){ sxx+=(p[0]-mx)*(p[0]-mx); sxy+=(p[0]-mx)*(p[1]-my); });
+      var a=sxy/sxx, b=my-a*mx;
+      out.push('<line clip-path="url(#upClip)" x1="'+sx(x0)+'" y1="'+sy(a*x0+b)+'" x2="'+sx(x1)+'" y2="'+sy(a*x1+b)+'" stroke="#1d1d1f" stroke-width="1.5" stroke-dasharray="6 5"/>');
+      out.push('<text x="'+(W-R-6)+'" y="'+(T+16)+'" text-anchor="end" font-size="12" fill="#1d1d1f">직선 맞춤 — 기울기 '+a.toFixed(2)+' · 절편 '+b.toFixed(2)+'</text>');
+    }
+    groups.forEach(function(g,gi){ var c=COLORS[gi%COLORS.length];
+      g.pts.forEach(function(p){ var x=inv?(p[0]?1/p[0]:NaN):p[0]; if(!isFinite(x)) return;
+        out.push('<circle cx="'+sx(x)+'" cy="'+sy(p[1])+'" r="5" fill="'+c+'" fill-opacity=".85"><title>'+esc(g.team)+' · '+fmt(p[0])+', '+fmt(p[1])+'</title></circle>'); });
+      var lx=L+14+(gi%7)*118, ly=T-30+Math.floor(gi/7)*16;
+      out.push('<circle cx="'+lx+'" cy="'+ly+'" r="5" fill="'+c+'"/><text x="'+(lx+10)+'" y="'+(ly+4)+'" font-size="12" fill="#1d1d1f">'+esc(g.team)+'</text>');
+    });
+    svg.innerHTML=out.join('');
+  }
+  function drawAll(){
+    var f=$('#upFilter').value||'보일의 법칙';
+    var rows=rowsCache.filter(function(r){ return r.exp===f; });
+    if(!rows.length){ $('#upChartMsg').textContent='그릴 데이터가 없습니다 — 예시를 넣거나 파일을 올려 주세요.'; $('#upChartMsg').className='upmsg bad'; return; }
+    $('#upChartMsg').textContent='읽는 중…'; $('#upChartMsg').className='upmsg';
+    Promise.all(rows.map(function(r){ return getCsv(r.id); })).then(function(all){
+      var groups=[]; all.forEach(function(r){ var g=parseCsv(r.csv); if(g){ g.team=r.team; groups.push(g); } });
+      if(!groups.length){ $('#upChartMsg').textContent='숫자 열을 두 개 찾지 못했습니다.'; $('#upChartMsg').className='upmsg bad'; return; }
+      var inv=$('#upAxis').value==='inv';
+      drawChart(groups, inv);
+      var html='<div class="tablewrap"><table><tr><th>모둠</th><th>점</th><th>'+esc(groups[0].xl)+' × '+esc(groups[0].yl)+' 평균</th><th>범위</th></tr>';
+      var tot=0,cnt=0;
+      groups.forEach(function(g){ var v=g.pts.filter(function(p){return p[0]>0;}).map(function(p){return p[0]*p[1];}); if(!v.length) return; var m=v.reduce(function(a,b){return a+b;},0)/v.length; tot+=v.reduce(function(a,b){return a+b;},0); cnt+=v.length;
+        html+='<tr><td><b>'+esc(g.team)+'</b></td><td>'+g.pts.length+'</td><td>'+m.toFixed(2)+'</td><td style="color:var(--ink-48)">'+Math.min.apply(null,v).toFixed(2)+' ~ '+Math.max.apply(null,v).toFixed(2)+'</td></tr>'; });
+      html+='<tr><td><b>전체</b></td><td>'+cnt+'</td><td><b>'+(cnt?(tot/cnt).toFixed(2):'—')+'</b></td><td></td></tr></table></div>';
+      $('#upPV').innerHTML=html;
+      $('#upChartMsg').textContent=groups.length+'모둠 '+cnt+'점'+(inv?' · 1/x 로 펴서 직선 맞춤':''); $('#upChartMsg').className='upmsg ok';
+    });
+  }
+  $('#upDraw').addEventListener('click',drawAll);
+  $('#upAxis').addEventListener('change',function(){ if($('#upChart').innerHTML) drawAll(); });
+  function getCsv(id){ if(DEMO[id]) return Promise.resolve(DEMO[id]); return fetch(TBL+'?select=csv,team,exp,filename&id=eq.'+id,{headers:H}).then(function(r){ return r.json(); }).then(function(a){ return a[0]; }); }
   function copyText(s){
     if(navigator.clipboard&&window.isSecureContext) return navigator.clipboard.writeText(s);
     var ta=document.createElement('textarea'); ta.value=s; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return Promise.resolve();
@@ -4011,7 +4127,7 @@ function initUpload(){
       return copyText(out.join('\n')).then(function(){ say((same?'모둠 열을 붙여 한 표로 ':'머리글이 달라 모둠별로 이어 붙여 ')+all.length+'건을 복사했습니다.','ok'); });
     });
   });
-  $('#upRefresh').addEventListener('click',load);
+  $('#upRefresh').addEventListener('click',function(){ demoOn=false; load(); });
   $('#upFilter').addEventListener('change',load);
   load();
   setInterval(function(){ if(document.visibilityState==='visible' && document.body.dataset.view!=='hub') load(); },15000);
