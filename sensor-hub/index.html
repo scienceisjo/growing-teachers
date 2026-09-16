@@ -608,7 +608,7 @@ body[data-view="hub"] #app-credit{border-top-color:transparent!important}
     <span class="school">2026 찾아가는 디지털 과학 수업 역량 강화 연수 · 서울특별시교육청</span>
     <h1>수집을 대신해 준 만큼,<br><b>어디에 쓸 것인가</b></h1>
     <div class="sub">디지털 탐구도구로 하는 과학 수업</div>
-    <p class="lead">해누리중학교 <b>조승재</b></p>
+    <p class="lead">선생님들 안녕하세요! 해누리중학교 <b>조승재</b>입니다^^</p>
     <div class="cta-row"><button class="btn" data-go="setup">연수 시작하기</button><button class="btn ghost" data-go="__all">전체를 한 장으로 펼치기</button></div>
     <svg class="trace" viewBox="0 0 1000 74" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0,66 C120,65 190,62 262,51 C334,40 382,18 470,10 C580,1 760,5 1000,6"
@@ -1045,7 +1045,7 @@ function gradePanel(g){
   list.forEach(e=>{ if(!units.includes(e.unit)) units.push(e.unit); });
   const okN = list.filter(e=>e.ok).length;
   return head(`${g}️⃣ 중${g}`, `중${g} — 자료집에 있는 <b>${list.length}개</b>를 단원 순서로`,
-      `실험마다 <b>매뉴얼이 어디에 있는지</b>와 <b>축을 어떻게 잡고 어느 수집 모드로 하는지</b>를 EZ·ON · Science# 두 갈래로 적어 두었습니다.`)
+      `실험마다 <b>매뉴얼이 어디에 있는지</b>와 <b>축을 어떻게 잡고 어느 수집 모드로 하는지</b>를 EZ·ON · Science# 두 갈래로 적어 두었습니다^^`)
     + `<div class="callout"><b>오늘 이 자리에서 해 보실 수 있는 것은 ${okN}개</b>입니다. 나머지도 학교에 그 센서가 있으면 그대로 하실 수 있어 매뉴얼과 축 설정을 같이 실었습니다.</div>`
     + units.map(u=>`<h3 class="subh">${u}</h3>`
         + `<div class="exps">${list.filter(e=>e.unit===u).map(expCard).join('')}</div>`).join('');
@@ -1055,7 +1055,7 @@ const PANEL = {
 
 /* ───── 출발 준비 ───── */
 setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
-  '여기까지 되면 실습은 어느 학년 실험이든 바로 들어갈 수 있습니다')
+  '선생님들, 여기까지만 해 두시면 어느 학년 실험이든 바로 들어갈 수 있습니다^^')
 + `<div class="here"><span class="hl">이 페이지</span><span class="hu">scienceisjo.github.io/growing-teachers/sensor-hub/</span></div>
 
 <div class="startlist">
@@ -1127,7 +1127,7 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
   <div><span class="no">06</span><span class="chk" role="checkbox" tabindex="0" aria-checked="false" aria-label="6번 완료 표시"></span></div>
   <div class="st-body">
     <h4>이지메이커 시작하기 가이드북 열기 <span class="bd n8">여기서 함께 봅니다</span></h4>
-    <p class="sd">앞의 다섯 가지가 준비되면 <b>이 가이드북부터 같이 펴 봅니다.</b> 보드를 처음 잡으시는 분도 여기 순서대로만 따라오시면 센서 값이 화면에 뜹니다. 오늘 실습 전에 <b>하드웨어 → 소프트웨어</b> 순으로 훑겠습니다.</p>
+    <p class="sd">앞의 다섯 가지가 준비되면 <b>이 가이드북부터 같이 펴 봅니다.</b> 보드를 처음 잡으시는 분도 여기 순서대로만 따라오시면 센서 값이 화면에 뜹니다^^ 오늘 실습 전에 <b>하드웨어 → 소프트웨어</b> 순으로 훑겠습니다.</p>
     <ul class="packlist">
       <li><b>하드웨어</b> 메인보드 알아보기 · 센서 알아보기 · <b>센서 연결 방법</b></li>
       <li><b>소프트웨어</b> <b>EZ·ON 접속하기</b> · 코딩 예제 · 코딩 기초</li>
@@ -1153,7 +1153,7 @@ setup: head('시작 전에','먼저 <b>네 가지</b>를 열어 둡니다',
 
 /* ───── 오늘 ───── */
 today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다',
-  '')
+  '선생님들 안녕하세요! 만화 한 편으로 시작하겠습니다 🙂')
 + `<figure class="fig">
   <img src="img/sensorstart.webp" width="1600" height="533" decoding="async"
        alt="4컷 만화. 실험복을 입은 수달이 한 손에 온도계를 들고 공책에 숫자를 받아 적는다. 시간이 흘러 공책은 숫자로 빼곡해지고 비커 안에서는 기포가 활발히 올라오지만 수달은 고개를 들지 않는다. 온도계 대신 센서를 비커에 꽂자 옆 태블릿에 곡선이 저절로 그려지기 시작한다. 마지막 칸에서 수달은 처음으로 고개를 들어 화면과 비커를 번갈아 본다.">
@@ -1211,7 +1211,7 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 </details>
 
 <details class="fold" data-school-only="yeoksam" open style="margin:18px 0"><summary>역삼중 FLOW CHART</summary>
-<div class="callout"><b>센서가 없는 학교입니다.</b> 공동활동 둘로 두 회사를 다 만져 본 뒤 <b>구매 계획</b>을 세우고, 계획에 적은 센서를 다시 만져 봅니다. 두 공동활동 모두 끝에 <b>MBL 수업허브</b>로 모둠 값을 <b>반 전체 그래프</b>로 합칩니다.</div>
+<div class="callout"><b>역삼중은 아직 센서가 없으시지요!</b> 그래서 오늘은 두 회사 센서를 다 만져 보신 뒤 <b>구매 계획</b>을 세우고, 계획에 적은 센서를 다시 만져 봅니다 🙂 두 공동활동 끝에 모둠 값을 올려 주시면 제가 <b>반 전체 그래프</b>로 합쳐 보여 드리겠습니다.</div>
 <div class="tablewrap"><table>
 <tr><th>TIME</th><th>BLOCK</th><th>CONTENTS</th></tr>
 <tr><td><b>0–6</b></td><td>열기</td><td>만화 4컷 → "무엇을 보고 있었을까요" · 오늘 두 가지 — <b>써 보기 · 살 계획</b></td></tr>
@@ -1239,14 +1239,14 @@ today: head('📋 여는 활동','먼저 <b>이 장면</b>을 보시겠습니다
 · <b>매뉴얼 모음집</b>(원드라이브) — EZ · CB · SB · BASE + 해누리중 품의안</div>
 </details>
 
-<div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 해 보십니다.</div>
+<div class="callout ok"><b>공통 실험을 함께 하고</b>, 시간이 남으면 <b>가져온 센서로 원하시는 실험</b>을 자유롭게 해 보시면 됩니다^^</div>
 
 
 `,
 
 /* ───── 측정 데이터 올리기 ───── */
 upload: head('📤 측정 데이터','잰 값을 <b>여기에 올려 주세요</b>',
-  '올라온 파일을 강사가 한 화면에서 합쳐 분석해 드립니다')
+  '올려 주시면 제가 제 화면에서 합쳐 분석해 보여 드리겠습니다 🙂')
 + `<div class="lab" id="upBox">
   <h4>CSV 올리기</h4>
   <div class="cap">EZ·ON은 [데이터 분석] → 내보내기(CSV), Science#는 툴바 [차트를 CSV로 저장]. 파일이 없으면 표를 복사해 아래 칸에 붙여 넣으셔도 됩니다.</div>
@@ -1271,7 +1271,7 @@ upload: head('📤 측정 데이터','잰 값을 <b>여기에 올려 주세요</
 
 /* ───── 왜 ───── */
 why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일까요?',
-  '교육과정 문서에서 근거를 찾아봅니다')
+  '선생님들, 근거는 교육과정 문서에 다 있습니다. 같이 찾아보겠습니다^^')
 + `<div class="punch">
   <div class="q"><b>2022 개정 교육과정</b>에서<br>센서 활용을 <b>여러 곳에서 강조</b>하고 있습니다.</div>
   <div class="cap">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정</div>
@@ -1393,10 +1393,10 @@ why: head('🔭 첫 번째 질문','센서를 쓰는 <b>이유</b>가 무엇일�
 
 /* ───── 지능형 과학실 ON ───── */
 smartlab: head('🏫 지능형 과학실','<b>지능형 과학실</b>은 무엇을 말할까요',
-  '공간은 이미 있습니다. 그 위의 플랫폼이 하나 더')
+  '공간은 이미 있고, 그 위에 플랫폼이 하나 더 있습니다 🙂')
 + `
 <div class="punch">
-  <div class="q">이 연수의 정식 부제가 무엇인지 아십니까.<br><b>"지능형 과학실에서 AI·센서·데이터로<br>완성하는 K-STEM 클래스"</b>입니다.</div>
+  <div class="q">선생님들, 이 연수의 정식 부제를 아시나요?<br><b>"지능형 과학실에서 AI·센서·데이터로<br>완성하는 K-STEM 클래스"</b>입니다.</div>
   <div class="cap">2026 찾아가는 디지털 과학 수업 역량 강화 연수 · 서울특별시교육청 창의미래교육과</div>
 </div>
 
@@ -1476,7 +1476,7 @@ smartlab: head('🏫 지능형 과학실','<b>지능형 과학실</b>은 무엇�
 `,
 
 /* ───── 잃는 것 ───── */
-lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요','')
+lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 중 몇 개</b>일까요','제 생각은 이렇습니다. 잃는 것을 세어 보면 걱정이 숫자가 됩니다 🙂')
 + `<div class="punch">
   <div class="q">온도계를 30초마다 읽어 적던 학생은<br>그 30초 동안 <b>탐구 기능을 연습하고</b> 있었습니다.<br>그 기능의 <b>이름은 무엇일까요?</b></div>
   <div class="cap">이름을 붙일 수 있어야 무엇을 잃었는지 셀 수 있습니다</div>
@@ -1486,7 +1486,7 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 
 <div class="callout gold"><b>원문이 기능 이름을 그대로 부릅니다</b> — "<b>관찰, 측정, 분류, 예상, 추리</b> 등을 통해…"<br>기초 6 중 5개. 의사소통은 "협력적 소통하기"로 따로.</div>
 
-<p style="color:var(--ink-soft);margin:26px 0 4px">그래서 세어 봅시다 — 과학 탐구 기능은 흔히 <b>기초 6가지</b>와 <b>통합 7가지</b>로 나눕니다</p>
+<p style="color:var(--ink-soft);margin:26px 0 4px">그래서 같이 세어 봅시다 — 과학 탐구 기능은 흔히 <b>기초 6가지</b>와 <b>통합 7가지</b>로 나눕니다</p>
 <div class="fnwrap">
   <div class="fngroup">
     <h4>기초 탐구 기능 <span>6</span></h4>
@@ -1595,7 +1595,7 @@ lose: head('⚖️ 두 번째 질문','센서가 가져가는 것은 <b>13개 �
 
 /* ───── 학생이 얻는 것 ───── */
 gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻을까요',
-  '교사 편의 말고, 학생 쪽에서만')
+  '교사 편의 말고, 학생 쪽에서만 세어 봤습니다^^')
 + `<h3 class="subh" style="margin-top:6px">센서가 <b>있어야만</b> 되는 것</h3>
 <div class="cardgrid">
   <div class="pcard only"><h3>감각이 닿지 않는 곳을 본다</h3><p>손으로는 "빡빡하다"가 끝. 1초 사이의 압력, 마찰력이 <b>최대가 되는 그 순간</b>은 감각에 안 잡힙니다.</p></div>
@@ -1622,8 +1622,8 @@ gain: head('🎁 세 번째 질문','<b>학생</b>은 무엇을 얻을까요',
 `,
 
 /* ───── 내 센서 · 무엇을 할 수 있나 ───── */
-mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로 할 수 있는 실험',
-  '종류별 2개씩 — 그래서 각자 다른 실험을 고릅니다')
+mykit: head('🧪 골라 주세요','오늘 <b>가져온 센서</b>와, 그걸로 할 수 있는 실험',
+  '종류별 2개씩이라 각자 다른 실험을 고르시면 됩니다^^')
 + `
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
   <input type="search" id="kQ" placeholder="센서나 실험 이름으로 찾기 (예: 온도, 보일, 광합성, 옴)"
@@ -1641,7 +1641,7 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 <tr><td><b>BASE</b></td><td>『기초 – 측정 방법』 클래스보드 · 무선판/유선판 각 1권<br>센서 19종 · 센서당 4쪽</td><td>센서 하나를 처음 잡을 때</td></tr>
 </table></div></div>
 
-<div class="callout gold"><b>가방 사정으로 센서를 종류별 두 개씩만 챙겨 왔습니다.</b> 넉넉히 못 가져와 죄송합니다.<br>고르신 실험이 겹치면 <b>그 실험은 함께 하시면서 데이터를 나눠 주십시오.</b> 오히려 모둠 비교가 됩니다.</div>
+<div class="callout gold"><b>가방 사정으로 센서를 종류별 두 개씩만 챙겨 왔습니다.</b> 넉넉히 못 가져와 죄송합니다^^;<br>고르신 실험이 겹치면 <b>그 실험은 함께 하시면서 데이터를 나눠 주세요.</b> 오히려 모둠 비교가 됩니다 🙂</div>
 <div class="callout warn"><b>한 실험에 두 조까지입니다</b><br>센서 1개 쓰는 실험 → <b>2조</b> · 센서 <b>2개</b> 쓰는 실험 → <b>1조</b><br>온도 2개가 필요한 것: 비열 · 열평형 · 냉각곡선 비교 · 온실효과 · 종이색 복사<br><b>그래서 각자 다른 실험을 고르시는 게 맞습니다.</b> 6~7명이면 3~4가지를 나눠 맡으면 딱 맞습니다.</div>
 
 <h3 class="subh">실험 <b>수업</b> 요령</h3>
@@ -1674,7 +1674,7 @@ mykit: head('🧪 고르십시오','오늘 <b>가져온 센서</b>와, 그걸로
 
 /* ───── 축을 바꾸면 보인다 ───── */
 axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것이 보입니다',
-  '알맹이는 측정이 아니라 여기')
+  '제 생각은 이렇습니다. 알맹이는 측정이 아니라 여기입니다 🙂')
 + `
 <div class="punch">
   <div class="q">센서는 언제나 <b>시간축</b>으로 줍니다.<br>그런데 우리가 알고 싶은 건 대개 <b>시간이 아닙니다.</b></div>
@@ -1738,7 +1738,7 @@ axis: head('📈 오늘의 핵심','<b>축을 바꾸면</b> 보이지 않던 것
     <div class="say">"왜 원점을 안 지나갈까? 이게 뭘 말해 주는 걸까?"</div></div></div>
 </div>
 
-<h3 class="subh">교사가 알아 두어야 할 것 둘</h3>
+<h3 class="subh">우리가 알아 두어야 할 것 둘</h3>
 
 <div class="callout warn"><b>① 오차도 같이 변환됩니다</b> — 1/V는 <b>작은 V에서 증폭</b>. 양 끝 점이 튑니다.</div>
 
@@ -1882,7 +1882,7 @@ axislab: head('🛠 실습','축을 바꾸려면 <b>어디를 누를까요</b>',
 
 /* ───── 우리 반 보일의 법칙 그래프 ───── */
 classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>를 맡아<br>반 전체가 <b>곡선 하나</b>를 만듭니다',
-  '센서가 두세 개뿐이어도 되는 설계입니다 — 오히려 그래서 더 좋습니다')
+  '센서가 두세 개뿐이어도 되는 설계입니다 — 오히려 그래서 더 좋습니다 🙂')
 + `<div class="callout"><b>왜 이렇게 할까요.</b> 한 모둠이 부피를 여덟 번 바꿔 가며 재면, 그 모둠 그래프는 그 모둠 것으로 끝납니다. 그런데 <b>모둠마다 한 점씩</b> 맡아 모으면, 완성된 곡선은 <b>반 전체가 함께 만든 것</b>이 됩니다. 자기 점이 어디 있는지 찾게 되고, 튀는 점이 나오면 그 모둠이 다시 재게 됩니다.</div>
 
 <h3 class="subh">준비 — 마개는 <b>30 mL 에서</b> 막습니다</h3>
@@ -2063,7 +2063,7 @@ classgraph: head('📊 바로 쓰는 수업','모둠마다 <b>다른 부피</b>�
 
 /* ───── 반 전체 데이터 모으기 ───── */
 classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 전체로</b> 모으는 설계',
-  '구글 클래스룸을 쓰고 계시면 새로 배울 것이 거의 없습니다')
+  '구글 클래스룸을 쓰고 계시면 새로 배울 것이 거의 없습니다^^')
 + `<div class="callout"><b>교육과정에도 적혀 있는 일입니다.</b> "여러 모둠의 데이터를 공유하여 탐구 활동을 수행할 수 있으며, 데이터 공유 시 <b>공유 플랫폼</b>을 활용할 수 있다" <span style="font-size:.86rem;color:var(--ink-soft)">별책 9 · (6) 기체의 성질</span></div>
 
 <h3 class="subh">시트 양식은 <b>만들어 두었습니다</b></h3>
@@ -2155,7 +2155,7 @@ classroom: head('🗂 이미 쓰시는 도구로','모둠 데이터를 <b>반 �
     <p>구글 시트 전송을 아예 안 쓰고, <b>「반 전체」 탭에 한 줄만 치게</b> 하는 방법입니다. 학교 도메인 안에서만 공유하면 되니 권한 걱정이 없습니다.</p>
     <p style="margin-top:7px">원자료가 필요하면 EZ·ON <b>「데이터 + 그래프 다운로드」</b> 로 각자 내려받아 <b>클래스룸에 제출</b>하게 합니다. 큐브 쪽과 같은 방식이 됩니다.</p>
     <div class="say">"시트에는 값만 한 줄. 원본 파일은 클래스룸에 내세요."</div>
-    <p style="margin-top:9px"><b>처음 하시는 거라면 이 길을 권합니다.</b></p></div></div>
+    <p style="margin-top:9px"><b>처음 하시는 거라면 이 길을 권해 드립니다^^</b></p></div></div>
 
   <div class="move"><div class="n">마무리</div><div>
     <h4>그 자리에서 그래프와 계산</h4>
@@ -2304,7 +2304,7 @@ textbook: head('📚 근거','선생님이 쓰시는 <b>그 교과서</b>에 이
 basics: head('📖 도감','센서 <b>하나씩</b> 익히기',
   '19종 · 무엇을 재며 시작할지')
 + `
-<div class="callout"><b>각 편이 질문으로 시작합니다.</b> 온도 편 — "여름에 운동장에서 놀다가 교실에 들어오면 왜 시원할까요?"<br><b>수업 첫마디가 열아홉 개 들어 있습니다.</b></div>
+<div class="callout"><b>각 편이 질문으로 시작합니다.</b> 온도 편 — "여름에 운동장에서 놀다가 교실에 들어오면 왜 시원할까요?"<br><b>수업 첫마디가 열아홉 개 들어 있습니다^^</b></div>
 
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
   <input type="search" id="sQ" placeholder="센서 이름·측정 대상으로 찾기 (예: 온도, 주사기, 전도도)"
@@ -2347,7 +2347,7 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
 <div class="callout"><b>같은 온도, 두 갈래 길</b><br>전압의 크기로 → <b>A</b> · 0과 1의 데이터로 → <b>D · I2C · UART</b><br><b>측정하는 물리량</b>과 <b>전달하는 신호</b>는 별개입니다.</div>
 
 <h3 class="subh">A 포트 — <b style="color:var(--coral-deep)">전압의 크기</b>로 전달</h3>
-<p style="color:var(--ink-soft);margin-bottom:12px">밝기 센서를 예로 들겠습니다. 슬라이더를 움직여 보십시오.</p>
+<p style="color:var(--ink-soft);margin-bottom:12px">밝기 센서를 예로 들겠습니다. 슬라이더를 움직여 보세요^^</p>
 
 <div class="lab">
   <div class="ctl">
@@ -2389,7 +2389,7 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
 
 <div class="lab">
   <h4>온습도 센서가 27℃를 보내는 방법</h4>
-  <div class="cap">데이터선 하나로 0과 1을 차례차례 보냅니다. 버튼을 눌러 보십시오.</div>
+  <div class="cap">데이터선 하나로 0과 1을 차례차례 보냅니다. 버튼을 눌러 보세요.</div>
   <div class="ctl"><button class="btn" id="dhtGo">▶ 측정 시작</button>
     <span id="dhtState" style="color:var(--ink-soft);font-size:.92rem">대기 중</span></div>
   <div class="flow" style="grid-template-columns:1fr 1fr 1fr">
@@ -2441,7 +2441,7 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
 
 <div class="lab">
   <h4>같은 두 선에 여러 장치를 매답니다</h4>
-  <div class="cap">교사가 한 교실에서 "1번!", "2번!" 하고 부르는 것과 같습니다. 눌러 보십시오.</div>
+  <div class="cap">교사가 한 교실에서 "1번!", "2번!" 하고 부르는 것과 같습니다. 눌러 보세요.</div>
   <div class="ctl">
     <button class="btn ghost" data-ch="0">채널 0 읽기</button>
     <button class="btn ghost" data-ch="1">채널 1 읽기</button>
@@ -2512,7 +2512,7 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
       <text x="360" y="238" text-anchor="middle" font-size="12" fill="#6e6e73">가지 2</text>
     </svg>
   </figure>
-  <div class="punch" style="margin:6px 0 0;padding:18px"><div class="q" id="parEq">측정을 눌러 보십시오</div></div>
+  <div class="punch" style="margin:6px 0 0;padding:18px"><div class="q" id="parEq">측정을 눌러 보세요</div></div>
   <div class="callout warn" style="margin-bottom:0"><b>전류 센서는 직렬.</b> 배선을 끊고 그 자리에. 저항 양끝에 물리면 <b>단락</b>입니다.</div>
 </div>
 
@@ -2579,8 +2579,8 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
   </svg>
 </div>
 
-<h3 class="subh">직접 나눠 보십시오</h3>
-<p style="color:var(--ink-soft);margin-bottom:12px">센서를 누른 뒤, 꽂아야 할 포트를 누르시면 됩니다.</p>
+<h3 class="subh">직접 나눠 보세요</h3>
+<p style="color:var(--ink-soft);margin-bottom:12px">센서를 누른 뒤, 꽂아야 할 포트를 누르시면 됩니다^^</p>
 
 <div class="lab">
   <div class="sortwrap">
@@ -2599,7 +2599,7 @@ ports: head('🔌 잠깐 · 이지메이커','센서는 측정값을 <b>어떻�
   </div>
 </div>
 
-<h3 class="subh">오개념 점검 — 눌러서 뒤집어 보십시오</h3>
+<h3 class="subh">오개념 점검 — 눌러서 뒤집어 보세요</h3>
 <div class="ox" id="oxWrap"></div>
 
 <div class="callout ok" style="margin-top:24px"><b>센서 기판에 ⒶⒹ·I2C·UART가 인쇄</b>돼 있습니다. 적힌 대로 꽂으면 됩니다.<br>A·D는 <b>0~4 아무 번호나</b> — 단 <b>코드의 번호와 같아야</b> 합니다.</div>
@@ -2614,10 +2614,10 @@ g3: gradePanel(3),
 
 /* ───── 센서 구매 계획 세우기 ───── */
 buy: head('🧾 우리 학교 계획','센서를 <b>몇 개</b> 사야 할까요',
-  '학년·학급·모둠·시간표에서 수량이 나오고, 그다음이 업체와 예산입니다')
+  '선생님들 학교 숫자를 넣어 보시면 수량이 나옵니다. 업체와 예산은 그다음입니다 🙂')
 + `<div class="punch">
   <div class="q">한 번에 <b>두 교실</b>에서 센서 수업을 열려면<br>같은 센서가 <b>두 배</b> 필요할까요?</div>
-  <div class="cap">두 교실에 다른 실험을 배정하면 보드만 두 배입니다 — 생성기에 모둠 수를 넣어 보십시오</div>
+  <div class="cap">두 교실에 다른 실험을 배정하면 보드만 두 배입니다 — 생성기에 모둠 수를 넣어 보세요</div>
 </div>
 
 <h3 class="subh">구매 계획 생성기 — <b>우리 학교 안</b>을 그 자리에서</h3>
@@ -2678,7 +2678,7 @@ buy: head('🧾 우리 학교 계획','센서를 <b>몇 개</b> 사야 할까요
 
 /* ───── 사고 나서 — 서류 셋 ───── */
 paper: head('🗂 사고 나서','센서를 산 뒤 <b>써야 하는 서류</b> 셋',
-  '정산서 · 결과보고서 · (연계형) 디지털 탐구 도구 정산보고서 — 해누리중이 2026년에 실제로 낸 것을 기준으로')
+  '정산서 · 결과보고서 · (연계형) 디지털 탐구 도구 정산보고서 — 해누리중이 2026년에 실제로 낸 것을 기준으로 정리했습니다^^')
 + `<div class="punch">
   <div class="q">서류는 세 장인데,<br><b>숫자는 한 벌</b>입니다.</div>
   <div class="cap">계획서 → 정산서 → 결과보고서의 품명·규격·수량이 같아야 보완 요청이 오지 않습니다</div>
@@ -2802,7 +2802,7 @@ share: head('🤝 마지막','오늘 함께해 주셔서 <b>고맙습니다</b>'
 
 /* ───── 링크 자료실 ───── */
 links: head('🔗 자료실','필요할 때 <b>여기서 꺼내</b> 씁니다',
-  '중학교 수업에 실제로 쓰이는 것만')
+  '중학교 수업에 실제로 쓰이는 것만 모았습니다^^')
 + `
 <div class="ctl" style="display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;align-items:center">
   <input type="search" id="lQ" placeholder="찾기 (예: 드라이버, 크롬북, 카탈로그, 지능형, 코딩)"
@@ -2973,7 +2973,7 @@ const hubEl=document.getElementById('hub'), secfoot=document.getElementById('sec
 const SCHOOLS={
   songrye:{name:'송례중학교', when:'8월 24일(월)', note:'이지메이커 공통 실험 둘 — 보일의 법칙 · 옴의 법칙'},
   wiresol:{name:'위례솔중학교', when:'8월 26일(수)', note:'사이언스큐브 · 이지메이커 반반 — 중1 기체 단원(압력·부피, 온도·부피) 중심'},
-  yeoksam:{name:'역삼중학교', when:'9월 17일(목)', note:'센서 없는 학교 — 이지 나노 밝기 · 큐브 보일 공동활동 → MBL 수업허브로 합치기 → 구매 계획 세우기'}
+  yeoksam:{name:'역삼중학교', when:'9월 17일(목)', note:'오늘은 밝기(이지 나노)와 보일의 법칙(큐브)을 직접 해 보시고, 우리 학교 센서 구매 계획까지 세워 봅니다 🙂'}
 };
 const schoolSel=document.getElementById('school');
 function setSchool(id){
