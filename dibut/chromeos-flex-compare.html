@@ -70,6 +70,9 @@ h2{margin:0 0 calc(var(--u)*1.1);font-size:calc(var(--u)*2.3);font-weight:600;le
 .fig svg{width:100%;height:auto;max-height:calc(var(--u)*14);color:var(--ink);}
 .fig figcaption{font-size:calc(var(--u)*1.35);color:var(--ink-60);text-align:center;letter-spacing:-.01em;line-height:1.4;}
 .fig figcaption strong{color:var(--ink);font-weight:600;}
+.prob{display:flex;flex-direction:column;gap:calc(var(--u)*.5);background:var(--canvas);border:1px solid var(--hairline);}
+.prob svg{width:100%;height:auto;max-height:calc(var(--u)*17);color:var(--ink);margin-bottom:calc(var(--u)*.4);}
+.pop-body .prob{border:0;} .pop-body .prob svg{max-height:calc(var(--u)*30);}
 
 /* ---------- 장단점 표 ---------- */
 .tblwrap{border:1px solid var(--hairline);border-radius:calc(var(--u)*1.2);overflow:hidden;background:var(--canvas);}
@@ -149,6 +152,7 @@ dialog.kind-fig .pop-body{--u:min(1.9vw,2.8vh);}
   .card{padding:14px 16px;border-radius:14px;} .card b{font-size:17px;} .card span{font-size:15px;}
   .step{padding-left:40px;} .step i{left:16px;top:15px;font-size:15px;}
   .fig svg{max-height:160px;} .fig figcaption{font-size:13.5px;}
+  .prob svg{max-height:190px;}
   .cmp{overflow-x:auto;} .tblwrap{min-width:560px;}
   th{font-size:16px;padding:10px 14px;} td{padding:0 14px;} .item{padding:10px 0;}
   td b{font-size:16px;} td span{font-size:14px;}
@@ -217,6 +221,66 @@ dialog.kind-fig .pop-body{--u:min(1.9vw,2.8vh);}
           <text x="170" y="146" text-anchor="middle" font-size="24" font-weight="600" fill="#0066cc">Chrome OS Flex</text>
         </svg>
         <figcaption><strong>기기(Surface Go 3)는 그대로</strong>, 켜면 뜨는 운영체제만 바뀝니다</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 1-2. 우리 학교에서 실제 겪고 있는 문제 -->
+  <section aria-labelledby="h-prob">
+    <h2 id="h-prob" class="reveal">우리 학교 선생님·학생들이 실제 겪고 있는 문제</h2>
+    <div class="grid3">
+      <figure class="card prob reveal" data-pop="fig">
+        <svg viewBox="0 0 340 210" role="img" aria-label="업데이트를 미루면 켜는 데 20분: 업데이트 구성 중 화면과 시계">
+          <rect x="18" y="22" width="200" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="4"/>
+          <rect x="28" y="32" width="180" height="110" rx="5" fill="#f5f5f7"/>
+          <path d="M4 160 H232 a8 8 0 0 1 -8 12 H12 a8 8 0 0 1 -8 -12 Z" fill="currentColor"/>
+          <text x="118" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1d1d1f">업데이트 구성 중</text>
+          <rect x="48" y="86" width="140" height="12" rx="6" fill="#e0e0e0"/>
+          <rect x="48" y="86" width="52" height="12" rx="6" fill="#7a7a7a"/>
+          <text x="118" y="126" text-anchor="middle" font-size="14" fill="#7a7a7a">37% · 전원을 끄지 마세요</text>
+          <circle cx="288" cy="88" r="40" fill="none" stroke="currentColor" stroke-width="4"/>
+          <line x1="288" y1="88" x2="288" y2="58" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <line x1="288" y1="88" x2="312" y2="102" stroke="#0066cc" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="288" cy="88" r="4" fill="currentColor"/>
+          <text x="288" y="160" text-anchor="middle" font-size="22" font-weight="600" fill="#0066cc">20분</text>
+          <text x="288" y="184" text-anchor="middle" font-size="13" fill="#6e6e73">수업은 이미 시작</text>
+        </svg>
+        <b>켜는 데 20분</b>
+        <span>업데이트를 미룬 디벗은 켜자마자 <strong>「업데이트 구성 중」</strong>으로 들어가 <strong>20분</strong>이 걸림. 그 사이 수업은 시작</span>
+      </figure>
+      <figure class="card prob reveal" data-pop="fig">
+        <svg viewBox="0 0 340 210" role="img" aria-label="업데이트를 강제 종료하면 한/영 전환이 안 되고 글자가 깨짐">
+          <rect x="46" y="18" width="248" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="4"/>
+          <rect x="56" y="28" width="228" height="110" rx="5" fill="#f5f5f7"/>
+          <path d="M18 156 H322 a10 10 0 0 1 -10 14 H28 a10 10 0 0 1 -10 -14 Z" fill="currentColor"/>
+          <text x="72" y="60" font-size="16" fill="#1d1d1f">안녕하세요 → </text>
+          <text x="196" y="60" font-size="16" font-weight="600" fill="#7a7a7a">▯▯?▯□?</text>
+          <text x="72" y="92" font-size="16" fill="#1d1d1f">dksdnjdgktpdy</text>
+          <text x="72" y="122" font-size="13" fill="#6e6e73">한글로 바꾸려는데 영문만 나옴</text>
+          <rect x="222" y="84" width="52" height="34" rx="6" fill="#ffffff" stroke="currentColor" stroke-width="3"/>
+          <text x="248" y="107" text-anchor="middle" font-size="14" font-weight="600" fill="#1d1d1f">한/영</text>
+          <line x1="226" y1="80" x2="270" y2="122" stroke="#0066cc" stroke-width="4" stroke-linecap="round"/>
+          <text x="170" y="196" text-anchor="middle" font-size="13" fill="#6e6e73">업데이트를 강제 종료·취소한 뒤</text>
+        </svg>
+        <b>한/영 전환 불가 · 글자 깨짐</b>
+        <span>기다리다 못해 업데이트를 <strong>강제 종료·취소</strong>하면 <strong>한/영 전환이 안 되고 글자가 깨지는</strong> 문제 발생</span>
+      </figure>
+      <figure class="card prob reveal" data-pop="fig">
+        <svg viewBox="0 0 340 210" role="img" aria-label="프로그램 여러 개를 동시에 켜면 디벗이 멈춤: 겹친 창들과 응답 없음">
+          <rect x="46" y="18" width="248" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="4"/>
+          <rect x="56" y="28" width="228" height="110" rx="5" fill="#f5f5f7"/>
+          <path d="M18 156 H322 a10 10 0 0 1 -10 14 H28 a10 10 0 0 1 -10 -14 Z" fill="currentColor"/>
+          <rect x="66" y="44" width="110" height="70" rx="4" fill="#ffffff" stroke="#7a7a7a" stroke-width="2"/>
+          <rect x="84" y="56" width="110" height="70" rx="4" fill="#ffffff" stroke="#7a7a7a" stroke-width="2"/>
+          <rect x="102" y="68" width="110" height="70" rx="4" fill="#ffffff" stroke="#7a7a7a" stroke-width="2"/>
+          <rect x="120" y="80" width="110" height="56" rx="4" fill="#ffffff" stroke="#1d1d1f" stroke-width="2"/>
+          <text x="175" y="105" text-anchor="middle" font-size="13" font-weight="600" fill="#1d1d1f">응답 없음</text>
+          <circle cx="250" cy="66" r="18" fill="none" stroke="#e0e0e0" stroke-width="6"/>
+          <path d="M250 48 a18 18 0 0 1 18 18" fill="none" stroke="#0066cc" stroke-width="6" stroke-linecap="round"/>
+          <text x="170" y="196" text-anchor="middle" font-size="13" fill="#6e6e73">패들렛 + 구글 문서 + 유튜브 … 동시에 켜면</text>
+        </svg>
+        <b>여러 개 켜면 멈춤</b>
+        <span>속도 자체가 느려서 <strong>프로그램을 여러 개 동시에 실행하면 디벗이 멈춰 버림</strong></span>
       </figure>
     </div>
   </section>
