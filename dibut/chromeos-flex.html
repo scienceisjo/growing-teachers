@@ -349,6 +349,13 @@ details.card[open] > summary .chev{transform:rotate(-135deg);margin-top:16px;}
 .card-b li b{color:var(--ink);}
 .card-b > p{font-size:17px;color:var(--ink);}
 .card-b .cmp td:first-child{white-space:nowrap;}
+.card-b .thanks{font-size:14px;letter-spacing:-.224px;line-height:1.5;color:var(--ink-60);}
+.card-b details.sub{border-top:1px solid var(--divider);padding-top:12px;}
+.card-b details.sub > summary{list-style:none;cursor:pointer;font-size:15px;font-weight:600;letter-spacing:-.224px;color:var(--ink-80);display:flex;align-items:center;gap:8px;}
+.card-b details.sub > summary::-webkit-details-marker{display:none;}
+.card-b details.sub > summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--ink-48);border-bottom:2px solid var(--ink-48);transform:rotate(-45deg);transition:transform .2s ease;}
+.card-b details.sub[open] > summary::before{transform:rotate(45deg);}
+.card-b details.sub > ul{margin-top:12px;}
 .pnote{
   display:none;font-size:14px;letter-spacing:-.224px;line-height:1.5;color:var(--ink-80);
   background:var(--parchment);border-radius:var(--r-sm);padding:10px 14px;
@@ -785,7 +792,7 @@ img{max-width:100%;}
             </summary>
             <div class="card-b">
               <ul>
-                <li><b>카메라 초점</b> — 전·후면 중 한쪽 초점 불량 가능. 시범학교에서 QR 인식 문제가 실제로 발생</li>
+                <li><b>카메라 초점</b> — 전·후면 중 한쪽 초점 불량 가능. 시범학교에서 QR 인식 문제가 실제로 발생. 대여 기기로 확인해 보니 <b>가까이 있는 QR은 인식</b>됩니다</li>
                 <li><b>스마트폰용 앱·설치형 프로그램 사용 불가</b> — 예: 한글(HWP) 설치판, 엔트리 오프라인·하드웨어 연결, 곰믹스, 안드로이드 앱. 인터넷 사이트로 되는 것만 사용(패들렛·띵커벨·캔바 등은 사이트라 그대로)</li>
                 <li><b>디벗 안에 저장한 파일 전부 삭제</b> — 기존 OS를 지우는 방식. 전환 전 백업 필수</li>
                 <li><b>기기 로그인은 센스쿨(SEN스쿨) 계정</b> — 학교가 관리하는 계정이라야 차단·앱 설치 같은 관리가 적용됨. 교사는 로그인 뒤 <b>기존 해누리중학교 계정을 브라우저에 등록</b>해 기존 워크스페이스 수업 그대로. 학생 개인 지메일은 차단. 학생별 아이디 라벨지를 배부하고, 전환 다음 날 아침 조회 시간에 방송 교육으로 로그인</li>
@@ -815,13 +822,21 @@ img{max-width:100%;}
           <details class="card">
             <summary>
               <span class="cn">06</span>
-              <span class="ct">직접 써 보기 — 전환된 디벗이 과학정보부 교무실에 있습니다</span>
+              <span class="ct">크롬 OS Flex로 전환된 디벗 체험</span>
               <span class="chev" aria-hidden="true"></span>
-              <span class="ch">아주중학교에서 대여한 크롬 OS 플렉스 전환 디벗 · 기존 디벗과 속도 비교 · 낯선 점도 미리 겪어 보기</span>
+              <span class="ch">과학정보부 교무실에 있습니다 · 주요 실습 3가지 · 기존 디벗과 속도 비교</span>
             </summary>
             <div class="card-b">
-              <p>아주중학교에서 전환을 마친 디벗을 대여해 <b>과학정보부 교무실</b>에 두었습니다. 기존 디벗과 나란히 켜서 부팅·로그인·패들렛 접속 속도를 비교해 보시고, 수업에 쓰시는 사이트가 그대로 되는지도 직접 확인해 보십시오.</p>
-              <p><b>윈도우와 달라서 처음에 당황하는 것들</b> — 체험하실 때 미리 알고 가시면 편합니다</p>
+              <p>아주중학교에서 전환을 마친 디벗을 대여해 <b>과학정보부 교무실</b>에 두었습니다. 기존 디벗과 나란히 켜서 속도를 비교해 보시고, 아래 실습 세 가지를 해 보십시오.</p>
+              <p class="thanks">전환 관련해서 매우 많은 도움을 주신 아주중학교 송세호 선생님께 맛있는 식사를 대접해 드리고 디벗을 대여해 왔습니다 😊</p>
+              <p><b>주요 실습 3가지</b></p>
+              <ol>
+                <li><b>크롬에서 '창 끄는 법' 실습</b> — 오른쪽 위 ✕, 또는 Ctrl+Shift+W (탭 하나만 닫기는 Ctrl+W)</li>
+                <li><b>카메라 테스트</b> — 가까이 있는 QR 코드는 인식됩니다. 멀리 있는 것도 시험해 보기</li>
+                <li><b>유튜브 들어가서 아무 영상이나 틀어 보기</b> — 화면·소리·끊김 확인</li>
+              </ol>
+              <details class="sub">
+                <summary>윈도우와 달라서 처음에 당황하는 것들 10가지</summary>
               <ul>
                 <li><b>F5를 누르면 창이 전부 펼쳐짐</b> — 윗줄 F키가 크롬북 기능키(뒤로·새로고침·전체 화면·창 표시·밝기·음량)로 동작합니다. 새로고침은 <b>F3</b>, 전체 화면은 F11 대신 <b>F4</b></li>
                 <li><b>윈도우 키 = 런처(검색) 키</b> — 시작 메뉴 대신 앱·파일·웹 통합 검색이 열립니다. 화면 잠금 Win+L은 그대로</li>
@@ -834,6 +849,7 @@ img{max-width:100%;}
                 <li><b>Home·End·PgUp·PgDn이 없는 자판</b>에선 Alt+↑/↓(한 쪽씩), Ctrl+Alt+↑/↓(문서 처음·끝)</li>
                 <li><b>주의</b> — Ctrl+Shift+Q를 두 번 누르면 바로 로그아웃됩니다</li>
               </ul>
+              </details>
               <p class="pnote">대여 기기 — 초기화(파워워시)·설정 변경은 하지 말고, 써 본 뒤 로그아웃만. 반납 전 상태 확인.</p>
             </div>
           </details>
