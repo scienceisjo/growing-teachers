@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>크롬 OS Flex 전환 디벗 체험 — 실습 매뉴얼 · 해누리중 과학정보부</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
+<style>
+/* 과학정보부 교무실 체험 기기 옆에 두는 A4 실습 매뉴얼. Ctrl+P → PDF */
+:root{
+  --blue:#0066cc; --ink:#1d1d1f; --ink-60:#6e6e73; --ink-48:#7a7a7a;
+  --canvas:#ffffff; --parchment:#f5f5f7; --hairline:#e0e0e0; --divider:#f0f0f0;
+  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{background:var(--parchment);color:var(--ink);font-family:var(--sf);font-size:14px;line-height:1.55;letter-spacing:-.2px;-webkit-font-smoothing:antialiased;word-break:keep-all;padding:24px 16px;}
+.page{width:210mm;min-height:297mm;margin:0 auto 16px;background:var(--canvas);padding:16mm 16mm 14mm;border:1px solid var(--hairline);border-radius:8px;display:flex;flex-direction:column;gap:14px;}
+.eyebrow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:12px;font-weight:600;color:var(--ink-60);}
+.eyebrow .stage{background:var(--ink);color:#fff;padding:4px 10px;border-radius:6px;}
+h1{margin:6px 0 0;font-size:26px;font-weight:600;line-height:1.15;letter-spacing:-.4px;}
+h1 small{display:block;font-size:13px;font-weight:400;color:var(--ink-60);margin-top:6px;letter-spacing:-.2px;}
+h2{margin:0 0 8px;font-size:17px;font-weight:600;letter-spacing:-.3px;}
+.lead{background:var(--parchment);border-radius:10px;padding:12px 14px;font-size:14px;}
+.lead b{font-weight:600;}
+.thanks{font-size:11.5px;color:var(--ink-60);margin-top:6px;}
+ol.steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:s;}
+ol.steps li{position:relative;padding:10px 12px 10px 44px;border:1px solid var(--hairline);border-radius:10px;font-size:14px;}
+ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+ol.steps li b{font-weight:600;}
+ol.steps li span{display:block;color:var(--ink-60);font-size:13px;margin-top:2px;}
+ol.steps li .box{position:absolute;right:12px;top:11px;width:16px;height:16px;border:1.5px solid var(--ink-48);border-radius:4px;}
+kbd{font-family:var(--sf);font-size:12px;font-weight:600;background:var(--parchment);border:1px solid var(--hairline);border-bottom-width:2px;border-radius:5px;padding:1px 6px;white-space:nowrap;}
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--hairline);border-radius:10px;overflow:hidden;font-size:13px;}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--ink-60);background:var(--parchment);padding:8px 10px;border-bottom:1px solid var(--hairline);}
+td{padding:7px 10px;border-bottom:1px solid var(--divider);vertical-align:top;}
+tr:last-child td{border-bottom:0;}
+td:first-child{font-weight:600;white-space:nowrap;}
+td b{font-weight:600;}
+.warn{border:1px solid var(--ink);border-radius:10px;padding:10px 14px;font-size:13px;}
+.warn b{font-weight:600;}
+.foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;font-size:11.5px;color:var(--ink-60);}
+.foot b{color:var(--ink);font-weight:600;}
+@media print{
+  @page{size:A4;margin:0;}
+  body{background:none;padding:0;}
+  .page{width:auto;min-height:0;margin:0;border:0;border-radius:0;padding:14mm 15mm 12mm;page-break-after:always;}
+  .page:last-child{page-break-after:auto;}
+}
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>체험 기기 실습 매뉴얼</span><span>·</span><span>2학년 디벗 Surface Go 3</span></div>
+  <h1>크롬 OS Flex로 전환된 디벗 체험
+    <small>전환 여부는 추석 연휴 전 쿨메신저 설문(투표)으로 결정합니다. 써 보시고 판단해 주세요.</small>
+  </h1>
+
+  <div class="lead">
+    <b>왼쪽은 지금 쓰는 윈도우 디벗, 오른쪽은 크롬 OS Flex로 전환된 디벗</b>입니다. 두 대를 나란히 켜서 속도를 비교해 보시고, 아래 실습 네 가지를 해 보십시오. 기기는 아주중학교에서 빌려 왔습니다.
+    <div class="thanks">전환 관련해서 매우 많은 도움을 주신 아주중학교 송세호 선생님께 맛있는 식사를 대접해 드리고 디벗을 대여해 왔습니다 😊</div>
+  </div>
+
+  <div>
+    <h2>주요 실습 — 해 보신 것에 ✓</h2>
+    <ol class="steps">
+      <li><span class="box"></span><b>두 기기 동시에 켜 보기</b><span>전원 버튼을 같이 누르고 로그인 화면까지, 로그인 뒤 클릭이 먹을 때까지 비교</span></li>
+      <li><span class="box"></span><b>크롬에서 '창 끄는 법'</b><span>창 오른쪽 위에 윈도우처럼 최소화 · 최대화 · <b>닫기 ✕</b> 세 개. 키보드는 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>W</kbd>(창 닫기), <kbd>Ctrl</kbd>+<kbd>W</kbd>(탭 하나만). 키보드를 떼면 ✕가 숨을 수 있으니 그때는 단축키로</span></li>
+      <li><span class="box"></span><b>카메라 테스트</b><span>카메라 앱을 열고 QR 코드를 비춰 보기. <b>가까이 있는 QR은 인식</b>됩니다. 멀리 있는 것도 시험해 보기</span></li>
+      <li><span class="box"></span><b>유튜브에서 아무 영상이나 틀어 보기</b><span>화면 · 소리 · 끊김 확인</span></li>
+      <li><span class="box"></span><b>한/영 전환</b><span>한/영 키가 안 먹을 때 <kbd>Ctrl</kbd>+<kbd>Space</kbd> (윈도우의 Win+Space에 해당). 영어 상태에서 눌러 한글이 쳐지는지 확인. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Space</kbd>는 다음 입력 방법</span></li>
+    </ol>
+  </div>
+
+  <div class="warn"><b>대여 기기입니다.</b> 초기화(파워워시)·설정 변경은 하지 말아 주시고, 써 보신 뒤에는 로그아웃만 해 주세요. 느낀 점은 과학정보부(조승재)에게 말씀해 주시면 됩니다.</div>
+
+  <div class="foot"><span><b>해누리중학교 과학정보부 조승재</b> · 2026. 9.</span><span>자세한 안내·FAQ: growing-teachers 「선생님 안내」 페이지</span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="stage">해누리중학교 과학정보부</span><span>체험 기기 실습 매뉴얼 · 2쪽</span></div>
+  <h1>윈도우와 달라서 처음에 당황하는 것들
+    <small>키보드 옆에 두고 보는 대조표</small>
+  </h1>
+  <table>
+    <thead><tr><th>하려는 일</th><th>윈도우에서는</th><th>크롬 OS Flex에서는</th></tr></thead>
+    <tbody>
+      <tr><td>새로고침</td><td><kbd>F5</kbd></td><td><kbd>F3</kbd> — F5를 누르면 창이 전부 펼쳐집니다(창 표시 키). 윗줄 F키가 뒤로·앞으로·새로고침·전체 화면·창 표시·밝기·음량 순서의 크롬북 기능키로 동작</td></tr>
+      <tr><td>전체 화면</td><td><kbd>F11</kbd></td><td><kbd>F4</kbd></td></tr>
+      <tr><td>시작 메뉴</td><td><kbd>Win</kbd></td><td><kbd>Win</kbd> = 런처(검색) 키. 앱 · 파일 · 웹 통합 검색이 열림. 화면 잠금 <kbd>Win</kbd>+<kbd>L</kbd>은 그대로</td></tr>
+      <tr><td>프로그램 사이 이동</td><td><kbd>Alt</kbd>+<kbd>Tab</kbd></td><td>프로그램 창이 따로 없고 거의 다 크롬 탭 → <kbd>Ctrl</kbd>+<kbd>Tab</kbd>. 화면 반반 나누기 <kbd>Alt</kbd>+<kbd>[</kbd> / <kbd>Alt</kbd>+<kbd>]</kbd></td></tr>
+      <tr><td>창 닫기</td><td>오른쪽 위 ✕ · <kbd>Alt</kbd>+<kbd>F4</kbd></td><td>오른쪽 위 ✕ · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>W</kbd> (탭 하나만 <kbd>Ctrl</kbd>+<kbd>W</kbd>)</td></tr>
+      <tr><td>파일 찾기</td><td>바탕화면 · 탐색기</td><td><b>바탕화면이 없음.</b> 「파일」 앱의 다운로드 · 내 파일 · 구글 드라이브. 기기 안 저장 공간이 작음</td></tr>
+      <tr><td>화면 캡처</td><td><kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td><td><kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>F5</kbd>(창 표시 키) → 캡처 도구</td></tr>
+      <tr><td>한/영 전환</td><td>한/영 키 · <kbd>Win</kbd>+<kbd>Space</kbd></td><td>한/영 키가 안 먹으면 <kbd>Ctrl</kbd>+<kbd>Space</kbd></td></tr>
+      <tr><td>오른쪽 클릭</td><td>터치패드 오른쪽 아래</td><td>터치패드 <b>두 손가락 탭</b>, 또는 <kbd>Alt</kbd>+클릭</td></tr>
+      <tr><td>설정 · 종료</td><td>시작 메뉴 → 전원</td><td><b>오른쪽 아래 시계</b>를 누르면 와이파이 · 음량 · 밝기 · 설정 톱니 · 전원이 한곳에</td></tr>
+      <tr><td>Home · End · PgUp · PgDn</td><td>키 있음</td><td>없는 자판에선 <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>(한 쪽씩), <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>(문서 처음 · 끝)</td></tr>
+      <tr><td>주의</td><td>—</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>를 두 번 누르면 바로 로그아웃</td></tr>
+    </tbody>
+  </table>
+
+  <div class="lead">
+    <b>로그인</b> — 기기는 센스쿨(SEN스쿨) 계정으로 로그인합니다. 로그인 뒤 <b>설정 → 계정 → 계정 추가</b>로 기존 해누리중학교 계정을 얹으면 드라이브 · 문서 · 클래스룸을 그 계정으로 그대로 쓸 수 있습니다. (관리 콘솔에서 교사 기기의 보조 계정을 허용해 둡니다)
+  </div>
+
+  <div class="foot"><span><b>해누리중학교 과학정보부 조승재</b></span><span>F키 · 한/영 키 동작이 이 기기에서 다르게 나오면 과학정보부에 알려 주세요</span></div>
+</section>
+
+</body>
+</html>
