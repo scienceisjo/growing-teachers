@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SenGPT 에이전트 기본 실습 — 나만의 비서를 만들고, 구글 캘린더까지 연결하기 · 해누리중 조승재</title>
+<meta name="description" content="센스쿨 SenGPT에서 나만의 에이전트를 만들고 구글 캘린더까지 연결하는 기본 실습 — 에이전트란 무엇인지, 무엇을 할 수 있는지, 로그인부터 일정 등록까지 순서대로. 해누리중 조승재.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}   /* 한글엔 쓰지 않는다 — 숫자·코드·URL 전용 */
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+hr{border:0;border-top:1px solid var(--line);margin:2rem 0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.muted{color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2)}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h);text-decoration:none}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ── 표지 모식도 ── */
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+.pipe.sub{margin:0 0 18px}
+.pipe.sub .t{color:var(--ink2);font-size:.95em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록: 키워드 줄 + 상세 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}           /* 발표 모드에서도 남는 한 줄 설명 */
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+
+/* 참고·주의·강사 큐 */
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* 보여주기 */
+.frame{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:var(--bg2);margin:14px 0}
+.frame iframe,.frame img,.frame video{display:block;width:100%;border:0}
+.frame iframe{aspect-ratio:16/9;height:auto}
+.frame .cap{padding:10px 14px;font-size:.84em;color:var(--ink2);border-top:1px solid var(--line);background:#fff}
+.frame.empty{padding:46px 20px;text-align:center;color:var(--ink3);font-size:.9em}
+
+/* 실습 */
+.steps{list-style:none;margin:10px 0;padding:0;counter-reset:s}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+
+/* 나눔 · 실시간 벽 */
+.live{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:14px 0;background:#fff}
+.live .q{font-weight:600;font-size:1.08em;margin-bottom:10px}
+.live form{display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start}
+.live input,.live textarea{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.live textarea{min-height:2.7em;resize:vertical}
+.live input:focus,.live textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.live .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:var(--bg2);font-size:.95em;word-break:keep-all;overflow-wrap:anywhere}
+.card .who{display:block;font-size:.78em;color:var(--blue);font-weight:600;margin-bottom:4px}
+.card.mine{border-color:var(--blue)}
+.live .empty{color:var(--ink3);font-size:.9em;padding:8px 0}
+html[data-mode="present"] .live form{display:none}          /* 앞 화면엔 벽만. 입력은 각자 폰(📖)에서 */
+html[data-mode="present"] .live .st{display:none}
+
+/* OneDrive 제출 · 링크 카드 */
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+.qr{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:8px;line-height:0;min-width:72px;min-height:72px}
+.qr svg{width:120px;height:120px}
+html[data-mode="present"] .qr svg{width:220px;height:220px}
+.qr .url{font-family:var(--mono);font-size:.72rem;color:var(--ink2);line-height:1.3;word-break:break-all;display:block;max-width:220px}
+
+/* 표·격자 */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+/* 푸터 */
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+
+/* 키 안내 */
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .live form{grid-template-columns:1fr}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+/* ── 이 연수 전용: 프롬프트 복사 카드 · 3색 점 · 빌더 · 모식도 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+.pr .dl{position:absolute;top:8px;right:84px;font-size:.78rem;padding:5px 11px}
+.pr:has(.dl){padding-right:170px}
+#pPrompt .txt{max-height:26em;overflow:auto;font-size:.92em}
+html[data-mode="present"] .pr{font-size:.8em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:.45em;vertical-align:-.02em}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
+
+.builder{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px 10px;margin:12px 0;background:#fff}
+.builder .f{margin:0 0 12px}
+.builder .f > label,.builder .f > .lab{display:block;font-weight:600;font-size:.92em;margin-bottom:6px}
+.builder input[type=text]{width:100%;font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;color:var(--ink);background:#fff}
+.builder input[type=text]:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.builder .opts{display:flex;flex-wrap:wrap;gap:6px}
+.builder .opts label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9999px;padding:5px 12px;font-size:.9em;background:#fff;cursor:pointer}
+.builder .opts label:has(input:checked){border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.builder .opts input{accent-color:var(--blue);margin:0}
+.builder .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.builder .hint{font-size:.85em;color:var(--ink3)}
+html[data-mode="present"] .builder{display:none}
+
+.frame.narrow{max-width:560px}
+.frame.narrow img{width:100%}
+.diagram{display:block;width:100%;max-width:760px;height:auto;margin:14px 0 6px;font-family:inherit}
+.diagram rect{fill:#fff;stroke:var(--line);stroke-width:1.5}
+.diagram rect.hi{stroke:var(--blue);fill:var(--blue-t)}
+.diagram .t{font-size:15px;font-weight:600;fill:var(--ink)}
+.diagram .t.hi{fill:var(--blue)}
+.diagram .s{font-size:12.5px;fill:var(--ink2)}
+.diagram .lab{font-size:13px;font-weight:600;fill:var(--ink3);letter-spacing:.02em}
+.diagram line{stroke:#86868b;stroke-width:1.5;marker-end:url(#arr)}
+.diagram line.hi{stroke:var(--blue);marker-end:url(#arrb)}
+@media (max-width:720px){ .pr,.pr:has(.dl){padding-right:14px;padding-top:44px} }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 상단 바: 단계 칩 · 타이머(🎤) · 모드 전환 ═══════════ -->
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">SenGPT 에이전트 기본<small>해누리중 조승재</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow" id="eyebrow">교사 연수 · SenGPT 에이전트 기본 실습</div>
+    <h1>SenGPT 에이전트 기본 실습 — 나만의 비서를 만들고, 구글 캘린더까지 연결하기</h1>
+    <p class="lead">선생님들의 시간이 소중하기 때문에, 오늘은 센스쿨 로그인부터 에이전트 하나를 만들어 제 캘린더에 일정이 들어가는 것까지 끝까지 해보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">센스쿨 로그인</span><span class="a">→</span><span class="n">SenGPT 열기</span><span class="a">→</span><span class="n">에이전트 만들기</span><span class="a">→</span><span class="n">구글 캘린더 연결</span><span class="a">→</span><span class="n hi">일정이 들어가는 내 비서</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span id="metaDateWrap" hidden>📅 <b id="metaDate"></b></span>
+      <span id="metaPlaceWrap" hidden>📍 <b id="metaPlace"></b></span>
+      <span>👩‍🏫 <b id="metaWho">서울 선생님들 · 전 교과</b></span>
+      <span>💻 <b>노트북 · 크롬 · 센스쿨 계정(관리자 승인 완료) · 개인 Google 계정</b></span>
+    </div>
+    <div class="flow" id="flow"><!-- 단계 목록은 스크립트가 .step 에서 만듭니다 --></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big" id="openingLink" href="../opening/" target="_blank">🙋 오프닝 페이지 (인사 · 아이스브레이킹) ↗</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장에서 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
+    <p class="small">✍️ 이 페이지의 흐름과 지침문 틀은 <b>서울온라인학교 강현욱 선생님</b>의 연수 자료(SenGPT의 활용 · SenGPT 에이전트와 MCP)를 참고했습니다. 고맙습니다.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 들어가기 ═══════════ -->
+<section class="step" id="s1" data-title="들어가기" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>들어가기 — 센스쿨에서 SenGPT를 열고, 에이전트가 무엇인지 같이 보기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">센스쿨에 교사로 로그인해 도구모음에서 SenGPT를 열고, 모델과 사용량을 확인한 뒤, 채팅과 에이전트가 무엇이 다른지 화면으로 같이 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">senedu.kr → 교사 로그인 → 도구모음 → SenGPT — 새 창이 안 뜨면 팝업 차단부터</p>
+      <p class="brief">SenGPT는 센스쿨 안의 「도구모음」에 들어 있습니다. 첫 화면 오른쪽 도구모음에서 SenGPT를 누르면 새 창으로 열립니다.</p>
+      <div class="frame" data-embed="img/01-senedu-home.jpg" data-cap="센스쿨(senedu.kr) 첫 화면 — 오른쪽 「도구모음」 안에 SenGPT가 있습니다"></div>
+      <ol class="steps" data-key="do1">
+        <li><input type="checkbox"><div><span class="what">senedu.kr 열고 「교사」로 로그인하기</span><span class="how">로그인 방식(간편인증·아이디)은 편한 것으로. 학교 관리자 승인이 안 된 계정은 SenGPT가 안 열립니다 — 그런 분은 옆 선생님과 함께 같은 화면으로 따라와주시길 바랍니다~!</span></div></li>
+        <li><input type="checkbox"><div><span class="what">첫 화면 오른쪽 「도구모음」에서 SenGPT 누르기</span><span class="how">안 보이면 도구모음 양옆의 ‹ › 화살표로 넘깁니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">새 창이 안 뜨면 주소창 오른쪽 팝업 차단 아이콘 → 「항상 허용」</span><span class="how">크롬 기본값이 팝업 차단이라 처음 여는 분은 거의 여기서 한 번 멈춥니다. 허용한 뒤 SenGPT를 다시 누릅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">SenGPT 화면이 열리면 위쪽 메뉴와 「Auto」 모델 표시 확인하기</span><span class="how">위쪽 메뉴(에이전트 · 이미지 · 비디오 · 회의록 · 슬라이드 · 문서 작성)와 대화창 위 「Auto」가 보이면 성공입니다. 왼쪽 아래 「개인 사용량」 막대도 여기 있습니다.</span></div></li>
+      </ol>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>SenGPT를 눌러도 아무 일이 없음</b> — 팝업 차단입니다. 주소창 오른쪽 끝의 차단 아이콘 → 「항상 허용」 → 다시 클릭.</p>
+          <p><b>「승인 대기」·「권한 없음」이 뜸</b> — 학교 관리자의 계정 승인이 아직입니다. 오늘은 옆 선생님 화면으로 함께 하고, 승인은 학교 관리자 선생님께 부탁드립니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>저는 연수 첫 5분을 이 로그인에 씁니다. SenGPT는 2026년 5월부터 센스쿨 계정으로만 열리고, 그 계정은 학교 관리자 승인이 있어야 살아납니다. 그래서 연수 전에 「센스쿨 로그인이 되는지」 한 줄을 미리 부탁드리는 편입니다.</p>
+        <p>SenGPT를 누르면 새 창(팝업)으로 열립니다. 크롬 기본값이 팝업 차단이라 처음 여는 분은 거의 여기서 한 번 멈춥니다. 그래서 순서에 팝업 허용을 한 줄로 넣어 두었습니다. 여기까지 되면 나머지는 한 화면 안에서 끝납니다.</p>
+      </div>
+      <div class="cue">로그인 안 되는 분 손 들기 → 2인 1조 · 팝업 허용 화면을 앞 화면에서 한 번 보여 주기 · 3분</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">모델 고르기와 사용량 — 한 달에 3만 원어치, 매월 1일 다시 채워집니다</p>
+      <p class="brief">모델은 대화창 위의 「Auto」를 눌러 바꿉니다. 사용량은 왼쪽 아래 「개인 사용량」 막대로 보이고, 개인별 한 달 단위입니다. 그림·영상은 글보다 훨씬 많이 씁니다.</p>
+      <div class="frame" data-embed="img/03-sengpt-model.jpg" data-cap="SenGPT 대화 화면 — 「Auto」를 누르면 회사별 모델 목록이 열립니다"></div>
+      <div class="frame narrow" data-embed="img/03b-usage.jpg" data-cap="왼쪽 아래 「개인 사용량」 막대 — 이달 얼마나 썼는지 %로 보입니다"></div>
+      <table>
+        <tr><th style="width:9em">무엇</th><th>제가 알고 쓰는 것</th></tr>
+        <tr><td>사용량</td><td>왼쪽 아래 「개인 사용량」 막대(%). 개인별 월 한도(약 3만 원어치 토큰)이고 매월 1일 초기화됩니다. 초과하면 무료 모델로 바뀔 예정이라고 운영 계획에 적혀 있습니다.</td></tr>
+        <tr><td>모델</td><td>기본은 「Auto」(요청에 맞는 모델 자동 선택). 회사별로 웍스AI · Anthropic · Google · OpenAI · xAI · Upstage · Perplexity 중에서 고르고, Auto 밖의 모델을 고르면 그 모델로만 대화합니다. 만든 뒤에도 바꿉니다.</td></tr>
+        <tr><td>많이 쓰는 것</td><td>이미지·영상 생성, 긴 파일 업로드. 오늘 실습은 글로만 합니다.</td></tr>
+        <tr><td>데이터</td><td>서울교육청 전용이고 API 방식이라 모델 학습에 쓰이지 않는다고 운영 계획에 있습니다. 그래도 매뉴얼은 「개인정보·내부 데이터 입력 금지」입니다.</td></tr>
+      </table>
+      <div class="detail">
+        <p>사용량은 개인별로 한 달 단위입니다. 운영 계획에는 초과하면 무료 모델로 바뀐다고 적혀 있어서, 저는 연수를 될 수 있으면 월초에 잡고 연수 전날에는 그림·영상 생성을 하지 않습니다. 오늘 실습은 글로만 하기 때문에 한도에 닿을 일은 거의 없습니다.</p>
+        <p>모델은 대화창 위 「Auto」 자리에서 고릅니다. Auto는 요청에 맞는 모델을 알아서 고르는 기본값이고, 회사 이름을 누르면 그 회사 모델만 씁니다. 저는 지침을 길게 쓴 에이전트에는 Anthropic 쪽 모델을, 한두 줄 질문에는 Auto를 씁니다. 어느 쪽이든 오늘 순서는 같습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">에이전트란 — 채팅에 매번 다시 쓰던 설명을 한 번 저장해 이름을 붙인 것</p>
+      <p class="brief">채팅은 부탁할 때마다 「저는 ○○중 과학 교사고, 이런 형식으로…」를 다시 씁니다. 에이전트는 그 설명(지침)과 모델·참고 파일·도구를 한 번 저장해 둔 대화 상대입니다.</p>
+      <svg class="diagram" viewBox="0 0 760 320" role="img" aria-label="채팅과 에이전트의 차이 — 채팅은 매번 설명하고 답은 글로만, 에이전트는 지침·모델·참고 파일·도구가 저장돼 있어 부탁만 하고 캘린더에 직접 손을 뻗는다">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#86868b"/></marker>
+          <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0066cc"/></marker>
+        </defs>
+        <text x="20" y="30" class="lab">채팅</text>
+        <rect x="20" y="48" width="90" height="46" rx="10"/><text x="65" y="77" class="t" text-anchor="middle">나</text>
+        <line x1="112" y1="71" x2="328" y2="71"/>
+        <text x="220" y="62" class="s" text-anchor="middle">매번 다시 씀 — 역할·형식·규칙 + 부탁</text>
+        <rect x="330" y="48" width="110" height="46" rx="10"/><text x="385" y="77" class="t" text-anchor="middle">모델</text>
+        <line x1="442" y1="71" x2="560" y2="71"/>
+        <text x="572" y="77" class="t">답 — 글로만</text>
+        <text x="65" y="122" class="s">다음 대화에서는 처음부터 다시 설명합니다</text>
+
+        <text x="20" y="168" class="lab">에이전트</text>
+        <rect x="20" y="200" width="90" height="46" rx="10"/><text x="65" y="229" class="t" text-anchor="middle">나</text>
+        <line x1="112" y1="223" x2="248" y2="223"/>
+        <text x="180" y="214" class="s" text-anchor="middle">부탁만</text>
+        <rect x="250" y="180" width="270" height="88" rx="12" class="hi"/>
+        <text x="385" y="206" class="t hi" text-anchor="middle">에이전트(비서)</text>
+        <text x="385" y="232" class="s" text-anchor="middle">지침 · 모델 · 참고 파일 · 도구</text>
+        <text x="385" y="254" class="s" text-anchor="middle">한 번 저장하고 이름을 붙여 둠</text>
+        <line x1="522" y1="204" x2="596" y2="204"/>
+        <text x="604" y="209" class="t">답 — 글</text>
+        <line x1="522" y1="246" x2="596" y2="246" class="hi"/>
+        <rect x="600" y="228" width="140" height="60" rx="10" class="hi"/>
+        <text x="670" y="252" class="t hi" text-anchor="middle">구글 캘린더</text>
+        <text x="670" y="273" class="s" text-anchor="middle">일정 조회·생성·수정</text>
+      </svg>
+      <div class="grid2">
+        <div class="box"><b>채팅</b><p>열 때마다 새로 시작합니다. 역할·형식·말투를 매번 다시 적고, 답은 글로만 옵니다.</p></div>
+        <div class="box"><b>에이전트</b><p>지침이 저장돼 있어 부탁만 합니다. 도구를 연결하면 캘린더·파일에 직접 손을 뻗습니다. 지침문은 TXT로 옆 선생님과 나눕니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>저는 채팅창에 「해누리중 과학 교사입니다, 표로 정리해 주세요, 이름은 빼 주세요」를 매번 다시 쓰다가 에이전트를 만들었습니다. 그 세 줄을 지침에 넣고 이름을 붙이니, 그다음부터는 공문만 올리면 됩니다.</p>
+        <p>에이전트 안에 들어가는 것은 넷입니다 — 어떤 모델이 답할지, 무슨 일을 어떻게 도울지 적은 지침, 참고할 파일, 그리고 손을 뻗을 도구. 채팅과 다른 점도 둘입니다. 설명을 다시 하지 않아도 되고, 도구를 연결하면 답을 글로만 주는 게 아니라 제 캘린더에 일정을 직접 넣습니다.</p>
+        <p>도구 카드 뒤에는 MCP라는 연결 규격이 있습니다. 낱말은 몰라도 실습에 지장이 없어서 저도 연수에서는 이름만 말하고 넘어갑니다. 제가 알아 둔 것은 하나입니다 — 연결 설정은 에이전트에 저장되지만, 데이터는 각자 자기 계정으로 로그인해서 오갑니다. 그래서 옆 선생님이 제 지침문으로 같은 에이전트를 만들어 써도 제 캘린더는 열리지 않습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">에이전트로 할 수 있는 것, 아직 못 하는 것</p>
+      <p class="brief">도구는 에이전트 하나에 다섯 개까지입니다. 오늘은 구글 캘린더 하나만 연결하고, 나머지는 표로만 봅니다.</p>
+      <table>
+        <tr><th style="width:9em">할 수 있는 것</th><th>무엇</th></tr>
+        <tr><td>지침</td><td>역할·형식·규칙을 글로 적어 둡니다. 「요술봉」이 한두 줄을 긴 지침으로 늘려 줍니다.</td></tr>
+        <tr><td>모델</td><td>목록에서 고르고, 만든 뒤에도 바꿉니다.</td></tr>
+        <tr><td>참고 파일</td><td>양식·매뉴얼 PDF 등을 붙여 두면 답할 때 참고합니다(선택).</td></tr>
+        <tr><td>계정을 연결해서 쓰는 도구(최대 5개)</td><td>Google Calendar(일정 조회·생성·수정) · Google Drive(파일) · Gmail(메일 조회·초안, 발송은 확인 후) · Notion · M365 메일·일정(아웃룩·팀즈, 승인 없이 바로) · M365 파일·회의실(원드라이브·사내 사이트 — 관리자 승인 후). 카드마다 각자 로그인합니다.</td></tr>
+        <tr><td>로그인 없이 바로 쓰는 도구</td><td>국가법령정보 · 도로명주소 검색 · 논문·특허·R&amp;D 통합검색(KISTI) · 국회 의안정보 등. 나머지는 금융·조달·부동산 쪽이라 학교에서는 거의 안 씁니다.</td></tr>
+        <tr><td>내부 도구</td><td>코드 실행 · 웹 검색 · 시각화(차트) · 문서 요약 — 만들기 창 맨 아래에 기본으로 켜져 있습니다.</td></tr>
+        <tr><td>대화 시작 가이드</td><td>대화를 열 때 보이는 버튼(0~6개). 만들기 창에서 넣습니다.</td></tr>
+        <tr><td>즐겨찾기 · 수정 · 삭제</td><td>카드에 마우스를 올리면 연필·휴지통, 오른쪽 아래 별이 즐겨찾기입니다. 옆 선생님께는 지침문 TXT로 건넵니다.</td></tr>
+        <tr><td>대화 예약</td><td>정한 시간에 에이전트가 알아서 대화를 돌리고 결과를 메일로 보냅니다(에이전트 목록 아래 「대화 예약」). 오늘은 다루지 않습니다.</td></tr>
+        <tr><td>내보내기</td><td>대화를 DOCX로 저장합니다.</td></tr>
+      </table>
+      <table>
+        <tr><th style="width:9em">못 하는 것</th><th>왜</th></tr>
+        <tr><td>삭제</td><td>메일·일정·파일 삭제는 도구가 막아 두었습니다(데이터 유실 방지). 지우는 건 언제나 제 손으로 합니다.</td></tr>
+        <tr><td>「내일」·「다음 주 화요일」 같은 날짜</td><td>가끔 다른 날로 잡습니다. 저는 날짜를 숫자로 적고, 등록 전에 계획표를 봅니다.</td></tr>
+        <tr><td>나이스 · K-에듀파인 · e알리미 · 쿨메신저</td><td>연결 카드가 없습니다. 결과를 복사해 제가 붙입니다.</td></tr>
+        <tr><td>개인정보·내부 데이터</td><td>매뉴얼의 금지 항목입니다. 학생 이름·명단·성적은 넣지 않습니다.</td></tr>
+        <tr><td>남의 계정</td><td>도구는 각자 로그인입니다. 공유해도 제 데이터는 넘어가지 않습니다.</td></tr>
+      </table>
+      <div class="frame" data-embed="img/08b-create-builtin-tools.jpg" data-cap="만들기 창 맨 아래 — 로그인 없이 바로 쓰는 도구들과 「내부 도구 선택」 네 개(기본으로 켜짐)"></div>
+      <p class="note">도구 목록과 모델 이름은 2026년 9월 22일 SenGPT 화면(웍스AI v3.0) 기준입니다. 카드가 더 생기거나 이름이 바뀌면 이 표를 고칩니다.</p>
+      <div class="detail">
+        <p>오늘 연결하는 것은 구글 캘린더 하나입니다. 조회·생성·수정이 되고 삭제만 안 되는데, 저는 이 「삭제 없음」이 마음에 듭니다. 잘못 넣은 일정은 캘린더에서 제가 지우면 되고, 비서가 제 일정을 지워 버릴 일은 없기 때문입니다.</p>
+        <p>Gmail과 Google Drive는 카드가 따로라서, 드라이브만 연결해도 메일 권한은 넘어가지 않습니다. 그래도 오늘은 캘린더 하나만 합니다 — 연결이 하나면 막히는 자리도 하나이기 때문입니다. M365 파일·회의실은 학교 M365 관리자 승인이 있어야 열립니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 만들기 ═══════════ -->
+<section class="step" id="s2" data-title="만들기" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>에이전트 만들기 — 모델·이름·지침을 넣고 「만들기」까지</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">「에이전트 만들기」에서 모델을 고르고, 이름과 지침을 넣고, 도구 카드에서 구글 캘린더를 체크한 뒤 「만들기」를 눌러 제 첫 에이전트를 만들어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">만들기 창 — 위에서 아래로 아홉 칸</p>
+      <p class="brief">「에이전트」 탭 → 「나만의 에이전트」 → 「+ 에이전트 만들기」 카드를 누르면 창이 뜹니다. 유형 · 모델 · 이름 · 아이콘 · 설명 · 프롬프트 · 대화 시작 가이드 · 참고 파일 · 도구 순으로 내려옵니다. 설명과 프롬프트는 다음 블록의 빌더에서 만들어 붙이고, 스타터 세 줄은 이 블록의 카드에 있습니다.</p>
+      <div class="frame" data-embed="img/04-my-agents.jpg" data-cap="「에이전트」 탭 → 「나만의 에이전트」 — 「+ 에이전트 만들기」 카드"></div>
+      <div class="frame" data-embed="img/05-create-top.jpg" data-cap="「에이전트 만들기」 창 — 유형 · 모델 선택 · 에이전트 이름 · 아이콘이 위에서 아래로 있습니다"></div>
+      <ol class="steps" data-key="do2">
+        <li><input type="checkbox"><div><span class="what">「에이전트」 탭에서 「나만의 에이전트」 → 「+ 에이전트 만들기」 누르기</span><span class="how">화면 가운데 「에이전트를 골라 일을 맡겨주세요」 아래의 탭입니다. 「서울시교육청 에이전트」 탭은 교육청이 만들어 둔 것이고, 오늘 만드는 것은 「나만의 에이전트」에 들어갑니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">유형은 「대화형」 그대로 두고, 모델 고르기</span><span class="how">「링크형」은 링크로 나눠 주는 판이라 오늘은 대화형. 「모델 선택」 드롭다운에서 하나, 이름이 낯설면 Auto(자동 선택).</span></div></li>
+        <li><input type="checkbox"><div><span class="what">이름 적기 — 아이콘 등록은 건너뛰기</span><span class="how">저는 「승재쌤 비서」처럼 부르기 쉬운 이름으로. 이름은 본인 목록에만 보입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「에이전트 설명」에 빌더의 설명 두 줄 붙여 넣기</span><span class="how">200자 칸입니다. 누구의, 무슨 일을 돕는 에이전트인지 두 줄.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「프롬프트」에 빌더의 프롬프트 붙여 넣기 — 요술봉은 누르지 않기</span><span class="how">다음 블록의 빌더에서 「만들기」 → 복사 → 붙여넣기. 오른쪽 요술봉은 한두 줄을 긴 프롬프트로 바꿔 주는 단추인데, 오늘은 누르지 않습니다(글이 길어지며 원문이 바뀝니다).</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「대화 시작 가이드」 → 「+ 가이드 추가」 세 번, 아래 스타터 세 줄 넣기</span><span class="how">대화를 열 때 버튼으로 뜨는 문장입니다(0~6개). 아래 카드의 세 줄을 한 줄씩.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「참고할 파일」은 오늘은 건너뛰기</span><span class="how">선택 항목입니다(파일마다 100MB까지). 양식 PDF가 있으면 나중에 붙입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">아래 「이용 가능한 도구들」에서 「계정 연결해서 쓰는 도구」 → 「Google Calendar」 카드 누르기</span><span class="how">탭은 「전체」 그대로. 카드에 체크가 생기고 아래 「현재 선택된 도구」에 이름이 뜹니다. 최대 5개까지인데 오늘은 하나만. 로그인은 3단계에서. 맨 아래 「내부 도구 선택」 네 개(코드 실행·웹 검색·시각화·문서 요약)는 켜진 채로 둡니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「만들기」 누르고 「나만의 에이전트」에 카드가 생겼는지 보기</span><span class="how">방금 적은 이름의 카드가 보이면 성공입니다.</span></div></li>
+      </ol>
+      <div class="pr"><span class="pl">대화 시작 가이드에 넣을 세 줄 — 한 줄에 하나씩</span><button class="btn cp" type="button">복사</button><div class="txt">📅 이번 주 일정을 표로 보여 줘
+📄 이 공문에서 할 일·기한·회신 방법만 표로 뽑아 줘 (이름은 빼고)
+✍️ 이 내용을 e알리미용 5줄 안내문으로 써 줘</div></div>
+      <div class="frame" data-embed="img/06-create-desc-prompt.jpg" data-cap="「에이전트 설명」과 「프롬프트」를 채운 모습 — 프롬프트 오른쪽의 요술봉은 누르지 않습니다"></div>
+      <div class="frame" data-embed="img/07-create-starters-files.jpg" data-cap="「대화 시작 가이드」 세 줄과 「참고할 파일」(오늘은 비움)"></div>
+      <div class="frame" data-embed="img/08-create-tools.jpg" data-cap="「계정 연결해서 쓰는 도구」 — Google Calendar 카드를 누르면 체크가 생깁니다"></div>
+      <div class="frame" data-embed="img/09-agent-created.jpg" data-cap="「만들기」 뒤 — 「나만의 에이전트」에 카드가 생겼습니다"></div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>「만들기」가 눌리지 않음</b> — 이름이나 지침 칸이 비어 있을 때 그렇습니다. 두 칸을 채우면 살아납니다.</p>
+          <p><b>요술봉을 눌렀더니 지침이 다른 글이 됨</b> — 빌더에서 다시 복사해 붙여 넣으면 원래 글로 돌아옵니다.</p>
+          <p><b>도구 카드가 안 보임</b> — 만들기 창 안을 맨 아래까지 스크롤합니다. 「참고할 파일」 상자 아래에 있습니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>저는 만들기 창에서 지침을 직접 씁니다. 요술봉은 한두 줄을 긴 지침으로 늘려 주는데, 늘어난 글에 제가 시키지 않은 규칙이 섞여 들어와서 한 번 써 보고 끄게 됐습니다. 대신 아래 빌더로 네 칸만 채우면 오늘 쓸 지침문이 나옵니다.</p>
+        <p>도구 카드는 만들기 창에서 체크만 하고, 실제 로그인은 만든 뒤 에이전트 화면에서 합니다. 이 두 단계가 떨어져 있어서 처음엔 「체크했는데 왜 연결이 안 됐지」 하고 헤맸습니다. 그 로그인을 3단계에서 합니다.</p>
+      </div>
+      <div class="cue">앞 화면에서 만들기 창을 위→아래로 한 번 스크롤해 보여 주고 시작 · 이름은 각자 · 지침은 빌더 결과 그대로 · 8분</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">설명과 프롬프트 — 네 칸만 채우면 나오는 기본 틀</p>
+      <p class="brief">학교 · 이름 · 담당 · 말투 네 칸을 채우고 「만들기」를 눌러보겠습니다! 「에이전트 설명」에 넣을 두 줄과 「프롬프트」에 넣을 규칙이 따로 나옵니다. 강현욱 선생님의 틀에 제 규칙 셋을 더했습니다.</p>
+      <div class="builder" id="builder">
+        <div class="f"><label for="b_school">① 학교</label><input type="text" id="b_school" placeholder="예: 해누리중학교" maxlength="30" autocomplete="off"></div>
+        <div class="f"><label for="b_name">② 이름</label><input type="text" id="b_name" placeholder="예: 조승재" maxlength="20" autocomplete="off"></div>
+        <div class="f"><label for="b_role">③ 교과 · 담당 업무</label><input type="text" id="b_role" placeholder="예: 과학 교사, 2학년 담임, 과학실 기자재 담당" maxlength="80" autocomplete="off"></div>
+        <div class="f"><span class="lab">④ 말투</span>
+          <div class="opts">
+            <label><input type="radio" name="tone" value="존댓말로, 개조식으로 짧게 답한다." checked>존댓말 · 개조식</label>
+            <label><input type="radio" name="tone" value="존댓말로, 문장으로 친절하게 답한다.">존댓말 · 문장</label>
+            <label><input type="radio" name="tone" value="요점만 짧게, 표를 우선해서 답한다.">요점만 · 표 우선</label>
+          </div>
+        </div>
+        <div class="act"><button class="btn primary" type="button" id="bMake">만들기</button><span class="hint">입력은 이 기기에만 저장됩니다.</span></div>
+      </div>
+      <div id="built" hidden>
+        <div class="pr" id="pDesc"><span class="pl">① 「에이전트 설명」 칸에 (200자 이내)</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+        <div class="pr" id="pPrompt"><span class="pl">② 「프롬프트」 칸에 — 요술봉은 누르지 않습니다</span><button class="btn dl" type="button" data-name="지침문">⬇️ TXT</button><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      </div>
+      <div class="detail">
+        <p>틀은 서울온라인학교 강현욱 선생님의 연수 자료에 있던 것을 그대로 가져왔습니다 — 설명 두 줄(누구의 에이전트인지)과 행동 규칙 네 줄이 그것입니다. 고맙습니다. 저는 거기에 「지키는 것」 세 줄을 더했습니다. 지어내지 않기, 이름 옮기지 않기, 등록 전에 계획표 먼저.</p>
+        <p>세 줄을 더한 이유는 캘린더 때문입니다. 도구를 연결하면 비서가 말로만 답하는 게 아니라 제 캘린더에 실제로 손을 대기 때문에, 「등록」이라고 말하기 전에는 계획표만 보여 주게 해 두었습니다. 잘못 들어간 일정을 지우는 것보다 미리 보는 편이 빠릅니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 도구 연결 ═══════════ -->
+<section class="step" id="s3" data-title="도구 연결" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>도구 연결 — 구글 캘린더에 로그인하고, 조회·생성·수정 한 번씩</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">만든 에이전트를 열어 「Google Calendar · 로그인 필요」 칩을 누르고, 구글 계정으로 로그인해 권한을 허용한 뒤, 「이번 주 일정」 조회 → 「[실습] 일정 등록」 → 「제목 수정」 세 마디를 해 보고 캘린더에서 확인해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">연결 — 칩에 「로그인 필요」가 보이면 아직입니다</p>
+      <p class="brief">에이전트를 열면 가운데에 「Google Calendar · 로그인 필요」 칩이 보입니다. 칩 → 새 창에서 구글 계정 선택 → 권한 「모두 허용」까지 가야 「연결됨」이 됩니다.</p>
+      <div class="frame" data-embed="img/10-agent-start.jpg" data-cap="만든 에이전트를 열었을 때 — 이름·설명·「Google Calendar · 로그인 필요」 칩·스타터 버튼 세 개"></div>
+      <ol class="steps" data-key="do3">
+        <li><input type="checkbox"><div><span class="what">목록에서 방금 만든 에이전트 카드 열기</span><span class="how">가운데에 이름·설명·도구 칩·스타터 버튼 세 개가 보입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">「Google Calendar · 로그인 필요」 칩 누르기</span><span class="how">「계정을 선택하세요」 창이 새 창으로 뜹니다. 안 뜨면 팝업 차단입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">구글 계정 고르기 — 개인 계정</span><span class="how">학교 구글 계정은 관리자가 외부 앱을 막아 둔 경우가 있어 저는 개인 계정으로 합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">권한 화면에서 항목을 모두 허용하기</span><span class="how">조회·생성·수정 권한을 다 켜야 등록까지 됩니다. 하나라도 끄면 조회만 되고 등록에서 막힙니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">칩이 「연결됨」으로 바뀌었는지 확인하기</span><span class="how">입력칸 왼쪽 「연동 도구」 자리에 캘린더 아이콘이 보이면 성공입니다.</span></div></li>
+      </ol>
+      <div class="frame" data-embed="img/11-google-account.jpg" data-cap="칩을 누르면 뜨는 새 창 — 구글 계정을 고릅니다(계정 이름은 가렸습니다)"></div>
+      <div class="frame" data-embed="img/12-connected.jpg" data-cap="권한을 허용한 뒤 — 칩이 「연결됨」으로 바뀝니다"></div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>학교 구글 계정으로 권한 창이 안 뜸</b> — 관리자가 외부 앱 접근을 막아 둔 것입니다. 개인 구글 계정으로 연결합니다.</p>
+          <p><b>칩을 눌러도 새 창이 안 뜸</b> — 팝업 차단입니다. 주소창 오른쪽 아이콘 → 「항상 허용」 → 칩을 다시 누릅니다.</p>
+          <p><b>M365 파일 카드에서 「관리자 승인 필요」</b> — 학교 M365 관리자가 승인해야 열립니다. 오늘은 넘어갑니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>연결은 에이전트마다 한 번입니다. 같은 캘린더를 두 번째 에이전트에서 쓰려면 거기서 다시 로그인합니다. 처음엔 번거로워 보였는데, 이 덕분에 에이전트를 복사해 나눠 줘도 제 캘린더는 따라가지 않습니다.</p>
+        <p>권한은 전부 허용합니다. 조회만 허용하면 「등록해」에서 실패합니다. 구글 권한 화면에는 「삭제」까지 한 묶음으로 나오지만, 삭제는 도구 쪽에서 막아 두어 비서가 제 일정을 지우지는 못합니다.</p>
+      </div>
+      <div class="cue">계정 선택 창은 앞 화면에 띄우지 않기(이메일 노출) · 개인 계정 없는 분은 옆 선생님 화면으로 · 5분</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">세 마디 — 조회 · 생성 · 수정</p>
+      <p class="brief">연결이 됐으면 새 대화에서 세 마디를 순서대로 해보겠습니다! 등록은 계획표를 보고 「등록」이라고 해야 들어갑니다.</p>
+      <div class="pr"><span class="pl">P1 · 조회</span><button class="btn cp" type="button">복사</button><div class="txt">이번 주 내 일정을 날짜순으로 표로 보여 줘.</div></div>
+      <div class="pr"><span class="pl">P2 · 생성</span><button class="btn cp" type="button">복사</button><div class="txt">내일 15:00~16:00에 「[실습] 과학부 회의」 일정을 등록해 줘. 먼저 계획표만 보여 주고, 내가 「등록」이라고 하면 넣어.</div></div>
+      <div class="pr"><span class="pl">P3 · 수정</span><button class="btn cp" type="button">복사</button><div class="txt">방금 등록한 「[실습] 과학부 회의」 제목 앞에 「(연수)」를 붙이고, 30분 전 알림을 넣어 줘.</div></div>
+      <ol class="steps" data-key="do4">
+        <li><input type="checkbox"><div><span class="what">P1 붙여넣기 → 이번 주 일정이 표로 오는지 보기</span><span class="how">일정이 없으면 「일정 없음」이 와도 성공입니다. 연결이 진짜 됐는지 아무것도 바꾸지 않고 확인하는 마디입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P2 붙여넣기 → 계획표 확인 → 「등록」</span><span class="how">성공·실패가 한 줄로 옵니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">구글 캘린더를 새 탭으로 열어 내일 15시 확인하기</span><span class="how">calendar.google.com → 내일. [실습] 일정이 보이면 성공입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P3로 수정 한 번</span><span class="how">캘린더를 새로고침해 제목과 알림이 바뀌었는지.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">[실습] 일정은 캘린더에서 직접 지우기</span><span class="how">비서는 삭제를 못 합니다. 지우는 건 제 손으로.</span></div></li>
+      </ol>
+      <div class="frame" data-embed="img/14-calendar-chat.jpg" data-cap="P2 — 계획표를 먼저 보여 주고, 「등록」이라고 해야 캘린더에 들어갑니다"></div>
+      <div class="frame" data-embed="img/15-google-calendar.jpg" data-cap="구글 캘린더 새 탭 — [실습] 일정이 들어와 있습니다"></div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>「등록」했는데 실패가 옴</b> — 권한을 일부만 허용한 경우입니다. 아이콘 → 연결 해제 → 다시 로그인해 모두 허용.</p>
+          <p><b>날짜가 엉뚱하게 잡힘</b> — 「내일」 같은 말이 헷갈릴 때가 있습니다. 날짜를 숫자로 적습니다: 「9월 23일 15:00~16:00」.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>첫 마디를 조회로 하는 이유는, 연결이 진짜 됐는지 아무것도 바꾸지 않고 확인하기 위해서입니다. 표가 오면 그다음이 등록입니다. 등록은 계획표를 먼저 받고 「등록」이라고 말합니다 — 지침에 그렇게 써 두었습니다.</p>
+        <p>제목 앞에 [실습]을 붙이는 이유는 지울 때 찾기 쉽게 하려는 것입니다. 연수장에서 스무 분이 같은 시각에 등록해도 회의가 한 캘린더에 스무 개 생기는 게 아니라 각자 캘린더에 하나씩 생깁니다. 끝나면 각자 지웁니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">선택</span>M365 파일 — 학교 계정 OneDrive를 읽게 하기</p>
+      <p class="brief">학교 M365 계정이 있고 관리자 승인이 나 있으면, 「M365 파일」 카드로 OneDrive·SharePoint 파일을 읽고 엑셀을 고칠 수 있습니다. 오늘은 표로만 둡니다.</p>
+      <div class="detail">
+        <p>M365 파일 카드는 학교의 M365 관리자 승인이 있어야 열립니다. 학교마다 승인하는 분이 달라서 오늘 실습에서는 뺐습니다. 되는 학교는 카드 → 학교 계정 로그인 → 승인 요청 순서이고, 열리면 OneDrive 파일 목록 조회와 엑셀 조회·편집이 됩니다.</p>
+        <p>M365 메일·일정 카드는 따로 있습니다. 여기서 「보내 줘」라고 하면 확인 질문 없이 바로 발송된다고 웍스AI 문서에 적혀 있어서, 저는 메일 카드는 연결하지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 써 보기 ═══════════ -->
+<section class="step" id="s4" data-title="써 보기" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>써 보기 — 스타터 세 개, 복사 한 번, 내 업무 하나</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">자주 할 부탁 세 개를 대화 스타터로 넣고, 에이전트를 복사해 두 번째 판을 만들고, 오늘 실제 업무 하나를 맡겨보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">스타터 버튼으로 첫 대화 — 만들 때 넣은 세 줄</p>
+      <p class="brief">에이전트 화면의 버튼을 누르면 그 문장이 입력칸에 들어갑니다. 저는 세 개만 둡니다.</p>
+      <ol class="steps" data-key="do5">
+        <li><input type="checkbox"><div><span class="what">에이전트 화면에서 📅 버튼 누르기 → 보내기</span><span class="how">3단계 P1과 같은 부탁입니다. 버튼 하나로 끝나는지 봅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">📄 버튼 → 공문 본문 붙여 넣고 보내기</span><span class="how">지금 손에 있는 공문이 없으면 다음 블록의 예제로.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">버튼 문장을 고치고 싶으면 카드의 연필 → 「대화 시작 가이드」</span><span class="how">고친 뒤 「수정」을 눌러야 저장됩니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>스타터는 제가 매번 치던 문장을 버튼으로 옮긴 것입니다. 여섯 개까지 되는데, 저는 셋을 넘기지 않습니다. 넷째부터는 어떤 버튼이 무엇인지 제가 다시 읽어야 해서입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">즐겨찾기 · 수정 · 삭제 — 카드에 마우스를 올리면</p>
+      <p class="brief">카드 오른쪽 위에 연필(수정)·휴지통(삭제), 오른쪽 아래에 별(즐겨찾기)이 있습니다. 옆 선생님과 나눌 때는 지침문 TXT를 건넵니다.</p>
+      <div class="frame narrow" data-embed="img/13-agent-card-icons.jpg" data-cap="카드에 마우스를 올린 모습 — 연필 · 휴지통 · 별"></div>
+      <ol class="steps" data-key="do6">
+        <li><input type="checkbox"><div><span class="what">별 눌러 즐겨찾기 켜기</span><span class="how">「즐겨찾기」 탭에 모입니다. 교육청 에이전트도 별을 누르면 같은 탭에 옵니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">연필로 지침 한 줄 고쳐 보기 — 요술봉은 그대로 두기</span><span class="how">[말투]에 「표는 5행 이내」 한 줄 더하기 → 「수정」. 고치기 전에 2단계의 ⬇️ TXT로 한 번 저장해 둡니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">휴지통은 오늘 누르지 않기</span><span class="how">지우면 되살릴 수 없습니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>저는 지침을 고치기 전에 TXT로 한 번 저장해 둡니다. 고친 쪽이 더 나쁘면 TXT를 다시 붙여 넣으면 되기 때문입니다. 삭제는 되살릴 수 없어서 휴지통은 손이 잘 안 갑니다.</p>
+        <p>옆 선생님과 나눌 때는 지침문 TXT를 건넵니다. 받은 분은 2단계 그대로 자기 계정에 만들고, 3단계의 연결을 한 번 합니다. 데이터가 각자 로그인으로 오가기 때문에 제 캘린더는 따라가지 않습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">내 업무 하나 — 오늘 온 것 한 건</p>
+      <p class="brief">오늘 실제로 온 공문·쪽지·안내문 한 건을 비서에게 맡겨보겠습니다! 이름·연락처가 든 것은 지우고 올립니다.</p>
+      <table>
+        <tr><th style="width:8em">색</th><th>어떤 것</th><th>처리</th></tr>
+        <tr><td><span class="dot ok"></span>바로</td><td>일반 안내·계획·연수·행사·공모 공문. 개인정보라고는 담당자 공무 연락처뿐</td><td>본문 그대로. 담당자 이름·전화는 결과에 옮기지 않음</td></tr>
+        <tr><td><span class="dot warn"></span>지우고</td><td>본문이나 붙임에 특정인 이름·연락처·명단·계좌가 있음</td><td>본문 글을 메모장에 붙여 지운 뒤 올림. 붙임은 서식만</td></tr>
+        <tr><td><span class="dot bad"></span>올리지 않음</td><td>학생 성적·건강·상담·징계, 교직원 인사·복무·급여, 계약·예산 세부, 대외비·비공개</td><td>올리지 않음. SenGPT여도 같음</td></tr>
+      </table>
+      <ol class="steps" data-key="do7">
+        <li><input type="checkbox"><div><span class="what">한 건 고르고 위 표로 색 가르기</span><span class="how">🔴이면 다른 건으로.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">본문 붙여넣기 → 「할 일·기한·회신 방법만 표로 뽑아 줘」</span><span class="how">스타터 둘째 버튼과 같은 문장입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">원문과 맞춰 보기</span><span class="how">기한 하나라도 원문과 다르면 지침의 「지어내지 않기」가 일했는지 봅니다. 「원문에 없음」이 와야 맞습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">기한이 있으면 P2 방식으로 캘린더에</span><span class="how">계획표 → 「등록」.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>SenGPT 운영 계획에는 데이터가 모델 학습에 쓰이지 않는다고 적혀 있고, 같은 기관의 매뉴얼은 개인정보와 내부 데이터를 넣지 말라고 합니다. 저는 둘 다 따릅니다 — 본문만 올리고, 명단이 붙은 붙임은 올리지 않습니다.</p>
+        <p>공문을 표로 받는 것부터 안내문·캘린더까지 한 벌로 이어 붙인 연수는 따로 있습니다(<a href="../ai-work/">AI 활용 업무 효율화</a>). 오늘은 에이전트 자체를 익히는 날이라 한 건만 합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 나눔 ═══════════ -->
+<section class="step" id="s5" data-title="나눔" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>나눔 — 내 에이전트 이름과, 제일 잘 된 답 한 토막</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">각자 폰이나 노트북에서 에이전트 이름과 오늘 제일 잘 된 답 한 토막을 벽에 올리고, 몇 분은 말로 들어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">내 에이전트 이름 + 오늘 제일 잘 된 답 한 토막 — 안 된 것도 좋습니다</p>
+      <div class="live" data-kind="share1" data-max="400">
+        <div class="q">내 에이전트 이름과, 오늘 제일 잘 된(또는 제일 엉뚱했던) 답 한 토막을 3줄 안쪽으로 올려 주세요.</div>
+        <form>
+          <input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="예: 「승재쌤 비서」 — 이번 주 일정을 표로 잘 뽑아 줬는데 「내일」을 모레로 잡았습니다" maxlength="400"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+      <div class="detail">
+        <p>저는 잘 된 답보다 안 된 답에서 더 배웁니다. 「내일」을 엉뚱한 날짜로 잡은 것, 이름을 빼라고 했는데 넣은 것 — 그런 답이 올라오면 지침에 한 줄이 더 붙습니다. 연수장에서 나온 답 몇 개는 연수 뒤에 이 자리에 적어 두겠습니다.</p>
+      </div>
+      <div class="cue">벽에 올라온 것 중 엉뚱한 답 2개를 골라 「지침에 무슨 줄을 더하면 될까」 묻기 · 손 든 분 셋 · 10분</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6 마무리 ═══════════ -->
+<section class="step" id="s6" data-title="마무리" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>마무리 — 오늘 만든 것과 다시 열어 볼 자리</h2><span class="min"><b>5</b>분</span></div>
+
+    <div class="blk">
+      <p class="kw">오늘 가져가시는 것</p>
+      <div class="grid2">
+        <div class="box"><b>도구가 연결된 내 에이전트 1개</b><p>SenGPT 「나만의 에이전트」에 있습니다. 지침은 연필로 언제든 고칩니다. 삭제는 휴지통이고, 지우면 되살릴 수 없습니다.</p></div>
+        <div class="box"><b>지침문 TXT</b><p>2단계 빌더의 ⬇️ TXT. 지침 칸에 다시 붙여 넣거나, Gemini·Copilot에도 같은 글을 씁니다.</p></div>
+        <div class="box"><b>이 페이지</b><p>처음부터 다시 할 때는 1단계 로그인부터, 도구만 다시 이을 때는 3단계부터입니다. 아래 QR로 폰에서도 열립니다.</p></div>
+      </div>
+      <div class="submit">
+        <div class="txt"><b>이 페이지 주소</b><span>연수 뒤에 다시 열어 보실 수 있게 순서대로 두었습니다. QR을 찍으면 📖 상세 모드로 열립니다.</span></div>
+        <div class="qr" data-url=""></div>
+      </div>
+      <div class="detail">
+        <p>연수 뒤에 숙제처럼 남기지 않으려고 세 가지를 다 링크가 있는 자리에 두었습니다. 에이전트는 SenGPT 목록에, 지침문은 TXT로 각자 기기에, 순서는 이 페이지에 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">더 두는 것 — 이어지는 연수와 출처</p>
+      <div class="grid2">
+        <div class="box"><b>공문 한 장으로 하는 업무 효율화</b><p>오늘 만든 비서에 공문 읽기·안내문·캘린더·구글 시트까지 이어 붙인 연수입니다. <a href="../ai-work/">AI 활용 업무 효율화 →</a></p></div>
+        <div class="box"><b>SenGPT로 수업 영상 만들기</b><p>같은 에이전트 방식으로 수업 도입 영상을 만드는 순서입니다. <a href="../senedu-video/">영상 만들기 →</a></p></div>
+        <div class="box"><b>SenGPT로 바이브코딩</b><p>PPT 대신 링크 하나 — 이 페이지 같은 HTML을 SenGPT로 만드는 교안입니다. <a href="../vibecoding/">바이브코딩 교안 →</a></p></div>
+        <div class="box"><b>출처</b><p>서울온라인학교 <b>강현욱 선생님</b>의 연수 자료 「SenGPT의 활용 · SenGPT 에이전트와 MCP」 — 이 페이지의 흐름과 지침문 틀. 고맙습니다. 도구별 동작은 <a href="https://docs.wrks.ai/user-guide/undefined-1" target="_blank" rel="noopener">웍스AI 도구 연결 가이드</a>를 봤습니다.</p></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">만족도 조사 — 다음 연수를 위해 3분만 부탁드립니다</p>
+      <div class="submit">
+        <div class="txt"><b>별점 하나와 한 줄이면 충분합니다</b><span>오프닝 페이지의 마지막 탭에서 받습니다. 이름은 적지 않으셔도 됩니다.</span></div>
+        <a class="btn big primary" id="closingLink" href="../opening/#close" target="_blank">⭐ 만족도 조사 열기</a>
+        <div class="qr" id="closingQr" data-url=""></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-22</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   설정 — 연수마다 여기만 바꿉니다
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  key:  'sengpt-agent',          // localStorage 접두어 (연수마다 다르게 — 체크칸·이름이 섞이지 않게)
+  code: (new URLSearchParams(location.search).get('s')||'').trim() || 'sengpt-agent',   // 연수 코드 = 주소의 ?s= (학교마다 다르게). 없으면 sengpt-agent
+  title: 'SenGPT 에이전트 기본',          // 오프닝 페이지 상단에 보일 이름
+  reflect: '',                       // Microsoft Reflect 체크인 링크 — 연수마다 다르게. 비우면 오프닝의 기분 블록이 대신 보임
+  supabase: {
+    url: 'https://vbvtnmnodeoocbbjauap.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc'
+  },
+  pollMs: 6000                       // 실시간 벽 새로고침 간격
+};
+
+/* ── 학교마다 다시 쓰는 페이지: ?s=연수코드&school=학교명&date=일시&place=장소 ──
+   예) sengpt-agent/?s=2026-11-yangjin&school=양진중학교&date=2026. 11. 3.(화) 15:00~16:30&place=양진중 컴퓨터실
+   표지 글·오프닝 링크·만족도 링크·이 페이지 QR 이 그 학교 것으로 바뀝니다. 매개변수가 없으면 공용판. */
+(function(){
+  const q=new URLSearchParams(location.search);
+  const school=(q.get('school')||'').trim(), date=(q.get('date')||'').trim(), place=(q.get('place')||'').trim();
+  if(school){
+    document.getElementById('eyebrow').textContent = school+' 교직원 연수 · SenGPT 에이전트 기본 실습';
+    document.getElementById('metaWho').textContent = school+' 선생님들 · 전 교과';
+    document.title = school+' '+document.title;
+  }
+  if(date){ document.getElementById('metaDate').textContent=date; document.getElementById('metaDateWrap').hidden=false; }
+  if(place||school){ document.getElementById('metaPlace').textContent=place||school; document.getElementById('metaPlaceWrap').hidden=false; }
+  const keep=new URLSearchParams(); ['s','school','date','place'].forEach(k=>{ const v=(q.get(k)||'').trim(); if(v) keep.set(k,v); });
+  const self = location.pathname + (keep.toString() ? '?'+keep.toString() : '');
+  const oq={ s:CONFIG.code, t:CONFIG.title }; if(CONFIG.reflect) oq.reflect=CONFIG.reflect;
+  document.getElementById('openingLink').href = '../opening/?'+new URLSearchParams({...oq, to:self}).toString();
+  document.getElementById('closingLink').href = '../opening/?'+new URLSearchParams(oq).toString()+'#close';
+  keep.set('mode','detail');
+  window.__selfUrl = location.origin+location.pathname+'?'+keep.toString();
+})();
+
+/* ── 모드: 📖 detail / 🎤 present ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save=true){
+  html.dataset.mode = m;
+  modeBtn.textContent = m==='present' ? '📖 상세로' : '🎤 발표로';
+  if(save){ try{ localStorage.setItem(CONFIG.key+':mode', m); }catch(e){} }
+}
+(function initMode(){
+  const q = new URLSearchParams(location.search).get('mode');
+  let m = q;
+  if(!m){ try{ m = localStorage.getItem(CONFIG.key+':mode'); }catch(e){} }
+  setMode(m==='present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', ()=> setMode(html.dataset.mode==='present' ? 'detail' : 'present'));
+
+/* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow  = document.getElementById('flow');
+steps.forEach((s,i)=>{
+  const title = s.dataset.title || s.querySelector('h2')?.textContent || ('단계 '+(i+1));
+  const min = s.dataset.min || '';
+  const c = document.createElement('a');
+  c.className='chip'; c.href='#'+s.id; c.innerHTML = `<b>${i+1}</b>${title}${min?` · ${min}분`:''}`;
+  chips.appendChild(c);
+  if(flow){
+    const f = document.createElement('a');
+    f.href='#'+s.id; f.innerHTML = `<span class="n">${i+1}</span><span class="t">${title}</span><span class="m">${min?min+'분':''}</span>`;
+    flow.appendChild(f);
+  }
+});
+const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
+if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분 (오프닝 제외)'; flow.appendChild(f); }
+
+/* ── 현재 단계 추적 (칩 하이라이트 · 타이머 대상) ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i){
+  if(i===current && chipEls[i].classList.contains('on')) return;
+  current = i;
+  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', j<i); });
+  updateTimerLabel();
+}
+const io = new IntersectionObserver(es=>{
+  const vis = es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
+  if(vis.length) setCurrent(steps.indexOf(vis[0].target));
+},{rootMargin:'-30% 0px -55% 0px', threshold:[0,.2,.5,1]});
+steps.forEach(s=>io.observe(s));
+
+/* ── 타이머: 단계마다 따로 잽니다 ── */
+const elapsed = steps.map(()=>0);
+let running=false, tick=null;
+const tmE=document.getElementById('tmElapsed'), tmP=document.getElementById('tmPlan'), tmT=document.getElementById('tmToggle'), timerEl=document.getElementById('timer');
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function updateTimerLabel(){
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]);
+  tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', plan && elapsed[current] > plan*60);
+}
+function toggleTimer(){
+  running=!running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick);
+  if(running) tick=setInterval(()=>{ elapsed[current]++; updateTimerLabel(); },1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', ()=>{ elapsed[current]=0; updateTimerLabel(); });
+setCurrent(0);
+
+/* ── 키보드 (발표 모드) — 발표 중엔 스르륵 대신 바로 뜀 ── */
+function go(i){ i=Math.max(0,Math.min(i,steps.length-1)); steps[i].scrollIntoView({behavior:'instant',block:'start'}); setCurrent(i); }
+document.addEventListener('keydown', e=>{
+  const tg=e.target; if((tg&&tg.matches&&tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.key==='p'){ modeBtn.click(); return; }
+  if(html.dataset.mode!=='present') return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); go(current+1); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(current-1); }
+  if(e.key==='t'){ toggleTimer(); }
+  if(e.key==='c'){ html.classList.toggle('cue-on'); }
+});
+
+/* ── 실습 체크칸: 기기마다 저장 ── */
+document.querySelectorAll('.steps').forEach(ol=>{
+  const k = CONFIG.key+':chk:'+(ol.dataset.key||ol.closest('.step')?.id||'x');
+  let saved=[]; try{ saved = JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){}
+  const boxes=[...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b,i)=>{ b.checked=!!saved[i]; b.closest('li').classList.toggle('ok',b.checked);
+    b.addEventListener('change',()=>{ b.closest('li').classList.toggle('ok',b.checked);
+      try{ localStorage.setItem(k, JSON.stringify(boxes.map(x=>x.checked))); }catch(e){} }); });
+});
+
+/* ── 보여주기 프레임: data-embed 에 주소를 넣으면 iframe/img 로 바뀝니다 ── */
+document.querySelectorAll('.frame[data-embed]').forEach(f=>{
+  const u=f.dataset.embed.trim(); if(!u) return;
+  f.classList.remove('empty'); const cap=f.dataset.cap||'';
+  const isImg=/\.(png|jpe?g|webp|gif|svg)(\?|$)/i.test(u);
+  f.innerHTML = (isImg ? `<img src="${u}" alt="${cap}">` : `<iframe src="${u}" loading="lazy" allowfullscreen></iframe>`) + (cap?`<div class="cap">${cap}</div>`:'');
+  const im=f.querySelector('img'); if(im) im.addEventListener('error',()=>f.remove());   // 아직 없는 캡처는 자리째 숨김
+});
+
+/* ── 실시간 벽 (Supabase REST, 폴링) ── */
+const SB = CONFIG.supabase;
+const sbHeaders = ()=>({ 'apikey':SB.key, 'Authorization':'Bearer '+SB.key, 'Content-Type':'application/json' });
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let myName=''; try{ myName = localStorage.getItem('yeonsu:name')||''; }catch(e){}
+document.querySelectorAll('.live[data-kind]').forEach(box=>{
+  const kind=box.dataset.kind, form=box.querySelector('form'), st=box.querySelector('.st'), wall=box.querySelector('.wall');
+  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
+  nameIn.value=myName;
+  if(!SB.url||!SB.key){ st.textContent='실시간 벽을 켜려면 CONFIG.supabase 에 주소와 키를 넣고, SETUP_연수라이브.sql 을 한 번 실행합니다.'; return; }
+  let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem(CONFIG.key+':mine:'+kind)||'[]')); }catch(e){}
+  async function load(){
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CONFIG.code)}&kind=eq.${encodeURIComponent(kind)}&select=id,name,body,created_at&order=created_at.desc&limit=300`,{headers:sbHeaders()});
+      if(!r.ok) throw new Error(r.status);
+      const rows=await r.json();
+      wall.innerHTML = rows.length ? rows.map(x=>`<div class="card${mine.has(x.id)?' mine':''}"><span class="who">${esc(x.name||'익명')}</span>${esc(x.body)}</div>`).join('') : '<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
+      box.querySelector('.q').dataset.count=rows.length;
+    }catch(e){ st.textContent='서버에 닿지 않습니다 ('+e.message+'). SETUP SQL 을 실행했는지, 주소가 맞는지 확인해 주세요.'; }
+  }
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const name=nameIn.value.trim(), body=bodyIn.value.trim();
+    if(!body){ bodyIn.focus(); return; }
+    myName=name; try{ localStorage.setItem('yeonsu:name',name); }catch(e){}
+    st.textContent='올리는 중…';
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:{...sbHeaders(),'Prefer':'return=representation'},body:JSON.stringify({s:CONFIG.code,kind,name,body})});
+      if(!r.ok) throw new Error(r.status);
+      const [row]=await r.json(); if(row){ mine.add(row.id); try{ localStorage.setItem(CONFIG.key+':mine:'+kind, JSON.stringify([...mine])); }catch(e){} }
+      bodyIn.value=''; st.textContent='올렸습니다. 고맙습니다 🙂'; load();
+    }catch(e){ st.textContent='올리지 못했습니다 ('+e.message+'). 다시 눌러 주세요.'; }
+  });
+  load();
+  let t=null; const vis=new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, CONFIG.pollMs); } }); }); vis.observe(box);
+});
+
+/* ── QR: data-url 이 비어 있으면 이 페이지(📖 상세) 주소 ── */
+function drawQRs(){
+  document.querySelectorAll('.qr').forEach(el=>{
+    let u=(el.dataset.url||'').trim();
+    if(!u||/^\u3010/.test(u)){ u = el.id==='closingQr' ? document.getElementById('closingLink').href : (window.__selfUrl || location.origin+location.pathname+'?mode=detail'); }
+    if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
+    el.innerHTML=`<span class="url">${esc(u)}</span>`;
+  });
+}
+if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load', drawQRs); setTimeout(()=>{ if(!window.qrcode) drawQRs(); },2500); }
+
+/* ── 프롬프트 복사 카드 ── */
+document.querySelectorAll('.cp').forEach(b=>{
+  b.addEventListener('click', async ()=>{
+    const host=b.closest('.pr'); const t=host&&host.querySelector('.txt'); if(!t) return;
+    const text=t.innerText.trim();
+    try{ await navigator.clipboard.writeText(text); b.textContent='복사했습니다'; }
+    catch(e){ const r=document.createRange(); r.selectNodeContents(t); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent='선택했습니다 · Ctrl+C'; }
+    setTimeout(()=>{ b.textContent='복사'; },1800);
+  });
+});
+
+/* ── TXT 다운로드 ── */
+function dlTxt(name, text){
+  const blob=new Blob(['﻿'+text],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800);
+}
+const today=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const safeName=x=>String(x||'').replace(/[\\/:*?"<>|]/g,'_').trim();
+document.querySelectorAll('.pr .dl').forEach(b=>b.addEventListener('click',()=>{
+  const pr=b.closest('.pr'); let t=pr.querySelector('.txt').innerText.trim(); if(!t) return;
+  if(pr.id==='pPrompt'){ const d=(document.querySelector('#pDesc .txt')?.innerText||'').trim(); t=['[에이전트 설명]', d, '', '[프롬프트]', t].join(String.fromCharCode(10)); }
+  const nm=safeName(document.getElementById('b_name')?.value);
+  dlTxt((b.dataset.name||'텍스트')+(nm?'_'+nm:'')+'_'+today()+'.txt', t);
+}));
+
+/* ── 2단계 빌더: 네 칸 → 지침문 ── */
+(function(){
+  const B=document.getElementById('builder'); if(!B) return;
+  const F={school:B.querySelector('#b_school'), name:B.querySelector('#b_name'), role:B.querySelector('#b_role')};
+  const K=CONFIG.key+':builder';
+  try{
+    const s=JSON.parse(localStorage.getItem(K)||'{}');
+    Object.keys(F).forEach(k=>{ if(s[k]) F[k].value=s[k]; });
+    if(s.tone){ const r=[...B.querySelectorAll('input[name=tone]')].find(x=>x.value===s.tone); if(r) r.checked=true; }
+  }catch(e){}
+  const tone=()=>(B.querySelector('input[name=tone]:checked')||{}).value||'존댓말로, 개조식으로 짧게 답한다.';
+  const save=()=>{ try{ localStorage.setItem(K, JSON.stringify({school:F.school.value, name:F.name.value, role:F.role.value, tone:tone()})); }catch(e){} };
+  B.addEventListener('input',save); B.addEventListener('change',save);
+  const out=document.getElementById('built'), dTxt=document.querySelector('#pDesc .txt'), txt=document.querySelector('#pPrompt .txt');
+  document.getElementById('bMake').addEventListener('click',()=>{
+    const school=F.school.value.trim()||'○○학교', name=F.name.value.trim()||'○○○', role=F.role.value.trim()||'(교과 · 담당 업무)';
+    dTxt.textContent=`당신은 ${school} ${name} 선생님의 에이전트입니다.\n${school} 소속 교사 ${name}의 업무와 수업 활동을 지원하는 어시스턴트입니다.`;
+    const L=[];
+    L.push(`담당: ${role}`);
+    L.push('');
+    L.push('[행동 규칙]');
+    L.push('- 요청의 의도가 불명확하면 가정해서 진행하지 말고, 핵심 질문 하나만 먼저 묻는다.');
+    L.push('- 쓸 수 있는 도구가 여럿이면 가장 알맞은 도구 하나를 고르고, 고른 이유를 한 줄로 알린다.');
+    L.push('- 결과를 줄 때는 「무엇을 했는지」보다 「무엇이 해결되었는지」를 중심으로 답한다.');
+    L.push('- 처리할 수 없는 요청은 가능한 범위를 분명히 알린다.');
+    L.push('');
+    L.push('[지키는 것]');
+    L.push('- 원문에 없는 날짜·숫자·이름을 만들어 넣지 않는다. 없으면 「원문에 없음」이라고 쓴다.');
+    L.push('- 학생·학부모·교직원의 이름과 연락처는 결과에 옮기지 않는다.');
+    L.push('- 일정을 등록·수정하기 전에 계획표(제목 | 날짜 | 시간 | 알림)를 먼저 보여 주고, 「등록」이라는 말을 들은 뒤에 실행한다.');
+    L.push('');
+    L.push('[말투]');
+    L.push('- '+tone());
+    txt.textContent=L.join('\n');
+    out.hidden=false; out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+})();
+</script>
+</body>
+</html>
