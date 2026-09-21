@@ -107,6 +107,11 @@ img{max-width:100%}
 .link:hover{text-decoration:underline;text-underline-offset:3px}
 .t-dark .link,.t-dark-2 .link,.t-dark-3 .link{color:var(--blue-on-dark)}
 .cta-row{display:flex;flex-wrap:wrap;gap:var(--s-md);margin-top:var(--s-xl);justify-content:center}
+/* 닫는 말의 연락처 한 줄 — 전화·메일은 누르면 바로 걸리고 열린다. 좁은 화면에선 구분점 자리에서 줄이 바뀐다 */
+.contact{margin-top:var(--s-xl);font-size:17px;letter-spacing:-.374px;color:var(--on-dark-muted);line-height:1.8}
+.contact a{color:var(--on-dark);font-weight:600;white-space:nowrap}
+.contact a:hover{text-decoration:underline;text-underline-offset:3px}
+.contact .sep{margin:0 10px;opacity:.5}
 
 /* ══════════════ 내비 두 줄 ══════════════ */
 .gnav{background:var(--black);color:var(--on-dark);height:44px;position:relative;z-index:60}
@@ -592,9 +597,10 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   <div class="wrap center">
     <span class="eyebrow">그리고</span>
     <h2 class="display-lg">이 인연이 짧게<br>끝나지 않았으면 좋겠습니다</h2>
-    <p class="lead">여기 있는 것 중 하나라도 쓸모가 있었다면 그대로 가져가 쓰셔도 됩니다.
-      고쳐 쓰셔도 되고, 학교 이름을 바꿔 다시 올리셔도 됩니다.
-      대신 언젠가 한 번은, 선생님께서 수업에 대해 하고 계신 고민을 들려주시면 좋겠습니다.</p>
+    <p class="lead">언젠가 다른 학교에서 동료로 뵙게 되거나 연수에서 다시 뵙게 되거나,
+      교직이 워낙 좁으니 분명 또 뵙게 될 겁니다.
+      여기 있는 자료들은 선생님의 자료라고 생각하시고, 아주 자유롭게 써 주시면 감사하겠습니다.</p>
+    <p class="contact">해누리중학교 조승재<span class="sep">·</span><a href="tel:010-2804-0316">010-2804-0316</a><span class="sep">·</span><a href="mailto:chuseonjae@outlook.kr">chuseonjae@outlook.kr</a></p>
     <div class="cta-row">
       <a class="btn btn-fill" href="#tools">자료 다시 보기</a>
       <a class="btn btn-ghost" href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">인스타그램으로 인사하기</a>
