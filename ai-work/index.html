@@ -82,6 +82,16 @@ html[data-mode="present"] .timer{display:inline-flex}
 .flow .m{font-size:.8em;color:var(--ink2)}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
 
+/* ── 캡처 두 장 나란히 · 코스 ── */
+.shot2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.shot2 .frame{margin:0}
+.lite-note{display:none;border-color:var(--ok)}
+.lite-note::before{content:""}
+html[data-course="lite"] .lite-note{display:block}
+html[data-course="lite"] .blk.pro,
+html[data-course="lite"] .step.pro-step{display:none}
+@media (max-width:720px){ .shot2{grid-template-columns:1fr} }
+
 /* ── 표지 모식도 ── */
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
 .pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
@@ -256,6 +266,7 @@ details.answer .body table{margin:4px 0 6px}
         <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
         <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
       </div>
+      <button class="btn" id="courseBtn" title="가볍게 = 체험만, 제대로 = 전체 실습">🌱 가볍게로</button>
       <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
     </div>
   </div>
@@ -288,7 +299,7 @@ details.answer .body table{margin:4px 0 6px}
       <a class="btn big" id="openingLink" href="../opening/?s=ai-work&t=공문 한 장, AI 업무 효율화" target="_blank">🙋 오프닝 페이지 (인사 · 아이스브레이킹) ↗</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
     </div>
-    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장에서 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
+    <p class="small" style="margin-top:18px">위의 🌱/🔧 단추로 코스를 고를 수 있습니다 — 🔧 제대로 실습(오늘 연수 기본)과 🌱 가볍게 체험(「이런 게 되는구나」까지만, 채점·빌더·쪽지·선택 단계를 접습니다). 📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장에서 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
   </div>
 </header>
 
@@ -312,6 +323,7 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">팝업 차단 풀기</span><span class="how">새 창이 안 뜨면 주소창 오른쪽 🚫 아이콘 → 「항상 허용」 → 다시 SenGPT.</span></div></li>
         <li><input type="checkbox"><div><span class="what">예제 공문 내려받기</span><span class="how"><a href="files/gongmun-01.pdf" download>01 예제 공문(PDF)</a> · <a href="files/gongmun-01.txt" download>같은 내용 텍스트(붙여넣기용)</a></span></div></li>
       </ol>
+      <div class="frame" data-embed="img/01-senedu-tools.jpg" data-cap="센스쿨 도구모음 — 여기서 SenGPT를 누르면 새 창으로 열립니다"></div>
       <div class="detail">
         <p>저는 연수를 시작할 때 이 세 가지부터 확인합니다. SenGPT는 센스쿨에서 새 창으로 열리는데 크롬 기본 설정이 그 창을 막기 때문에, 그냥 두면 첫 5분을 여기서 쓰게 됩니다. 제가 수업 도입 영상 자료를 만들 때도 같은 자리에서 한 번 멈췄습니다.</p>
         <p>계정은 2026년 5월 1일부터 센스쿨 계정만 되고, 가입한 뒤에 학교 관리자 승인이 나야 열립니다. 연수 전에 미리 부탁드린 이유가 이것입니다. 그래도 오늘 로그인이 안 되는 분이 계시면 옆 선생님과 함께 같은 화면으로 따라와주시길 바랍니다~!</p>
@@ -367,6 +379,7 @@ details.answer .body table{margin:4px 0 6px}
   <div class="wrap">
     <div class="step-h"><span class="num">2</span><h2>읽고 알리기 — 추출표, 안내문, 체크리스트</h2><span class="min"><b>20</b>분</span></div>
     <p class="goal">예제 공문을 올려 표로 받고, 정답 카드로 채점하고, 안내문과 체크리스트까지 뽑아보겠습니다!</p>
+    <p class="note lite-note">🌱 가볍게 코스는 공문을 올려 표를 받고, P3 안내문까지만 해봅니다. 채점은 접어 두었습니다.</p>
 
     <div class="blk">
       <p class="kw">공문 올리고 표로 받기</p>
@@ -378,6 +391,11 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">표가 나왔는지 보기</span><span class="how">항목 · 내용 · 근거 문장 세 열에 13행. 줄글로 오면 「표로 다시」 한 줄.</span></div></li>
       </ol>
       <div class="pr" id="p1"><b class="pl">P1 · 읽기</b><button class="btn cp" type="button">복사</button><div class="txt">이 공문에서 다음 항목을 표로 정리해 줘. 열은 항목 | 내용 | 근거 문장. 항목은 문서 제목, 발신 기관, 시행일, 목적(한 줄), 대상, 내가 해야 할 일(번호), 각 일의 기한, 제출 방법, 붙임(첨부 여부), 행사·연수 일시와 장소, 주의사항, 예산·출장, 확인이 필요한 것. 원문에 없는 항목은 「원문에 없음」이라고 쓰고 지어내지 마. 날짜는 원문 표기 그대로. 이름·전화번호는 쓰지 마.</div></div>
+      <div class="shot2">
+        <div class="frame" data-embed="img/04-attach-menu.jpg" data-cap="입력창의 + → 파일 업로드"></div>
+        <div class="frame" data-embed="img/05-prompt-ready.jpg" data-cap="예제 공문 PDF와 P1이 준비된 모습"></div>
+      </div>
+      <div class="frame" data-embed="img/06-result-table.jpg" data-cap="P1 결과 — 항목·내용·근거 문장 세 열. 「원문에 없음」이 그대로 나오는지 봅니다"></div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>파일이 안 올라감</b> — 관리자가 올릴 수 있는 확장자를 제한할 수 있습니다(웍스AI 관리자 기능). 텍스트 파일의 본문을 입력창에 붙여넣으면 같은 결과가 나옵니다.</p>
@@ -391,7 +409,7 @@ details.answer .body table{margin:4px 0 6px}
       </div>
     </div>
 
-    <div class="blk">
+    <div class="blk pro">
       <p class="kw">채점 — 함정 일곱 개 중 몇 개를 잡았나</p>
       <p class="brief">정답 카드를 열어 각자 받은 표와 맞춰보겠습니다! 틀렸거나 빠진 항목은 P2로 되묻습니다.</p>
       <details class="stuck answer"><summary>정답 카드 — 채점할 때 엽니다</summary>
@@ -414,6 +432,7 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">맞은 개수를 옆 선생님과 비교하기</span><span class="how">같은 공문, 같은 프롬프트인데 개수가 다르면 모델이 다른 것.</span></div></li>
       </ol>
       <div class="pr" id="p2"><b class="pl">P2 · 되묻기</b><button class="btn cp" type="button">복사</button><div class="txt">기한 항목마다 근거가 된 원문 문장을 그대로 다시 인용해 줘. 원문에 요일이 있으면 그대로, 없으면 「요일 미기재」. 원문에 없는 항목은 「원문에 없음」으로 고쳐 줘.</div></div>
+      <div class="frame" data-embed="img/03-model-menu.jpg" data-cap="입력창 위 Auto — 모델을 고르는 자리입니다. 같은 프롬프트라도 모델이 다르면 결과가 다릅니다"></div>
       <div class="detail">
         <p>이 채점에 오늘 연수에서 제일 긴 시간을 둡니다. AI 결과를 원문과 나란히 놓고 보는 습관이 여기서 생기지 않으면, 4단계에서 비서를 만들어도 비서가 틀린 기한을 그대로 캘린더에 넣게 되기 때문입니다.</p>
         <p>같은 공문에 같은 프롬프트를 넣어도 개수가 다를 수 있습니다. SenGPT 안에 모델이 여럿이고 기본값이 다르기 때문입니다. 저는 공문 추출은 표준 등급 모델로 두고, 가벼운 모델은 안내문 다듬기에만 씁니다. 개수가 다른 두 분 화면을 나란히 놓고 보면 그 차이가 바로 보입니다.</p>
@@ -451,6 +470,7 @@ details.answer .body table{margin:4px 0 6px}
   <div class="wrap">
     <div class="step-h"><span class="num">3</span><h2>일정 — 계획표를 보고, 내 캘린더에 넣기</h2><span class="min"><b>10</b>분</span></div>
     <p class="goal">계획표를 먼저 받아 종류와 시간을 확인해보겠습니다! 캘린더에 넣는 건 4단계에서 비서에 Google 캘린더를 연결한 뒤 「등록」 한마디로 합니다. 지금 당장 넣고 싶으면 계획표를 보고 직접 넣어도 3건이면 2분입니다.</p>
+    <p class="note lite-note">🌱 가볍게 코스는 P5로 계획표를 받아 보는 데까지입니다.</p>
 
     <div class="blk">
       <p class="kw">일정 계획표 먼저 — 등록은 아직</p>
@@ -466,7 +486,7 @@ details.answer .body table{margin:4px 0 6px}
       </div>
     </div>
 
-    <div class="blk">
+    <div class="blk pro">
       <p class="kw"><span class="tag">선택</span>CSV로 가져오기 — 계정 연결이 안 될 때만</p>
       <p class="brief">학교 Google 계정이 연결을 막거나 일정이 열 건을 넘을 때 쓰는 길입니다. P5-b로 CSV를 받아 파일로 저장한 뒤 Google 캘린더 설정의 가져오기로 넣습니다. 오늘 실습에서는 건너뜁니다.</p>
       <ol class="steps" data-key="do5">
@@ -495,8 +515,9 @@ details.answer .body table{margin:4px 0 6px}
   <div class="wrap">
     <div class="step-h"><span class="num">4</span><h2>나만의 비서 — 빈칸을 채워 지침문을 받고, 2·3단계를 한 번에</h2><span class="min"><b>15</b>분</span></div>
     <p class="goal">프리셋을 누르고 빈칸을 채워 지침문을 받은 뒤, 에이전트로 만들어 예제 공문으로 시험해보겠습니다! 「등록해」라고 했을 때 계획표를 보여 주고 묻고 멈추는지까지 보겠습니다.</p>
+    <p class="note lite-note">🌱 가볍게 코스는 빌더 대신 아래 완성본 지침문을 그대로 붙여 비서를 하나 만들어봅니다.</p>
 
-    <div class="blk">
+    <div class="blk pro">
       <p class="kw">내 업무에 맞춘 비서 — 프리셋을 누르고 빈칸을 채우면, 지침문을 받는 프롬프트가 나옵니다</p>
       <p class="brief">프리셋 하나를 누르고 빈칸을 고친 뒤 「프롬프트 만들기」를 눌러보겠습니다! 그걸 SenGPT 새 대화에 붙여 넣으면 지침문과 대화 스타터 여섯 개가 옵니다. 빌더는 📖 상세 모드에서 채웁니다.</p>
       <div class="builder only-detail" id="builder">
@@ -555,6 +576,10 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">저장하고 새 대화에 예제 공문 올리기</span><span class="how">다른 말 없이 추출표가 먼저 나오면 성공.</span></div></li>
         <li><input type="checkbox"><div><span class="what">「일정 등록해」라고 말해 보기</span><span class="how">계획표를 보여 주고 「이대로 등록할까요?」라고 묻고 멈추면 성공. 도구를 붙이면 「등록」에 실제로 들어갑니다.</span></div></li>
       </ol>
+      <div class="shot2">
+        <div class="frame" data-embed="img/08-myagents.jpg" data-cap="나만의 에이전트 → 에이전트 만들기"></div>
+        <div class="frame" data-embed="img/11-agent-prompt.jpg" data-cap="프롬프트(지침) 칸 — 받은 지침문을 여기에 붙입니다. 오른쪽 요술봉은 누르지 않습니다"></div>
+      </div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>지침문이 길어 지침 칸에 안 들어감</b> — 「2,000자 이내로 줄여. 절대 규칙 여섯 개는 그대로」 한 줄.</p>
@@ -644,6 +669,10 @@ details.answer .body table{margin:4px 0 6px}
     <div class="blk">
       <p class="kw"><span class="tag">사용량</span>SenGPT 사용량이 모자랄 때 — 같은 지침문을 Gemini·ChatGPT·Copilot에</p>
       <p class="brief">지침문 TXT 한 장이면 어느 AI에서도 같은 비서가 됩니다. 에이전트 기능이 없는 곳은 새 대화 첫 메시지에 지침문을 붙이고 「이 지침대로 일해 줘」.</p>
+      <div class="shot2">
+        <div class="frame" data-embed="img/12-usage.jpg" data-cap="왼쪽 아래 개인 사용량 — 매월 1일 초기화됩니다"></div>
+        <div class="frame" data-embed="img/07-export.jpg" data-cap="대화 내보내기 — Markdown·PDF·Word(DOCX)로 받아 둘 수 있습니다"></div>
+      </div>
       <table>
         <tr><th style="width:9em">어디에</th><th>지침문 넣는 자리</th><th>파일</th><th>일정</th><th>메모</th></tr>
         <tr><td>SenGPT 에이전트</td><td>에이전트 만들기 → 「지침」</td><td>PDF·HWP·HWPX</td><td>Google 캘린더 도구</td><td>서울교육청 전용, 개인별 월간 사용량 한도(매월 1일 초기화)</td></tr>
@@ -667,6 +696,7 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">Google 캘린더 새 탭에서 확인하기</span><span class="how">11월로 넘겨 [마감]·[연수]가 보이는지.</span></div></li>
         <li><input type="checkbox"><div><span class="what">수정 한 번 시켜 보기</span><span class="how">「[마감] 일정에 하루 전 알림 넣어 줘」. 삭제는 안 되니 캘린더에서 직접.</span></div></li>
       </ol>
+      <div class="frame" data-embed="img/10-agent-tools.jpg" data-cap="에이전트 만들기의 도구들 — Google Calendar를 여기서 연결합니다(필요한 것만, 최대 5개)"></div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>학교 Google 계정으로 권한 창이 안 뜸</b> — 관리자가 외부 앱 접근을 막아 둔 것입니다. 개인 Google 계정으로 연결합니다.</p>
@@ -686,6 +716,7 @@ details.answer .body table{margin:4px 0 6px}
   <div class="wrap">
     <div class="step-h"><span class="num">5</span><h2>내 공문으로 — 오늘 실제 업무 한 건(쪽지도 됩니다)</h2><span class="min"><b>15</b>분</span></div>
     <p class="goal">연수 전에 저장해 오신 진짜 공문(또는 오늘 온 쿨메신저 쪽지)을 3색으로 가른 뒤 비서에게 맡기고, 원문과 맞춰 보고, 기한 하나를 캘린더에 넣어보겠습니다 — 오늘의 실제 업무 한 건을 여기서 처리해보겠습니다!</p>
+    <p class="note lite-note">🌱 가볍게 코스는 내 공문 하나를 3색으로 가르고, 비서에게 넣어 표를 받아 보는 데까지입니다.</p>
 
     <div class="blk">
       <p class="kw">올려도 되는 공문, 지우고 올릴 공문, 올리지 않을 공문</p>
@@ -728,7 +759,7 @@ details.answer .body table{margin:4px 0 6px}
       <div class="cue">돌아다니며 빨강 공문 올리려는 분 확인 · 벽 글 3개 이상 올라오면 나눔으로</div>
     </div>
 
-    <div class="blk">
+    <div class="blk pro">
       <p class="kw"><span class="tag">쪽지</span>쿨메신저 쪽지도 같은 비서에게 — 공문이 빨강뿐이면 오늘 온 쪽지로</p>
       <p class="brief">쪽지 서너 개를 메모장에 모아 이름을 부서·직책으로 바꾼 뒤 비서에게 넣어보겠습니다! 출처·할 일·기한·회신 방법 표가 나옵니다.</p>
       <ol class="steps" data-key="do9">
@@ -761,6 +792,7 @@ details.answer .body table{margin:4px 0 6px}
   <div class="wrap">
     <div class="step-h"><span class="num">6</span><h2>시트 만들기 — 교직원 법정 의무연수 이수 확인 시트</h2><span class="min"><b>10</b>분</span></div>
     <p class="goal">담당자라면 누구나 한 번은 만드는 표를 AI에게 받아 구글 시트에 붙여보겠습니다! 표의 뼈대와 수식은 AI가 쓰고, 이름과 이수일은 시트에서 직접 채웁니다. 만든 시트 링크는 나눔 벽에 올려보겠습니다!</p>
+    <p class="note lite-note">🌱 가볍게 코스는 P20으로 표를 받아 시트에 붙여 넣는 데(2단계)까지만 해봅니다.</p>
 
     <div class="blk">
       <p class="kw">AI에게 표를 받고, 구글 시트에 붙이고, 체크박스와 수식까지</p>
@@ -797,7 +829,7 @@ details.answer .body table{margin:4px 0 6px}
 </section>
 
 <!-- ═══════════ 선택 · 설문과 표 ═══════════ -->
-<section class="step" id="s5b" data-title="설문·표(선택)" data-min="">
+<section class="step pro-step" id="s5b" data-title="설문·표(선택)" data-min="">
   <div class="wrap">
     <div class="step-h"><span class="num">7</span><h2>설문과 표 — 제가 실제로 하는 세 가지(선택)</h2><span class="min">시간이 남을 때 · 연수 뒤에</span></div>
     <p class="goal">시간이 남거나 연수 뒤에 여는 자리입니다. 학기 초 학급 설문, 학부모 총회 설문, 디벗 관리대장 — 제가 Forms·Google 시트·AI로 실제로 하는 세 가지를 순서대로 해보겠습니다! 셋 다 같은 틀입니다: 문항은 AI에게 초안을 받고, 응답은 시트로 내려받아 이름을 뺀 뒤 AI에 넣고, 나온 표를 원본과 맞춰 봅니다.</p>
@@ -1039,6 +1071,20 @@ function setMode(m, save=true){
   setMode(m==='present' ? 'present' : 'detail', !!q);
 })();
 modeBtn.addEventListener('click', ()=> setMode(html.dataset.mode==='present' ? 'detail' : 'present'));
+
+/* ── 코스: 🔧 제대로(pro, 기본) / 🌱 가볍게(lite) ── */
+const courseBtn = document.getElementById('courseBtn');
+function setCourse(c, save=true){
+  html.dataset.course = c;
+  courseBtn.textContent = c==='lite' ? '🔧 제대로로' : '🌱 가볍게로';
+  if(save){ try{ localStorage.setItem(CONFIG.key+':course', c); }catch(e){} }
+}
+(function(){
+  const q = new URLSearchParams(location.search).get('course');
+  let c = q; if(!c){ try{ c = localStorage.getItem(CONFIG.key+':course'); }catch(e){} }
+  setCourse(c==='lite' ? 'lite' : 'pro', !!q);
+})();
+courseBtn.addEventListener('click', ()=> setCourse(html.dataset.course==='lite' ? 'pro' : 'lite'));
 
 /* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
 const steps = [...document.querySelectorAll('.step')];
