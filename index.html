@@ -284,14 +284,14 @@ img{max-width:100%}
   .eye+.eye{border-left:1px solid rgba(255,255,255,.24);padding-left:var(--s-xxl)}
 }
 .eye-label{display:block;font-size:14px;font-weight:600;letter-spacing:-.224px;color:var(--blue-on-dark);margin-bottom:var(--s-lg)}
+.eye-label .hint{font-weight:400;color:var(--on-dark-muted);margin-left:8px}
 .eye .bio{max-width:none}
 .t-dark .bio li{border-bottom-color:rgba(255,255,255,.24)}
 .t-dark .bio li:first-child{border-top-color:rgba(255,255,255,.24)}
+.eye .chips{justify-content:flex-start;margin:0 0 var(--s-lg)}
 .eye .quote{max-width:none;margin:0;text-align:left;justify-content:flex-start;min-height:0}
 .eye .quote blockquote{font-size:clamp(21px,2.2vw,30px)}
 .eye .quote cite{margin-top:var(--s-md)}
-.eye .chips{justify-content:flex-start;margin:var(--s-lg) 0 0}
-@media(min-width:900px){.eye .quote{min-height:200px}}
 
 /* ══════════════ 푸터 ══════════════ */
 footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
@@ -445,7 +445,7 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
     <div class="tile-head">
       <span class="eyebrow">두 시선</span>
       <h2 class="display-lg">제가 바라보는 제 모습,<br>아이들이 바라보는 제 모습</h2>
-      <p class="lead">한쪽은 제가 쓴 문장, 다른 한쪽은 학기 끝에 받은 편지에서 그대로 옮긴 문장입니다. 낱말을 눌러 보세요.</p>
+      <p class="lead">한쪽은 제가 쓴 문장, 다른 한쪽은 학기 끝에 받은 편지에서 그대로 옮긴 문장입니다.</p>
     </div>
     <div class="eyes">
       <div class="eye">
@@ -459,12 +459,12 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
         </ul>
       </div>
       <div class="eye">
-        <span class="eye-label">아이들이 바라보는 제 모습</span>
+        <span class="eye-label">아이들이 바라보는 제 모습 <span class="hint">낱말을 눌러 보세요</span></span>
+        <div class="chips" id="chips" role="tablist" aria-label="아이들이 써준 말"></div>
         <figure class="quote" id="quotebox">
           <blockquote id="vq"></blockquote>
           <cite id="vc"></cite>
         </figure>
-        <div class="chips" id="chips" role="tablist" aria-label="아이들이 써준 말"></div>
       </div>
     </div>
   </div>
