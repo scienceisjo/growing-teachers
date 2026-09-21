@@ -223,7 +223,16 @@ details.answer .body table{margin:4px 0 6px}
 .builder .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
 .builder .hint{font-size:.85em;color:var(--ink3)}
 #pBuilt .txt{max-height:26em;overflow:auto;font-size:.92em}
-@media (max-width:720px){ .pr{padding-right:14px;padding-top:40px} }
+.pr .dl{position:absolute;top:8px;right:84px;font-size:.78rem;padding:5px 11px}
+.pr:has(.dl){padding-right:170px}
+.keep{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:12px 0;background:#fff}
+.keep label{display:block;font-weight:600;font-size:.92em;margin-bottom:6px}
+.keep textarea{width:100%;font:inherit;font-size:.93em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;color:var(--ink);background:#fff;resize:vertical}
+.keep textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.keep .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.keep .hint{font-size:.85em;color:var(--ink3)}
+.kw .dlall{font-size:.55em;vertical-align:middle;margin-left:8px;font-weight:500}
+@media (max-width:720px){ .pr,.pr:has(.dl){padding-right:14px;padding-top:44px} }
 </style>
 </head>
 <body>
@@ -512,11 +521,17 @@ details.answer .body table{margin:4px 0 6px}
         <div class="f"><label for="b_ex">⑨ 우리 학교 예시 문자 2개(말투 따라 쓰기 · 학부모 안내에 특히)</label><textarea id="b_ex" rows="4" maxlength="1200" placeholder="실제로 보낸 안내 문자 2개를 붙여 넣기(학생 이름은 지우고). 호칭·길이·끝맺음을 그대로 따라 씁니다. 비워 두면 「학부모님 호칭, 5줄 이내」 기본값."></textarea></div>
         <div class="act"><button class="btn primary" type="button" id="b_make">프롬프트 만들기</button><span class="hint">채운 내용은 이 기기에 남습니다. 빈 칸은 기본값으로 채워집니다.</span></div>
       </div>
-      <div class="pr only-detail" id="pBuilt" hidden><b class="pl">SenGPT에 넣을 프롬프트 — 이걸로 지침문을 받습니다</b><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="pr only-detail" id="pBuilt" hidden><b class="pl">SenGPT(또는 Gemini·ChatGPT·Copilot)에 넣을 프롬프트 — 이걸로 지침문을 받습니다</b><button class="btn dl" type="button" data-name="비서_만들기_프롬프트">⬇️ TXT</button><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="keep only-detail" id="keep">
+        <label for="keepTxt">내 지침문 보관함 — SenGPT(또는 Gemini·ChatGPT·Copilot)가 준 지침문을 여기 붙여 넣기</label>
+        <textarea id="keepTxt" rows="7" placeholder="코드 블록 안의 지침문 전체를 붙여 넣으면 이 기기에 남고, ⬇️ TXT 저장을 누르면 파일이 됩니다. 파일 이름: 지침문_비서이름_날짜.txt"></textarea>
+        <div class="act"><button class="btn primary" type="button" id="keepDl">⬇️ TXT 저장</button><button class="btn" type="button" id="keepCp">복사</button><span class="hint">메모장·한글·구글 문서 어디에 열어도 됩니다.</span></div>
+      </div>
       <ol class="steps" data-key="do6">
         <li><input type="checkbox"><div><span class="what">프리셋 하나 누르고 빈칸 채우기</span><span class="how">공문 담당자 / 담임·학부모 안내 / 부서 쪽지 많은 분. 부서·담당 업무는 구체적으로(「과학정보부, 디벗·정보화」). 모르는 칸은 비워 두어도 됩니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">「프롬프트 만들기」 → 「복사」</span><span class="how">아래에 프롬프트가 나타납니다. 칸을 고치고 다시 누르면 다시 만들어집니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">SenGPT 새 대화에 붙여넣고 지침문 받기</span><span class="how">코드 블록 하나(지침문) + 스타터 6개가 오면 성공. 블록이 둘로 나뉘면 「한 블록으로 다시」.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">받은 지침문을 보관함에 붙여 넣고 ⬇️ TXT로 저장하기</span><span class="how">아래 「내 지침문 보관함」. 이 파일 하나로 SenGPT·Gemini·ChatGPT·Copilot 어디서든 같은 비서를 만듭니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">에이전트 만들기 → 이름·설명 → 지침 칸에 붙여넣기</span><span class="how">[내가 만든 비서] 또는 [에이전트] → 만들기. 코드 블록 안만 복사. 요술봉(프롬프트 고도화)은 누르지 않기 — 규칙이 바뀝니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">대화 스타터 여섯 개 넣기</span><span class="how">SenGPT가 준 것 그대로. 6개까지 됩니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">저장하고 새 대화에 예제 공문 올리기</span><span class="how">다른 말 없이 추출표가 먼저 나오면 성공.</span></div></li>
@@ -549,7 +564,7 @@ details.answer .body table{margin:4px 0 6px}
         <tr><td>5</td><td>💬 쪽지 정리 — 붙여 넣은 쪽지들에서 할 일·기한·회신 방법을 표로 정리해 줘</td></tr>
         <tr><td>6</td><td>🔍 근거 다시 찾기 — 각 기한의 근거 문장을 원문에서 다시 찾아 줘</td></tr>
       </table>
-<div class="pr only-detail" id="pAgent"><b class="pl">에이전트 지침문 · 「지침」 칸에 그대로</b><button class="btn cp" type="button">복사</button><div class="txt"># 공문 업무비서
+<div class="pr only-detail" id="pAgent"><b class="pl">에이전트 지침문 · 「지침」 칸에 그대로</b><button class="btn dl" type="button" data-name="공문업무비서_지침문">⬇️ TXT</button><button class="btn cp" type="button">복사</button><div class="txt"># 공문 업무비서
 
 ## 역할
 당신은 학교 교사의 「공문 업무비서」입니다. 교사가 올린 공문 1건을 읽고 교사가 해야 할 일을 정리하며, 요청이 있을 때만 안내문·체크리스트·일정 계획·관리표를 만듭니다. 최종 판단과 실행 여부는 항상 교사가 결정합니다.
@@ -605,6 +620,22 @@ details.answer .body table{margin:4px 0 6px}
       <p class="small only-detail">같은 내용을 파일로: <a href="files/agent-instructions.txt" download>agent-instructions.txt</a></p>
       <div class="detail">
         <p>이 완성본에서 제가 제일 오래 다듬은 줄은 절대 규칙 5번입니다. 「등록해」라고 말하기 전에는 도구를 부르지 않는다는 규칙인데, 이게 없으면 비서가 계획표를 보여 주는 동시에 캘린더에 넣어 버립니다. 2단계의 「쪽지 정리」는 쿨메신저 쪽지 여러 개를 한 번에 표로 받는 자리입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">사용량</span>SenGPT 사용량이 모자랄 때 — 같은 지침문을 Gemini·ChatGPT·Copilot에</p>
+      <p class="brief">지침문 TXT 한 장이면 어느 AI에서도 같은 비서가 됩니다. 에이전트 기능이 없는 곳은 새 대화 첫 메시지에 지침문을 붙이고 「이 지침대로 일해 줘」.</p>
+      <table>
+        <tr><th style="width:9em">어디에</th><th>지침문 넣는 자리</th><th>파일</th><th>일정</th><th>메모</th></tr>
+        <tr><td>SenGPT 에이전트</td><td>에이전트 만들기 → 「지침」</td><td>PDF·HWP·HWPX</td><td>Google 캘린더 도구</td><td>서울교육청 전용, 개인별 월간 사용량 한도(매월 1일 초기화)</td></tr>
+        <tr><td>Gemini <b>Gems</b>(개인 Google 계정, 무료)</td><td>Gem 관리자 → 새 Gem → 「지침」 → 저장</td><td>지식 파일 첨부 가능(HWP는 PDF로)</td><td>채팅의 Google 캘린더 확장(Gem 안에서는 확인 필요)</td><td>요술봉(지침 다시 쓰기)은 여기서도 누르지 않기</td></tr>
+        <tr><td>ChatGPT <b>프로젝트</b>(무료)</td><td>새 프로젝트 → 「지침」</td><td>무료 5개(플랜별 다름)</td><td>없음 → CSV 길</td><td>「GPT 만들기」는 유료. 프로젝트 지침이 같은 역할</td></tr>
+        <tr><td>Copilot(학교 M365 계정)</td><td>「에이전트 만들기」가 보이면 지침 칸, 안 보이면 첫 메시지</td><td>Word·PDF</td><td>Outlook 캘린더에 CSV 가져오기</td><td>라이선스에 따라 메뉴가 다름</td></tr>
+      </table>
+      <div class="detail">
+        <p>SenGPT는 개인별 월간 사용량 한도가 있어서(2026 운영 계획, 매월 1일 초기화) 월말에 막힐 수 있습니다. 그래서 지침문을 TXT 한 장으로 갖고 다니는 것을 기본으로 둡니다. 어느 AI에 넣어도 같은 규칙으로 일하고, 갈아타는 데 1분이면 됩니다.</p>
+        <p>다만 SenGPT 밖은 개인 계정입니다. 그래서 저는 SenGPT 밖에서는 🟢 공문만 올리고, 이름을 지운 🟡 공문도 되도록 SenGPT에서 합니다. 3색 표는 도구가 아니라 문서에 붙는 기준입니다.</p>
       </div>
     </div>
 
@@ -751,7 +782,7 @@ details.answer .body table{margin:4px 0 6px}
     </div>
 
     <div class="blk only-detail">
-      <p class="kw">프롬프트 서랍 — 오늘 쓴 것과 더 두는 것</p>
+      <p class="kw">프롬프트 서랍 — 오늘 쓴 것과 더 두는 것 <button class="btn dlall" type="button" id="drawerDl">⬇️ 서랍 전체 TXT</button></p>
       <p class="brief">P1~P5·P11·P12는 위 단계에 있는 것과 같습니다. P6~P10은 설문·관리표·분석·앱·이미지용, P13~P15는 학부모 안내·문의 회신·번역용으로, 같은 예제 공문에 이어서 씁니다.</p>
       <table class="drawer">
         <tr><th style="width:7em">번호</th><th>프롬프트</th><th style="width:5em"></th></tr>
@@ -1077,6 +1108,41 @@ document.querySelectorAll('.cp').forEach(b=>{
     out.hidden=false; out.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
 })();
+
+/* ── TXT 다운로드: 지침문·프롬프트·보관함·서랍 전체 ── */
+function dlTxt(name, text){
+  const blob=new Blob(['\ufeff'+text],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800);
+}
+const today=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const safeName=x=>String(x||'').replace(/[\\/:*?"<>|]/g,'_').trim();
+document.querySelectorAll('.pr .dl').forEach(b=>b.addEventListener('click',()=>{
+  const t=b.closest('.pr').querySelector('.txt').innerText.trim(); if(!t) return;
+  dlTxt((b.dataset.name||'텍스트')+'_'+today()+'.txt', t);
+}));
+(function(){
+  const ta=document.getElementById('keepTxt'); if(!ta) return;
+  const K=CONFIG.key+':keep';
+  try{ ta.value=localStorage.getItem(K)||''; }catch(e){}
+  ta.addEventListener('input',()=>{ try{ localStorage.setItem(K,ta.value); }catch(e){} });
+  document.getElementById('keepDl').addEventListener('click',()=>{
+    const t=ta.value.trim(); if(!t){ ta.focus(); return; }
+    const nm=safeName(document.getElementById('b_name')?.value)||'비서';
+    dlTxt('지침문_'+nm+'_'+today()+'.txt', t);
+  });
+  document.getElementById('keepCp').addEventListener('click',async()=>{
+    const b=document.getElementById('keepCp'); const t=ta.value.trim(); if(!t){ ta.focus(); return; }
+    try{ await navigator.clipboard.writeText(t); b.textContent='복사했습니다'; }catch(e){ ta.select(); b.textContent='선택했습니다 · Ctrl+C'; }
+    setTimeout(()=>{ b.textContent='복사'; },1800);
+  });
+})();
+document.getElementById('drawerDl')?.addEventListener('click',()=>{
+  const parts=[];
+  document.querySelectorAll('.pr').forEach(p=>{ if(p.id==='pBuilt') return; const l=p.querySelector('.pl')?.innerText.trim(), t=p.querySelector('.txt')?.innerText.trim(); if(l&&t) parts.push('## '+l+'\n'+t); });
+  document.querySelectorAll('.drawer tr').forEach(tr=>{ const l=tr.children[0]?.innerText.trim(), t=tr.querySelector('.txt')?.innerText.trim(); if(l&&t) parts.push('## '+l+'\n'+t); });
+  dlTxt('프롬프트_서랍_'+today()+'.txt', parts.join('\n\n'));
+});
 </script>
 </body>
 </html>
