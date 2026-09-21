@@ -162,7 +162,19 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 <!-- ═══ 2 아이스브레이킹 ═══ -->
 <section class="panel" id="p-ice">
   <h2>오늘 어떤 마음으로 오셨나요?</h2>
-  <p class="sub">하나만 눌러 주세요. 한 줄은 적으셔도, 안 적으셔도 됩니다.</p>
+  <p class="sub" id="iceSub">하나만 눌러 주세요. 한 줄은 적으셔도, 안 적으셔도 됩니다.</p>
+
+  <!-- Microsoft Reflect 체크인 — 주소의 ?reflect= 로 연수마다 다른 링크가 들어옵니다. 있으면 아래 기분 블록 대신 이 카드가 보입니다 -->
+  <div class="blk" id="reflectCard" style="display:none">
+    <div class="gift">
+      <div class="txt">
+        <p class="kw">Reflect 로 지금 마음 하나 골라 주세요</p>
+        <p class="small">폰으로 QR 을 찍거나 버튼을 누르면 열립니다. 이름은 남지 않고, 모인 결과는 앞 화면에서 같이 봅니다.</p>
+        <a class="btn big primary" id="reflectLink" href="#" target="_blank" rel="noopener">💬 Reflect 체크인 열기</a>
+      </div>
+      <div class="qr" id="reflectQr"></div>
+    </div>
+  </div>
 
   <div class="blk">
     <div class="live" data-kind="mood" data-mode-ui="mood">
@@ -258,21 +270,28 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-21</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-22</span></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
 /* ═══ 설정 — 배포할 때 한 번만 채웁니다 ═══ */
 const CONFIG = {
   supabase: { url: 'https://vbvtnmnodeoocbbjauap.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc' },   // Supabase A(과학이조선생)
-  gift: '../gift/',                    // 선물 꾸러미 주소
-  photo: 'img/profile.webp',          // 바탕화면 연수프로필.png (600px webp)
+  gift: '../gift/',
+  photo: 'img/profile.webp',
   pollMs: 5000
 };
 const Q = new URLSearchParams(location.search);
 const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
 const TITLE = (Q.get('t')||'').trim();
 const TO = (Q.get('to')||'').trim();
+const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
+if(/^https?:\/\//i.test(REFLECT)){
+  document.getElementById('reflectCard').style.display='';
+  document.getElementById('reflectLink').href=REFLECT;
+  document.getElementById('iceSub').textContent='Reflect 에서 하나 골라 주세요. 그다음 교과와 학교를 적어 주시면 됩니다.';
+  const mood=document.querySelector('.live[data-kind=mood]'); if(mood) mood.closest('.blk').style.display='none';
+}
 
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
@@ -382,9 +401,13 @@ document.getElementById('clearBtn').addEventListener('click',async()=>{
 });
 
 /* ── QR ── */
-function drawQR(){ const el=document.getElementById('giftQr'); const u=new URL(CONFIG.gift,location.href).href;
+function qrInto(el,u){
   if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
   el.innerHTML=`<span class="url">${esc(u)}</span>`; }
+function drawQR(){
+  qrInto(document.getElementById('giftQr'), new URL(CONFIG.gift,location.href).href);
+  if(/^https?:\/\//i.test(REFLECT)) qrInto(document.getElementById('reflectQr'), REFLECT);
+}
 if(window.qrcode) drawQR(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load',drawQR); setTimeout(()=>{ if(!window.qrcode) drawQR(); },2500); }
 </script>
 </body>
