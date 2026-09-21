@@ -694,7 +694,7 @@ details.answer .body table{margin:4px 0 6px}
         <li><input type="checkbox"><div><span class="what">비서 새 대화에 올리기</span><span class="how">PDF 또는 붙여넣기. 추출표가 먼저 옵니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">기한·제출 방법·붙임을 원문에서 다시 찾기</span><span class="how">🔍 스타터 → 근거 문장을 에듀파인 원문과 맞춰 보기.</span></div></li>
         <li><input type="checkbox"><div><span class="what">기한 하나를 캘린더에 넣기</span><span class="how">CSV 또는 연결. 종류 접두어가 맞는지.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">6단계 벽에 한 줄 남기기</span><span class="how">공문 제목은 쓰지 않고 유형만(연수 안내·자료 제출·행사 참가 …).</span></div></li>
+        <li><input type="checkbox"><div><span class="what">나눔 벽에 한 줄 남기기</span><span class="how">공문 제목은 쓰지 않고 유형만(연수 안내·자료 제출·행사 참가 …).</span></div></li>
       </ol>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
@@ -707,7 +707,7 @@ details.answer .body table{margin:4px 0 6px}
         <p>앞 세 단계는 예제 공문으로 했고, 여기서 처리하는 공문은 각자의 진짜 업무입니다. 비서가 만들어져 있어서 15분으로 잡았습니다. 이 시간에 처리한 것은 연습이 아니라 그대로 업무 결과입니다.</p>
         <p>대조를 세 가지로 좁힌 이유는 2단계 채점에서 AI가 틀리는 자리가 거의 이 셋이기 때문입니다. 기한(시간·요일), 제출 방법(공문인지 메일인지), 붙임(있는데 안 올렸는지).</p>
       </div>
-      <div class="cue">돌아다니며 빨강 공문 올리려는 분 확인 · 벽 글 3개 이상 올라오면 6단계로</div>
+      <div class="cue">돌아다니며 빨강 공문 올리려는 분 확인 · 벽 글 3개 이상 올라오면 나눔으로</div>
     </div>
 
     <div class="blk">
@@ -733,6 +733,80 @@ details.answer .body table{margin:4px 0 6px}
       <div class="detail">
         <p>쪽지는 공문과 달리 접수함에 남지 않고 밀려 올라갑니다. 그래서 이 페이지에는 그날 쪽지를 모아 한 번에 표로 받는 길을 따로 두었습니다. 공문에서 하던 것과 같은 비서, 같은 규칙이고, 넣는 재료만 다릅니다.</p>
         <p>이름을 부서·직책으로 바꾸고 넣는 이유는 쪽지에 교직원 이름이 그대로 있어서입니다. 비서에게 이름을 옮기지 말라는 규칙이 있어도, 넣기 전에 지우는 쪽이 확실합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 선택 · 설문과 표 ═══════════ -->
+<section class="step" id="s5b" data-title="설문·표(선택)" data-min="">
+  <div class="wrap">
+    <div class="step-h"><span class="num">+</span><h2>설문과 표 — 제가 실제로 하는 세 가지(선택)</h2><span class="min">시간이 남을 때 · 연수 뒤에</span></div>
+    <p class="goal">시간이 남거나 연수 뒤에 여는 자리입니다. 학기 초 학급 설문, 학부모 총회 설문, 디벗 관리대장 — 제가 Forms·Google 시트·AI로 실제로 하는 세 가지를 순서대로 둡니다. 셋 다 같은 틀입니다: 문항은 AI에게 초안을 받고, 응답은 시트로 내려받아 이름을 뺀 뒤 AI에 넣고, 나온 표를 원본과 맞춰 봅니다.</p>
+    <p class="note warn">학생 응답은 🟡입니다. 이름 열은 지우고 번호만 넣고, 가정·건강·상담이 드러난 응답은 그 행을 빼고 넣습니다. 이 셋은 되도록 SenGPT에서 합니다.</p>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">학기 초</span>자기소개 설문 — 우리가 원하는 우리 반 모습과 자리 배치 고려사항</p>
+      <p class="brief">학기 초에 Forms로 자기소개와 「우리가 원하는 우리 반 모습」을 받고, 응답을 AI에 넣어 우리 반이 바라는 모습 세 가지와 자리 배치 때 고려할 것을 정리합니다.</p>
+      <ol class="steps" data-key="do10">
+        <li><input type="checkbox"><div><span class="what">P16으로 문항 초안 받아 Forms에 넣기</span><span class="how">자기소개 5 · 우리 반 모습 3 · 자리 배치 참고 2. 이름 대신 번호만 묻기.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">응답을 시트로 내려받기</span><span class="how">Forms 응답 탭 → 시트에서 보기 → 파일 → 다운로드 → CSV.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">이름 열이 있으면 지우고 번호만 남기기</span><span class="how">가정·건강이 드러난 응답은 그 행을 빼기.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P17로 분석 받기</span><span class="how">우리 반 모습 3묶음 · 자리 배치 고려사항 표(번호 | 고려사항 | 근거 응답) · 개별로 볼 응답은 번호만.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">원본과 맞춰 보고 학급 회의 자료로</span><span class="how">묶음마다 인용된 응답이 CSV에 정말 있는지. 없는 문장이 있으면 그 묶음은 버리기.</span></div></li>
+      </ol>
+      <div class="pr" id="p16"><b class="pl">P16 · 학급 설문 문항</b><button class="btn cp" type="button">복사</button><div class="txt">학기 초 자기소개와 「우리가 원하는 우리 반 모습」을 묻는 Google Forms 문항을 만들어 줘. 자기소개 5문항(객관식·단답 섞어), 우리 반 모습 3문항(객관식 2·서술형 1), 자리 배치 참고용 2문항(앞자리가 필요한지, 조용한 자리를 선호하는지). 문항마다 응답 형식을 적고, 이름은 묻지 말고 번호만 묻게 해.</div></div>
+      <div class="pr" id="p17"><b class="pl">P17 · 학급 설문 분석</b><button class="btn cp" type="button">복사</button><div class="txt">아래는 우리 반 설문 응답 CSV야(이름 없음, 번호만). ① 「우리가 원하는 우리 반 모습」을 자주 나온 순으로 3묶음으로 묶고, 묶음마다 대표 응답을 번호와 함께 2개씩 그대로 인용해. ② 자리 배치 때 고려할 것을 표로(번호 | 고려사항 | 근거 응답). ③ 개별로 살펴볼 응답은 번호만 적어. 응답에 없는 내용은 쓰지 마.
+[CSV 붙여넣기 또는 파일 첨부]</div></div>
+      <div class="detail">
+        <p>저는 학기 초에 자기소개와 함께 「우리가 원하는 우리 반 모습」을 Forms로 받습니다. 응답을 AI에 넣어 우리 반이 바라는 모습과 자리 배치 때 고려할 것을 정리합니다. 그러면 첫 자리 배치와 학급 회의를 학생들 말로 시작할 수 있습니다.</p>
+        <p>AI에 넣을 때 이름 열은 빼고 번호만 넣습니다. 자리 배치 고려사항은 개인 사정이 섞이기 때문에, 표에 번호만 있어야 나중에 누가 봐도 괜찮습니다. 묶음마다 인용된 응답이 원본에 정말 있는지 보는 것이 이 일의 검증입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">총회 전</span>학부모 총회 — 부모님께 들으면 행복해지는 말, 듣고 싶지 않은 말</p>
+      <p class="brief">총회 전에 학생들에게 두 문항을 익명 Forms로 받고, 응답을 AI로 묶어 총회 때 학부모님께 학생 말 그대로 보여 드립니다.</p>
+      <ol class="steps" data-key="do11">
+        <li><input type="checkbox"><div><span class="what">문항 두 개를 익명 Forms로 받기</span><span class="how">「부모님께 들으면 행복해지는 말」「듣고 싶지 않은 말」. 이름·번호 모두 묻지 않기.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">응답 CSV 내려받기</span><span class="how">응답 탭 → 시트 → 다운로드.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P18로 묶음과 인용 받기</span><span class="how">각각 5묶음, 묶음마다 학생 표현 그대로 2개, 몇 명이 썼는지.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">특정 가정을 알아볼 표현이 없는지 직접 읽기</span><span class="how">있으면 그 인용을 뺍니다. AI가 걸러도 한 번 더.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">총회 슬라이드 한 장으로</span><span class="how">묶음 제목 + 학생 말 인용. 숫자는 「○명」까지만.</span></div></li>
+      </ol>
+      <div class="pr" id="p18"><b class="pl">P18 · 총회 설문 분석</b><button class="btn cp" type="button">복사</button><div class="txt">아래는 학생들이 쓴 「부모님께 들으면 행복해지는 말」과 「듣고 싶지 않은 말」 응답이야(익명). 비슷한 말끼리 묶어 각각 5묶음으로 만들고, 묶음마다 학생 표현을 그대로 2개씩 인용하고 몇 명이 썼는지 세어 줘. 특정 가정을 알아볼 수 있는 표현은 빼. 총회 슬라이드 한 장에 들어갈 길이로.
+[응답 붙여넣기 또는 파일 첨부]</div></div>
+      <div class="detail">
+        <p>학부모 총회 전에 학생들에게 「부모님께 들으면 행복해지는 말」과 「듣고 싶지 않은 말」을 받아, AI로 묶어서 총회 때 보여 드렸습니다. 학교 설명보다 학생 말 인용이 학부모님께 오래 남는다고 느껴서 계속 하고 있습니다.</p>
+        <p>이 설문은 익명으로 받고, 묶은 뒤에도 특정 가정을 알아볼 수 있는 표현이 없는지 제가 한 번 더 읽습니다. AI가 걸러 주더라도 학부모님 앞에 나가는 글은 사람이 마지막으로 봅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">디벗</span>디벗 관리대장 — 명렬과 기기 정보를 AI로 맞추고, 시트에서 학번·기기 번호를 고르면 시리얼이 따라옵니다</p>
+      <p class="brief">MDM에서 내려받은 기기 목록과 학생 학번 목록을 AI에 넣어 대응표를 만들고, 그 표를 Google 시트에 두면 학번과 기기 번호를 고를 때 시리얼번호가 자동으로 들어갑니다.</p>
+      <ol class="steps" data-key="do12">
+        <li><input type="checkbox"><div><span class="what">MDM에서 기기 목록 내려받기</span><span class="how">Argos → 단말현황 → 내보내기. 기기 번호(라벨) · 시리얼번호 · 모델 열이 있으면 됩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">학생 명렬에서 학번 열만 떼어 두기</span><span class="how">이름은 AI에 넣지 않습니다. 이름은 마지막에 시트에서 학번으로 붙입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P19로 대응표 받기</span><span class="how">학번 | 기기 번호 | 시리얼번호. 배정 규칙(학번 순·기기 번호 순)을 프롬프트에 적기.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">시트에 「기기」 시트로 붙여 넣고, 「대장」 시트에 드롭다운 만들기</span><span class="how">대장 시트의 학번·기기 번호 열: 데이터 → 데이터 확인 → 범위의 목록(기기!A:A). 시리얼 열에는 아래 수식.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">AI 대응표를 MDM 원본과 맞춰 보기</span><span class="how">시리얼 개수 = 기기 수인지(COUNTA), 중복 시리얼 없는지(COUNTIF &gt; 1), 남는 기기·학번이 따로 표시됐는지.</span></div></li>
+      </ol>
+      <div class="pr" id="p19"><b class="pl">P19 · 디벗 대응표</b><button class="btn cp" type="button">복사</button><div class="txt">아래 두 표를 맞춰 줘. 표1은 MDM 기기 목록(기기 번호, 시리얼번호, 모델), 표2는 학생 학번 목록이야. 규칙: 기기 번호 순으로 학번 순에 배정해. 결과는 학번 | 기기 번호 | 시리얼번호 표로 만들고, 시리얼번호는 표1에서 한 글자도 바꾸지 말고 그대로 옮겨. 짝이 안 맞아 남는 기기나 학번은 표 아래에 따로 적어. 표에 없는 기기나 학번을 만들어 넣지 마.
+[표1 붙여넣기]
+[표2 붙여넣기]</div></div>
+      <div class="pr" id="pSheet"><b class="pl">시트 수식 · 기기 번호를 고르면 시리얼번호</b><button class="btn cp" type="button">복사</button><div class="txt">=IFERROR(VLOOKUP(C2, 기기!A:B, 2, FALSE), "")</div></div>
+      <p class="small">「기기」 시트의 A열이 기기 번호, B열이 시리얼번호일 때. 대장 시트의 C2가 기기 번호 드롭다운이면 D2에 이 수식을 넣고 아래로 채웁니다. 이름은 학번으로 붙일 때만 <code>VLOOKUP(A2, 명렬!A:B, 2, FALSE)</code>처럼 시트 안에서만 씁니다.</p>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>시리얼이 한두 글자 바뀌어 옴</b> — 0과 O, 1과 l을 AI가 바꾸는 경우입니다. P19의 「한 글자도 바꾸지 말고」 조건이 있어도 생기니, COUNTIF로 원본과 개수를 맞춰 보고 다르면 그 행만 원본에서 다시 붙입니다.</p>
+          <p><b>드롭다운이 안 뜸</b> — 데이터 확인의 범위가 다른 시트를 가리킬 때는 <code>기기!A2:A200</code>처럼 시트 이름을 붙여야 합니다.</p>
+          <p><b>기기가 학생보다 많거나 적음</b> — AI가 억지로 채우지 않게 「남는 것은 따로」 조건이 있습니다. 남는 쪽은 대장에 「예비」로 둡니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>저는 디벗 업무를 맡고 있어서 학생 디벗 관리대장을 AI로 만들어 씁니다. MDM 기기 정보와 학생 명렬을 넣어 학생과 기기를 대응한 표를 받고, 그 표를 Google 시트에 두어 학번과 기기 번호를 고르면 시리얼번호가 자동으로 들어가게 했습니다. 대여·반납·교체가 잦은 업무라 손으로 옮겨 적다가 시리얼 하나 틀리면 찾는 데 한참 걸리는데, 고르기만 하면 되니 그 일이 없어졌습니다.</p>
+        <p>AI에는 학번만 넣고 이름은 시트 안에서 붙입니다. 기기 시리얼과 이름이 한 표로 AI에 들어가면 그 자체가 개인정보 파일이 되기 때문입니다. 관리대장의 나머지 칸(대여일·반납일·상태)은 <a href="../dibut/ledger.html">디벗 관리대장 생성기</a>에 따로 두었습니다.</p>
       </div>
     </div>
   </div>
@@ -774,7 +848,7 @@ details.answer .body table{margin:4px 0 6px}
       <div class="grid2">
         <div class="box"><b>① 내 업무에 맞춘 비서</b><p>각자 SenGPT 계정 안에. 빌더와 제 완성본은 <a href="#s4">4단계</a>에, 완성본 파일은 <a href="files/agent-instructions.txt" download>여기</a>.</p></div>
         <div class="box"><b>② 내 캘린더의 기한</b><p>오늘 넣은 일정. 다음 공문은 <a href="#s3">3단계 CSV 길</a> 또는 연결한 비서의 「등록」으로.</p></div>
-        <div class="box"><b>③ 3색 표와 프롬프트 열다섯 개</b><p><a href="#s5">5단계 표</a>와 아래 서랍. 연수에 안 오신 선생님께 링크만 보내도 됩니다.</p></div>
+        <div class="box"><b>③ 3색 표와 프롬프트 열아홉 개</b><p><a href="#s5">5단계 표</a>와 아래 서랍. 연수에 안 오신 선생님께 링크만 보내도 됩니다.</p></div>
       </div>
       <div class="detail">
         <p>숙제로 남기지 않으려고 전부 이 페이지에 순서대로 두었습니다. 다시 여실 때 필요한 것은 4단계 빌더와 아래 프롬프트 서랍, 그리고 5단계의 3색 표입니다.</p>
@@ -784,7 +858,7 @@ details.answer .body table{margin:4px 0 6px}
 
     <div class="blk only-detail">
       <p class="kw">프롬프트 서랍 — 오늘 쓴 것과 더 두는 것 <button class="btn dlall" type="button" id="drawerDl">⬇️ 서랍 전체 TXT</button></p>
-      <p class="brief">P1~P5·P11·P12는 위 단계에 있는 것과 같습니다. P6~P10은 설문·관리표·분석·앱·이미지용, P13~P15는 학부모 안내·문의 회신·번역용으로, 같은 예제 공문에 이어서 씁니다.</p>
+      <p class="brief">P1~P5·P11·P12·P16~P19는 위 단계에 있는 것과 같습니다. P6~P10은 설문·관리표·분석·앱·이미지용, P13~P15는 학부모 안내·문의 회신·번역용으로, 같은 예제 공문에 이어서 씁니다.</p>
       <table class="drawer">
         <tr><th style="width:7em">번호</th><th>프롬프트</th><th style="width:5em"></th></tr>
         <tr><td>P6 · 조사 문항</td><td class="txt">이 연수 참가 희망 조사 문항 5개를 만들어 줘. 문항마다 응답 형식(객관식/체크박스/단답). 개인정보는 이름·소속만.</td><td><button class="btn cp" type="button">복사</button></td></tr>
@@ -796,10 +870,14 @@ details.answer .body table{margin:4px 0 6px}
         <tr><td>P13 · 학부모 안내 5줄</td><td class="txt">이 공문(또는 가정통신문) 내용을 학부모께 보내는 e알리미 안내문으로 5줄 이내로 써 줘. 무엇을·언제까지·어떻게·회신 방법·문의처(부서명까지). 학생 이름·반은 넣지 말고, 날짜·장소·금액은 원문 그대로, 원문에 없는 것은 빈칸(____)으로. 호칭은 「학부모님」, 끝은 「감사합니다」.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P14 · 문의 회신 초안</td><td class="txt">아래는 학부모 문의 내용이야(학생 정보는 지웠어). 회신 초안을 5줄로 써 줘: 확인한 사실 → 학교가 한 조치·할 조치 → 다음 연락 방법과 시점. 사과가 필요하면 한 문장만, 약속하지 못할 것은 쓰지 마. 호칭은 「학부모님」. [문의 내용 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P15 · 안내문 번역</td><td class="txt">위 안내문을 ○○어로 번역해 줘. 날짜·시간·금액·전화번호는 원문 그대로 두고, 학교 용어(현장체험학습·회신서·학년부 등)는 뜻이 통하게 풀어 써. 끝에 「번역본은 참고용이며 원문은 한국어본입니다」를 그 언어로 한 줄.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P16 · 학급 설문 문항</td><td class="txt">학기 초 자기소개와 「우리가 원하는 우리 반 모습」을 묻는 Google Forms 문항을 만들어 줘. 자기소개 5문항, 우리 반 모습 3문항(객관식 2·서술형 1), 자리 배치 참고용 2문항. 문항마다 응답 형식. 이름 대신 번호만.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P17 · 학급 설문 분석</td><td class="txt">아래는 우리 반 설문 응답 CSV야(번호만). ① 우리가 원하는 우리 반 모습을 3묶음으로, 묶음마다 대표 응답 2개를 번호와 함께 그대로 인용 ② 자리 배치 고려사항 표(번호 | 고려사항 | 근거 응답) ③ 개별로 볼 응답은 번호만. 응답에 없는 내용은 쓰지 마.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P18 · 총회 설문 분석</td><td class="txt">학생들이 쓴 「부모님께 들으면 행복해지는 말」「듣고 싶지 않은 말」 응답(익명)을 각각 5묶음으로 묶고, 묶음마다 학생 표현 그대로 2개씩 인용하고 몇 명이 썼는지 세어 줘. 특정 가정을 알아볼 표현은 빼고, 슬라이드 한 장 길이로.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P19 · 디벗 대응표</td><td class="txt">표1(MDM 기기 목록: 기기 번호·시리얼·모델)과 표2(학번 목록)를 기기 번호 순 → 학번 순으로 맞춰 학번 | 기기 번호 | 시리얼번호 표로. 시리얼은 한 글자도 바꾸지 말고, 남는 기기·학번은 따로, 없는 것은 만들지 마.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P10 · 안내 이미지</td><td class="txt">교직원 연수 안내 카드뉴스 배경 1장. 글자 없이, 노트북과 사람 실루엣, 밝은 파랑 계열, 정사각형. 실제 인물·로고 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
       </table>
       <div class="detail">
-        <p>P13~P15는 4단계 빌더의 「담임·학부모 안내」 프리셋과 짝입니다. 학부모에게 가는 글은 비서가 쓰더라도 보내는 건 언제나 사람 손으로 하고, 특정 학생 이야기는 틀만 받아 이름은 직접 넣습니다. P8의 응답 파일은 설문이 모여야 생기는데, 연수 중에는 모이지 않아서 오늘은 넣지 않았습니다. P10의 이미지는 한글 글자가 깨지기 때문에 배경만 만들고 글자는 캔바나 미리캔버스(센스쿨 도구모음에 있습니다)에서 얹습니다.</p>
+        <p>P16~P19는 선택 단계 「설문과 표」의 것으로, 학급 설문·총회 설문·디벗 관리대장에 제가 실제로 쓰는 프롬프트입니다. P13~P15는 4단계 빌더의 「담임·학부모 안내」 프리셋과 짝입니다. 학부모에게 가는 글은 비서가 쓰더라도 보내는 건 언제나 사람 손으로 하고, 특정 학생 이야기는 틀만 받아 이름은 직접 넣습니다. P8의 응답 파일은 설문이 모여야 생기는데, 연수 중에는 모이지 않아서 오늘은 넣지 않았습니다. P10의 이미지는 한글 글자가 깨지기 때문에 배경만 만들고 글자는 캔바나 미리캔버스(센스쿨 도구모음에 있습니다)에서 얹습니다.</p>
       </div>
     </div>
 
