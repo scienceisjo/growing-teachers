@@ -250,6 +250,49 @@ img{max-width:100%}
 .row .sub a::after{content:"\00a0↗";font-size:12px}
 .row .sub a:hover{text-decoration:underline;text-underline-offset:3px}
 
+/* ══════════════ 히어로 프로필 그림 ══════════════ */
+/* 연수 프로필 캐리커처(images/profile.webp, 720²). 크림색 원이 흰 타일 위에 그대로 선다 — 테두리·그림자 없음 */
+.portrait{display:block;width:clamp(128px,15vw,176px);height:auto;aspect-ratio:1;border-radius:50%;
+  object-fit:cover;background:#fcf4e1;margin:0 auto var(--s-lg)}
+
+/* ══════════════ 접기·펼치기 — 약력, 연수 목록 ══════════════ */
+/* 페이지가 길어져 두 곳을 접어 둔다. 높이 전환은 grid-template-rows 0fr→1fr, 단추는 파란 알약(btn-ghost) 그대로 */
+.fold-cta{margin-top:0}
+.fold-btn .chev{width:14px;height:14px;margin-left:8px;transition:transform .3s cubic-bezier(.25,.46,.45,.94)}
+.fold-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.25,.46,.45,.94)}
+.fold>.fold-in{overflow:hidden;min-height:0;visibility:hidden;transition:visibility 0s .4s}
+.fold.open{grid-template-rows:1fr}
+.fold.open>.fold-in{visibility:visible;transition:visibility 0s}
+.fold-body{padding-top:var(--s-xxl)}
+@media print{.fold{grid-template-rows:1fr}.fold>.fold-in{visibility:visible}.fold-cta{display:none}}
+
+/* ══════════════ 약력 표 — 왼쪽 라벨(학력·경력·연도), 오른쪽 내용 ══════════════ */
+.cv{max-width:var(--readw);margin:0 auto;border-top:1px solid var(--hairline)}
+.cv>div{display:grid;grid-template-columns:104px 1fr;gap:var(--s-md);padding:var(--s-md) 0;border-bottom:1px solid var(--hairline)}
+.cv dt{font-size:14px;font-weight:600;letter-spacing:-.224px;color:var(--ink-48);padding-top:3px;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.cv dd{font-size:17px;line-height:1.6;letter-spacing:-.374px;word-break:keep-all}
+@media(max-width:520px){.cv>div{grid-template-columns:1fr;gap:2px}}
+
+/* ══════════════ 두 시선 — 제가 바라보는 제 모습 | 아이들이 바라보는 제 모습 ══════════════ */
+/* 절반·절반. 넓은 화면은 두 칸 사이 헤어라인 하나, 좁은 화면은 위아래로 쌓인다 */
+.eyes{display:grid;gap:var(--s-xxl);max-width:1100px;margin:0 auto}
+@media(min-width:900px){
+  .eyes{grid-template-columns:1fr 1fr;gap:0}
+  .eye:first-child{padding-right:var(--s-xxl)}
+  .eye+.eye{border-left:1px solid rgba(255,255,255,.24);padding-left:var(--s-xxl)}
+}
+.eye-label{display:block;font-size:14px;font-weight:600;letter-spacing:-.224px;color:var(--blue-on-dark);margin-bottom:var(--s-lg)}
+.eye .bio{max-width:none}
+.t-dark .bio li{border-bottom-color:rgba(255,255,255,.24)}
+.t-dark .bio li:first-child{border-top-color:rgba(255,255,255,.24)}
+.eye .quote{max-width:none;margin:0;text-align:left;justify-content:flex-start;min-height:0}
+.eye .quote blockquote{font-size:clamp(21px,2.2vw,30px)}
+.eye .quote cite{margin-top:var(--s-md)}
+.eye .chips{justify-content:flex-start;margin:var(--s-lg) 0 0}
+@media(min-width:900px){.eye .quote{min-height:200px}}
+
 /* ══════════════ 푸터 ══════════════ */
 footer{background:var(--parchment);color:var(--ink-80);padding:64px 0}
 .fcols{display:grid;gap:var(--s-xl);border-bottom:1px solid var(--hairline);padding-bottom:var(--s-xl)}
@@ -305,7 +348,7 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
     <span class="sp"></span>
     <nav>
       <a href="#letter">여는 편지</a>
-      <a href="#voices">아이들의 말</a>
+      <a href="#voices">두 시선</a>
       <a href="#tools">교사 도구</a>
       <a href="#lesson">수업</a>
       <a href="#training">연수 자료</a>
@@ -318,6 +361,7 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
 <!-- 히어로 -->
 <section class="tile t-white">
   <div class="wrap center">
+    <img class="portrait" src="images/profile.webp" width="720" height="720" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()">
     <span class="eyebrow">수업을 사랑하는 과학교사</span>
     <h1 class="hero-display">수업을 연구하고,<br>수업에서 힐링합니다</h1>
     <p class="lead">바이브 코딩으로 만든 프로그램과 페이지들을 모아 두었습니다.<br>
@@ -329,29 +373,38 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
     <div class="stats">
       <div><b>17</b><span>웹 도구 · 수업 앱</span></div>
       <div><b>14</b><span>연수 · 강의 자료</span></div>
-      <div><b>0원</b><span>전부 무료 공개</span></div>
     </div>
   </div>
 </section>
 
-<!-- 약력 -->
-<section class="tile t-parch">
+<!-- 약력 — 강사카드 소개란과 같은 문구. 접혀 있고, 단추나 #bio 로 오면 펼쳐진다 -->
+<section class="tile t-parch" id="bio">
   <div class="wrap">
     <div class="tile-head">
       <span class="eyebrow">약력</span>
       <h2 class="display-lg">과학교사 조승재</h2>
     </div>
-    <ul class="bio">
-      <li>잠이나 워라밸보다 수업이 더 중요한 교사입니다.</li>
-      <li>과학을 그렇게 좋아하지 않았지만, 학생들을 만나고 과학에 푹 빠졌습니다.</li>
-      <li>질문에서 출발하는 수업과 평가를 고민합니다. 학생을 과학의 세계로 초대하는 방법을 늘 찾고 있습니다.</li>
-      <li>센서와 디지털 탐구도구 활용 수업에 관심이 높아 연구하고 있고, 모든 선생님이 쓰실 수 있도록 페이지로 만들고 있습니다.</li>
-      <li>학생들이 공부해야 하는 이유를, 그리고 제가 학교에 있어야 하는 이유를 늘 고민합니다.</li>
-    </ul>
-    <div class="bio">
-      <a class="ig" href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>@science_is_jo
-      </a>
+    <div class="cta-row fold-cta">
+      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="false" aria-controls="bioFold" data-open="약력 접기" data-closed="약력 펼쳐보기"><span class="lbl">약력 펼쳐보기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+    <div class="fold" id="bioFold">
+      <div class="fold-in">
+        <div class="fold-body">
+          <dl class="cv">
+            <div><dt>학력</dt><dd>한국교원대학교 화학교육과 졸업(2025. 2.)</dd></div>
+            <div><dt>경력</dt><dd>강동송파교육지원청 해누리중학교 과학 교사(2025. 3. 1. ~ 현재)</dd></div>
+            <div><dt>2025</dt><dd>AI·디지털 기반 교육혁신 선도교사 / 2025~2026 AIEDAP 마스터교원</dd></div>
+            <div><dt>2025~2026</dt><dd>MIEE(Microsoft Innovative Educator Expert)</dd></div>
+            <div><dt>2026</dt><dd>찾아가는 디지털 과학 수업 역량 강화 연수 강사(디지털 센서 활용 과학 수업)</dd></div>
+            <div><dt>2026</dt><dd>교원 연수 강사 10여 회 — 서울시교육청·교육지원청 직무연수, 단위학교 연수, Microsoft Pre-MIEE Teacher Program 등(AI·디지털 활용 수업, MBL 센서 과학 탐구, 바이브코딩·학생 데이터, 교사 업무 자동화, 디벗 활용)</dd></div>
+          </dl>
+          <div class="bio">
+            <a class="ig" href="https://www.instagram.com/science_is_jo/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>@science_is_jo
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -386,19 +439,34 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
-<!-- 아이들이 써준 말 -->
+<!-- 두 시선 — 왼쪽은 제가 쓴 다섯 문장, 오른쪽은 아이들이 써준 말(칩을 누르면 인용문 교체) -->
 <section class="tile t-dark" id="voices">
   <div class="wrap">
     <div class="tile-head">
-      <span class="eyebrow">마음 보관함</span>
-      <h2 class="display-lg">저를 소개하는 가장 정확한 말은<br>아이들이 써 주었습니다</h2>
-      <p class="lead">학기가 끝날 때 받은 편지에서 그대로 옮겼습니다. 낱말을 눌러 보세요.</p>
+      <span class="eyebrow">두 시선</span>
+      <h2 class="display-lg">제가 바라보는 제 모습,<br>아이들이 바라보는 제 모습</h2>
+      <p class="lead">한쪽은 제가 쓴 문장, 다른 한쪽은 학기 끝에 받은 편지에서 그대로 옮긴 문장입니다. 낱말을 눌러 보세요.</p>
     </div>
-    <div class="chips" id="chips" role="tablist" aria-label="아이들이 써준 말"></div>
-    <figure class="quote" id="quotebox">
-      <blockquote id="vq"></blockquote>
-      <cite id="vc"></cite>
-    </figure>
+    <div class="eyes">
+      <div class="eye">
+        <span class="eye-label">제가 바라보는 제 모습</span>
+        <ul class="bio">
+          <li>잠이나 워라밸보다 수업이 더 중요한 교사입니다.</li>
+          <li>과학을 그렇게 좋아하지 않았지만, 학생들을 만나고 과학에 푹 빠졌습니다.</li>
+          <li>질문에서 출발하는 수업과 평가를 고민합니다. 학생을 과학의 세계로 초대하는 방법을 늘 찾고 있습니다.</li>
+          <li>센서와 디지털 탐구도구 활용 수업에 관심이 높아 연구하고 있고, 모든 선생님이 쓰실 수 있도록 페이지로 만들고 있습니다.</li>
+          <li>학생들이 공부해야 하는 이유를, 그리고 제가 학교에 있어야 하는 이유를 늘 고민합니다.</li>
+        </ul>
+      </div>
+      <div class="eye">
+        <span class="eye-label">아이들이 바라보는 제 모습</span>
+        <figure class="quote" id="quotebox">
+          <blockquote id="vq"></blockquote>
+          <cite id="vc"></cite>
+        </figure>
+        <div class="chips" id="chips" role="tablist" aria-label="아이들이 써준 말"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -473,6 +541,10 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <h2 class="display-lg">그동안 진행한 연수 자료</h2>
       <p class="lead">연수에서 쓴 자료를 진행한 순서대로 열어 두었습니다. 참석하지 않으셨어도 내용을 따라오실 수 있게 만들었습니다.</p>
     </div>
+    <div class="cta-row fold-cta">
+      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="false" aria-controls="trainingFold" data-open="연수 목록 접기" data-closed="연수 목록 펼쳐보기"><span class="lbl">연수 목록 펼쳐보기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+    <div class="fold" id="trainingFold"><div class="fold-in"><div class="fold-body">
     <div class="rows">
       <a class="row" href="kkoribyeol.html"><span class="n">01</span><span class="b"><span class="ev"><time datetime="2026-06">2026. 6.</time><span class="sep">·</span>2026학년도 교간형 전문적 학습공동체 「꼬리별」 6월 워크숍</span><h3>말로 만드는 과학 수업</h3><p>AI를 활용한 수업 콘텐츠 개발 역량 강화. 코드 대신 말로 시키는 과학 시뮬레이터, ChatGPT·Canva 인포그래픽과 만화까지 보지 말고 손으로 만들어 보는 워크숍</p></span><span class="go">↗</span></a>
       <a class="row" href="lessondesignquiz.html"><span class="n">02</span><span class="b"><span class="ev"><time datetime="2026-06">2026. 6.</time><span class="sep">·</span>2026 학교로 찾아가는 수업 평가혁신 직무연수 · 도곡중학교</span><h3>모두가 답하는 교실</h3><p>온라인 퀴즈·평가 도구를 활용한 참여형 수업 설계. 퀴즈앤·젭퀴즈를 견주어 고르고, 수업 모형과 결합한 퀴즈를 직접 만듭니다 · 2시간 실습</p></span><span class="go">↗</span></a>
@@ -488,8 +560,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <div class="row"><span class="n">12</span><div class="b"><a class="main" href="https://scienceisjo.github.io/class-kit/"><span class="ev"><time datetime="2026-09">2026. 9.</time><span class="sep">·</span>수업 생태계 도구 나눔 · 다른 학교 선생님도 각자 설치해 쓰는 배포판(class-kit)</span><h3>온라인 칭찬 도장판 — 학생은 참여하고 싶어지고, 누가기록은 도장 한 번으로</h3><p>종이 도장판을 온라인으로 옮겨 학생 참여를 끌어내고, 도장 하나가 그대로 관찰 누가기록이 되어 생기부 근거로 남는 교사 수업 생태계 도구. 질문 과수원·진도 트래커와 함께 각자 학교의 Supabase에 설치하고, 설정 파일 하나로 학교 이름·역량·보상·세계관 팩을 바꿉니다. 설치 안내서와 설정 생성기 포함</p></a><div class="sub"><a href="https://scienceisjo.github.io/class-kit/setup/guide.html">설치·사용 가이드</a><a href="https://scienceisjo.github.io/class-tools/stamp-board/">칭찬 도장판 원본 · 해누리중</a><a href="https://github.com/scienceisjo/class-kit">GitHub 템플릿 저장소</a></div></div><a class="go" href="https://scienceisjo.github.io/class-kit/" aria-hidden="true" tabindex="-1">↗</a></div>
       <div class="row"><span class="n">13</span><div class="b"><a class="main" href="dibut/chromeos-flex.html"><span class="ev"><time datetime="2026-09-16">2026. 9. 16.</time><span class="sep">·</span>해누리중 토론이 있는 교직원 회의 · 과학정보부</span><h3>디벗 크롬 OS 전환 검토</h3><p>서피스고 디벗을 크롬 OS 플렉스로 바꿀지 판단하는 학교 업무 담당자용 자료. 설명회에서 나온 것과, 설명회가 다루지 않은 우려·대응을 나눠 정리했습니다</p></a><div class="sub"><a href="dibut/chromeos-flex-compare.html">회의용 한 장 · 개요·장단점·절차</a><a href="dibut/chromeos-flex-teachers.html">선생님 안내 페이지</a></div></div><a class="go" href="dibut/chromeos-flex.html" aria-hidden="true" tabindex="-1">↗</a></div>
       <a class="row" href="vibecoding/"><span class="n">14</span><span class="b"><span class="ev"><b>예정</b><span class="sep">·</span>일정 미정 · 90분 교안</span><h3>PPT 대신 링크 하나 — SENEDU로 시작하는 바이브코딩</h3><p>지금 보는 이 페이지가 오늘 만들 그 형식. SENEDU(SenGPT) 계정으로 연수·수업 자료를 HTML 한 장으로 만드는 90분 교안, 코드 도우미가 안에 들어 있습니다</p></span><span class="go">↗</span></a>
-      <a class="row" href="ai-work/"><span class="n">15</span><span class="b"><span class="ev"><b>예정</b><span class="sep">·</span>학교로 찾아가는 교직원 연수 「AI 활용 업무 효율화」 · 학교마다 이름만 바꿔 다시 쓰는 페이지 · 첫 회 양진중학교(2026년 10~11월) · 120분</span><h3>공문 한 장에서 시작하는 AI 업무 자동화</h3><p>접수함의 공문 한 장을 SenGPT로 읽어 할 일·기한을 뽑고 안내문·체크리스트·캘린더 일정까지 만든 뒤, 그 순서를 나만의 비서(에이전트)로 저장합니다. 가상 예제 공문에 함정 일곱 개, 3색 안전 기준, 프롬프트 열 개가 들어 있습니다</p></span><span class="go">↗</span></a>
+      <a class="row" href="ai-work/"><span class="n">15</span><span class="b"><span class="ev"><time datetime="2026-09-22">2026. 9. 22.</time><span class="sep">·</span>양진중학교 교직원 연수 「AI 활용 업무 효율화」 · 학교마다 이름만 바꿔 다시 쓰는 페이지 · 120분</span><h3>공문 한 장에서 시작하는 AI 업무 자동화</h3><p>접수함의 공문 한 장을 SenGPT로 읽어 할 일·기한을 뽑고 안내문·체크리스트·캘린더 일정까지 만든 뒤, 그 순서를 나만의 비서(에이전트)로 저장합니다. 가상 예제 공문에 함정 일곱 개, 3색 안전 기준, 프롬프트 열 개가 들어 있습니다</p></span><span class="go">↗</span></a>
     </div>
+    </div></div></div>
   </div>
 </section>
 
@@ -551,7 +624,7 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <div>
         <h4>이 페이지</h4>
         <a href="#letter">여는 편지</a>
-        <a href="#voices">아이들이 써준 말</a>
+        <a href="#voices">두 시선 · 아이들이 써준 말</a>
         <a href="#training">연수 자료</a>
         <a href="gift/">연수 선물 꾸러미</a>
         <a href="https://scienceisjo.github.io/class-kit/">우리 반 도구 꾸러미 · 설치판</a>
@@ -561,7 +634,7 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
     </div>
     <div id="app-credit">
       <b>조승재</b> · 해누리중학교 과학교사<br>
-      © 2026 조승재 <span class="sep">|</span> 최종 업데이트: 2026-09-17
+      © 2026 조승재 <span class="sep">|</span> 최종 업데이트: 2026-09-22
     </div>
   </div>
 </footer>
@@ -643,6 +716,39 @@ const VOICES = [
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(done, fallback);
     } else { fallback(); }
+  });
+})();
+
+/* ───── 접기·펼치기: 약력(#bio)·연수 목록(#training) ─────
+   단추로 여닫고, 내비·푸터·주소창의 #으로 그 구역에 오면 접힌 채 두지 않는다 */
+(function(){
+  function setOpen(btn, open){
+    var fold = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!fold) return;
+    fold.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.lbl').textContent = open ? btn.dataset.open : btn.dataset.closed;
+  }
+  function btnIn(id){
+    var sec = id && document.getElementById(id);
+    return sec ? sec.querySelector('.fold-btn') : null;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.fold-btn'), function(btn){
+    btn.addEventListener('click', function(){
+      setOpen(btn, btn.getAttribute('aria-expanded') !== 'true');
+    });
+  });
+  function openByHash(){
+    var btn = btnIn(location.hash.slice(1));
+    if (btn) setOpen(btn, true);
+  }
+  window.addEventListener('hashchange', openByHash);
+  openByHash();
+  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function(a){
+    a.addEventListener('click', function(){
+      var btn = btnIn(a.getAttribute('href').slice(1));
+      if (btn) setOpen(btn, true);
+    });
   });
 })();
 </script>
