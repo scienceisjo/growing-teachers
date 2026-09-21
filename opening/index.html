@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연수 오프닝 · 해누리중 조승재</title>
+<meta name="description" content="연수 시작과 끝에 쓰는 공용 페이지 — 인사 · 아이스브레이킹 · 선물 꾸러미 · 신청 이유 · 만족도">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 오프닝(공용) · 한 번 배포해 두고 연수마다 ?s=연수코드 로 씁니다
+   같은 디자인 언어: 흰 바탕 · 파란 강조 하나 · 그림자 0
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0; --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:1.55;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+b{font-weight:600}
+.mono{font-family:var(--mono);font-size:.92em}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+html[data-mode="present"] .detail,html[data-mode="present"] .only-detail{display:none}
+
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.tabs{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);border-radius:9999px;padding:5px 13px;font-size:.84rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap;font:inherit;font-size:.84rem}
+.tab.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2)} .btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h);text-decoration:none}
+.btn.big{font-size:1rem;padding:11px 22px}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+
+.panel{display:none;padding:48px 0 40px;min-height:60vh}
+.panel.on{display:block}
+.panel h2{font-size:var(--h2);margin-bottom:8px}
+.panel .sub{color:var(--ink2);margin-bottom:26px;max-width:40em}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.detail{max-width:40em}
+
+/* 인사 */
+.intro{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+.intro .photo{flex:none;width:150px;height:150px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:.8rem}
+.intro .photo img{width:100%;height:100%;object-fit:cover;display:block}
+.intro .say{flex:1;min-width:260px;font-size:1.08em;max-width:38em}
+.intro .say p{margin-bottom:.9em}
+.today{border:1px solid var(--line);border-radius:var(--r3);padding:18px 22px;margin:22px 0;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.today .t{flex:1;min-width:200px}
+.today .t small{display:block;color:var(--blue);font-weight:600;font-size:.8rem;margin-bottom:2px}
+.today .t b{font-size:1.15em}
+
+/* 실시간 벽 */
+.live{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:14px 0;background:#fff}
+.live .q{font-weight:600;font-size:1.08em;margin-bottom:10px}
+.live form{display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start}
+.live form.one{grid-template-columns:1fr auto}
+.live input,.live textarea{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.live textarea{min-height:2.7em;resize:vertical}
+.live input:focus,.live textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.live .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:var(--bg2);font-size:.95em;word-break:keep-all;overflow-wrap:anywhere}
+.card .who{display:block;font-size:.78em;color:var(--blue);font-weight:600;margin-bottom:4px}
+.card.mine{border-color:var(--blue)}
+.live .empty{color:var(--ink3);font-size:.9em;padding:8px 0}
+html[data-mode="present"] .live form,html[data-mode="present"] .live .st{display:none}
+
+/* 기분 · 별점 */
+.moods{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.mood{border:1px solid var(--line);border-radius:9999px;padding:8px 14px;background:#fff;cursor:pointer;font:inherit;font-size:1.05em}
+.mood.on{border-color:var(--blue);background:var(--blue-t)}
+.tally{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.tally span{border:1px solid var(--line);border-radius:var(--r2);padding:10px 14px;font-size:1.05em;background:var(--bg2)}
+.tally span b{font-size:1.3em;margin-left:6px;color:var(--blue)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chips span{border:1px solid var(--line);border-radius:9999px;padding:6px 12px;background:var(--bg2);font-size:.95em}
+.chips span b{color:var(--blue);margin-left:5px}
+.stars{display:flex;gap:6px;margin:6px 0 12px}
+.star{border:1px solid var(--line);border-radius:9999px;width:2.6em;height:2.6em;background:#fff;cursor:pointer;font:inherit;font-size:1.05em}
+.star.on{border-color:var(--blue);background:var(--blue-t)}
+.bars{margin-top:14px;display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:3.5em 1fr 3em;align-items:center;gap:10px;font-size:.95em}
+.bar i{display:block;height:14px;border-radius:9999px;background:var(--blue-t);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--blue);width:0;transition:width .4s}
+.avg{font-size:1.4em;font-weight:600;margin-top:10px}
+.avg small{font-size:.6em;color:var(--ink2);font-weight:400;margin-left:6px}
+
+/* 선물 */
+.gift{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.gift .txt{flex:1;min-width:220px}
+.qr{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:8px;line-height:0;min-width:72px;min-height:72px}
+.qr svg{width:120px;height:120px}
+html[data-mode="present"] .qr svg{width:220px;height:220px}
+.qr .url{font-family:var(--mono);font-size:.72rem;color:var(--ink2);line-height:1.3;word-break:break-all;display:block;max-width:220px}
+
+/* 강사 패널 */
+.admin{border:1px solid var(--warn);border-radius:var(--r3);padding:18px 22px;margin:30px 0;display:none}
+.admin.on{display:block}
+.admin h3{color:var(--warn);font-size:1rem;margin-bottom:10px}
+.admin .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.admin .counts{color:var(--ink2);font-size:.9em;margin:8px 0}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+@media (max-width:720px){ .live form{grid-template-columns:1fr} .top .brand small{display:none} .panel{padding:32px 0} }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <span class="brand">연수 오프닝<small id="brandTitle"></small></span>
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-p="hello">1 인사</button>
+      <button class="tab" data-p="ice">2 아이스브레이킹</button>
+      <button class="tab" data-p="gift">3 선물 꾸러미</button>
+      <button class="tab" data-p="why">4 신청하신 이유</button>
+      <button class="tab" data-p="close">⭐ 만족도</button>
+    </nav>
+    <button class="btn" id="modeBtn">🎤 발표로</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ═══ 1 인사 ═══ -->
+<section class="panel on" id="p-hello">
+  <h2>선생님 안녕하세요!</h2>
+  <p class="sub">해누리중학교 과학 교사(화학) 조승재입니다.</p>
+  <div class="intro">
+    <div class="photo" id="photo">사진<br>img/profile.jpg</div>
+    <div class="say">
+      <p>선생님들의 시간이 너무나 소중하기 때문에, 이 시간이 의미 있는 시간이 될 수 있도록 많은 준비를 해왔습니다. 그러나 양이 많아서 연수 이후에 많은 과제처럼 남지 않도록, 선생님들께 의미 있다고 여겨지는 것들 위주로 말씀드릴 예정입니다!</p>
+      <p>선생님들을 처음 뵙지만, 이렇게 일과 시간 이후에 혹은 주말에 더 나은 교육을 위해 모여 있다는 것에 든든한 동료애를 느낍니다. 연수보다는 교학공을 한다는 감정으로 선생님들과 많이 소통하고 싶습니다!!</p>
+    </div>
+  </div>
+  <div class="today" id="today">
+    <div class="t"><small>오늘 연수</small><b id="todayTitle">(연수 제목은 주소의 t= 로 들어옵니다)</b></div>
+    <a class="btn big primary" id="toPage" href="#" style="display:none">오늘 연수 페이지로 →</a>
+  </div>
+  <p class="small only-detail">이 페이지는 연수를 시작할 때와 끝낼 때 쓰는 공용 페이지입니다. 폰으로 열어 두시면 벽에 글을 올릴 수 있고, 앞 화면에는 🎤 발표 모드로 벽만 크게 보입니다.</p>
+</section>
+
+<!-- ═══ 2 아이스브레이킹 ═══ -->
+<section class="panel" id="p-ice">
+  <h2>오늘 어떤 마음으로 오셨나요?</h2>
+  <p class="sub">하나만 눌러 주세요. 한 줄은 적으셔도, 안 적으셔도 됩니다.</p>
+
+  <div class="blk">
+    <div class="live" data-kind="mood" data-mode-ui="mood">
+      <div class="q">지금 기분</div>
+      <div class="moods">
+        <button type="button" class="mood" data-v="😊 설렘">😊 설렘</button>
+        <button type="button" class="mood" data-v="🙂 편안">🙂 편안</button>
+        <button type="button" class="mood" data-v="😐 그냥">😐 그냥</button>
+        <button type="button" class="mood" data-v="😴 피곤">😴 피곤</button>
+        <button type="button" class="mood" data-v="🔥 의욕">🔥 의욕</button>
+      </div>
+      <form class="one"><textarea name="body" placeholder="(선택) 한 줄 — 예: 6교시 마치고 바로 왔습니다" maxlength="120"></textarea><button class="btn primary" type="submit">올리기</button></form>
+      <div class="st"></div>
+      <div class="tally"></div>
+      <div class="wall"></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="live" data-kind="subject" data-mode-ui="chips">
+      <div class="q">선생님의 교과 · 학교</div>
+      <form class="one"><input name="body" placeholder="예: 과학 · ○○중" maxlength="40" autocomplete="off"><button class="btn primary" type="submit">올리기</button></form>
+      <div class="st"></div>
+      <div class="chips"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3 선물 꾸러미 ═══ -->
+<section class="panel" id="p-gift">
+  <h2>연수 선물 꾸러미</h2>
+  <p class="sub">제가 실제로 매일 쓰는 무료 프로그램과 단축키를 한 페이지에 모아 두었습니다. QR 하나로 가져가시면 됩니다.</p>
+  <div class="gift">
+    <div class="txt">
+      <p class="kw">지금 폰으로 찍어 두세요</p>
+      <p class="small">연수가 끝난 뒤에도 그대로 열립니다. 설치할 것이 있으면 집에서 천천히 하셔도 됩니다.</p>
+      <a class="btn big primary" id="giftLink" href="../gift/" target="_blank">🎁 선물 꾸러미 열기</a>
+    </div>
+    <div class="qr" id="giftQr"></div>
+  </div>
+</section>
+
+<!-- ═══ 4 신청하신 이유 ═══ -->
+<section class="panel" id="p-why">
+  <h2>오늘 연수를 신청하신 이유가 궁금합니다</h2>
+  <p class="sub">솔직하게 적어 주시면 그 순서대로 시간을 더 쓰겠습니다.</p>
+  <div class="blk">
+    <div class="live" data-kind="reason">
+      <div class="q">신청하신 이유, 또는 오늘 꼭 알고 가고 싶은 것 하나</div>
+      <form><input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off"><textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea><button class="btn primary" type="submit">올리기</button></form>
+      <div class="st"></div>
+      <div class="wall"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⭐ 만족도 ═══ -->
+<section class="panel" id="p-close">
+  <h2>오늘 어떠셨나요?</h2>
+  <p class="sub">별 하나와 한 줄이면 충분합니다. 이름은 적지 않으셔도 됩니다. 다음 연수를 더 낫게 만드는 데 그대로 씁니다.</p>
+  <div class="blk">
+    <div class="live" data-kind="satis" data-mode-ui="stars">
+      <div class="q">오늘 연수는 몇 점이었나요?</div>
+      <div class="stars"><button type="button" class="star" data-v="1">1</button><button type="button" class="star" data-v="2">2</button><button type="button" class="star" data-v="3">3</button><button type="button" class="star" data-v="4">4</button><button type="button" class="star" data-v="5">5</button></div>
+      <form class="one"><textarea name="body" placeholder="좋았던 점 한 줄 (선택)" maxlength="300"></textarea><button class="btn primary" type="submit">보내기</button></form>
+      <div class="st"></div>
+      <div class="avg"></div>
+      <div class="bars"></div>
+      <div class="wall"></div>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="live" data-kind="next">
+      <div class="q">아쉬웠던 점, 또는 다음에 듣고 싶은 것</div>
+      <form class="one"><textarea name="body" placeholder="한 줄이면 됩니다" maxlength="300"></textarea><button class="btn primary" type="submit">보내기</button></form>
+      <div class="st"></div>
+      <div class="wall"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 강사 패널 (?admin=1 또는 맨 아래 🔒) ═══ -->
+<div class="admin" id="admin">
+  <h3>🔒 강사 · 이 연수의 응답</h3>
+  <div class="counts" id="adminCounts">연수 코드: <span class="mono" id="adminCode"></span></div>
+  <div class="row">
+    <button class="btn" id="csvBtn">⬇️ CSV 내려받기</button>
+    <button class="btn danger" id="clearBtn">🗑 이 연수 응답 비우기</button>
+    <span class="small">비우기는 비밀번호(SETUP SQL 의 yeonsu_admin)를 묻고, 이 코드의 응답만 지웁니다. 내려받은 뒤에 비우세요.</span>
+  </div>
+</div>
+<p class="small" style="text-align:center;margin-top:20px"><button class="btn" id="adminToggle" style="font-size:.78rem">🔒 강사</button></p>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-21</span></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+<script>
+/* ═══ 설정 — 배포할 때 한 번만 채웁니다 ═══ */
+const CONFIG = {
+  supabase: { url: 'https://vbvtnmnodeoocbbjauap.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc' },   // Supabase A(과학이조선생)
+  gift: '../gift/',                    // 선물 꾸러미 주소
+  photo: '../images/teacher.jpg',      // 포트폴리오 사진 그대로
+  pollMs: 5000
+};
+const Q = new URLSearchParams(location.search);
+const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
+const TITLE = (Q.get('t')||'').trim();
+const TO = (Q.get('to')||'').trim();
+
+/* ── 제목·링크·사진 ── */
+document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
+if(TITLE){ document.getElementById('todayTitle').textContent = TITLE; document.title = TITLE+' · 오프닝'; }
+if(TO){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }
+document.getElementById('giftLink').href = CONFIG.gift;
+(function(){ const im=new Image(); im.onload=()=>{ const p=document.getElementById('photo'); p.innerHTML=''; p.appendChild(im); }; im.alt='조승재'; im.src=CONFIG.photo; })();
+
+/* ── 모드 ── */
+const html=document.documentElement, modeBtn=document.getElementById('modeBtn');
+function setMode(m){ html.dataset.mode=m; modeBtn.textContent = m==='present'?'📖 상세로':'🎤 발표로'; try{ localStorage.setItem('opening:mode',m); }catch(e){} }
+(function(){ let m=Q.get('mode'); if(!m){ try{ m=localStorage.getItem('opening:mode'); }catch(e){} } setMode(m==='present'?'present':'detail'); })();
+modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'detail':'present'));
+
+/* ── 탭 ── */
+const tabs=[...document.querySelectorAll('.tab')];
+function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
+tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
+const h=location.hash.replace('#',''); if(['hello','ice','gift','why','close'].includes(h)) show(h);
+document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
+  if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
+
+/* ── Supabase REST ── */
+const SB=CONFIG.supabase;
+const hdr=()=>({'apikey':SB.key,'Authorization':'Bearer '+SB.key,'Content-Type':'application/json'});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ready=!!(SB.url&&SB.key);
+let myName=''; try{ myName=localStorage.getItem('yeonsu:name')||''; }catch(e){}
+async function fetchRows(kind){
+  const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CODE)}${kind?'&kind=eq.'+encodeURIComponent(kind):''}&select=id,kind,name,body,n,created_at&order=created_at.desc&limit=1000`,{headers:hdr()});
+  if(!r.ok) throw new Error(r.status); return r.json();
+}
+async function insertRow(o){
+  const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:{...hdr(),'Prefer':'return=representation'},body:JSON.stringify({s:CODE,...o})});
+  if(!r.ok) throw new Error(r.status); const [row]=await r.json(); return row;
+}
+
+/* ── 실시간 블록 4종: 벽(기본) · mood(이모지+집계) · chips(낱말 집계) · stars(별점 평균+막대) ── */
+document.querySelectorAll('.live[data-kind]').forEach(box=>{
+  const kind=box.dataset.kind, ui=box.dataset.modeUi||'wall', form=box.querySelector('form'), st=box.querySelector('.st');
+  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
+  if(nameIn) nameIn.value=myName;
+  let picked=null;
+  box.querySelectorAll('.mood,.star').forEach(b=>b.addEventListener('click',()=>{ picked=b.dataset.v; box.querySelectorAll('.mood,.star').forEach(x=>x.classList.toggle('on',x===b)); }));
+  if(!ready){ st.textContent='CONFIG.supabase 에 주소와 키를 넣고 SETUP_연수라이브.sql 을 실행하면 이 블록이 켜집니다.'; return; }
+  let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem('opening:mine:'+CODE+':'+kind)||'[]')); }catch(e){}
+  const wall=box.querySelector('.wall');
+  function render(rows){
+    if(ui==='mood'){
+      const c={}; rows.forEach(r=>{ if(r.name) c[r.name]=(c[r.name]||0)+1; });
+      box.querySelector('.tally').innerHTML=Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${esc(k)}<b>${v}</b></span>`).join('')||'<span class="small">아직 없습니다</span>';
+      wall.innerHTML=rows.filter(r=>r.body).map(r=>`<div class="card${mine.has(r.id)?' mine':''}"><span class="who">${esc(r.name)}</span>${esc(r.body)}</div>`).join('');
+    }else if(ui==='chips'){
+      const c={}; rows.forEach(r=>{ const k=(r.body||'').trim(); if(k) c[k]=(c[k]||0)+1; });
+      box.querySelector('.chips').innerHTML=Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${esc(k)}<b>${v}</b></span>`).join('')||'<span class="small">아직 없습니다</span>';
+    }else if(ui==='stars'){
+      const ns=rows.map(r=>+r.n).filter(n=>n>=1&&n<=5); const avg=ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:0;
+      box.querySelector('.avg').innerHTML= ns.length? `${avg.toFixed(2)}<small>/ 5 · ${ns.length}명</small>` : '<small>아직 없습니다</small>';
+      box.querySelector('.bars').innerHTML=[5,4,3,2,1].map(k=>{ const v=ns.filter(n=>n===k).length; return `<div class="bar"><span>${'★'.repeat(k)}</span><i><b style="width:${ns.length?v/ns.length*100:0}%"></b></i><span>${v}</span></div>`; }).join('');
+      wall.innerHTML=rows.filter(r=>r.body).map(r=>`<div class="card${mine.has(r.id)?' mine':''}">${'★'.repeat(+r.n||0)} ${esc(r.body)}</div>`).join('');
+    }else{
+      wall.innerHTML=rows.length?rows.map(r=>`<div class="card${mine.has(r.id)?' mine':''}"><span class="who">${esc(r.name||'익명')}</span>${esc(r.body)}</div>`).join(''):'<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
+    }
+  }
+  async function load(){ try{ render(await fetchRows(kind)); }catch(e){ st.textContent='서버에 닿지 않습니다 ('+e.message+'). SETUP SQL 과 주소를 확인해 주세요.'; } }
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const body=(bodyIn?.value||'').trim();
+    const o={kind,name:'',body,n:null};
+    if(ui==='mood'){ if(!picked){ st.textContent='기분 하나를 먼저 눌러 주세요.'; return; } o.name=picked; }
+    else if(ui==='stars'){ if(!picked){ st.textContent='별점을 먼저 눌러 주세요.'; return; } o.n=+picked; }
+    else if(ui==='chips'){ if(!body){ bodyIn.focus(); return; } }
+    else { if(!body){ bodyIn.focus(); return; } o.name=(nameIn?.value||'').trim(); myName=o.name; try{ localStorage.setItem('yeonsu:name',myName); }catch(e){} }
+    st.textContent='보내는 중…';
+    try{ const row=await insertRow(o); if(row){ mine.add(row.id); try{ localStorage.setItem('opening:mine:'+CODE+':'+kind,JSON.stringify([...mine])); }catch(e){} }
+      if(bodyIn) bodyIn.value=''; st.textContent='고맙습니다 🙂'; load(); }
+    catch(e){ st.textContent='보내지 못했습니다 ('+e.message+'). 다시 눌러 주세요.'; }
+  });
+  load(); setInterval(()=>{ if(box.closest('.panel').classList.contains('on')) load(); }, CONFIG.pollMs);
+});
+
+/* ── 강사 패널 ── */
+const admin=document.getElementById('admin');
+document.getElementById('adminCode').textContent=CODE;
+function openAdmin(){ admin.classList.add('on'); admin.scrollIntoView({block:'center'}); refreshCounts(); }
+document.getElementById('adminToggle').addEventListener('click',()=>{ admin.classList.toggle('on'); if(admin.classList.contains('on')) refreshCounts(); });
+if(Q.get('admin')==='1') openAdmin();
+async function refreshCounts(){
+  if(!ready){ document.getElementById('adminCounts').textContent='Supabase 설정 전입니다.'; return; }
+  try{ const rows=await fetchRows(); const c={}; rows.forEach(r=>c[r.kind]=(c[r.kind]||0)+1);
+    document.getElementById('adminCounts').innerHTML=`연수 코드 <span class="mono">${esc(CODE)}</span> · 응답 ${rows.length}건 — `+Object.entries(c).map(([k,v])=>`${esc(k)} ${v}`).join(' · ');
+  }catch(e){ document.getElementById('adminCounts').textContent='불러오지 못했습니다 ('+e.message+')'; }
+}
+document.getElementById('csvBtn').addEventListener('click',async()=>{
+  if(!ready) return;
+  const rows=await fetchRows();
+  const csv='﻿'+['kind,name,n,body,created_at',...rows.reverse().map(r=>[r.kind,r.name,r.n??'',r.body,r.created_at].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(','))].join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=`연수응답_${CODE}.csv`; a.click();
+});
+document.getElementById('clearBtn').addEventListener('click',async()=>{
+  if(!ready) return;
+  const pass=prompt(`연수 코드 "${CODE}" 의 응답을 모두 지웁니다. 비밀번호를 입력하세요.`); if(!pass) return;
+  try{ const r=await fetch(`${SB.url}/rest/v1/rpc/yeonsu_clear`,{method:'POST',headers:hdr(),body:JSON.stringify({p_s:CODE,p_pass:pass})});
+    const t=await r.text(); if(!r.ok) throw new Error(t.includes('wrong pass')?'비밀번호가 다릅니다':r.status);
+    alert(t+'건을 지웠습니다.'); refreshCounts(); location.reload(); }
+  catch(e){ alert('지우지 못했습니다: '+e.message); }
+});
+
+/* ── QR ── */
+function drawQR(){ const el=document.getElementById('giftQr'); const u=new URL(CONFIG.gift,location.href).href;
+  if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
+  el.innerHTML=`<span class="url">${esc(u)}</span>`; }
+if(window.qrcode) drawQR(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load',drawQR); setTimeout(()=>{ if(!window.qrcode) drawQR(); },2500); }
+</script>
+</body>
+</html>
