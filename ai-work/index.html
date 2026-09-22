@@ -219,6 +219,7 @@ html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
 #pAgent .txt{max-height:24em;overflow:auto;font-size:.92em}
 .drawer td.txt{color:var(--ink)}
 .drawer .cp{font-size:.78rem;padding:5px 11px}
+.drawer tr.sec td{background:var(--bg2);font-weight:600;color:var(--ink);padding:8px 12px;border-bottom:1px solid var(--line)}
 .dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:.45em;vertical-align:-.02em}
 .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
 details.answer summary::before{content:"🔒 "} details.answer[open] summary::before{content:"🔓 "}
@@ -294,6 +295,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
       <span>📍 <b id="metaPlace">학교로 찾아갑니다</b></span>
       <span>👩‍🏫 <b id="metaWho">교직원 · 전 교과</b></span>
       <span>💻 <b>노트북 · 크롬 · SenGPT(센스쿨 계정) · Google 계정</b></span>
+      <span>📌 <b>공문 주제: 담임·교무·교과 업무별 프롬프팅 공유·실습(ChatGPT·Gemini·Claude) → 우리 학교만의 업무 효율화 방안</b></span>
     </div>
     <div class="flow" id="flow"><!-- 단계 목록은 스크립트가 .step 에서 만듭니다 --></div>
     <div class="actions">
@@ -434,7 +436,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
         <li><input type="checkbox"><div><span class="what">맞은 개수를 옆 선생님과 비교하기</span><span class="how">같은 공문, 같은 프롬프트인데 개수가 다르면 모델이 다른 것.</span></div></li>
       </ol>
       <div class="pr" id="p2"><b class="pl">P2 · 되묻기</b><button class="btn cp" type="button">복사</button><div class="txt">기한 항목마다 근거가 된 원문 문장을 그대로 다시 인용해 줘. 원문에 요일이 있으면 그대로, 없으면 「요일 미기재」. 원문에 없는 항목은 「원문에 없음」으로 고쳐 줘.</div></div>
-      <div class="frame" data-embed="img/03-model-menu.jpg" data-cap="입력창 위 Auto — 모델을 고르는 자리입니다. 같은 프롬프트라도 모델이 다르면 결과가 다릅니다"></div>
+      <div class="frame" data-embed="img/03-model-menu.jpg" data-cap="입력창 위 Auto — ChatGPT(OpenAI)·Gemini(Google)·Claude(Anthropic)를 SenGPT 안에서 여기서 고릅니다. 같은 프롬프트라도 모델이 다르면 결과가 다릅니다"></div>
       <div class="detail">
         <p>이 채점에 오늘 연수에서 제일 긴 시간을 둡니다. AI 결과를 원문과 나란히 놓고 보는 습관이 여기서 생기지 않으면, 4단계에서 비서를 만들어도 비서가 틀린 기한을 그대로 캘린더에 넣게 되기 때문입니다.</p>
         <p>같은 공문에 같은 프롬프트를 넣어도 개수가 다를 수 있습니다. SenGPT 안에 모델이 여럿이고 기본값이 다르기 때문입니다. 저는 공문 추출은 표준 등급 모델로 두고, 가벼운 모델은 안내문 다듬기에만 씁니다. 개수가 다른 두 분 화면을 나란히 놓고 보면 그 차이가 바로 보입니다.</p>
@@ -523,10 +525,11 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
       <p class="kw">내 업무에 맞춘 비서 — 프리셋을 누르고 빈칸을 채우면, 지침문을 받는 프롬프트가 나옵니다</p>
       <p class="brief">프리셋 하나를 누르고 빈칸을 고친 뒤 「프롬프트 만들기」를 눌러보겠습니다! 그걸 SenGPT 새 대화에 붙여 넣으면 지침문과 대화 스타터 여섯 개가 옵니다. 빌더는 📖 상세 모드에서 채웁니다.</p>
       <div class="builder only-detail" id="builder">
-        <div class="f"><span class="lab">프리셋 — 누르면 ②③⑥⑦⑧이 채워집니다. 그다음 고치면 됩니다</span><div class="opts presets">
+        <div class="f"><span class="lab">프리셋 — 내 업무에 가까운 것 하나(담임·교무·교과). 누르면 ②③⑥⑦⑧이 채워지고, 그다음 고치면 됩니다</span><div class="opts presets">
           <button type="button" class="btn" data-preset="gongmun">📄 공문 담당자</button>
           <button type="button" class="btn" data-preset="damim">👨‍👩‍👧 담임 · 학부모 안내</button>
           <button type="button" class="btn" data-preset="jjokji">💬 부서 쪽지 많은 분</button>
+          <button type="button" class="btn" data-preset="gyogwa">📚 교과 · 수업</button>
         </div></div>
         <div class="f"><label for="b_role">① 학교·부서·담당 업무</label><input type="text" id="b_role" placeholder="예: ○○중학교 과학정보부, 디벗·정보화·과학실 업무 담당" maxlength="120"></div>
         <div class="f"><span class="lab">② AI에게 분석시킬 것 — 비서에게 넣을 재료</span><div class="opts">
@@ -536,6 +539,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
           <label><input type="checkbox" name="b_in" value="설문·조사 응답(CSV)">설문·조사 응답</label>
           <label><input type="checkbox" name="b_in" value="회의록·녹취">회의록·녹취</label>
           <label><input type="checkbox" name="b_in" value="학부모·학생 문의 글">학부모·학생 문의</label>
+          <label><input type="checkbox" name="b_in" value="교과서·성취기준·수업 자료">교과서·성취기준·수업 자료</label>
         </div></div>
         <div class="f"><span class="lab">③ 비서가 만들어 줄 것 — 결과물(표는 엑셀·구글 시트에 붙여 넣는 열·수식으로 옵니다)</span><div class="opts">
           <label><input type="checkbox" name="b_out" value="할 일·기한 추출표" checked>할 일·기한 추출표</label>
@@ -546,6 +550,8 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
           <label><input type="checkbox" name="b_out" value="회신 초안">회신 초안</label>
           <label><input type="checkbox" name="b_out" value="설문 문항">설문 문항</label>
           <label><input type="checkbox" name="b_out" value="가정통신문 초안">가정통신문 초안</label>
+          <label><input type="checkbox" name="b_out" value="지도안·활동지 초안">지도안·활동지 초안</label>
+          <label><input type="checkbox" name="b_out" value="평가 루브릭·수행평가 안내">루브릭·수행평가 안내</label>
           <label><input type="checkbox" name="b_out" value="학부모 안내문(e알리미용 5줄)">학부모 안내문(e알리미)</label>
           <label><input type="checkbox" name="b_out" value="번역(다국어 안내)">번역(다국어)</label>
         </div></div>
@@ -987,23 +993,23 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
 <!-- ═══════════ 6 나눔 ═══════════ -->
 <section class="step" id="s6" data-title="나눔" data-min="15">
   <div class="wrap">
-    <div class="step-h"><span class="num">8</span><h2>나눔 — 오늘 만든 것 하나를 벽에</h2><span class="min"><b>15</b>분</span></div>
-    <p class="goal">오늘 만든 것 하나를 벽에 올려보겠습니다! 비서가 써 준 안내문 한 토막이든, 방금 만든 구글 시트 링크든 좋습니다. 같은 공문인데 비서마다 답이 다르게 나오는 걸 같이 보는 시간입니다.</p>
+    <div class="step-h"><span class="num">8</span><h2>나눔 — 업무별 프롬프트 공유</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">오늘 내 업무에서 잘 먹힌 프롬프트 하나와 그 결과 한 토막을 벽에 올려보겠습니다! 담임·교무·교과 표시를 앞에 붙여 두면, 연수 뒤에 이 벽이 우리 학교 프롬프트 서랍이 됩니다. 방금 만든 구글 시트 링크도 올려보겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">비서가 써 준 것 한 토막 — 안내문 5줄, 추출표 한 줄, 회신 초안</p>
+      <p class="kw">잘 먹힌 프롬프트 하나 + 결과 한 토막 — 앞에 [담임] [교무] [교과]</p>
       <div class="live" data-kind="share1" data-max="600">
-        <div class="q">오늘 비서가 써 준 것 중 마음에 든 한 토막을 그대로 붙여 주세요(이름·전화·공문 제목은 빼고). 어느 프리셋으로 만든 비서인지 한 마디 붙이면 더 좋습니다.</div>
+        <div class="q">오늘 내 업무에서 잘 먹힌 프롬프트 하나와 그 결과 한 토막을 붙여 주세요(이름·전화·공문 제목은 빼고). 앞에 [담임] [교무] [교과] 중 하나를 붙여 주세요.</div>
         <form>
           <input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="예: [공문 담당자 비서] 11/5(목)까지 참가 신청서 제출 · 학교당 2명 · 교내 회신 기한: 10/30(금)" maxlength="600"></textarea>
+          <textarea name="body" placeholder="예: [교무] 「이 공문에서 내가 할 일과 기한을 표로」 → 11/5(목)까지 참가 신청서 제출 · 학교당 2명" maxlength="600"></textarea>
           <button class="btn primary" type="submit">올리기</button>
         </form>
         <div class="st"></div>
         <div class="wall"></div>
       </div>
       <div class="detail">
-        <p>같은 예제 공문을 넣었는데 비서마다 안내문이 다르게 나옵니다. 프리셋이 다르고, 빈칸을 다르게 채웠고, 모델이 다르기 때문입니다. 그 차이를 벽에서 같이 보면 각자 지침문에서 무엇을 고칠지가 보입니다.</p>
+        <p>공문의 연수 주제가 「담임·교무·교과 업무별 프롬프팅 공유 및 실습」입니다. 저는 그 공유를 발표 대신 벽으로 합니다. 같은 예제 공문을 넣었는데 비서마다 안내문이 다르게 나오는데, 프리셋이 다르고 빈칸을 다르게 채웠고 모델이 다르기 때문입니다. 그 차이를 벽에서 같이 보면 각자 지침문에서 무엇을 고칠지가 보입니다.</p>
       </div>
       <div class="cue">벽에 올라온 안내문 3개 소리 내 읽기 · 같은 문장이 어떻게 다르게 나왔는지 · 5분</div>
     </div>
@@ -1038,7 +1044,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
       <div class="grid2">
         <div class="box"><b>① 내 업무에 맞춘 비서</b><p>각자 SenGPT 계정 안에. 빌더와 제 완성본은 <a href="#s4">4단계</a>에, 완성본 파일은 <a href="files/agent-instructions.txt" download>여기</a>.</p></div>
         <div class="box"><b>② 내 캘린더의 기한</b><p>오늘 넣은 일정. 다음 공문은 연결한 비서의 「등록」으로, 연결이 막히면 <a href="#s3">3단계 선택 CSV</a>로.</p></div>
-        <div class="box"><b>③ 3색 표와 프롬프트 스무 개</b><p><a href="#s5">5단계 표</a>와 아래 서랍. 연수에 안 오신 선생님께 링크만 보내도 됩니다.</p></div>
+        <div class="box"><b>③ 3색 표와 업무별 프롬프트 스물두 개</b><p><a href="#s5">5단계 표</a>와 아래 서랍. 연수에 안 오신 선생님께 링크만 보내도 됩니다.</p></div>
       </div>
       <div class="detail">
         <p>숙제로 남기지 않으려고 전부 이 페이지에 순서대로 두었습니다. 다시 여실 때 필요한 것은 4단계 빌더와 아래 프롬프트 서랍, 그리고 5단계의 3색 표입니다.</p>
@@ -1047,24 +1053,29 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
     </div>
 
     <div class="blk only-detail">
-      <p class="kw">프롬프트 서랍 — 오늘 쓴 것과 더 두는 것 <button class="btn dlall" type="button" id="drawerDl">⬇️ 서랍 전체 TXT</button></p>
-      <p class="brief">P1~P5·P11·P12·P16~P20은 위 단계에 있는 것과 같습니다. P6~P10은 설문·관리표·분석·앱·이미지용, P13~P15는 학부모 안내·문의 회신·번역용으로, 같은 예제 공문에 이어서 씁니다.</p>
+      <p class="kw">업무별 프롬프트 서랍 — 담임 · 교무·행정 · 교과·수업 <button class="btn dlall" type="button" id="drawerDl">⬇️ 서랍 전체 TXT</button></p>
+      <p class="brief">담임·교무·교과 업무별로 묶었습니다. P1~P5(공문 읽기·안내·일정)는 2·3단계에 그대로 있고, 여기 있는 것은 오늘 쓴 것과 더 두는 것입니다. 나눔 벽에 올라온 프롬프트는 연수 뒤에 이 서랍에 더하겠습니다.</p>
       <table class="drawer">
         <tr><th style="width:7em">번호</th><th>프롬프트</th><th style="width:5em"></th></tr>
-        <tr><td>P6 · 조사 문항</td><td class="txt">이 연수 참가 희망 조사 문항 5개를 만들어 줘. 문항마다 응답 형식(객관식/체크박스/단답). 개인정보는 이름·소속만.</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P7 · 관리표</td><td class="txt">참가 희망자 관리표의 열 이름과 예시 1행을 표로 만들어 줘. 회차별 인원을 세는 COUNTIF 수식도 한 줄.</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P8 · 응답 분석</td><td class="txt">이 응답 파일에서 회차별 희망 인원, 노트북 지참 여부, 중복 제출·빈칸을 표로 정리해 줘. 계산 근거(어느 행을 셌는지)도 함께.</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P9 · 앱 고치기</td><td class="txt">아래 HTML 파일에 「기한이 3일 이내면 카드를 빨간 테두리로」 기능을 추가해 줘. 한 파일로, 전체를 다시 출력해. 기존 기능은 바꾸지 마. [파일 전체 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P11 · 쪽지 정리</td><td class="txt">아래 쪽지들에서 내가 할 일을 표로 정리해 줘. 열은 출처(부서·직책·받은 때) | 할 일 | 기한(원문 표기 그대로, 없으면 「원문에 없음」) | 회신 방법 | 근거 문장. 날짜가 아닌 기한은 그대로 옮기고 「확인 필요」라고 표시해. 사람 이름은 쓰지 마. [쪽지들 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P12 · 회신 초안</td><td class="txt">위 표에서 회신이 필요한 항목마다 3줄 회신 초안을 써 줘. 첫 줄은 무엇을·언제까지·어떻게. 존댓말, 이름 없이, 인사말 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr class="sec"><td colspan="3">👩‍🏫 담임 — 학부모·학급</td></tr>
         <tr><td>P13 · 학부모 안내 5줄</td><td class="txt">이 공문(또는 가정통신문) 내용을 학부모께 보내는 e알리미 안내문으로 5줄 이내로 써 줘. 무엇을·언제까지·어떻게·회신 방법·문의처(부서명까지). 학생 이름·반은 넣지 말고, 날짜·장소·금액은 원문 그대로, 원문에 없는 것은 빈칸(____)으로. 호칭은 「학부모님」, 끝은 「감사합니다」.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P14 · 문의 회신 초안</td><td class="txt">아래는 학부모 문의 내용이야(학생 정보는 지웠어). 회신 초안을 5줄로 써 줘: 확인한 사실 → 학교가 한 조치·할 조치 → 다음 연락 방법과 시점. 사과가 필요하면 한 문장만, 약속하지 못할 것은 쓰지 마. 호칭은 「학부모님」. [문의 내용 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P15 · 안내문 번역</td><td class="txt">위 안내문을 ○○어로 번역해 줘. 날짜·시간·금액·전화번호는 원문 그대로 두고, 학교 용어(현장체험학습·회신서·학년부 등)는 뜻이 통하게 풀어 써. 끝에 「번역본은 참고용이며 원문은 한국어본입니다」를 그 언어로 한 줄.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P16 · 학급 설문 문항</td><td class="txt">학기 초 자기소개와 「우리가 원하는 우리 반 모습」을 묻는 Google Forms 문항을 만들어 줘. 자기소개 5문항, 우리 반 모습 3문항(객관식 2·서술형 1), 자리 배치 참고용 2문항. 문항마다 응답 형식. 이름 대신 번호만.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P17 · 학급 설문 분석</td><td class="txt">아래는 우리 반 설문 응답 CSV야(번호만). ① 우리가 원하는 우리 반 모습을 3묶음으로, 묶음마다 대표 응답 2개를 번호와 함께 그대로 인용 ② 자리 배치 고려사항 표(번호 | 고려사항 | 근거 응답) ③ 개별로 볼 응답은 번호만. 응답에 없는 내용은 쓰지 마.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P18 · 총회 설문 분석</td><td class="txt">학생들이 쓴 「부모님께 들으면 행복해지는 말」「듣고 싶지 않은 말」 응답(익명)을 각각 5묶음으로 묶고, 묶음마다 학생 표현 그대로 2개씩 인용하고 몇 명이 썼는지 세어 줘. 특정 가정을 알아볼 표현은 빼고, 슬라이드 한 장 길이로.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr class="sec"><td colspan="3">🗂 교무·행정 — 공문·쪽지·조사·시트</td></tr>
+        <tr><td>P6 · 조사 문항</td><td class="txt">이 연수 참가 희망 조사 문항 5개를 만들어 줘. 문항마다 응답 형식(객관식/체크박스/단답). 개인정보는 이름·소속만.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P7 · 관리표</td><td class="txt">참가 희망자 관리표의 열 이름과 예시 1행을 표로 만들어 줘. 회차별 인원을 세는 COUNTIF 수식도 한 줄.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P8 · 응답 분석</td><td class="txt">이 응답 파일에서 회차별 희망 인원, 노트북 지참 여부, 중복 제출·빈칸을 표로 정리해 줘. 계산 근거(어느 행을 셌는지)도 함께.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P11 · 쪽지 정리</td><td class="txt">아래 쪽지들에서 내가 할 일을 표로 정리해 줘. 열은 출처(부서·직책·받은 때) | 할 일 | 기한(원문 표기 그대로, 없으면 「원문에 없음」) | 회신 방법 | 근거 문장. 날짜가 아닌 기한은 그대로 옮기고 「확인 필요」라고 표시해. 사람 이름은 쓰지 마. [쪽지들 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P12 · 회신 초안</td><td class="txt">위 표에서 회신이 필요한 항목마다 3줄 회신 초안을 써 줘. 첫 줄은 무엇을·언제까지·어떻게. 존댓말, 이름 없이, 인사말 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P19 · 디벗 대응표</td><td class="txt">표1(MDM 기기 목록: 기기 번호·시리얼·모델)과 표2(학번 목록)를 기기 번호 순 → 학번 순으로 맞춰 학번 | 기기 번호 | 시리얼번호 표로. 시리얼은 한 글자도 바꾸지 말고, 남는 기기·학번은 따로, 없는 것은 만들지 마.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P20 · 의무연수 이수 시트</td><td class="txt">교직원 법정 의무연수 이수 확인 시트를 만들어 줘. 연수 목록: [우리 학교 목록]. 교직원은 N명, 이름 대신 번호로. 출력: ① 탭 구분 표(번호 | 부서 | 연수마다 「이수」「이수일」 | 비고) ② 이수율(COUNTIF)·사람별 이수 개수·미이수자 FILTER 수식 ③ 미이수 칸 조건부 서식 한 줄. 표 밖 설명 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr class="sec"><td colspan="3">📚 교과·수업 — 지도안·평가·자료</td></tr>
+        <tr><td>P21 · 지도안·활동지</td><td class="txt">아래 성취기준(코드와 문장 그대로)으로 한 차시 지도안과 활동지 초안을 써 줘. 도입 발문 2개, 활동 2개(모둠·개인), 정리 질문 1개. 활동은 성취기준 범위 안에서만, 교과서에 없는 실험·수치는 만들지 마. 학생에게 보이는 문장은 쉬운 말로. [성취기준 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P22 · 루브릭·수행평가 안내</td><td class="txt">이 수행평가 과제의 평가 루브릭을 3수준(상·중·하)으로 표로 만들어 줘. 평가 요소는 성취기준에서만 뽑고, 수준 설명은 학생이 읽고 자기 점검할 수 있는 문장으로. 아래에 학생·학부모용 수행평가 안내문 5줄(무엇을·언제·어떻게·유의점·문의 부서). [과제 설명·성취기준 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P9 · 앱 고치기</td><td class="txt">아래 HTML 파일에 「기한이 3일 이내면 카드를 빨간 테두리로」 기능을 추가해 줘. 한 파일로, 전체를 다시 출력해. 기존 기능은 바꾸지 마. [파일 전체 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P10 · 안내 이미지</td><td class="txt">교직원 연수 안내 카드뉴스 배경 1장. 글자 없이, 노트북과 사람 실루엣, 밝은 파랑 계열, 정사각형. 실제 인물·로고 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
       </table>
       <div class="detail">
@@ -1078,6 +1089,19 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
         <div class="box"><b>공문 기한 보드 앱 고치기</b><p>P9처럼 HTML 한 파일을 AI에게 통째로 주고 기능 하나를 더하는 방법과 코드 도우미는 <a href="../vibecoding/">바이브코딩 교안</a>에 있습니다.</p></div>
         <div class="box"><b>행사 안내 영상</b><p>공문의 행사를 알리는 짧은 영상은 <a href="../senedu-video/">SenGPT 영상 만들기 페이지</a>의 순서 그대로입니다. 첫 장면과 끝 장면을 정하고 만듭니다.</p></div>
         <div class="box"><b>계정 · 사용량 · 팝업</b><p>SenGPT는 센스쿨 계정만(2026. 5.~), 학교 관리자 승인 필요, 개인별 월간 사용량 한도(매월 1일 초기화). 학교 Microsoft 365 계정의 Copilot은 학교 관리자가 M365 관리 센터에서 계정을 만들어 준 뒤 m365.cloud.microsoft 에서 엽니다.</p></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">우리 학교만의 업무 효율화 방안 — 오늘 만든 것 세 가지를 학교 공용으로</p>
+      <p class="brief">공문의 마지막 목표가 「우리 학교만의 업무 효율화 방안을 마련해 구성원 모두 활용」입니다. 저는 그걸 계획서로 쓰지 않고, 오늘 만든 세 가지를 학교 공용으로 돌리는 것으로 갈음합니다.</p>
+      <div class="grid2">
+        <div class="box"><b>① 부서별 비서 하나</b><p>담임·교무·교과 프리셋으로 만든 지침문 TXT를 학교 공용 드라이브에 두고, 부서마다 하나씩 SenGPT에 만듭니다. 에이전트 화면에 공유 단추가 있으면 그것으로, 없으면 TXT로 각자 3분.</p></div>
+        <div class="box"><b>② 우리 학교 프롬프트 서랍</b><p>나눔 벽에 올라온 [담임]·[교무]·[교과] 프롬프트를 오프닝 🔒 강사 패널에서 CSV로 내려 공용 시트로 옮깁니다. 위 서랍의 학교판입니다.</p></div>
+        <div class="box"><b>③ 공용 시트 하나</b><p>6단계에서 만든 의무연수 이수 확인 시트부터. 담당자가 만들고 구성원은 체크만 하는 표가 하나씩 늘어나는 것 — 공문이 말하는 「업무 혁신 구축」을 저는 이렇게 읽습니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>세 가지가 다 오늘 연수 안에서 나온 것입니다. 연수 뒤에 따로 모여 방안을 쓰는 일은 대개 흐지부지되어서, 저는 연수 안에서 만든 것을 그대로 학교 것으로 넘기는 쪽을 택합니다. 다음 학교에서는 이 페이지에 그 학교 이름과 서랍만 바뀝니다.</p>
       </div>
     </div>
 
@@ -1326,7 +1350,8 @@ document.querySelectorAll('.cp').forEach(b=>{
   const PRESETS={
     gongmun:{ins:['에듀파인 공문','쿨메신저 쪽지'], outs:['할 일·기한 추출표','교직원 안내문','담당자 체크리스트','일정 계획표(캘린더용)'], name:'공문 업무비서', style:'개조식, 존댓말, 표 먼저', edge:'붙임에만 기한이 있음, 이메일 접수 불가 같은 조건이 본문 끝에 있음'},
     damim:{ins:['가정통신문·학교 안내','학부모·학생 문의 글','쿨메신저 쪽지'], outs:['학부모 안내문(e알리미용 5줄)','회신 초안','번역(다국어 안내)','일정 계획표(캘린더용)'], name:'학부모 안내 비서', style:'「학부모님」 호칭, 5줄 이내, 끝맺음은 「감사합니다」, 사과는 한 문장', edge:'개별 학생 이야기(결석·지각·상담·사고·성적)는 넣지 않음 — 틀만 받고 이름은 직접 넣음'},
-    jjokji:{ins:['쿨메신저 쪽지','에듀파인 공문','회의록·녹취'], outs:['할 일·기한 추출표','담당자 체크리스트','회신 초안','일정 계획표(캘린더용)'], name:'부서 업무비서', style:'개조식, 존댓말, 회신은 3줄', edge:'쪽지에 첨부만 옴, 「이번 주까지」처럼 날짜가 아닌 기한'}
+    jjokji:{ins:['쿨메신저 쪽지','에듀파인 공문','회의록·녹취'], outs:['할 일·기한 추출표','담당자 체크리스트','회신 초안','일정 계획표(캘린더용)'], name:'부서 업무비서', style:'개조식, 존댓말, 회신은 3줄', edge:'쪽지에 첨부만 옴, 「이번 주까지」처럼 날짜가 아닌 기한'},
+    gyogwa:{ins:['교과서·성취기준·수업 자료','설문·조사 응답(CSV)','에듀파인 공문'], outs:['지도안·활동지 초안','평가 루브릭·수행평가 안내','설문 문항','일정 계획표(캘린더용)'], name:'교과 수업 비서', style:'학생에게 보이는 글은 쉬운 말과 짧은 문장, 교사용은 개조식', edge:'성취기준 코드와 문장은 원문 그대로, 활동은 그 범위 안에서만'}
   };
   B.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{
     const p=PRESETS[btn.dataset.preset]; if(!p) return;
@@ -1382,6 +1407,7 @@ document.querySelectorAll('.cp').forEach(b=>{
     L.push('열: 항목 | 내용 | 근거 문장. 행: 문서 제목 / 발신 / 시행일 / 목적(한 줄) / 대상 / 내가 해야 할 일(번호) / 각 일의 기한 / 제출 방법 / 붙임(첨부 여부) / 행사·연수 일시와 장소 / 주의사항 / 예산·출장 / 확인이 필요한 것. 표 아래에 한 줄 요약과 「지금 당장 할 일 1개」.');
     if(ins.includes('쿨메신저 쪽지')) L.push('쿨메신저 쪽지가 여러 개 붙여 넣어지면: 출처(부서·직책·받은 때) | 할 일 | 기한(원문 그대로, 없으면 「원문에 없음」) | 회신 방법 | 근거 문장 표로 정리한다. 「이번 주까지」처럼 날짜가 아닌 기한은 그대로 옮기고 「확인 필요」라고 표시한다. 「회신 초안」 요청이 있으면 항목마다 3줄(무엇을·언제까지·어떻게), 이름 없이 쓴다.');
     if(parent) L.push('학부모 안내 요청에는 e알리미용 5줄: 무엇을·언제까지·어떻게·회신 방법·문의처(부서명까지). 호칭은 「학부모님」. 번역 요청에는 같은 내용을 요청한 언어로 쓰되 날짜·시간·금액·전화번호는 원문 그대로 두고, 끝에 「번역본은 참고용이며 원문은 한국어본입니다」를 그 언어로 한 줄 덧붙인다. 학부모 문의에 대한 회신 초안은 5줄: 확인한 사실 → 학교가 한 조치·할 조치 → 다음 연락 방법과 시점. 약속하지 못할 것은 쓰지 않는다.');
+    if(outs.some(o=>/지도안|루브릭|수행평가/.test(o))||ins.includes('교과서·성취기준·수업 자료')) L.push('지도안·활동지 요청에는 성취기준을 코드와 문장 그대로 인용하고, 활동은 그 범위 안에서만 만든다. 평가 루브릭은 3~4수준으로, 학생에게 보이는 문장은 쉬운 말로 쓴다. 교과서에 없는 실험·수치는 만들지 않는다.');
     if(ins.includes('설문·조사 응답(CSV)')) L.push('설문·조사 응답 파일이 올라오면: 선택형은 집계표, 서술형은 주제별로 묶어 핵심 의견 3개. 어느 행을 셌는지 계산 근거를 함께 적고, 중복·빈칸을 따로 표시한다.');
     if(ex){ L.push(''); L.push('[우리 학교 말투 예시 — 호칭·길이·끝맺음을 그대로 따라 쓸 것]'); L.push(ex); }
     L.push('');
