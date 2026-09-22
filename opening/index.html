@@ -171,6 +171,10 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <div class="today" id="today">
     <div class="t"><small>오늘 연수</small><b id="todayTitle">(연수 제목은 주소의 t= 로 들어옵니다)</b></div>
     <a class="btn big primary" id="toPage" href="#" style="display:none">오늘 연수 페이지로 →</a>
+    <div id="twoWays" style="display:none">
+      <p class="small" style="margin:0 0 8px">오늘 연수 페이지는 두 갈래입니다. 아이스브레이킹의 네 문항 결과에 따라 둘 중 하나로 갑니다.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn big" id="goA" href="#">🤖 SenGPT 에이전트 기본 실습</a><a class="btn big primary" id="goB" href="#">📄 공문 한 장에서 시작하는 AI 업무 자동화</a></div>
+    </div>
   </div>
   <p class="small only-detail">이 페이지는 연수를 시작할 때와 끝낼 때 쓰는 공용 페이지입니다. 폰으로 열어 두시면 벽에 글을 올릴 수 있고, 앞 화면에는 🎤 발표 모드로 벽만 크게 보입니다.</p>
 </section>
@@ -338,7 +342,7 @@ const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 
 const POLL = (Q.get('poll')||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
-if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; }
+if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; document.getElementById('toPage').style.display='none'; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
@@ -349,7 +353,7 @@ if(/^https?:\/\//i.test(REFLECT)){
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
 if(TITLE){ document.getElementById('todayTitle').textContent = TITLE; document.title = TITLE+' · 오프닝'; }
-if(TO){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }
+if(TO && !(Q.get('poll')||'').trim()){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }   // poll= 이 있으면 두 갈래 버튼이 대신 뜸
 document.getElementById('giftLink').href = CONFIG.gift;
 (function(){ const im=new Image(); im.onload=()=>{ const p=document.getElementById('photo'); p.innerHTML=''; p.appendChild(im); }; im.alt='조승재'; im.src=CONFIG.photo; })();
 
@@ -415,7 +419,7 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
       const pct=N?Math.round(ready/N*100):0;
       const goB = N>0 && pct>=60;
       const v=document.getElementById('verdict');
-      if(!N){ v.innerHTML='<div class="big">아직 응답이 없습니다</div><div class="why">네 문항을 누르고 보내 주세요.</div>'; }
+      if(!N){ v.innerHTML=`<div class="big">아직 응답이 없습니다</div><div class="why">네 문항을 누르고 보내 주세요. 결과에 따라 아래 둘 중 하나로 갑니다.</div><div class="go"><a class="btn big" href="${esc(PATH_A)}">🤖 에이전트 기본 실습</a><a class="btn big" href="${esc(PATH_B)}">📄 공문 한 장에서 시작하는 AI 업무 자동화</a></div>`; }
       else{
         v.innerHTML=`<div class="big">${goB?'📄 공문 한 장으로 바로 갑니다':'🤖 에이전트 기본 실습부터 갑니다'}</div>
           <div class="why">${N}명 중 에이전트를 만들어 봤거나 뜻을 아는 분 ${ready}명(${pct}%) · 공문 실습 희망 ${wantB}명(${Math.round(wantB/N*100)}%)</div>
