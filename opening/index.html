@@ -352,8 +352,9 @@ if(POLL){ document.getElementById('diagBlk').style.display=''; document.getEleme
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
-  document.getElementById('iceSub').textContent='먼저 Reflect 에서 지금 마음 하나를 골라 주세요. 아래 기분 하나와 한 줄은 이 벽에 모입니다.';
-  document.getElementById('moodQ').textContent='지금 기분 — Reflect 가 안 열리는 분은 여기서';
+  document.getElementById('iceSub').textContent='Reflect 에서 지금 마음 하나를 골라 주세요. 그다음 교과와 학교를 적어 주시면 됩니다.';
+  const mood=document.querySelector('.live[data-kind=mood]'); if(mood) mood.style.display='none';
+  const rc=document.getElementById('reflectCard'); rc.style.borderBottom='0'; rc.style.paddingBottom='0'; rc.style.marginBottom='0';
 }
 
 /* ── 제목·링크·사진 ── */

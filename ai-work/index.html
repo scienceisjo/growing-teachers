@@ -60,6 +60,8 @@ html[data-mode="present"] .detail{display:none}
 .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
 .btn.primary:hover{background:var(--blue-h);text-decoration:none}
 .btn.big{font-size:1rem;padding:11px 22px}
+.dlrow{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+.dlrow .btn{text-decoration:none}
 .timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
 html[data-mode="present"] .timer{display:inline-flex}
 .timer.over{border-color:var(--bad);color:var(--bad)}
@@ -332,7 +334,8 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
 
     <div class="blk">
       <p class="kw">이 페이지를 각자 노트북에서 여는 것부터</p>
-      <p class="brief">실습 단계마다 체크칸이 있어서 어디까지 했는지 기기에 저장됩니다. 준비 세 가지 — SenGPT 로그인 · 팝업 허용 · 예제 공문 내려받기 — 를 아래 체크칸에 표시하면서 갑니다.</p>
+      <p class="brief">실습 단계마다 체크칸이 있어서 어디까지 했는지 기기에 저장됩니다. 준비 세 가지 — SenGPT 로그인 · 팝업 허용 · 예제 공문 내려받기 — 를 아래 체크칸에 표시하면서 갑니다. 예제 공문은 이 단추로 받습니다.</p>
+      <div class="dlrow"><a class="btn big primary" href="files/gongmun-01.pdf" download>⬇️ 예제 공문 PDF 내려받기</a><a class="btn big" href="files/gongmun-01.txt" download>⬇️ 같은 내용 텍스트(붙여넣기용)</a></div>
       <ol class="steps" data-key="prep">
         <li><input type="checkbox"><div><span class="what">SenGPT 열기</span><span class="how">센스쿨(senedu.kr) 교사 로그인 → 도구모음 → SenGPT. 새 창으로 열립니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">팝업 차단 풀기</span><span class="how">새 창이 안 뜨면 주소창 오른쪽 🚫 아이콘 → 「항상 허용」 → 다시 SenGPT.</span></div></li>
@@ -368,6 +371,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
     <div class="blk">
       <p class="kw"><span class="tag">예제</span>예제 공문 — 교육지원청이 보낸 연수 참가 신청 안내(가상)</p>
       <p class="brief">실제 학교·인물과 무관한 가상 공문입니다. 개인정보가 없어서 어느 계정에 올려도 됩니다.</p>
+      <div class="dlrow"><a class="btn big primary" href="files/gongmun-01.pdf" download>⬇️ 예제 공문 PDF 내려받기</a><a class="btn big" href="files/gongmun-01.txt" download>⬇️ 같은 내용 텍스트(붙여넣기용)</a></div>
       <table>
         <tr><th style="width:9em">항목</th><th>내용</th></tr>
         <tr><td>제목</td><td>2026학년도 2학기 교원 디지털·AI 활용 직무연수 운영 및 참가 신청 안내</td></tr>
@@ -398,7 +402,7 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
       <p class="brief">SenGPT 채팅의 문서 검토에 PDF를 올리고 P1을 붙여 넣어보겠습니다! 표가 세 열 열세 행으로 오면 다음으로 넘어갑니다.</p>
       <ol class="steps" data-key="do1">
         <li><input type="checkbox"><div><span class="what">새 대화를 열고 「문서 검토」 고르기</span><span class="how">SenGPT [채팅] → 문서 검토. 그 항목이 안 보이면 입력창의 📎 파일 첨부.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">예제 공문 PDF 올리기</span><span class="how">01 예제 공문(PDF). 안 올라가면 같은 이름의 텍스트 파일 내용을 입력창에 붙여넣기.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">예제 공문 PDF 올리기</span><span class="how">아직 안 받으셨으면 <a href="files/gongmun-01.pdf" download>⬇️ 예제 공문 PDF</a>. 안 올라가면 <a href="files/gongmun-01.txt" download>같은 내용 텍스트</a>를 입력창에 붙여넣기.</span></div></li>
         <li><input type="checkbox"><div><span class="what">P1 붙여넣고 보내기</span><span class="how">아래 카드의 [복사] → 입력창에 붙여넣기 → 보내기.</span></div></li>
         <li><input type="checkbox"><div><span class="what">표가 나왔는지 보기</span><span class="how">항목 · 내용 · 근거 문장 세 열에 13행. 줄글로 오면 「표로 다시」 한 줄.</span></div></li>
       </ol>
