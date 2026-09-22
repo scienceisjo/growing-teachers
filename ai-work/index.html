@@ -92,6 +92,17 @@ html[data-course="lite"] .blk.pro,
 html[data-course="lite"] .step.pro-step{display:none}
 @media (max-width:720px){ .shot2{grid-template-columns:1fr} }
 
+/* ── 1단계 흐름 목록 ── */
+.flowlist{list-style:none;margin:12px 0;padding:0}
+.flowlist li{display:grid;grid-template-columns:2.2em 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line2)}
+.flowlist li:first-child{border-top:0;padding-top:4px}
+.flowlist .n{width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.9rem}
+.flowlist b{display:block;margin-bottom:2px}
+.flowlist p{margin:0 0 6px;color:var(--ink2);font-size:.95em;max-width:40em}
+.flowlist .frame{margin:8px 0 0;max-width:560px}
+.flowlist .shot2{max-width:760px}
+html[data-mode="present"] .flowlist p{color:var(--ink)}
+
 /* ── 표지 모식도 ── */
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
 .pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
@@ -309,11 +320,11 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
 
 <main>
 
-<!-- ═══════════ 1 시연 ═══════════ -->
-<section class="step" id="s1" data-title="시연" data-min="10">
+<!-- ═══════════ 1 안내 ═══════════ -->
+<section class="step" id="s1" data-title="안내" data-min="10">
   <div class="wrap">
-    <div class="step-h"><span class="num">1</span><h2>시연 — 오늘 만드는 것 네 가지, 예제 공문 한 장으로</h2><span class="min"><b>10</b>분</span></div>
-    <p class="goal">먼저 오늘 만들 네 가지를 보여 드리고, 예제 공문을 소개하고, 준비 세 가지를 같이 확인해보겠습니다!</p>
+    <div class="step-h"><span class="num">1</span><h2>안내 — 오늘 이런 것들이 됩니다, 흐름 순서대로</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">먼저 준비 세 가지를 같이 확인하고, 오늘 무엇이 되는지를 흐름 순서대로 캡처와 함께 안내해보겠습니다! 제가 직접 돌리는 시연은 하지 않고 바로 실습으로 갑니다.</p>
 
     <div class="blk">
       <p class="kw">이 페이지를 각자 노트북에서 여는 것부터</p>
@@ -336,17 +347,22 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
     </div>
 
     <div class="blk">
-      <p class="kw">완성본 네 장 — 추출표 · 안내문 · 체크리스트 · 캘린더</p>
-      <p class="brief">기능을 구경하는 대신 이 네 장을 각자 계정에서 만들어보겠습니다! 넷 다 예제 공문 한 장에서 나옵니다.</p>
-      <div class="grid2">
-        <div class="box"><b>① 추출표</b><p>내가 할 일 · 기한 · 제출 방법 · 붙임을 13행 표로. 칸마다 근거 문장이 붙습니다.</p></div>
-        <div class="box"><b>② 메신저 안내문</b><p>5~7줄. 첫 줄에 무엇을·언제까지·어떻게. 교내 회신 기한은 빈칸으로 와서 직접 채웁니다.</p></div>
-        <div class="box"><b>③ 담당자 체크리스트</b><p>희망자 조사 → 2명 선정 → 신청서 제출 → 출장 처리. 항목마다 기한과 산출물.</p></div>
-        <div class="box"><b>④ 캘린더 일정</b><p>[마감] 11/5 · [안내] 11/11 · [연수] 11/18 · 11/25. 각자 Google 캘린더에 실제로 들어갑니다.</p></div>
-      </div>
+      <p class="kw">오늘 이런 것들이 됩니다 — 공문 한 장이 지나가는 순서</p>
+      <p class="brief">아래 일곱 칸을 오늘 순서대로 직접 해보겠습니다! 손으로 프롬프트를 넣어 만드는 데 2·3단계 30분, 같은 일을 비서에게 맡기면 3분입니다.</p>
+      <ol class="flowlist">
+        <li><span class="n">1</span><div><b>공문 올리기</b><p>에듀파인에서 저장한 PDF를 SenGPT 입력창의 +로 올립니다. HWP·HWPX도 됩니다.</p><div class="frame" data-embed="img/04-attach-menu.jpg" data-cap="입력창의 + → 파일 업로드"></div></div></li>
+        <li><span class="n">2</span><div><b>할 일·기한을 표로 받기</b><p>프롬프트 하나로 13행 표가 옵니다. 칸마다 근거 문장이 붙고, 원문에 없는 건 「원문에 없음」이라고 씁니다.</p><div class="frame" data-embed="img/06-result-table.jpg" data-cap="P1 결과 — 항목·내용·근거 문장"></div></div></li>
+        <li><span class="n">3</span><div><b>안내문과 체크리스트</b><p>같은 대화에서 메신저 안내문 5줄과 담당자 체크리스트가 나옵니다. 교내 회신 기한은 빈칸으로 와서 직접 채웁니다.</p></div></li>
+        <li><span class="n">4</span><div><b>캘린더에 넣기</b><p>일정 계획표(제출 마감·연수일·안내)를 보고 「등록」 한마디, 급하면 직접 3건. [마감] 11/5 · [안내] 11/11 · [연수] 11/18·25가 각자 캘린더에 들어갑니다.</p></div></li>
+        <li><span class="n">5</span><div><b>나만의 비서로 저장</b><p>빈칸 여덟 개를 채워 지침문을 받고 에이전트로 만들면, 다음 공문부터는 올리기만 하면 됩니다.</p><div class="shot2"><div class="frame" data-embed="img/08-myagents.jpg" data-cap="나만의 에이전트 → 만들기"></div><div class="frame" data-embed="img/11-agent-prompt.jpg" data-cap="지침 칸에 받은 지침문을 붙입니다"></div></div></div></li>
+        <li><span class="n">6</span><div><b>도구 연결, 그리고 다른 AI</b><p>Google 캘린더를 붙이면 등록까지 비서가 합니다. 사용량이 모자라면 같은 지침문 TXT를 Gemini·ChatGPT에 넣습니다.</p><div class="frame" data-embed="img/10-agent-tools.jpg" data-cap="에이전트 도구 — Google Calendar 연결"></div></div></li>
+        <li><span class="n">7</span><div><b>시트와 설문</b><p>의무연수 이수 확인 시트, 모둠 편성 초안 — 표의 뼈대와 수식은 AI가, 이름은 사람이 넣습니다.</p></div></li>
+      </ol>
       <div class="detail">
-        <p>저는 완성본을 먼저 보여 드립니다. 무엇을 만드는지 알고 시작해야 중간에 길을 잃지 않기 때문입니다. 네 번째 캘린더 일정은 화면으로 보여 드리고 끝이 아니라, 3단계에서 각자 캘린더에 실제로 들어갑니다.</p>
+        <p>직접 돌려 보여 드리는 대신 흐름을 캡처로 안내하는 이유는 시간 때문입니다. 시연 10분을 아끼면 그만큼 선생님들 손으로 하는 시간이 늘어납니다. 무엇이 되는지만 알고 시작하면 중간에 길을 잃지 않습니다.</p>
+        <p>그런데도 2·3단계에서 30분을 손으로 하는 이유는, 비서가 무엇을 틀리는지 알려면 한 번은 손으로 해 보고 원문과 맞춰 봐야 하기 때문입니다. 저는 이 순서를 바꾸지 않습니다.</p>
       </div>
+      <div class="cue">한 칸 20초씩, 캡처 가리키며 말로만 · 여기서 질문 받지 않기 · 7분 안에</div>
     </div>
 
     <div class="blk">
@@ -367,14 +383,6 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
       </div>
     </div>
 
-    <div class="blk">
-      <p class="kw">비서에게 맡기면 3분 — 제가 먼저 보여 드리는 시연</p>
-      <p class="brief">같은 공문을 제 비서에게 주면 추출표·안내문·일정 계획표가 한 번에 나옵니다. 먼저 제가 3분 시연해보겠습니다! 그 비서를 4단계에서 각자 만듭니다.</p>
-      <div class="detail">
-        <p>손으로 프롬프트를 넣어 가며 만드는 데 2단계와 3단계를 합쳐 30분을 씁니다. 같은 공문을 비서에게 맡기면 3분입니다. 그런데도 30분을 먼저 두는 이유는, 비서가 무엇을 틀리는지 알려면 한 번은 손으로 해 보고 원문과 맞춰 봐야 하기 때문입니다. 저는 이 순서를 바꾸지 않습니다.</p>
-      </div>
-      <div class="cue">시연 3분 · 결과 검증은 안 하고 넘어감(2단계에서 같이) · 「등록할까요?」에서 멈춘 화면 보여 주기</div>
-    </div>
   </div>
 </section>
 
