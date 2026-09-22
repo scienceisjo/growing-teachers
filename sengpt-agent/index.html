@@ -225,6 +225,20 @@ html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
 .builder .hint{font-size:.85em;color:var(--ink3)}
 html[data-mode="present"] .builder{display:none}
 
+/* 회사별 에이전트 지도 */
+.tblx{overflow-x:auto;margin:12px 0;-webkit-overflow-scrolling:touch}
+.tblx table{margin:0;min-width:700px;font-size:.9em}
+.tblx th small{display:block;font-weight:400;opacity:.8;font-size:.8em;line-height:1.3;margin-top:2px}
+.tblx td{word-break:keep-all;line-height:1.4}
+.tblx td .i{display:block}
+.tblx td .i+.i{margin-top:3px}
+.tblx td .small{display:block;margin:1px 0 3px;line-height:1.35}
+.tblx td.me{background:var(--blue-t)}
+.box p b{display:inline;margin:0}                 /* 문단 안의 굵은 글자는 줄을 끊지 않는다(출처 상자) */
+.box.me{border-color:var(--blue);background:var(--blue-t)}
+.box .kv{margin:0}
+.box .kv+.kv{margin-top:6px}
+.box .k{color:var(--ink);font-weight:600;margin-right:.35em}
 .frame.narrow{max-width:560px}
 .frame.narrow img{width:100%}
 .diagram{display:block;width:100%;max-width:760px;height:auto;margin:14px 0 6px;font-family:inherit}
@@ -287,7 +301,7 @@ html[data-mode="present"] .builder{display:none}
 <section class="step" id="s1" data-title="들어가기" data-min="10">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>들어가기 — 센스쿨에서 SenGPT를 열고, 에이전트가 무엇인지 같이 보기</h2><span class="min"><b>10</b>분</span></div>
-    <p class="goal">센스쿨에 교사로 로그인해 도구모음에서 SenGPT를 열고, 모델과 사용량을 확인한 뒤, 채팅과 에이전트가 무엇이 다른지 화면으로 같이 보겠습니다!</p>
+    <p class="goal">센스쿨에 교사로 로그인해 도구모음에서 SenGPT를 열고, 모델과 사용량을 확인한 뒤, 채팅과 에이전트가 무엇이 다른지, 그리고 다른 회사에서는 같은 것을 무엇이라 부르는지 화면과 표로 같이 보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">senedu.kr → 교사 로그인 → 도구모음 → SenGPT — 새 창이 안 뜨면 팝업 차단부터</p>
@@ -371,6 +385,96 @@ html[data-mode="present"] .builder{display:none}
         <p>에이전트 안에는 네 가지가 들어갑니다. 어떤 모델이 답할지, 무슨 일을 어떻게 도울지 적은 지침, 참고할 파일, 그리고 손을 뻗을 도구입니다. 채팅과 다른 점은 두 가지입니다. 설명을 다시 하지 않아도 되고, 도구를 연결하면 답을 글로만 주는 게 아니라 제 캘린더에 일정을 직접 넣습니다.</p>
         <p>도구 카드 뒤에는 MCP라는 연결 규격이 있습니다. 낱말은 몰라도 실습에 지장이 없어서 저도 연수에서는 이름만 말하고 넘어갑니다. 제가 알아 둔 것은 하나입니다. 연결 설정은 에이전트에 저장되지만, 데이터는 각자 자기 계정으로 로그인해서 오갑니다. 그래서 옆 선생님이 제 지침문으로 같은 에이전트를 만들어 써도 제 캘린더는 열리지 않습니다.</p>
       </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">회사별 에이전트 지도 — SenGPT 에이전트는 GPTs · Gems · 코파일럿 에이전트와 같은 줄에 있습니다</p>
+      <p class="brief">「에이전트」라는 낱말을 회사마다 네 가지 다른 것에 씁니다. 오늘 만드는 SenGPT 에이전트는 첫째 줄이고, ChatGPT의 GPTs, Gemini의 Gems, 코파일럿의 Agent Builder, Claude의 프로젝트·스킬이 같은 줄에 있습니다.</p>
+      <div class="tblx">
+        <table class="map">
+          <tr><th style="width:10.5em">「에이전트」가 가리키는 것</th><th>SenGPT<small>오늘 만드는 것</small></th><th>ChatGPT<small>OpenAI</small></th><th>Gemini<small>Google</small></th><th>Copilot<small>Microsoft</small></th><th>Claude<small>Anthropic</small></th></tr>
+          <tr>
+            <td><b>① 내 비서를 미리 만들어 두는 것</b><span class="small">지침·참고 파일·도구를 한 번 저장합니다</span></td>
+            <td class="me"><span class="i">에이전트</span><span class="small">도구 5개까지</span></td>
+            <td><span class="i">GPTs</span><span class="small">플러그인으로 옮기는 중</span><span class="i">Projects</span></td>
+            <td><span class="i">Gems</span></td>
+            <td><span class="i">Agent Builder</span><span class="small">M365 Copilot 안</span><span class="i">Copilot Studio</span></td>
+            <td><span class="i">Projects</span><span class="i">Skills</span></td>
+          </tr>
+          <tr>
+            <td><b>② 일을 대신 하는 에이전트</b><span class="small">브라우저·컴퓨터를 직접 움직이거나 긴 작업을 끝냅니다</span></td>
+            <td class="me"><span class="i">대화 예약</span><span class="small">정한 시간에 실행, 결과는 메일</span></td>
+            <td><span class="i">ChatGPT 에이전트 모드</span><span class="i">Tasks · Pulse</span></td>
+            <td><span class="i">Gemini Agent</span><span class="i">Chrome Auto Browse</span></td>
+            <td><span class="i">Copilot Cowork</span><span class="i">Researcher · Analyst</span><span class="i">Copilot Actions</span></td>
+            <td><span class="i">Cowork</span><span class="i">Claude in Chrome</span></td>
+          </tr>
+          <tr>
+            <td><b>③ 코딩 에이전트</b></td>
+            <td class="me">없습니다</td>
+            <td><span class="i">Codex</span></td>
+            <td><span class="i">Antigravity</span></td>
+            <td><span class="i">GitHub Copilot</span></td>
+            <td><span class="i">Claude Code</span></td>
+          </tr>
+          <tr>
+            <td><b>④ 개발자·조직용 플랫폼</b><span class="small">직접 만들어 배포합니다</span></td>
+            <td class="me">없습니다</td>
+            <td><span class="i">Agents SDK</span><span class="i">AgentKit</span></td>
+            <td><span class="i">Gemini Enterprise</span><span class="i">ADK</span></td>
+            <td><span class="i">Copilot Studio</span><span class="i">Agent 365</span></td>
+            <td><span class="i">Agent SDK</span><span class="i">Managed Agents</span><span class="i">MCP</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="only-detail">
+        <p class="brief">첫째 줄에 있는 다섯 가지를 부품별로 견주면 이렇습니다. 지침·참고 파일·도구·공유 방법이 거의 같아서, 2단계에서 받는 지침문 TXT는 어디에 붙여 넣어도 그대로 씁니다.</p>
+        <div class="grid2 cmp">
+          <div class="box me"><b>SenGPT 에이전트</b>
+            <p class="kv"><span class="k">지침</span>「에이전트 설명(200자)」과 「프롬프트」 칸이 따로 있고, 요술봉이 짧은 글을 긴 지침으로 늘려 줍니다.</p>
+            <p class="kv"><span class="k">참고 파일</span>100MB까지 붙입니다.</p>
+            <p class="kv"><span class="k">도구</span>계정 연결 카드 여섯 개 중 다섯 개까지 고르고, 로그인은 각자 합니다.</p>
+            <p class="kv"><span class="k">공유</span>카드에 복사·공유 메뉴가 없어서 저는 지침문 TXT로 건넵니다.</p>
+            <p class="kv"><span class="k">계정</span>센스쿨 교사 계정(관리자 승인)으로 쓰고, 개인 월 한도 안에서 씁니다.</p>
+          </div>
+          <div class="box"><b>ChatGPT · GPTs(플러그인)</b>
+            <p class="kv"><span class="k">지침</span>지침 칸에 적고, 플러그인으로 옮기면 그 지침이 「스킬」이 됩니다.</p>
+            <p class="kv"><span class="k">참고 파일</span>지식 파일을 올리고, 플러그인에서는 「참고 파일」이 됩니다.</p>
+            <p class="kv"><span class="k">도구</span>Notion·드라이브·Slack 같은 앱을 붙입니다. 직접 만든 액션(API 호출)은 플러그인으로 넘어가지 않습니다.</p>
+            <p class="kv"><span class="k">공유</span>링크와 스토어로 나눴고, 2026년 7월 9일부터는 플러그인 디렉터리가 그 자리를 잇습니다.</p>
+            <p class="kv"><span class="k">계정</span>개인 요금제(Free·Go·Plus·Pro)에서는 새 GPT를 더 만들 수 없고, 있는 것은 2026년 12월 11일에 멈출 예정입니다.</p>
+          </div>
+          <div class="box"><b>Gemini · Gems</b>
+            <p class="kv"><span class="k">지침</span>지침 한 칸에 적습니다.</p>
+            <p class="kv"><span class="k">참고 파일</span>파일을 올리거나 구글 드라이브 문서를 연결합니다.</p>
+            <p class="kv"><span class="k">도구</span>Gmail·드라이브·캘린더 같은 구글 앱이 Gemini에 이미 붙어 있습니다.</p>
+            <p class="kv"><span class="k">공유</span>링크로 나누고, 보기·편집 권한을 구글 드라이브처럼 줍니다.</p>
+            <p class="kv"><span class="k">계정</span>무료 구글 계정으로도 만들고 나눕니다.</p>
+          </div>
+          <div class="box"><b>Copilot · Agent Builder</b>
+            <p class="kv"><span class="k">지침</span>설명과 지침 칸이 있고, 대화로 대신 써 주는 탭도 있습니다.</p>
+            <p class="kv"><span class="k">참고 파일</span>셰어포인트·팀즈·메일 같은 학교 M365 자료와 웹을 지식으로 고릅니다.</p>
+            <p class="kv"><span class="k">도구</span>학교 M365 자료까지는 여기서 되고, 바깥 서비스를 부르는 액션은 Copilot Studio에서 붙입니다.</p>
+            <p class="kv"><span class="k">공유</span>학교 조직 안에서 링크로 나누고, Teams와 Copilot 안에서 씁니다.</p>
+            <p class="kv"><span class="k">계정</span>웹 지식만 쓰면 무료이고, 학교 자료를 붙이려면 M365 Copilot 라이선스가 필요합니다.</p>
+          </div>
+          <div class="box"><b>Claude · Projects와 Skills</b>
+            <p class="kv"><span class="k">지침</span>프로젝트마다 지침을 적고, 되풀이되는 일은 스킬(SKILL.md 파일)로 따로 둡니다.</p>
+            <p class="kv"><span class="k">참고 파일</span>프로젝트 지식에 올립니다.</p>
+            <p class="kv"><span class="k">도구</span>커넥터(MCP)로 구글 드라이브·캘린더·Notion 등을 잇습니다.</p>
+            <p class="kv"><span class="k">공유</span>프로젝트는 팀 요금제에서 나누고, 스킬은 파일이라 그대로 건넵니다.</p>
+            <p class="kv"><span class="k">계정</span>프로젝트는 Pro부터 제한 없이 쓰고, 스킬은 무료 요금제에도 있습니다.</p>
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <p>저는 연수에서 「에이전트」라는 말이 나올 때마다 표의 몇째 줄 이야기인지 먼저 짚습니다. 같은 낱말을 회사마다 네 가지 다른 것에 쓰기 때문입니다. 오늘 만드는 SenGPT 에이전트는 첫째 줄에 있습니다. 지침과 참고 파일과 도구를 한 번 저장해 이름을 붙여 두는 것이고, ChatGPT의 GPTs, Gemini의 Gems, 코파일럿의 Agent Builder, Claude의 프로젝트가 전부 같은 자리입니다. 그래서 2단계에서 받는 지침문 TXT는 다른 회사 서비스의 지침 칸에 그대로 붙여 넣어도 거의 그대로 작동합니다.</p>
+        <p>뉴스에서 「에이전트가 예약을 대신 한다」고 할 때는 둘째 줄 이야기입니다. 브라우저나 컴퓨터를 직접 움직이는 것이라 학교 계정 정책과 개인정보부터 봐야 해서, 저는 오늘 다루지 않습니다. SenGPT에서 이쪽에 가까운 것은 정한 시간에 대화를 돌리고 결과를 메일로 보내는 「대화 예약」 정도입니다. 셋째 줄과 넷째 줄은 개발자 쪽이라 이름만 적어 두었습니다.</p>
+        <p>이름이 자주 바뀝니다. 2026년 9월 22일 기준으로 제가 확인한 것은 세 가지입니다. OpenAI는 9월 11일에 GPTs를 「플러그인」으로 옮기겠다고 알렸고, 개인 요금제에서는 새 GPT를 더 만들 수 없으며 있는 것은 12월 11일에 멈출 예정입니다. 따로 있던 브라우저 에이전트는 기존 앱 안으로 들어갔는데, OpenAI Atlas는 8월 9일에 끝나 ChatGPT 앱으로, 구글 Project Mariner는 5월 4일에 끝나 Gemini Agent와 크롬의 Auto Browse로 흡수되었습니다. 그리고 Anthropic의 Cowork(1월)와 마이크로소프트의 Copilot Cowork(3월)는 이름만 같고 자리가 다릅니다. 표는 이 날짜 기준이고, 바뀌면 고칩니다.</p>
+        <p>SenGPT 도구 카드 뒤에 있는 MCP는 Anthropic이 2024년 11월에 공개한 연결 규격인데, 지금은 네 회사가 다 씁니다. 그래서 회사가 달라도 도구를 붙이는 화면이 비슷하게 생겼고, 한 곳에서 익힌 순서가 다른 곳에서도 통합니다.</p>
+      </div>
+      <p class="note">표는 각 회사 도움말과 공지로 2026년 9월 22일에 확인했습니다. <a href="https://help.openai.com/en/articles/20001519-custom-gpt-retirement-and-migration-faq" target="_blank" rel="noopener">OpenAI · Custom GPT retirement and migration FAQ</a> · <a href="https://help.openai.com/en/articles/20001371-evolving-atlas-into-chatgpt-for-browser-based-agentic-work" target="_blank" rel="noopener">OpenAI · Evolving Atlas into ChatGPT</a> · <a href="https://blog.google/products-and-platforms/products/gemini/sharing-gems/" target="_blank" rel="noopener">Google · Gems 공유</a> · <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-studio-experience" target="_blank" rel="noopener">Microsoft Learn · Agent Builder와 Copilot Studio 고르기</a> · <a href="https://support.claude.com/en/articles/12512180-use-skills-in-claude" target="_blank" rel="noopener">Claude · Use skills in Claude</a>. 이름이 바뀌면 이 표를 고칩니다.</p>
+      <div class="cue">표는 1분 · SenGPT 칸과 GPTs 칸만 손으로 짚기 · 「GPTs는 12월에 멈춤」 한 마디 · 부품 비교와 날짜 이야기는 📖에만</div>
     </div>
 
     <div class="blk">
