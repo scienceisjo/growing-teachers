@@ -149,7 +149,6 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <button class="tab" data-p="ice">2 아이스브레이킹</button>
       <button class="tab" data-p="gift">3 선물 꾸러미</button>
       <button class="tab" data-p="why">4 신청하신 이유</button>
-      <button class="tab" data-p="diag" id="tabDiag" style="display:none">🧭 오늘 갈 길</button>
       <button class="tab" data-p="close">⭐ 만족도</button>
     </nav>
     <button class="btn" id="modeBtn">🎤 발표로</button>
@@ -218,6 +217,25 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <div class="chips"></div>
     </div>
   </div>
+  <div class="blk" id="diagBlk" style="display:none">
+    <p class="kw">에이전트, 써 보셨나요? — 오늘 갈 길을 정하는 네 문항(익명)</p>
+    <p class="small">에이전트를 이미 만들어 쓰고 계신 분이 많으면 바로 공문 한 장으로 가고, 처음이신 분이 많으면 에이전트 만들기부터 차근차근 갑니다.</p>
+    <div class="live poll" data-kind="diag" data-mode-ui="poll">
+      <div class="qs">
+        <div class="pq" data-q="q1"><div class="q">① SenGPT에 로그인해서 대화해 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">몇 번 있습니다</button><button type="button" class="opt" data-v="2">자주 씁니다</button></div></div>
+        <div class="pq" data-q="q2"><div class="q">② 「나만의 에이전트(비서)」를 만들어 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">만들어 봤습니다</button><button type="button" class="opt" data-v="2">지금도 쓰고 있습니다</button></div></div>
+        <div class="pq" data-q="q3"><div class="q">③ 에이전트가 무엇인지, 가장 가까운 것은</div><div class="opts"><button type="button" class="opt" data-v="0">챗봇의 다른 이름</button><button type="button" class="opt" data-v="1">지침을 저장해 두고 같은 일을 시키는 비서</button><button type="button" class="opt" data-v="2">파일·캘린더까지 붙여 대신 일하는 비서</button><button type="button" class="opt" data-v="3">잘 모르겠습니다</button></div></div>
+        <div class="pq" data-q="q4"><div class="q">④ 오늘 더 하고 싶은 쪽은</div><div class="opts"><button type="button" class="opt" data-v="0">에이전트를 처음부터 차근차근</button><button type="button" class="opt" data-v="1">공문 한 장으로 바로 실습</button></div></div>
+      </div>
+      <form class="one"><button class="btn primary big" type="submit">보내기</button></form>
+      <div class="st"></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="bars"></div>
+    </div>
+  </div>
+  <div class="blk only-detail" id="diagNote" style="display:none">
+    <p class="small">판정 기준은 하나입니다. 에이전트를 만들어 봤거나(②) 에이전트가 무엇인지 아는(③ 두 번째·세 번째) 분이 <b>60% 이상</b>이면 공문 한 장으로, 아니면 에이전트 기본 실습으로 갑니다. ④의 희망은 참고로만 봅니다. 결과는 앞 화면에서 같이 보고 정합니다.</p>
+  </div>
 </section>
 
 <!-- ═══ 3 선물 꾸러미 ═══ -->
@@ -259,29 +277,6 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <div class="st"></div>
       <div class="wall"></div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ 🧭 오늘 갈 길 (진단 설문 · ?poll=agent 일 때만) ═══ -->
-<section class="panel" id="p-diag">
-  <h2>오늘 어느 길로 갈지, 선생님들께 먼저 여쭙겠습니다</h2>
-  <p class="sub">준비한 실습이 두 갈래입니다. 에이전트를 이미 만들어 쓰고 계신 분이 많으면 바로 공문 한 장으로 가고, 처음이신 분이 많으면 에이전트 만들기부터 차근차근 갑니다. 네 가지만 눌러 주세요 — 이름은 받지 않습니다.</p>
-  <div class="blk">
-    <div class="live poll" data-kind="diag" data-mode-ui="poll">
-      <div class="qs">
-        <div class="pq" data-q="q1"><div class="q">① SenGPT에 로그인해서 대화해 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">몇 번 있습니다</button><button type="button" class="opt" data-v="2">자주 씁니다</button></div></div>
-        <div class="pq" data-q="q2"><div class="q">② 「나만의 에이전트(비서)」를 만들어 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">만들어 봤습니다</button><button type="button" class="opt" data-v="2">지금도 쓰고 있습니다</button></div></div>
-        <div class="pq" data-q="q3"><div class="q">③ 에이전트가 무엇인지, 가장 가까운 것은</div><div class="opts"><button type="button" class="opt" data-v="0">챗봇의 다른 이름</button><button type="button" class="opt" data-v="1">지침을 저장해 두고 같은 일을 시키는 비서</button><button type="button" class="opt" data-v="2">파일·캘린더까지 붙여 대신 일하는 비서</button><button type="button" class="opt" data-v="3">잘 모르겠습니다</button></div></div>
-        <div class="pq" data-q="q4"><div class="q">④ 오늘 더 하고 싶은 쪽은</div><div class="opts"><button type="button" class="opt" data-v="0">에이전트를 처음부터 차근차근</button><button type="button" class="opt" data-v="1">공문 한 장으로 바로 실습</button></div></div>
-      </div>
-      <form class="one"><button class="btn primary big" type="submit">보내기</button></form>
-      <div class="st"></div>
-      <div class="verdict" id="verdict"></div>
-      <div class="bars"></div>
-    </div>
-  </div>
-  <div class="blk only-detail">
-    <p class="small">판정 기준은 하나입니다. 에이전트를 만들어 봤거나(②) 에이전트가 무엇인지 아는(③ 두 번째·세 번째) 분이 <b>60% 이상</b>이면 공문 한 장으로, 아니면 에이전트 기본 실습으로 갑니다. ④의 희망은 참고로만 봅니다. 결과는 앞 화면에서 같이 보고 정합니다.</p>
   </div>
 </section>
 
@@ -340,10 +335,10 @@ const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — �
 const TITLE = (Q.get('t')||'').trim();
 const TO = (Q.get('to')||'').trim();
 const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
-const POLL = (Q.get('poll')||'').trim();          // poll=agent → 🧭 오늘 갈 길(에이전트 이해도) 탭이 켜짐
+const POLL = (Q.get('poll')||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
-if(POLL){ document.getElementById('tabDiag').style.display=''; }
+if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
@@ -368,7 +363,7 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(['hello','ice','gift','why','diag','close'].includes(h)) show(h);
+const h=location.hash.replace('#',''); if(['hello','ice','gift','why','close'].includes(h)) show(h);
 document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
   if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
