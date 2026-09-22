@@ -184,21 +184,20 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <h2>오늘 어떤 마음으로 오셨나요?</h2>
   <p class="sub" id="iceSub">하나만 눌러 주세요. 한 줄은 적으셔도, 안 적으셔도 됩니다.</p>
 
-  <!-- Microsoft Reflect 체크인 — 주소의 ?reflect= 로 연수마다 다른 링크가 들어옵니다. 있으면 아래 기분 블록 대신 이 카드가 보입니다 -->
-  <div class="blk" id="reflectCard" style="display:none">
-    <div class="gift">
-      <div class="txt">
-        <p class="kw">Reflect 로 지금 마음 하나 골라 주세요</p>
-        <p class="small">폰으로 QR 을 찍거나 버튼을 누르면 열립니다. 이름은 남지 않고, 모인 결과는 앞 화면에서 같이 봅니다.</p>
-        <a class="btn big primary" id="reflectLink" href="#" target="_blank" rel="noopener">💬 Reflect 체크인 열기</a>
-      </div>
-      <div class="qr" id="reflectQr"></div>
-    </div>
-  </div>
-
   <div class="blk">
+    <!-- Microsoft Reflect 체크인 — 주소의 ?reflect= 또는 PRESET 으로 연수마다 다른 링크. 있으면 기분 블록 맨 위에 링크·QR 이 보입니다 -->
+    <div id="reflectCard" style="display:none;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line2)">
+      <div class="gift">
+        <div class="txt">
+          <p class="kw">Reflect 로 지금 마음 하나 골라 주세요</p>
+          <p class="small">폰으로 QR 을 찍거나 버튼을 누르면 열립니다. 이름은 남지 않고, 모인 결과는 앞 화면에서 같이 봅니다.</p>
+          <a class="btn big primary" id="reflectLink" href="#" target="_blank" rel="noopener">💬 Reflect 체크인 열기</a>
+        </div>
+        <div class="qr" id="reflectQr"></div>
+      </div>
+    </div>
     <div class="live" data-kind="mood" data-mode-ui="mood">
-      <div class="q">지금 기분</div>
+      <div class="q" id="moodQ">지금 기분</div>
       <div class="moods">
         <button type="button" class="mood" data-v="😊 설렘">😊 설렘</button>
         <button type="button" class="mood" data-v="🙂 편안">🙂 편안</button>
@@ -336,20 +335,25 @@ const CONFIG = {
 };
 const Q = new URLSearchParams(location.search);
 const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
-const TITLE = (Q.get('t')||'').trim();
-const TO = (Q.get('to')||'').trim();
-const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
+/* 연수 코드별 기본값 — 주소에 t= to= poll= reflect= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
+const PRESET = {
+  '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' }
+};
+const PR = PRESET[CODE] || {};
+const TITLE = (Q.get('t')||PR.t||'').trim();
+const TO = (Q.get('to')||PR.to||'').trim();
+const REFLECT = (Q.get('reflect')||PR.reflect||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
 const SATIS = (Q.get('satis')||'').trim()==='1';   // satis=1 일 때만 ⭐ 만족도 탭 — 평소엔 잠금(만족도는 노션 QR로 따로)
 if(SATIS) document.getElementById('tabClose').style.display='';
-const POLL = (Q.get('poll')||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
+const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
 if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
-  document.getElementById('iceSub').textContent='Reflect 에서 하나 골라 주세요. 그다음 교과와 학교를 적어 주시면 됩니다.';
-  const mood=document.querySelector('.live[data-kind=mood]'); if(mood) mood.closest('.blk').style.display='none';
+  document.getElementById('iceSub').textContent='먼저 Reflect 에서 지금 마음 하나를 골라 주세요. 아래 기분 하나와 한 줄은 이 벽에 모입니다.';
+  document.getElementById('moodQ').textContent='지금 기분 — Reflect 가 안 열리는 분은 여기서';
 }
 
 /* ── 제목·링크·사진 ── */

@@ -747,11 +747,7 @@ html[data-mode="present"] .builder{display:none}
       <div class="grid2">
         <div class="box"><b>도구가 연결된 내 에이전트 1개</b><p>SenGPT 「나만의 에이전트」에 있습니다. 지침은 연필로 언제든 고칩니다. 삭제는 휴지통이고, 지우면 되살릴 수 없습니다.</p></div>
         <div class="box"><b>지침문 TXT</b><p>2단계 빌더에서 ⬇️ TXT로 받은 파일입니다. 지침 칸에 다시 붙여 넣거나, Gemini·Copilot에도 같은 글을 씁니다.</p></div>
-        <div class="box"><b>이 페이지</b><p>처음부터 다시 할 때는 1단계 로그인부터, 도구만 다시 이을 때는 3단계부터입니다. 아래 QR로 폰에서도 열립니다.</p></div>
-      </div>
-      <div class="submit">
-        <div class="txt"><b>이 페이지 주소</b><span>연수 뒤에 다시 열어 보실 수 있게 순서대로 두었습니다. QR을 찍으면 📖 상세 모드로 열립니다.</span></div>
-        <div class="qr" data-url=""></div>
+        <div class="box"><b>이 페이지</b><p>처음부터 다시 할 때는 1단계 로그인부터, 도구만 다시 이을 때는 3단계부터입니다. 주소는 연수 자료 모음 페이지에 함께 드립니다.</p></div>
       </div>
       <div class="detail">
         <p>연수 뒤에 숙제처럼 남기지 않으려고 세 가지를 다 링크가 있는 자리에 두었습니다. 에이전트는 SenGPT 목록에, 지침문은 TXT로 각자 기기에, 순서는 이 페이지에 있습니다.</p>
@@ -768,14 +764,6 @@ html[data-mode="present"] .builder{display:none}
       </div>
     </div>
 
-    <div class="blk">
-      <p class="kw">만족도 조사 — 다음 연수를 위해 3분만 부탁드립니다</p>
-      <div class="submit">
-        <div class="txt"><b>별점 하나와 한 줄이면 충분합니다</b><span>오프닝 페이지의 마지막 탭에서 받습니다. 이름은 적지 않으셔도 됩니다.</span></div>
-        <a class="btn big primary" id="closingLink" href="../opening/#close" target="_blank">⭐ 만족도 조사 열기</a>
-        <div class="qr" id="closingQr" data-url=""></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -819,7 +807,7 @@ const CONFIG = {
   const self = location.pathname + (keep.toString() ? '?'+keep.toString() : '');
   const oq={ s:CONFIG.code, t:CONFIG.title }; if(CONFIG.reflect) oq.reflect=CONFIG.reflect;
   document.getElementById('openingLink').href = '../opening/?'+new URLSearchParams({...oq, to:self}).toString();
-  document.getElementById('closingLink').href = '../opening/?'+new URLSearchParams(oq).toString()+'#close';
+  const cl=document.getElementById('closingLink'); if(cl) cl.href = '../opening/?'+new URLSearchParams(oq).toString()+'#close';
   keep.set('mode','detail');
   window.__selfUrl = location.origin+location.pathname+'?'+keep.toString();
 })();
@@ -966,7 +954,7 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
 function drawQRs(){
   document.querySelectorAll('.qr').forEach(el=>{
     let u=(el.dataset.url||'').trim();
-    if(!u||/^\u3010/.test(u)){ u = el.id==='closingQr' ? document.getElementById('closingLink').href : (window.__selfUrl || location.origin+location.pathname+'?mode=detail'); }
+    if(!u||/^\u3010/.test(u)){ u = (el.id==='closingQr' && document.getElementById('closingLink')) ? document.getElementById('closingLink').href : (window.__selfUrl || location.origin+location.pathname+'?mode=detail'); }
     if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
     el.innerHTML=`<span class="url">${esc(u)}</span>`;
   });
