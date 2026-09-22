@@ -149,7 +149,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <button class="tab" data-p="ice">2 아이스브레이킹</button>
       <button class="tab" data-p="gift">3 선물 꾸러미</button>
       <button class="tab" data-p="why">4 신청하신 이유</button>
-      <button class="tab" data-p="close">⭐ 만족도</button>
+      <button class="tab" data-p="close" id="tabClose" style="display:none">⭐ 만족도</button>
     </nav>
     <button class="btn" id="modeBtn">🎤 발표로</button>
   </div>
@@ -339,10 +339,12 @@ const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — �
 const TITLE = (Q.get('t')||'').trim();
 const TO = (Q.get('to')||'').trim();
 const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
+const SATIS = (Q.get('satis')||'').trim()==='1';   // satis=1 일 때만 ⭐ 만족도 탭 — 평소엔 잠금(만족도는 노션 QR로 따로)
+if(SATIS) document.getElementById('tabClose').style.display='';
 const POLL = (Q.get('poll')||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
-if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; document.getElementById('toPage').style.display='none'; }
+if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
@@ -353,7 +355,7 @@ if(/^https?:\/\//i.test(REFLECT)){
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
 if(TITLE){ document.getElementById('todayTitle').textContent = TITLE; document.title = TITLE+' · 오프닝'; }
-if(TO && !(Q.get('poll')||'').trim()){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }   // poll= 이 있으면 두 갈래 버튼이 대신 뜸
+if(TO){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }
 document.getElementById('giftLink').href = CONFIG.gift;
 (function(){ const im=new Image(); im.onload=()=>{ const p=document.getElementById('photo'); p.innerHTML=''; p.appendChild(im); }; im.alt='조승재'; im.src=CONFIG.photo; })();
 
@@ -367,7 +369,7 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(['hello','ice','gift','why','close'].includes(h)) show(h);
+const h=location.hash.replace('#',''); if(['hello','ice','gift','why'].includes(h) || (h==='close' && SATIS)) show(h);
 document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
   if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
