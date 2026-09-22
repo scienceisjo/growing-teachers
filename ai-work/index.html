@@ -92,6 +92,10 @@ html[data-course="lite"] .blk.pro,
 html[data-course="lite"] .step.pro-step{display:none}
 @media (max-width:720px){ .shot2{grid-template-columns:1fr} }
 
+/* ── 6단계 수식 답안지 ── */
+table.fx td.txt{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;word-break:break-all}
+table.fx td:first-child{font-weight:600;white-space:nowrap}
+
 /* ── 1단계 흐름 목록 ── */
 .flowlist{list-style:none;margin:12px 0;padding:0}
 .flowlist li{display:grid;grid-template-columns:2.2em 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line2)}
@@ -888,38 +892,58 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
   <div class="wrap">
     <div class="step-h"><span class="num">6</span><h2>시트 만들기 — 교직원 법정 의무연수 이수 확인 시트</h2><span class="min"><b>10</b>분</span></div>
     <p class="goal">담당자라면 누구나 한 번은 만드는 표를 AI에게 받아 구글 시트에 붙여보겠습니다! 표의 뼈대와 수식은 AI가 쓰고, 이름과 이수일은 시트에서 직접 채웁니다. 만든 시트 링크는 나눔 벽에 올려보겠습니다!</p>
-    <p class="note lite-note">🌱 가볍게 코스는 P20으로 표를 받아 시트에 붙여 넣는 데(2단계)까지만 해봅니다.</p>
+    <p class="note lite-note">🌱 가볍게 코스는 P20으로 받은 ① 블록을 붙여 넣고 드래그로 늘리는 데(3단계)까지만 해봅니다.</p>
 
     <div class="blk">
-      <p class="kw">AI에게 표를 받고, 구글 시트에 붙이고, 체크박스와 수식까지</p>
-      <p class="brief">우리 학교 법정 의무연수 목록과 교직원 수만 주면 이수 확인표가 탭 구분 표로 옵니다. 구글 시트에 붙여 넣고 체크박스·이수율 수식·조건부 서식을 얹어보겠습니다!</p>
+      <p class="kw">AI에게 뼈대와 수식을 한 번에 받고, 구글 시트에 붙이고, 체크박스와 색까지</p>
+      <p class="brief">P20 하나로 붙여 넣을 블록이 두 개 옵니다. ①은 머리글과 두 줄짜리 본표, ②는 연수별 이수율·미이수 인원·미이수자 요약표이고, 수식은 둘 다 셀 안에 들어 있어서 붙여 넣는 순간 계산됩니다. 40행은 시트에서 드래그로 늘리고, 체크박스와 빨간색은 메뉴 두 번으로 얹어보겠습니다!</p>
       <ol class="steps" data-key="do13">
-        <li><input type="checkbox"><div><span class="what">P20의 연수 목록을 우리 학교 것으로 고쳐 보내기</span><span class="how">교직원은 이름 대신 번호(1~40)로. 목록은 예시 8개를 그대로 써도 됩니다.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">결과의 표 블록을 복사해 새 구글 시트 A1에 붙여 넣기</span><span class="how">sheets.new → A1 클릭 → Ctrl+Shift+V(서식 없이). 열이 한 칸에 몰리면 탭 구분인지 확인.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">「이수 여부」 열을 체크박스로 바꾸기</span><span class="how">열 범위 선택 → 삽입 → 체크박스.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">이수율·미이수자 수식 붙이기</span><span class="how">아래 수식 카드. AI가 준 수식과 같은지 견주어 보기.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">미이수 칸에 색 넣기</span><span class="how">서식 → 조건부 서식 → 「같음」 FALSE → 빨간 배경.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">이름 열은 시트에서 직접 채우고, 공유 링크를 나눔 벽에 올리기</span><span class="how">공유 → 링크가 있는 모든 사용자 「뷰어」. 이름을 넣기 전 상태로 올려도 됩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">P20을 그대로 보내기</span><span class="how">연수 이름을 우리 학교 것으로 바꿀 때는 「4대폭력 예방」처럼 짧은 이름으로. 답이 코드 블록 두 개 + 한 줄이면 성공.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">① 블록을 새 구글 시트 A1에 붙여 넣기</span><span class="how">코드 블록의 복사 단추 → sheets.new → A1 클릭 → Ctrl+V. 1행 머리글, 2·3행에 FALSE 여덟 칸, K2·K3에 0이 보이면 됩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">두 줄을 41행까지 늘리기</span><span class="how">A2:K3 선택 → 오른쪽 아래 파란 점을 41행까지 끌기. 번호가 1~40이 되고 K열 수식이 따라옵니다. 부서는 나중에 고칩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">이수 여부 칸을 체크박스로</span><span class="how">C2:J41 선택 → 삽입 → 체크박스. FALSE 글자가 빈 네모로 바뀝니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">② 블록을 V1에 붙여 넣기</span><span class="how">V1 클릭 → Ctrl+V. 이수율 0%, 미이수 인원 40, 미이수자에 1~40이 보이면 수식이 산 것. 체크 하나 눌러 보면 숫자가 바뀝니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">미이수 칸에 색 넣기</span><span class="how">서식 → 조건부 서식 → 범위 C2:J41 → 형식 규칙 「맞춤 수식」 → <code>=C2=FALSE</code> → 배경 빨강. AI가 준 ③ 줄과 같은지 봅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">공유 링크를 나눔 벽에 올리기</span><span class="how">공유 → 링크가 있는 모든 사용자 「뷰어」. 번호 자리에 이름을 넣는 건 시트에서, 링크는 이름 넣기 전 판으로.</span></div></li>
       </ol>
-      <div class="pr" id="p20"><b class="pl">P20 · 의무연수 이수 확인 시트</b><button class="btn cp" type="button">복사</button><div class="txt">교직원 법정 의무연수 이수 확인 시트를 만들어 줘. 연수 목록: 아동학대 예방, 성희롱·성폭력·성매매·가정폭력 예방, 장애인식 개선, 청렴, 개인정보 보호, 긴급복지 신고의무자, 학교폭력 예방, 심폐소생술·응급처치 (우리 학교 목록으로 고쳐도 됨). 교직원은 40명이고 이름 대신 번호 1~40으로.
-출력: ① 탭으로 구분한 표 — 1행 머리글은 번호 | 부서 | 연수마다 「○○ 이수」「○○ 이수일」 두 열 | 비고, 2행부터 번호 1~40(이수 칸은 FALSE, 이수일은 빈칸). ② 구글 시트 수식 — 연수별 이수율(COUNTIF), 사람별 이수 개수, 미이수자만 뽑는 FILTER. ③ 미이수 칸을 빨갛게 하는 조건부 서식 규칙 한 줄. 표 밖에 설명은 붙이지 마.</div></div>
-      <div class="pr" id="pSheet2"><b class="pl">시트 수식 · 이수율 · 사람별 이수 개수 · 미이수자</b><button class="btn cp" type="button">복사</button><div class="txt">=COUNTIF(C2:C41, TRUE)/COUNTA(A2:A41)
-=COUNTIF(C2:R2, TRUE)
-=FILTER(A2:A41, C2:C41=FALSE)</div></div>
-      <p class="small">첫 줄은 C열(첫 연수의 이수 여부)의 이수율, 둘째 줄은 한 사람(2행)의 이수 개수, 셋째 줄은 첫 연수 미이수자 번호 목록입니다. 열 글자는 각자 시트에 맞게 바꿉니다.</p>
+      <div class="pr" id="p20"><b class="pl">P20 · 의무연수 이수 확인 시트 — 수식까지 한 번에</b><button class="btn cp" type="button">복사</button><div class="txt">교직원 법정 의무연수 이수 확인 시트를 구글 시트에 붙여 넣을 수 있게 만들어 줘. 연수 8개 이름은 이대로 써: 아동학대 예방, 4대폭력 예방, 장애인식 개선, 청렴, 개인정보 보호, 긴급복지 신고, 학교폭력 예방, 응급처치. 교직원 40명은 이름 대신 번호 1~40.
+열 배치(고정): A 번호 | B 부서 | C~J 연수 8개 이수 여부 | K 이수 개수 | L~S 연수 8개 이수일 | T 비고. 자료는 2~41행.
+출력은 코드 블록 두 개. 칸은 탭 문자로 구분하고 빈칸도 탭을 빠뜨리지 마. 마크다운 표(|) 금지, 블록 밖 설명 금지. 수식은 글로 설명하지 말고 셀 안에 =로 시작하는 구글 시트 수식 그대로 넣어서, 붙여 넣으면 바로 계산되게.
+① A1에 붙일 블록: 1행 머리글(이수 여부 열은 연수 이름 그대로, 이수일 열은 「○○ 이수일」) + 2행·3행만(번호 1·2, 부서 「교무부」, 이수 여부 8칸은 FALSE, K칸은 그 행의 TRUE 개수를 세는 COUNTIF, 이수일·비고는 빈칸). 41행까지는 내가 드래그로 늘릴게.
+② V1에 붙일 블록: 머리글 「연수 | 이수율 | 미이수 인원」, 그 아래 연수 8줄 — 이수율은 COUNTIF를 COUNTA(A2:A41)로 나눠 TEXT로 0% 꼴, 미이수 인원은 FALSE 개수 COUNTIF. 맨 아래 한 줄 「미이수자」에는 K열이 8 미만인 사람의 번호·부서를 뽑는 FILTER, 없으면 「없음」이 나오게 IFERROR로 감싸.
+③ 블록 밖에 딱 한 줄: C2:J41의 미이수 칸을 빨갛게 하는 조건부 서식 맞춤 수식.</div></div>
+      <p class="small">연수 이름이 원래 이름보다 짧은 이유가 있습니다. 「성희롱·성폭력·성매매·가정폭력 예방」을 그대로 넣었더니 답이 중간에 끊겼습니다(아래 막혔을 때). 공공기관 표준 이름인 「4대폭력 예방」으로 쓰면 뜻은 같고 끊기지 않습니다.</p>
+      <p class="kw" style="margin-top:18px">답이 이상하게 왔을 때 보내는 한 줄</p>
+      <div class="pr" id="p20b"><b class="pl">P20-2 · 수식이 글로만 설명돼 왔을 때 — 셀 안에 다시 넣어 달라기</b><button class="btn cp" type="button">복사</button><div class="txt">①·② 블록을 다시 줘. 이번에는 수식을 글로 설명하지 말고 셀 안에 =로 시작하는 구글 시트 수식 그대로 넣어. ①의 K2·K3에는 그 행의 TRUE 개수를 세는 COUNTIF, ②의 이수율·미이수 인원·미이수자 칸에는 각각 TEXT(COUNTIF÷COUNTA)·COUNTIF·IFERROR(FILTER). 탭 구분 코드 블록, 블록 밖 설명 없이. 붙여 넣으면 바로 계산되어야 해.</div></div>
+      <div class="pr" id="p20c"><b class="pl">P20-3 · 수식만 따로 받기 — 내가 직접 넣을 때</b><button class="btn cp" type="button">복사</button><div class="txt">이 시트에 넣을 수식만 표로 줘. 열은 셀 주소 | 수식 | 하는 일. 열 배치는 A 번호, B 부서, C~J 연수 8개 이수 여부(TRUE/FALSE), K 이수 개수, L~S 이수일, T 비고, 자료는 2~41행. 필요한 수식: K열 한 사람의 이수 개수, 연수별 이수율(0% 꼴), 연수별 미이수 인원, 8개를 다 못 채운 사람의 번호·부서(FILTER, 없으면 「없음」), 미이수 칸을 빨갛게 하는 조건부 서식 맞춤 수식. 구글 시트 기준, 표 밖 설명 없이.</div></div>
+      <div class="pr" id="p20d"><b class="pl">P20-4 · 표가 |로 오거나 한 칸에 몰릴 때</b><button class="btn cp" type="button">복사</button><div class="txt">마크다운 표(|) 말고, 칸을 탭 문자로 구분해서 코드 블록에 다시 줘. 빈칸도 탭을 빠뜨리지 말고, 블록 밖 설명은 없이.</div></div>
+      <p class="kw" style="margin-top:18px">수식 답안지 — AI가 준 것과 견주어 보고, 다르면 이걸 넣습니다</p>
+      <table class="fx">
+        <tr><th style="width:7em">셀</th><th>수식</th><th style="width:16em">하는 일</th><th style="width:5em"></th></tr>
+        <tr><td>K2</td><td class="txt">=COUNTIF(C2:J2,TRUE)</td><td>한 사람의 이수 개수. 41행까지 드래그</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>W2</td><td class="txt">=TEXT(COUNTIF(C2:C41,TRUE)/COUNTA(A2:A41),"0%")</td><td>첫 연수의 이수율. 연수마다 C→D→…→J</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>X2</td><td class="txt">=COUNTIF(C2:C41,FALSE)</td><td>첫 연수의 미이수 인원</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>W10</td><td class="txt">=IFERROR(FILTER(A2:B41, K2:K41&lt;8), "없음")</td><td>8개를 다 못 채운 사람의 번호·부서. 연수가 6개면 8을 6으로</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>조건부 서식</td><td class="txt">=C2=FALSE</td><td>범위 C2:J41, 맞춤 수식, 배경 빨강</td><td><button class="btn cp" type="button">복사</button></td></tr>
+      </table>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
-          <p><b>붙여 넣으니 한 칸에 다 들어감</b> — AI가 탭 대신 「|」로 준 경우입니다. 「탭으로 구분해서 다시」 한 줄이면 돌아옵니다. 또는 붙여 넣은 뒤 데이터 → 텍스트를 열로 분할.</p>
-          <p><b>체크박스가 TRUE/FALSE 글자로만 보임</b> — 그 열을 선택하고 삽입 → 체크박스를 한 번 더.</p>
-          <p><b>FILTER 결과가 #N/A</b> — 미이수자가 없을 때 그렇습니다. <code>=IFERROR(FILTER(…), "없음")</code>으로 감쌉니다.</p>
+          <p><b>「이 응답은 AI 제공자의 콘텐츠 안전 정책에 의해 중단되었습니다」</b> — 첫 판 P20(연수 이름 원문 그대로, 40행을 다 쓰게 함)을 Gemini로 돌렸을 때 11행에서 실제로 끊겼습니다. 짚이는 건 둘입니다. 연수 이름에 든 낱말(성폭력·성매매)과, 똑같은 행을 40개 쓰게 한 것. 지금 P20은 「4대폭력 예방」으로 쓰고 행은 둘만 받아서 둘 다 피했습니다. 그래도 끊기면 모델을 바꿔(Auto → ChatGPT나 Claude) 같은 프롬프트를 한 번 더 보냅니다.</p>
+          <p><b>수식이 셀에 없고 아래에 글로 설명만 옴</b> — P20-2를 보냅니다. 그래도 안 오면 P20-3으로 수식만 표로 받아 위 답안지와 견주어 직접 넣습니다.</p>
+          <p><b>붙여 넣으니 한 칸에 다 들어감</b> — AI가 탭 대신 「|」로 준 경우입니다. P20-4 한 줄이면 돌아옵니다. 또는 붙여 넣은 뒤 데이터 → 텍스트를 열로 분할.</p>
+          <p><b>K2가 아니라 다른 열에 0이 있음</b> — 빈칸의 탭이 뭉친 것입니다. P20-4를 보내거나, 그 행의 칸을 손으로 밀어 맞춥니다.</p>
+          <p><b>수식이 글자 그대로 보임(=COUNTIF…)</b> — 그 칸이 「일반 텍스트」 서식입니다. 칸을 지우고 서식 → 숫자 → 자동으로 바꾼 뒤 다시 붙여 넣습니다.</p>
+          <p><b>체크박스가 TRUE/FALSE 글자로만 보임</b> — C2:J41을 선택하고 삽입 → 체크박스를 한 번 더.</p>
+          <p><b>미이수자 칸이 #N/A</b> — IFERROR가 빠진 것입니다. 답안지의 W10 수식으로 바꿉니다. 모두 이수하면 「없음」이 나옵니다.</p>
           <p><b>이름을 넣은 뒤 링크를 올리려 함</b> — 교직원 이름이 든 시트는 「뷰어」 권한이라도 벽에 올리지 않습니다. 이름 넣기 전 판을 올립니다.</p>
         </div>
       </details>
       <div class="detail">
         <p>이 시트를 실습으로 고른 이유는 담당자라면 누구나 한 번은 만드는 표이기 때문입니다. 연수가 하나 늘 때마다 열을 다시 그리는 표라서, AI에게 뼈대와 수식을 받고 사람은 이름과 이수일만 채우는 편이 맞습니다.</p>
+        <p>행을 둘만 받고 드래그로 늘리는 것은 끊김을 피하려는 것만이 아닙니다. 40행을 AI가 쓰면 그만큼 사용량이 나가고, 드래그 한 번이면 같은 결과입니다. 열을 「이수 여부 여덟 칸 → 이수일 여덟 칸」으로 묶은 이유는 체크박스와 조건부 서식을 C2:J41 한 범위에 한 번씩만 걸기 위해서입니다. 이수·이수일을 번갈아 두면 여덟 번 해야 합니다.</p>
         <p>AI에는 번호만 줍니다. 교직원 이름과 이수 여부가 한 표로 AI에 들어가면 그 자체가 개인정보 파일입니다. 이름은 시트에서 붙이고, 벽에 올리는 링크는 이름을 넣기 전 판으로 합니다.</p>
       </div>
-      <div class="cue">P20 보내기 1분 · 붙여넣기 2분 · 체크박스·수식 4분 · 공유 링크 2분 · 못 따라온 분은 제 시트 링크 복사해 열어 보기</div>
+      <div class="cue">P20 보내기 1분 · ① 붙이고 드래그 2분 · 체크박스 1분 · ② 붙이기 1분 · 조건부 서식 2분 · 공유 링크 2분 · 못 따라온 분은 제 시트 링크 복사해 열어 보기</div>
     </div>
   </div>
 </section>
@@ -1108,7 +1132,8 @@ html[data-mode="present"] #pJjokji .txt{max-height:6.5em}
         <tr><td>P11 · 쪽지 정리</td><td class="txt">아래 쪽지들에서 내가 할 일을 표로 정리해 줘. 열은 출처(부서·직책·받은 때) | 할 일 | 기한(원문 표기 그대로, 없으면 「원문에 없음」) | 회신 방법 | 근거 문장. 날짜가 아닌 기한은 그대로 옮기고 「확인 필요」라고 표시해. 사람 이름은 쓰지 마. [쪽지들 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P12 · 회신 초안</td><td class="txt">위 표에서 회신이 필요한 항목마다 3줄 회신 초안을 써 줘. 첫 줄은 무엇을·언제까지·어떻게. 존댓말, 이름 없이, 인사말 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P19 · 디벗 대응표</td><td class="txt">표1(MDM 기기 목록: 기기 번호·시리얼·모델)과 표2(학번 목록)를 기기 번호 순 → 학번 순으로 맞춰 학번 | 기기 번호 | 시리얼번호 표로. 시리얼은 한 글자도 바꾸지 말고, 남는 기기·학번은 따로, 없는 것은 만들지 마.</td><td><button class="btn cp" type="button">복사</button></td></tr>
-        <tr><td>P20 · 의무연수 이수 시트</td><td class="txt">교직원 법정 의무연수 이수 확인 시트를 만들어 줘. 연수 목록: [우리 학교 목록]. 교직원은 N명, 이름 대신 번호로. 출력: ① 탭 구분 표(번호 | 부서 | 연수마다 「이수」「이수일」 | 비고) ② 이수율(COUNTIF)·사람별 이수 개수·미이수자 FILTER 수식 ③ 미이수 칸 조건부 서식 한 줄. 표 밖 설명 없이.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P20 · 의무연수 이수 시트</td><td class="txt">교직원 법정 의무연수 이수 확인 시트를 구글 시트에 붙여 넣을 수 있게 만들어 줘. 연수 이름은 이대로 써: [우리 학교 연수, 짧은 이름으로]. 교직원 N명은 이름 대신 번호. 열 배치(고정): A 번호 | B 부서 | C~ 연수별 이수 여부 | 이수 개수 | 연수별 이수일 | 비고, 자료는 2행부터. 출력은 코드 블록 두 개, 탭 구분, 빈칸도 탭, 마크다운 표(|) 금지, 블록 밖 설명 금지, 수식은 셀 안에 =로 시작하는 그대로. ① A1 블록: 머리글 + 2·3행만(이수 여부 FALSE, 이수 개수는 그 행의 TRUE 개수 COUNTIF), 나머지 행은 내가 드래그. ② V1 블록: 연수 | 이수율(TEXT로 0% 꼴) | 미이수 인원, 맨 아래 미이수자 FILTER(없으면 「없음」, IFERROR). ③ 블록 밖 한 줄: 미이수 칸 조건부 서식 맞춤 수식.</td><td><button class="btn cp" type="button">복사</button></td></tr>
+        <tr><td>P20-2 · 수식 다시 넣기</td><td class="txt">①·② 블록을 다시 줘. 수식을 글로 설명하지 말고 셀 안에 =로 시작하는 구글 시트 수식 그대로 넣어. 탭 구분 코드 블록, 블록 밖 설명 없이. 붙여 넣으면 바로 계산되어야 해.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr class="sec"><td colspan="3">📚 교과·수업 — 지도안·평가·자료·모둠</td></tr>
         <tr><td>P23 · 모둠 편성안</td><td class="txt">아래 CSV는 모둠 구성 사전 설문 결과야(학번만). 7모둠×4명 편성안 초안. 규칙: 역할 안 겹치게 · 관심 주제 같은 학생 우선 · 발표 자신감 4~5 모둠마다 1명 · 함께 희망 1명은 반영 · 편성 전에 학번 중복·없는 학번·빈 칸부터 표로 보여 주고 물어봐. 출력: 모둠 | 학번 | 역할 | 근거 + 반영 못 한 희망 + 학번 개수 확인.</td><td><button class="btn cp" type="button">복사</button></td></tr>
         <tr><td>P21 · 지도안·활동지</td><td class="txt">아래 성취기준(코드와 문장 그대로)으로 한 차시 지도안과 활동지 초안을 써 줘. 도입 발문 2개, 활동 2개(모둠·개인), 정리 질문 1개. 활동은 성취기준 범위 안에서만, 교과서에 없는 실험·수치는 만들지 마. 학생에게 보이는 문장은 쉬운 말로. [성취기준 붙여넣기]</td><td><button class="btn cp" type="button">복사</button></td></tr>
