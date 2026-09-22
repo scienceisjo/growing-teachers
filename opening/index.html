@@ -97,6 +97,22 @@ html[data-mode="present"] .live form,html[data-mode="present"] .live .st{display
 .stars{display:flex;gap:6px;margin:6px 0 12px}
 .star{border:1px solid var(--line);border-radius:9999px;width:2.6em;height:2.6em;background:#fff;cursor:pointer;font:inherit;font-size:1.05em}
 .star.on{border-color:var(--blue);background:var(--blue-t)}
+.poll .pq{padding:12px 0;border-top:1px solid var(--line2)}
+.poll .pq:first-child{border-top:0;padding-top:0}
+.poll .pq .q{margin-bottom:8px}
+.poll .opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1px solid var(--line);border-radius:9999px;padding:8px 14px;background:#fff;cursor:pointer;font:inherit;font-size:.98em}
+.opt.on{border-color:var(--blue);background:var(--blue-t);color:var(--blue)}
+.poll form.one{grid-template-columns:1fr;margin-top:14px}
+.verdict{margin-top:16px;border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;background:var(--bg2)}
+.verdict .big{font-size:1.35em;font-weight:600;margin-bottom:6px}
+.verdict .why{color:var(--ink2);font-size:.95em;margin-bottom:12px}
+.verdict .go{display:flex;gap:10px;flex-wrap:wrap}
+.verdict .go .btn.pick{border-color:var(--blue);background:var(--blue);color:#fff}
+.poll .bars .bar{grid-template-columns:14em 1fr 3em}
+.poll .bars h4{margin:12px 0 4px;font-size:.92em;color:var(--ink2)}
+html[data-mode="present"] .poll .qs,html[data-mode="present"] .poll form{display:none}
+html[data-mode="present"] .verdict .big{font-size:1.9em}
 .bars{margin-top:14px;display:grid;gap:6px}
 .bar{display:grid;grid-template-columns:3.5em 1fr 3em;align-items:center;gap:10px;font-size:.95em}
 .bar i{display:block;height:14px;border-radius:9999px;background:var(--blue-t);overflow:hidden}
@@ -133,6 +149,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <button class="tab" data-p="ice">2 아이스브레이킹</button>
       <button class="tab" data-p="gift">3 선물 꾸러미</button>
       <button class="tab" data-p="why">4 신청하신 이유</button>
+      <button class="tab" data-p="diag" id="tabDiag" style="display:none">🧭 오늘 갈 길</button>
       <button class="tab" data-p="close">⭐ 만족도</button>
     </nav>
     <button class="btn" id="modeBtn">🎤 발표로</button>
@@ -231,6 +248,29 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
 </section>
 
+<!-- ═══ 🧭 오늘 갈 길 (진단 설문 · ?poll=agent 일 때만) ═══ -->
+<section class="panel" id="p-diag">
+  <h2>오늘 어느 길로 갈지, 선생님들께 먼저 여쭙겠습니다</h2>
+  <p class="sub">준비한 실습이 두 갈래입니다. 에이전트를 이미 만들어 쓰고 계신 분이 많으면 바로 공문 한 장으로 가고, 처음이신 분이 많으면 에이전트 만들기부터 차근차근 갑니다. 네 가지만 눌러 주세요 — 이름은 받지 않습니다.</p>
+  <div class="blk">
+    <div class="live poll" data-kind="diag" data-mode-ui="poll">
+      <div class="qs">
+        <div class="pq" data-q="q1"><div class="q">① SenGPT에 로그인해서 대화해 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">몇 번 있습니다</button><button type="button" class="opt" data-v="2">자주 씁니다</button></div></div>
+        <div class="pq" data-q="q2"><div class="q">② 「나만의 에이전트(비서)」를 만들어 본 적이</div><div class="opts"><button type="button" class="opt" data-v="0">없습니다</button><button type="button" class="opt" data-v="1">만들어 봤습니다</button><button type="button" class="opt" data-v="2">지금도 쓰고 있습니다</button></div></div>
+        <div class="pq" data-q="q3"><div class="q">③ 에이전트가 무엇인지, 가장 가까운 것은</div><div class="opts"><button type="button" class="opt" data-v="0">챗봇의 다른 이름</button><button type="button" class="opt" data-v="1">지침을 저장해 두고 같은 일을 시키는 비서</button><button type="button" class="opt" data-v="2">파일·캘린더까지 붙여 대신 일하는 비서</button><button type="button" class="opt" data-v="3">잘 모르겠습니다</button></div></div>
+        <div class="pq" data-q="q4"><div class="q">④ 오늘 더 하고 싶은 쪽은</div><div class="opts"><button type="button" class="opt" data-v="0">에이전트를 처음부터 차근차근</button><button type="button" class="opt" data-v="1">공문 한 장으로 바로 실습</button></div></div>
+      </div>
+      <form class="one"><button class="btn primary big" type="submit">보내기</button></form>
+      <div class="st"></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="bars"></div>
+    </div>
+  </div>
+  <div class="blk only-detail">
+    <p class="small">판정 기준은 하나입니다. 에이전트를 만들어 봤거나(②) 에이전트가 무엇인지 아는(③ 두 번째·세 번째) 분이 <b>60% 이상</b>이면 공문 한 장으로, 아니면 에이전트 기본 실습으로 갑니다. ④의 희망은 참고로만 봅니다. 결과는 앞 화면에서 같이 보고 정합니다.</p>
+  </div>
+</section>
+
 <!-- ═══ ⭐ 만족도 ═══ -->
 <section class="panel" id="p-close">
   <h2>오늘 어떠셨나요?</h2>
@@ -286,6 +326,10 @@ const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — �
 const TITLE = (Q.get('t')||'').trim();
 const TO = (Q.get('to')||'').trim();
 const REFLECT = (Q.get('reflect')||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
+const POLL = (Q.get('poll')||'').trim();          // poll=agent → 🧭 오늘 갈 길(에이전트 이해도) 탭이 켜짐
+const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
+const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
+if(POLL){ document.getElementById('tabDiag').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
@@ -310,7 +354,7 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(['hello','ice','gift','why','close'].includes(h)) show(h);
+const h=location.hash.replace('#',''); if(['hello','ice','gift','why','diag','close'].includes(h)) show(h);
 document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
   if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
@@ -336,6 +380,8 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
   if(nameIn) nameIn.value=myName;
   let picked=null;
   box.querySelectorAll('.mood,.star').forEach(b=>b.addEventListener('click',()=>{ picked=b.dataset.v; box.querySelectorAll('.mood,.star').forEach(x=>x.classList.toggle('on',x===b)); }));
+  const ans={};
+  box.querySelectorAll('.pq').forEach(pq=>pq.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{ ans[pq.dataset.q]=+b.dataset.v; pq.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b)); })));
   if(!ready){ st.textContent='CONFIG.supabase 에 주소와 키를 넣고 SETUP_연수라이브.sql 을 실행하면 이 블록이 켜집니다.'; return; }
   let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem('opening:mine:'+CODE+':'+kind)||'[]')); }catch(e){}
   const wall=box.querySelector('.wall');
@@ -352,6 +398,23 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
       box.querySelector('.avg').innerHTML= ns.length? `${avg.toFixed(2)}<small>/ 5 · ${ns.length}명</small>` : '<small>아직 없습니다</small>';
       box.querySelector('.bars').innerHTML=[5,4,3,2,1].map(k=>{ const v=ns.filter(n=>n===k).length; return `<div class="bar"><span>${'★'.repeat(k)}</span><i><b style="width:${ns.length?v/ns.length*100:0}%"></b></i><span>${v}</span></div>`; }).join('');
       wall.innerHTML=rows.filter(r=>r.body).map(r=>`<div class="card${mine.has(r.id)?' mine':''}">${'★'.repeat(+r.n||0)} ${esc(r.body)}</div>`).join('');
+    }else if(ui==='poll'){
+      const A=rows.map(r=>{ try{ return JSON.parse(r.body||'{}'); }catch(e){ return null; } }).filter(Boolean);
+      const N=A.length;
+      const ready=A.filter(a=>(a.q2>=1)||(a.q3===1||a.q3===2)).length;
+      const wantB=A.filter(a=>a.q4===1).length;
+      const pct=N?Math.round(ready/N*100):0;
+      const goB = N>0 && pct>=60;
+      const v=document.getElementById('verdict');
+      if(!N){ v.innerHTML='<div class="big">아직 응답이 없습니다</div><div class="why">네 문항을 누르고 보내 주세요.</div>'; }
+      else{
+        v.innerHTML=`<div class="big">${goB?'📄 공문 한 장으로 바로 갑니다':'🤖 에이전트 기본 실습부터 갑니다'}</div>
+          <div class="why">${N}명 중 에이전트를 만들어 봤거나 뜻을 아는 분 ${ready}명(${pct}%) · 공문 실습 희망 ${wantB}명(${Math.round(wantB/N*100)}%)</div>
+          <div class="go"><a class="btn big ${goB?'':'pick'}" href="${esc(PATH_A)}">🤖 에이전트 기본 실습</a><a class="btn big ${goB?'pick':''}" href="${esc(PATH_B)}">📄 공문 한 장에서 시작하는 AI 업무 자동화</a></div>`;
+      }
+      const QS={q1:['없다','몇 번','자주'],q2:['없다','만들어 봤다','지금도 쓴다'],q3:['챗봇 이름','지침 저장 비서','파일·캘린더 비서','모르겠다'],q4:['에이전트부터','공문 한 장']};
+      const T={q1:'① SenGPT 사용',q2:'② 에이전트 만들기',q3:'③ 에이전트란',q4:'④ 오늘 희망'};
+      box.querySelector('.bars').innerHTML=Object.keys(QS).map(q=>`<h4>${T[q]}</h4>`+QS[q].map((lab,i)=>{ const c=A.filter(a=>a[q]===i).length; return `<div class="bar"><span>${lab}</span><i><b style="width:${N?c/N*100:0}%"></b></i><span>${c}</span></div>`; }).join('')).join('');
     }else{
       wall.innerHTML=rows.length?rows.map(r=>`<div class="card${mine.has(r.id)?' mine':''}"><span class="who">${esc(r.name||'익명')}</span>${esc(r.body)}</div>`).join(''):'<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
     }
@@ -364,6 +427,7 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
     if(ui==='mood'){ if(!picked){ st.textContent='기분 하나를 먼저 눌러 주세요.'; return; } o.name=picked; }
     else if(ui==='stars'){ if(!picked){ st.textContent='별점을 먼저 눌러 주세요.'; return; } o.n=+picked; }
     else if(ui==='chips'){ if(!body){ bodyIn.focus(); return; } }
+    else if(ui==='poll'){ if(!['q1','q2','q3','q4'].every(k=>k in ans)){ st.textContent='네 문항을 모두 눌러 주세요.'; return; } const sc=(ans.q1||0)+(ans.q2||0)*2+((ans.q3===1||ans.q3===2)?2:0); o.body=JSON.stringify(ans); o.n=sc; o.name=''; }
     else { if(!body){ bodyIn.focus(); return; } o.name=(nameIn?.value||'').trim(); myName=o.name; try{ localStorage.setItem('yeonsu:name',myName); }catch(e){} }
     st.textContent='보내는 중…';
     try{ const row=await insertRow(o); if(row){ mine.add(row.id); try{ localStorage.setItem('opening:mine:'+CODE+':'+kind,JSON.stringify([...mine])); }catch(e){} }
