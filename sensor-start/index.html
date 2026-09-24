@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>사이언스큐브·이지메이커 센서 수업 시작하기 · 해누리중 조승재</title>
-<meta name="description" content="센서 활용 연수를 여는 공통 페이지입니다. 사이언스큐브·이지메이커 프로그램 열기, 자료집 모음, 실험 36건의 자료집 쪽수와 자동·수동 수집 방법을 담았습니다.">
+<meta name="description" content="센서 활용 연수 공통 교안입니다. 디지털 탐구도구로 수업하는 이유, 사이언스큐브·이지메이커 프로그램 열기, 자료집 모음, 실험 36건의 자료집 쪽수와 자동·수동 수집 방법을 담았습니다.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
@@ -219,6 +219,17 @@ details.x > summary::-webkit-details-marker{display:none}
 .xvid a{margin-right:12px;white-space:nowrap}
 .xempty{padding:18px 4px;color:var(--ink3)}
 
+/* 교육과정 인용 */
+.quotes{display:grid;gap:10px;margin:12px 0}
+.qt{border:1px solid var(--line);border-radius:var(--r2);padding:12px 16px;background:#fff}
+.qt .where{display:block;font-size:.8em;font-weight:600;color:var(--blue);margin-bottom:4px}
+.qt p{margin:0 0 .35em}
+.qt p:last-child{margin-bottom:0}
+.xlink{border:0;background:none;padding:0;font:inherit;color:var(--blue);cursor:pointer;text-align:left}
+.xlink:hover{text-decoration:underline}
+.box .ex{display:block;margin-top:8px;font-size:.85em;color:var(--ink3)}
+.box .ex .xlink{font-size:1em}
+
 /* 수집 방식 목록 */
 .mcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
 .mc{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px}
@@ -281,10 +292,10 @@ html[data-mode="present"] .keys{display:block}
 <!-- ═══════════ 표지 ═══════════ -->
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="eyebrow" id="eyebrow">센서 활용 연수 · 공통 오프닝</div>
+    <div class="eyebrow" id="eyebrow">센서 활용 연수 · 공통 교안</div>
     <h1>사이언스큐브·이지메이커 센서 수업 시작하기</h1>
-    <p class="lead">선생님들 시간이 소중하기 때문에, 오늘은 두 회사 프로그램을 열고 자료집을 받은 다음, 해 보고 싶은 실험 하나를 골라 자료집 쪽수와 수집 방식까지 찾아보겠습니다!</p>
-    <div class="pipe" aria-label="오늘의 흐름"><span class="n">프로그램 열기</span><span class="a">→</span><span class="n">자료집 받기</span><span class="a">→</span><span class="n">실험 찾기</span><span class="a">→</span><span class="n">자동·수동 정하기</span><span class="a">→</span><span class="n hi">값 꺼내기</span></div>
+    <p class="lead">선생님들 시간이 소중하기 때문에, 오늘은 디지털 탐구도구를 쓰는 이유를 원문으로 확인하고, 두 회사 프로그램과 자료집을 준비한 다음, 해 보고 싶은 실험 하나를 골라 자료집 쪽수와 수집 방식까지 찾아보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">쓰는 이유</span><span class="a">→</span><span class="n">프로그램 열기</span><span class="a">→</span><span class="n">자료집 받기</span><span class="a">→</span><span class="n">실험 찾기</span><span class="a">→</span><span class="n">자동·수동 정하기</span><span class="a">→</span><span class="n hi">값 꺼내기</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
       <span id="metaDateWrap" hidden>📅 <b id="metaDate"></b></span>
@@ -295,19 +306,101 @@ html[data-mode="present"] .keys{display:block}
     <div class="flow" id="flow"></div>
     <div class="actions">
       <a class="btn big primary" href="#s1">시작하기 ↓</a>
-      <a class="btn big" id="openingLink" href="../opening/" target="_blank">🙋 오프닝 페이지 (인사 · 아이스브레이킹) ↗</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
     </div>
-    <p class="small" style="margin-top:18px">이 페이지는 어느 학교 센서 연수에서든 처음에 같이 여는 공통 부분입니다. 📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판이고, 🎤 발표 모드는 연수장 앞 화면에 띄우는 판이라 키워드와 짧은 설명만 보입니다.</p>
+    <p class="small" style="margin-top:18px">이 페이지는 어느 학교, 어느 강사의 센서 연수에서든 그대로 쓸 수 있게 만든 공통 교안입니다. 📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판이고, 🎤 발표 모드는 연수장 앞 화면에 띄우는 판이라 키워드와 짧은 설명만 보입니다. 다른 학교에서 쓰실 때는 주소 뒤에 <code>?school=학교명</code>을 붙이면 표지가 그 학교 이름으로 바뀝니다.</p>
   </div>
 </header>
 
 <main>
 
-<!-- ═══════════ 1 프로그램 열기 ═══════════ -->
-<section class="step" id="s1" data-title="프로그램 열기" data-min="10">
+<!-- ═══════════ 1 쓰는 이유 ═══════════ -->
+<section class="step" id="s1" data-title="쓰는 이유" data-min="10">
   <div class="wrap">
-    <div class="step-h"><span class="num">1</span><h2>두 회사 프로그램을 열고 센서 값 띄우기</h2><span class="min"><b>10</b>분</span></div>
+    <div class="step-h"><span class="num">1</span><h2>디지털 탐구도구로 수업하는 이유</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">교육과정과 교과서가 디지털 탐구 도구를 어디에 적어 두었는지 원문으로 확인하고, 센서를 쓰면 수업에서 무엇이 달라지는지 실험 몇 가지로 짚어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">근거</span>2022 개정 교육과정이 디지털 탐구 도구를 적어 둔 곳</p>
+      <p class="brief">내용 체계의 과정·기능과 교수·학습 방법에 디지털 탐구 도구가 그대로 적혀 있습니다.</p>
+      <div class="quotes">
+        <div class="qt"><span class="where">내용 체계 · 물질 영역 과정·기능 (중학교 1~3학년)</span><p>"수학적 사고와 디지털 탐구 도구 활용하기"</p><p>"변인 간의 관계를 이끌어내기 위해 자료를 수집하고 이를 그래프로 변환하여 해석하기"</p></div>
+        <div class="qt"><span class="where">교수·학습 방법</span><p>"'과학' 관련 탐구 활동에서 다양한 센서나 기기 등 디지털 탐구 도구를 활용하여 실시간으로 자료를 측정하거나 기상청 등 공공기관에서 제공한 자료를 활용하여 자료를 수집하고 처리하는 기회를 제공한다."</p><p>"지능형 과학실을 활용한 탐구 실험⋅실습 중심의 교수⋅학습 활동 계획을 수립하여 실행한다."</p></div>
+        <div class="qt"><span class="where">(3) 열 · 성취기준 적용 시 고려 사항</span><p>"온도를 측정하거나 열의 전도를 관찰하는 활동에서 온도 센서 등 디지털 탐구 도구를 활용하도록 한다."</p></div>
+      </div>
+      <p class="note">교육부 고시 제2022-33호 [별책 9] 과학과 교육과정에서 그대로 옮겼습니다. 같은 교수·학습 방법에는 "학교 및 학생의 디지털 활용 수준 등을 고려하여 디지털 격차가 발생하지 않도록 유의한다."는 문장도 함께 있습니다.</p>
+      <div class="detail">
+        <p>과정·기능은 내용 체계에서 학생이 직접 해 보아야 하는 탐구 기능을 적는 칸입니다. 중학교 물질 영역의 과정·기능에 디지털 탐구 도구 활용하기가 들어 있고, 바로 다음 줄이 자료를 모아 그래프로 바꾸어 해석하기입니다. 센서 실험에서 학생이 하는 일이 이 두 줄에 그대로 들어 있습니다.</p>
+        <p>교수·학습 방법의 두 문장은 특정 단원이 아니라 중학교 과학 전체에 걸립니다. 센서로 실시간 자료를 측정하는 기회를 주라는 문장과 지능형 과학실을 활용한 탐구 실험 계획을 세워 실행하라는 문장이 나란히 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">탐구 활동에 디지털 탐구 도구가 이름으로 들어간 실험 다섯 개</p>
+      <p class="brief">중학교 탐구 활동 가운데 다섯 개가 디지털 탐구 도구를 이름으로 적고 있고, 그중 네 개는 4단계 표에 있습니다.</p>
+      <div class="tablewrap"><table>
+        <tr><th>단원</th><th>탐구 활동 원문</th><th>4단계 표</th></tr>
+        <tr><td><b>(3) 열</b></td><td>"온도 센서를 이용하여 여러 가지 액체의 비열 비교하기"</td><td><button type="button" class="xlink" data-x="heat-oil">물과 식용유의 비열 비교</button></td></tr>
+        <tr><td><b>(10) 빛과 파동</b></td><td>"디지털 탐구 도구를 이용하여 소리의 진폭, 진동수, 파형 탐구하기"</td><td class="dim">4단계 표에는 없습니다.</td></tr>
+        <tr><td><b>(15) 별과 우주</b></td><td>"디지털 탐구 도구를 활용하여 광원으로부터의 거리에 따른 빛의 세기 실험하기"</td><td><button type="button" class="xlink" data-x="inverse">거리에 따른 빛의 세기</button></td></tr>
+        <tr><td><b>(17) 날씨와 기후변화</b></td><td>"디지털 탐구 도구를 이용하여 구름 생성 과정 실험하기"</td><td><button type="button" class="xlink" data-x="cloud">구름 생성 (단열 팽창)</button></td></tr>
+        <tr><td><b>(18) 수권과 해수의 순환</b></td><td>"디지털 탐구 도구를 이용하여 해수의 연직 수온 분포 실험하기"</td><td><button type="button" class="xlink" data-x="layers">수권의 층상 구조 만들기</button></td></tr>
+      </table></div>
+      <div class="detail">
+        <p>탐구 활동 말고도 성취기준 적용 시 고려 사항에 디지털 탐구 도구를 적은 단원이 일곱 곳 더 있습니다. 문장 끝이 단원마다 달라서 그대로 옮겨 두었습니다.</p>
+        <div class="tablewrap"><table>
+          <tr><th>단원</th><th>성취기준 적용 시 고려 사항 원문</th></tr>
+          <tr><td><b>(6) 기체의 성질</b></td><td>"데이터를 수집하거나 시각화할 때 다양한 센서와 소프트웨어를 활용하여 디지털 소양을 함양하도록 지도한다."<br>"여러 모둠의 데이터를 공유하여 탐구 활동을 수행할 수 있으며, 데이터 공유 시 공유 플랫폼을 활용할 수 있다."</td></tr>
+          <tr><td><b>(7) 태양계</b></td><td>"태양계 학습 시 디지털 탐구 도구, 최신 관측 자료, 천체 관측 프로그램, 앱 등을 적절하게 활용하도록 한다."</td></tr>
+          <tr><td><b>(12) 식물과 에너지</b></td><td>"광합성 실험은 디지털 탐구 도구를 이용하여 데이터를 얻고 이를 해석하여 문제를 해결하는 디지털 기반 탐구 활동을 할 수 있다."</td></tr>
+          <tr><td><b>(14) 전기와 자기</b></td><td>"전기 회로 실험에서 디지털 탐구 도구나 가상 실험을 활용할 수 있다."</td></tr>
+          <tr><td><b>(15) 별과 우주</b></td><td>"디지털 탐구 도구를 활용하여 우리은하를 구성하는 천체의 종류와 특징을 비교⋅분석하는 수업을 전개할 수 있다."</td></tr>
+          <tr><td><b>(16) 화학 반응의 규칙성</b></td><td>"여러 모둠의 데이터를 공유할 수 있으며, 데이터 공유 시 공유 플랫폼 등을 활용하여 디지털 소양 교육과 연계하여 지도한다."</td></tr>
+          <tr><td><b>(19) 운동과 에너지</b></td><td>"운동에 대한 기록과 자료의 해석⋅분석에 사진기나 운동 센서 등 다양한 디지털 탐구 도구를 활용할 수 있도록 한다."</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="blk">
+      <p class="kw"><span class="tag">근거</span>교과서에 이미 실린 센서 탐구</p>
+      <p class="brief">사이언스큐브 무선센서 카탈로그 Ver 9.0 의 「2022 개정 중등교과서 수록 무선센서 및 탐구목록」을 옮겼습니다.</p>
+      <div class="tablewrap"><table>
+        <tr><th>과학1</th><th>비상</th><th>천재</th><th>동아</th><th>YBM</th><th>지학사</th></tr>
+        <tr><td><b>3. 열</b></td><td><span class="k">온도</span> 열평형, 여러 가지 액체의 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 물과 식용유 비열</td></tr>
+        <tr><td><b>4. 물질의 상태 변화</b></td><td><span class="k">온도</span> 상태변화 가열곡선</td><td class="dim">없음</td><td class="dim">없음</td><td class="dim">없음</td><td class="dim">없음</td></tr>
+        <tr><td><b>5. 힘의 작용</b></td><td class="dim">없음</td><td><span class="k">힘·가속도</span> 용수철의 탄성력, 물속에서 부력</td><td class="dim">없음</td><td><span class="k">힘·가속도</span> 용수철의 탄성력</td><td class="dim">없음</td></tr>
+        <tr><td><b>6. 기체의 성질</b></td><td><span class="k">압력</span> 기체의 압력과 부피 관계</td><td><span class="k">압력</span> 압력과 부피, <span class="k">온도</span> 온도와 부피</td><td class="dim">없음</td><td><span class="k">압력</span> 기체의 압력과 부피 관계</td><td><span class="k">압력</span> 기체 압력과 부피 관계</td></tr>
+      </table></div>
+      <div class="tablewrap"><table>
+        <tr><th>과학2</th><th>비상</th><th>천재</th><th>YBM</th><th>지학사</th></tr>
+        <tr><td><b>1. 물질의 특성</b></td><td><span class="k">온도</span> 물질의 양에 따른 성질 비교, 상태 변화, 끓는점 차를 이용한 혼합물 분리</td><td><span class="k">온도</span> 물과 에탄올의 끓는점, 액체의 종류·양에 따른 끓는점</td><td><span class="k">온도</span> 물질의 끓는점 측정</td><td><span class="k">온도</span> 녹는점, 끓는점</td></tr>
+        <tr><td><b>5. 식물과 에너지</b></td><td><span class="k">CO₂</span> 광합성에 필요한 물질과 산물, 환경 요인과 광합성의 관계, 식물의 호흡에서 기체의 출입 <span class="k">산소</span> 식물의 호흡에서 기체의 출입</td><td><span class="k">CO₂·산소·온도</span> 광합성</td><td class="dim">없음</td><td><span class="k">CO₂</span> 광합성에 필요한 물질</td></tr>
+        <tr><td><b>7. 전기와 자기</b></td><td><span class="k">자기장</span> 전류가 흐르는 코일 주위 자기장</td><td><span class="k">전압·전류</span> 저항, 전류, 전압 사이의 관계</td><td><span class="k">전압·전류</span> 전류, 전압, 저항 관계</td><td class="dim">없음</td></tr>
+      </table></div>
+      <div class="detail">
+        <p>과학1의 3단원 열은 다섯 출판사 모두 온도 센서 탐구를 실었고, 과학2의 옴의 법칙은 천재와 YBM 이 전압·전류 센서로 실었습니다. 학교에서 쓰는 출판사의 열을 따라가면 어느 센서가 먼저 필요한지 보입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">센서를 쓰면 수업에서 달라지는 것</p>
+      <p class="brief">서울시교육청 자료집이 실험마다 적어 둔 「디지털 센서를 활용하면 좋은 점」을 네 가지로 모았습니다.</p>
+      <div class="grid2">
+        <div class="box"><b>눈으로 놓치는 순간을 잡습니다</b><p>용수철저울은 눈금이 흔들려 최대 정지 마찰력을 읽기 어렵지만, 힘 센서는 그래프의 가장 높은 점으로 보여 줍니다. 구름이 생기는 순간의 압력 감소와 온도 하강도 그래프에 그대로 찍힙니다.</p><span class="ex"><button type="button" class="xlink" data-x="friction">마찰력</button> · <button type="button" class="xlink" data-x="cloud">구름 생성</button></span></div>
+        <div class="box"><b>적는 시간을 해석하는 시간으로 돌립니다</b><p>학생이 값을 하나하나 읽어 적지 않아도 되어 기록 오차가 줄고, 그 시간을 그래프 해석과 개념 설명에 씁니다.</p><span class="ex"><button type="button" class="xlink" data-x="heat-oil">비열</button> · <button type="button" class="xlink" data-x="sanitizer">손소독제 증발</button></span></div>
+        <div class="box"><b>점 몇 개가 아니라 이어진 그래프를 봅니다</b><p>눈금을 읽으면 몇 지점의 값만 얻지만, 센서는 전압을 천천히 올리는 동안 값을 촘촘하게 모읍니다. 순간적인 변화를 놓쳐도 전체 그래프에서 다시 확인할 수 있습니다.</p><span class="ex"><button type="button" class="xlink" data-x="ohm">옴의 법칙</button> · <button type="button" class="xlink" data-x="heat-oil">비열</button></span></div>
+        <div class="box"><b>색과 느낌 대신 수치로 판단합니다</b><p>BTB 용액의 색 변화는 보는 사람에 따라 판단이 달라지지만, CO₂ 센서는 농도를 수치와 그래프로 보여 줍니다. 그림으로 설명하던 거리와 빛의 세기 관계도 직접 재어 봅니다.</p><span class="ex"><button type="button" class="xlink" data-x="photo-co2">광합성</button> · <button type="button" class="xlink" data-x="inverse">빛의 세기</button></span></div>
+      </div>
+      <div class="detail">
+        <p>네 가지 모두 서울특별시교육청 『2026 교구 및 디지털 도구 활용 과학 교수학습자료』의 사례마다 붙은 「이 실험을 디지털 센서 활용하면 좋은 점」을 줄여 옮긴 것입니다(사례 01·03·04·06·08·09·10). 상자 아래의 실험 이름을 누르면 4단계 표의 그 실험 카드가 열립니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 프로그램 열기 ═══════════ -->
+<section class="step" id="s2" data-title="프로그램 열기" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>두 회사 프로그램을 열고 센서 값 띄우기</h2><span class="min"><b>10</b>분</span></div>
     <p class="goal">사이언스큐브는 Science#, 이지메이커는 EZ·ON 으로 값을 받습니다. 가지고 오신 기기에서 두 프로그램을 열고 센서 값이 화면에서 움직이는 것까지 확인해보겠습니다!</p>
 
     <div class="blk">
@@ -323,7 +416,6 @@ html[data-mode="present"] .keys{display:block}
         <tr><td><b>설치판</b></td><td>for Windows 와 for Chromebook 이 있습니다. 실험 콘텐츠와 보고서 양식은 윈도우 설치판에 들어 있고, 웹판에는 없어서 자료실에서 따로 봅니다.</td><td>웹이 본체라 설치판이 따로 없습니다.</td></tr>
       </table></div>
       <div class="detail">
-        <p>저는 두 회사 센서를 한 과학실에서 같이 씁니다. 두 회사가 가장 크게 다른 점은 센서가 값을 보내는 길입니다. 사이언스큐브는 센서마다 블루투스가 들어 있어서 전원을 켜고 목록에서 고르면 바로 그래프가 그려집니다. 이지메이커는 보드 하나에 센서를 꽂고 그 보드에 코드를 올려야 해서 처음 한 번은 시간이 더 걸리지만, 보드 하나에 센서 여러 개를 꽂아 한 화면에서 같이 봅니다.</p>
         <p>두 프로그램 모두 크롬북에서 설치 없이 열립니다. EZ·ON 은 이지메이커 안내문에 웨일북과 맥북도 된다고 적혀 있습니다. 사이언스큐브 웹판에는 실험 콘텐츠와 보고서 양식이 들어 있지 않아서, 그 자료가 필요할 때는 윈도우 설치판을 쓰거나 사이언스큐브 자료실에서 받습니다.</p>
       </div>
       <div class="cue">크롬북 자리부터 EZ·ON 로그인 먼저 · 센서 수가 모자라면 두 자리가 한 센서</div>
@@ -359,17 +451,17 @@ html[data-mode="present"] .keys{display:block}
         </div>
       </details>
       <div class="detail">
-        <p>저는 연수에서 블록을 직접 짜지 않고 [예제 코드 열기]로 연 코드를 그대로 올립니다. 예제 코드만 올려도 센서 값은 들어오고, 블록을 처음부터 짜기 시작하면 그 시간 동안 실험을 못 하기 때문입니다. 블록을 고치는 때는 수집 간격을 바꿀 때 정도인데, 이지메이커 사례집의 실험마다 1초에 한 번, 20초에 한 번처럼 간격이 적혀 있어서 그 숫자를 그대로 옮겨 씁니다.</p>
+        <p>[예제 코드 열기]로 연 코드를 그대로 올려도 센서 값은 들어옵니다. 블록을 처음부터 짜면 그 시간 동안 실험을 하지 못하므로, 연수에서는 예제 코드로 시작하고 수집 간격을 바꿀 때만 블록을 고칩니다. 이지메이커 사례집의 실험마다 1초에 한 번, 20초에 한 번처럼 수집 간격이 적혀 있습니다.</p>
         <p>무선 나노 보드는 연결 순서가 조금 다릅니다. 이지메이커가 2026년 8월에 올린 <a href="https://ezmaker.co.kr/bbs/board.php?bo_table=notice&wr_id=69" target="_blank" rel="noopener">「유선·무선 보드 연결 가이드북」</a>에 두 보드의 순서가 그림으로 나와 있습니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ 2 자료집 받기 ═══════════ -->
-<section class="step" id="s2" data-title="자료집 받기" data-min="5">
+<!-- ═══════════ 3 자료집 받기 ═══════════ -->
+<section class="step" id="s3" data-title="자료집 받기" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">2</span><h2>자료집을 한 폴더로 받기</h2><span class="min"><b>5</b>분</span></div>
+    <div class="step-h"><span class="num">3</span><h2>자료집을 한 폴더로 받기</h2><span class="min"><b>5</b>분</span></div>
     <p class="goal">흩어져 있는 자료집을 한 폴더로 받고, 어느 책을 언제 펴는지 같이 짚어보겠습니다!</p>
 
     <div class="blk">
@@ -390,7 +482,7 @@ html[data-mode="present"] .keys{display:block}
         <tr><td><b>참고</b></td><td>사이언스샵 for Web·Android·iOS 설명서, 블루투스 연결, 보고서 공유, 차트 합치기, 무선센서 카탈로그 Ver 9.0</td><td>사이언스큐브 프로그램을 쓰다 막힐 때 폅니다. 카탈로그 뒤쪽에 2022 개정 교과서 수록 탐구 대조표가 있습니다.</td></tr>
       </table></div>
       <div class="detail">
-        <p>저는 이 폴더를 만들면서 파일 이름 앞에 약칭을 붙였습니다. 3단계 「실험 찾기」 표의 EZ·CB·SB 가 곧 파일 이름이라, 표에서 쪽수를 보고 그 파일을 연 다음 PDF 뷰어의 쪽 칸에 숫자를 넣으면 그 실험이 바로 나옵니다.</p>
+        <p>모음집의 파일 이름 앞에는 약칭이 붙어 있습니다. 4단계 「실험 찾기」 표의 EZ·CB·SB 가 곧 파일 이름이라, 표에서 쪽수를 보고 그 파일을 연 다음 PDF 뷰어의 쪽 칸에 숫자를 넣으면 그 실험이 바로 나옵니다.</p>
         <p>SB 는 서울특별시교육청이 2026년 7월에 낸 자료집인데 업체 이름을 A사·B사로 가려 두었습니다. 프로그램과 센서 이름으로 맞춰 보면 A사가 사이언스큐브, B사가 이지메이커입니다. EZ 는 영서중 최효석 선생님이 쓰신 사례집이고, CB 는 같은 30건을 클래스보드 프로그램에 맞춘 판입니다. 이 페이지의 실험 표는 최효석 선생님의 사례집을 많이 참고했습니다.</p>
       </div>
     </div>
@@ -440,17 +532,17 @@ html[data-mode="present"] .keys{display:block}
         <tr><th>센서</th><th>포트</th><th>BASE 수집 주기</th><th>BASE 무선판</th><th>BASE 유선판</th><th>먼저 알아 둘 것</th></tr>
       </table></div>
       <div class="detail">
-        <p>BASE 는 클래스보드 프로그램용으로 나온 자료지만 센서는 이지메이커 센서와 같습니다. 저는 질문과 주의 사항은 그대로 쓰고 연결만 EZ·ON 으로 합니다. 센서마다 4쪽씩인데 첫 쪽이 학생에게 던지는 질문으로 시작해서, 수업 첫마디를 고를 때 도움이 됩니다.</p>
+        <p>BASE 는 클래스보드 프로그램용으로 나온 자료지만 센서는 이지메이커 센서와 같습니다. 그래서 질문과 주의 사항은 그대로 쓰고 연결만 EZ·ON 으로 바꿔 쓸 수 있습니다. 센서마다 4쪽씩이고 첫 쪽이 학생에게 던지는 질문으로 시작해서, 수업 첫마디를 고를 때 도움이 됩니다.</p>
         <p>무선판과 유선판은 10번 센서까지 쪽수가 같고, 11번 미세먼지부터는 유선판에 코딩 쪽이 더 들어 있어 쪽수가 달라집니다. 유선판 목차에는 무선판과 같은 쪽수가 적혀 있어서, 유선판은 이 표의 쪽수로 찾는 편이 정확합니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ 3 실험 찾기 ═══════════ -->
-<section class="step" id="s3" data-title="실험 찾기" data-min="12">
+<!-- ═══════════ 4 실험 찾기 ═══════════ -->
+<section class="step" id="s4" data-title="실험 찾기" data-min="12">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>해 보고 싶은 실험 찾기</h2><span class="min"><b>12</b>분</span></div>
+    <div class="step-h"><span class="num">4</span><h2>해 보고 싶은 실험 찾기</h2><span class="min"><b>12</b>분</span></div>
     <p class="goal">학년과 수집 방식, 낱말로 실험을 걸러서 자료집 몇 쪽인지와 두 회사에서 어떻게 모으는지 찾아보겠습니다!</p>
 
     <div class="blk">
@@ -466,8 +558,8 @@ html[data-mode="present"] .keys{display:block}
       <p class="note">쪽수는 PDF 뷰어의 쪽 칸에 넣는 번호입니다. 책에 인쇄된 번호보다 EZ 는 3, CB 는 1, SB 는 4 큽니다.</p>
       <div class="xl" id="xl"></div>
       <div class="detail">
-        <p>저는 이 표를 만들면서 실험마다 자료집 원문의 실험 과정과 결과 표를 다시 읽고 수집 방식을 정했습니다. 결과 표의 가로줄이 시각이면 자동수집, 부피나 거리처럼 사람이 정하는 값이면 수동수집으로 두었습니다. 그래서 같은 주사기 실험이라도 두 주사기를 맞대어 미는 「면적과 압력」은 자동수집이고, 추를 하나씩 거는 「무게 재기」는 수동수집입니다.</p>
-        <p>두 회사 칸은 자료집에 적힌 설정을 따랐습니다. 자료집이 한 회사만 다룬 실험은 다른 회사 칸을 제가 같은 구조로 짜서 넣었고, 센서가 없는 회사는 그 칸에 적어두었습니다. 교과서에 실린 3건(샤를의 법칙, 훅의 법칙, 저항에 따른 V–I 기울기)은 자료집에 절차가 없어서 보일의 법칙과 같은 구조로 짰습니다.</p>
+        <p>이 표의 수집 방식은 자료집 원문의 실험 과정과 결과 표를 기준으로 정했습니다. 결과 표의 가로줄이 시각이면 자동수집, 부피나 거리처럼 사람이 정하는 값이면 수동수집입니다. 그래서 같은 주사기 실험이라도 두 주사기를 맞대어 미는 「면적과 압력」은 자동수집이고, 추를 하나씩 거는 「무게 재기」는 수동수집입니다.</p>
+        <p>두 회사 칸은 자료집에 적힌 설정을 따랐습니다. 자료집이 한 회사만 다룬 실험은 다른 회사 칸을 같은 구조로 짜서 넣었고, 센서가 없는 회사는 그 칸에 적어두었습니다. 교과서에 실린 3건(샤를의 법칙, 훅의 법칙, 저항에 따른 V–I 기울기)은 자료집에 절차가 없어서 보일의 법칙과 같은 구조로 짰습니다.</p>
       </div>
     </div>
 
@@ -487,33 +579,13 @@ html[data-mode="present"] .keys{display:block}
       <div class="detail"><p>올라온 실험은 앞 화면에 모아 보면서, 위 표에서 그 실험의 자료집 쪽과 수집 방식을 같이 찾아보겠습니다.</p></div>
     </div>
 
-    <div class="blk">
-      <p class="kw"><span class="tag">근거</span>교과서에 이미 실린 센서 탐구</p>
-      <p class="brief">사이언스큐브 무선센서 카탈로그 Ver 9.0 의 「2022 개정 중등교과서 수록 무선센서 및 탐구목록」을 옮겼습니다.</p>
-      <div class="tablewrap"><table>
-        <tr><th>과학1</th><th>비상</th><th>천재</th><th>동아</th><th>YBM</th><th>지학사</th></tr>
-        <tr><td><b>3. 열</b></td><td><span class="k">온도</span> 열평형, 여러 가지 액체의 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 비열</td><td><span class="k">온도</span> 열평형, 물과 식용유 비열</td></tr>
-        <tr><td><b>4. 물질의 상태 변화</b></td><td><span class="k">온도</span> 상태변화 가열곡선</td><td class="dim">없음</td><td class="dim">없음</td><td class="dim">없음</td><td class="dim">없음</td></tr>
-        <tr><td><b>5. 힘의 작용</b></td><td class="dim">없음</td><td><span class="k">힘·가속도</span> 용수철의 탄성력, 물속에서 부력</td><td class="dim">없음</td><td><span class="k">힘·가속도</span> 용수철의 탄성력</td><td class="dim">없음</td></tr>
-        <tr><td><b>6. 기체의 성질</b></td><td><span class="k">압력</span> 기체의 압력과 부피 관계</td><td><span class="k">압력</span> 압력과 부피, <span class="k">온도</span> 온도와 부피</td><td class="dim">없음</td><td><span class="k">압력</span> 기체의 압력과 부피 관계</td><td><span class="k">압력</span> 기체 압력과 부피 관계</td></tr>
-      </table></div>
-      <div class="tablewrap"><table>
-        <tr><th>과학2</th><th>비상</th><th>천재</th><th>YBM</th><th>지학사</th></tr>
-        <tr><td><b>1. 물질의 특성</b></td><td><span class="k">온도</span> 물질의 양에 따른 성질 비교, 상태 변화, 끓는점 차를 이용한 혼합물 분리</td><td><span class="k">온도</span> 물과 에탄올의 끓는점, 액체의 종류·양에 따른 끓는점</td><td><span class="k">온도</span> 물질의 끓는점 측정</td><td><span class="k">온도</span> 녹는점, 끓는점</td></tr>
-        <tr><td><b>5. 식물과 에너지</b></td><td><span class="k">CO₂</span> 광합성에 필요한 물질과 산물, 환경 요인과 광합성의 관계, 식물의 호흡에서 기체의 출입 <span class="k">산소</span> 식물의 호흡에서 기체의 출입</td><td><span class="k">CO₂·산소·온도</span> 광합성</td><td class="dim">없음</td><td><span class="k">CO₂</span> 광합성에 필요한 물질</td></tr>
-        <tr><td><b>7. 전기와 자기</b></td><td><span class="k">자기장</span> 전류가 흐르는 코일 주위 자기장</td><td><span class="k">전압·전류</span> 저항, 전류, 전압 사이의 관계</td><td><span class="k">전압·전류</span> 전류, 전압, 저항 관계</td><td class="dim">없음</td></tr>
-      </table></div>
-      <div class="detail">
-        <p>저는 학교에서 센서를 사자고 이야기할 때 이 표를 먼저 봅니다. 과학1의 3단원 열은 다섯 출판사 모두 온도 센서 탐구를 실었고, 과학2의 옴의 법칙은 천재와 YBM 이 전압·전류 센서로 실었습니다. 선생님 학교가 쓰는 출판사의 열만 따라가 보시면 어느 센서가 먼저 필요한지 보입니다.</p>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ═══════════ 4 자동수집·수동수집 ═══════════ -->
-<section class="step" id="s4" data-title="자동·수동" data-min="10">
+<!-- ═══════════ 5 자동수집·수동수집 ═══════════ -->
+<section class="step" id="s5" data-title="자동·수동" data-min="10">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>자동수집과 수동수집</h2><span class="min"><b>10</b>분</span></div>
+    <div class="step-h"><span class="num">5</span><h2>자동수집과 수동수집</h2><span class="min"><b>10</b>분</span></div>
     <p class="goal">가로축에 놓을 값을 센서가 재는지로 수집 방식을 가르고, 두 회사 프로그램에서 수동수집으로 점을 하나씩 찍어보겠습니다!</p>
 
     <div class="blk">
@@ -525,7 +597,7 @@ html[data-mode="present"] .keys{display:block}
         <div class="box"><b>센서 둘 · 모은 뒤 축 바꾸기</b><p>전압과 전류, 온도와 CO₂처럼 두 값을 모두 센서가 잴 때입니다. 시간축으로 모은 다음 한 센서를 가로축으로 옮깁니다.</p><span class="cnt" data-count="pair"></span></div>
       </div>
       <div class="detail">
-        <p>센서는 기본으로 시간을 따라 값을 잽니다. 그런데 3단계의 실험 36건 가운데 10건은 가로축이 부피, 거리, 저항처럼 센서가 재지 못하는 값이라 사람이 넣어야 합니다. 저는 실험을 고르면 가장 먼저 가로축에 무엇을 놓을지 정하고, 그 답으로 수집 방식을 고릅니다.</p>
+        <p>센서는 기본으로 시간을 따라 값을 잽니다. 그런데 4단계의 실험 36건 가운데 10건은 가로축이 부피, 거리, 저항처럼 센서가 재지 못하는 값이라 사람이 넣어야 합니다. 그래서 실험을 고르면 가로축에 무엇을 놓을지부터 정하고, 그 답으로 수집 방식을 고릅니다.</p>
         <p>두 값을 모두 센서가 재는 옴의 법칙은 자동으로 모은 뒤 축을 바꿉니다. EZ·ON 은 센서를 두 개 이상 붙여 수집했을 때 수동 모드의 오른쪽 아래 X축 탭에서 한 센서를 가로축으로 고를 수 있습니다. Science# 는 수집을 시작하기 전에 축을 정하는 구조라서, CSV 로 저장한 뒤 시트에서 전압을 가로축으로 옮깁니다.</p>
       </div>
     </div>
@@ -558,15 +630,15 @@ html[data-mode="present"] .keys{display:block}
         </div>
       </details>
       <div class="detail">
-        <p>두 회사 센서를 한 과학실에서 같이 쓰면 학생들이 가장 많이 헷갈리는 곳이 이 순서입니다. 사이언스큐브에서 숫자를 적지 않고 [수집]부터 누르거나, 이지메이커에서 값만 적고 [수집]을 누르지 않는 일이 자주 생겨서, 저는 첫 두 점은 옆에서 같이 찍어 줍니다.</p>
-        <p>사이언스큐브 X축 데이터 타입에는 숫자 입력도 있지만, 저는 텍스트 입력으로 두고 그 칸에 숫자를 적습니다. 종이 색이나 불꽃 위치처럼 글자가 가로축에 들어가는 실험도 같은 자리에서 할 수 있기 때문입니다.</p>
+        <p>두 회사 센서를 함께 쓰면 학생들이 이 순서에서 가장 많이 헷갈립니다. 사이언스큐브에서 숫자를 적지 않고 [수집]부터 누르거나, 이지메이커에서 값만 적고 [수집]을 누르지 않는 일이 자주 생기므로, 첫 두 점은 모둠 옆에서 같이 찍어 보는 편이 좋습니다.</p>
+        <p>사이언스큐브 X축 데이터 타입은 자동 증가수, 숫자 입력, 텍스트 입력 세 가지입니다. 이 페이지는 텍스트 입력으로 두고 그 칸에 숫자를 적는 방법으로 안내합니다. 종이 색이나 불꽃 위치처럼 글자가 가로축에 들어가는 실험도 같은 자리에서 할 수 있기 때문입니다.</p>
       </div>
       <div class="cue">첫 두 점은 옆에서 같이 · 큐브는 적고 누르고, 이지는 누르고 적고</div>
     </div>
 
     <div class="blk">
       <p class="kw">어느 실험이 어느 쪽인가</p>
-      <p class="brief">3단계 실험 36건을 수집 방식으로 나누었습니다. 이름을 누르면 그 실험 카드가 열립니다.</p>
+      <p class="brief">4단계 실험 36건을 수집 방식으로 나누었습니다. 이름을 누르면 그 실험 카드가 열립니다.</p>
       <div class="mcols" id="mcols"></div>
       <div class="detail">
         <p>같은 실험도 모으는 방법을 바꿀 수 있습니다. 불꽃색 실험은 자료집에 수동 모드로 적혀 있지만, 겉불꽃과 속불꽃, 불꽃심을 시간 순서대로 재면 자동수집으로도 됩니다.</p>
@@ -575,10 +647,10 @@ html[data-mode="present"] .keys{display:block}
   </div>
 </section>
 
-<!-- ═══════════ 5 값 꺼내기 ═══════════ -->
-<section class="step" id="s5" data-title="값 꺼내기" data-min="5">
+<!-- ═══════════ 6 값 꺼내기 ═══════════ -->
+<section class="step" id="s6" data-title="값 꺼내기" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>모은 값을 파일로 꺼내고 축 만들기</h2><span class="min"><b>5</b>분</span></div>
+    <div class="step-h"><span class="num">6</span><h2>모은 값을 파일로 꺼내고 축 만들기</h2><span class="min"><b>5</b>분</span></div>
     <p class="goal">모은 값을 CSV 와 시트로 꺼내고, 1/부피처럼 계산한 축은 어디서 만드는지 확인해보겠습니다!</p>
 
     <div class="blk">
@@ -595,7 +667,7 @@ html[data-mode="present"] .keys{display:block}
       </table></div>
       <p class="note">사이언스큐브 웹판에서 고를 수 있는 실험 시간은 10·30·60·300·600·1000초입니다. 1000초(약 17분)보다 긴 실험은 한 그래프에 다 담기지 않습니다.</p>
       <div class="detail">
-        <p>저는 모둠 값을 모을 때 파일을 CSV 로 받습니다. CSV 는 구글 시트와 엑셀에서 모두 열리고 지능형 과학실 ON 에도 올라가서, 어느 프로그램으로 모았든 같은 모양으로 합칠 수 있기 때문입니다.</p>
+        <p>모둠 값을 합칠 때는 CSV 파일을 씁니다. CSV 는 구글 시트와 엑셀에서 모두 열리고 지능형 과학실 ON 에도 올라가서, 어느 프로그램으로 모았든 같은 모양으로 합칠 수 있기 때문입니다.</p>
       </div>
     </div>
 
@@ -607,7 +679,7 @@ html[data-mode="present"] .keys{display:block}
         <div class="box"><b>CSV 로 받아 시트에서 만들기</b><p>부피와 압력을 그대로 모은 뒤 시트에 <code>=1/B2</code> 같은 열을 만들어 가로축으로 씁니다. 원래 값도 같이 보관됩니다.</p></div>
       </div>
       <div class="detail">
-        <p>중학교 교과서는 보일의 법칙을 P–V 곡선으로 그립니다. 저는 1/V 로 바꿔 직선을 보는 일을 그 곡선이 반비례인지 확인하는 단계로 씁니다.</p>
+        <p>중학교 교과서는 보일의 법칙을 P–V 곡선으로 그립니다. 1/V 로 바꿔 직선을 보는 일은 그 곡선이 반비례인지 확인하는 단계입니다.</p>
         <p>사이언스큐브의 [그래프 분석]에는 선형 회귀, 2~6차 다항식, 통계 분석, 로그 회귀가 있고 거듭제곱 회귀는 없습니다. 그래서 역제곱 법칙은 회귀로 맞추기보다 가로축을 1/거리²으로 바꾸거나, 표에서 밝기 × 거리²가 일정한지 계산해 보는 편이 확실합니다.</p>
         <p>수동수집의 X축을 텍스트 입력으로 두면 적은 값이 글자로 들어갑니다. 1/부피처럼 간격이 고르지 않은 값을 넣을 때는 가로축 간격이 값만큼 벌어지는지 먼저 보고, 고르게 늘어서 있으면 숫자 입력으로 바꿉니다.</p>
       </div>
@@ -615,26 +687,27 @@ html[data-mode="present"] .keys{display:block}
   </div>
 </section>
 
-<!-- ═══════════ 6 마무리 ═══════════ -->
-<section class="step" id="s6" data-title="마무리" data-min="3">
+<!-- ═══════════ 7 마무리 ═══════════ -->
+<section class="step" id="s7" data-title="마무리" data-min="3">
   <div class="wrap">
-    <div class="step-h"><span class="num">6</span><h2>오늘 가져가시는 것</h2><span class="min"><b>3</b>분</span></div>
+    <div class="step-h"><span class="num">7</span><h2>오늘 가져가시는 것</h2><span class="min"><b>3</b>분</span></div>
 
     <div class="blk">
       <p class="kw">가져가시는 것 세 가지</p>
       <div class="grid2">
-        <div class="box"><b>이 페이지</b><p>실험 36건의 자료집 쪽수와 두 회사 수집 순서가 들어 있습니다. 새 실험을 고를 때는 3단계부터 봅니다.</p></div>
+        <div class="box"><b>이 페이지</b><p>디지털 탐구도구를 쓰는 이유(교육과정·교과서 원문), 실험 36건의 자료집 쪽수, 두 회사 수집 순서가 들어 있습니다. 새 실험을 고를 때는 4단계부터 봅니다.</p></div>
         <div class="box"><b>매뉴얼 모음집 폴더</b><p>EZ·CB·SB·BASE 와 프로그램 설명서가 한 폴더에 있습니다. <a id="packLink2" href="#" target="_blank" rel="noopener">모음집 열기 →</a></p></div>
         <div class="box"><b>회사 무상 지원</b><p>사이언스큐브는 센서 무상 점검과 무상 사용연수를 받습니다. <a href="https://sciencecube.kr/article/%EC%9E%90%EB%A3%8C%EC%8B%A4/1/26310/" target="_blank" rel="noopener">신청 안내 →</a> 이지메이커는 학습가이드에 보드별 안내가 모여 있습니다. <a href="https://haict.kr/bbs/board.php?bo_table=guide2&wr_id=1" target="_blank" rel="noopener">학습가이드 →</a></p></div>
       </div>
       <div class="detail">
-        <p>연수 뒤에 숙제처럼 남기지 않으려고 세 가지를 모두 링크가 있는 자리에 두었습니다. 새 실험을 해 보실 때는 3단계 표에서 학년과 낱말로 거르고, 쪽수를 보고 모음집 파일을 여시면 그 실험의 준비물과 과정이 바로 나옵니다. 두 회사의 수동수집 순서는 4단계에 적어두었습니다.</p>
+        <p>연수 뒤에 숙제처럼 남기지 않으려고 세 가지를 모두 링크가 있는 자리에 두었습니다. 새 실험을 해 보실 때는 4단계 표에서 학년과 낱말로 거르고, 쪽수를 보고 모음집 파일을 여시면 그 실험의 준비물과 과정이 바로 나옵니다. 두 회사의 수동수집 순서는 5단계에 적어두었습니다.</p>
       </div>
     </div>
 
     <div class="blk">
       <p class="kw">출처</p>
       <div class="grid2">
+        <div class="box"><b>교육과정과 교과서</b><p>교육부 고시 제2022-33호 [별책 9] 과학과 교육과정과 사이언스큐브 무선센서 카탈로그 Ver 9.0 의 「2022 개정 중등교과서 수록 무선센서 및 탐구목록」을 원문 그대로 옮겼습니다.</p></div>
         <div class="box"><b>실험 자료집</b><p>영서중 최효석 선생님의 『이지메이커 활용 과학실험 사례(중학교)』와 클래스보드판, 서울특별시교육청 『2026 교구 및 디지털 도구 활용 과학 교수학습자료』를 보고 적었습니다.</p></div>
         <div class="box"><b>프로그램과 센서</b><p>Science# for Web 설명서(K2025.12), 사이언스큐브 무선센서 카탈로그 Ver 9.0, 이지메이커 학습가이드와 『기초 측정 방법』을 보고 적었습니다.</p></div>
       </div>
@@ -656,8 +729,6 @@ html[data-mode="present"] .keys{display:block}
 const CONFIG = {
   key:  'sensor-start',          // localStorage 접두어
   code: (new URLSearchParams(location.search).get('s')||'').trim() || 'sensor-start',   // 연수 코드 = 주소의 ?s= (학교마다 다르게). 없으면 sensor-start
-  title: '센서 수업 시작하기',     // 오프닝 페이지 상단에 보일 이름
-  reflect: '',                   // Microsoft Reflect 체크인 링크 — 연수마다 다르게. 비우면 오프닝의 기분 블록이 대신 보임
   pack: 'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgB0i7TtzkBZQ4blgfGkKEKYAS4ARemXGX8ga1qNaglcpJE?e=HKK13h',   // 매뉴얼 모음집 OneDrive 폴더
   supabase: {
     url: 'https://vbvtnmnodeoocbbjauap.supabase.co',
@@ -668,21 +739,18 @@ const CONFIG = {
 
 /* ── 학교마다 다시 쓰는 페이지: ?s=연수코드&school=학교명&date=일시&place=장소 ──
    예) sensor-start/?s=2026-10-yeoksam&school=역삼중학교&date=2026. 10. 1.(목) 15:30~17:30&place=역삼중 과학실
-   표지 글·오프닝 링크·이 페이지 QR 이 그 학교 것으로 바뀝니다. 매개변수가 없으면 공용판. */
+   표지 글이 그 학교 것으로 바뀝니다. 매개변수가 없으면 공용판. */
 (function(){
   const q=new URLSearchParams(location.search);
   const school=(q.get('school')||'').trim(), date=(q.get('date')||'').trim(), place=(q.get('place')||'').trim();
   if(school){
-    document.getElementById('eyebrow').textContent = school+' 센서 활용 연수 · 공통 오프닝';
+    document.getElementById('eyebrow').textContent = school+' 센서 활용 연수 · 공통 교안';
     document.getElementById('metaWho').textContent = school+' 과학 선생님들';
     document.title = school+' '+document.title;
   }
   if(date){ document.getElementById('metaDate').textContent=date; document.getElementById('metaDateWrap').hidden=false; }
   if(place||school){ document.getElementById('metaPlace').textContent=place||school; document.getElementById('metaPlaceWrap').hidden=false; }
   const keep=new URLSearchParams(); ['s','school','date','place'].forEach(k=>{ const v=(q.get(k)||'').trim(); if(v) keep.set(k,v); });
-  const self = location.pathname + (keep.toString() ? '?'+keep.toString() : '');
-  const oq={ s:CONFIG.code, t:CONFIG.title }; if(CONFIG.reflect) oq.reflect=CONFIG.reflect;
-  document.getElementById('openingLink').href = '../opening/?'+new URLSearchParams({...oq, to:self}).toString();
   keep.set('mode','detail');
   window.__selfUrl = location.origin+location.pathname+'?'+keep.toString();
   ['packLink','packLink2'].forEach(id=>{ const a=document.getElementById(id); if(a) a.href=CONFIG.pack; });
@@ -722,7 +790,7 @@ steps.forEach((s,i)=>{
   }
 });
 const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
-if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분 (오프닝 제외)'; flow.appendChild(f); }
+if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
 
 /* ── 현재 단계 추적 (칩 하이라이트 · 타이머 대상) ── */
 let current = 0;
@@ -1104,9 +1172,11 @@ function openX(id){
     const list=X.filter(e=>e.m===m);
     return `<div class="mc"><h4><span class="xm ${m}">${MN[m]}</span>${list.length}건</h4><ul>${list.map(e=>`<li><span class="gl">${GN[e.g]}</span><button type="button" data-x="${e.id}">${esc(e.t)}</button></li>`).join('')}</ul></div>`;
   }).join('');
-  box.addEventListener('click',ev=>{ const b=ev.target.closest('button[data-x]'); if(b) openX(b.dataset.x); });
   document.querySelectorAll('.cnt[data-count]').forEach(s=>{ s.textContent=X.filter(e=>e.m===s.dataset.count).length+'건'; });
 })();
+
+/* ── 실험 이름 단추(1단계 근거·5단계 목록) → 4단계 카드 열기 ── */
+document.addEventListener('click',ev=>{ const b=ev.target.closest('button[data-x]'); if(b){ ev.preventDefault(); openX(b.dataset.x); } });
 
 /* ── 실시간 벽 (Supabase REST, 폴링) ── */
 const SB = CONFIG.supabase;
