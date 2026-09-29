@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GiteacherHub 고양이 선생님">
+  <defs><clipPath id="sq"><rect width="512" height="512" rx="116"/></clipPath></defs>
+  <g clip-path="url(#sq)">
+    <rect width="512" height="512" fill="#0066cc"/>
+    <path d="M78 512V466Q78 392 166 376H346Q434 392 434 466V512Z" fill="#1d1d1f"/>
+    <path d="M206 372L256 448L306 372Z" fill="#fff"/>
+    <path d="M226 386L256 402L226 418ZM286 386L256 402L286 418Z" fill="#0066cc" stroke="#0066cc" stroke-width="8" stroke-linejoin="round"/>
+    <circle cx="256" cy="402" r="9" fill="#0066cc"/>
+    <path d="M122 214L146 86L236 150ZM390 214L366 86L276 150Z" fill="#fff" stroke="#fff" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M152 188L163 126L208 158ZM360 188L349 126L304 158Z" fill="#0066cc" fill-opacity=".16" stroke="#0066cc" stroke-opacity=".16" stroke-width="10" stroke-linejoin="round"/>
+    <ellipse cx="256" cy="250" rx="164" ry="128" fill="#fff"/>
+    <g fill="none" stroke="#1d1d1f" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="196" cy="258" r="46" stroke-width="12"/>
+      <circle cx="316" cy="258" r="46" stroke-width="12"/>
+      <path d="M242 252Q256 240 270 252M150 250L114 238M362 250L398 238" stroke-width="12"/>
+      <path d="M178 268Q196 246 214 268M298 268Q316 246 334 268" stroke-width="10"/>
+      <path d="M256 322Q256 340 240 340Q228 340 224 330M256 322Q256 340 272 340Q284 340 288 330" stroke-width="8"/>
+      <path d="M168 312L112 302M170 330L130 338M344 312L400 302M342 330L382 338" stroke-width="6" stroke-opacity=".85"/>
+    </g>
+    <path d="M244 308Q256 303 268 308Q263 320 256 323Q249 320 244 308Z" fill="#1d1d1f"/>
+  </g>
+</svg>

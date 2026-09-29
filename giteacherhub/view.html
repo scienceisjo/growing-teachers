@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>앱 실행 · GiteacherHub</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#fff;color:#1d1d1f;font-family:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;letter-spacing:-.02em}
+body{display:flex;flex-direction:column}
+.top{flex:none;display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-bottom:1px solid #e0e0e0;background:#fff;font-size:14px}
+.top a{color:#0066cc;text-decoration:none;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.top a img{width:22px;height:22px}
+.top b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.top button{border:1px solid #e0e0e0;background:#fff;border-radius:980px;height:30px;padding:0 12px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+iframe{flex:1;width:100%;border:0;display:block}
+.msg{margin:auto;text-align:center;color:#6e6e73;padding:24px}
+</style>
+</head>
+<body>
+<div class="top"><a id="back" href="./"><img src="icon.svg" alt="">GiteacherHub</a><b id="t"></b><button id="dl" hidden>원본 받기</button></div>
+<p class="msg" id="msg">앱을 불러오는 중입니다…</p>
+<script>
+'use strict';
+const SB = { url: 'https://vbvtnmnodeoocbbjauap.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc' };
+/* index.html 과 같은 대체 스크립트 — 격리한 채로 localStorage 를 쓰는 앱이 돌게 한다 */
+const SHIM = '<script>(function(){function M(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){var a=Object.keys(d);return i<a.length?a[i]:null},get length(){return Object.keys(d).length}}}["localStorage","sessionStorage"].forEach(function(n){try{window[n].getItem("__t")}catch(e){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e2){}}});try{document.cookie}catch(e){try{Object.defineProperty(document,"cookie",{get:function(){return""},set:function(){},configurable:true})}catch(e2){}}document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href^=\'#\']");if(!a)return;e.preventDefault();var id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id)return;try{location.hash=id}catch(e3){}var t=document.getElementById(id)||document.getElementsByName(id)[0];if(t&&t.scrollIntoView)t.scrollIntoView({behavior:"smooth"});},true);})();<\/script>';
+const withShim = html => { const m = /^\s*<!doctype[^>]*>/i.exec(html); return m ? m[0] + SHIM + html.slice(m[0].length) : SHIM + html; };
+const id = new URLSearchParams(location.search).get('id') || '';
+const msg = document.getElementById('msg');
+(async () => {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) { msg.textContent = '주소가 올바르지 않습니다.'; return; }
+  document.getElementById('back').href = './#/app/' + id;
+  try {
+    const r = await fetch(`${SB.url}/rest/v1/gth_apps?id=eq.${id}&select=title,html`, { headers: { apikey: SB.key, Authorization: 'Bearer ' + SB.key } });
+    const rows = r.ok ? await r.json() : [];
+    const a = rows[0];
+    if (!a) { msg.textContent = '이 앱은 지금 볼 수 없습니다. 확인을 기다리고 있거나 내려간 앱입니다.'; return; }
+    document.title = a.title + ' · GiteacherHub';
+    document.getElementById('t').textContent = a.title;
+    const f = document.createElement('iframe');
+    f.setAttribute('sandbox', 'allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-downloads');
+    f.setAttribute('allow', 'fullscreen; clipboard-write');
+    f.setAttribute('referrerpolicy', 'no-referrer');
+    f.title = a.title;
+    f.srcdoc = withShim(a.html);
+    msg.replaceWith(f);
+    const dl = document.getElementById('dl'); dl.hidden = false;
+    dl.onclick = () => {
+      const el = document.createElement('a');
+      el.href = URL.createObjectURL(new Blob([a.html], { type: 'text/html;charset=utf-8' }));
+      el.download = (a.title.replace(/[\\/:*?"<>|]+/g, ' ').trim() || 'app') + '.html';
+      document.body.appendChild(el); el.click(); setTimeout(() => { URL.revokeObjectURL(el.href); el.remove(); }, 1500);
+    };
+  } catch (e) { msg.textContent = '앱을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.'; }
+})();
+</script>
+</body>
+</html>
