@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>디자인 서랍 · 바이브코딩 연수 · 해누리중 조승재</title>
-<meta name="description" content="설계서(DESIGN.md) 한 장으로 앱에 옷을 입히는 법. 설계서 74개를 한국어 설명·색 미리보기와 함께 모았고, ChatGPT·Claude·SenGPT 도구별 쓰는 법을 정리했습니다.">
+<meta name="description" content="설계서(DESIGN.md) 한 장으로 앱에 옷을 입히는 법. 설계서 74개를 한국어 설명·색 미리보기와 함께 모았고, 폴더에서 일하는 앱(ChatGPT·Claude)과 무료로도 되는 웹 채팅(ChatGPT·Claude·Gemini·SenGPT)별 적용 방법을 정리했습니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -96,9 +96,10 @@ html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
 .toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
 .tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
 html[data-t] .tl{display:none}
-html[data-t="codex"] [data-tool]:not([data-tool~="codex"]),
-html[data-t="claude"] [data-tool]:not([data-tool~="claude"]),
-html[data-t="sengpt"] [data-tool]:not([data-tool~="sengpt"]){display:none!important}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
 
 /* ── 단계 ── */
 .step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
@@ -270,15 +271,26 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
   <div class="wrap">
     <div class="eyebrow">바이브코딩 연수 · 디자인 서랍</div>
     <h1>설계서 한 장으로 앱에 옷 입히기</h1>
-    <p class="lead">선생님들 시간이 소중하기 때문에, 디자인은 따로 고민하지 않고 서랍에서 설계서 한 장을 골라 AI에게 맡기는 방법을 정리해보겠습니다!</p>
+    <p class="lead">디자인은 따로 고민하지 않고 서랍에서 설계서 한 장을 골라 AI에게 맡기는 방법을 정리해보겠습니다!</p>
     <div class="pipe" aria-label="흐름"><span class="n">서랍에서 고르기</span><span class="a">→</span><span class="n">내 도구에 넣기</span><span class="a">→</span><span class="n">디자인만 바꿔 달라고 부탁하기</span><span class="a">→</span><span class="n hi">옷 입은 내 앱</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="pick">
       <p>쓰시는 도구를 골라 주세요. 도구에 맞는 쓰는 법만 보입니다.</p>
-      <div class="toolpick" role="group" aria-label="쓰는 도구">
-        <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex · 유료</small></button>
-        <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭 · 유료</small></button>
-        <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정 · 웹</small></button>
+      <div class="toolgroup">
+        <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
+        <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
+          <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex</small></button>
+          <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭</small></button>
+        </div>
+      </div>
+      <div class="toolgroup">
+        <span class="tg">웹 채팅 · 무료 계정도 됩니다</span>
+        <div class="toolpick" role="group" aria-label="웹 채팅">
+          <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹<small>chatgpt.com</small></button>
+          <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹<small>claude.ai</small></button>
+          <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹<small>gemini.google.com</small></button>
+          <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정</small></button>
+        </div>
       </div>
     </div>
     <div class="flow" id="flow"></div>
@@ -304,6 +316,21 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
       <div class="detail">
         <p>DESIGN.md는 한 회사 웹사이트의 색, 글꼴 크기, 간격, 버튼 모양, 해야 할 것과 하지 말 것을 글로 적어 둔 파일입니다. 코딩 도우미에게 "이 설계서대로 만들어 줘"라고 하면 디자인을 따로 설명하지 않아도 그 느낌으로 만들어 줍니다.</p>
         <p>저는 연수 자료와 수업 페이지를 만들 때 이 서랍의 apple.md를 자주 씁니다. 흰 바탕에 파란색 하나만 쓰는 규칙이라 과학 그래프와 시뮬레이션이 눈에 잘 들어오기 때문입니다. 지금 보고 계신 이 페이지도 같은 규칙으로 만들었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">이럴 때 설계서가 도움이 됩니다</p>
+      <p class="brief">말로 설명하기 어려운 느낌을 숫자로 건네고, 부탁할 때마다 달라지는 결과를 한 방향으로 모읍니다.</p>
+      <div class="grid2">
+        <div class="box"><b>원하는 느낌을 말로 설명하기 어려울 때</b><p>"깔끔하게", "고급스럽게" 같은 말은 AI마다, 그리고 부탁할 때마다 다르게 읽힙니다. 설계서에는 색 값과 글씨 크기, 모서리 둥글기가 숫자로 적혀 있어서 뜻이 어긋나지 않는 지침을 줄 수 있습니다.</p></div>
+        <div class="box"><b>같은 부탁인데 결과가 들쑥날쑥할 때</b><p>어제는 파란 버튼이었는데 오늘은 초록 버튼이 되거나 페이지마다 버튼 모양이 다를 때, 설계서를 하나 골라 계속 쓰면 여러 번 만들어도 한 벌처럼 맞춰집니다.</p></div>
+        <div class="box"><b>앱을 여러 개 만들어 한 세트로 쓸 때</b><p>단원 페이지와 학습지, 퀴즈를 같은 설계서로 입히면 학생이 어느 화면을 열어도 같은 도구라고 느낍니다.</p></div>
+        <div class="box"><b>안 써도 되는 때</b><p>기능만 확인하는 일회용 앱이거나 AI가 처음 만든 모양이 이미 마음에 들면, 설계서 없이 가도 됩니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>설계서를 줘도 AI가 적힌 줄을 전부 지키는 것은 아니어서 결과가 완전히 똑같아지지는 않습니다. 다만 부탁마다 흔들리던 부분이 줄어들고, 마음에 안 들 때는 서랍에서 다른 설계서로 바꿔 다시 부탁하면 됩니다.</p>
+        <p>옷만 바꿔 달라고 해도 AI가 슬라이더 범위나 숫자를 건드리는 일이 있어서, 입힌 뒤에는 ① 기초의 30초 점검을 한 번 더 하는 편이 안전합니다.</p>
       </div>
     </div>
 
@@ -336,10 +363,10 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
 <section class="step" id="s3" data-title="쓰는 법">
   <div class="wrap">
     <div class="step-h"><span class="num">3</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
-    <p class="goal">폴더에서 일하는 도구는 파일을 두고 읽게 하고, 웹 채팅은 짧은 판을 붙여넣어보겠습니다!</p>
+    <p class="goal">폴더에서 일하는 도구는 파일을 두고 읽게 하고, 웹 채팅은 짧은 판을 붙여넣거나 원본을 첨부해보겠습니다!</p>
 
-    <div class="blk" data-tool="codex claude">
-      <p class="kw"><span class="tl">ChatGPT · Claude</span>폴더에 DESIGN.md로 두고 읽게 합니다</p>
+    <div class="blk" data-tool="local">
+      <p class="kw"><span class="tl">앱</span>폴더에 DESIGN.md로 두고 읽게 합니다</p>
       <p class="brief">원본을 받아 index.html 옆에 두면, AI가 폴더에서 직접 읽습니다.</p>
       <ol class="steps" data-key="local">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">서랍에서 고르고 DESIGN.md 받기</span><span class="how">카드의 [DESIGN.md 받기] → 다운로드 폴더에 DESIGN.md 이름으로 저장됩니다</span></div></li>
@@ -353,15 +380,21 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
       </div>
     </div>
 
-    <div class="blk" data-tool="sengpt">
-      <p class="kw"><span class="tl">SenGPT</span>짧은 판을 붙여넣습니다</p>
-      <p class="brief">원본 대신 색·글꼴 크기·모양만 추린 짧은 판을 부탁문에 넣습니다. 아래 빌더가 저절로 넣어 줍니다.</p>
+    <div class="blk" data-tool="web">
+      <p class="kw"><span class="tl">웹 채팅</span>짧은 판을 붙여넣거나 원본 파일을 첨부합니다</p>
+      <p class="brief">붙여넣기가 기본이고, 파일 첨부가 되는 도구라면 원본을 올려도 됩니다.</p>
+      <div class="grid2">
+        <div class="box"><b>방법 ① 짧은 판 붙여넣기 (기본)</b><p>서랍 카드의 [짧은 판 복사]나 아래 빌더가 만든 부탁문을 채팅 입력칸에 붙여넣습니다. 무료 계정에서도 가장 안정적입니다.</p></div>
+        <div class="box"><b>방법 ② 원본 파일 첨부</b><p>[DESIGN.md 받기]로 받은 파일을 입력칸의 첨부 버튼(+ 모양이나 클립 모양)으로 올리고, 부탁문에서는 첨부한 DESIGN.md를 읽게 합니다.</p></div>
+      </div>
       <ol class="steps" data-key="web">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일을 고르기</span><span class="how">짧은 판이 부탁문 안에 저절로 들어갑니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">앱을 만든 그 대화에 이어서 보내기</span><span class="how">같은 대화면 코드를 다시 붙이지 않아도 됩니다. 새 대화면 부탁문의 [지금 코드] 자리에 index.html 코드를 붙이기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일, 전달 방법을 고르기</span><span class="how">방법 ①이면 짧은 판이 부탁문 안에 저절로 들어갑니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">방법 ②라면 먼저 DESIGN.md를 받아 채팅에 첨부하기</span><span class="how">카드의 [DESIGN.md 받기] → 채팅 입력칸의 첨부 버튼 → 다운로드 폴더의 DESIGN.md</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">만든 부탁문을 복사해 채팅에 보내기</span><span class="how">앱을 만든 그 대화에 이어서 보내면 코드를 다시 붙이지 않아도 됩니다. 새 대화면 부탁문의 [지금 코드] 자리에 index.html 코드를 붙이기</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 코드 전체를 코드 도우미로 저장하기</span><span class="how">① 기초 3단계의 코드 도우미 → [index.html로 저장]</span></div></li>
       </ol>
       <div class="detail">
+        <p>붙여넣기와 첨부 중 무엇이 나은지는 도구와 계정에 따라 달라서 하나로 정해 드리기 어렵습니다. 무료 계정에서는 짧은 판을 붙여넣는 쪽을 먼저 권합니다. 첨부는 손이 덜 가지만, 무료 계정은 하루에 올릴 수 있는 파일 수나 크기에 제한이 있는 경우가 많고, AI가 원본 전체를 읽는 만큼 사용량도 붙여넣는 것과 같이 씁니다.</p>
         <p>원본을 웹 채팅에 그대로 붙이면 영어 2~3만 자가 한꺼번에 들어가서 사용량을 많이 쓰고, 뒤에 받는 긴 코드와 겹쳐 답이 중간에 끊기기 쉽습니다. 그래서 색, 글꼴 크기, 모서리 모양, 해야 할 것과 하지 말 것만 3천 자 안팎으로 추린 짧은 판을 따로 만들었습니다.</p>
         <p>새 대화에서 지금 코드를 붙이려면, 과학실험실 폴더의 index.html을 오른쪽 클릭해 [연결 프로그램]에서 [메모장]을 골라 열고 <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사합니다.</p>
       </div>
@@ -380,9 +413,25 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
             <label><input type="radio" name="mode" value="edit" checked> 이미 만든 앱에 입히기</label>
           </div>
         </div>
+        <div class="f full" data-tool="web">설계서 전달 방법
+          <div class="opts">
+            <label><input type="radio" name="deliver" value="paste" checked> 짧은 판을 붙여넣기 (기본)</label>
+            <label><input type="radio" name="deliver" value="attach"> 원본 DESIGN.md 파일을 첨부하기</label>
+          </div>
+        </div>
       </form>
       <p class="note" id="noTool">위쪽에서 도구를 고르시면 도구에 맞는 부탁문이 나옵니다. 지금은 ChatGPT·Claude 앱 기준입니다.</p>
       <div class="pr big" id="dOut"><span class="pl">디자인 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">입힌 뒤에는 기능이 그대로인지 봅니다</p>
+      <p class="brief">디자인만 바꿔 달라고 했어도 숫자나 범위가 바뀌는 일이 있습니다.</p>
+      <ol class="steps" data-key="after">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">새로고침해서 새 옷 확인하기</span><span class="how">앱을 쓰시면 index.html을 다시 열고, 웹 채팅이면 받은 코드를 코드 도우미로 저장해서 열기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">슬라이더를 양 끝까지 밀고 숫자에 단위가 그대로 있는지 보기</span><span class="how">① 기초 4단계의 30초 점검과 같습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">마음에 안 들면 되돌리거나 다른 서랍으로 바꾸기</span><span class="how">"방금 고치기 전으로 되돌려 줘" → 서랍에서 다른 설계서를 골라 다시 부탁</span></div></li>
+      </ol>
     </div>
   </div>
 </section>
@@ -473,9 +522,13 @@ modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' 
 
 /* ── 도구 (매뉴얼 셋과 같은 값) ── */
 const TOOL_KEY = 'vibe:tool';
+const TOOLS = { codex: 'local', claude: 'local', sengpt: 'web', 'gpt-free': 'web', 'claude-free': 'web', 'gemini-free': 'web' };
 function setTool(t) {
-  if (t) html.dataset.t = t; else delete html.dataset.t;
+  if (!TOOLS[t]) t = '';
+  const kind = t ? TOOLS[t] : '';
+  if (t) { html.dataset.t = t; html.dataset.k = kind; } else { delete html.dataset.t; delete html.dataset.k; }
   document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  document.querySelectorAll('[data-tool]').forEach(el => { const tk = el.dataset.tool.split(/\s+/); el.hidden = !!t && !(tk.includes(t) || tk.includes(kind)); });
   try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
   document.getElementById('noTool').hidden = !!t;
   buildDesignPrompt();
@@ -607,11 +660,16 @@ async function buildDesignPrompt() {
   if (!ITEMS.length) return;
   const seq = ++buildSeq;
   const slug = dForm.elements.slug.value, mode = (dForm.querySelector('[name=mode]:checked') || {}).value || 'edit';
-  const it = ITEMS.find(x => x.slug === slug) || ITEMS[0], t = html.dataset.t || '';
-  try { localStorage.setItem(CONFIG.key + ':builder', JSON.stringify({ slug, mode })); } catch (e) {}
+  const it = ITEMS.find(x => x.slug === slug) || ITEMS[0], k = html.dataset.k || '';
+  const deliver = (dForm.querySelector('[name=deliver]:checked') || {}).value || 'paste';
+  try { localStorage.setItem(CONFIG.key + ':builder', JSON.stringify({ slug, mode, deliver })); } catch (e) {}
   const keep = '기능과 글, 숫자, 계산식은 하나도 바꾸지 마. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘.';
   let text;
-  if (t === 'sengpt') {
+  if (k === 'web' && deliver === 'attach') {
+    text = mode === 'new'
+      ? `첨부한 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽고 그대로 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 부탁문을 붙여넣기)`
+      : `첨부한 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽어 줘. 그다음 앱의 디자인만 이 설계서의 색·글꼴 크기·모양으로 바꿔 줘. ${keep} 고친 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[지금 코드]\n(같은 대화에서 이어서 부탁하면 이 줄은 지워도 됩니다. 새 대화라면 지금 index.html 코드를 통째로 붙여넣기)`;
+  } else if (k === 'web') {
     dOut.textContent = '짧은 판을 불러오는 중입니다…';
     let d; try { d = await getData(it.slug); } catch (e) { dOut.textContent = '설계서를 불러오지 못했습니다. 잠시 뒤 다시 골라 주세요.'; return; }
     if (seq !== buildSeq) return;
@@ -641,9 +699,10 @@ fetch('design/index.json').then(r => r.json()).then(j => {
   let b = null; try { b = JSON.parse(localStorage.getItem(CONFIG.key + ':builder') || 'null'); } catch (e) {}
   sel.value = (b && ITEMS.some(x => x.slug === b.slug)) ? b.slug : 'apple';
   if (b && b.mode) { const r = dForm.querySelector(`[name=mode][value="${b.mode}"]`); if (r) r.checked = true; }
+  if (b && b.deliver) { const r = dForm.querySelector(`[name=deliver][value="${b.deliver}"]`); if (r) r.checked = true; }
   renderAll();
   let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {}
-  setTool(['codex', 'claude', 'sengpt'].includes(t) ? t : '');
+  setTool(TOOLS[t] ? t : '');
 }).catch(() => { document.getElementById('picks').innerHTML = '<p class="small">서랍을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.</p>'; });
 </script>
 </body>

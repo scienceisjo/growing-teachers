@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>① 바이브코딩 기초 · 해누리중 조승재</title>
-<meta name="description" content="말로 시켜서 내 수업용 가상 실험실을 만들고 GiteacherHub에 올리는 데까지. ChatGPT(Codex)·Claude·SenGPT 세 갈래로 따라오는 60분 매뉴얼입니다.">
+<meta name="description" content="말로 시켜서 내 수업용 가상 실험실을 만들고 GiteacherHub에 올리는 데까지. 폴더에서 일하는 유료 앱(ChatGPT·Claude)과 무료로도 되는 웹 채팅(ChatGPT·Claude·Gemini·SenGPT)을 골라 따라오는 60분 매뉴얼입니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -96,9 +96,10 @@ html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
 .toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
 .tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
 html[data-t] .tl{display:none}
-html[data-t="codex"] [data-tool]:not([data-tool~="codex"]),
-html[data-t="claude"] [data-tool]:not([data-tool~="claude"]),
-html[data-t="sengpt"] [data-tool]:not([data-tool~="sengpt"]){display:none!important}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
 
 /* ── 단계 ── */
 .step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
@@ -237,20 +238,31 @@ html[data-mode="present"] .keys{display:block}
   <div class="wrap">
     <div class="eyebrow">바이브코딩 연수 · 분임 ① 기초</div>
     <h1>말로 시켜서 내 수업용 가상 실험실 만들기</h1>
-    <p class="lead">선생님들 시간이 소중하기 때문에, 오늘은 수업 장면 하나를 골라 가상 실험실로 만들고 GiteacherHub에 올리는 데까지 끝까지 해보겠습니다!</p>
+    <p class="lead">오늘은 수업 장면 하나를 골라 가상 실험실로 만들고 GiteacherHub에 올리는 데까지 해보겠습니다!</p>
     <div class="pipe" aria-label="오늘의 흐름"><span class="n">도구 열기</span><span class="a">→</span><span class="n">부탁문 쓰기</span><span class="a">→</span><span class="n">만들기</span><span class="a">→</span><span class="n">30초 점검</span><span class="a">→</span><span class="n">고치기</span><span class="a">→</span><span class="n hi">보관함에 올리기</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
       <span>⏱ <b>60분</b></span>
       <span>💻 <b>Windows·Mac 노트북</b></span>
-      <span>🔑 <b>ChatGPT·Claude 유료 계정 또는 SENEDU 계정</b></span>
+      <span>🔑 <b>AI 계정 하나 (무료 계정도 됩니다)</b></span>
     </div>
     <div class="pick" id="pickHero">
       <p>먼저 쓰시는 도구를 골라 주세요. 고르신 도구에 맞는 설명만 보입니다.</p>
-      <div class="toolpick" role="group" aria-label="쓰는 도구">
-        <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex · 유료</small></button>
-        <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭 · 유료</small></button>
-        <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정 · 웹</small></button>
+      <div class="toolgroup">
+        <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
+        <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
+          <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex</small></button>
+          <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭</small></button>
+        </div>
+      </div>
+      <div class="toolgroup">
+        <span class="tg">웹 채팅 · 무료 계정도 됩니다</span>
+        <div class="toolpick" role="group" aria-label="웹 채팅">
+          <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹<small>chatgpt.com</small></button>
+          <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹<small>claude.ai</small></button>
+          <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹<small>gemini.google.com</small></button>
+          <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정</small></button>
+        </div>
       </div>
     </div>
     <div class="flow" id="flow"></div>
@@ -276,7 +288,7 @@ html[data-mode="present"] .keys{display:block}
       <p class="brief">만든 파일을 나중에 끌어다 올려야 해서, 처음부터 한곳에 모아 둡니다.</p>
       <div class="detail">
         <p>저는 새 앱을 만들 때마다 폴더부터 하나 만듭니다. Claude 앱과 ChatGPT 앱의 코딩 도우미는 그 폴더 안에서 파일을 만들고 고치기 때문에, 폴더가 곧 작업대가 됩니다. 폴더 없이 시작하면 파일이 어디에 생겼는지 찾느라 시간을 씁니다.</p>
-        <p>SenGPT는 파일을 직접 만들지 못해서, 받은 코드를 폴더에 저장하는 일은 선생님이 합니다. 그래서 SenGPT로 하시는 분도 폴더는 똑같이 만들어 둡니다.</p>
+        <p>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)은 파일을 내 컴퓨터에 직접 만들지 못해서, 받은 코드를 폴더에 저장하는 일은 선생님이 합니다. 그래서 웹 채팅으로 하시는 분도 폴더는 똑같이 만들어 둡니다.</p>
       </div>
     </div>
 
@@ -286,6 +298,9 @@ html[data-mode="present"] .keys{display:block}
         <div class="toolpick" role="group" aria-label="쓰는 도구">
           <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱</button>
           <button type="button" data-pick="claude" aria-pressed="false">Claude 앱</button>
+          <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹</button>
+          <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹</button>
+          <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹</button>
           <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT</button>
         </div>
       </div>
@@ -296,14 +311,17 @@ html[data-mode="present"] .keys{display:block}
         <li data-tool="claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">Claude</span>Claude 앱을 열고 Code 탭으로 가기</span><span class="how">위쪽 가운데 [Code] 탭</span></div></li>
         <li data-tool="claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">Claude</span>과학실험실 폴더 고르기</span><span class="how">[Local] → [Select folder](폴더 선택) → 바탕화면 → 과학실험실</span></div></li>
         <li data-tool="claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">Claude</span>모델을 Sonnet으로 두기</span><span class="how">보내기 버튼 옆 모델 이름을 눌러 Sonnet. 사용량을 아낍니다</span></div></li>
+        <li data-tool="gpt-free"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">ChatGPT 웹</span>ChatGPT를 열고 새 채팅 시작하기</span><span class="how">chatgpt.com 로그인 → [새 채팅]. 무료 계정도 됩니다</span></div></li>
+        <li data-tool="claude-free"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">Claude 웹</span>Claude를 열고 새 채팅 시작하기</span><span class="how">claude.ai 로그인 → [새 채팅]. 무료 계정도 됩니다</span></div></li>
+        <li data-tool="gemini-free"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">Gemini 웹</span>Gemini를 열고 새 채팅 시작하기</span><span class="how">gemini.google.com 접속 → 구글 계정 로그인 → [새 채팅]. 무료 계정도 됩니다</span></div></li>
         <li data-tool="sengpt"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">SenGPT</span>SenGPT 열기</span><span class="how">senedu.kr 로그인 → [도구모음] → [SenGPT]. 새 창이 안 뜨면 주소창 오른쪽에서 팝업 허용</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">입력칸이 보이면 준비 끝</span><span class="how">앱이 업데이트되면 버튼 이름이 조금 다를 수 있습니다</span></div></li>
       </ol>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
-          <p><b>학교 노트북에 앱이 설치되지 않습니다.</b> 관리자 권한이 막혀 있는 노트북입니다. 오늘은 SenGPT나 ChatGPT 웹으로 하시고, 만든 코드는 3단계의 코드 도우미로 저장하면 같은 결과가 나옵니다.</p>
-          <p><b>Code 탭을 누르니 요금제를 올리라고 나옵니다.</b> Claude 무료 계정은 Code 탭이 잠겨 있습니다. 오늘은 SenGPT 갈래로 오셔도 같은 결과물을 만드실 수 있습니다.</p>
-          <p><b>SenGPT 새 창이 뜨지 않습니다.</b> 팝업이 막힌 상태입니다. 주소창 오른쪽 끝의 팝업 차단 표시를 눌러 senedu.kr을 허용하고 다시 누릅니다.</p>
+          <p><b>학교 노트북에 앱이 설치되지 않습니다.</b> 관리자 권한이 막혀 있는 노트북입니다. 오늘은 웹 채팅(ChatGPT·Claude·Gemini·SenGPT)으로 하시고, 만든 코드는 3단계의 코드 도우미로 저장하면 같은 결과가 나옵니다.</p>
+          <p><b>Code 탭을 누르니 요금제를 올리라고 나옵니다.</b> Claude 무료 계정은 Code 탭이 잠겨 있습니다. 오늘은 위에서 「Claude 웹」(claude.ai)을 고르셔도 같은 결과물을 만드실 수 있습니다.</p>
+          <p><b>SenGPT 새 창이 뜨지 않습니다(SenGPT를 고르신 분).</b> 팝업이 막힌 상태입니다. 주소창 오른쪽 끝의 팝업 차단 표시를 눌러 senedu.kr을 허용하고 다시 누릅니다.</p>
         </div>
       </details>
     </div>
@@ -400,22 +418,36 @@ html[data-mode="present"] .keys{display:block}
     <div class="blk">
       <p class="kw">도구별 순서</p>
       <ol class="steps" data-key="s3">
-        <li data-tool="codex claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">ChatGPT · Claude</span>입력칸에 부탁문을 붙여넣고 보내기</span><span class="how"><kbd>Ctrl</kbd>+<kbd>V</kbd> → 보내기(↑) 버튼</span></div></li>
-        <li data-tool="codex claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">ChatGPT · Claude</span>되묻는 질문에 답하기</span><span class="how">짧게. 모르겠으면 "네가 정해 줘"</span></div></li>
-        <li data-tool="codex claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">ChatGPT · Claude</span>파일을 만들어도 되냐고 물으면 위치를 보고 허용하기</span><span class="how">과학실험실 폴더 안이면 [허용]. 다른 곳이면 멈추고 손 들기</span></div></li>
-        <li data-tool="codex claude"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">ChatGPT · Claude</span>다 됐다고 하면 index.html 열기</span><span class="how">과학실험실 폴더에서 index.html 더블클릭</span></div></li>
-        <li data-tool="sengpt"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">SenGPT</span>부탁문을 붙여넣고 보내기</span><span class="how"><kbd>Ctrl</kbd>+<kbd>V</kbd> → 보내기</span></div></li>
-        <li data-tool="sengpt"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">SenGPT</span>질문에 답하고 코드가 끝까지 나올 때까지 기다리기</span><span class="how">마지막 줄이 &lt;/html&gt; 이면 끝까지 나온 것</span></div></li>
-        <li data-tool="sengpt"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">SenGPT</span>답을 통째로 복사해 아래 코드 도우미에 붙여넣기</span><span class="how">답 아래 복사 버튼 → 코드 도우미 칸 클릭 → <kbd>Ctrl</kbd>+<kbd>V</kbd> → [미리보기]</span></div></li>
-        <li data-tool="sengpt"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">SenGPT</span>과학실험실 폴더에 index.html로 저장하고 열기</span><span class="how">[index.html로 저장] → 과학실험실 폴더 → 저장한 파일 더블클릭</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>입력칸에 부탁문을 붙여넣고 보내기</span><span class="how"><kbd>Ctrl</kbd>+<kbd>V</kbd> → 보내기(↑) 버튼</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>되묻는 질문에 답하기</span><span class="how">짧게. 모르겠으면 "네가 정해 줘"</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>파일을 만들어도 되냐고 물으면 위치를 보고 허용하기</span><span class="how">과학실험실 폴더 안이면 [허용]. 다른 곳이면 멈추고 손 들기</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>다 됐다고 하면 index.html 열기</span><span class="how">과학실험실 폴더에서 index.html 더블클릭</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>부탁문을 붙여넣고 보내기</span><span class="how"><kbd>Ctrl</kbd>+<kbd>V</kbd> → 보내기</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>질문에 답하고 코드가 끝까지 나올 때까지 기다리기</span><span class="how">마지막 줄이 &lt;/html&gt; 이면 끝까지 나온 것</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>답을 통째로 복사해 아래 코드 도우미에 붙여넣기</span><span class="how">복사 버튼 → 코드 도우미 칸 클릭 → <kbd>Ctrl</kbd>+<kbd>V</kbd> → [미리보기]. 복사 요령은 바로 아래</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>과학실험실 폴더에 index.html로 저장하고 열기</span><span class="how">[index.html로 저장] → 과학실험실 폴더 → 저장한 파일 더블클릭</span></div></li>
       </ol>
     </div>
 
-    <div class="blk" data-tool="sengpt">
-      <p class="kw"><span class="tag">SenGPT</span>코드 도우미</p>
+    <div class="blk" data-tool="web">
+      <p class="kw"><span class="tag">웹 채팅</span>도구마다 코드를 복사하는 자리가 다릅니다</p>
+      <p class="brief">답 전체를 통째로 복사해도 되고, 코드가 따로 나오면 그 상자의 복사 버튼을 눌러도 됩니다.</p>
+      <ul class="steps">
+        <li data-tool="gpt-free"><div><span class="what">ChatGPT</span><span class="how">코드는 채팅 안의 코드 상자로 나옵니다. 상자 오른쪽 위의 복사 버튼을 누릅니다.</span></div></li>
+        <li data-tool="claude-free"><div><span class="what">Claude</span><span class="how">코드가 오른쪽 아티팩트 창에 나오면 [Preview]로 먼저 움직이는지 보고, 복사 버튼으로 코드를 복사합니다.</span></div></li>
+        <li data-tool="gemini-free"><div><span class="what">Gemini</span><span class="how">오른쪽 캔버스에서 미리보기로 먼저 확인하고, 코드 보기에서 복사합니다.</span></div></li>
+        <li data-tool="sengpt"><div><span class="what">SenGPT</span><span class="how">답 아래의 복사 버튼을 누릅니다.</span></div></li>
+      </ul>
+      <div class="detail">
+        <p>화면 이름과 버튼 자리는 앱이 업데이트될 때마다 조금씩 바뀝니다. 복사 버튼이 잘 안 보이면 답을 마우스로 끝까지 끌어 선택한 뒤 <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사해도 됩니다. 무료 계정은 한 번에 쓸 수 있는 양과 하루 사용량이 작아서, 긴 코드가 중간에 끊기거나 오늘 한도에 도달했다는 안내가 나올 수 있습니다. 그때는 4·5단계의 고치기를 한 번에 하나씩만 부탁합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" data-tool="web">
+      <p class="kw"><span class="tag">웹 채팅</span>코드 도우미</p>
       <p class="brief">설명이 섞인 답을 통째로 붙여넣어도 코드만 골라 미리 보여 주고, 파일로 저장합니다.</p>
       <div class="helper">
-        <textarea id="hPaste" placeholder="SenGPT가 준 답을 여기에 통째로 붙여넣으세요." aria-label="받은 답 붙여넣기"></textarea>
+        <textarea id="hPaste" placeholder="AI가 준 답을 여기에 통째로 붙여넣으세요." aria-label="받은 답 붙여넣기"></textarea>
         <div class="hbtns">
           <button class="btn" type="button" id="hPrev">미리보기</button>
           <button class="btn primary" type="button" id="hSave">index.html로 저장</button>
@@ -437,9 +469,9 @@ html[data-mode="present"] .keys{display:block}
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>한참 기다려도 반응이 없습니다.</b> 화면 아래에 허용을 묻는 창이 떠 있는지 봅니다. 멈춘 것처럼 보이면 대개 선생님 대답을 기다리는 중입니다.</p>
-          <p><b>SenGPT 코드가 중간에 끊겼습니다.</b> "처음부터 끝까지 다시, 설명은 빼고 코드만 써 줘"라고 보냅니다. 그래도 끊기면 기능을 하나 줄여 달라고 합니다.</p>
+          <p><b>웹 채팅에서 코드가 중간에 끊겼습니다.</b> 무료 계정에서 자주 있는 일입니다. "처음부터 끝까지 다시, 설명은 빼고 코드만 써 줘"라고 보냅니다. 그래도 끊기면 기능을 하나 줄여 달라고 합니다.</p>
           <p><b>index.html이 어디 있는지 모르겠습니다.</b> 도구에게 "방금 만든 파일 위치를 알려 줘"라고 물으면 경로를 알려 줍니다.</p>
-          <p><b>파일을 열었더니 하얀 화면만 나옵니다.</b> 도구에게 "하얀 화면만 나와. 원인을 찾아서 고쳐 줘"라고 보냅니다. SenGPT 갈래라면 코드 도우미의 미리보기에서 먼저 확인합니다.</p>
+          <p><b>파일을 열었더니 하얀 화면만 나옵니다.</b> 도구에게 "하얀 화면만 나와. 원인을 찾아서 고쳐 줘"라고 보냅니다. 웹 채팅 갈래라면 코드 도우미의 미리보기에서 먼저 확인합니다.</p>
         </div>
       </details>
     </div>
@@ -495,7 +527,7 @@ html[data-mode="present"] .keys{display:block}
     <div class="blk">
       <p class="kw"><span class="tag">카드</span>과학 수업용 고치기 부탁</p>
       <p class="brief">필요한 카드를 복사해 붙여넣습니다.</p>
-      <p class="note" data-tool="sengpt"><span class="tl">SenGPT</span>SenGPT 갈래에서는 카드 뒤에 "고친 코드 전체를 다시 보여 줘"를 붙이고, 받은 답을 코드 도우미로 다시 저장합니다.</p>
+      <p class="note" data-tool="web"><span class="tl">웹 채팅</span>웹 채팅 갈래에서는 카드 뒤에 "고친 코드 전체를 다시 보여 줘"를 붙이고, 받은 답을 코드 도우미로 다시 저장합니다.</p>
       <div class="fixgrid">
         <div class="pr"><span class="pl">전자칠판용으로 키우기</span><button class="btn cp" type="button">복사</button><div class="txt">교실 전자칠판에 띄울 거야. 글씨와 버튼만 지금보다 1.5배 크게 해 줘. 나머지는 그대로 둬.</div></div>
         <div class="pr"><span class="pl">단위 붙이기</span><button class="btn cp" type="button">복사</button><div class="txt">화면에 나오는 숫자마다 알맞은 단위를 붙여 줘. 다른 건 바꾸지 마.</div></div>
@@ -522,13 +554,13 @@ html[data-mode="present"] .keys{display:block}
       <p class="kw">토큰과 긴 대화</p>
       <p class="brief">AI가 읽고 쓰는 양만큼 요금제 한도가 줄어듭니다. 대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다.</p>
       <div class="detail">
-        <p>토큰은 AI가 글을 읽고 쓰는 단위입니다. 요금제의 사용 한도는 메시지 개수보다 이 토큰을 얼마나 썼는지에 따라 줄어듭니다. "파일 전체를 다시 써 줘"는 파일 한 장을 통째로 다시 쓰는 일이라 가장 많이 씁니다. Claude 앱과 Codex는 고칠 부분만 바꾸니 훨씬 덜 쓰고, SenGPT처럼 고칠 때마다 코드 전체를 다시 받는 방식은 한 번에 파일 한 장만큼 씁니다.</p>
+        <p>토큰은 AI가 글을 읽고 쓰는 단위입니다. 요금제의 사용 한도는 메시지 개수보다 이 토큰을 얼마나 썼는지에 따라 줄어듭니다. "파일 전체를 다시 써 줘"는 파일 한 장을 통째로 다시 쓰는 일이라 가장 많이 씁니다. Claude 앱과 Codex는 고칠 부분만 바꾸니 훨씬 덜 쓰고, 웹 채팅처럼 고칠 때마다 코드 전체를 다시 받는 방식은 한 번에 파일 한 장만큼 씁니다.</p>
         <p>대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다. 다만 요약하면서 자잘한 약속이 빠질 수 있어서, 저는 꼭 지킬 규칙을 파일에 적어 두고 "이 규칙을 읽고 시작해 줘"라고 합니다. Claude 앱이나 Codex처럼 폴더에서 일하는 도구는 만든 파일이 그대로 남아 있어서, 새 대화를 열어도 "이 폴더의 index.html을 이어서 고쳐 줘" 한 줄이면 이어집니다. 처음부터 다시 올려야 하는 것은 코드가 채팅창 안에만 있는 웹 채팅 쪽입니다.</p>
       </div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>고쳐 달라고 했더니 다른 부분까지 바뀌었습니다.</b> "방금 고치기 전으로 되돌려 줘"라고 한 뒤, 고칠 곳 하나만 다시 부탁합니다.</p>
-          <p><b>새로고침해도 바뀐 것이 보이지 않습니다.</b> SenGPT 갈래라면 새 코드를 코드 도우미로 다시 저장했는지 봅니다. 앱 갈래라면 AI가 다른 파일을 고쳤을 수 있으니 "어느 파일을 고쳤는지 알려 줘"라고 묻습니다.</p>
+          <p><b>새로고침해도 바뀐 것이 보이지 않습니다.</b> 웹 채팅 갈래라면 새 코드를 코드 도우미로 다시 저장했는지 봅니다. 앱 갈래라면 AI가 다른 파일을 고쳤을 수 있으니 "어느 파일을 고쳤는지 알려 줘"라고 묻습니다.</p>
           <p><b>사용량이 다 떨어졌다고 나옵니다.</b> 몇 시간 단위로 다시 채워집니다. 같은 부탁을 여러 번 되풀이하는 것이 가장 많이 쓰니, 부탁을 하나로 모아 짧게 보냅니다.</p>
         </div>
       </details>
@@ -615,9 +647,13 @@ modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' 
 
 /* ── 도구 고르기: 매뉴얼 세 장이 같은 값을 씁니다 ── */
 const TOOL_KEY = 'vibe:tool';
+const TOOLS = { codex: 'local', claude: 'local', sengpt: 'web', 'gpt-free': 'web', 'claude-free': 'web', 'gemini-free': 'web' };
 function setTool(t) {
-  if (t) html.dataset.t = t; else delete html.dataset.t;
+  if (!TOOLS[t]) t = '';
+  const kind = t ? TOOLS[t] : '';
+  if (t) { html.dataset.t = t; html.dataset.k = kind; } else { delete html.dataset.t; delete html.dataset.k; }
   document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  document.querySelectorAll('[data-tool]').forEach(el => { const tk = el.dataset.tool.split(/\s+/); el.hidden = !!t && !(tk.includes(t) || tk.includes(kind)); });
   try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
   buildPrompt();
 }
@@ -717,7 +753,7 @@ function josa(w) {
 }
 function buildPrompt() {
   if (!bform) return;
-  const v = readForm(), t = html.dataset.t || '';
+  const v = readForm(), k = html.dataset.k || '';
   bform.elements.miscOwn.hidden = v.misc !== 'own';
   const L = [];
   const scene = (v.scene || '(보여주고 싶은 장면)').replace(/[.。]\s*$/, '');
@@ -743,8 +779,8 @@ function buildPrompt() {
   const mis = v.misc === 'own' ? (v.miscOwn ? v.miscOwn.split(/\n+/).filter(Boolean) : []) : (MISC[v.misc] || []);
   if (mis.length) { L.push(''); L.push('[틀리게 보여 주면 안 되는 것]'); mis.forEach(m => L.push('- ' + m)); }
   L.push('');
-  if (t === 'codex' || t === 'claude') L.push('파일은 지금 열린 과학실험실 폴더에 index.html로 저장해 주세요.');
-  if (t === 'sengpt') L.push('코드는 설명과 나눠서, <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 한 번에 전부 보여 주세요.');
+  if (k === 'local') L.push('파일은 지금 열린 과학실험실 폴더에 index.html로 저장해 주세요.');
+  if (k === 'web') L.push('코드는 설명과 나눠서, <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 한 번에 전부 보여 주세요.');
   L.push('다 만들면 무엇을 어떻게 만들었는지 세 줄로 알려 주세요.');
   pOut.textContent = L.join('\n');
   try { localStorage.setItem(BKEY, JSON.stringify(v)); } catch (e) {}
@@ -817,7 +853,7 @@ document.getElementById('hSave').addEventListener('click', async () => {
 });
 
 /* 처음 한 번: 저장된 도구 불러오기 (빌더가 도구에 맞춰 한 줄을 바꿉니다) */
-(function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(['codex', 'claude', 'sengpt'].includes(t) ? t : ''); })();
+(function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
 </script>
 </body>
 </html>
