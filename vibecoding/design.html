@@ -86,6 +86,14 @@ html[data-mode="present"] .timer{display:inline-flex}
 .pipe .a{color:var(--ink3);font-size:1.1em}
 html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
 
+/* ── 강사 ── */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+
 /* ── 도구 고르기 ── */
 .pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
 .pick p{margin:0 0 10px;font-weight:600}
@@ -269,6 +277,7 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
 <!-- ═══════════ 표지 ═══════════ -->
 <header class="hero" id="top">
   <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">바이브코딩 연수 · 디자인 서랍</div>
     <h1>설계서 한 장으로 앱에 옷 입히기</h1>
     <p class="lead">디자인은 따로 고민하지 않고 서랍에서 설계서 한 장을 골라 AI에게 맡기는 방법을 정리해보겠습니다!</p>
@@ -370,7 +379,7 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
       <p class="brief">원본을 받아 index.html 옆에 두면, AI가 폴더에서 직접 읽습니다.</p>
       <ol class="steps" data-key="local">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">서랍에서 고르고 DESIGN.md 받기</span><span class="how">카드의 [DESIGN.md 받기] → 다운로드 폴더에 DESIGN.md 이름으로 저장됩니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 파일을 과학실험실 폴더로 옮기기</span><span class="how">다운로드 폴더의 DESIGN.md → 과학실험실 폴더(index.html 옆)로 끌기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 파일을 수업도구 폴더로 옮기기</span><span class="how">다운로드 폴더의 DESIGN.md → 수업도구 폴더(index.html 옆)로 끌기</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 만든 부탁문 보내기</span><span class="how">새로 만들 때는 ① 기초 부탁문 끝에 붙이고, 이미 만든 앱이면 그대로 보내기</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">index.html을 새로고침해서 보기</span><span class="how">마음에 안 들면 "방금 고치기 전으로 되돌려 줘" → 다른 서랍으로</span></div></li>
       </ol>
@@ -396,7 +405,7 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
       <div class="detail">
         <p>붙여넣기와 첨부 중 무엇이 나은지는 도구와 계정에 따라 달라서 하나로 정해 드리기 어렵습니다. 무료 계정에서는 짧은 판을 붙여넣는 쪽을 먼저 권합니다. 첨부는 손이 덜 가지만, 무료 계정은 하루에 올릴 수 있는 파일 수나 크기에 제한이 있는 경우가 많고, AI가 원본 전체를 읽는 만큼 사용량도 붙여넣는 것과 같이 씁니다.</p>
         <p>원본을 웹 채팅에 그대로 붙이면 영어 2~3만 자가 한꺼번에 들어가서 사용량을 많이 쓰고, 뒤에 받는 긴 코드와 겹쳐 답이 중간에 끊기기 쉽습니다. 그래서 색, 글꼴 크기, 모서리 모양, 해야 할 것과 하지 말 것만 3천 자 안팎으로 추린 짧은 판을 따로 만들었습니다.</p>
-        <p>새 대화에서 지금 코드를 붙이려면, 과학실험실 폴더의 index.html을 오른쪽 클릭해 [연결 프로그램]에서 [메모장]을 골라 열고 <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사합니다.</p>
+        <p>새 대화에서 지금 코드를 붙이려면, 수업도구 폴더의 index.html을 오른쪽 클릭해 [연결 프로그램]에서 [메모장]을 골라 열고 <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사합니다.</p>
       </div>
     </div>
 

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>칠판 강의 화면 만들기 · 바이브코딩 연수 · 해누리중 조승재</title>
+<meta name="description" content="학습지 빈칸에 위에서부터 번호를 매기고, 빈칸과 한 장씩 맞춘 칠판 강의 화면을 AI로 만드는 60분 매뉴얼. 준비물, 네 단계 부탁문 템플릿(빈칸 지도·장면 목록·만들기·대조), 고치기 카드까지 정리했습니다.">
+<link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 강사 ── */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+
+/* ── 도구 고르기 ── */
+.pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
+.pick p{margin:0 0 10px;font-weight:600}
+.toolpick{display:flex;flex-wrap:wrap;gap:8px}
+.toolpick button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:9px 18px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.toolpick button:hover{border-color:var(--ink2)}
+.toolpick button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
+.tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
+html[data-t] .tl{display:none}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* ── 실습 ── */
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::-webkit-details-marker{display:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+html[data-mode="present"] details.stuck{display:none}
+
+/* ── 비교 상자·링크 카드 ── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box.no b{color:var(--bad)} .box.yes b{color:var(--ok)}
+.box.yes{border-color:var(--ok)}
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+
+/* ── 프롬프트 카드 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+html[data-mode="present"] .pr{font-size:.75em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 12px}
+.pr.big .txt{max-height:none}
+html[data-mode="present"] .pr.big .txt{max-height:14em}
+
+/* ── 부탁문 빌더 ── */
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
+.bform .full{grid-column:1/-1}
+.bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.bform input[type=text],.bform select,.bform textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.bform textarea{min-height:4.4em;resize:vertical;line-height:1.5}
+.bform input:focus,.bform select:focus,.bform textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem;cursor:pointer}
+.opts input{width:1.1em;height:1.1em;margin:.2em 0 0;accent-color:var(--blue);flex:none}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 16px}
+html[data-mode="present"] .bform{font-size:.8em}
+
+.ideas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.ideas .il{font-size:.85rem;color:var(--ink2);margin-right:4px}
+.ideas button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.ideas button:hover{border-color:var(--blue);color:var(--blue)}
+.kinds label{border:1px solid var(--line);border-radius:9999px;padding:6px 14px 6px 10px;align-items:center}
+.kinds label:has(input:checked){border-color:var(--blue);background:var(--blue-t);color:var(--blue);font-weight:600}
+.kinds input{margin:0}
+
+/* ── 코드 도우미 ── */
+.helper{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.helper textarea{width:100%;min-height:9em;font-family:var(--mono);font-size:.82rem;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;resize:vertical;line-height:1.45}
+.helper textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.hbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.hmsg{font-size:.88em;color:var(--ink2)}
+.hmsg.bad{color:var(--bad)} .hmsg.ok{color:var(--ok)}
+.hframe{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-top:12px}
+.hframe iframe{display:block;width:100%;height:440px;border:0;background:#fff}
+
+/* ── 표 ── */
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+  .bform{grid-template-columns:1fr}
+  .pr{padding-right:14px;padding-top:44px}
+  .fixgrid{grid-template-columns:1fr}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+/* ── 강의 화면 전용 ── */
+.ex3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
+.ex3 a{display:block;color:var(--ink);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff}
+.ex3 a:hover{border-color:var(--blue);text-decoration:none}
+.ex3 img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top;background:var(--bg2)}
+.ex3 span{display:block;padding:10px 12px 12px}
+.ex3 b{display:block;font-size:.98rem}
+.ex3 small{color:var(--ink2);font-size:.82rem}
+.mat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0}
+.mat .box .n{display:inline-flex;align-items:center;justify-content:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--blue);color:#fff;font-size:.8rem;font-weight:600;margin-bottom:6px}
+.tplbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.formsub{grid-column:1/-1;font-size:.82rem;font-weight:600;color:var(--ink2);border-top:1px solid var(--line2);padding-top:10px;margin-top:2px}
+.keytbl td:first-child{white-space:nowrap;width:1%}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">칠판 강의 화면<small>바이브코딩 연수</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">바이브코딩 연수 · 칠판 강의 화면</div>
+    <h1>학습지 한 장을 칠판 강의 화면으로</h1>
+    <p class="lead">제가 직렬·병렬, 소비 전력, 기체의 압력 수업에 띄우는 강의 화면은 학습지 빈칸과 한 장씩 맞춰 만들었습니다. 같은 방법으로 선생님 학습지 한 장을 칠판에 띄우는 강의 화면으로 만들어보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">재료 세 가지</span><span class="a">→</span><span class="n">빈칸 지도</span><span class="a">→</span><span class="n">장면 목록</span><span class="a">→</span><span class="n">만들기</span><span class="a">→</span><span class="n">빈칸 대조</span><span class="a">→</span><span class="n hi">칠판에 띄우기</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span>⏱ <b>60분</b></span>
+      <span>📄 <b>빈칸이 있는 개념정리 학습지 한 장</b></span>
+      <span>🔑 <b>AI 계정 하나 (폴더에서 일하는 앱이면 더 편합니다)</b></span>
+    </div>
+    <div class="pick">
+      <p>먼저 쓰시는 도구를 골라 주세요. 고르신 도구에 맞는 설명만 보입니다.</p>
+      <div class="toolgroup">
+        <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
+        <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
+          <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex</small></button>
+          <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭</small></button>
+        </div>
+      </div>
+      <div class="toolgroup">
+        <span class="tg">웹 채팅 · 무료 계정도 됩니다</span>
+        <div class="toolpick" role="group" aria-label="웹 채팅">
+          <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹<small>chatgpt.com</small></button>
+          <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹<small>claude.ai</small></button>
+          <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹<small>gemini.google.com</small></button>
+          <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정</small></button>
+        </div>
+      </div>
+    </div>
+    <div class="flow" id="flow"></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big to-hub" href="./">연수 허브로</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 먼저 보기 ═══════════ -->
+<section class="step" id="s1" data-title="먼저 보기" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>제가 만든 강의 화면 먼저 보기</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">강의 화면이 수업에서 어떻게 쓰이는지 먼저 넘겨 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">빈칸 번호가 학습지와 같습니다</p>
+      <p class="brief">번호 배지가 붙은 빈칸이 누를 때마다 하나씩 열리고, 학생들은 학습지의 같은 번호 칸에 받아 적습니다.</p>
+      <div class="ex3">
+        <a href="https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html" target="_blank" rel="noopener"><img src="gallery/series-parallel.webp" alt="직렬·병렬 강의 화면" width="800" height="500" loading="lazy"><span><b>직렬·병렬</b><small>중2 · 22장 · 빈칸 24개</small></span></a>
+        <a href="https://scienceisjo.github.io/electricity/06-power-lecture.html" target="_blank" rel="noopener"><img src="gallery/power.webp" alt="소비 전력 강의 화면" width="800" height="500" loading="lazy"><span><b>소비 전력</b><small>중2 · 31장 · 빈칸 26개</small></span></a>
+        <a href="https://scienceisjo.github.io/gas-properties/03-boyle-lecture.html" target="_blank" rel="noopener"><img src="gallery/boyle-lecture.webp" alt="기체의 압력 강의 화면" width="800" height="500" loading="lazy"><span><b>기체의 압력 세 벌</b><small>중1 · 9~13장씩 · 빈칸 48개</small></span></a>
+      </div>
+      <div class="detail">
+        <p>첫 장면에서 "번호가 붙은 칸이 열리면 학습지의 그 번호 칸에 적는다"고 한 번만 알려 주면, 그다음부터는 화면을 넘기는 것만으로 학습지가 채워집니다. 빈칸 옆에서는 비유나 시뮬레이션이 함께 움직여서, 학생들이 정답을 받아 적기 전에 왜 그런지를 먼저 봅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">PPT로 만들 때와 다른 점</p>
+      <div class="grid2">
+        <div class="box"><b>계산해서 움직입니다</b><p>지나가는 입자 수를 세거나, 흐르는 빠르기를 식대로 맞추는 일은 손으로 그리는 것보다 코드가 잘합니다.</p></div>
+        <div class="box"><b>대본이 화면 뒤에 있습니다</b><p>T 키를 누르면 그 장면에서 제가 할 말이 화면 아래에 열립니다.</p></div>
+        <div class="box"><b>링크 하나로 복습합니다</b><p>주소 끝에 ?s=1을 붙이면 대본이 숨은 학생용 판이 됩니다.</p></div>
+        <div class="box"><b>학습지와 1:1입니다</b><p>빈칸 번호와 정답을 맞추는 과정이 그대로 학습지 점검이 됩니다.</p></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">만든 방식은 단순합니다</p>
+      <p class="brief">제 설명 순서, 학습지, 디자인 설계서. 이 세 가지를 AI에게 넣었습니다.</p>
+      <div class="detail">
+        <p>강의 화면을 만들 때 저는 평소 수업에서 하는 설명을 순서대로 적은 대본과, 빈칸이 있는 개념정리 학습지, 그리고 디자인 서랍의 apple 설계서를 AI에게 주었습니다. 이 매뉴얼은 그 과정을 네 번의 부탁으로 나눈 것입니다. 한 번에 "강의 화면 만들어 줘"라고 하면 빈칸이 빠지거나 순서가 뒤섞이기 쉬워서, 빈칸 지도와 장면 목록을 먼저 받아 확인한 다음에 만듭니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 재료 ═══════════ -->
+<section class="step" id="s2" data-title="재료" data-min="8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>재료 세 가지를 한 폴더에</h2><span class="min"><b>8</b>분</span></div>
+    <p class="goal">학습지, 설명 순서, 설계서 세 가지를 강의화면 폴더에 모아보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">준비물</p>
+      <div class="mat">
+        <div class="box"><span class="n">1</span><b>학습지</b><p>빈칸이 있는 개념정리 학습지 한 장. 정답이 보이는 교사용이면 가장 좋습니다. PDF로 저장합니다.</p></div>
+        <div class="box"><span class="n">2</span><b>내 설명 순서</b><p>이 차시에서 평소 하는 말을 순서대로 적은 메모. 학생에게 던지는 질문도 그대로 적습니다.</p></div>
+        <div class="box"><span class="n">3</span><b>디자인 설계서</b><p>디자인 서랍에서 고른 DESIGN.md 한 장. 제 강의 화면은 apple 설계서를 썼습니다.</p></div>
+        <div class="box"><span class="n">+</span><b>있으면 좋은 것</b><p>꼭 움직여 보여 주고 싶은 장면이나 비유 하나. 저는 버블티 빨대로 저항을 설명합니다.</p></div>
+      </div>
+      <ol class="steps" data-key="prep">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">바탕화면에 강의화면 폴더 만들기</span><span class="how">바탕화면 빈 곳 오른쪽 클릭 → [새로 만들기] → [폴더] → 이름 <b>강의화면</b></span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">학습지를 PDF로 저장해 폴더에 넣기</span><span class="how">한글에서 [파일] → [PDF로 저장하기]. 종이뿐이면 휴대폰으로 반듯하게 찍은 사진도 됩니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">설명 순서를 메모장에 적어 대본.txt로 저장하기</span><span class="how">한 줄에 이야기 하나. 적기 번거로우면 말로 녹음해 글자로 바꾼 것도 됩니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">디자인 서랍에서 DESIGN.md를 받아 폴더에 넣기</span><span class="how"><a class="to-design" href="design.html" target="_blank" rel="noopener">디자인 서랍</a> → 카드의 [DESIGN.md 받기] → 강의화면 폴더로 옮기기</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>앱에서 강의화면 폴더 열기</span><span class="how">Codex는 [폴더 추가], Claude 앱은 Code 탭의 [Select folder]로 강의화면 폴더를 고릅니다</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>새 채팅을 열고 이 대화 하나로 끝까지 가기</span><span class="how">빈칸 지도와 장면 목록이 같은 대화 안에 있어야 3단계부터 이어집니다</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>한글(HWP) 파일은 AI가 제대로 읽지 못하는 경우가 많아서 PDF로 바꿔 넣습니다. 학습지 스튜디오로 만든 학습지라면 학습지 파일(JSON)을 그대로 넣어도 됩니다. 빈칸이 따로 표시되어 있어서 번호와 정답이 정확하게 들어갑니다.</p>
+        <p data-tool="web">웹 채팅은 부탁문을 보낼 때 입력칸의 첨부 버튼으로 학습지 PDF를 올리고, 대본은 입력칸에 붙여넣습니다. 무료 계정은 첨부할 수 있는 횟수와 한 번에 받을 수 있는 코드 길이가 작아서, 장면 수를 10장 안팎으로 줄여 만듭니다.</p>
+      </div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>한글에 PDF로 저장하기가 보이지 않습니다.</b> [인쇄]를 누르고 프린터를 Microsoft Print to PDF로 고르면 PDF 파일로 저장됩니다.</p>
+          <p><b>학습지가 두 쪽입니다.</b> 두 쪽을 한 PDF로 저장해 넣습니다. 쪽마다 따로 저장해도 괜찮습니다.</p>
+          <p><b>정답이 적힌 교사용이 없습니다.</b> 학생용만 넣어도 됩니다. 3단계에서 AI가 정답을 추측해 채우면, 그 칸만 직접 확인해 고칩니다.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 빈칸 지도 ═══════════ -->
+<section class="step" id="s3" data-title="빈칸 지도" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>빈칸 지도 받기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">학습지 빈칸에 위에서부터 번호를 매기고, 정답까지 표로 받아 확인해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">템플릿</span>몇 칸만 채우면 아래 부탁 네 개에 저절로 들어갑니다</p>
+      <form class="bform" id="lf" onsubmit="return false">
+        <label class="f">학년
+          <select name="grade"><option>초등학교 5~6학년</option><option>중학교 1학년</option><option selected>중학교 2학년</option><option>중학교 3학년</option><option>고등학교 1학년</option></select>
+        </label>
+        <label class="f">과목
+          <input type="text" name="subject" maxlength="20" value="과학">
+        </label>
+        <label class="f full">차시 제목
+          <input type="text" name="unit" maxlength="60" placeholder="예: 저항의 직렬연결과 병렬연결">
+        </label>
+        <div class="f">학습지의 빈칸 번호
+          <div class="opts">
+            <label><input type="radio" name="num" value="has" checked> 번호가 이미 적혀 있음</label>
+            <label><input type="radio" name="num" value="none"> 번호가 없음 (새로 매기기)</label>
+          </div>
+        </div>
+        <div class="f">정답
+          <div class="opts">
+            <label><input type="radio" name="ans" value="has" checked> 교사용이라 정답이 적혀 있음</label>
+            <label><input type="radio" name="ans" value="none"> 학생용이라 정답이 없음</label>
+          </div>
+        </div>
+        <label class="f">수업 시간
+          <select name="min"><option value="40">40분</option><option value="45" selected>45분</option><option value="50">50분</option></select>
+        </label>
+        <label class="f">꼭 넣고 싶은 비유나 장면 (선택)
+          <input type="text" name="analogy" maxlength="120" placeholder="예: 버블티 빨대가 좁을수록 저항이 크다">
+        </label>
+      </form>
+      <div class="tplbar"><button class="btn" type="button" id="dlTpl">빈칸 채우기형 템플릿으로 받기 (.txt)</button><span class="small">칸을 비워 둔 부탁문 네 개를 파일로 받아 두고 다른 차시에 다시 씁니다.</span></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">부탁 ①</span>빈칸 지도</p>
+      <p class="brief">학습지를 붙여(첨부해) 함께 보냅니다. 코드는 아직 받지 않습니다.</p>
+      <div class="pr big" id="p1"><span class="pl">부탁 ① 빈칸 지도</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="map">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">빈칸 개수가 학습지와 같은지 보기</span><span class="how">AI가 마지막에 센 개수와 학습지의 빈칸 수를 맞춰 봅니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">번호 순서가 인쇄된 학습지와 같은지 보기</span><span class="how">두 단으로 된 쪽, 표 안의 빈칸에서 순서가 잘 뒤바뀝니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">정답이 한 글자도 다르지 않은지 보기</span><span class="how">띄어쓰기와 단위까지. (추측) 표시가 붙은 칸은 직접 고칩니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">고친 곳이 있으면 AI에게 알려 주기</span><span class="how">아래 카드를 복사해 고친 줄만 적어 보냅니다</span></div></li>
+      </ol>
+      <div class="pr"><span class="pl">고친 빈칸 지도 알려 주기</span><button class="btn cp" type="button">복사</button><div class="txt">빈칸 지도를 이렇게 고쳤어. 앞으로는 고친 표를 기준으로 해 줘.
+- (고친 번호와 정답을 한 줄씩)</div></div>
+      <div class="detail">
+        <p>빈칸 지도는 강의 화면의 설계도라서, 인쇄된 학습지 옆에 두고 번호와 정답을 한 줄씩 맞춰 봅니다. 소비 전력 강의 화면을 만들 때는 이 단계에서 학습지에 적힌 숫자 하나가 계산과 맞지 않는다는 것이 드러나기도 했습니다. 강의 화면을 만들다 보면 학습지까지 한 번 더 다듬어집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 장면 목록 ═══════════ -->
+<section class="step" id="s4" data-title="장면 목록" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>장면 목록 짜기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">빈칸 지도와 설명 순서로 강의 화면의 장면 목록을 짜 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">장면의 뼈대</p>
+      <p class="brief">처음과 끝을 같은 질문으로 묶고, 가운데에 빈칸이 열리는 장면을 학습지 순서대로 놓습니다.</p>
+      <div class="pipe" aria-label="장면의 뼈대"><span class="n">표지</span><span class="a">→</span><span class="n">궁금증을 여는 질문</span><span class="a">→</span><span class="n">빈칸이 열리는 개념 장면</span><span class="a">→</span><span class="n">표와 문제</span><span class="a">→</span><span class="n">생활 속으로</span><span class="a">→</span><span class="n">오늘의 정리</span><span class="a">→</span><span class="n hi">처음 질문으로</span></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">부탁 ②</span>장면 목록</p>
+      <p class="brief">대본을 함께 보냅니다. 앱을 쓰시면 폴더의 대본.txt를 읽으라고 적혀 있습니다.</p>
+      <div class="pr big" id="p2"><span class="pl">부탁 ② 장면 목록</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="plan">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">빈칸 번호가 빠짐없이 한 번씩 나오는지 보기</span><span class="how">표의 빈칸 번호 칸을 위에서부터 읽어 내려갑니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">장면 수가 수업 시간에 맞는지 보기</span><span class="how">45분 수업이면 20~30장이 알맞습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">움직임이 과하지 않은지 보기</span><span class="how">장면마다 하나까지. 없어도 되는 장면이 더 많습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">'내가 할 말'이 내 말투인지 보기</span><span class="how">다르면 "내가 할 말을 대본 그대로 옮겨 줘"라고 보냅니다</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>처음 설계를 크게 잡으면 한 차시 자료가 영상 제작이 되어 버립니다. 제 소비 전력 강의 화면도 처음 설계에는 움직이는 효과가 스물다섯 가지나 들어 있어서, 장면마다 움직임 하나 정도로 줄였습니다. 한 차시에는 20~30장, 장면마다 움직임 하나면 충분합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 만들기 ═══════════ -->
+<section class="step" id="s5" data-title="만들기" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>강의 화면 만들기</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">장면 목록대로 강의 화면을 받아, 처음부터 끝까지 넘겨 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">부탁 ③</span>만들기</p>
+      <form class="bform" id="lf2" onsubmit="return false">
+        <div class="f">디자인
+          <div class="opts">
+            <label><input type="radio" name="design" value="md" checked> 폴더의 DESIGN.md 설계서 따르기</label>
+            <label><input type="radio" name="design" value="plain"> 흰 바탕에 파란색 하나</label>
+          </div>
+        </div>
+        <div class="f">더할 것
+          <div class="opts">
+            <label><input type="checkbox" name="student" checked> 학생 복습판 (주소 끝 ?s=1)</label>
+            <label><input type="checkbox" name="sound"> 빈칸이 열릴 때 효과음</label>
+          </div>
+        </div>
+      </form>
+      <p class="note" data-tool="web"><span class="tl">웹 채팅</span>설계서는 파일로 첨부하거나, 디자인 서랍 카드의 [짧은 판 복사]로 부탁문 아래에 붙여넣습니다.</p>
+      <div class="pr big" id="p3"><span class="pl">부탁 ③ 만들기</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="make">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내고 되묻는 질문에 짧게 답하기</span><span class="how">잘 모르겠으면 "네가 정해 줘"</span></div></li>
+        <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>다 됐다고 하면 index.html 열기</span><span class="how">강의화면 폴더에서 index.html 더블클릭</span></div></li>
+        <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>코드가 &lt;/html&gt;까지 나오면 아래 코드 도우미로 저장하기</span><span class="how">복사 → 코드 도우미 칸에 붙여넣기 → [미리보기] → [index.html로 저장] → 강의화면 폴더</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">→ 키로 처음부터 끝까지 넘겨 보기</span><span class="how">T 키로 대본, F 키로 전체 화면도 확인합니다</span></div></li>
+      </ol>
+    </div>
+
+    <div class="blk" data-tool="web">
+      <p class="kw"><span class="tag">웹 채팅</span>코드 도우미</p>
+      <p class="brief">설명이 섞인 답을 통째로 붙여넣어도 코드만 골라 미리 보여 주고, 파일로 저장합니다.</p>
+      <div class="helper">
+        <textarea id="hPaste" placeholder="AI가 준 답을 여기에 통째로 붙여넣으세요." aria-label="받은 답 붙여넣기"></textarea>
+        <div class="hbtns">
+          <button class="btn" type="button" id="hPrev">미리보기</button>
+          <button class="btn primary" type="button" id="hSave">index.html로 저장</button>
+          <span class="hmsg" id="hMsg" role="status"></span>
+        </div>
+        <div class="hframe" id="hFrame" hidden></div>
+      </div>
+      <div class="detail">
+        <p>붙여넣은 내용은 선생님 컴퓨터 안에서만 처리되고 어디로도 보내지 않습니다. 코드가 중간에 끊겼다면 "끊긴 곳부터가 아니라, 장면을 줄여서 처음부터 끝까지 다시 써 줘"라고 보냅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">처음 결과는 끝까지 넘어가기만 하면 됩니다</p>
+      <p class="brief">어설픈 장면은 6단계에서 장면 번호를 불러 하나씩 고칩니다.</p>
+      <div class="detail">
+        <p>한 번에 완성본이 나오는 경우는 거의 없습니다. 초안은 금방 나오고, 시간은 대부분 고치는 데 들어갑니다. 첫 결과가 처음부터 끝까지 넘어가고 빈칸이 열리기만 하면 다음 단계로 넘어갑니다.</p>
+      </div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>하얀 화면만 나옵니다.</b> "하얀 화면만 나와. 원인을 찾아서 고쳐 줘"라고 보냅니다.</p>
+          <p><b>빈칸이 한꺼번에 다 열려 있습니다.</b> "빈칸은 처음에 가려 두고, 누를 때마다 하나씩 열리게 고쳐 줘"라고 보냅니다.</p>
+          <p><b>화면이 전자칠판보다 작거나 잘립니다.</b> "창 크기에 맞춰 16:9 비율로 꽉 차게 보여 줘"라고 보냅니다.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6 대조와 고치기 ═══════════ -->
+<section class="step" id="s6" data-title="대조와 고치기" data-min="7">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>빈칸 대조하고 고치기</h2><span class="min"><b>7</b>분</span></div>
+    <p class="goal">화면에 나온 빈칸을 빈칸 지도와 맞춰 보고, 장면 번호를 불러 하나씩 고쳐보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">부탁 ④</span>빈칸 대조</p>
+      <div class="pr big" id="p4"><span class="pl">부탁 ④ 빈칸 대조</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="check">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">처음부터 끝까지 넘기고, ← 키로 거꾸로 돌아와 보기</span><span class="how">돌아왔을 때 화면이 깨지거나 빈칸이 이상하게 남는지</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">빠르게 여러 번 눌러 보기</span><span class="how">움직임이 겹치거나 빈칸이 건너뛰어지는지</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">장면 제목에 아직 열리지 않은 정답이 보이는지</span><span class="how">제목이 정답을 먼저 말해 버리는 실수가 잦습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">단위와 용어가 교과서와 같은지</span><span class="how">힘은 N, 압력은 N/m²처럼</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">교실 뒷자리에서 글씨가 읽히는지</span><span class="how">전자칠판에 띄워 교실 맨 뒤에서 봅니다</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>제 기체의 압력 강의 화면도 검토에서 장면 제목에 빈칸 정답이 먼저 적혀 있거나, 힘의 단위가 N이 아니라 g으로 적힌 실수가 나왔습니다. 빈칸 대조를 AI에게 한 번 시키고, 눈으로 한 번 더 넘겨 보면 대부분 잡힙니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">카드</span>장면 번호를 불러 하나씩 고치기</p>
+      <p class="brief">[ ] 안을 바꿔 보냅니다. 끝에 "다른 장면은 그대로 둬"가 붙어 있습니다.</p>
+      <p class="note" data-tool="web"><span class="tl">웹 채팅</span>웹 채팅에서는 카드 뒤에 "고친 코드 전체를 다시 보여 줘"를 붙이고, 받은 답을 코드 도우미로 다시 저장합니다.</p>
+      <div class="fixgrid">
+        <div class="pr"><span class="pl">한 장면만 고치기</span><button class="btn cp" type="button">복사</button><div class="txt">[7]번 장면만 고쳐 줘. [고칠 내용]. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">빈칸 배지 키우기</span><button class="btn cp" type="button">복사</button><div class="txt">빈칸 번호 배지와 정답 글씨가 뒷자리에서 안 보여. 배지와 정답 글씨만 1.5배로 키워 줘. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">움직임 느리게</span><button class="btn cp" type="button">복사</button><div class="txt">[5]번 장면의 움직임이 설명하기 전에 끝나. 두 배 느리게 하고, 내가 누를 때 시작하게 해 줘. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">질문 장면 넣기</span><button class="btn cp" type="button">복사</button><div class="txt">[9]번 장면 앞에 학생에게 던질 질문 장면을 하나 넣어 줘. 질문: [질문]. 빈칸 번호는 바꾸지 마. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">대본 말투 고치기</span><button class="btn cp" type="button">복사</button><div class="txt">대본을 내가 수업에서 말하는 말투로 고쳐 줘. 장면마다 두세 문장, 학생에게 묻는 질문은 살려 줘. 화면은 바꾸지 마.</div></div>
+        <div class="pr"><span class="pl">화면 가리기</span><button class="btn cp" type="button">복사</button><div class="txt">B 키를 누르면 화면이 검게 가려지고, 다시 누르면 돌아오게 해 줘. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">판서 펜</span><button class="btn cp" type="button">복사</button><div class="txt">P 키를 누르면 화면 위에 펜으로 쓸 수 있게 해 줘. 색 세 가지와 지우기 버튼, 장면을 넘기면 지워지게. 다른 장면은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">되돌리기</span><button class="btn cp" type="button">복사</button><div class="txt">방금 고치기 전으로 되돌려 줘.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 7 칠판에 띄우기 ═══════════ -->
+<section class="step" id="s7" data-title="칠판에 띄우기" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">7</span><h2>칠판에 띄우고 나누기</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">완성한 강의 화면을 수업에 띄우고, 보관함과 학생 복습 링크로 나눠보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">수업에서 쓰는 키</p>
+      <table class="keytbl">
+        <tbody>
+          <tr><td><kbd>→</kbd> <kbd>Space</kbd> 클릭</td><td>다음 단계, 다음 장면</td></tr>
+          <tr><td><kbd>←</kbd></td><td>이전</td></tr>
+          <tr><td><kbd>F</kbd></td><td>전체 화면</td></tr>
+          <tr><td><kbd>T</kbd></td><td>대본 열고 닫기</td></tr>
+          <tr><td><kbd>B</kbd> <kbd>P</kbd> <kbd>M</kbd></td><td>화면 가리기, 판서 펜, 소리 (6단계 카드로 더했다면)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생 복습판은 주소 끝에 ?s=1</p>
+      <p class="brief">배포해서 주소가 생기면, 주소 끝에 ?s=1을 붙인 링크를 학생에게 줍니다. 대본이 보이지 않는 판입니다.</p>
+      <div class="detail">
+        <p>저는 학생 입구의 '칠판 다시보기' 방에 이 링크를 걸어 두고, 결석했거나 다시 보고 싶은 학생이 열어 보게 합니다. 주소를 받는 방법은 ② 배포 매뉴얼에서 다룹니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">보관함에 올려 서로 보기</p>
+      <div class="submit">
+        <div class="txt"><b>GiteacherHub · 올리기</b><span>강의화면 폴더의 index.html을 올리면 다른 선생님들도 넘겨 볼 수 있습니다.</span></div>
+        <a class="btn big primary to-gth-up" href="../giteacherhub/#/up" target="_blank" rel="noopener">올리기 열기 ↗</a>
+      </div>
+      <p><a class="btn to-hub" href="./">연수 허브로 돌아가기</a> <a class="btn to-basic" href="basic.html">① 기초 매뉴얼</a></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>p</kbd> 📖/🎤</div>
+
+<script>
+const CONFIG = { key: 'vibe-lecture' };
+/* ═══════════════════════════════════════════════════════════════
+   공통 — 회차 코드(?s=)·📖/🎤 모드·도구 고르기·단계 칩·타이머·체크칸·복사
+   페이지마다 위에서 CONFIG = { key } 를 먼저 정합니다.
+   ═══════════════════════════════════════════════════════════════ */
+const QS = new URLSearchParams(location.search);
+const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+const SCHOOL = (QS.get('school') || '').slice(0, 30);
+
+/* ── 회차 코드를 링크에 싣기 ── */
+(function () {
+  const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
+  const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'deploy.html' + sq, 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; }));
+  if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
+})();
+
+/* ── 모드: 📖 detail / 🎤 present ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save = true) {
+  html.dataset.mode = m;
+  modeBtn.textContent = m === 'present' ? '📖 상세로' : '🎤 발표로';
+  if (save) { try { localStorage.setItem(CONFIG.key + ':mode', m); } catch (e) {} }
+}
+(function initMode() {
+  const q = QS.get('mode'); let m = q;
+  if (!m) { try { m = localStorage.getItem(CONFIG.key + ':mode'); } catch (e) {} }
+  setMode(m === 'present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' ? 'detail' : 'present'));
+
+/* ── 도구 고르기: 매뉴얼 여러 장이 같은 값을 씁니다 ── */
+const TOOL_KEY = 'vibe:tool';
+const TOOLS = { codex: 'local', claude: 'local', sengpt: 'web', 'gpt-free': 'web', 'claude-free': 'web', 'gemini-free': 'web' };
+function setTool(t) {
+  if (!TOOLS[t]) t = '';
+  const kind = t ? TOOLS[t] : '';
+  if (t) { html.dataset.t = t; html.dataset.k = kind; } else { delete html.dataset.t; delete html.dataset.k; }
+  document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  document.querySelectorAll('[data-tool]').forEach(el => { const tk = el.dataset.tool.split(/\s+/); el.hidden = !!t && !(tk.includes(t) || tk.includes(kind)); });
+  try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
+  if (typeof onTool === 'function') onTool();
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => setTool(html.dataset.t === b.dataset.pick ? '' : b.dataset.pick)));
+
+/* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow = document.getElementById('flow');
+steps.forEach((s, i) => {
+  const title = s.dataset.title || s.querySelector('h2')?.textContent || ('단계 ' + (i + 1));
+  const min = s.dataset.min || '';
+  const c = document.createElement('a');
+  c.className = 'chip'; c.href = '#' + s.id; c.innerHTML = `<b>${i + 1}</b>${title}${min ? ` · ${min}분` : ''}`;
+  chips.appendChild(c);
+  if (flow) {
+    const f = document.createElement('a');
+    f.href = '#' + s.id; f.innerHTML = `<span class="n">${i + 1}</span><span class="t">${title}</span><span class="m">${min ? min + '분' : ''}</span>`;
+    flow.appendChild(f);
+  }
+});
+
+/* ── 현재 단계 추적 · 타이머 · 키보드 ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i) {
+  current = i;
+  chipEls.forEach((c, j) => { c.classList.toggle('on', j === i); c.classList.toggle('done', j < i); });
+  updateTimerLabel();
+}
+const io = new IntersectionObserver(es => {
+  const vis = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+  if (vis.length) setCurrent(steps.indexOf(vis[0].target));
+}, { rootMargin: '-30% 0px -55% 0px', threshold: [0, .2, .5, 1] });
+steps.forEach(s => io.observe(s));
+const elapsed = steps.map(() => 0);
+let running = false, tick = null;
+const tmE = document.getElementById('tmElapsed'), tmP = document.getElementById('tmPlan'), tmT = document.getElementById('tmToggle'), timerEl = document.getElementById('timer');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function updateTimerLabel() {
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]); tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', !!plan && elapsed[current] > plan * 60);
+}
+function toggleTimer() {
+  running = !running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick); if (running) tick = setInterval(() => { elapsed[current]++; updateTimerLabel(); }, 1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
+setCurrent(0);
+function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+document.addEventListener('keydown', e => {
+  const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (document.querySelector('dialog[open]')) return;
+  if (e.key === 'p') { modeBtn.click(); return; }
+  if (html.dataset.mode !== 'present') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 't') toggleTimer();
+  if (e.key === 'c') html.classList.toggle('cue-on');
+});
+
+/* ── 실습 체크칸: 기기마다 저장 ── */
+document.querySelectorAll('.steps').forEach(ol => {
+  const k = CONFIG.key + ':chk:' + (ol.dataset.key || 'x');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const boxes = [...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b, i) => {
+    b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked);
+    b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} });
+  });
+});
+
+/* ── 복사 버튼 (.pr 안의 .txt 를 복사) ── */
+async function copyText(text, b) {
+  const old = b.textContent;
+  try { await navigator.clipboard.writeText(text); b.textContent = '복사했습니다'; }
+  catch (e) { b.textContent = '복사가 막혀 있습니다 · 직접 선택해 주세요'; }
+  setTimeout(() => { b.textContent = old; }, 1800);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.cp'); if (!b) return;
+  const t = b.closest('.pr') && b.closest('.pr').querySelector('.txt'); if (!t) return;
+  copyText(t.innerText.trim(), b);
+});
+
+/* ═══ 부탁문 네 개 ═══ */
+const lf = document.getElementById('lf'), lf2 = document.getElementById('lf2');
+const FKEY = CONFIG.key + ':form';
+function readL() {
+  const f = lf.elements, g = lf2.elements;
+  return {
+    grade: f.grade.value, subject: f.subject.value.trim(), unit: f.unit.value.trim(),
+    num: (lf.querySelector('[name=num]:checked') || {}).value || 'has', ans: (lf.querySelector('[name=ans]:checked') || {}).value || 'has',
+    min: f.min.value, analogy: f.analogy.value.trim(),
+    design: (lf2.querySelector('[name=design]:checked') || {}).value || 'md', student: g.student.checked, sound: g.sound.checked
+  };
+}
+function numbered(lines) { return lines.map((l, i) => (i + 1) + '. ' + l); }
+function prompts(v, k, tpl) {
+  const grade = tpl ? '[학년]' : v.grade, subject = tpl ? '[과목]' : (v.subject || '과학');
+  const unit = tpl ? '[차시 제목]' : (v.unit || '[차시 제목]');
+  const where = k === 'local' ? '이 폴더의 학습지' : '첨부한 학습지';
+  const script = k === 'local' ? '이 폴더의 대본.txt에 적힌 내 설명 순서' : '아래에 붙인 내 설명 순서(대본)';
+  const web = k === 'web';
+  /* ① 빈칸 지도 */
+  const a = [];
+  a.push(`나는 ${grade} ${subject} 교사야. ${where}(${unit})를 읽고, 빈칸을 번호 순서대로 표로 정리해 줘. 코드는 아직 쓰지 마.`);
+  a.push('', '[번호 매기는 규칙]');
+  if (tpl) a.push('- (번호가 이미 있으면) 학습지에 적힌 빈칸 번호를 그대로 써 줘.', '- (번호가 없으면) 빈칸에 위에서부터 순서대로 ①, ②, ③… 번호를 매겨 줘.');
+  else if (v.num === 'has') a.push('- 학습지에 적힌 빈칸 번호를 그대로 써 줘.');
+  else a.push('- 빈칸에 위에서부터 순서대로 ①, ②, ③… 번호를 매겨 줘.');
+  a.push('- 두 단으로 된 쪽은 왼쪽 단을 위에서 아래로 먼저 읽고, 그다음 오른쪽 단을 읽어 줘.',
+    '- 표 안의 빈칸은 왼쪽에서 오른쪽으로, 위에서 아래로 세어 줘.',
+    '- 학생이 자기 생각을 쓰는 칸처럼 정답이 하나로 정해지지 않은 칸은 번호를 매기지 말고 표 아래에 따로 적어 줘.');
+  a.push('', '[표의 칸]', '번호 | 정답 | 빈칸이 들어 있는 문장(빈칸 자리는 ____) | 쪽', '');
+  if (tpl) a.push('(정답이 적혀 있으면) 정답은 학습지에 적힌 글자 그대로, 띄어쓰기와 단위까지 똑같이 써 줘.', '(정답이 없으면) 학습지에 정답이 없으니 교과서 수준으로 추측해서 채우고, 추측한 칸마다 (추측)이라고 표시해 줘.');
+  else if (v.ans === 'has') a.push('정답은 학습지에 적힌 글자 그대로, 띄어쓰기와 단위까지 똑같이 써 줘.');
+  else a.push(`학습지에 정답이 없으니 ${grade} 교과서 수준으로 추측해서 채우고, 추측한 칸마다 (추측)이라고 표시해 줘.`);
+  a.push('마지막에 빈칸이 모두 몇 개인지 세어 알려 주고, 학습지 내용 가운데 과학적으로 이상하거나 계산이 맞지 않는 곳이 있으면 따로 알려 줘.');
+  /* ② 장면 목록 */
+  const b = [];
+  const range = web ? '10~12장' : '20~30장';
+  b.push(`빈칸 지도와 ${script}를 바탕으로 ${tpl ? '[수업 시간]' : v.min + '분'} 수업에 띄울 칠판 강의 화면의 장면 목록을 표로 짜 줘. 코드는 아직 쓰지 마.`);
+  b.push('', '[표의 칸]', '장면 번호 | 화면에 보일 것 | 이 장면에서 열리는 빈칸 번호 | 움직임(있다면 하나) | 내가 할 말', '', '[규칙]');
+  b.push(`- 전체 ${range} 안팎으로 짜 줘.`,
+    '- 빈칸은 학습지 번호 순서대로 열리게 하고, 한 장면에서 여는 빈칸은 1~5개로 해 줘. 모든 빈칸 번호가 빠짐없이 한 번씩 나와야 해.',
+    '- 빈칸이 있는 장면에는 학습지의 그 부분을 그대로 옮기고, 옆에 그림이나 움직임을 붙여 줘.',
+    '- 첫 장면은 학생의 궁금증을 여는 질문으로, 마지막 장면은 오늘의 정리와 처음 질문으로 돌아가기로 해 줘.',
+    '- 움직임은 장면마다 하나까지, 개념을 보여 주는 데 꼭 필요한 곳에만 넣어 줘.',
+    "- '내가 할 말'은 내 대본에서 가져오고, 대본에 없는 숫자나 사실은 지어내지 마. 예시가 꼭 필요하면 (예)라고 표시해 줘.");
+  if (tpl) b.push('- (쓰고 싶은 비유가 있으면) 내가 쓰는 비유: [비유]. 이 비유가 들어갈 장면을 정해 줘.');
+  else if (v.analogy) b.push(`- 내가 쓰는 비유: ${v.analogy.replace(/[.。]\s*$/, '')}. 이 비유가 들어갈 장면을 정해 줘.`);
+  if (k !== 'local') b.push('', '[내 설명 순서]', '(여기에 대본을 붙여넣기)');
+  /* ③ 만들기 */
+  const c = [];
+  c.push(`빈칸 지도와 장면 목록대로 ${unit} 칠판 강의 화면을 만들어 줘.`, '');
+  const L = [
+    '교실 전자칠판에 띄우는 가로 16:9 화면이야. 창 크기가 달라도 비율을 지키며 꽉 차게 보여 줘.',
+    '한 장면씩 넘겨. 다음은 → 키·스페이스·화면 클릭·손가락으로 밀기, 이전은 ← 키. F 키는 전체 화면.',
+    '장면 안에서도 누를 때마다 한 단계씩 진행해. 빈칸은 한 번 누를 때 하나씩 열려.',
+    '이전으로 돌아가도 화면이 깨지지 않게, 그 단계의 모습 그대로 보여 줘.',
+    '빈칸 자리에는 처음부터 학습지와 같은 번호 배지를 보여 주고, 정답은 가려 둬. 정답이 열릴 때는 눈에 띄는 색으로 나타나게 해 줘.',
+    '빈칸 번호와 정답은 빈칸 지도와 한 글자도 다르지 않게 써. 장면 제목이나 그림 설명에 아직 열리지 않은 정답이 먼저 보이면 안 돼.',
+    "장면 목록의 '내가 할 말'을 장면마다 대본으로 넣고, T 키를 누르면 화면 아래에 대본이 열리고 닫히게 해 줘."
+  ];
+  if (tpl || v.student) L.push((tpl ? '(학생 복습판이 필요하면) ' : '') + '주소 끝에 ?s=1을 붙여 열면 대본과 대본 버튼이 보이지 않는 학생 복습판이 되게 해 줘.');
+  if (tpl || v.sound) L.push((tpl ? '(효과음이 필요하면) ' : '') + '빈칸이 열릴 때 짧은 효과음을 내고, M 키로 소리를 끄고 켤 수 있게 해 줘. 소리 파일 없이 코드로 소리를 만들어 줘.');
+  L.push('한 장면의 글은 제목 한 줄과 짧은 설명 한두 줄까지만. 글씨는 교실 뒤에서도 읽히게 크게 해 줘.',
+    '움직임은 장면마다 하나까지, 과학 식으로 계산해서 움직이게 해 줘.',
+    '그림은 사진이나 AI가 그린 그림 대신 코드로 그린 도형과 그래프로 그려 줘.',
+    '대본과 학습지에 없는 숫자나 사실은 지어내지 마.');
+  if (tpl) L.push('(디자인) 이 폴더의 DESIGN.md 설계서를 따라 줘. 또는: 흰 바탕에 강조색은 파란색 하나만 써 줘. 한글은 Pretendard 글꼴로.');
+  else if (v.design === 'md') L.push((k === 'local' ? '이 폴더의 DESIGN.md 설계서' : web ? '첨부한 DESIGN.md 설계서' : 'DESIGN.md 설계서') + '를 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로.');
+  else L.push('흰 바탕에 강조색은 파란색 하나만 써 줘. 한글은 Pretendard 글꼴로.');
+  L.push('HTML·CSS·JavaScript를 한 파일에 모두 넣어 줘.');
+  numbered(L).forEach(x => c.push(x));
+  c.push('');
+  if (tpl) c.push('(앱이면) 파일은 이 폴더에 index.html로 저장하고, 브라우저로 열어 처음부터 끝까지 넘겨 보며 오류가 없는지 확인해 줘.', '(웹 채팅이면) 코드는 설명과 나눠서 <!DOCTYPE html>부터 </html>까지 한 번에 전부 보여 줘. 길어서 끊길 것 같으면 장면을 줄여서라도 끝까지 써 줘.');
+  else if (k === 'local') c.push('파일은 이 폴더에 index.html로 저장하고, 브라우저로 열어 처음부터 끝까지 넘겨 보며 오류가 없는지 확인해 줘.');
+  else if (web) c.push('코드는 설명과 나눠서 <!DOCTYPE html>부터 </html>까지 한 번에 전부 보여 줘. 길어서 끊길 것 같으면 장면을 줄여서라도 끝까지 써 줘.');
+  c.push('다 만들면 장면마다 열리는 빈칸 번호와 정답을 표로 다시 보여 줘.');
+  /* ④ 빈칸 대조 */
+  const d = [
+    '만든 강의 화면에서 빈칸이 열리는 순서대로 번호 | 정답 | 장면 번호를 표로 뽑아 줘.',
+    '그리고 빈칸 지도와 한 줄씩 대조해서 아래 네 가지를 찾아 줘. 코드는 아직 바꾸지 마.',
+    '- 빠진 번호',
+    '- 순서가 바뀐 번호',
+    '- 글자나 단위가 다른 정답',
+    '- 열리기 전에 제목이나 그림 설명에서 먼저 보여 버리는 정답',
+    '마지막으로 과학적으로 틀렸거나 학생이 오해할 수 있는 장면이 있으면 장면 번호와 함께 알려 줘.'
+  ];
+  return [a.join('\n'), b.join('\n'), c.join('\n'), d.join('\n')];
+}
+function renderL() {
+  const v = readL(), k = html.dataset.k || '';
+  const ps = prompts(v, k, false);
+  ['p1', 'p2', 'p3', 'p4'].forEach((id, i) => { document.querySelector('#' + id + ' .txt').textContent = ps[i]; });
+  try { const save = Object.assign({}, v); localStorage.setItem(FKEY, JSON.stringify(save)); } catch (e) {}
+}
+function onTool() { renderL(); }
+(function restoreL() {
+  let v = null; try { v = JSON.parse(localStorage.getItem(FKEY) || 'null'); } catch (e) {}
+  if (!v) return;
+  const f = lf.elements, g = lf2.elements;
+  if (v.grade) f.grade.value = v.grade;
+  f.subject.value = v.subject == null ? '과학' : v.subject; f.unit.value = v.unit || ''; f.analogy.value = v.analogy || '';
+  if (v.min) f.min.value = v.min;
+  ['num', 'ans'].forEach(n => { const r = lf.querySelector(`[name=${n}][value="${v[n]}"]`); if (r) r.checked = true; });
+  const d = lf2.querySelector(`[name=design][value="${v.design}"]`); if (d) d.checked = true;
+  g.student.checked = v.student !== false; g.sound.checked = !!v.sound;
+})();
+[lf, lf2].forEach(f => { f.addEventListener('input', renderL); f.addEventListener('change', renderL); });
+document.getElementById('dlTpl').addEventListener('click', () => {
+  const ps = prompts(readL(), '', true);
+  const names = ['부탁 ① 빈칸 지도', '부탁 ② 장면 목록', '부탁 ③ 만들기', '부탁 ④ 빈칸 대조'];
+  const body = '칠판 강의 화면 부탁문 템플릿\n[ ] 안을 바꾸고, ( ) 줄은 해당할 때만 남겨 쓰세요.\n출처: 조승재 · 바이브코딩 연수 · https://scienceisjo.github.io/growing-teachers/vibecoding/lecture.html\n\n'
+    + ps.map((p, i) => '━━━━━━━━ ' + names[i] + ' ━━━━━━━━\n' + p).join('\n\n') + '\n';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + body], { type: 'text/plain;charset=utf-8' })); a.download = '칠판강의화면_부탁문템플릿.txt';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+});
+
+/* ═══ 코드 도우미 (웹 채팅) ═══ */
+const SHIM = '<script>(function(){function M(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){var a=Object.keys(d);return i<a.length?a[i]:null},get length(){return Object.keys(d).length}}}["localStorage","sessionStorage"].forEach(function(n){try{window[n].getItem("__t")}catch(e){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e2){}}});document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href^=\'#\']");if(!a)return;e.preventDefault();var id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id)return;try{location.hash=id}catch(e3){}var t=document.getElementById(id);if(t&&t.scrollIntoView)t.scrollIntoView({behavior:"smooth"});},true);})();<\/script>';
+function extractHtml(raw) {
+  if (!raw) return null;
+  raw = raw.replace(/^```[a-z]*\s*$/gim, '');
+  let s = raw.search(/<!doctype/i); if (s < 0) s = raw.search(/<html[\s>]/i);
+  const e = raw.toLowerCase().lastIndexOf('</html>');
+  if (s >= 0 && e > s) return raw.slice(s, e + 7);
+  if (/<[a-z!][\s\S]*>/i.test(raw)) return raw.trim();
+  return null;
+}
+const hMsg = document.getElementById('hMsg');
+function say(t, cls) { hMsg.textContent = t; hMsg.className = 'hmsg' + (cls ? ' ' + cls : ''); }
+function getCode() {
+  const c = extractHtml(document.getElementById('hPaste').value);
+  if (!c) { say('HTML 코드를 찾지 못했습니다. <!DOCTYPE html>부터 </html>까지 들어 있는지 확인해 주세요.', 'bad'); return null; }
+  if (!/<\/html>\s*$/i.test(c)) say('마지막 </html>이 보이지 않습니다. 코드가 중간에 끊겼을 수 있습니다.', 'bad'); else say('');
+  return c;
+}
+document.getElementById('hPrev').addEventListener('click', () => {
+  const c = getCode(); if (!c) return;
+  const box = document.getElementById('hFrame'); box.hidden = false; box.innerHTML = '';
+  const f = document.createElement('iframe');
+  f.setAttribute('sandbox', 'allow-scripts allow-forms allow-modals');
+  f.title = '미리보기';
+  const m = /^\s*<!doctype[^>]*>/i.exec(c); f.srcdoc = m ? m[0] + SHIM + c.slice(m[0].length) : SHIM + c;
+  box.appendChild(f);
+  if (!hMsg.classList.contains('bad')) say('미리보기입니다. 화면을 누르거나 → 키로 넘어가면 저장합니다.', 'ok');
+});
+document.getElementById('hSave').addEventListener('click', async () => {
+  const c = getCode(); if (!c) return;
+  if (window.showSaveFilePicker) {
+    try {
+      const h = await window.showSaveFilePicker({ suggestedName: 'index.html', types: [{ description: 'HTML 파일', accept: { 'text/html': ['.html'] } }] });
+      const w = await h.createWritable(); await w.write(c); await w.close();
+      say('저장했습니다. 강의화면 폴더에서 index.html을 더블클릭해 열어 보세요.', 'ok'); return;
+    } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([c], { type: 'text/html;charset=utf-8' })); a.download = 'index.html';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  say('다운로드 폴더에 index.html로 받았습니다. 강의화면 폴더로 옮겨 주세요.', 'ok');
+});
+
+/* 처음 한 번: 저장된 도구 불러오기 (부탁문이 도구에 맞춰 바뀝니다) */
+(function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
+</script>
+</body>
+</html>

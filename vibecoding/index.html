@@ -1,15 +1,1148 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-mode="detail">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>바이브코딩 연수</title>
-<meta http-equiv="refresh" content="0; url=senedu.html">
-<link rel="canonical" href="senedu.html">
-<script>location.replace('senedu.html' + location.search + location.hash);</script>
-<style>body{font-family:system-ui,sans-serif;margin:0;min-height:100vh;display:grid;place-items:center;background:#fff;color:#1d1d1f}a{color:#0066cc}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바이브코딩 연수 · 말로 만드는 나만의 수업 도구 · 해누리중 조승재</title>
+<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물두 점을 전시실처럼 둘러본 뒤 분임별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
+<link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 강사 ── */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+
+/* ── 도구 고르기 ── */
+.pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
+.pick p{margin:0 0 10px;font-weight:600}
+.toolpick{display:flex;flex-wrap:wrap;gap:8px}
+.toolpick button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:9px 18px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.toolpick button:hover{border-color:var(--ink2)}
+.toolpick button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
+.tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
+html[data-t] .tl{display:none}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* ── 실습 ── */
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::-webkit-details-marker{display:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+html[data-mode="present"] details.stuck{display:none}
+
+/* ── 비교 상자·링크 카드 ── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box.no b{color:var(--bad)} .box.yes b{color:var(--ok)}
+.box.yes{border-color:var(--ok)}
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+
+/* ── 프롬프트 카드 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+html[data-mode="present"] .pr{font-size:.75em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 12px}
+.pr.big .txt{max-height:none}
+html[data-mode="present"] .pr.big .txt{max-height:14em}
+
+/* ── 부탁문 빌더 ── */
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
+.bform .full{grid-column:1/-1}
+.bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.bform input[type=text],.bform select,.bform textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.bform textarea{min-height:4.4em;resize:vertical;line-height:1.5}
+.bform input:focus,.bform select:focus,.bform textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem;cursor:pointer}
+.opts input{width:1.1em;height:1.1em;margin:.2em 0 0;accent-color:var(--blue);flex:none}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 16px}
+html[data-mode="present"] .bform{font-size:.8em}
+
+.ideas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.ideas .il{font-size:.85rem;color:var(--ink2);margin-right:4px}
+.ideas button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.ideas button:hover{border-color:var(--blue);color:var(--blue)}
+.kinds label{border:1px solid var(--line);border-radius:9999px;padding:6px 14px 6px 10px;align-items:center}
+.kinds label:has(input:checked){border-color:var(--blue);background:var(--blue-t);color:var(--blue);font-weight:600}
+.kinds input{margin:0}
+
+/* ── 코드 도우미 ── */
+.helper{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.helper textarea{width:100%;min-height:9em;font-family:var(--mono);font-size:.82rem;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;resize:vertical;line-height:1.45}
+.helper textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.hbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.hmsg{font-size:.88em;color:var(--ink2)}
+.hmsg.bad{color:var(--bad)} .hmsg.ok{color:var(--ok)}
+.hframe{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-top:12px}
+.hframe iframe{display:block;width:100%;height:440px;border:0;background:#fff}
+
+/* ── 표 ── */
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+  .bform{grid-template-columns:1fr}
+  .pr{padding-right:14px;padding-top:44px}
+  .fixgrid{grid-template-columns:1fr}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
+.tscroll table{margin:0;min-width:600px}
+
+/* ── 허브 전용 ── */
+.byline.big img{width:80px;height:80px}
+.byline.big b{font-size:1.1rem}
+.meta [data-school]::before{content:"🏫 "}
+
+/* 전시실 */
+.room{margin:34px 0 6px}
+.room:first-of-type{margin-top:10px}
+.room-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.room-h .no{font-size:.78rem;font-weight:600;color:var(--blue);letter-spacing:.06em}
+.room-h h3{font-size:1.3rem}
+.room-h .d{color:var(--ink2);font-size:.92rem;flex:1;min-width:14em}
+.room-h a{font-size:.88rem;white-space:nowrap}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:26px 20px}
+.work{display:flex;flex-direction:column;gap:10px;min-width:0}
+.frame{display:block;width:100%;padding:10px;background:#fff;border:1px solid var(--ink);border-radius:3px;cursor:zoom-in;font:inherit;text-align:left}
+.frame:hover{border-color:var(--blue)}
+.frame:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.frame img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top;background:var(--bg2);border:1px solid var(--line2)}
+.plate{border-left:2px solid var(--ink);padding:1px 0 1px 11px}
+.plate .wno{display:block;font-size:.72rem;color:var(--ink3);letter-spacing:.05em;font-variant-numeric:tabular-nums}
+.plate b{display:block;font-size:1rem;line-height:1.3;margin:1px 0}
+.plate .tg2{display:block;font-size:.78rem;color:var(--ink2)}
+.plate p{font-size:.88rem;color:var(--ink2);margin:.35em 0 0;line-height:1.5}
+.work .acts{display:flex;gap:6px;flex-wrap:wrap}
+.star{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.8rem;cursor:pointer;color:var(--ink2)}
+.star[aria-pressed="true"]{border-color:var(--warn);background:var(--warn-t);color:var(--warn);font-weight:600}
+html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+html[data-mode="present"] .plate p,html[data-mode="present"] .work .acts{display:none}
+.picked{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:30px 0 0;background:var(--bg2)}
+.picked b{display:block;margin-bottom:6px}
+.picked ul{margin:0;padding-left:1.2em}
+.picked li{margin:3px 0}
+dialog.lb{border:0;border-radius:var(--r3);padding:0;width:min(880px,94vw);max-height:92vh;color:var(--ink);background:#fff}
+dialog.lb::backdrop{background:rgba(29,29,31,.55)}
+.lb .lb-in{padding:18px 22px 22px;overflow:auto;max-height:92vh}
+.lb .lb-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.lb .lb-top div{flex:1}
+.lb h3{font-size:1.35rem;margin:2px 0 4px}
+.lb .x{border:1px solid var(--line);background:#fff;border-radius:9999px;width:36px;height:36px;font-size:1rem;cursor:pointer;flex:none}
+.lb img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:var(--bg2)}
+.lb .more{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+
+/* 몸 비유 데모 */
+.bd{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.bd-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.bd-tabs button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:8px 16px;font:inherit;font-size:.9rem;cursor:pointer;color:var(--ink)}
+.bd-tabs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.bd-app{max-width:600px}
+.bd[data-layer="2"] .bd-app,.bd[data-layer="3"] .bd-app{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--bg2)}
+.bd[data-layer="2"] .bd-app h4,.bd[data-layer="3"] .bd-app h4{font-size:1.1rem;margin:0 0 10px}
+.bd[data-layer="2"] .bd-row,.bd[data-layer="3"] .bd-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:10px;font-size:.95rem}
+.bd[data-layer="2"] .bd-row input[type=range],.bd[data-layer="3"] .bd-row input[type=range]{accent-color:var(--blue);width:200px}
+.bd[data-layer="2"] .bd-row output,.bd[data-layer="3"] .bd-row output{font-variant-numeric:tabular-nums;font-weight:600;min-width:9.5em}
+.bd[data-layer="2"] .bd-row button,.bd[data-layer="3"] .bd-row button{border:0;background:var(--blue);color:#fff;border-radius:9999px;padding:7px 16px;font:inherit;font-size:.88rem;cursor:pointer}
+.bd[data-layer="2"] canvas,.bd[data-layer="3"] canvas{display:block;width:100%;height:auto;border-radius:10px;background:#fff;border:1px solid var(--line)}
+.bd[data-layer="2"] .bd-note,.bd[data-layer="3"] .bd-note{font-size:.85rem;color:var(--ink2);margin:8px 0 0}
+.bd[data-layer="1"] .bd-app,.bd[data-layer="1"] .bd-app *{all:revert}
+.bd[data-layer="1"] .bd-app{font-family:'Times New Roman',Batang,serif;display:block}
+.bd[data-layer="1"] canvas{display:block;width:280px;height:110px;border:1px solid #999}
+.bd-cap{margin:12px 0 0;font-size:.95em}
+.bd-cap b{color:var(--blue)}
+
+/* 서버 흐름 */
+.fmap{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+.fmap .nd{flex:1;min-width:130px;border:1px solid var(--line);border-radius:var(--r2);padding:10px 12px;background:#fff}
+.fmap .nd b{display:block;font-size:.95rem}
+.fmap .nd span{display:block;font-size:.8rem;color:var(--ink2)}
+.fmap .nd i{display:block;font-style:normal;font-size:.72rem;font-weight:600;color:var(--blue);letter-spacing:.03em;margin-bottom:2px}
+.fmap .nd.db{border-color:var(--warn);background:var(--warn-t)}
+.fmap .ar{align-self:center;color:var(--ink3);font-size:1.2rem}
+
+/* 배우는 길 */
+.lp{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.lp .row{margin:0 0 14px}
+.lp .row:last-child{margin:0}
+.lp .rl{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px}
+.lp .pipe{margin:0}
+.lp .eps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.lp .ep{border:1px dashed var(--line);border-radius:var(--r2);padding:10px 12px;font-size:.88rem}
+.lp .ep b{display:block;color:var(--bad);font-size:.92rem;margin-bottom:4px}
+.lp .ep span{display:inline-block;border:1px solid var(--line);border-radius:9999px;padding:1px 9px;margin:2px 2px 2px 0;background:var(--bg2);font-size:.8rem}
+.lp .ep em{display:block;font-style:normal;color:var(--ink2);font-size:.8rem;margin-top:4px}
+
+/* 분임 고르기 */
+.qz{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:14px 0;background:#fff}
+.qz .q{margin:0 0 14px}
+.qz .q b{display:block;margin-bottom:8px}
+.qz .q[hidden]{display:none}
+.qz .ans{display:flex;gap:8px;flex-wrap:wrap}
+.qz .ans button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:8px 20px;font:inherit;cursor:pointer}
+.qz .ans button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.qz .res{border-top:1px solid var(--line2);padding-top:14px;margin-top:4px}
+.qz .res b{font-size:1.1rem}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:14px 0}
+.mcard{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;color:var(--ink)}
+a.mcard:hover{border-color:var(--blue);text-decoration:none}
+.mcard .mn{font-size:.78rem;font-weight:600;color:var(--blue);letter-spacing:.03em}
+.mcard b{font-size:1.08rem;margin:4px 0 4px;line-height:1.3}
+.mcard span{font-size:.9rem;color:var(--ink2);flex:1}
+.mcard em{font-style:normal;font-size:.82rem;color:var(--ink3);margin-top:8px}
+.mcard.soon{background:var(--bg2);color:var(--ink3)}
+.mcard.soon b{color:var(--ink2)}
+.mcard.hi{border-color:var(--blue);background:var(--blue-t)}
+</style>
 </head>
 <body>
-<p>새 바이브코딩 연수 페이지를 준비하고 있습니다. <a href="senedu.html">SENEDU로 시작하는 바이브코딩 교안</a>으로 이동합니다.</p>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">바이브코딩 연수<small>해누리중 조승재</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline big" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="80" height="80" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">바이브코딩 연수</div>
+    <h1>말로 만드는 나만의 수업 도구</h1>
+    <p class="lead">바이브코딩이 무엇이고 어디까지 되는지부터 짚고, 제가 만든 것들을 한 바퀴 둘러본 뒤, 분임으로 나뉘어 선생님만의 수업 도구를 직접 만들어보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">바이브코딩 기초</span><span class="a">→</span><span class="n">전시실 둘러보기</span><span class="a">→</span><span class="n">분임 실습</span><span class="a">→</span><span class="n hi">보관함에서 나눔</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span>⏱ <b>100분</b></span>
+      <span>💻 <b>노트북</b></span>
+      <span>🔑 <b>AI 계정 하나 (무료 계정도 됩니다)</b></span>
+      <span data-school hidden></span>
+    </div>
+    <div class="flow" id="flow"></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big" href="#s9">분임 고르기 ↓</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 바이브코딩이란 ═══════════ -->
+<section class="step" id="s1" data-title="바이브코딩이란" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>바이브코딩이란</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">바이브코딩이 무엇이고, 어디까지 되는지부터 짚어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">코드를 몰라도, 말로 시켜서 만듭니다</p>
+      <p class="brief">만들고 싶은 것을 말로 설명하면 AI가 코드를 쓰고, 저는 결과를 보면서 다시 말로 고칩니다.</p>
+      <div class="pipe" aria-label="바이브코딩의 흐름"><span class="n">말로 설명하기</span><span class="a">→</span><span class="n">AI가 코드 쓰기</span><span class="a">→</span><span class="n">화면으로 확인하기</span><span class="a">→</span><span class="n hi">말로 고치기</span></div>
+      <div class="detail">
+        <p>바이브코딩이라는 말은 2025년 초 AI 연구자 안드레이 카파시가 처음 썼습니다. 코드를 한 줄씩 짜는 대신 원하는 느낌을 말로 전하고, 나온 결과를 보면서 다시 말로 고치는 방식입니다.</p>
+        <p>저는 코드를 정식으로 배운 적이 없습니다. 제가 하는 일은 수업 장면을 설명하고, 나온 화면이 과학적으로 맞는지 확인하고, 틀린 곳을 짚어 고쳐 달라고 하는 것입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">어디까지 되나</p>
+      <p class="brief">한 파일짜리 수업 도구는 오늘 백 분 안에 만듭니다. 서버를 붙이면 학생 기록을 모으는 앱까지 갑니다.</p>
+      <div class="grid2">
+        <div class="box yes"><b>한 파일짜리 수업 도구</b><p>시뮬레이션, 퀴즈, 타이머, 칠판 강의 화면. 오늘 분임 실습에서 만듭니다.</p></div>
+        <div class="box"><b>여러 화면이 이어진 단원 웹앱</b><p>차시 페이지 여러 장을 허브 하나로 묶습니다. 전시실의 전기와 자기 단원이 이렇게 만들어졌습니다.</p></div>
+        <div class="box"><b>학생 기록이 모이는 앱</b><p>서버를 붙이면 제출, 모둠 기록, 교사 화면까지 됩니다. ③ 데이터·AI 매뉴얼에서 다룹니다.</p></div>
+        <div class="box"><b>이야기가 있는 3D 게임</b><p>레몬 백작의 부탁처럼 섬을 돌아다니는 게임도 됩니다. 다만 고치는 데 시간이 오래 걸립니다.</p></div>
+        <div class="box no"><b>아직 사람이 해야 하는 일</b><p>과학적으로 맞는지 확인하는 일, 학생 정보를 지키는 일, 무엇을 만들지 정하는 일입니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>초안은 금방 나옵니다. 시간은 대부분 고치는 데 들어갑니다. 전시실의 큰 작품들도 처음부터 그 모습이었던 것이 아니라, 수업에 쓰면서 여러 번 고쳐 키운 것들입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 전시실 ═══════════ -->
+<section class="step" id="s2" data-title="전시실" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>전시실 · 제가 만든 것들</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">제가 수업과 업무에 쓰려고 만든 것들을 전시실처럼 한 바퀴 둘러보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">액자를 누르면 크게 보입니다</p>
+      <p class="brief">작품마다 무엇에 쓰는지 적어 두었습니다. 마음에 드는 작품에 별을 붙여 두시면 분임 실습 때 아이디어로 다시 꺼내 보실 수 있습니다.</p>
+      <div class="detail">
+        <p>액자를 누르면 큰 화면과 함께 비슷한 것을 만들어 보는 첫 부탁이 나옵니다. 실습에서 무엇을 만들지 막막하시면 그 부탁을 복사해 시작하셔도 됩니다. 다른 선생님들이 만든 것은 나눔 시간에 GiteacherHub에서 함께 봅니다.</p>
+      </div>
+      <div id="gallery"></div>
+      <div class="picked" id="picked" hidden><b>별을 붙인 작품</b><ul id="pickedList"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 도구 지도 ═══════════ -->
+<section class="step" id="s3" data-title="도구 지도" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>바이브코딩 도구 지도</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">바이브코딩 도구를 다섯 갈래로 나눠 어떤 차이가 있는지 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">같은 AI라도 일하는 자리가 다릅니다</p>
+      <p class="brief">채팅창에서 코드를 받아 오느냐, AI가 내 컴퓨터 폴더에서 직접 일하느냐가 가장 큰 차이입니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>갈래</th><th>대표 도구</th><th>AI가 하는 일</th><th>이럴 때</th></tr></thead>
+        <tbody>
+          <tr><td><b>웹 채팅</b></td><td>ChatGPT · Claude · Gemini · SenGPT</td><td>코드를 채팅창에 써 줍니다. 파일로 저장하는 일은 제가 합니다.</td><td>무료 계정으로 처음 해 볼 때, 한 파일짜리 도구</td></tr>
+          <tr><td><b>데스크톱 앱</b></td><td>ChatGPT 앱의 Codex · Claude 앱의 Code 탭</td><td>폴더를 열어 두면 파일을 직접 만들고, 고치고, 열어 봅니다.</td><td>여러 번 고쳐 가며 키울 때</td></tr>
+          <tr><td><b>터미널</b></td><td>Claude Code · Codex CLI · Gemini CLI</td><td>앱과 같은 일을 검은 창에 글로 시킵니다.</td><td>익숙해진 뒤 여러 작업을 한꺼번에 맡길 때</td></tr>
+          <tr><td><b>코드 편집기</b></td><td>VS Code · Cursor · Antigravity</td><td>코드를 눈으로 보면서 AI와 같이 고칩니다.</td><td>코드를 직접 읽어 보고 싶을 때</td></tr>
+          <tr><td><b>브라우저 에이전트</b></td><td>Claude in Chrome</td><td>AI가 크롬을 직접 눌러 가며 확인하고 작업합니다.</td><td>만든 앱을 AI가 직접 눌러 보며 검사할 때</td></tr>
+        </tbody>
+      </table></div>
+      <div class="detail">
+        <p>오늘 분임 실습은 웹 채팅이나 데스크톱 앱으로 합니다. 웹 채팅은 무료 계정으로도 되고, 데스크톱 앱은 유료 요금제에서 넉넉하게 씁니다. ChatGPT 무료 계정도 데스크톱 앱에서 Codex를 조금 쓸 수 있지만 가벼운 모델만 됩니다. 코드 편집기 가운데 Antigravity는 개인에게 무료이고 한도가 주마다 다시 채워지며, Cursor는 월 20달러 요금제부터 넉넉해집니다. VS Code에 붙여 쓰는 GitHub Copilot은 교사 인증(GitHub Education)을 받으면 Pro 요금제를 무료로 쓸 수 있습니다.</p>
+        <p>저는 Claude 앱의 Code 탭을 주로 쓰고, Codex를 함께 씁니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">폴더에서 일하는 도구가 좋은 점</p>
+      <p class="brief">만든 파일이 폴더에 그대로 남아서, 새 대화를 열어도 이어서 고칠 수 있습니다.</p>
+      <div class="grid2">
+        <div class="box"><b>파일이 폴더에 그대로 있습니다</b><p>대화가 끝나도 폴더에 파일이 있으니 "이 폴더의 index.html을 이어서 고쳐 줘" 한 줄이면 이어집니다.</p></div>
+        <div class="box"><b>여러 파일을 다룹니다</b><p>차시 페이지 여러 장, 그림 파일, 데이터 파일을 한꺼번에 만들고 서로 잇습니다.</p></div>
+        <div class="box"><b>스스로 열어 보고 고칩니다</b><p>만든 페이지를 직접 실행해 보고, 오류가 나면 제가 말하기 전에 고치기도 합니다.</p></div>
+        <div class="box"><b>규칙 파일을 읽습니다</b><p>폴더의 CLAUDE.md나 AGENTS.md에 적어 둔 규칙을 대화를 시작할 때마다 저절로 읽습니다.</p></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">새로 나온 것</span>브라우저를 직접 다루는 AI</p>
+      <p class="brief">Claude in Chrome은 AI가 크롬 창을 직접 눌러 가며 일합니다. 만든 앱을 AI가 학생처럼 눌러 보며 검사하게 할 수 있습니다.</p>
+      <div class="detail">
+        <p>2026년 8월 26일에 정식으로 나왔고, Claude 유료 요금제(Pro 이상)에서 씁니다. 로그인된 사이트에서 AI가 대신 누르는 것이라, 결제나 메일 보내기처럼 되돌리기 어려운 일은 맡기지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 모델·요금제·토큰 ═══════════ -->
+<section class="step" id="s4" data-title="모델·요금제·토큰" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>모델, 요금제, 토큰</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">AI의 두뇌인 모델과, 쓸 수 있는 양을 정하는 요금제와 토큰을 짚어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">모델은 AI의 두뇌입니다</p>
+      <p class="brief">같은 앱 안에서도 모델을 고를 수 있습니다. 똑똑한 모델일수록 사용량을 빨리 씁니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>회사</th><th>가장 똑똑한 모델</th><th>주로 쓰는 모델</th><th>가볍고 빠른 모델</th></tr></thead>
+        <tbody>
+          <tr><td><b>Anthropic</b> (Claude)</td><td>Fable 5.1</td><td>Opus 5.5 · Sonnet 5.5</td><td>Haiku 4.5</td></tr>
+          <tr><td><b>OpenAI</b> (ChatGPT)</td><td>GPT-6 Astra</td><td>GPT-6.1 Sol · GPT-6 Sol</td><td>GPT-6 Luna</td></tr>
+          <tr><td><b>Google</b> (Gemini)</td><td colspan="2">Gemini 3.1 Pro</td><td>Gemini 3.8 Flash</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">2026년 9월 30일 기준입니다. 모델 이름은 몇 주 단위로 바뀝니다.</p>
+      <div class="detail">
+        <p>처음 틀을 잡을 때는 똑똑한 모델이 실수를 덜 합니다. 글자 몇 개를 바꾸거나 색을 고치는 일은 가벼운 모델로도 충분해서, 그런 일에 똑똑한 모델을 쓰면 한도만 빨리 줄어듭니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">요금제는 쓸 수 있는 양을 정합니다</p>
+      <p class="brief">무료, 월 3만 원 안팎, 월 15만 원 이상의 세 층으로 보면 쉽습니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th></th><th>무료</th><th>월 3만 원 안팎</th><th>월 15만 원 이상</th></tr></thead>
+        <tbody>
+          <tr><td><b>ChatGPT</b></td><td>채팅, Codex 조금</td><td>Plus 29,000원 · Codex 앱·웹·터미널</td><td>Pro 159,000원부터</td></tr>
+          <tr><td><b>Claude</b></td><td>채팅, 아티팩트 미리보기 (Code 탭 없음)</td><td>Pro 22달러 · Code 탭, Claude in Chrome</td><td>Max 110달러·220달러</td></tr>
+          <tr><td><b>Google</b></td><td>Gemini 캔버스, Antigravity</td><td>AI Pro 29,000원</td><td>AI Ultra 119,000원부터</td></tr>
+          <tr><td><b>SenGPT</b></td><td colspan="3">서울 교원 학교 계정으로 쓰고, 개인 결제는 없습니다. 월 사용량 한도가 있습니다.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">2026년 9월 30일 한국 결제 화면 기준입니다. Claude는 달러로 결제되고 부가세가 포함된 값입니다. 그 사이에 ChatGPT Go(월 13,000원), Google AI Plus(월 7,500원) 같은 가벼운 요금제도 있습니다.</p>
+      <div class="detail">
+        <p>유료 요금제는 5시간마다 다시 채워지는 한도와 한 주 동안 쓸 수 있는 한도가 함께 있습니다. ChatGPT Plus의 Codex와 Claude Pro 모두 그렇습니다. 저는 매달 3만 원에서 15만 원 사이의 요금제를 씁니다. 그 이야기는 뒤의 드릴 말씀에서 다시 하겠습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">토큰은 AI가 읽고 쓰는 조각입니다</p>
+      <p class="brief">요금제 한도는 메시지 개수가 아니라, AI가 읽고 쓴 토큰의 양만큼 줄어듭니다.</p>
+      <div class="detail">
+        <p>AI는 글을 토큰이라는 작은 조각으로 나눠 읽고 씁니다. 부탁문 몇 줄보다 AI가 읽어야 하는 코드가 훨씬 깁니다. 그래서 "파일 전체를 다시 써 줘"처럼 긴 코드를 통째로 다시 받는 부탁이 가장 많이 씁니다. 데스크톱 앱은 고칠 부분만 바꾸니 덜 쓰고, 웹 채팅은 고칠 때마다 코드 전체를 다시 받으니 더 씁니다.</p>
+        <p>대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다. 요약하면서 자잘한 약속이 빠질 수 있어서, 꼭 지킬 규칙은 파일에 적어 두고 읽게 하는 편이 안전합니다. 폴더에서 일하는 도구는 파일이 남아 있으니 새 대화를 열어도 이어지고, 코드가 채팅창 안에만 있는 웹 채팅은 새 대화에서 코드를 다시 붙여야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 HTML·CSS·JS ═══════════ -->
+<section class="step" id="s5" data-title="HTML·CSS·JS" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>웹 페이지의 몸 · HTML, CSS, JavaScript</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">웹 페이지를 이루는 세 가지를 몸에 빗대어, 한 겹씩 입혀 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">HTML은 뼈대, CSS는 피부와 옷, JavaScript는 근육과 신경</p>
+      <p class="brief">아래 버튼을 차례로 눌러 보세요. 같은 기체 입자 상자에 한 겹씩 더해집니다.</p>
+      <div class="bd" id="bodyDemo" data-layer="3">
+        <div class="bd-tabs" role="group" aria-label="몸 겹 고르기">
+          <button type="button" data-layer="1" aria-pressed="false">① HTML · 뼈대만</button>
+          <button type="button" data-layer="2" aria-pressed="false">② + CSS · 옷 입히기</button>
+          <button type="button" data-layer="3" aria-pressed="true">③ + JavaScript · 움직이기</button>
+        </div>
+        <div class="bd-app">
+          <h4>기체 입자 상자</h4>
+          <div class="bd-row">
+            <label for="bdT">온도</label>
+            <input type="range" id="bdT" min="150" max="600" step="10" value="300">
+            <output id="bdOut">300 K (27 ℃)</output>
+            <button type="button" id="bdStop">멈춤</button>
+          </div>
+          <canvas id="bdCv" width="600" height="230" aria-label="상자 속 기체 입자"></canvas>
+          <p class="bd-note">입자의 크기는 온도가 바뀌어도 그대로입니다. 달라지는 것은 움직이는 빠르기입니다.</p>
+        </div>
+        <p class="bd-cap" id="bdCap"></p>
+      </div>
+      <div class="detail">
+        <p>HTML은 제목, 슬라이더, 버튼, 그림 자리가 어디에 있는지 적는 뼈대입니다. CSS는 색, 글꼴, 간격, 모서리 같은 겉모습이고, 디자인 서랍의 설계서가 바꾸는 곳이 여기입니다. JavaScript는 슬라이더를 움직이면 온도에 맞춰 입자의 빠르기를 계산하고 다시 그리는 근육과 신경입니다. 이 상자는 입자의 평균 빠르기가 절대온도의 제곱근에 비례하도록 계산해서 그립니다.</p>
+        <p>오늘 만드는 도구는 이 세 가지를 index.html 한 파일에 모두 담습니다. 그리고 Java와 JavaScript는 이름만 닮은 서로 다른 언어입니다. 웹 페이지를 움직이는 것은 JavaScript입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6 서버와 데이터 ═══════════ -->
+<section class="step" id="s6" data-title="서버와 데이터" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>서버, 백엔드, 데이터베이스</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">서버가 무엇이고, 언제 있어야 하는지 구글 설문에 빗대어 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">구글 설문으로 보면 쉽습니다</p>
+      <p class="brief">학생이 보는 설문지 화면, 응답을 받아 두는 구글의 컴퓨터, 응답이 쌓이는 시트. 셋이 각각 프론트엔드, 서버·백엔드, 데이터베이스입니다.</p>
+      <div class="fmap" aria-label="데이터가 가는 길">
+        <div class="nd"><i>프론트엔드</i><b>학생 화면</b><span>설문지</span></div><span class="ar">→</span>
+        <div class="nd"><i>서버 · 백엔드</i><b>받아 주는 곳</b><span>구글의 컴퓨터</span></div><span class="ar">→</span>
+        <div class="nd db"><i>데이터베이스</i><b>쌓이는 곳</b><span>응답 시트</span></div><span class="ar">→</span>
+        <div class="nd"><i>프론트엔드</i><b>교사 화면</b><span>응답 요약</span></div>
+      </div>
+      <div class="detail">
+        <p>오늘 만드는 한 파일짜리 도구에는 서버가 없습니다. 화면만 있어서, 학생이 무엇을 누르든 그 기록은 학생 기기의 브라우저 안에만 저장됩니다. 학생들의 답을 제 화면으로 모으려면 받아 주는 곳과 쌓아 두는 곳, 곧 서버와 데이터베이스가 있어야 합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">서버 없이 되는 것, 서버가 있어야 되는 것</p>
+      <div class="grid2">
+        <div class="box yes"><b>서버 없이 됩니다</b><p>시뮬레이션, 퀴즈, 타이머, 칠판 강의 화면. 링크 하나로 나눠 주고, 기록은 각자 기기에만 저장됩니다.</p></div>
+        <div class="box"><b>서버가 있어야 됩니다</b><p>학생 제출 모으기, 여러 기기가 같은 화면을 함께 쓰기, 다른 기기에서 이어 하기, 교사 관리 화면, AI 연결.</p></div>
+      </div>
+      <p class="note warn">학생 정보를 모으는 순간 개인정보를 다루게 됩니다. 2026학년도부터 학교에서 쓰는 에듀테크와 소프트웨어는 학교운영위원회 심의를 거치게 되었으니, 직접 만든 앱이라도 학생 정보를 모은다면 학교의 절차를 먼저 확인합니다.</p>
+      <p><a class="btn to-data" href="data.html">③ 학생 데이터·AI 연결 매뉴얼 →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 7 부탁하는 법 ═══════════ -->
+<section class="step" id="s7" data-title="부탁하는 법" data-min="1">
+  <div class="wrap">
+    <div class="step-h"><span class="num">7</span><h2>부탁문을 AI에게 부탁하기</h2><span class="min"><b>1</b>분</span></div>
+    <p class="goal">부탁문을 잘 쓰는 요령 대신, 부탁문 자체를 AI에게 부탁해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">프롬프트 엔지니어링에서, 부탁문을 부탁하기로</p>
+      <p class="brief">무엇을 만들고 싶은지 대충 말하고, 코딩 AI에게 줄 부탁문을 먼저 써 달라고 합니다.</p>
+      <div class="pr"><span class="pl">부탁문을 부탁하는 부탁</span><button class="btn cp" type="button">복사</button><div class="txt">나는 중학교 과학 교사야. 수업에서 [만들고 싶은 것]을 웹 페이지로 만들고 싶어. 코딩 AI에게 줄 부탁문을 써 줘. 쓰기 전에 네가 알아야 할 것을 나에게 하나씩 물어봐 줘.</div></div>
+      <div class="detail">
+        <p>몇 해 전만 해도 AI에게 역할을 정해 주고 형식을 못 박는 요령을 따로 배웠습니다. 지금 모델들은 사람 말을 훨씬 잘 알아들어서 부탁문도 잘 씁니다. 막연할 때는 부탁문부터 받아 보고, 수업에 맞지 않는 줄만 고쳐 보내면 됩니다. 어떤 부탁이든 끝에 "만들기 전에 궁금한 것을 먼저 물어봐 줘"를 붙이면 결과가 한결 나아집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 8 드릴 말씀 ═══════════ -->
+<section class="step" id="s8" data-title="드릴 말씀" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">8</span><h2>분임으로 흩어지기 전에 드릴 말씀</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">실습에 들어가기 전에 바이브코딩에 대해 꼭 드리고 싶은 이야기를 전하겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">에듀테크 회사들이 걱정이 많다고 합니다</p>
+      <p class="brief">선생님이 직접 만든 도구가 교실에 더 잘 맞고, 그걸 무료로 공개하시기 때문입니다.</p>
+      <div class="detail">
+        <p>에듀테크 회사들이 걱정이 많다고 합니다. 선생님들이 직접 만든 도구가 교실에 더 잘 맞는 데다, 그걸 무료로 공개하시니까요. 저도 그렇습니다. 지금은 회사에서 만든 프로그램보다 제가 만든 프로그램을 더 자주, 더 만족하면서 쓰고 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">품위 유지비가 확 올라갔습니다</p>
+      <p class="brief">매달 3만 원에서 15만 원. 코드를 다 알지 못해서, 고치고 관리하려면 AI가 있어야 합니다.</p>
+      <div class="detail">
+        <p>그런데 이걸 시작한 순간부터 따라오는 게 있습니다. 저는 매달 최소 3만 원, 많게는 15만 원짜리 요금제를 씁니다. 제가 만든 프로그램이지만 코드를 제가 다 아는 게 아니라서, 고치고 관리하려면 AI가 있어야 합니다. 토큰이 끊기면 지금 쓰는 수업 도구들을 유지할 수가 없습니다. 품위 유지비가 확 올라가 버린 셈입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">저는 기술을 조각으로 배우고 있습니다</p>
+      <p class="brief">문제가 생길 때마다 필요한 기술을 한 조각씩 배웁니다. 해결은 되지만, 조각들이 이어지지는 않습니다.</p>
+      <div class="lp">
+        <div class="row"><span class="rl">정식으로 배운다면 이런 순서입니다</span>
+          <div class="pipe"><span class="n">HTML</span><span class="a">→</span><span class="n">CSS</span><span class="a">→</span><span class="n">JavaScript</span><span class="a">→</span><span class="n">HTTP</span><span class="a">→</span><span class="n">서버</span><span class="a">→</span><span class="n">DB</span><span class="a">→</span><span class="n">보안</span></div>
+        </div>
+        <div class="row"><span class="rl">제가 배운 순서는 이렇습니다</span>
+          <div class="eps">
+            <div class="ep"><b>CORS 오류</b><span>AI에게 물어봄</span><span>코드 붙여넣음</span><span>해결</span><em>CORS가 무엇인지는 체계적으로 공부한 적이 없습니다.</em></div>
+            <div class="ep"><b>환경변수 오류</b><span>AI에게 물어봄</span><span>해결</span><em>또 한 조각.</em></div>
+            <div class="ep"><b>Git 오류</b><span>AI에게 물어봄</span><span>해결</span><em>또 한 조각.</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <p>하나 고백하자면, 저는 기술을 파편적으로, 겉핥기식으로 익혀 가고 있습니다. 예를 들어 CORS 오류가 나면 AI에게 묻고, 받은 코드를 붙여 넣고, 해결합니다. 해결은 했지만 CORS가 무엇인지 체계적으로 공부한 적은 없습니다. 그러다 환경변수 오류가 나면 또 묻고 해결하고, Git 오류가 나면 또 묻고 해결합니다.</p>
+        <p>HTML, CSS, JavaScript, HTTP, 서버, 데이터베이스, 보안을 차례로 배운 것이 아니라, 문제가 생길 때마다 필요한 기술을 한 조각씩 배우는 중입니다. 바이브코딩으로 배우면 이렇게 됩니다. 도구는 당장 돌아가지만 조각 사이가 비어 있어서, 처음 보는 문제를 만나면 왜 그런지 모른 채 다시 AI에게 물어야 합니다. 이 점은 알고 시작하셨으면 합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">선생님만의 설명 방식을 담은 도구</p>
+      <p class="brief">누구나 쓰는 멋진 도구보다, 선생님께만 꼭 필요한 도구를 만들어 쓸 수 있는 때가 됐습니다.</p>
+      <div class="detail">
+        <p>그래서 오늘 꼭 드리고 싶은 말씀이 있습니다. 누구나 쓸 수 있는 멋진 도구를 만드는 걸 목표로 삼기보다, 선생님만의 설명 방식을 담은 프로그램, 선생님께만 꼭 필요한 프로그램을 만들어 쓸 수 있는 때가 됐다는 것입니다.</p>
+        <p>전시실의 직렬·병렬 강의 화면이 그 예입니다. 아이들이 연결 방법에 따라 전압이 다르게 걸리는 걸 잘 이해하지 못해서, 저는 공차 버블티로 비유해 설명합니다. 그런데 그 비유를 담은 영상은 어디에도 없고, PPT로 만들면 덜 와닿을 것 같았습니다. 마침 AI는 계산해서 움직이게 하는 코드를 잘 짭니다. 지나가는 개수를 정확히 세어 보여 주거나, 같은 빠르기로 흐르게 하거나, 입자가 움직이는 속도를 식대로 맞추는 일은 제가 손으로 그리는 것보다 코드가 훨씬 잘합니다. 저는 바이브코딩을 이런 자리에 씁니다. 모든 걸 바이브코딩으로 만들려고 하면 시간이 너무 오래 걸립니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">화면은 실험실을 대신하지 못합니다</p>
+      <p class="brief">아이들은 화면을 보고 잠깐 감탄할 뿐입니다. 과학은 실험실에서 직접 겪을 때 가장 과학답습니다.</p>
+      <div class="detail">
+        <p>하나 더 말씀드리면, 저는 이런 걸 만들어 놓고 엄청난 콘텐츠라고 여기는 걸 경계합니다. 아이들은 화면을 보고 잠깐 감탄할 뿐입니다. 선생님들이 저보다 더 잘 아시겠지만, 과학은 실험실에서 직접 보고, 듣고, 만지고, 재미있는 시범 실험을 보면서 겪을 때 가장 과학답다고 생각합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">한두 번이면 충분합니다</p>
+      <p class="brief">누군가 만들어 둔 게 없을 때 하나를 차근차근 만들고, 아이들과 조금 다른 수업을 한두 번 해 보시면 오늘은 성공입니다.</p>
+      <div class="detail">
+        <p>그래서 오늘은 너무 큰 기대 없이, 이런 방법이 있다는 것만 가져가셨으면 합니다. 수업 아이디어가 떠올랐는데 누군가 만들어 둔 게 없다면, 그때 하나를 차근차근 만들어 보시면 됩니다. 유료 요금제를 쓰고 계시면 배포까지 그냥 시키시면 되고, 아니시면 오늘 배우신 방법으로 직접 올리시면 됩니다. 그렇게 만든 링크로 아이들과 조금 다른 수업을 한두 번 해 보시면, 저는 그것만으로 오늘이 성공이라고 생각합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 9 분임 실습 ═══════════ -->
+<section class="step" id="s9" data-title="분임 실습" data-min="60">
+  <div class="wrap">
+    <div class="step-h"><span class="num">9</span><h2>분임을 고르고 매뉴얼 따라 만들기</h2><span class="min"><b>60</b>분</span></div>
+    <p class="goal">두 가지 질문에 답해 분임을 고르고, 매뉴얼을 따라 직접 만들어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">두 가지만 답하면 분임이 정해집니다</p>
+      <div class="qz" id="qz">
+        <div class="q" id="q1"><b>AI가 준 코드를 파일로 저장해서 브라우저로 열어 보신 적이 있나요?</b>
+          <div class="ans"><button type="button" data-q="1" data-a="no" aria-pressed="false">아니요</button><button type="button" data-q="1" data-a="yes" aria-pressed="false">네</button></div></div>
+        <div class="q" id="q2" hidden><b>만든 파일을 주소(링크)로 배포해서 다른 사람에게 보내 보신 적이 있나요?</b>
+          <div class="ans"><button type="button" data-q="2" data-a="no" aria-pressed="false">아니요</button><button type="button" data-q="2" data-a="yes" aria-pressed="false">네</button></div></div>
+        <div class="res" id="qres" hidden></div>
+      </div>
+      <p class="brief">학습지를 칠판에 띄우는 강의 화면을 만들고 싶으시면, 어느 분임이든 칠판 강의 화면 매뉴얼로 가셔도 됩니다.</p>
+    </div>
+
+    <div class="blk">
+      <p class="kw">쓰시는 도구를 먼저 골라 두세요</p>
+      <p class="brief">여기서 고르시면 매뉴얼을 열었을 때도 그 도구에 맞는 설명만 보입니다.</p>
+      <div class="pick" style="margin:10px 0 0">
+        <div class="toolgroup">
+          <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
+          <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
+            <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex</small></button>
+            <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭</small></button>
+          </div>
+        </div>
+        <div class="toolgroup">
+          <span class="tg">웹 채팅 · 무료 계정도 됩니다</span>
+          <div class="toolpick" role="group" aria-label="웹 채팅">
+            <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹<small>chatgpt.com</small></button>
+            <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹<small>claude.ai</small></button>
+            <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹<small>gemini.google.com</small></button>
+            <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정</small></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">매뉴얼</p>
+      <p class="brief">매뉴얼의 마지막 칸이 다음 매뉴얼의 첫 칸으로 이어집니다. 일찍 끝나시면 다음 매뉴얼로 넘어가셔도 됩니다.</p>
+      <div class="mgrid" id="mgrid">
+        <a class="mcard to-basic" data-m="basic" href="basic.html"><span class="mn">분임 ① 기초 · 60분</span><b>상상만 하던 수업 도구, 말로 만들기</b><span>가상 실험실, 퀴즈, 타이머 무엇이든 하나를 말로 만들어 보관함에 올립니다.</span><em>코드를 처음 저장해 보시는 분</em></a>
+        <a class="mcard to-lecture" data-m="lecture" href="lecture.html"><span class="mn">칠판 강의 화면 · 60분</span><b>학습지 한 장을 칠판 강의 화면으로</b><span>학습지 빈칸에 번호를 매기고, 빈칸과 한 장씩 맞춘 강의 화면을 만듭니다.</span><em>학습지로 수업하시는 분 누구나</em></a>
+        <div class="mcard soon" data-m="deploy"><span class="mn">분임 ② 배포 · 준비 중</span><b>GitHub로 내 도구에 주소 붙이기</b><span>만든 파일을 GitHub에 올려 학생에게 링크로 건넵니다. GitHub Pages, Netlify, Vercel의 차이도 다룹니다.</span><em>파일로 저장해 보신 분</em></div>
+        <a class="mcard to-data" data-m="data" href="data.html"><span class="mn">분임 ③ 데이터·AI · 60분</span><b>학생 데이터와 AI를 내 앱에 연결하기</b><span>Supabase로 학생 제출을 모으고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.</span><em>배포까지 해 보신 분</em></a>
+        <a class="mcard to-design" data-m="design" href="design.html"><span class="mn">함께 쓰는 서랍</span><b>디자인 서랍</b><span>설계서(DESIGN.md) 한 장을 골라 만든 앱에 옷을 입힙니다. 설계서 74개가 들어 있습니다.</span><em>어느 분임에서나</em></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 10 나눔 ═══════════ -->
+<section class="step" id="s10" data-title="나눔" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">10</span><h2>GiteacherHub에서 나누기</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">만든 것을 보관함에 올리고, 서로 열어 보며 의견을 남겨보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">GiteacherHub · 교실 앱 보관함</p>
+      <p class="brief">선생님들이 바이브코딩으로 만든 교실 앱을 모아 두는 곳입니다. 오늘 회차의 PIN은 앞 화면에 있습니다.</p>
+      <div class="submit">
+        <div class="txt"><b>GiteacherHub</b><span>배포하지 않아도 파일 하나만 올리면 서로 열어 볼 수 있습니다.</span></div>
+        <a class="btn big to-gth" href="../giteacherhub/" target="_blank" rel="noopener">보관함 열기 ↗</a>
+        <a class="btn big primary to-gth-up" href="../giteacherhub/#/up" target="_blank" rel="noopener">올리기 ↗</a>
+      </div>
+      <ol class="steps" data-key="share">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">만든 파일 올리기</span><span class="how">매뉴얼마다 마지막 칸에 올리는 순서가 있습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">공개되면 다른 선생님 앱 세 개 열어 보기</span><span class="how">나눔 시간에 제가 한 번에 공개합니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">열어 본 앱마다 의견 한 줄 남기기</span><span class="how">좋았던 점 하나, 내 수업이라면 바꾸고 싶은 점 하나</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">마음에 드는 앱은 원본을 받아 내 수업에 맞게 고치기</span><span class="how">앱 화면의 [원본 받기] → 내 폴더에 저장 → AI에게 고쳐 달라고 부탁</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>보관함에 올린 앱은 제가 학생 이름이 들어 있지 않은지 확인한 뒤 공개합니다. 공개된 앱마다 의견을 남길 수 있어서, 다른 선생님이 어떻게 고쳐 쓰셨는지도 함께 모입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 11 마무리 ═══════════ -->
+<section class="step" id="s11" data-title="마무리" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">11</span><h2>마무리</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">오늘 쓴 자료를 어디서 다시 보실 수 있는지 정리해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">다시 보실 곳</p>
+      <div class="grid2">
+        <a class="box to-hub" href="./"><b>이 허브</b><p>바이브코딩 기초와 전시실, 분임 매뉴얼로 가는 길</p></a>
+        <a class="box to-basic" href="basic.html"><b>① 기초</b><p>상상만 하던 수업 도구, 말로 만들기</p></a>
+        <a class="box to-lecture" href="lecture.html"><b>칠판 강의 화면</b><p>학습지 한 장을 강의 화면으로</p></a>
+        <a class="box to-data" href="data.html"><b>③ 데이터·AI</b><p>학생 데이터와 AI를 내 앱에 연결하기</p></a>
+        <a class="box to-design" href="design.html"><b>디자인 서랍</b><p>설계서 74개와 쓰는 법</p></a>
+        <a class="box to-gth" href="../giteacherhub/"><b>GiteacherHub</b><p>오늘 올린 앱과 의견</p></a>
+      </div>
+      <div class="detail">
+        <p>오늘 다룬 내용과 매뉴얼은 연수가 끝난 뒤에도 이 주소에서 그대로 보실 수 있게 정리해두었습니다^^</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<dialog class="lb" id="lb" aria-labelledby="lbTitle">
+  <div class="lb-in">
+    <div class="lb-top"><div><span class="small" id="lbNo"></span><h3 id="lbTitle"></h3><span class="small" id="lbTag"></span></div><button class="x" type="button" id="lbX" aria-label="닫기">✕</button></div>
+    <img id="lbImg" alt="" width="800" height="500">
+    <p id="lbDesc" style="margin:14px 0 6px"></p>
+    <div class="more" id="lbMore"></div>
+    <div class="pr"><span class="pl">비슷한 것을 만들어 보는 첫 부탁</span><button class="btn cp" type="button">복사</button><div class="txt" id="lbPrompt"></div></div>
+  </div>
+</dialog>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>p</kbd> 📖/🎤</div>
+
+<script>
+const CONFIG = { key: 'vibe-hub' };
+/* ═══════════════════════════════════════════════════════════════
+   공통 — 회차 코드(?s=)·📖/🎤 모드·도구 고르기·단계 칩·타이머·체크칸·복사
+   페이지마다 위에서 CONFIG = { key } 를 먼저 정합니다.
+   ═══════════════════════════════════════════════════════════════ */
+const QS = new URLSearchParams(location.search);
+const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+const SCHOOL = (QS.get('school') || '').slice(0, 30);
+
+/* ── 회차 코드를 링크에 싣기 ── */
+(function () {
+  const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
+  const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'deploy.html' + sq, 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; }));
+  if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
+})();
+
+/* ── 모드: 📖 detail / 🎤 present ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save = true) {
+  html.dataset.mode = m;
+  modeBtn.textContent = m === 'present' ? '📖 상세로' : '🎤 발표로';
+  if (save) { try { localStorage.setItem(CONFIG.key + ':mode', m); } catch (e) {} }
+}
+(function initMode() {
+  const q = QS.get('mode'); let m = q;
+  if (!m) { try { m = localStorage.getItem(CONFIG.key + ':mode'); } catch (e) {} }
+  setMode(m === 'present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' ? 'detail' : 'present'));
+
+/* ── 도구 고르기: 매뉴얼 여러 장이 같은 값을 씁니다 ── */
+const TOOL_KEY = 'vibe:tool';
+const TOOLS = { codex: 'local', claude: 'local', sengpt: 'web', 'gpt-free': 'web', 'claude-free': 'web', 'gemini-free': 'web' };
+function setTool(t) {
+  if (!TOOLS[t]) t = '';
+  const kind = t ? TOOLS[t] : '';
+  if (t) { html.dataset.t = t; html.dataset.k = kind; } else { delete html.dataset.t; delete html.dataset.k; }
+  document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  document.querySelectorAll('[data-tool]').forEach(el => { const tk = el.dataset.tool.split(/\s+/); el.hidden = !!t && !(tk.includes(t) || tk.includes(kind)); });
+  try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
+  if (typeof onTool === 'function') onTool();
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => setTool(html.dataset.t === b.dataset.pick ? '' : b.dataset.pick)));
+
+/* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow = document.getElementById('flow');
+steps.forEach((s, i) => {
+  const title = s.dataset.title || s.querySelector('h2')?.textContent || ('단계 ' + (i + 1));
+  const min = s.dataset.min || '';
+  const c = document.createElement('a');
+  c.className = 'chip'; c.href = '#' + s.id; c.innerHTML = `<b>${i + 1}</b>${title}${min ? ` · ${min}분` : ''}`;
+  chips.appendChild(c);
+  if (flow) {
+    const f = document.createElement('a');
+    f.href = '#' + s.id; f.innerHTML = `<span class="n">${i + 1}</span><span class="t">${title}</span><span class="m">${min ? min + '분' : ''}</span>`;
+    flow.appendChild(f);
+  }
+});
+
+/* ── 현재 단계 추적 · 타이머 · 키보드 ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i) {
+  current = i;
+  chipEls.forEach((c, j) => { c.classList.toggle('on', j === i); c.classList.toggle('done', j < i); });
+  updateTimerLabel();
+}
+const io = new IntersectionObserver(es => {
+  const vis = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+  if (vis.length) setCurrent(steps.indexOf(vis[0].target));
+}, { rootMargin: '-30% 0px -55% 0px', threshold: [0, .2, .5, 1] });
+steps.forEach(s => io.observe(s));
+const elapsed = steps.map(() => 0);
+let running = false, tick = null;
+const tmE = document.getElementById('tmElapsed'), tmP = document.getElementById('tmPlan'), tmT = document.getElementById('tmToggle'), timerEl = document.getElementById('timer');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function updateTimerLabel() {
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]); tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', !!plan && elapsed[current] > plan * 60);
+}
+function toggleTimer() {
+  running = !running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick); if (running) tick = setInterval(() => { elapsed[current]++; updateTimerLabel(); }, 1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
+setCurrent(0);
+function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+document.addEventListener('keydown', e => {
+  const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (document.querySelector('dialog[open]')) return;
+  if (e.key === 'p') { modeBtn.click(); return; }
+  if (html.dataset.mode !== 'present') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 't') toggleTimer();
+  if (e.key === 'c') html.classList.toggle('cue-on');
+});
+
+/* ── 실습 체크칸: 기기마다 저장 ── */
+document.querySelectorAll('.steps').forEach(ol => {
+  const k = CONFIG.key + ':chk:' + (ol.dataset.key || 'x');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const boxes = [...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b, i) => {
+    b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked);
+    b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} });
+  });
+});
+
+/* ── 복사 버튼 (.pr 안의 .txt 를 복사) ── */
+async function copyText(text, b) {
+  const old = b.textContent;
+  try { await navigator.clipboard.writeText(text); b.textContent = '복사했습니다'; }
+  catch (e) { b.textContent = '복사가 막혀 있습니다 · 직접 선택해 주세요'; }
+  setTimeout(() => { b.textContent = old; }, 1800);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.cp'); if (!b) return;
+  const t = b.closest('.pr') && b.closest('.pr').querySelector('.txt'); if (!t) return;
+  copyText(t.innerText.trim(), b);
+});
+
+/* ═══ 전시실 ═══ */
+const G = 'https://scienceisjo.github.io/';
+const ROOMS = [
+  { no: '제1전시실', name: '칠판 강의 화면', d: '학습지 빈칸과 한 장씩 맞춘 강의 화면입니다.', link: ['to-lecture', 'lecture.html', '만드는 법 보기 →'] },
+  { no: '제2전시실', name: '실험실과 단원 웹앱', d: '차시 페이지와 시뮬레이션, 단원을 통째로 담은 웹앱입니다.' },
+  { no: '제3전시실', name: '놀이와 이야기', d: '게임과 이야기로 여는 수업, 교실을 깨우는 도구입니다.' },
+  { no: '제4전시실', name: '수업이 흐르는 곳', d: '학생이 들어와 기록을 남기는 곳입니다. 서버를 붙여 만들었습니다.', link: ['to-data', 'data.html', '서버 붙이는 법 보기 →'] },
+  { no: '제5전시실', name: '교사의 책상', d: '수업 준비와 업무를 덜어 주는 도구입니다.' }
+];
+const WORKS = [
+  { r: 0, id: 'series-parallel', t: '직렬·병렬 강의 화면', tag: '중2 · 전기와 자기', u: 'electricity/05-series-parallel-lecture.html',
+    d: '학습지 빈칸과 한 장씩 맞춘 22장짜리 강의 화면입니다. 버블티와 미끄럼틀 비유로 연결 방법에 따라 전압이 어떻게 걸리는지 움직여 보여 줍니다.',
+    p: '첨부한 학습지의 빈칸을 위에서부터 ①, ②, ③ 순서로 번호를 매기고, 빈칸 하나마다 정답이 드러나는 장면을 한 장씩 넘기는 칠판 강의 화면을 만들고 싶어. 먼저 빈칸 번호와 정답을 표로 보여 줘.' },
+  { r: 0, id: 'power', t: '소비 전력 강의 화면', tag: '중2 · 전기와 자기', u: 'electricity/06-power-lecture.html',
+    d: '학습지 빈칸 ①~㉖을 31장에 나눠 담고, 장면마다 제가 할 말을 대본으로 붙였습니다. 전력량까지 이어집니다.',
+    p: '이 강의 화면의 장면마다 내가 할 말을 두세 문장씩 대본으로 붙여 줘. 대본은 학생 화면에는 보이지 않고 나만 켜서 볼 수 있게 해 줘.' },
+  { r: 0, id: 'boyle-lecture', t: '기체의 압력 강의 화면 세 벌', tag: '중1 · 기체의 성질', u: 'gas-properties/01-pressure-lecture.html',
+    more: [['압력', 'gas-properties/01-pressure-lecture.html'], ['기체의 압력', 'gas-properties/02-gas-pressure-lecture.html'], ['압력과 부피', 'gas-properties/03-boyle-lecture.html']],
+    d: '학습지 세 장의 빈칸 48개를 강의 화면 세 벌에 한 장씩 맞췄습니다. 상자 속 기체 입자가 장면 안에서 움직입니다.',
+    p: '이 장면에 상자 속 기체 입자가 움직이는 시뮬레이션을 넣어 줘. 입자의 크기는 바뀌지 않게 하고, 온도가 높을수록 빠르게, 부피가 작을수록 벽에 자주 부딪히도록 식으로 계산해 줘.' },
+  { r: 1, id: 'boyle', t: '과자 봉지 차시 페이지', tag: '중1 · 기체의 성질', u: 'gas-properties/03-boyle.html',
+    d: '"산에 오르니 과자 봉지가 부풀었다"에서 출발해, 주사기와 압력 센서로 압력과 부피의 관계를 찾는 차시 페이지입니다. 생각 열기부터 확인하기까지 한 페이지에 담았습니다.',
+    p: '[차시 주제] 수업을 생각 열기, 탐구, 정리, 확인하기 순서로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개를 넣어 줘.' },
+  { r: 1, id: 'electricity', t: '전기와 자기 단원 웹앱', tag: '중2 · 8차시', u: 'electricity/',
+    d: '에디슨 연구실을 테마로 한 8차시 전체입니다. 전압계와 전구 시뮬레이션, 확인 문제가 들어 있습니다.',
+    p: '[단원] 단원의 차시 페이지들을 한곳에서 여는 허브 페이지를 만들어 줘. 차시마다 카드 하나, 제목은 학생이 궁금해할 질문으로 써 줘.' },
+  { r: 1, id: 'starandspace', t: '별과 우주 단원 웹앱', tag: '중2 · 별과 우주', u: 'starandspace/',
+    d: '연주 시차, 별의 등급과 색, 우리은하. 직접 관측하기 어려운 내용을 화면에서 다룹니다.',
+    p: '연주 시차를 보여 주는 시뮬레이션을 만들어 줘. 지구가 공전하는 동안 가까운 별이 먼 별들을 배경으로 움직여 보이는 모습을, 별까지의 거리를 슬라이더로 바꿔 가며 비교할 수 있게 해 줘.' },
+  { r: 1, id: 'scienceworld', t: '과학탐험월드', tag: '중1·중2 · 통합 허브', u: 'scienceworld/science-exploration-world.html',
+    d: '단원별 시뮬레이션과 가상 실험실을 한 세계 안에 모았습니다. 지금까지 만든 수업 웹앱 대부분이 여기 들어 있습니다.',
+    p: '지금까지 만든 수업 페이지 링크를 단원별로 모아 보여 주는 허브를 만들어 줘. 링크 목록은 코드 맨 위 한곳에 모아 두고, 검색창을 넣어 줘.' },
+  { r: 2, id: 'sparkle', t: '놀러오세요 전기의 숲', tag: '중2 · 전기와 자기', u: 'electricity/sparkle-island/',
+    d: '숲 주민들의 부탁을 해결하며 전류, 전압, 저항과 회로를 탐구하는 게임입니다. 나만의 탐험일지가 채워집니다.',
+    p: '[단원] 개념을 탐구하는 게임을 만들고 싶어. 마을 주민의 부탁을 하나씩 해결하면 개념이 하나씩 쌓이는 구조로, 부탁 목록과 장면 순서부터 표로 짜 줘. 코드는 아직 쓰지 마.' },
+  { r: 2, id: 'lemon', t: '레몬 백작의 부탁', tag: '고1 통합과학 · 산과 염기', u: 'science-islands/lemon-island/',
+    d: '레몬 왕국 아이들에게 번진 중화병을 두 연구자의 조수가 되어 풀어 가는 3D 탐험 게임입니다. 겨울쌤의 수업 「레몬 백작의 부탁」을 바탕으로 만들었습니다.',
+    p: '[단원] 개념을 이야기로 푸는 탐험 게임을 만들고 싶어. 이야기 줄거리와 장면 목록부터 표로 짜 줘. 코드는 아직 쓰지 마.' },
+  { r: 2, id: 'gameworld', t: '클래스 게임 월드', tag: '학급 · 남는 5분', u: 'brain-break-lab/',
+    d: '남는 5분, 학급 행사, 수업 전환에 바로 띄우는 교실 미니게임 모음입니다. 전자칠판 화면에 맞췄고 준비물이 없습니다.',
+    p: '전자칠판에 띄우는 교실 미니게임을 만들어 줘. [게임 규칙]. 버튼 하나로 시작하고, 글씨는 교실 뒤에서도 보이게 크게 해 줘.' },
+  { r: 2, id: 'goldenbell', t: '도전 골든벨', tag: '수업 도입', u: 'class-tools/goldenbell/',
+    d: '수업을 여는 3~5문제입니다. 문제와 사진을 미리 넣어 두고 전자칠판에 띄우면, 저는 틀린 사람 수만 누릅니다.',
+    p: '수업을 여는 골든벨을 만들어 줘. 문제와 사진은 코드 맨 위 목록에 넣고, 나는 틀린 학생 수만 누르면 되게 해 줘.' },
+  { r: 2, id: 'jarvis', t: '자비스 · 수업 도입 도우미', tag: '수업 도입', u: 'class-tools/jarvis/',
+    d: '손뼉 두 번에 깨어나는 인공지능 비서입니다. 오늘의 학습목표를 빈칸 퀴즈로 열고, 발표자 뽑기와 소음 신호등까지 말 한마디나 숫자 키 하나로 부릅니다.',
+    p: '수업 시작 화면을 만들어 줘. 스페이스 키를 누르면 오늘 배울 내용이 빈칸 퀴즈로 나오고, 숫자 키로 발표자 뽑기와 타이머를 부를 수 있게 해 줘.' },
+  { r: 3, id: 'scienceclass', t: '과학 시간 학생 입구', tag: '학생 · 수업 전체', u: 'scienceclass/',
+    d: '제 수업 전체가 이 문 하나로 들어옵니다. 학습지, 평가, 수업 페이지, 질문나무, 도장판이 서로 이어져 있습니다.',
+    p: '학생들이 우리 과학 시간 자료를 한곳에서 여는 입구 페이지를 만들어 줘. 방마다 카드 하나, 링크 목록은 코드 맨 위에 모아 둬.' },
+  { r: 3, id: 'questionuri', t: '해누리 질문 과수원', tag: '학생 참여 · 서버', u: 'questionuri/',
+    d: '학생이 수업 중 떠오른 질문을 심으면 나무가 자랍니다. 좋은 질문은 다듬어 다시 수업으로 돌아옵니다.',
+    p: '학생들이 수업 중 떠오른 질문을 올리고 서로 볼 수 있는 게시판을 만들고 싶어. 여러 학생이 동시에 올려야 하니, 어떤 서버가 필요하고 학생 정보는 어떻게 지켜야 하는지부터 설명해 줘.' },
+  { r: 3, id: 'stamp', t: '과학 칭찬 도장판', tag: '학급 · 서버', u: 'class-tools/stamp-board/',
+    d: '학생에게는 캐릭터를 키우는 도장판이고, 교사에게는 30초 만에 끝나는 관찰 기록부입니다. 다른 선생님이 각자 설치해 쓰시는 판도 있습니다.',
+    p: '학생마다 칭찬 도장을 모으는 도장판을 만들고 싶어. 기록이 여러 기기에서 이어져야 하니 서버를 어떻게 붙여야 하는지, 학생 정보는 무엇을 저장하지 말아야 하는지부터 알려 줘.' },
+  { r: 3, id: 'mbl', t: 'MBL 센서 수업 허브', tag: '실험 · 서버', u: 'mblclasshub/',
+    d: '센서로 모은 모둠 데이터를 한 화면에 모아 비교합니다. 참여 코드 6자리로 학생이 들어오고, 교사 화면과 발표 화면이 따로 있습니다.',
+    p: '모둠별 실험 측정값을 입력하면 우리 반 전체 결과가 그래프 하나에 모이는 페이지를 만들고 싶어. 학생 이름 없이 모둠 번호로만 받게 하고, 필요한 서버부터 설명해 줘.' },
+  { r: 3, id: 'forest', t: '이삼한 친구들의 숲', tag: '학급 · 3D · 서버', u: 'class-tools/memory-village/',
+    d: '학생들이 같은 3D 숲에 함께 들어와 학급의 추억을 남기고 투표하는 곳입니다. 모인 기록은 인쇄하거나 표로 받습니다.',
+    p: '우리 반 학생들이 한 해 추억을 한 줄씩 남기는 페이지를 만들고 싶어. 먼저 서버 없이 이 기기에만 저장되는 판으로 만들고, 나중에 여러 기기로 넓히려면 무엇이 더 필요한지 알려 줘.' },
+  { r: 4, id: 'worksheet', t: '학습지 스튜디오', tag: '교사 · A4 학습지', u: 'teacher-toolkit/worksheet-studio/',
+    d: '수업 내용을 블록으로 조립해 A4 학습지를 만듭니다. 교사용 원본 하나에서 학생용과 정답지를 한 번에 뽑고, [AI로 만들기]에서 AI가 써 준 학습지 파일(JSON)을 붙여넣으면 바로 조판됩니다.',
+    p: '학습지 스튜디오의 [AI로 만들기]에 있는 설계서를 채워서 AI에게 주고, 받은 결과를 다시 스튜디오에 붙여넣어 학습지로 만들어 보자.' },
+  { r: 4, id: 'curriculum', t: '과학 교육과정 나선지도', tag: '교사 · 교육과정', u: 'teacher-toolkit/science-curriculum-map/',
+    d: '2022 개정 과학과 초3~고3의 108개 단원을 지하철 노선도로 펼쳤습니다. 단원을 누르면 성취기준과 해설, 앞뒤 학습 연계가 나옵니다.',
+    p: '내가 가르치는 단원들을 학년 순서대로 잇는 노선도를 만들어 줘. 단원 목록과 연결은 코드 맨 위 목록에 넣고, 역을 누르면 설명이 나오게 해 줘.' },
+  { r: 4, id: 'sensor', t: '센서 구매 가이드', tag: '교사 · 예산', u: 'teacher-toolkit/sensor-guide/',
+    d: '과학 센서 회사 네 곳의 가격과 장단점을 비교합니다. 예산, 모둠 수, 수업을 고르면 구매 계획이 만들어집니다.',
+    p: '과학실 기자재를 고르는 비교표를 만들어 줘. 예산과 모둠 수를 넣으면 몇 개를 살 수 있는지 계산해 주고, 가격 목록은 코드 맨 위에 모아 둬.' },
+  { r: 4, id: 'pdf', t: 'PDF 만능 도구', tag: '교사 · 업무', u: 'class-tools/pdf-tool/',
+    d: '병합, 분할, 압축, 쪽번호, 워터마크, 글자 추출까지 열한 가지를 합니다. 파일이 컴퓨터 밖으로 나가지 않습니다.',
+    p: '여러 PDF를 하나로 합치는 페이지를 만들어 줘. 파일은 서버로 보내지 말고 브라우저 안에서만 처리해 줘.' },
+  { r: 4, id: 'gth', t: 'GiteacherHub', tag: '연수 · 나눔', u: 'growing-teachers/giteacherhub/',
+    d: '선생님들이 바이브코딩으로 만든 교실 앱을 올리고 서로 열어 보는 보관함입니다. 오늘 나눔 시간에 씁니다.',
+    p: '선생님들이 만든 HTML 파일을 올리고 서로 열어 볼 수 있는 보관함을 만들고 싶어. 다른 사람이 올린 파일을 안전하게 미리 보려면 무엇을 조심해야 하는지부터 알려 줘.' }
+];
+const STAR_KEY = CONFIG.key + ':stars';
+let stars = []; try { stars = JSON.parse(localStorage.getItem(STAR_KEY) || '[]'); } catch (e) {}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function linkWithCode(href) { return CODE && !/^https?:/.test(href) ? href + '?s=' + encodeURIComponent(CODE) : href; }
+function renderGallery() {
+  let n = 0;
+  document.getElementById('gallery').innerHTML = ROOMS.map((R, ri) => {
+    const ws = WORKS.filter(w => w.r === ri);
+    return `<div class="room"><div class="room-h"><span class="no">${R.no}</span><h3>${R.name}</h3><span class="d">${R.d}</span>${R.link ? `<a href="${linkWithCode(R.link[1])}">${R.link[2]}</a>` : ''}</div>
+      <div class="wall">${ws.map(w => { n++; const no = String(n).padStart(2, '0'); w.no = no; return `<div class="work">
+        <button class="frame" type="button" data-w="${w.id}" aria-label="${esc(w.t)} 크게 보기"><img src="gallery/${w.id}.webp" alt="${esc(w.t)} 화면" width="800" height="500" loading="lazy"></button>
+        <div class="plate"><span class="wno">작품 ${no}</span><b>${esc(w.t)}</b><span class="tg2">${esc(w.tag)}</span><p>${esc(w.d)}</p></div>
+        <div class="acts"><a class="btn" href="${G + w.u}" target="_blank" rel="noopener">열어 보기 ↗</a><button class="star" type="button" data-star="${w.id}" aria-pressed="${stars.includes(w.id)}">★ 별</button></div>
+      </div>`; }).join('')}</div></div>`;
+  }).join('');
+  renderPicked();
+}
+function renderPicked() {
+  const box = document.getElementById('picked'), ul = document.getElementById('pickedList');
+  const ws = WORKS.filter(w => stars.includes(w.id));
+  box.hidden = !ws.length;
+  ul.innerHTML = ws.map(w => `<li><a href="${G + w.u}" target="_blank" rel="noopener">${esc(w.t)}</a> <span class="small">· ${esc(w.tag)}</span></li>`).join('');
+  document.querySelectorAll('[data-star]').forEach(b => b.setAttribute('aria-pressed', String(stars.includes(b.dataset.star))));
+  const lbStar = document.getElementById('lbStar'); if (lbStar) lbStar.setAttribute('aria-pressed', String(stars.includes(lbStar.dataset.star)));
+}
+function toggleStar(id) {
+  stars = stars.includes(id) ? stars.filter(x => x !== id) : stars.concat(id);
+  try { localStorage.setItem(STAR_KEY, JSON.stringify(stars)); } catch (e) {}
+  renderPicked();
+}
+const lb = document.getElementById('lb');
+function openWork(id) {
+  const w = WORKS.find(x => x.id === id); if (!w) return;
+  document.getElementById('lbNo').textContent = '작품 ' + w.no + ' · ' + ROOMS[w.r].no;
+  document.getElementById('lbTitle').textContent = w.t;
+  document.getElementById('lbTag').textContent = w.tag;
+  const img = document.getElementById('lbImg'); img.src = 'gallery/' + w.id + '.webp'; img.alt = w.t + ' 화면';
+  document.getElementById('lbDesc').textContent = w.d;
+  document.getElementById('lbPrompt').textContent = w.p;
+  const more = (w.more || [[w.more ? '' : '열어 보기', w.u]]).map(m => `<a class="btn" href="${G + m[1]}" target="_blank" rel="noopener">${esc(m[0] || '열어 보기')} ↗</a>`).join('');
+  document.getElementById('lbMore').innerHTML = more + `<button class="star" id="lbStar" type="button" data-star="${w.id}" aria-pressed="${stars.includes(w.id)}">★ 별</button>`;
+  if (lb.showModal) lb.showModal(); else lb.setAttribute('open', '');
+}
+document.addEventListener('click', e => {
+  const f = e.target.closest('[data-w]'); if (f) { openWork(f.dataset.w); return; }
+  const s = e.target.closest('[data-star]'); if (s) { toggleStar(s.dataset.star); return; }
+});
+document.getElementById('lbX').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+renderGallery();
+
+/* ═══ 몸 비유 데모 · 기체 입자 상자 ═══
+   2차원 맥스웰 분포(레일리)로 빠르기를 뽑고, 평균 빠르기가 √T 에 비례하게 맞춥니다. 입자 반지름은 그대로. */
+(function () {
+  const box = document.getElementById('bodyDemo'), cv = document.getElementById('bdCv'), ctx = cv.getContext('2d');
+  const tIn = document.getElementById('bdT'), out = document.getElementById('bdOut'), stopB = document.getElementById('bdStop'), cap = document.getElementById('bdCap');
+  const W = cv.width, H = cv.height, R = 6, N = 26, K = 7.2; /* K: 300 K 에서 σ ≈ 125 px/s */
+  let T = +tIn.value, run = true, last = 0, raf = 0;
+  const sigma = t => K * Math.sqrt(t);
+  const P = Array.from({ length: N }, () => {
+    const s = sigma(T) * Math.sqrt(-2 * Math.log(1 - Math.random())), a = Math.random() * Math.PI * 2;
+    return { x: R + Math.random() * (W - 2 * R), y: R + Math.random() * (H - 2 * R), vx: s * Math.cos(a), vy: s * Math.sin(a) };
+  });
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0066cc';
+    P.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, Math.PI * 2); ctx.fill(); });
+  }
+  function step(now) {
+    raf = 0;
+    if (box.dataset.layer !== '3' || !run) { last = 0; return; }
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
+    P.forEach(p => {
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      if (p.x < R) { p.x = 2 * R - p.x; p.vx = -p.vx; } if (p.x > W - R) { p.x = 2 * (W - R) - p.x; p.vx = -p.vx; }
+      if (p.y < R) { p.y = 2 * R - p.y; p.vy = -p.vy; } if (p.y > H - R) { p.y = 2 * (H - R) - p.y; p.vy = -p.vy; }
+    });
+    draw(); raf = requestAnimationFrame(step);
+  }
+  function kick() { if (!raf && box.dataset.layer === '3' && run) raf = requestAnimationFrame(step); }
+  function setT(t) {
+    t = Math.min(600, Math.max(150, +t || 300));
+    if (box.dataset.layer === '3') { const f = Math.sqrt(t / T); P.forEach(p => { p.vx *= f; p.vy *= f; }); T = t; }
+    out.textContent = t + ' K (' + (t - 273) + ' ℃)';
+  }
+  tIn.addEventListener('input', () => setT(tIn.value));
+  stopB.addEventListener('click', () => { run = !run; stopB.textContent = run ? '멈춤' : '다시 움직이기'; kick(); });
+  const CAP = {
+    1: '<b>HTML만 있으면</b> 제목, 슬라이더, 버튼, 그림 자리가 순서대로 놓일 뿐입니다. 슬라이더를 움직여도 아무 일도 일어나지 않습니다.',
+    2: '<b>CSS를 입히면</b> 색, 글꼴, 간격, 모서리가 생겨 보기 좋아집니다. 그래도 아직 움직이지는 않습니다.',
+    3: '<b>JavaScript를 더하면</b> 슬라이더의 온도에 맞춰 입자의 빠르기를 계산해 움직입니다. 온도를 올려 보세요.'
+  };
+  function setLayer(l) {
+    box.dataset.layer = l;
+    box.querySelectorAll('.bd-tabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.layer === l)));
+    cap.innerHTML = CAP[l];
+    if (l === '3') { const t = +tIn.value; const f = Math.sqrt(t / T); P.forEach(p => { p.vx *= f; p.vy *= f; }); T = t; }
+    draw(); last = 0; kick();
+  }
+  box.querySelectorAll('.bd-tabs button').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.layer)));
+  setLayer('3');
+})();
+
+/* ═══ 분임 고르기 ═══ */
+(function () {
+  const res = document.getElementById('qres'), q2 = document.getElementById('q2');
+  const OUT = {
+    basic: ['① 기초로 가시면 됩니다', '상상만 하던 수업 도구 하나를 말로 만들어 파일로 저장하고, 보관함에 올리는 데까지 갑니다.', 'to-basic', 'basic.html', '① 기초 매뉴얼 열기 →'],
+    deploy: ['② 배포로 가시면 됩니다', '만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. 매뉴얼을 준비하는 동안에는 칠판 강의 화면 매뉴얼로 하나 더 만들어 보셔도 좋습니다.', 'to-lecture', 'lecture.html', '칠판 강의 화면 매뉴얼 열기 →'],
+    data: ['③ 데이터·AI로 가시면 됩니다', 'Supabase로 학생 제출을 모으고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.', 'to-data', 'data.html', '③ 데이터·AI 매뉴얼 열기 →']
+  };
+  function show(k) {
+    const o = OUT[k]; res.hidden = false;
+    res.innerHTML = `<b>${o[0]}</b><p class="brief" style="margin:6px 0 12px">${o[1]}</p><a class="btn big primary" href="${linkWithCode(o[3])}">${o[4]}</a>`;
+    document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('hi', c.dataset.m === k));
+  }
+  document.querySelectorAll('#qz [data-q]').forEach(b => b.addEventListener('click', () => {
+    b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    if (b.dataset.q === '1') {
+      if (b.dataset.a === 'no') { q2.hidden = true; show('basic'); }
+      else { q2.hidden = false; res.hidden = true; q2.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false')); document.querySelectorAll('.mcard').forEach(c => c.classList.remove('hi')); }
+    } else show(b.dataset.a === 'no' ? 'deploy' : 'data');
+  }));
+})();
+
+/* 처음 한 번: 저장된 도구 불러오기 */
+(function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
+</script>
 </body>
 </html>

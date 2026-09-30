@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>③ 학생 데이터·AI 연결 · 바이브코딩 연수 · 해누리중 조승재</title>
+<meta name="description" content="내 앱에 Supabase를 붙여 학생 제출을 모으고, AI API를 키를 숨긴 채 연결하는 60분 매뉴얼. 프론트엔드·백엔드·API·환경변수·CORS를 학교에 빗댄 용어 사전, 회사별 결제 한도 거는 법, 키 유출 대응, 학생에게 내놓기 전 다섯 가지 점검을 정리했습니다.">
+<link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 강사 ── */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+
+/* ── 도구 고르기 ── */
+.pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
+.pick p{margin:0 0 10px;font-weight:600}
+.toolpick{display:flex;flex-wrap:wrap;gap:8px}
+.toolpick button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:9px 18px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.toolpick button:hover{border-color:var(--ink2)}
+.toolpick button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
+.tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
+html[data-t] .tl{display:none}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* ── 실습 ── */
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::-webkit-details-marker{display:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+html[data-mode="present"] details.stuck{display:none}
+
+/* ── 비교 상자·링크 카드 ── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box.no b{color:var(--bad)} .box.yes b{color:var(--ok)}
+.box.yes{border-color:var(--ok)}
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+
+/* ── 프롬프트 카드 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+html[data-mode="present"] .pr{font-size:.75em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 12px}
+.pr.big .txt{max-height:none}
+html[data-mode="present"] .pr.big .txt{max-height:14em}
+
+/* ── 부탁문 빌더 ── */
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
+.bform .full{grid-column:1/-1}
+.bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.bform input[type=text],.bform select,.bform textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.bform textarea{min-height:4.4em;resize:vertical;line-height:1.5}
+.bform input:focus,.bform select:focus,.bform textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem;cursor:pointer}
+.opts input{width:1.1em;height:1.1em;margin:.2em 0 0;accent-color:var(--blue);flex:none}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 16px}
+html[data-mode="present"] .bform{font-size:.8em}
+
+.ideas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.ideas .il{font-size:.85rem;color:var(--ink2);margin-right:4px}
+.ideas button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.ideas button:hover{border-color:var(--blue);color:var(--blue)}
+.kinds label{border:1px solid var(--line);border-radius:9999px;padding:6px 14px 6px 10px;align-items:center}
+.kinds label:has(input:checked){border-color:var(--blue);background:var(--blue-t);color:var(--blue);font-weight:600}
+.kinds input{margin:0}
+
+/* ── 코드 도우미 ── */
+.helper{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.helper textarea{width:100%;min-height:9em;font-family:var(--mono);font-size:.82rem;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;resize:vertical;line-height:1.45}
+.helper textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.hbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.hmsg{font-size:.88em;color:var(--ink2)}
+.hmsg.bad{color:var(--bad)} .hmsg.ok{color:var(--ok)}
+.hframe{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-top:12px}
+.hframe iframe{display:block;width:100%;height:440px;border:0;background:#fff}
+
+/* ── 표 ── */
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+  .bform{grid-template-columns:1fr}
+  .pr{padding-right:14px;padding-top:44px}
+  .fixgrid{grid-template-columns:1fr}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
+.tscroll table{margin:0;min-width:600px}
+
+/* ── 데이터·AI 전용 ── */
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin:14px 0}
+.gl .g{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.gl .g b{display:block;font-size:1.02rem}
+.gl .g i{display:block;font-style:normal;font-size:.8rem;font-weight:600;color:var(--blue);margin:2px 0 6px}
+.gl .g p{margin:0;color:var(--ink2);font-size:.9rem}
+.gl .g small{display:block;margin-top:6px;font-size:.78rem;color:var(--ink3)}
+html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{display:none}
+.lane{margin:10px 0 4px}
+.lane .ll{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px}
+.fmap{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:0 0 12px}
+.fmap .nd{flex:1;min-width:130px;border:1px solid var(--line);border-radius:var(--r2);padding:10px 12px;background:#fff}
+.fmap .nd b{display:block;font-size:.95rem}
+.fmap .nd span{display:block;font-size:.8rem;color:var(--ink2)}
+.fmap .nd i{display:block;font-style:normal;font-size:.72rem;font-weight:600;color:var(--blue);letter-spacing:.03em;margin-bottom:2px}
+.fmap .nd.db{border-color:var(--warn);background:var(--warn-t)}
+.fmap .nd.safe{border-color:var(--ok);background:var(--ok-t)}
+.fmap .ar{align-self:center;color:var(--ink3);font-size:1.2rem}
+.five{counter-reset:f}
+.five li .what::before{counter-increment:f;content:counter(f,decimal) ". ";color:var(--blue)}
+.keymsg{font-size:.85rem;margin:2px 0 0;min-height:1.2em}
+.keymsg.bad{color:var(--bad);font-weight:600}
+.keymsg.warn{color:var(--warn)}
+.keymsg.ok{color:var(--ok)}
+.bform input[type=url],.bform input[type=password]{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.provtbl td{font-size:.92em}
+.provtbl td:first-child{min-width:7.5em}
+.provtbl td:nth-child(2){min-width:9em}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">③ 데이터·AI 연결<small>해누리중 조승재</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">바이브코딩 연수 · 분임 ③ 데이터·AI</div>
+    <h1>학생 데이터와 AI를 내 앱에 연결하기</h1>
+    <p class="lead">내 앱에 Supabase를 붙여 학생 제출을 모으고, AI를 키를 숨긴 채 연결하는 방법과 학생에게 내놓기 전에 꼭 볼 것을 정리해보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">말 익히기</span><span class="a">→</span><span class="n">Supabase 준비</span><span class="a">→</span><span class="n">API 연결</span><span class="a">→</span><span class="n">제출 받기</span><span class="a">→</span><span class="n">AI 연결</span><span class="a">→</span><span class="n hi">다섯 가지 점검</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span>⏱ <b>60분</b></span>
+      <span>💻 <b>만들어 둔 앱 하나 (배포까지 했으면 더 좋습니다)</b></span>
+      <span>🔑 <b>GitHub 계정</b></span>
+    </div>
+    <div class="pick">
+      <p>먼저 쓰시는 도구를 골라 주세요. 고르신 도구에 맞는 부탁문이 나옵니다.</p>
+      <div class="toolgroup">
+        <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
+        <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
+          <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex</small></button>
+          <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭</small></button>
+        </div>
+      </div>
+      <div class="toolgroup">
+        <span class="tg">웹 채팅 · 무료 계정도 됩니다</span>
+        <div class="toolpick" role="group" aria-label="웹 채팅">
+          <button type="button" data-pick="gpt-free" aria-pressed="false">ChatGPT 웹<small>chatgpt.com</small></button>
+          <button type="button" data-pick="claude-free" aria-pressed="false">Claude 웹<small>claude.ai</small></button>
+          <button type="button" data-pick="gemini-free" aria-pressed="false">Gemini 웹<small>gemini.google.com</small></button>
+          <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정</small></button>
+        </div>
+      </div>
+    </div>
+    <div class="flow" id="flow"></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big to-hub" href="./">연수 허브로</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 말 익히기 ═══════════ -->
+<section class="step" id="s1" data-title="말 익히기" data-min="8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>딱 여기까지만 알면 되는 말</h2><span class="min"><b>8</b>분</span></div>
+    <p class="goal">AI를 연결한 웹 페이지를 만들 때 만나는 말들을 학교에 빗대어 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">학교에 빗대면 쉽습니다</p>
+      <p class="brief">학생이 보는 교실, 학생이 못 들어오는 교무실, 교무실 창구의 신청서, 금고 속 법인카드로 봅니다.</p>
+      <div class="gl">
+        <div class="g"><b>프론트엔드</b><i>교실 칠판</i><p>학생 기기에 보이는 화면입니다. 오늘 만든 index.html이 여기에 해당합니다.</p><small>GitHub Pages에 올린 앱</small></div>
+        <div class="g"><b>백엔드</b><i>교무실</i><p>학생 눈에 보이지 않는 곳에서 저장하고, 확인하고, 대신 부탁하는 쪽입니다.</p><small>Supabase</small></div>
+        <div class="g"><b>서버</b><i>교무실이 있는 건물</i><p>24시간 켜져 있는 남의 컴퓨터입니다. 백엔드가 여기서 돌아갑니다.</p><small>Supabase, Render</small></div>
+        <div class="g"><b>데이터베이스 (DB)</b><i>기록 캐비닛</i><p>표 모양으로 기록이 쌓이는 곳입니다. 줄 하나가 제출 하나입니다.</p><small>Supabase의 표</small></div>
+        <div class="g"><b>API</b><i>교무실 창구의 신청서 양식</i><p>정해진 양식으로 부탁하면 정해진 모양으로 답이 오는 약속입니다.</p><small>Supabase API, AI 회사의 API</small></div>
+        <div class="g"><b>API 키</b><i>학생증과 법인카드</i><p>창구에 내미는 증표입니다. Supabase의 publishable 키는 학생증처럼 보여도 되고, secret 키와 AI 회사의 키는 법인카드라 보이면 안 됩니다.</p><small>3단계, 5단계</small></div>
+        <div class="g"><b>환경변수</b><i>교무실 금고</i><p>비밀 키를 코드에 적지 않고 서버의 금고에 넣어 두고, 이름으로만 꺼내 씁니다.</p><small>Edge Function의 Secrets</small></div>
+        <div class="g"><b>RLS</b><i>캐비닛 서랍마다 붙인 규칙</i><p>표마다 누가 넣고, 읽고, 고칠 수 있는지 정하는 규칙입니다. 오늘은 "학생은 넣기만"입니다.</p><small>3단계</small></div>
+        <div class="g"><b>Edge Function</b><i>교무실 심부름꾼</i><p>서버에서 돌아가는 작은 함수입니다. 금고의 키로 AI에게 대신 묻고, 답만 돌려줍니다.</p><small>5단계</small></div>
+        <div class="g"><b>CORS</b><i>"우리 교실에서 온 신청서만 읽게 한다"</i><p>브라우저에게 어느 주소의 페이지가 답을 읽어도 되는지 알려 주는 규칙입니다. 브라우저만 지키는 규칙이라 자물쇠는 아닙니다.</p><small>5단계</small></div>
+        <div class="g"><b>GitHub · GitHub Pages</b><i>원본 보관함과 그 앞 게시판</i><p>코드를 보관하고, 누구나 여는 주소로 걸어 줍니다. 서버 코드는 돌리지 못합니다.</p><small>② 배포</small></div>
+        <div class="g"><b>Netlify · Vercel</b><i>게시판에 심부름꾼까지</i><p>페이지를 걸어 주면서 작은 함수도 돌려 줍니다. 비밀 키는 환경변수로 넣습니다.</p><small>Supabase 대신 쓸 때</small></div>
+        <div class="g"><b>Render</b><i>교무실을 통째로 빌려주는 곳</i><p>서버 프로그램을 계속 켜 두는 곳입니다. 무료는 15분 동안 아무도 안 부르면 잠들고, 깨어나는 데 1분쯤 걸립니다.</p><small>Supabase 대신 쓸 때</small></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">오늘 만드는 두 길</p>
+      <div class="lane"><span class="ll">학생 제출을 모으는 길 · 3~4단계</span>
+        <div class="fmap"><div class="nd"><i>프론트엔드</i><b>학생 화면</b><span>index.html</span></div><span class="ar">→</span><div class="nd"><i>API · publishable 키</i><b>Supabase</b><span>RLS가 문지기</span></div><span class="ar">→</span><div class="nd db"><i>데이터베이스</i><b>표</b><span>교사만 봅니다</span></div></div>
+      </div>
+      <div class="lane"><span class="ll">AI에게 묻는 길 · 5단계</span>
+        <div class="fmap"><div class="nd"><i>프론트엔드</i><b>화면</b><span>키가 없습니다</span></div><span class="ar">→</span><div class="nd safe"><i>백엔드 · 금고에 AI 키</i><b>Edge Function</b><span>횟수를 셉니다</span></div><span class="ar">→</span><div class="nd"><i>AI 회사의 API</i><b>AI</b><span>답만 돌아옵니다</span></div></div>
+      </div>
+      <div class="detail">
+        <p>이 매뉴얼에 나오는 말은 이 정도면 충분합니다. 저도 이 말들을 순서대로 공부한 것이 아니라, 오류를 만날 때마다 하나씩 알게 됐습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 Supabase 준비 ═══════════ -->
+<section class="step" id="s2" data-title="Supabase 준비" data-min="7">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>Supabase 프로젝트 만들기</h2><span class="min"><b>7</b>분</span></div>
+    <p class="goal">Supabase에 가입하고, 데이터를 담을 프로젝트를 하나 만들어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">GitHub 계정으로 들어갑니다</p>
+      <p class="brief">배포에서 쓴 GitHub 계정으로 가입하면 비밀번호를 따로 만들 필요가 없습니다.</p>
+      <ol class="steps" data-key="sb">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">supabase.com 에서 [Start your project]</span><span class="how">오른쪽 위 [Sign in]이 보이면 그것을 눌러도 됩니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">[Continue with GitHub]로 로그인</span><span class="how">GitHub 권한을 묻는 화면에서 [Authorize]</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">[New project]에서 이름, 데이터베이스 비밀번호, 지역 정하기</span><span class="how">비밀번호는 [Generate a password] 후 메모장에 저장. 지역(Region)은 Northeast Asia (Seoul)</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">[Create new project]를 누르고 1~2분 기다리기</span><span class="how">프로젝트 화면이 뜨면 준비 끝</span></div></li>
+      </ol>
+      <div class="grid2">
+        <div class="box"><b>무료 프로젝트는 두 개까지</b><p>수업용 하나, 연습용 하나로 쓰면 알맞습니다.</p></div>
+        <div class="box"><b>일주일 쉬면 멈춥니다</b><p>일주일 동안 쓰지 않으면 메일로 알려 준 뒤 멈춥니다. 1년 안에는 대시보드에서 다시 켤 수 있습니다.</p></div>
+        <div class="box"><b>Edge Function은 한 달 50만 번</b><p>무료에서는 넘으면 더 쓸 수 없습니다. 한 반이 수업에서 쓰기에는 넉넉합니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>학기 중에 매주 쓰는 앱이라면 멈출 일이 거의 없고, 방학이 지나면 한 번 다시 켜면 됩니다. 이 숫자들은 2026년 9월 Supabase 안내 기준입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 API 연결 ═══════════ -->
+<section class="step" id="s3" data-title="API 연결" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>주소와 키로 API 연결하기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">프로젝트 주소와 키를 찾아, 내 앱이 Supabase와 이야기하게 해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">주소 하나, 키 하나</p>
+      <p class="brief">Project URL과 Publishable key 두 가지만 앱에 넣습니다.</p>
+      <ol class="steps" data-key="api">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">프로젝트 화면 위쪽의 [Connect] 누르기</span><span class="how">Project URL과 Publishable key가 함께 보입니다. [Settings] → [API Keys]에서도 찾을 수 있습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Project URL 복사하기</span><span class="how">https://영문자.supabase.co 모양</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Publishable key 복사하기</span><span class="how">sb_publishable_ 로 시작하는 키</span></div></li>
+      </ol>
+      <div class="grid2">
+        <div class="box yes"><b>Publishable key · sb_publishable_</b><p>앱에 넣어도 되는 키입니다. 누구나 볼 수 있다는 전제로 쓰고, 표를 지켜 주는 것은 표마다 거는 규칙(RLS)입니다.</p></div>
+        <div class="box no"><b>Secret key · sb_secret_</b><p>모든 규칙을 건너뛰는 열쇠입니다. 앱에도 GitHub에도 넣지 않습니다. AI가 넣으라고 해도 넣지 않습니다.</p></div>
+      </div>
+      <p class="note">예전 설명서나 AI가 eyJ로 시작하는 긴 키(anon, service_role)를 복사하라고 하면 예전 방식입니다. Supabase는 2026년 말까지 예전 키를 없애 가는 중이라, 새로 만드는 앱은 sb_publishable_ 키로 합니다.</p>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">빌더</span>연결 부탁문</p>
+      <p class="brief">복사한 주소와 키, 모을 내용을 적으면 부탁문이 완성됩니다.</p>
+      <form class="bform" id="cf" onsubmit="return false" autocomplete="off">
+        <label class="f">Project URL
+          <input type="url" name="url" placeholder="https://abcdefgh.supabase.co" spellcheck="false">
+        </label>
+        <label class="f">Publishable key
+          <input type="text" name="key" placeholder="sb_publishable_…" spellcheck="false">
+          <span class="keymsg" id="keyMsg" role="status"></span>
+        </label>
+        <label class="f">표 이름 (영어 소문자)
+          <input type="text" name="table" maxlength="40" value="submissions" spellcheck="false">
+        </label>
+        <label class="f full">모을 내용
+          <textarea name="cols" maxlength="300" placeholder="예: 모둠 번호(1~8), 측정한 부피(mL, 숫자), 결론(글, 300자까지)"></textarea>
+        </label>
+      </form>
+      <div class="pr big" id="pc"><span class="pl">연결 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="api2">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 표를 만드는 SQL 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 표가 생겼는지 보기</span><span class="how">왼쪽 메뉴 [Table Editor] → 표 이름</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>주소와 키 칸에 넣은 값은 이 페이지 안에서 부탁문을 만드는 데만 쓰이고, 어디에도 저장하거나 보내지 않습니다.</p>
+      </div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>SQL을 실행하려니 경고 창이 뜹니다.</b> 표를 만들거나 규칙을 바꾸는 SQL이면 Supabase가 한 번 더 묻습니다. 경고를 읽고, 이미 있는 표를 지우는(drop) 내용이 아니면 실행합니다.</p>
+          <p><b>secret 키를 앱에 넣어 버렸습니다.</b> [Settings]의 [API Keys]에서 그 secret 키를 바로 지우고 새로 만듭니다. 앱에서도 지웁니다.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 제출 받기 ═══════════ -->
+<section class="step" id="s4" data-title="제출 받기" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>학생 제출 받아 보기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">학생처럼 제출해 보고, 모인 기록을 교사가 내려받는 데까지 해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">두 갈래 가운데 하나</p>
+      <div class="grid2">
+        <div class="box"><b>A · 만들어 둔 도구 설치하기</b><p>칭찬 도장판, 질문나무, 진도 트래커를 내 Supabase에 설치해 쓰는 판입니다. 설치 가이드를 따라갑니다.</p><p style="margin-top:8px"><a class="btn" href="https://scienceisjo.github.io/class-kit/setup/guide.html" target="_blank" rel="noopener">우리 반 도구 꾸러미 설치 가이드 ↗</a></p></div>
+        <div class="box"><b>B · 내 앱에 제출 붙이기</b><p>3단계의 연결 부탁문으로 내 앱에 [제출] 버튼을 붙이고, 아래 순서로 확인합니다.</p></div>
+      </div>
+      <ol class="steps" data-key="collect">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">휴대폰으로 앱 열기</span><span class="how">배포한 주소가 있으면 휴대폰으로. 아직이면 내 컴퓨터에서 index.html</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">두세 번 제출해 보기</span><span class="how">빈칸으로도, 아주 긴 글로도, 버튼 연타로도</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 모인 줄 보기</span><span class="how">왼쪽 [Table Editor] → 표 이름. 새로고침하면 줄이 늘어납니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">CSV로 내려받기</span><span class="how">표 위쪽의 내보내기(Export) 메뉴에서 CSV. 엑셀에서는 [데이터] → [텍스트/CSV]로 열고 UTF-8을 고릅니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">연습으로 넣은 줄 지우기</span><span class="how">줄 앞 칸을 골라 [Delete]</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>모인 답을 보는 교사 화면까지 앱으로 만들려면 교사 로그인이 필요합니다. 로그인 없이 읽기를 열어 두면, 주소를 아는 누구나 학생 답을 볼 수 있기 때문입니다. 오늘은 Supabase의 Table Editor가 교사 화면을 대신합니다. 교사 로그인을 붙이는 법과 학교 심의 자료 만들기는 <a href="../student-data-backend/" target="_blank" rel="noopener">학생 데이터 연수 자료</a>에 따로 정리해 두었습니다.</p>
+      </div>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>제출했는데 표에 줄이 생기지 않습니다.</b> 앱에서 F12를 눌러 [Console]에 빨간 글이 있는지 보고, 그 글을 그대로 AI에게 보냅니다. RLS 규칙이 빠졌거나 표 이름이 다른 경우가 가장 많습니다.</p>
+          <p><b>엑셀에서 한글이 깨집니다.</b> CSV 파일을 두 번 눌러 열지 말고, 엑셀의 [데이터] 탭에서 [텍스트/CSV]로 불러와 UTF-8을 고릅니다.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 AI 연결 ═══════════ -->
+<section class="step" id="s5" data-title="AI 연결" data-min="12">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>내 앱에 AI 연결하기</h2><span class="min"><b>12</b>분</span></div>
+    <p class="goal">AI를 붙이면 무엇이 되는지 보고, 키를 숨긴 채 연결하는 구조와 결제 한도를 걸어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">AI를 붙이면 되는 일</p>
+      <div class="grid2">
+        <div class="box"><b>학생 글에 피드백 초안</b><p>실험 결론이나 서술형 답을 넣으면 채점 기준에 맞춘 피드백 초안이 나옵니다. 교사가 읽고 고쳐서 돌려줍니다.</p></div>
+        <div class="box"><b>질문 모으고 나누기</b><p>학생 질문을 주제별로 묶고, 수업에서 다룰 만한 질문을 골라 줍니다.</p></div>
+        <div class="box"><b>문제 바꿔 만들기</b><p>같은 개념으로 숫자와 상황만 바꾼 연습 문제를 만듭니다.</p></div>
+        <div class="box"><b>대화 상대</b><p>과학자나 물질이 되어 학생 질문에 답하는 역할 놀이입니다. 학생이 AI와 직접 대화하므로 아래 기준을 먼저 봅니다.</p></div>
+      </div>
+      <p class="note warn">학생이 AI와 직접 대화하는 앱은 회사 약관과 법을 먼저 확인합니다. Gemini API는 18세 미만이 쓸 수 있는 앱에 쓰지 못하게 되어 있고, 무료 등급에 넣은 글은 구글 제품 개선에 쓰이며 사람이 읽을 수도 있습니다. OpenAI API는 미성년자가 쓰게 하려면 보호자 동의와 나이에 맞는 안전장치를 두게 되어 있고, Anthropic(Claude) API는 미성년자가 쓰는 서비스에 나이 확인, 내용 거르기, AI라는 사실 밝히기 같은 안전장치를 요구합니다. 개인정보 보호법은 만 14세 미만의 개인정보를 처리하려면 법정대리인의 동의를 받게 합니다.</p>
+      <div class="detail">
+        <p>그래서 교사가 쓰는 도구에 AI를 붙이는 쪽이 시작하기 쉽습니다. 학생 글을 넣을 때도 이름과 번호는 지우고 넣습니다. 약관 내용은 2026년 9월 각 회사의 안내를 기준으로 정리했고, 바뀔 수 있어서 쓰시기 전에 한 번 더 확인하시길 권합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">AI 키는 브라우저에 두지 않습니다</p>
+      <p class="brief">AI 회사의 키는 쓴 만큼 결제되는 법인카드입니다. 앱 코드에 넣으면 누구나 F12로 볼 수 있습니다.</p>
+      <div class="fmap"><div class="nd"><i>프론트엔드</i><b>내 앱</b><span>부탁만 합니다</span></div><span class="ar">→</span><div class="nd safe"><i>백엔드 · 금고</i><b>Edge Function</b><span>키를 꺼내 대신 묻습니다</span></div><span class="ar">→</span><div class="nd"><i>API</i><b>AI 회사</b><span>답만 돌아옵니다</span></div></div>
+      <div class="detail">
+        <p>앱의 코드는 브라우저로 내려받아 실행되는 것이라, 파일에 적힌 글자는 누구나 볼 수 있습니다. 그래서 AI 키는 Supabase의 Edge Function 같은 서버 쪽 금고에 넣고, 앱은 그 함수에게 부탁만 합니다. 함수가 금고에서 키를 꺼내 AI에게 묻고, 답만 앱으로 돌려줍니다. Netlify나 Vercel의 함수, Render의 서버에 키를 환경변수로 넣어도 같은 구조가 됩니다.</p>
+        <p>브라우저는 다른 주소의 서버에 부탁할 때, 그 서버가 "이 주소의 페이지는 답을 읽어도 된다"고 허락해야 답을 보여 줍니다. 이 허락이 CORS입니다. 함수가 내 앱 주소만 허락하면 다른 사이트의 페이지가 내 함수를 끌어다 쓰기 어려워집니다. 다만 CORS는 브라우저만 지키는 규칙이라 다른 프로그램으로 직접 부르는 것까지 막지는 못해서, 호출 횟수 제한과 결제 한도를 함께 겁니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">키를 받기 전에 결제 한도부터</p>
+      <p class="brief">선불로 조금만 넣고, 자동 충전을 끄고, 월 한도를 겁니다.</p>
+      <div class="tscroll"><table class="provtbl">
+        <thead><tr><th>회사</th><th>키 받는 곳</th><th>결제</th><th>한도 거는 곳</th><th>꼭 볼 것</th></tr></thead>
+        <tbody>
+          <tr><td><b>OpenAI</b></td><td>platform.openai.com의 API keys</td><td>선불 크레딧, 5달러부터</td><td>Settings의 Limits에서 월 한도를 정하고 "Enforce a hard limit" 켜기 (조직 또는 프로젝트)</td><td>결제를 등록할 때 자동 충전(auto-reload)이 켜진 채로 시작하니 끕니다</td></tr>
+          <tr><td><b>Anthropic</b> (Claude)</td><td>platform.claude.com의 API keys</td><td>선불 크레딧, 다 쓰면 멈춤</td><td>Settings의 Billing에서 Spend limits. 수업용 Workspace를 따로 만들어 그 Workspace에 월 한도</td><td>자동 충전(Auto-reload)이 꺼져 있는지 봅니다. 기본 Workspace에는 한도를 걸 수 없습니다</td></tr>
+          <tr><td><b>Google</b> (Gemini)</td><td>aistudio.google.com의 API key</td><td>무료 등급, 또는 선불 5달러부터</td><td>AI Studio의 Spend 페이지에서 월 한도 (시험 기능)</td><td>학생이 쓰는 앱에는 쓰지 못합니다. Google Cloud 예산 알림은 알림만 보내고 멈추지 않습니다</td></tr>
+        </tbody>
+      </table></div>
+      <div class="detail">
+        <p>처음에는 크레딧을 5~10달러만 넣고 자동 충전을 끈 채로 시작하면, 무슨 일이 생겨도 넣은 돈 이상은 나가기 어렵습니다. 다만 회사들은 한도에 닿은 뒤 몇 분 동안은 조금 더 쓰일 수 있다고 적어 두었습니다. 메뉴 이름은 2026년 9월 기준이고 자주 바뀝니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">빌더</span>AI 함수 부탁문</p>
+      <p class="brief">함수 코드와 앱 쪽 코드를 한 번에 받습니다. 코드는 대시보드에 붙여넣기만 하면 됩니다.</p>
+      <form class="bform" id="af" onsubmit="return false" autocomplete="off">
+        <div class="f">AI 회사
+          <div class="opts">
+            <label><input type="radio" name="prov" value="openai" checked> OpenAI</label>
+            <label><input type="radio" name="prov" value="anthropic"> Anthropic (Claude)</label>
+          </div>
+        </div>
+        <div class="f">누가 쓰나
+          <div class="opts">
+            <label><input type="radio" name="who" value="teacher" checked> 교사인 제가 씁니다</label>
+            <label><input type="radio" name="who" value="student"> 학생이 직접 씁니다 (약관·동의 확인)</label>
+          </div>
+        </div>
+        <label class="f full">AI가 할 일
+          <textarea name="task" maxlength="400" placeholder="예: 학생이 쓴 실험 결론을 받아서, 채점 기준에 맞춰 잘한 점 하나와 고칠 점 하나를 두 문장으로 써 줘. 채점 기준: 변인을 밝혔는가, 결과의 수치를 근거로 들었는가"></textarea>
+        </label>
+        <label class="f full">내 앱 주소 (허락할 주소)
+          <input type="url" name="origin" placeholder="https://아이디.github.io" spellcheck="false">
+        </label>
+        <label class="f">답 길이
+          <select name="len"><option value="300" selected>짧게 (300토큰)</option><option value="600">보통 (600토큰)</option></select>
+        </label>
+        <label class="f">부르는 횟수 제한 (반 전체)
+          <select name="rate"><option value="10/100">1분에 10번, 하루 100번</option><option value="20/300" selected>1분에 20번, 하루 300번</option><option value="30/500">1분에 30번, 하루 500번</option></select>
+        </label>
+      </form>
+      <div class="pr big" id="pa"><span class="pl">AI 함수 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="fn">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">AI 회사에서 결제 한도를 걸고 키 만들기</span><span class="how">위 표의 순서대로. 키는 만들 때 한 번만 보이니 바로 다음 칸으로</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Supabase의 금고(Secrets)에 키 넣기</span><span class="how">[Edge Functions] → [Secrets] → Key에 <span id="envName">OPENAI_API_KEY</span>, Value에 키 → [Save]. 넣자마자 쓸 수 있습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 함수 코드와 앱 쪽 코드 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">대시보드에서 함수 만들기</span><span class="how">[Edge Functions] → [Deploy a new function] → [Via Editor] → 함수 코드 붙여넣기 → 이름 정하고 [Deploy function]</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">함수 설정의 Verify JWT 확인하기</span><span class="how">publishable 키로 부르는 함수는 끄고, 대신 함수 안에서 호출 횟수를 셉니다. AI가 알려 준 대로</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">앱에서 불러 보기</span><span class="how">답이 오면 성공. 오류 글은 그대로 AI에게 보냅니다</span></div></li>
+      </ol>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>앱에서 부르니 CORS 오류가 납니다.</b> 오류 글을 그대로 AI에게 보내고 "함수의 CORS 설정에 내 앱 주소를 넣고, OPTIONS 요청에 답하게 고쳐 줘"라고 합니다. 허락할 주소는 https://아이디.github.io처럼 뒤에 폴더 이름 없이 적습니다.</p>
+          <p><b>401 오류가 납니다.</b> Verify JWT가 켜져 있으면 publishable 키로는 들어가지 못합니다. 함수 설정에서 끄고 다시 불러 봅니다. 함수를 다시 배포한 뒤 이 설정이 되돌아가는 일이 있어서 한 번 더 확인합니다.</p>
+          <p><b>보관함 미리보기에서는 AI 답이 오지 않습니다.</b> 함수가 내 앱 주소만 허락하기 때문입니다. 배포한 주소로 열어서 확인합니다.</p>
+          <p><b>Render 서버의 첫 답이 1분 가까이 걸립니다.</b> 무료 서버가 잠들었다 깨는 시간입니다. 수업 시작 전에 한 번 불러 깨워 둡니다.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6 다섯 가지 점검 ═══════════ -->
+<section class="step" id="s6" data-title="다섯 가지 점검" data-min="8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>학생에게 내놓기 전 다섯 가지</h2><span class="min"><b>8</b>분</span></div>
+    <p class="goal">학생에게 내놓기 전에 다섯 가지를 하나씩 확인해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">이 다섯 가지만 답할 수 있으면 됩니다</p>
+      <ol class="steps five" data-key="five">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">학생 정보가 어디로 가는지</span><span class="how">앱이 무엇을 어디로 보내는지 적어 봅니다. Supabase의 표, AI 회사. 이름·번호·얼굴 사진은 보내지 않고, 학교의 심의 절차를 확인합니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">API 키가 드러나지 않는지</span><span class="how">앱 파일에서 <kbd>Ctrl</kbd>+<kbd>F</kbd>로 sk-, sb_secret, AIza를 찾아 봅니다. 하나라도 나오면 올리지 않습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">AI가 틀렸을 때 어떻게 하는지</span><span class="how">AI 답 아래에 "AI가 쓴 답이라 틀릴 수 있어요"를 붙이고, 평가에 쓰는 답은 교사가 먼저 읽습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">비용이 폭주하지 않게 무엇으로 막는지</span><span class="how">세 겹. 회사 쪽 월 한도와 자동 충전 끄기, 함수의 호출 횟수 제한, 짧은 답과 가벼운 모델</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">서비스가 고장 났을 때 수업 대안이 있는지</span><span class="how">같은 활동을 종이 활동지나 AI 없는 판으로 할 수 있게 준비하고, 앱은 오류가 나도 멈추지 않고 안내 문구를 보여 주게 합니다</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>AI 회사나 Supabase도 멈추는 날이 있습니다. 수업 한 차시를 통째로 앱에 걸어 두면 그날 수업이 같이 멈추기 때문에, 앱이 없던 때의 방법을 옆에 남겨 두는 편이 안전합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">키가 새어 나갔다면</p>
+      <ol class="steps" data-key="leak">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">그 키를 바로 지우기</span><span class="how">회사 대시보드의 API keys에서 삭제(Revoke)</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">새 키를 만들어 금고에 다시 넣기</span><span class="how">Supabase [Edge Functions] → [Secrets]에서 값만 바꿉니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">사용량 화면에서 모르는 사용이 있었는지 보기</span><span class="how">날짜별 사용량이 갑자기 튀었는지</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">모르는 결제가 있으면 회사에 바로 문의하기</span><span class="how">키를 지운 시각과 사용 기록을 함께 보냅니다</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>GitHub 공개 저장소에 키를 올리면 GitHub가 찾아내 회사에 알려 주고, OpenAI와 Anthropic은 그 키를 곧바로 막습니다. Supabase도 공개 저장소에서 찾은 secret 키를 없앱니다. 그래도 그 사이에 누군가 쓸 수 있습니다. 2026년 2월에는 한 작은 회사의 Google 키가 새어 나가 48시간 만에 8만 2천 달러, 우리 돈으로 1억 원이 넘게 청구된 일이 보도되기도 했습니다.</p>
+      </div>
+      <p class="note warn">학생 정보를 모으거나 학생이 AI를 쓰게 하는 앱은 학교의 절차를 먼저 확인합니다. 2026학년도부터 학교에서 쓰는 에듀테크와 소프트웨어는 학교운영위원회 심의를 거치게 되었습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 7 보관함 ═══════════ -->
+<section class="step" id="s7" data-title="보관함" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">7</span><h2>한 번 더 확인하고 보관함에</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">파일에 비밀 키가 없는지 확인하고, 보관함에 올려보겠습니다!</p>
+
+    <div class="blk">
+      <ol class="steps" data-key="up">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">앱 파일에서 비밀 키 찾기</span><span class="how"><kbd>Ctrl</kbd>+<kbd>F</kbd>로 sk-, sb_secret, AIza. publishable 키(sb_publishable_)는 들어 있어도 괜찮습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">연습으로 넣은 줄 지우기</span><span class="how">Table Editor에서 줄을 골라 [Delete]</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">보관함에 올리기</span><span class="how">회차와 PIN을 고르고 index.html을 끌어다 놓기</span></div></li>
+      </ol>
+      <div class="submit">
+        <div class="txt"><b>GiteacherHub · 올리기</b><span>제출 기능이 붙은 앱도 보관함에서 열어 볼 수 있습니다.</span></div>
+        <a class="btn big primary to-gth-up" href="../giteacherhub/#/up" target="_blank" rel="noopener">올리기 열기 ↗</a>
+      </div>
+      <div class="detail">
+        <p>학생 제출 모으기, 교사 로그인, 학교 심의 자료까지 더 깊이 다룬 자료는 <a href="../student-data-backend/" target="_blank" rel="noopener">학생 데이터, 모으기 전에</a>에 있습니다.</p>
+      </div>
+      <p><a class="btn to-hub" href="./">연수 허브로 돌아가기</a></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>p</kbd> 📖/🎤</div>
+
+<script>
+const CONFIG = { key: 'vibe-data' };
+/* ═══════════════════════════════════════════════════════════════
+   공통 — 회차 코드(?s=)·📖/🎤 모드·도구 고르기·단계 칩·타이머·체크칸·복사
+   페이지마다 위에서 CONFIG = { key } 를 먼저 정합니다.
+   ═══════════════════════════════════════════════════════════════ */
+const QS = new URLSearchParams(location.search);
+const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+const SCHOOL = (QS.get('school') || '').slice(0, 30);
+
+/* ── 회차 코드를 링크에 싣기 ── */
+(function () {
+  const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
+  const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'deploy.html' + sq, 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; }));
+  if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
+})();
+
+/* ── 모드: 📖 detail / 🎤 present ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save = true) {
+  html.dataset.mode = m;
+  modeBtn.textContent = m === 'present' ? '📖 상세로' : '🎤 발표로';
+  if (save) { try { localStorage.setItem(CONFIG.key + ':mode', m); } catch (e) {} }
+}
+(function initMode() {
+  const q = QS.get('mode'); let m = q;
+  if (!m) { try { m = localStorage.getItem(CONFIG.key + ':mode'); } catch (e) {} }
+  setMode(m === 'present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' ? 'detail' : 'present'));
+
+/* ── 도구 고르기: 매뉴얼 여러 장이 같은 값을 씁니다 ── */
+const TOOL_KEY = 'vibe:tool';
+const TOOLS = { codex: 'local', claude: 'local', sengpt: 'web', 'gpt-free': 'web', 'claude-free': 'web', 'gemini-free': 'web' };
+function setTool(t) {
+  if (!TOOLS[t]) t = '';
+  const kind = t ? TOOLS[t] : '';
+  if (t) { html.dataset.t = t; html.dataset.k = kind; } else { delete html.dataset.t; delete html.dataset.k; }
+  document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  document.querySelectorAll('[data-tool]').forEach(el => { const tk = el.dataset.tool.split(/\s+/); el.hidden = !!t && !(tk.includes(t) || tk.includes(kind)); });
+  try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
+  if (typeof onTool === 'function') onTool();
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => setTool(html.dataset.t === b.dataset.pick ? '' : b.dataset.pick)));
+
+/* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow = document.getElementById('flow');
+steps.forEach((s, i) => {
+  const title = s.dataset.title || s.querySelector('h2')?.textContent || ('단계 ' + (i + 1));
+  const min = s.dataset.min || '';
+  const c = document.createElement('a');
+  c.className = 'chip'; c.href = '#' + s.id; c.innerHTML = `<b>${i + 1}</b>${title}${min ? ` · ${min}분` : ''}`;
+  chips.appendChild(c);
+  if (flow) {
+    const f = document.createElement('a');
+    f.href = '#' + s.id; f.innerHTML = `<span class="n">${i + 1}</span><span class="t">${title}</span><span class="m">${min ? min + '분' : ''}</span>`;
+    flow.appendChild(f);
+  }
+});
+
+/* ── 현재 단계 추적 · 타이머 · 키보드 ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i) {
+  current = i;
+  chipEls.forEach((c, j) => { c.classList.toggle('on', j === i); c.classList.toggle('done', j < i); });
+  updateTimerLabel();
+}
+const io = new IntersectionObserver(es => {
+  const vis = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+  if (vis.length) setCurrent(steps.indexOf(vis[0].target));
+}, { rootMargin: '-30% 0px -55% 0px', threshold: [0, .2, .5, 1] });
+steps.forEach(s => io.observe(s));
+const elapsed = steps.map(() => 0);
+let running = false, tick = null;
+const tmE = document.getElementById('tmElapsed'), tmP = document.getElementById('tmPlan'), tmT = document.getElementById('tmToggle'), timerEl = document.getElementById('timer');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function updateTimerLabel() {
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]); tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', !!plan && elapsed[current] > plan * 60);
+}
+function toggleTimer() {
+  running = !running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick); if (running) tick = setInterval(() => { elapsed[current]++; updateTimerLabel(); }, 1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
+setCurrent(0);
+function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+document.addEventListener('keydown', e => {
+  const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (document.querySelector('dialog[open]')) return;
+  if (e.key === 'p') { modeBtn.click(); return; }
+  if (html.dataset.mode !== 'present') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 't') toggleTimer();
+  if (e.key === 'c') html.classList.toggle('cue-on');
+});
+
+/* ── 실습 체크칸: 기기마다 저장 ── */
+document.querySelectorAll('.steps').forEach(ol => {
+  const k = CONFIG.key + ':chk:' + (ol.dataset.key || 'x');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const boxes = [...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b, i) => {
+    b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked);
+    b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} });
+  });
+});
+
+/* ── 복사 버튼 (.pr 안의 .txt 를 복사) ── */
+async function copyText(text, b) {
+  const old = b.textContent;
+  try { await navigator.clipboard.writeText(text); b.textContent = '복사했습니다'; }
+  catch (e) { b.textContent = '복사가 막혀 있습니다 · 직접 선택해 주세요'; }
+  setTimeout(() => { b.textContent = old; }, 1800);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.cp'); if (!b) return;
+  const t = b.closest('.pr') && b.closest('.pr').querySelector('.txt'); if (!t) return;
+  copyText(t.innerText.trim(), b);
+});
+
+/* ═══ 연결 부탁문 ═══ (주소·키는 저장하지 않습니다) */
+const cf = document.getElementById('cf'), af = document.getElementById('af');
+const keyMsg = document.getElementById('keyMsg');
+function checkKey(k) {
+  keyMsg.className = 'keymsg';
+  if (!k) { keyMsg.textContent = ''; return; }
+  if (/^sb_secret_/.test(k)) { keyMsg.textContent = '비밀 키(secret)입니다. 앱에 넣으면 안 됩니다. Publishable key를 복사해 주세요.'; keyMsg.classList.add('bad'); return; }
+  if (/^eyJ/.test(k)) { keyMsg.textContent = '예전 방식의 키입니다. sb_publishable_ 로 시작하는 키를 쓰세요.'; keyMsg.classList.add('warn'); return; }
+  if (/^sb_publishable_/.test(k)) { keyMsg.textContent = '앱에 넣어도 되는 키입니다.'; keyMsg.classList.add('ok'); return; }
+  keyMsg.textContent = 'sb_publishable_ 로 시작하는 키인지 확인해 주세요.'; keyMsg.classList.add('warn');
+}
+function buildConnect() {
+  const f = cf.elements, k = html.dataset.k || '';
+  const url = f.url.value.trim(), key = f.key.value.trim(), table = (f.table.value.trim() || 'submissions').toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/^_+|_+$/g, '') || 'submissions';
+  checkKey(key);
+  const safeKey = /^sb_secret_/.test(key) ? '(여기에는 비밀 키가 아니라 publishable key를 넣어 주세요)' : (key || '(sb_publishable_ 로 시작하는 키)');
+  const L = [
+    (k === 'local' ? '이 폴더의 index.html(내 앱)' : '아래에 붙인 내 앱') + '에 Supabase를 연결해서, 학생이 [제출] 버튼을 누르면 아래 내용이 표에 저장되게 해 줘.',
+    '',
+    '- Project URL: ' + (url || '(https://로 시작하는 Project URL)'),
+    '- Publishable key: ' + safeKey,
+    '- 표 이름: ' + table,
+    '- 모을 내용: ' + (f.cols.value.trim() || '(예: 모둠 번호(1~8), 측정한 값(숫자), 결론(글, 300자까지))'),
+    '',
+    '[꼭 지켜 줄 것]',
+    '1. 앱에는 publishable key만 넣어 줘. secret key(sb_secret_로 시작)나 service_role 키는 어디에도 쓰지 마.',
+    '2. 표를 만드는 SQL을 먼저 따로 보여 줘. 내가 Supabase의 SQL Editor에 붙여 실행할게.',
+    '3. 그 SQL에서 RLS를 켜고, 학생(anon)은 넣기(insert)만 할 수 있게 해 줘. 읽기·고치기·지우기 정책은 만들지 마.',
+    '4. 학생 이름, 번호, 연락처처럼 누구인지 알 수 있는 칸은 만들지 마. 필요하면 모둠 번호만 받아.',
+    '5. 글자 칸은 길이를 제한하고, 숫자 칸은 알맞은 범위만 받게 해 줘. 이 제한은 앱과 SQL 양쪽에 걸어 줘.',
+    "6. 저장되면 '제출했습니다', 실패하면 '저장하지 못했습니다. 선생님께 알려 주세요'를 보여 주고, 인터넷이 끊겨도 앱이 멈추지 않게 해 줘.",
+    '7. 버튼을 여러 번 눌러도 한 번만 저장되게 해 줘.',
+    ''
+  ];
+  if (k === 'local') L.push('앱은 이 폴더의 index.html을 고쳐 줘. 다 하면 무엇을 바꿨는지 세 줄로 알려 줘.');
+  else {
+    if (k === 'web') L.push('고친 코드는 설명과 나눠서 <!DOCTYPE html>부터 </html>까지 한 번에 전부 보여 줘.');
+    L.push('', '[지금 내 앱 코드]', '(여기에 index.html 코드를 통째로 붙여넣기)');
+  }
+  document.querySelector('#pc .txt').textContent = L.join('\n');
+}
+
+/* ═══ AI 함수 부탁문 ═══ */
+const PROV = { openai: { n: 'OpenAI', env: 'OPENAI_API_KEY' }, anthropic: { n: 'Anthropic(Claude)', env: 'ANTHROPIC_API_KEY' } };
+const AKEY = CONFIG.key + ':ai';
+function buildAI() {
+  const f = af.elements, k = html.dataset.k || '';
+  const prov = (af.querySelector('[name=prov]:checked') || {}).value || 'openai', who = (af.querySelector('[name=who]:checked') || {}).value || 'teacher';
+  const P = PROV[prov], origin = f.origin.value.trim().replace(/\/+$/, '');
+  const [perMin, perDay] = f.rate.value.split('/');
+  document.getElementById('envName').textContent = P.env;
+  const L = [
+    `Supabase Edge Function으로 ${P.n} API를 부르는 함수를 만들어 줘. 대시보드의 Edge Functions 편집기에 그대로 붙여넣을 수 있게 파일 하나로 줘.`,
+    '',
+    '[하는 일]',
+    who === 'teacher' ? '- 이 앱은 교사인 내가 쓰는 도구야.' : '- 이 앱은 중학생이 직접 써. 답은 중학생에게 알맞은 말로 하고, 수업과 관계없거나 위험한 부탁에는 답하지 말고 선생님께 여쭤보라고 안내해 줘. 화면에는 "AI와 대화하고 있어요"를 늘 보여 줘.',
+    '- 앱이 보낸 글을 받아서: ' + (f.task.value.trim() || '(AI가 할 일)'),
+    '- AI에게 주는 지시문은 함수 코드 안에 두고, 앱에서 바꿀 수 없게 해 줘.',
+    '',
+    '[키]',
+    `1. API 키는 코드에 적지 말고 Deno.env.get('${P.env}')로만 읽어 줘. 나는 Edge Functions의 Secrets에 ${P.env}라는 이름으로 넣을게.`,
+    '',
+    '[비용]',
+    `2. 모델은 그 회사의 가볍고 싼 최신 모델로 골라 코드 맨 위에 이름을 적어 두고, 답은 ${f.len.value}토큰까지만 받아 줘.`,
+    `3. 반 전체로 1분에 ${perMin}번, 하루 ${perDay}번이 넘으면 AI를 부르지 말고 '오늘은 여기까지예요'를 돌려줘. 횟수는 Supabase 표에 부른 시각만 남겨서 세고, 누구인지 알 수 있는 값은 남기지 마. 그 표를 만드는 SQL도 줘(RLS를 켜고 앱에서는 읽거나 쓸 수 없게).`,
+    '4. 앱이 보낸 글이 1000자를 넘으면 잘라서 보내 줘.',
+    '',
+    '[보안]',
+    `5. CORS는 ${origin || '(내 앱 주소, 예: https://아이디.github.io)'}에서 온 요청만 허락하고, 브라우저가 먼저 보내는 OPTIONS 요청에도 답해 줘.`,
+    '6. 학생 이름·번호 같은 개인정보는 AI에게 보내지 마. 앱에도 그런 칸을 만들지 마.',
+    "7. 이 함수를 publishable key로 부를 때 'Verify JWT' 설정을 어떻게 해야 하는지, 끄면 함수 안에서 무엇을 대신 확인하는지 알려 줘.",
+    '',
+    '[고장 났을 때]',
+    "8. AI 회사가 답을 못 주거나 10초가 넘게 걸리면 '지금은 AI가 답할 수 없어요. 선생님께 알려 주세요.'를 돌려줘.",
+    '',
+    '[앱 쪽]',
+    "9. 앱에서 이 함수를 부르는 코드도 줘. 기다리는 동안 버튼을 잠그고, AI 답 아래에는 'AI가 쓴 답이라 틀릴 수 있어요'를 늘 붙여 줘."
+  ];
+  if (k === 'local') L.push('', '앱 쪽 코드는 이 폴더의 index.html에 넣어 줘. 함수 코드는 내가 대시보드에 붙여넣을 수 있게 채팅에 따로 보여 줘.');
+  else if (k === 'web') L.push('', '함수 코드와 고친 앱 코드를 따로 나눠서, 앱 코드는 <!DOCTYPE html>부터 </html>까지 전부 보여 줘.', '', '[지금 내 앱 코드]', '(여기에 index.html 코드를 통째로 붙여넣기)');
+  document.querySelector('#pa .txt').textContent = L.join('\n');
+  try { localStorage.setItem(AKEY, JSON.stringify({ prov, who, task: f.task.value, origin: f.origin.value, len: f.len.value, rate: f.rate.value })); } catch (e) {}
+}
+(function restoreAI() {
+  let v = null; try { v = JSON.parse(localStorage.getItem(AKEY) || 'null'); } catch (e) {}
+  if (!v) return;
+  const f = af.elements;
+  ['prov', 'who'].forEach(n => { const r = af.querySelector(`[name=${n}][value="${v[n]}"]`); if (r) r.checked = true; });
+  f.task.value = v.task || ''; f.origin.value = v.origin || ''; if (v.len) f.len.value = v.len; if (v.rate) f.rate.value = v.rate;
+})();
+function onTool() { buildConnect(); buildAI(); }
+cf.addEventListener('input', buildConnect); cf.addEventListener('change', buildConnect);
+af.addEventListener('input', buildAI); af.addEventListener('change', buildAI);
+
+/* 처음 한 번: 저장된 도구 불러오기 (부탁문이 도구에 맞춰 바뀝니다) */
+(function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
+</script>
+</body>
+</html>
