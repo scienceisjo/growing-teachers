@@ -398,6 +398,9 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <div class="box"><b>일주일 쉬면 멈춥니다</b><p>일주일 동안 쓰지 않으면 메일로 알려 준 뒤 멈춥니다. 1년 안에는 대시보드에서 다시 켤 수 있습니다.</p></div>
         <div class="box"><b>Edge Function은 한 달 50만 번</b><p>무료에서는 넘으면 더 쓸 수 없습니다. 한 반이 수업에서 쓰기에는 넉넉합니다.</p></div>
       </div>
+      <div class="shots narrow">
+        <figure class="shot"><a href="shots/sb-limit.webp" target="_blank" rel="noopener"><img src="shots/sb-limit.webp" alt="무료 프로젝트 한도 안내" width="700" height="475" loading="lazy"></a><figcaption><b>무료 한도</b>무료 프로젝트 두 개를 다 쓰면 셋째는 이렇게 막힙니다. 안 쓰는 프로젝트를 멈추거나 지워야 새로 만들 수 있습니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>학기 중에 매주 쓰는 앱이라면 멈출 일이 거의 없고, 방학이 지나면 한 번 다시 켜면 됩니다. 이 숫자들은 2026년 9월 Supabase 안내 기준입니다.</p>
       </div>
@@ -419,9 +422,17 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Project URL 복사하기</span><span class="how">https://영문자.supabase.co 모양</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Publishable key 복사하기</span><span class="how">sb_publishable_ 로 시작하는 키</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot"><a href="shots/sb-project.webp" target="_blank" rel="noopener"><img src="shots/sb-project.webp" alt="프로젝트 첫 화면" width="1200" height="436" loading="lazy"></a><figcaption><b>프로젝트 첫 화면</b>위쪽 가운데 [Connect], 프로젝트 이름 아래에 Project URL과 [Copy]가 있습니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-connect.webp" target="_blank" rel="noopener"><img src="shots/sb-connect.webp" alt="Connect 창" width="768" height="674" loading="lazy"></a><figcaption><b>Connect 창</b>아래쪽 .env 칸에 주소(SUPABASE_URL)와 공개 키(PUBLISHABLE_KEY)가 함께 적혀 있습니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-apikeys.webp" target="_blank" rel="noopener"><img src="shots/sb-apikeys.webp" alt="Settings의 API Keys 화면" width="1200" height="527" loading="lazy"></a><figcaption><b>Settings · API Keys</b>위쪽 두 번째 탭(Legacy anon, service_role)은 예전 방식의 키입니다.</figcaption></figure>
+      </div>
       <div class="grid2">
         <div class="box yes"><b>Publishable key · sb_publishable_</b><p>앱에 넣어도 되는 키입니다. 누구나 볼 수 있다는 전제로 쓰고, 표를 지켜 주는 것은 표마다 거는 규칙(RLS)입니다.</p></div>
         <div class="box no"><b>Secret key · sb_secret_</b><p>모든 규칙을 건너뛰는 열쇠입니다. 앱에도 GitHub에도 넣지 않습니다. AI가 넣으라고 해도 넣지 않습니다.</p></div>
+      </div>
+      <div class="shots">
+        <figure class="shot"><a href="shots/sb-secretkeys.webp" target="_blank" rel="noopener"><img src="shots/sb-secretkeys.webp" alt="Publishable key와 Secret keys" width="1200" height="476" loading="lazy"></a><figcaption><b>두 키</b>위가 앱에 넣어도 되는 publishable 키, 아래가 가려진 secret 키입니다. secret 키 옆 눈 모양은 누르지 않습니다.</figcaption></figure>
       </div>
       <p class="note">예전 설명서나 AI가 eyJ로 시작하는 긴 키(anon, service_role)를 복사하라고 하면 예전 방식입니다. Supabase는 2026년 말까지 예전 키를 없애 가는 중이라, 새로 만드는 앱은 sb_publishable_ 키로 합니다.</p>
     </div>
@@ -450,6 +461,10 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 표가 생겼는지 보기</span><span class="how">왼쪽 메뉴 [Table Editor] → 표 이름</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot"><a href="shots/sb-sql.webp" target="_blank" rel="noopener"><img src="shots/sb-sql.webp" alt="SQL Editor 새 쿼리" width="1200" height="527" loading="lazy"></a><figcaption><b>SQL Editor</b>빈 칸에 받은 SQL을 붙여넣고 오른쪽 위 초록 [Run]을 누릅니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-table.webp" target="_blank" rel="noopener"><img src="shots/sb-table.webp" alt="Table Editor의 표" width="1200" height="527" loading="lazy"></a><figcaption><b>Table Editor</b>왼쪽에서 표를 누르면 줄이 보입니다. 위쪽 RLS policy 옆 숫자가 걸어 둔 규칙 개수입니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>주소와 키 칸에 넣은 값은 이 페이지 안에서 부탁문을 만드는 데만 쓰이고, 어디에도 저장하거나 보내지 않습니다.</p>
       </div>
@@ -482,6 +497,9 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">CSV로 내려받기</span><span class="how">표 위쪽의 내보내기(Export) 메뉴에서 CSV. 엑셀에서는 [데이터] → [텍스트/CSV]로 열고 UTF-8을 고릅니다</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">연습으로 넣은 줄 지우기</span><span class="how">줄 앞 칸을 골라 [Delete]</span></div></li>
       </ol>
+      <div class="shots narrow">
+        <figure class="shot"><a href="shots/sb-export.webp" target="_blank" rel="noopener"><img src="shots/sb-export.webp" alt="표 메뉴의 CSV 내보내기" width="712" height="294" loading="lazy"></a><figcaption><b>CSV로 받기</b>표 이름 옆 ⋯에서 Export data의 Export table as CSV를 고릅니다. 아래쪽 Delete table은 누르지 않습니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>모인 답을 보는 교사 화면까지 앱으로 만들려면 교사 로그인이 필요합니다. 로그인 없이 읽기를 열어 두면, 주소를 아는 누구나 학생 답을 볼 수 있기 때문입니다. 오늘은 Supabase의 Table Editor가 교사 화면을 대신합니다. 교사 로그인을 붙이는 법과 학교 심의 자료 만들기는 <a href="../student-data-backend/" target="_blank" rel="noopener">학생 데이터 연수 자료</a>에 따로 정리해 두었습니다.</p>
       </div>
@@ -582,6 +600,12 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">함수 설정의 Verify JWT 확인하기</span><span class="how">publishable 키로 부르는 함수는 끄고, 대신 함수 안에서 호출 횟수를 셉니다. AI가 알려 준 대로</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">앱에서 불러 보기</span><span class="how">답이 오면 성공. 오류 글은 그대로 AI에게 보냅니다</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot"><a href="shots/sb-secrets.webp" target="_blank" rel="noopener"><img src="shots/sb-secrets.webp" alt="Edge Function Secrets" width="1200" height="596" loading="lazy"></a><figcaption><b>Secrets</b>Name에 키 이름, Value에 키를 넣고 [Save]를 누릅니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-deploy-menu.webp" target="_blank" rel="noopener"><img src="shots/sb-deploy-menu.webp" alt="Deploy a new function 메뉴" width="1200" height="301" loading="lazy"></a><figcaption><b>새 함수</b>[Deploy a new function]에서 [Via Editor]를 고르면 브라우저에서 바로 만듭니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-editor.webp" target="_blank" rel="noopener"><img src="shots/sb-editor.webp" alt="함수 편집기" width="1200" height="527" loading="lazy"></a><figcaption><b>편집기</b>받은 코드를 붙여넣고, 아래 Function name을 정한 뒤 [Deploy function]을 누릅니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sb-jwt.webp" target="_blank" rel="noopener"><img src="shots/sb-jwt.webp" alt="함수 설정의 Verify JWT" width="1200" height="544" loading="lazy"></a><figcaption><b>Verify JWT</b>함수의 [Settings]에 있는 스위치입니다. publishable 키로 부를 때는 AI가 알려 준 대로 끕니다.</figcaption></figure>
+      </div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>앱에서 부르니 CORS 오류가 납니다.</b> 오류 글을 그대로 AI에게 보내고 "함수의 CORS 설정에 내 앱 주소를 넣고, OPTIONS 요청에 답하게 고쳐 줘"라고 합니다. 허락할 주소는 https://아이디.github.io처럼 뒤에 폴더 이름 없이 적습니다.</p>
