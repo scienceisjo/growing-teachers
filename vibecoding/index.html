@@ -231,6 +231,14 @@ html[data-mode="present"] .keys{display:block}
   .step{break-inside:avoid;padding:20px 0}
 }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+/* ── 화면 캡처 ── */
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:14px 0}
+.shots.narrow{max-width:560px}
+.shot{margin:0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff;align-self:start}
+.shot a{display:block}
+.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line2)}
+.shot figcaption{padding:8px 12px 10px;font-size:.85rem;color:var(--ink2);line-height:1.45}
+.shot figcaption b{color:var(--ink);font-weight:600;margin-right:.35em}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
 .tscroll table{margin:0;min-width:600px}
 
@@ -453,6 +461,11 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
           <tr><td><b>브라우저 에이전트</b></td><td>Claude in Chrome</td><td>AI가 크롬을 직접 눌러 가며 확인하고 작업합니다.</td><td>만든 앱을 AI가 직접 눌러 보며 검사할 때</td></tr>
         </tbody>
       </table></div>
+      <div class="shots">
+        <figure class="shot"><a href="shots/gpt-new.webp" target="_blank" rel="noopener"><img src="shots/gpt-new.webp" alt="ChatGPT 웹 첫 화면" width="840" height="340" loading="lazy"></a><figcaption><b>ChatGPT</b>chatgpt.com</figcaption></figure>
+        <figure class="shot"><a href="shots/claude-new.webp" target="_blank" rel="noopener"><img src="shots/claude-new.webp" alt="Claude 웹 첫 화면" width="840" height="270" loading="lazy"></a><figcaption><b>Claude</b>claude.ai</figcaption></figure>
+        <figure class="shot"><a href="shots/gemini-new.webp" target="_blank" rel="noopener"><img src="shots/gemini-new.webp" alt="Gemini 웹 첫 화면" width="700" height="200" loading="lazy"></a><figcaption><b>Gemini</b>gemini.google.com</figcaption></figure>
+      </div>
       <div class="detail">
         <p>오늘 분임 실습은 웹 채팅이나 데스크톱 앱으로 합니다. 웹 채팅은 무료 계정으로도 되고, 데스크톱 앱은 유료 요금제에서 넉넉하게 씁니다. ChatGPT 무료 계정도 데스크톱 앱에서 Codex를 조금 쓸 수 있지만 가벼운 모델만 됩니다. 코드 편집기 가운데 Antigravity는 개인에게 무료이고 한도가 주마다 다시 채워지며, Cursor는 월 20달러 요금제부터 넉넉해집니다. VS Code에 붙여 쓰는 GitHub Copilot은 교사 인증(GitHub Education)을 받으면 Pro 요금제를 무료로 쓸 수 있습니다.</p>
         <p>저는 Claude 앱의 Code 탭을 주로 쓰고, Codex를 함께 씁니다.</p>
@@ -498,6 +511,9 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
         </tbody>
       </table></div>
       <p class="small">2026년 9월 30일 기준입니다. 모델 이름은 몇 주 단위로 바뀝니다.</p>
+      <div class="shots narrow">
+        <figure class="shot"><a href="shots/claude-models.webp" target="_blank" rel="noopener"><img src="shots/claude-models.webp" alt="Claude 웹의 모델 고르기 메뉴" width="680" height="350" loading="lazy"></a><figcaption><b>모델 고르기</b>Claude 웹 입력칸 아래 모델 이름을 누르면 나오는 메뉴입니다. 위로 갈수록 똑똑하고, 아래로 갈수록 빠릅니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>처음 틀을 잡을 때는 똑똑한 모델이 실수를 덜 합니다. 글자 몇 개를 바꾸거나 색을 고치는 일은 가벼운 모델로도 충분해서, 그런 일에 똑똑한 모델을 쓰면 한도만 빨리 줄어듭니다.</p>
       </div>

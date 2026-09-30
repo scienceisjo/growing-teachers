@@ -256,6 +256,15 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
 .seg2 button{border:0;background:transparent;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
 .seg2 button[aria-pressed="true"]{background:#fff;font-weight:600}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r2);font-size:.9rem;z-index:70}
+/* ── 화면 캡처 ── */
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:14px 0}
+.shots.narrow{max-width:560px}
+.shot{margin:0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff;align-self:start}
+.shot a{display:block}
+.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line2)}
+.shot figcaption{padding:8px 12px 10px;font-size:.85rem;color:var(--ink2);line-height:1.45}
+.shot figcaption b{color:var(--ink);font-weight:600;margin-right:.35em}
+
 </style>
 </head>
 <body>
@@ -395,6 +404,11 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
       <div class="grid2">
         <div class="box"><b>방법 ① 짧은 판 붙여넣기 (기본)</b><p>서랍 카드의 [짧은 판 복사]나 아래 빌더가 만든 부탁문을 채팅 입력칸에 붙여넣습니다. 무료 계정에서도 가장 안정적입니다.</p></div>
         <div class="box"><b>방법 ② 원본 파일 첨부</b><p>[DESIGN.md 받기]로 받은 파일을 입력칸의 첨부 버튼(+ 모양이나 클립 모양)으로 올리고, 부탁문에서는 첨부한 DESIGN.md를 읽게 합니다.</p></div>
+      </div>
+      <div class="shots">
+        <figure class="shot" data-tool="gpt-free"><a href="shots/gpt-attach.webp" target="_blank" rel="noopener"><img src="shots/gpt-attach.webp" alt="ChatGPT의 + 메뉴" width="820" height="380" loading="lazy"></a><figcaption><b>ChatGPT 웹</b>입력칸 왼쪽 +의 [사진 및 파일 추가]로 DESIGN.md를 올립니다.</figcaption></figure>
+        <figure class="shot" data-tool="claude-free"><a href="shots/claude-attach.webp" target="_blank" rel="noopener"><img src="shots/claude-attach.webp" alt="Claude의 + 메뉴" width="720" height="390" loading="lazy"></a><figcaption><b>Claude 웹</b>입력칸 왼쪽 +의 [파일 또는 사진 추가]로 올립니다.</figcaption></figure>
+        <figure class="shot" data-tool="gemini-free"><a href="shots/gemini-tools.webp" target="_blank" rel="noopener"><img src="shots/gemini-tools.webp" alt="Gemini의 + 메뉴" width="700" height="355" loading="lazy"></a><figcaption><b>Gemini 웹</b>입력칸 왼쪽 +의 [파일 업로드]로 올립니다.</figcaption></figure>
       </div>
       <ol class="steps" data-key="web">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일, 전달 방법을 고르기</span><span class="how">방법 ①이면 짧은 판이 부탁문 안에 저절로 들어갑니다</span></div></li>

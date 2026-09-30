@@ -231,6 +231,14 @@ html[data-mode="present"] .keys{display:block}
   .step{break-inside:avoid;padding:20px 0}
 }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+/* ── 화면 캡처 ── */
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:14px 0}
+.shots.narrow{max-width:560px}
+.shot{margin:0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff;align-self:start}
+.shot a{display:block}
+.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line2)}
+.shot figcaption{padding:8px 12px 10px;font-size:.85rem;color:var(--ink2);line-height:1.45}
+.shot figcaption b{color:var(--ink);font-weight:600;margin-right:.35em}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
 .tscroll table{margin:0;min-width:600px}
 
@@ -380,6 +388,11 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">[New project]에서 이름, 데이터베이스 비밀번호, 지역 정하기</span><span class="how">비밀번호는 [Generate a password] 후 메모장에 저장. 지역(Region)은 Northeast Asia (Seoul)</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">[Create new project]를 누르고 1~2분 기다리기</span><span class="how">프로젝트 화면이 뜨면 준비 끝</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot"><a href="shots/supabase-home.webp" target="_blank" rel="noopener"><img src="shots/supabase-home.webp" alt="Supabase 첫 화면" width="1200" height="533" loading="lazy"></a><figcaption><b>supabase.com</b>첫 화면의 초록 [Start your project]를 누릅니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/supabase-signin.webp" target="_blank" rel="noopener"><img src="shots/supabase-signin.webp" alt="Supabase 로그인 화면" width="596" height="372" loading="lazy"></a><figcaption><b>로그인</b>[Continue with GitHub]로 들어갑니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/github-signin.webp" target="_blank" rel="noopener"><img src="shots/github-signin.webp" alt="GitHub 로그인 화면" width="480" height="609" loading="lazy"></a><figcaption><b>GitHub</b>GitHub에 로그인돼 있지 않으면 GitHub 아이디로 먼저 로그인합니다.</figcaption></figure>
+      </div>
       <div class="grid2">
         <div class="box"><b>무료 프로젝트는 두 개까지</b><p>수업용 하나, 연습용 하나로 쓰면 알맞습니다.</p></div>
         <div class="box"><b>일주일 쉬면 멈춥니다</b><p>일주일 동안 쓰지 않으면 메일로 알려 준 뒤 멈춥니다. 1년 안에는 대시보드에서 다시 켤 수 있습니다.</p></div>
@@ -523,6 +536,9 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
           <tr><td><b>Google</b> (Gemini)</td><td>aistudio.google.com의 API key</td><td>무료 등급, 또는 선불 5달러부터</td><td>AI Studio의 Spend 페이지에서 월 한도 (시험 기능)</td><td>학생이 쓰는 앱에는 쓰지 못합니다. Google Cloud 예산 알림은 알림만 보내고 멈추지 않습니다</td></tr>
         </tbody>
       </table></div>
+      <div class="shots narrow">
+        <figure class="shot"><a href="shots/aistudio-terms.webp" target="_blank" rel="noopener"><img src="shots/aistudio-terms.webp" alt="Google AI Studio 첫 약관 창" width="500" height="500" loading="lazy"></a><figcaption><b>Google AI Studio</b>처음 들어가면 나오는 약관 창입니다. 입력한 글이 검토되고 학습에 쓰일 수 있으니 민감한 정보나 개인 정보를 넣지 말라고 적혀 있습니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>처음에는 크레딧을 5~10달러만 넣고 자동 충전을 끈 채로 시작하면, 무슨 일이 생겨도 넣은 돈 이상은 나가기 어렵습니다. 다만 회사들은 한도에 닿은 뒤 몇 분 동안은 조금 더 쓰일 수 있다고 적어 두었습니다. 메뉴 이름은 2026년 9월 기준이고 자주 바뀝니다.</p>
       </div>

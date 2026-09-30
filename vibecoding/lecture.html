@@ -231,6 +231,14 @@ html[data-mode="present"] .keys{display:block}
   .step{break-inside:avoid;padding:20px 0}
 }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+/* ── 화면 캡처 ── */
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:14px 0}
+.shots.narrow{max-width:560px}
+.shot{margin:0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff;align-self:start}
+.shot a{display:block}
+.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line2)}
+.shot figcaption{padding:8px 12px 10px;font-size:.85rem;color:var(--ink2);line-height:1.45}
+.shot figcaption b{color:var(--ink);font-weight:600;margin-right:.35em}
 
 /* ── 강의 화면 전용 ── */
 .ex3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
@@ -321,6 +329,10 @@ html[data-mode="present"] .keys{display:block}
         <a href="https://scienceisjo.github.io/electricity/06-power-lecture.html" target="_blank" rel="noopener"><img src="gallery/power.webp" alt="소비 전력 강의 화면" width="800" height="500" loading="lazy"><span><b>소비 전력</b><small>중2 · 31장 · 빈칸 26개</small></span></a>
         <a href="https://scienceisjo.github.io/gas-properties/03-boyle-lecture.html" target="_blank" rel="noopener"><img src="gallery/boyle-lecture.webp" alt="기체의 압력 강의 화면" width="800" height="500" loading="lazy"><span><b>기체의 압력 세 벌</b><small>중1 · 9~13장씩 · 빈칸 48개</small></span></a>
       </div>
+      <div class="shots">
+        <figure class="shot"><a href="shots/pow-blank0.webp" target="_blank" rel="noopener"><img src="shots/pow-blank0.webp" alt="빈칸 번호만 보이는 강의 화면" width="1200" height="675" loading="lazy"></a><figcaption><b>처음</b>빈칸 자리에 학습지와 같은 번호만 보입니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/pow-blank2.webp" target="_blank" rel="noopener"><img src="shots/pow-blank2.webp" alt="정답이 열린 강의 화면" width="1200" height="675" loading="lazy"></a><figcaption><b>누를 때마다</b>정답이 하나씩 열립니다. 옆의 선풍기와 에너지 조각은 식대로 움직입니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>첫 장면에서 "번호가 붙은 칸이 열리면 학습지의 그 번호 칸에 적는다"고 한 번만 알려 주면, 그다음부터는 화면을 넘기는 것만으로 학습지가 채워집니다. 빈칸 옆에서는 비유나 시뮬레이션이 함께 움직여서, 학생들이 정답을 받아 적기 전에 왜 그런지를 먼저 봅니다.</p>
       </div>
@@ -333,6 +345,10 @@ html[data-mode="present"] .keys{display:block}
         <div class="box"><b>대본이 화면 뒤에 있습니다</b><p>T 키를 누르면 그 장면에서 제가 할 말이 화면 아래에 열립니다.</p></div>
         <div class="box"><b>링크 하나로 복습합니다</b><p>주소 끝에 ?s=1을 붙이면 대본이 숨은 학생용 판이 됩니다.</p></div>
         <div class="box"><b>학습지와 1:1입니다</b><p>빈칸 번호와 정답을 맞추는 과정이 그대로 학습지 점검이 됩니다.</p></div>
+      </div>
+      <div class="shots">
+        <figure class="shot"><a href="shots/pow-notes.webp" target="_blank" rel="noopener"><img src="shots/pow-notes.webp" alt="T 키로 연 대본 서랍" width="1200" height="675" loading="lazy"></a><figcaption><b>T 키</b>그 장면에서 제가 할 말이 화면 아래에 열립니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sp-student.webp" target="_blank" rel="noopener"><img src="shots/sp-student.webp" alt="학생 복습판 표지" width="1200" height="675" loading="lazy"></a><figcaption><b>?s=1</b>대본이 숨은 학생 복습판입니다. 표지에 넘기는 법이 적혀 있습니다.</figcaption></figure>
       </div>
     </div>
 
@@ -368,6 +384,11 @@ html[data-mode="present"] .keys{display:block}
         <li data-tool="local"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">앱</span>앱에서 강의화면 폴더 열기</span><span class="how">Codex는 [폴더 추가], Claude 앱은 Code 탭의 [Select folder]로 강의화면 폴더를 고릅니다</span></div></li>
         <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>새 채팅을 열고 이 대화 하나로 끝까지 가기</span><span class="how">빈칸 지도와 장면 목록이 같은 대화 안에 있어야 3단계부터 이어집니다</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot" data-tool="gpt-free"><a href="shots/gpt-attach.webp" target="_blank" rel="noopener"><img src="shots/gpt-attach.webp" alt="ChatGPT의 + 메뉴" width="820" height="380" loading="lazy"></a><figcaption><b>ChatGPT 웹</b>입력칸 왼쪽 +의 [사진 및 파일 추가]로 학습지 PDF를 올립니다.</figcaption></figure>
+        <figure class="shot" data-tool="claude-free"><a href="shots/claude-attach.webp" target="_blank" rel="noopener"><img src="shots/claude-attach.webp" alt="Claude의 + 메뉴" width="720" height="390" loading="lazy"></a><figcaption><b>Claude 웹</b>입력칸 왼쪽 +의 [파일 또는 사진 추가]로 올립니다.</figcaption></figure>
+        <figure class="shot" data-tool="gemini-free"><a href="shots/gemini-tools.webp" target="_blank" rel="noopener"><img src="shots/gemini-tools.webp" alt="Gemini의 + 메뉴" width="700" height="355" loading="lazy"></a><figcaption><b>Gemini 웹</b>입력칸 왼쪽 +의 [파일 업로드]로 올립니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>한글(HWP) 파일은 AI가 제대로 읽지 못하는 경우가 많아서 PDF로 바꿔 넣습니다. 학습지 스튜디오로 만든 학습지라면 학습지 파일(JSON)을 그대로 넣어도 됩니다. 빈칸이 따로 표시되어 있어서 번호와 정답이 정확하게 들어갑니다.</p>
         <p data-tool="web">웹 채팅은 부탁문을 보낼 때 입력칸의 첨부 버튼으로 학습지 PDF를 올리고, 대본은 입력칸에 붙여넣습니다. 무료 계정은 첨부할 수 있는 횟수와 한 번에 받을 수 있는 코드 길이가 작아서, 장면 수를 10장 안팎으로 줄여 만듭니다.</p>
@@ -553,6 +574,10 @@ html[data-mode="present"] .keys{display:block}
         <li><input type="checkbox" aria-label="완료"><div><span class="what">단위와 용어가 교과서와 같은지</span><span class="how">힘은 N, 압력은 N/m²처럼</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">교실 뒷자리에서 글씨가 읽히는지</span><span class="how">전자칠판에 띄워 교실 맨 뒤에서 봅니다</span></div></li>
       </ol>
+      <div class="shots">
+        <figure class="shot"><a href="shots/sp-blank0.webp" target="_blank" rel="noopener"><img src="shots/sp-blank0.webp" alt="빈칸 10~13번이 비어 있는 장면" width="1200" height="600" loading="lazy"></a><figcaption><b>대조 전</b>화면 오른쪽 위 「1쪽 빈칸 10-13」처럼 학습지의 몇 쪽 몇 번인지 보여 주면 대조가 쉽습니다.</figcaption></figure>
+        <figure class="shot"><a href="shots/sp-blank-all.webp" target="_blank" rel="noopener"><img src="shots/sp-blank-all.webp" alt="빈칸 10~13번이 모두 열린 장면" width="1200" height="600" loading="lazy"></a><figcaption><b>대조 후</b>열린 정답을 학습지 정답과 한 글자씩 맞춰 봅니다.</figcaption></figure>
+      </div>
       <div class="detail">
         <p>제 기체의 압력 강의 화면도 검토에서 장면 제목에 빈칸 정답이 먼저 적혀 있거나, 힘의 단위가 N이 아니라 g으로 적힌 실수가 나왔습니다. 빈칸 대조를 AI에게 한 번 시키고, 눈으로 한 번 더 넘겨 보면 대부분 잡힙니다.</p>
       </div>
