@@ -510,6 +510,15 @@ html[data-mode="present"] .keys{display:block}
     </div>
 
     <div class="blk">
+      <p class="kw"><span class="tag">디자인</span>옷은 서랍에서 골라 입힙니다</p>
+      <p class="brief">색·글꼴·모양을 적은 설계서를 골라 AI에게 맡기면, 기능은 그대로 두고 디자인만 바뀝니다.</p>
+      <p><a class="btn big to-design" href="design.html">디자인 서랍 열기 →</a></p>
+      <div class="detail">
+        <p>"예쁘게 해 줘"라고 하면 AI가 매번 다른 옷을 입힙니다. 그래서 저는 설계서 한 장을 골라 두고 "이 설계서대로 디자인만 바꿔 줘"라고 합니다. 서랍에는 설계서 74개와 쓰시는 도구에 맞는 부탁문 빌더가 들어 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
       <p class="kw">토큰과 긴 대화</p>
       <p class="brief">AI가 읽고 쓰는 양만큼 요금제 한도가 줄어듭니다. 대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다.</p>
       <div class="detail">
@@ -586,6 +595,7 @@ const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
   document.querySelectorAll('.to-gth-up').forEach(a => { a.href = '../giteacherhub/' + sq + '#/up'; });
   document.querySelectorAll('.to-deploy').forEach(a => { a.href = 'deploy.html' + sq; });
   document.querySelectorAll('.to-hub').forEach(a => { a.href = './' + sq; });
+  document.querySelectorAll('.to-design').forEach(a => { a.href = 'design.html' + sq; });
 })();
 
 /* ── 모드: 📖 detail / 🎤 present ── */

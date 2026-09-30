@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디자인 서랍 · 바이브코딩 연수 · 해누리중 조승재</title>
+<meta name="description" content="설계서(DESIGN.md) 한 장으로 앱에 옷을 입히는 법. 설계서 74개를 한국어 설명·색 미리보기와 함께 모았고, ChatGPT·Claude·SenGPT 도구별 쓰는 법을 정리했습니다.">
+<link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 도구 고르기 ── */
+.pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
+.pick p{margin:0 0 10px;font-weight:600}
+.toolpick{display:flex;flex-wrap:wrap;gap:8px}
+.toolpick button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:9px 18px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.toolpick button:hover{border-color:var(--ink2)}
+.toolpick button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
+.tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
+html[data-t] .tl{display:none}
+html[data-t="codex"] [data-tool]:not([data-tool~="codex"]),
+html[data-t="claude"] [data-tool]:not([data-tool~="claude"]),
+html[data-t="sengpt"] [data-tool]:not([data-tool~="sengpt"]){display:none!important}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* ── 실습 ── */
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::-webkit-details-marker{display:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+html[data-mode="present"] details.stuck{display:none}
+
+/* ── 비교 상자·링크 카드 ── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box.no b{color:var(--bad)} .box.yes b{color:var(--ok)}
+.box.yes{border-color:var(--ok)}
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+
+/* ── 프롬프트 카드 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+html[data-mode="present"] .pr{font-size:.75em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 12px}
+.pr.big .txt{max-height:none}
+html[data-mode="present"] .pr.big .txt{max-height:14em}
+
+/* ── 부탁문 빌더 ── */
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
+.bform .full{grid-column:1/-1}
+.bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.bform input[type=text],.bform select,.bform textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.bform textarea{min-height:4.4em;resize:vertical;line-height:1.5}
+.bform input:focus,.bform select:focus,.bform textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem;cursor:pointer}
+.opts input{width:1.1em;height:1.1em;margin:.2em 0 0;accent-color:var(--blue);flex:none}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 16px}
+html[data-mode="present"] .bform{font-size:.8em}
+
+/* ── 코드 도우미 ── */
+.helper{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.helper textarea{width:100%;min-height:9em;font-family:var(--mono);font-size:.82rem;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;resize:vertical;line-height:1.45}
+.helper textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.hbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.hmsg{font-size:.88em;color:var(--ink2)}
+.hmsg.bad{color:var(--bad)} .hmsg.ok{color:var(--ok)}
+.hframe{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-top:12px}
+.hframe iframe{display:block;width:100%;height:440px;border:0;background:#fff}
+
+/* ── 표 ── */
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+  .bform{grid-template-columns:1fr}
+  .pr{padding-right:14px;padding-top:44px}
+  .fixgrid{grid-template-columns:1fr}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+/* ── 디자인 서랍 ── */
+.dfilter{display:flex;flex-direction:column;gap:10px;margin:6px 0 16px}
+.dfilter input[type=search]{font:inherit;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;max-width:360px;width:100%}
+.dfilter input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchips button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer;color:var(--ink)}
+.fchips button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:10px 0}
+.dcard{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.mini{height:108px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid var(--line)}
+.mini .mt{font-size:1.02rem;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.mini .ms{font-size:.72rem;opacity:.75}
+.mini .mb{align-self:flex-start;font-size:.72rem;font-weight:600;padding:5px 12px;border-radius:9999px}
+.swrow{display:flex;height:10px}
+.swrow span{flex:1}
+.dcard .db{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.dcard h3{font-size:1.02rem}
+.dcard .ko{font-size:.88rem;color:var(--ink2);margin:0}
+.dcard .tg{font-size:.74rem;color:var(--ink3);margin:0}
+.dcard .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.dcard .acts .btn{font-size:.76rem;padding:5px 10px}
+.dcount{font-size:.86rem;color:var(--ink2);margin:4px 0 0}
+html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:60;padding:16px}
+.modal .mbox{background:#fff;border-radius:var(--r3);width:100%;max-width:900px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.modal .mhead{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.modal .mhead b{flex:1;min-width:140px}
+.modal pre{margin:0;padding:16px 18px;overflow:auto;font-family:var(--mono);font-size:.78rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;background:var(--bg2);flex:1}
+.seg2{display:inline-flex;background:var(--bg2);border-radius:9999px;padding:3px}
+.seg2 button{border:0;background:transparent;border-radius:9999px;padding:5px 12px;font:inherit;font-size:.82rem;cursor:pointer}
+.seg2 button[aria-pressed="true"]{background:#fff;font-weight:600}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r2);font-size:.9rem;z-index:70}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">디자인 서랍<small>바이브코딩 연수</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan"></span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">바이브코딩 연수 · 디자인 서랍</div>
+    <h1>설계서 한 장으로 앱에 옷 입히기</h1>
+    <p class="lead">선생님들 시간이 소중하기 때문에, 디자인은 따로 고민하지 않고 서랍에서 설계서 한 장을 골라 AI에게 맡기는 방법을 정리해보겠습니다!</p>
+    <div class="pipe" aria-label="흐름"><span class="n">서랍에서 고르기</span><span class="a">→</span><span class="n">내 도구에 넣기</span><span class="a">→</span><span class="n">디자인만 바꿔 달라고 부탁하기</span><span class="a">→</span><span class="n hi">옷 입은 내 앱</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="pick">
+      <p>쓰시는 도구를 골라 주세요. 도구에 맞는 쓰는 법만 보입니다.</p>
+      <div class="toolpick" role="group" aria-label="쓰는 도구">
+        <button type="button" data-pick="codex" aria-pressed="false">ChatGPT 앱<small>Codex · 유료</small></button>
+        <button type="button" data-pick="claude" aria-pressed="false">Claude 앱<small>Code 탭 · 유료</small></button>
+        <button type="button" data-pick="sengpt" aria-pressed="false">SenGPT<small>학교 계정 · 웹</small></button>
+      </div>
+    </div>
+    <div class="flow" id="flow"></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s2">추천 서랍 보기 ↓</a>
+      <a class="btn big to-basic" href="basic.html">① 기초 매뉴얼로</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 설계서란 ═══════════ -->
+<section class="step" id="s1" data-title="설계서란">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>설계서(DESIGN.md)란</h2></div>
+    <p class="goal">설계서가 무엇이고 왜 쓰는지부터 짚어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">색·글꼴·모양을 적어 둔 설계서 한 장</p>
+      <p class="brief">AI가 이 파일을 읽고 그대로 옷을 입힙니다. 기능은 건드리지 않습니다.</p>
+      <div class="detail">
+        <p>DESIGN.md는 한 회사 웹사이트의 색, 글꼴 크기, 간격, 버튼 모양, 해야 할 것과 하지 말 것을 글로 적어 둔 파일입니다. 코딩 도우미에게 "이 설계서대로 만들어 줘"라고 하면 디자인을 따로 설명하지 않아도 그 느낌으로 만들어 줍니다.</p>
+        <p>저는 연수 자료와 수업 페이지를 만들 때 이 서랍의 apple.md를 자주 씁니다. 흰 바탕에 파란색 하나만 쓰는 규칙이라 과학 그래프와 시뮬레이션이 눈에 잘 들어오기 때문입니다. 지금 보고 계신 이 페이지도 같은 규칙으로 만들었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">어디서 온 설계서인가</p>
+      <p class="brief">VoltAgent 팀이 공개한 모음(MIT 라이선스)을 그대로 옮기고 한국어 설명을 붙였습니다.</p>
+      <div class="detail">
+        <p>설계서는 모두 VoltAgent 팀이 GitHub에 공개한 awesome-design-md 저장소의 것입니다. MIT 라이선스라 누구나 쓰고 나눌 수 있고, 조건은 출처와 라이선스 문구를 함께 두는 것입니다. 그래서 받으시는 DESIGN.md 파일 맨 끝에 출처와 라이선스를 주석으로 붙여 두었습니다. 설계서 본문은 한 글자도 바꾸지 않았습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 추천 서랍 ═══════════ -->
+<section class="step" id="s2" data-title="추천 8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>교실 앱에 잘 맞는 추천 서랍 8</h2></div>
+    <p class="goal">수업용 앱에 입혔을 때 읽기 편한 설계서 여덟 개를 먼저 골라보겠습니다!</p>
+    <div class="blk">
+      <p class="brief">카드 위쪽 그림은 그 설계서의 바탕색·글자색·버튼색으로 그린 미리보기입니다.</p>
+      <div class="dgrid" id="picks"><p class="small">불러오는 중입니다…</p></div>
+      <div class="detail">
+        <p>밝은 바탕 여섯 개와 어두운 바탕 하나, 옛날 게임기 느낌 하나를 골랐습니다. 과학 시뮬레이션은 밝은 바탕에서 그래프와 입자가 가장 잘 보여서, 처음이시면 apple이나 notion부터 입혀 보시길 권합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 쓰는 법 ═══════════ -->
+<section class="step" id="s3" data-title="쓰는 법">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
+    <p class="goal">폴더에서 일하는 도구는 파일을 두고 읽게 하고, 웹 채팅은 짧은 판을 붙여넣어보겠습니다!</p>
+
+    <div class="blk" data-tool="codex claude">
+      <p class="kw"><span class="tl">ChatGPT · Claude</span>폴더에 DESIGN.md로 두고 읽게 합니다</p>
+      <p class="brief">원본을 받아 index.html 옆에 두면, AI가 폴더에서 직접 읽습니다.</p>
+      <ol class="steps" data-key="local">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">서랍에서 고르고 DESIGN.md 받기</span><span class="how">카드의 [DESIGN.md 받기] → 다운로드 폴더에 DESIGN.md 이름으로 저장됩니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 파일을 과학실험실 폴더로 옮기기</span><span class="how">다운로드 폴더의 DESIGN.md → 과학실험실 폴더(index.html 옆)로 끌기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 만든 부탁문 보내기</span><span class="how">새로 만들 때는 ① 기초 부탁문 끝에 붙이고, 이미 만든 앱이면 그대로 보내기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">index.html을 새로고침해서 보기</span><span class="how">마음에 안 들면 "방금 고치기 전으로 되돌려 줘" → 다른 서랍으로</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>설계서 원본은 영어로 2~3만 자쯤 됩니다. 폴더에서 일하는 도구는 필요한 부분만 골라 읽기 때문에 원본을 그대로 두는 편이 결과가 가장 좋습니다.</p>
+        <p>같은 설계서를 계속 쓰실 거라면 규칙 파일을 하나 만들어 두는 편이 좋습니다. Claude 앱은 폴더의 CLAUDE.md를, Codex는 AGENTS.md를 대화를 시작할 때마다 저절로 읽습니다. 그래서 "이 폴더에 CLAUDE.md(Codex는 AGENTS.md)를 만들고 '이 폴더의 페이지는 모두 DESIGN.md 설계서를 따른다'라고 적어 줘"라고 하면, 새 대화를 열 때마다 설계서를 다시 말하지 않아도 됩니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" data-tool="sengpt">
+      <p class="kw"><span class="tl">SenGPT</span>짧은 판을 붙여넣습니다</p>
+      <p class="brief">원본 대신 색·글꼴 크기·모양만 추린 짧은 판을 부탁문에 넣습니다. 아래 빌더가 저절로 넣어 줍니다.</p>
+      <ol class="steps" data-key="web">
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일을 고르기</span><span class="how">짧은 판이 부탁문 안에 저절로 들어갑니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">앱을 만든 그 대화에 이어서 보내기</span><span class="how">같은 대화면 코드를 다시 붙이지 않아도 됩니다. 새 대화면 부탁문의 [지금 코드] 자리에 index.html 코드를 붙이기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 코드 전체를 코드 도우미로 저장하기</span><span class="how">① 기초 3단계의 코드 도우미 → [index.html로 저장]</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>원본을 웹 채팅에 그대로 붙이면 영어 2~3만 자가 한꺼번에 들어가서 사용량을 많이 쓰고, 뒤에 받는 긴 코드와 겹쳐 답이 중간에 끊기기 쉽습니다. 그래서 색, 글꼴 크기, 모서리 모양, 해야 할 것과 하지 말 것만 3천 자 안팎으로 추린 짧은 판을 따로 만들었습니다.</p>
+        <p>새 대화에서 지금 코드를 붙이려면, 과학실험실 폴더의 index.html을 오른쪽 클릭해 [연결 프로그램]에서 [메모장]을 골라 열고 <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">빌더</span>디자인 부탁문 만들기</p>
+      <p class="brief">서랍과 할 일을 고르면 쓰시는 도구에 맞는 부탁문이 완성됩니다.</p>
+      <form class="bform" id="dbuilder" onsubmit="return false">
+        <label class="f">서랍 고르기
+          <select name="slug" id="dslug"><option value="apple">Apple</option></select>
+        </label>
+        <div class="f">할 일
+          <div class="opts">
+            <label><input type="radio" name="mode" value="new"> 새로 만드는 앱에 입히기</label>
+            <label><input type="radio" name="mode" value="edit" checked> 이미 만든 앱에 입히기</label>
+          </div>
+        </div>
+      </form>
+      <p class="note" id="noTool">위쪽에서 도구를 고르시면 도구에 맞는 부탁문이 나옵니다. 지금은 ChatGPT·Claude 앱 기준입니다.</p>
+      <div class="pr big" id="dOut"><span class="pl">디자인 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 전체 서랍 ═══════════ -->
+<section class="step" id="s4" data-title="전체 74">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>전체 서랍</h2></div>
+    <p class="goal">분류와 바탕 밝기로 거르면서 마음에 드는 설계서를 찾아보겠습니다!</p>
+    <div class="blk">
+      <div class="dfilter">
+        <input type="search" id="dq" placeholder="브랜드 이름이나 느낌으로 찾기 (예: 초록, 어두운, 둥근)" aria-label="설계서 찾기">
+        <div class="fchips" id="fcat" role="group" aria-label="분류"></div>
+        <div class="fchips" id="flight" role="group" aria-label="바탕 밝기">
+          <button type="button" data-light="" aria-pressed="true">밝기 전체</button>
+          <button type="button" data-light="light" aria-pressed="false">밝은 바탕</button>
+          <button type="button" data-light="dark" aria-pressed="false">어두운 바탕</button>
+        </div>
+      </div>
+      <p class="dcount" id="dcount"></p>
+      <div class="dgrid" id="all"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 지킬 것 ═══════════ -->
+<section class="step" id="s5" data-title="지킬 것">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>입힐 때 지킬 것</h2></div>
+    <p class="goal">학생들에게 나눠 줄 앱이라 몇 가지만 지켜보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">로고와 브랜드 이름은 넣지 않습니다</p>
+      <p class="brief">빌려 오는 것은 색과 모양이지, 그 회사의 이름이 아닙니다.</p>
+      <div class="detail">
+        <p>설계서에는 로고가 없지만, AI가 가끔 제목이나 버튼에 브랜드 이름을 넣습니다. 학생들에게 나눠 주는 앱이 그 회사에서 만든 것처럼 보이면 안 되기 때문에, 빌더가 만드는 부탁문에는 "로고와 브랜드 이름은 넣지 마"가 늘 들어갑니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">한글은 Pretendard 글꼴로</p>
+      <p class="brief">브랜드 전용 글꼴은 쓸 수 없고 한글도 없어서, 한글은 Pretendard로 대신합니다.</p>
+    </div>
+
+    <div class="blk">
+      <p class="kw">프로젝터로 띄울 앱은 밝은 바탕으로</p>
+      <p class="brief">프로젝터는 검은색을 빛으로 만들지 못해서, 불을 켠 교실에서는 어두운 바탕이 회색으로 떠 보입니다.</p>
+      <div class="detail">
+        <p>어두운 설계서는 멋있지만 프로젝터 화면에서는 글자와 바탕의 대비가 떨어집니다. 교실 전자칠판이나 학생 태블릿처럼 스스로 빛을 내는 화면에서는 괜찮습니다. 전체 서랍의 [밝은 바탕]으로 거르면 수업용으로 고르기 쉽습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">출처와 라이선스</p>
+      <div class="detail" style="display:block">
+        <p>설계서 원본은 <a href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener">VoltAgent/awesome-design-md</a>(MIT License, Copyright (c) 2026 VoltAgent)의 것을 <span id="dUpdated">받은 날</span>에 옮겼습니다. 라이선스 전문은 <a href="design/LICENSE.txt" target="_blank" rel="noopener">LICENSE.txt</a>에 있습니다. 설계서가 다루는 브랜드들과 이 서랍은 아무 관계가 없습니다.</p>
+        <p>getdesign.md 사이트에는 있지만 공개 저장소에 없는 설계서(discord, mobbin)는 서랍에 넣지 않았습니다. 필요하시면 <a href="https://getdesign.md/" target="_blank" rel="noopener">getdesign.md</a>에서 직접 받으실 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30 · 설계서 원본: VoltAgent/awesome-design-md (MIT)</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>p</kbd> 📖/🎤</div>
+
+<script>
+const CONFIG = { key: 'vibe-design' };
+const QS = new URLSearchParams(location.search);
+const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+(function () {
+  const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
+  document.querySelectorAll('.to-basic').forEach(a => { a.href = 'basic.html' + sq; });
+})();
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ── 모드 ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save = true) {
+  html.dataset.mode = m; modeBtn.textContent = m === 'present' ? '📖 상세로' : '🎤 발표로';
+  if (save) { try { localStorage.setItem(CONFIG.key + ':mode', m); } catch (e) {} }
+}
+(function () { const q = QS.get('mode'); let m = q; if (!m) { try { m = localStorage.getItem(CONFIG.key + ':mode'); } catch (e) {} } setMode(m === 'present' ? 'present' : 'detail', !!q); })();
+modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' ? 'detail' : 'present'));
+
+/* ── 도구 (매뉴얼 셋과 같은 값) ── */
+const TOOL_KEY = 'vibe:tool';
+function setTool(t) {
+  if (t) html.dataset.t = t; else delete html.dataset.t;
+  document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === t)));
+  try { t ? localStorage.setItem(TOOL_KEY, t) : localStorage.removeItem(TOOL_KEY); } catch (e) {}
+  document.getElementById('noTool').hidden = !!t;
+  buildDesignPrompt();
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => setTool(html.dataset.t === b.dataset.pick ? '' : b.dataset.pick)));
+
+/* ── 칩·흐름·타이머·키보드·체크칸 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips'), flow = document.getElementById('flow');
+steps.forEach((s, i) => {
+  const title = s.dataset.title || ('단계 ' + (i + 1));
+  const c = document.createElement('a'); c.className = 'chip'; c.href = '#' + s.id; c.innerHTML = `<b>${i + 1}</b>${title}`; chips.appendChild(c);
+  const f = document.createElement('a'); f.href = '#' + s.id; f.innerHTML = `<span class="n">${i + 1}</span><span class="t">${title}</span>`; flow.appendChild(f);
+});
+let current = 0; const chipEls = [...chips.children];
+function setCurrent(i) { current = i; chipEls.forEach((c, j) => { c.classList.toggle('on', j === i); c.classList.toggle('done', j < i); }); updateTimerLabel(); }
+const iob = new IntersectionObserver(es => { const v = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio); if (v.length) setCurrent(steps.indexOf(v[0].target)); }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, .2, .5, 1] });
+steps.forEach(s => iob.observe(s));
+const elapsed = steps.map(() => 0); let running = false, tick = null;
+const tmE = document.getElementById('tmElapsed'), tmT = document.getElementById('tmToggle');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function updateTimerLabel() { tmE.textContent = fmt(elapsed[current]); }
+function toggleTimer() { running = !running; tmT.textContent = running ? '⏸' : '▶'; clearInterval(tick); if (running) tick = setInterval(() => { elapsed[current]++; updateTimerLabel(); }, 1000); }
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
+setCurrent(0);
+function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+document.addEventListener('keydown', e => {
+  const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape') { const m = document.querySelector('.modal'); if (m) m.remove(); }
+  if (e.key === 'p') { modeBtn.click(); return; }
+  if (html.dataset.mode !== 'present') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 't') toggleTimer();
+});
+document.querySelectorAll('.steps').forEach(ol => {
+  const k = CONFIG.key + ':chk:' + (ol.dataset.key || 'x');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const boxes = [...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b, i) => { b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked);
+    b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} }); });
+});
+
+/* ── 알림 ── */
+let toastT;
+function toast(t) { let el = document.querySelector('.toast'); if (!el) { el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); } el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2400); }
+async function copyText(t, btn) {
+  try { await navigator.clipboard.writeText(t); if (btn) { const o = btn.textContent; btn.textContent = '복사했습니다'; setTimeout(() => { btn.textContent = o; }, 1600); } else toast('복사했습니다.'); return true; }
+  catch (e) { toast('복사가 막혀 있습니다. [원문 보기]에서 선택해 복사해 주세요.'); return false; }
+}
+
+/* ── 서랍 자료 ── */
+let ITEMS = [];
+const DATA = new Map();
+async function getData(slug) {
+  if (!DATA.has(slug)) DATA.set(slug, fetch('design/data/' + encodeURIComponent(slug) + '.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }));
+  return DATA.get(slug);
+}
+function lum(h) { const x = h.replace('#', ''); const r = parseInt(x.slice(0, 2), 16) / 255, g = parseInt(x.slice(2, 4), 16) / 255, b = parseInt(x.slice(4, 6), 16) / 255; return .2126 * r + .7152 * g + .0722 * b; }
+function contrast(a, b) { const la = lum(a) + .05, lb = lum(b) + .05; return la > lb ? la / lb : lb / la; }
+function miniColors(sw) {
+  const bg = sw[0] || '#ffffff';
+  const rest = sw.slice(1);
+  const ink = rest.slice().sort((a, b) => contrast(b, bg) - contrast(a, bg))[0] || (lum(bg) > .5 ? '#1d1d1f' : '#ffffff');
+  const btn = rest.find(c => c !== ink && contrast(c, bg) > 1.6) || ink;
+  const btnInk = lum(btn) > .55 ? '#1d1d1f' : '#ffffff';
+  return { bg, ink: contrast(ink, bg) < 3 ? (lum(bg) > .5 ? '#1d1d1f' : '#ffffff') : ink, btn, btnInk };
+}
+function card(it) {
+  const m = miniColors(it.sw);
+  return `<article class="dcard" data-slug="${esc(it.slug)}">
+    <div class="mini" style="background:${m.bg};color:${m.ink}" aria-hidden="true"><div><div class="mt">기체 입자 운동</div><div class="ms">온도 300 K · 압력 1.0 atm</div></div><span class="mb" style="background:${m.btn};color:${m.btnInk}">시작</span></div>
+    <div class="swrow" aria-hidden="true">${it.sw.map(c => `<span style="background:${c}"></span>`).join('')}</div>
+    <div class="db"><h3>${esc(it.brand)}</h3><p class="ko">${esc(it.ko)}</p><p class="tg">${esc(it.cat)} · ${it.dark ? '어두운 바탕' : '밝은 바탕'}</p>
+      <div class="acts"><button class="btn" type="button" data-act="short">짧은 판 복사</button><button class="btn primary" type="button" data-act="dl">DESIGN.md 받기</button><button class="btn" type="button" data-act="view">원문 보기</button></div></div></article>`;
+}
+async function onCardClick(e) {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const slug = b.closest('.dcard').dataset.slug, it = ITEMS.find(x => x.slug === slug);
+  try {
+    const d = await getData(slug);
+    if (b.dataset.act === 'short') copyText(d.short, b);
+    if (b.dataset.act === 'dl') {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([d.full], { type: 'text/markdown;charset=utf-8' })); a.download = 'DESIGN.md';
+      document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+      toast('다운로드 폴더에 DESIGN.md로 받았습니다. (' + it.brand + ')');
+    }
+    if (b.dataset.act === 'view') openView(it, d);
+  } catch (err) { toast('설계서를 불러오지 못했습니다. 잠시 뒤 다시 눌러 주세요.'); }
+}
+function openView(it, d) {
+  document.querySelector('.modal')?.remove();
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div class="mbox" role="dialog" aria-modal="true" aria-label="${esc(it.brand)} 설계서"><div class="mhead"><b>${esc(it.brand)} 설계서</b>
+    <div class="seg2"><button type="button" data-v="short" aria-pressed="true">짧은 판</button><button type="button" data-v="full" aria-pressed="false">원본</button></div>
+    <button class="btn" type="button" data-v="copy">지금 보이는 판 복사</button><button class="btn" type="button" data-v="close">닫기</button></div><pre></pre></div>`;
+  const pre = m.querySelector('pre'); let view = 'short'; pre.textContent = d.short;
+  m.addEventListener('click', e => {
+    if (e.target === m) { m.remove(); return; }
+    const b = e.target.closest('[data-v]'); if (!b) return;
+    if (b.dataset.v === 'close') { m.remove(); return; }
+    if (b.dataset.v === 'copy') { copyText(view === 'short' ? d.short : d.full, b); return; }
+    view = b.dataset.v; pre.textContent = view === 'short' ? d.short : d.full; pre.scrollTop = 0;
+    m.querySelectorAll('.seg2 button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  });
+  document.body.appendChild(m);
+}
+document.getElementById('picks').addEventListener('click', onCardClick);
+document.getElementById('all').addEventListener('click', onCardClick);
+
+/* ── 전체 서랍 거르기 ── */
+const F = { q: '', cat: '', light: '' };
+function renderAll() {
+  const q = F.q.toLowerCase();
+  const list = ITEMS.filter(it => (!F.cat || it.cat === F.cat) && (!F.light || (F.light === 'dark') === it.dark)
+    && (!q || (it.brand + ' ' + it.ko + ' ' + it.en + ' ' + it.cat + ' ' + (it.dark ? '어두운' : '밝은')).toLowerCase().includes(q)));
+  document.getElementById('all').innerHTML = list.map(card).join('') || '<p class="small">맞는 설계서가 없습니다.</p>';
+  document.getElementById('dcount').textContent = `${ITEMS.length}개 중 ${list.length}개`;
+}
+document.getElementById('dq').addEventListener('input', e => { F.q = e.target.value.trim(); renderAll(); });
+document.getElementById('flight').addEventListener('click', e => { const b = e.target.closest('[data-light]'); if (!b) return; F.light = b.dataset.light; document.querySelectorAll('#flight button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderAll(); });
+document.getElementById('fcat').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; F.cat = b.dataset.cat; document.querySelectorAll('#fcat button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderAll(); });
+
+/* ── 디자인 부탁문 빌더 ── */
+const dForm = document.getElementById('dbuilder'), dOut = document.querySelector('#dOut .txt');
+let buildSeq = 0;
+async function buildDesignPrompt() {
+  if (!ITEMS.length) return;
+  const seq = ++buildSeq;
+  const slug = dForm.elements.slug.value, mode = (dForm.querySelector('[name=mode]:checked') || {}).value || 'edit';
+  const it = ITEMS.find(x => x.slug === slug) || ITEMS[0], t = html.dataset.t || '';
+  try { localStorage.setItem(CONFIG.key + ':builder', JSON.stringify({ slug, mode })); } catch (e) {}
+  const keep = '기능과 글, 숫자, 계산식은 하나도 바꾸지 마. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘.';
+  let text;
+  if (t === 'sengpt') {
+    dOut.textContent = '짧은 판을 불러오는 중입니다…';
+    let d; try { d = await getData(it.slug); } catch (e) { dOut.textContent = '설계서를 불러오지 못했습니다. 잠시 뒤 다시 골라 주세요.'; return; }
+    if (seq !== buildSeq) return;
+    text = mode === 'new'
+      ? `[디자인 설계서]\n${d.short}\n\n위 설계서의 색·글꼴 크기·모양으로 아래 부탁대로 만들어 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 부탁문을 붙여넣기)`
+      : `[디자인 설계서]\n${d.short}\n\n위 설계서의 색·글꼴 크기·모양으로 앱의 디자인만 바꿔 줘. ${keep} 고친 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[지금 코드]\n(같은 대화에서 이어서 부탁하면 이 줄은 지워도 됩니다. 새 대화라면 지금 index.html 코드를 통째로 붙여넣기)`;
+  } else {
+    text = mode === 'new'
+      ? `디자인은 이 폴더의 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽고 그대로 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘.`
+      : `이 폴더의 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽어 줘. 그다음 index.html의 디자인만 이 설계서의 색·글꼴 크기·모양으로 바꿔 줘. ${keep} 다 바꾸면 무엇을 바꿨는지 세 줄로 알려 줘.`;
+  }
+  if (seq === buildSeq) dOut.textContent = text;
+}
+dForm.addEventListener('change', buildDesignPrompt);
+document.querySelector('#dOut .cp').addEventListener('click', e => copyText(dOut.innerText.trim(), e.currentTarget));
+
+/* ── 불러오기 ── */
+fetch('design/index.json').then(r => r.json()).then(j => {
+  ITEMS = j.items || [];
+  document.getElementById('dUpdated').textContent = j.updated || '받은 날';
+  const cats = [...new Set(ITEMS.map(x => x.cat))];
+  document.getElementById('fcat').innerHTML = `<button type="button" data-cat="" aria-pressed="true">분류 전체</button>` + cats.map(c => `<button type="button" data-cat="${esc(c)}" aria-pressed="false">${esc(c)} ${ITEMS.filter(x => x.cat === c).length}</button>`).join('');
+  const PICK_ORDER = ['apple', 'notion', 'airbnb', 'mintlify', 'miro', 'figma', 'spotify', 'nintendo-2001'];
+  document.getElementById('picks').innerHTML = PICK_ORDER.map(s => ITEMS.find(x => x.slug === s)).filter(Boolean).map(card).join('');
+  const sel = document.getElementById('dslug');
+  sel.innerHTML = cats.map(c => `<optgroup label="${esc(c)}">${ITEMS.filter(x => x.cat === c).map(x => `<option value="${esc(x.slug)}">${esc(x.brand)}</option>`).join('')}</optgroup>`).join('');
+  let b = null; try { b = JSON.parse(localStorage.getItem(CONFIG.key + ':builder') || 'null'); } catch (e) {}
+  sel.value = (b && ITEMS.some(x => x.slug === b.slug)) ? b.slug : 'apple';
+  if (b && b.mode) { const r = dForm.querySelector(`[name=mode][value="${b.mode}"]`); if (r) r.checked = true; }
+  renderAll();
+  let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {}
+  setTool(['codex', 'claude', 'sengpt'].includes(t) ? t : '');
+}).catch(() => { document.getElementById('picks').innerHTML = '<p class="small">서랍을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.</p>'; });
+</script>
+</body>
+</html>
