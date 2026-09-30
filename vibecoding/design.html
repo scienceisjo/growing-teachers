@@ -7,6 +7,7 @@
 <meta name="description" content="설계서(DESIGN.md) 한 장으로 앱에 옷을 입히는 법. 설계서 74개를 한국어 설명·색 미리보기와 함께 모았고, 폴더에서 일하는 앱(ChatGPT·Claude)과 무료로도 되는 웹 채팅(ChatGPT·Claude·Gemini·SenGPT)별 적용 방법을 정리했습니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="dg.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
    연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
@@ -340,6 +341,13 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
     <div class="blk">
       <p class="kw">이럴 때 설계서가 도움이 됩니다</p>
       <p class="brief">말로 설명하기 어려운 느낌을 숫자로 건네고, 부탁할 때마다 달라지는 결과를 한 방향으로 모읍니다.</p>
+      <div class="dg" style="--cyc:6s" aria-label="설계서 없이 부탁하면 부탁할 때마다 모양이 달라지고, 설계서 한 장이면 여러 앱이 한 벌로 맞춰지는 모습">
+        <div class="dg-tabs"><button type="button" data-v="no" aria-pressed="true">설계서 없이 "예쁘게 해 줘"</button><button type="button" data-v="yes" aria-pressed="false">설계서 한 장으로</button></div>
+        <div data-view="no"><div class="dg-mocks"><div><div class="dg-mock" style="--mc:#2e7d32;--mb:#43a047;--mr:6px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>첫 번째 부탁</small></div><div><div class="dg-mock" style="--mc:#6a1b9a;--mb:#8e24aa;--mr:0px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>두 번째 부탁</small></div><div><div class="dg-mock" style="--mc:#e65100;--mb:#fb8c00;--mr:14px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>세 번째 부탁</small></div></div></div>
+        <div data-view="yes"><div class="dg-mocks"><div><div class="dg-mock" style="--mc:#1d1d1f;--mb:#0066cc;--mr:9999px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>단원 페이지</small></div><div><div class="dg-mock" style="--mc:#1d1d1f;--mb:#0066cc;--mr:9999px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>퀴즈</small></div><div><div class="dg-mock" style="--mc:#1d1d1f;--mb:#0066cc;--mr:9999px"><i class="t"></i><i class="l"></i><i class="l s"></i><i class="sl"></i><i class="bt"></i></div><small>타이머</small></div></div></div>
+        <p class="dg-cap" data-vsay="no">"예쁘게"는 부탁할 때마다 다르게 읽혀서, 색과 단추 모양이 매번 바뀝니다.</p>
+        <p class="dg-cap" data-vsay="yes" hidden>설계서에 적힌 색 값과 모서리 둥글기를 따라서, 여러 앱이 한 벌처럼 맞춰집니다.</p>
+      </div>
       <div class="grid2">
         <div class="box"><b>원하는 느낌을 말로 설명하기 어려울 때</b><p>"깔끔하게", "고급스럽게" 같은 말은 AI마다, 그리고 부탁할 때마다 다르게 읽힙니다. 설계서에는 색 값과 글씨 크기, 모서리 둥글기가 숫자로 적혀 있어서 뜻이 어긋나지 않는 지침을 줄 수 있습니다.</p></div>
         <div class="box"><b>같은 부탁인데 결과가 들쑥날쑥할 때</b><p>어제는 파란 버튼이었는데 오늘은 초록 버튼이 되거나 페이지마다 버튼 모양이 다를 때, 설계서를 하나 골라 계속 쓰면 여러 번 만들어도 한 벌처럼 맞춰집니다.</p></div>
@@ -728,5 +736,6 @@ fetch('design/index.json').then(r => r.json()).then(j => {
   setTool(TOOLS[t] ? t : '');
 }).catch(() => { document.getElementById('picks').innerHTML = '<p class="small">서랍을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.</p>'; });
 </script>
+<script src="dg.js"></script>
 </body>
 </html>

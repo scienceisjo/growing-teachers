@@ -7,6 +7,7 @@
 <meta name="description" content="상상만 하던 수업 도구를 말로 만들어 GiteacherHub에 올리는 데까지. 가상 실험실·퀴즈·수업 진행 도구 무엇이든, 폴더에서 일하는 유료 앱(ChatGPT·Claude)이나 무료로도 되는 웹 채팅(ChatGPT·Claude·Gemini·SenGPT)으로 따라오는 60분 매뉴얼입니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="dg.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
    연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
@@ -312,6 +313,15 @@ html[data-mode="present"] .keys{display:block}
     <div class="blk">
       <p class="kw">폴더부터 만드는 까닭</p>
       <p class="brief">만든 파일을 나중에 끌어다 올려야 해서, 처음부터 한곳에 모아 둡니다.</p>
+      <div class="dg" aria-label="AI 도구가 만든 파일이 수업도구 폴더에 모이고, 그 폴더에서 보관함과 배포로 끌어다 놓는 흐름">
+        <div class="dg-flow">
+          <div class="dg-node"><svg class="ic"><use href="#i-ai"/></svg><b>AI 도구</b><small>앱은 직접, 웹 채팅은 제가 저장</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-folder"/></svg><b>수업도구 폴더</b><small>index.html이 여기에 모임</small></div>
+          <div class="dg-wire"><i style="--dl:1s"></i></div>
+          <div class="dg-node"><svg class="ic"><use href="#i-upload"/></svg><b>보관함 · 배포</b><small>6단계와 ② 배포에서 끌어다 놓기</small></div>
+        </div>
+      </div>
       <div class="detail">
         <p>저는 새 앱을 만들 때마다 폴더부터 하나 만듭니다. Claude 앱과 ChatGPT 앱의 코딩 도우미는 그 폴더 안에서 파일을 만들고 고치기 때문에, 폴더가 곧 작업대가 됩니다. 폴더 없이 시작하면 파일이 어디에 생겼는지 찾느라 시간을 씁니다.</p>
         <p>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)은 파일을 내 컴퓨터에 직접 만들지 못해서, 받은 코드를 폴더에 저장하는 일은 선생님이 합니다. 그래서 웹 채팅으로 하시는 분도 폴더는 똑같이 만들어 둡니다.</p>
@@ -478,6 +488,26 @@ html[data-mode="present"] .keys{display:block}
         <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>답을 통째로 복사해 아래 코드 도우미에 붙여넣기</span><span class="how">복사 버튼 → 코드 도우미 칸 클릭 → <kbd>Ctrl</kbd>+<kbd>V</kbd> → [미리보기]. 복사 요령은 바로 아래</span></div></li>
         <li data-tool="web"><input type="checkbox" aria-label="완료"><div><span class="what"><span class="tl">웹 채팅</span>수업도구 폴더에 index.html로 저장하고 열기</span><span class="how">[index.html로 저장] → 수업도구 폴더 → 저장한 파일 더블클릭</span></div></li>
       </ol>
+      <div class="dg" data-tool="local" aria-label="앱에서 부탁문을 보내면 AI가 폴더에 파일을 만들고, 그 파일을 더블클릭해 여는 순서">
+        <div class="dg-flow">
+          <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>부탁문 보내기</b><small>되묻는 말에 짧게 답함</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-file"/></svg><b>AI가 파일 만들기</b><small>수업도구 폴더에 index.html</small></div>
+          <div class="dg-wire"><i style="--dl:1s"></i></div>
+          <div class="dg-node"><svg class="ic"><use href="#i-browser"/></svg><b>더블클릭해서 열기</b><small>브라우저에서 움직이는지</small></div>
+        </div>
+      </div>
+      <div class="dg" data-tool="web" aria-label="웹 채팅의 코드를 코드 도우미로 옮겨 파일로 저장하고 여는 순서">
+        <div class="dg-flow">
+          <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>채팅 답</b><small>끝이 &lt;/html&gt;인지</small></div>
+          <div class="dg-wire"><em>복사</em><i></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-code"/></svg><b>코드 도우미</b><small>붙여넣고 [미리보기]</small></div>
+          <div class="dg-wire"><em>저장</em><i style="--dl:.8s"></i></div>
+          <div class="dg-node"><svg class="ic"><use href="#i-folder"/></svg><b>수업도구 폴더</b><small>index.html</small></div>
+          <div class="dg-wire"><em>열기</em><i style="--dl:1.6s"></i></div>
+          <div class="dg-node"><svg class="ic"><use href="#i-browser"/></svg><b>브라우저</b><small>더블클릭</small></div>
+        </div>
+      </div>
     </div>
 
     <div class="blk" data-tool="web">
@@ -582,6 +612,12 @@ html[data-mode="present"] .keys{display:block}
         <div class="box no"><b>이렇게 말고</b><p>좀 더 보기 좋게 해 줘.</p></div>
         <div class="box yes"><b>이렇게</b><p>온도 슬라이더만 화면 오른쪽으로 옮겨 줘. 나머지는 그대로 둬.</p></div>
       </div>
+      <div class="dg" style="--cyc:6s" aria-label="넓게 부탁하면 잘 되던 곳까지 여러 줄이 바뀌고, 하나만 집으면 그 줄만 바뀌는 모습">
+        <div class="dg-g2">
+          <div><span class="dg-t">"좀 더 보기 좋게 해 줘"</span><div class="dg-code tick" style="--dgc:var(--bad)"><span class="hd">index.html · 여기저기 바뀜</span><span class="ln hl" style="--lw:72%"></span><span class="ln" style="--lw:86%"></span><span class="ln hl" style="--lw:58%"></span><span class="ln hl" style="--lw:80%"></span><span class="ln" style="--lw:64%"></span><span class="ln hl" style="--lw:90%"></span><span class="ln" style="--lw:52%"></span><span class="ln hl" style="--lw:76%"></span><span class="ln hl" style="--lw:68%"></span><span class="ln" style="--lw:84%"></span></div><p class="dg-cap">잘 되던 곳까지 새로 짜여서, 처음부터 다시 확인해야 합니다.</p></div>
+          <div><span class="dg-t">"온도 슬라이더만 오른쪽으로. 나머지는 그대로 둬"</span><div class="dg-code tick"><span class="hd">index.html · 한 곳만 바뀜</span><span class="ln" style="--lw:72%"></span><span class="ln" style="--lw:86%"></span><span class="ln" style="--lw:58%"></span><span class="ln" style="--lw:80%"></span><span class="ln hl" style="--lw:64%"></span><span class="ln" style="--lw:90%"></span><span class="ln" style="--lw:52%"></span><span class="ln" style="--lw:76%"></span><span class="ln" style="--lw:68%"></span><span class="ln" style="--lw:84%"></span></div><p class="dg-cap">바뀐 곳이 하나라서, 확인도 그곳만 하면 됩니다.</p></div>
+        </div>
+      </div>
       <div class="detail">
         <p>"좀 더 보기 좋게"처럼 넓게 부탁하면 AI가 잘 되던 부분까지 새로 짜는 일이 생깁니다. 저는 고칠 곳 하나를 이름으로 부르고 끝에 "나머지는 그대로 둬"를 붙입니다. 고친 뒤에는 새로고침으로 확인하고 다음 것으로 넘어갑니다.</p>
       </div>
@@ -619,6 +655,28 @@ html[data-mode="present"] .keys{display:block}
     <div class="blk">
       <p class="kw">토큰과 긴 대화</p>
       <p class="brief">AI가 읽고 쓰는 양만큼 요금제 한도가 줄어듭니다. 대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다.</p>
+      <div class="dg" style="--cyc:8s" aria-label="대화가 길어지면 앞부분이 요약되면서 작은 약속이 빠질 수 있고, 규칙 파일은 새 대화마다 다시 읽히는 모습">
+        <div class="dg-g2">
+          <div class="dg-panel"><span class="dg-t">대화가 길어지면 앞부분을 요약합니다</span>
+            <div class="dg-sum">
+              <span class="b me old">기체 입자 상자를 만들어 줘. 숫자에는 단위를 꼭 붙여 줘</span>
+              <span class="b old">만들었습니다</span>
+              <span class="b me old">온도 슬라이더를 오른쪽으로</span>
+              <span class="b">옮겼습니다</span>
+              <span class="b me">압력 그래프를 더해 줘</span>
+              <span class="sm">앞부분 요약 · 입자 상자, 슬라이더 오른쪽 <s>단위 약속</s></span>
+            </div>
+          </div>
+          <div class="dg-panel"><span class="dg-t">꼭 지킬 규칙은 파일에 적어 둡니다</span>
+            <div class="dg-flow">
+              <div class="dg-node on"><svg class="ic"><use href="#i-paper"/></svg><b>규칙 파일</b><small>"숫자에는 단위"</small></div>
+              <div class="dg-wire"><i></i></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>대화마다</b><small>처음에 다시 읽음</small></div>
+            </div>
+            <p class="dg-cap">요약에서 빠진 약속도 파일에 있으면 다시 지켜집니다.</p>
+          </div>
+        </div>
+      </div>
       <div class="detail">
         <p>토큰은 AI가 글을 읽고 쓰는 단위입니다. 요금제의 사용 한도는 메시지 개수보다 이 토큰을 얼마나 썼는지에 따라 줄어듭니다. "파일 전체를 다시 써 줘"는 파일 한 장을 통째로 다시 쓰는 일이라 가장 많이 씁니다. Claude 앱과 Codex는 고칠 부분만 바꾸니 훨씬 덜 쓰고, 웹 채팅처럼 고칠 때마다 코드 전체를 다시 받는 방식은 한 번에 파일 한 장만큼 씁니다.</p>
         <p>대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다. 다만 요약하면서 자잘한 약속이 빠질 수 있어서, 저는 꼭 지킬 규칙을 파일에 적어 두고 "이 규칙을 읽고 시작해 줘"라고 합니다. Claude 앱이나 Codex처럼 폴더에서 일하는 도구는 만든 파일이 그대로 남아 있어서, 새 대화를 열어도 "이 폴더의 index.html을 이어서 고쳐 줘" 한 줄이면 이어집니다. 처음부터 다시 올려야 하는 것은 코드가 채팅창 안에만 있는 웹 채팅 쪽입니다.</p>
@@ -972,5 +1030,6 @@ document.getElementById('hSave').addEventListener('click', async () => {
 /* 처음 한 번: 저장된 도구 불러오기 (빌더가 도구에 맞춰 한 줄을 바꿉니다) */
 (function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
 </script>
+<script src="dg.js"></script>
 </body>
 </html>

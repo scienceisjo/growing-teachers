@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>바이브코딩 연수 · 말로 만드는 나만의 수업 도구 · 해누리중 조승재</title>
-<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물두 점을 전시실처럼 둘러본 뒤 분임별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
+<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물여덟 점을 전시실처럼 둘러본 뒤 분임별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="dg.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
    연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
@@ -346,6 +347,16 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 .mcard.soon{background:var(--bg2);color:var(--ink3)}
 .mcard.soon b{color:var(--ink2)}
 .mcard.hi{border-color:var(--blue);background:var(--blue-t)}
+
+/* 누르면 펼쳐지는 설명판 */
+.morebtn{border:0;background:none;padding:0;font:inherit;color:var(--blue);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+.morebtn[aria-expanded="true"]{font-weight:600}
+.morebox{border:1px solid var(--blue);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.morebox .mb-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.morebox .mb-h b{flex:1;font-size:1.05rem}
+.morebox .x{border:1px solid var(--line);background:#fff;border-radius:9999px;width:34px;height:34px;cursor:pointer;flex:none}
+.morebox>p{max-width:44em}
+.cx-list{display:grid;gap:8px}
 </style>
 </head>
 <body>
@@ -400,7 +411,19 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <div class="blk">
       <p class="kw">코드를 몰라도, 말로 시켜서 만듭니다</p>
       <p class="brief">만들고 싶은 것을 말로 설명하면 AI가 코드를 쓰고, 저는 결과를 보면서 다시 말로 고칩니다.</p>
-      <div class="pipe" aria-label="바이브코딩의 흐름"><span class="n">말로 설명하기</span><span class="a">→</span><span class="n">AI가 코드 쓰기</span><span class="a">→</span><span class="n">화면으로 확인하기</span><span class="a">→</span><span class="n hi">말로 고치기</span></div>
+      <div class="dg" role="img" aria-label="말로 설명하기, AI가 코드 쓰기, 화면으로 확인하기, 말로 고치기가 돌고 도는 그림">
+        <div class="dg-loop dg-seq" style="--n:4;--cyc:8s">
+          <div class="dg-node" style="--i:0"><svg class="ic"><use href="#i-chat"/></svg><b>말로 설명하기</b><small>"기체 입자 상자를 만들어 줘"</small></div>
+          <div class="dg-wire"><i style="--dl:1s"></i></div>
+          <div class="dg-node" style="--i:1"><svg class="ic"><use href="#i-code"/></svg><b>AI가 코드 쓰기</b><small>HTML 한 파일</small></div>
+          <div class="lv up"><i style="--dl:7s"></i></div>
+          <div class="mid">한 바퀴면 초안,<br>여러 바퀴면<br>수업 도구</div>
+          <div class="lv"><i style="--dl:3s"></i></div>
+          <div class="dg-node" style="--i:3"><svg class="ic"><use href="#i-pencil"/></svg><b>말로 고치기</b><small>"입자가 벽에 부딪히게 해 줘"</small></div>
+          <div class="dg-wire back"><i style="--dl:5s"></i></div>
+          <div class="dg-node" style="--i:2"><svg class="ic"><use href="#i-screen"/></svg><b>화면으로 확인하기</b><small>과학적으로 맞는지</small></div>
+        </div>
+      </div>
       <div class="detail">
         <p>바이브코딩이라는 말은 2025년 초 AI 연구자 안드레이 카파시가 처음 썼습니다. 코드를 한 줄씩 짜는 대신 원하는 느낌을 말로 전하고, 나온 결과를 보면서 다시 말로 고치는 방식입니다.</p>
         <p>저는 코드를 정식으로 배운 적이 없습니다. 제가 하는 일은 수업 장면을 설명하고, 나온 화면이 과학적으로 맞는지 확인하고, 틀린 곳을 짚어 고쳐 달라고 하는 것입니다.</p>
@@ -458,16 +481,41 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
           <tr><td><b>데스크톱 앱</b></td><td>ChatGPT 앱의 Codex · Claude 앱의 Code 탭</td><td>폴더를 열어 두면 파일을 직접 만들고, 고치고, 열어 봅니다.</td><td>여러 번 고쳐 가며 키울 때</td></tr>
           <tr><td><b>터미널</b></td><td>Claude Code · Codex CLI · Gemini CLI</td><td>앱과 같은 일을 검은 창에 글로 시킵니다.</td><td>익숙해진 뒤 여러 작업을 한꺼번에 맡길 때</td></tr>
           <tr><td><b>코드 편집기</b></td><td>VS Code · Cursor · Antigravity</td><td>코드를 눈으로 보면서 AI와 같이 고칩니다.</td><td>코드를 직접 읽어 보고 싶을 때</td></tr>
-          <tr><td><b>브라우저 에이전트</b></td><td>Claude in Chrome</td><td>AI가 크롬을 직접 눌러 가며 확인하고 작업합니다.</td><td>만든 앱을 AI가 직접 눌러 보며 검사할 때</td></tr>
+          <tr><td><b>브라우저 에이전트</b></td><td>Claude in Chrome · ChatGPT의 Chrome 확장</td><td>AI가 내 크롬을 직접 눌러 가며 확인하고 작업합니다.</td><td>만든 앱을 AI가 눌러 보며 검사할 때, 웹사이트에서 하는 일을 맡길 때</td></tr>
         </tbody>
       </table></div>
+      <div class="dg" aria-label="웹 채팅과 데스크톱 앱에서 코드가 폴더까지 가는 길">
+        <div class="dg-g2">
+          <div class="dg-panel">
+            <span class="dg-t">웹 채팅 · 코드는 제가 옮깁니다</span>
+            <div class="dg-flow">
+              <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>채팅창</b><small>AI가 코드를 씀</small></div>
+              <div class="dg-wire"><em>복사</em><i></i></div>
+              <div class="dg-node on"><svg class="ic"><use href="#i-person"/></svg><b>나</b><small>메모장에 붙여 저장</small></div>
+              <div class="dg-wire"><em>저장</em><i style="--dl:1.1s"></i></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-folder"/></svg><b>내 폴더</b><small>index.html</small></div>
+            </div>
+          </div>
+          <div class="dg-panel">
+            <span class="dg-t">데스크톱 앱 · AI가 폴더에서 직접 합니다</span>
+            <div class="dg-flow">
+              <div class="dg-node"><svg class="ic"><use href="#i-app"/></svg><b>앱</b><small>폴더를 열어 둠</small></div>
+              <div class="dg-wire"><i></i></div>
+              <div class="dg-node on"><svg class="ic"><use href="#i-folder"/></svg><b>내 폴더</b><small>AI가 저장</small></div>
+              <div class="dg-wire"><i style="--dl:1.1s"></i></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-browser"/></svg><b>브라우저</b><small>AI가 열어 봄</small></div>
+            </div>
+          </div>
+        </div>
+        <p class="dg-cap">웹 채팅에서는 코드가 채팅창 안에 있어서, 파일로 옮겨 담는 일을 제가 합니다. 데스크톱 앱에서는 AI가 폴더 안에서 파일을 만들고, 고치고, 열어 봅니다.</p>
+      </div>
       <div class="shots">
         <figure class="shot"><a href="shots/gpt-new.webp" target="_blank" rel="noopener"><img src="shots/gpt-new.webp" alt="ChatGPT 웹 첫 화면" width="840" height="340" loading="lazy"></a><figcaption><b>ChatGPT</b>chatgpt.com</figcaption></figure>
         <figure class="shot"><a href="shots/claude-new.webp" target="_blank" rel="noopener"><img src="shots/claude-new.webp" alt="Claude 웹 첫 화면" width="840" height="270" loading="lazy"></a><figcaption><b>Claude</b>claude.ai</figcaption></figure>
         <figure class="shot"><a href="shots/gemini-new.webp" target="_blank" rel="noopener"><img src="shots/gemini-new.webp" alt="Gemini 웹 첫 화면" width="700" height="200" loading="lazy"></a><figcaption><b>Gemini</b>gemini.google.com</figcaption></figure>
       </div>
       <div class="detail">
-        <p>오늘 분임 실습은 웹 채팅이나 데스크톱 앱으로 합니다. 웹 채팅은 무료 계정으로도 되고, 데스크톱 앱은 유료 요금제에서 넉넉하게 씁니다. ChatGPT 무료 계정도 데스크톱 앱에서 Codex를 조금 쓸 수 있지만 가벼운 모델만 됩니다. 코드 편집기 가운데 Antigravity는 개인에게 무료이고 한도가 주마다 다시 채워지며, Cursor는 월 20달러 요금제부터 넉넉해집니다. VS Code에 붙여 쓰는 GitHub Copilot은 교사 인증(GitHub Education)을 받으면 Pro 요금제를 무료로 쓸 수 있습니다.</p>
+        <p>오늘 분임 실습은 웹 채팅이나 데스크톱 앱으로 합니다. 웹 채팅은 무료 계정으로도 되고, 데스크톱 앱은 유료 요금제에서 넉넉하게 씁니다. ChatGPT 무료 계정도 데스크톱 앱에서 Codex를 조금 쓸 수 있지만 가벼운 모델만 됩니다. 4단계 요금제 표의 「Codex 조금」을 누르면 자세히 나옵니다. 코드 편집기 가운데 Antigravity는 개인에게 무료이고 한도가 주마다 다시 채워지며, Cursor는 월 20달러 요금제부터 넉넉해집니다. VS Code에 붙여 쓰는 GitHub Copilot은 교사 인증(GitHub Education)을 받으면 Pro 요금제를 무료로 쓸 수 있습니다.</p>
         <p>저는 Claude 앱의 Code 탭을 주로 쓰고, Codex를 함께 씁니다.</p>
       </div>
     </div>
@@ -485,9 +533,31 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 
     <div class="blk">
       <p class="kw"><span class="tag">새로 나온 것</span>브라우저를 직접 다루는 AI</p>
-      <p class="brief">Claude in Chrome은 AI가 크롬 창을 직접 눌러 가며 일합니다. 만든 앱을 AI가 학생처럼 눌러 보며 검사하게 할 수 있습니다.</p>
+      <p class="brief">Claude in Chrome과 ChatGPT의 Chrome 확장은 AI가 내 크롬을 직접 눌러 가며 일합니다. 만든 앱을 학생처럼 눌러 보며 검사하게 하거나, 웹사이트에서 하는 일을 통째로 맡길 수 있습니다.</p>
+      <div class="dg" aria-label="AI가 그림 파일을 Meshy에 올려 3D 모형으로 바꾸고 받아 오는 그림">
+        <span class="dg-t">예: 그림 한 장을 Meshy에 올려 3D 모형으로 바꾸기</span>
+        <div class="dg-flow">
+          <div class="dg-node"><svg class="ic"><use href="#i-image"/></svg><b>그림 파일</b><small>기록관.png</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-win" style="flex:2.4 1 0">
+            <div class="bar"><span class="url">meshy.ai</span></div>
+            <div class="body">
+              <div class="act"><svg class="ic"><use href="#i-upload"/></svg>그림 올리기</div>
+              <div class="act"><svg class="ic"><use href="#i-cube"/></svg>3D로 만들기</div>
+              <div class="act"><svg class="ic"><use href="#i-download"/></svg>GLB로 받기</div>
+              <svg class="cur" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cursor"/></svg>
+            </div>
+          </div>
+          <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-cube"/></svg><b>3D 모형</b><small>기록관.glb</small></div>
+        </div>
+        <p class="dg-cap">AI가 제 크롬에서 사이트를 열고, 그림을 올리고, 단추를 누르고, 파일을 받습니다. 저는 로그인과 결제처럼 제가 해야 하는 순간에만 손을 댑니다. 전시실의 NET ZERO ECO-CITY에 들어간 건물 모형도 Meshy로 만든 것입니다.</p>
+      </div>
+      <div class="pr"><span class="pl">브라우저 에이전트에게 맡기는 부탁</span><button class="btn cp" type="button">복사</button><div class="txt">바탕화면의 [그림 파일 이름]을 Meshy(meshy.ai)에 올려서 3D 모형으로 바꾸고, GLB 파일로 받아서 바탕화면에 저장해 줘. 로그인, 결제, 약관 동의가 나오면 멈추고 나에게 물어봐.</div></div>
       <div class="detail">
-        <p>2026년 8월 26일에 정식으로 나왔고, Claude 유료 요금제(Pro 이상)에서 씁니다. 로그인된 사이트에서 AI가 대신 누르는 것이라, 결제나 메일 보내기처럼 되돌리기 어려운 일은 맡기지 않습니다.</p>
+        <p>Claude in Chrome은 2026년 8월 26일에 정식으로 나왔고, Claude 유료 요금제(Pro 이상)에서 씁니다. ChatGPT는 데스크톱 앱의 설정에서 Computer Use 항목의 Chrome 확장을 설치한 뒤, 대화창에서 @Chrome으로 부릅니다. 둘 다 제가 로그인한 크롬에서 그대로 일합니다. ChatGPT의 확장으로 컴퓨터에 있는 파일을 사이트에 올리려면, 크롬의 확장 프로그램 관리 화면에서 이 확장의 「파일 URL에 대한 액세스 허용」을 켜야 합니다. OpenAI 안내에는 Plus 이상 요금제에 들어 있다고 적혀 있고, 무료와 Go 요금제에서 되는지는 적혀 있지 않습니다.</p>
+        <p>로그인된 사이트에서 AI가 대신 누르는 것이라, 결제나 메일 보내기처럼 되돌리기 어려운 일은 맡기지 않습니다. 웹 페이지 안에 AI를 속이려는 글이 숨어 있을 수도 있어서, 처음 가는 사이트에서는 한 단계씩 확인합니다.</p>
+        <p>Meshy 무료 요금제는 한 달 100크레딧이고, 무료로 받을 수 있는 모형은 가벼운 모델(Meshy 6 Lite)로 만든 것 한 달 10개까지입니다. 무료로 만든 모형은 Meshy를 출처로 밝히고 씁니다(CC BY 4.0). Meshy는 만 14세 이상이 쓰는 서비스라서, 학생에게 직접 시키지 않고 제가 만들어 수업에 넣습니다. 모두 2026년 9월 안내 기준입니다.</p>
       </div>
     </div>
   </div>
@@ -525,12 +595,51 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <div class="tscroll"><table>
         <thead><tr><th></th><th>무료</th><th>월 3만 원 안팎</th><th>월 15만 원 이상</th></tr></thead>
         <tbody>
-          <tr><td><b>ChatGPT</b></td><td>채팅, Codex 조금</td><td>Plus 29,000원 · Codex 앱·웹·터미널</td><td>Pro 159,000원부터</td></tr>
+          <tr><td><b>ChatGPT</b></td><td>채팅, <button class="morebtn" type="button" data-more="codexMore" aria-expanded="false" aria-controls="codexMore">Codex 조금 ⓘ</button></td><td>Plus 29,000원 · <button class="morebtn" type="button" data-more="codexMore" aria-expanded="false" aria-controls="codexMore">Codex 앱·웹·터미널 ⓘ</button></td><td>Pro 159,000원부터</td></tr>
           <tr><td><b>Claude</b></td><td>채팅, 아티팩트 미리보기 (Code 탭 없음)</td><td>Pro 22달러 · Code 탭, Claude in Chrome</td><td>Max 110달러·220달러</td></tr>
           <tr><td><b>Google</b></td><td>Gemini 캔버스, Antigravity</td><td>AI Pro 29,000원</td><td>AI Ultra 119,000원부터</td></tr>
           <tr><td><b>SenGPT</b></td><td colspan="3">서울 교원 학교 계정으로 쓰고, 개인 결제는 없습니다. 월 사용량 한도가 있습니다.</td></tr>
         </tbody>
       </table></div>
+      <div class="morebox" id="codexMore" hidden>
+        <div class="mb-h"><b>「Codex 조금」은 무슨 뜻인가요</b><button class="x" type="button" data-more="codexMore" aria-label="설명 닫기">✕</button></div>
+        <p>ChatGPT 무료와 Go 요금제에서도 Codex를 씁니다. 다만 ChatGPT 데스크톱 앱 안에서, 가장 가벼운 모델인 GPT-6 Luna로만 됩니다. 몇 번까지 되는지는 공개된 숫자가 없고, OpenAI는 간단한 코딩 작업용이라고 적어 두었습니다. 웹에서 돌리는 Codex(클라우드)는 무료와 Go에서 쓸 수 없습니다.</p>
+        <p>Plus부터는 웹, 터미널, 코드 편집기에서도 쓰고, 더 똑똑한 GPT-6 Sol과 Astra를 고를 수 있습니다. 한도는 5시간마다 다시 채워지는 몫과 한 주 몫이 있고, 네 자리가 한도를 함께 나눠 씁니다. 따로 있던 Codex 앱은 2026년 7월에 ChatGPT 데스크톱 앱 안으로 합쳐졌습니다.</p>
+        <div class="dg" aria-label="Codex가 일하는 네 자리. 앱, 터미널, 코드 편집기는 내 컴퓨터의 폴더에서, 클라우드는 OpenAI의 컴퓨터에서 GitHub 저장소로 일합니다">
+          <div class="dg-g2">
+            <div class="dg-panel">
+              <span class="dg-t">내 컴퓨터에서 · 내 폴더의 파일을 고칩니다</span>
+              <div class="cx-list">
+                <div class="dg-node"><svg class="ic"><use href="#i-app"/></svg><b>데스크톱 앱</b><small>ChatGPT 앱의 Codex · 무료도 됩니다</small></div>
+                <div class="dg-node"><svg class="ic"><use href="#i-terminal"/></svg><b>터미널</b><small>Codex CLI · 검은 창에 글로 시킵니다</small></div>
+                <div class="dg-node"><svg class="ic"><use href="#i-code"/></svg><b>코드 편집기</b><small>VS Code 같은 편집기의 확장</small></div>
+              </div>
+              <div class="dg-vwire"><i></i></div>
+              <div class="dg-node on"><svg class="ic"><use href="#i-folder"/></svg><b>내 폴더</b><small>GitHub 없이도 됩니다</small></div>
+            </div>
+            <div class="dg-panel">
+              <span class="dg-t">OpenAI의 컴퓨터에서 · GitHub 저장소를 가져가 일합니다</span>
+              <div class="dg-flow">
+                <div class="dg-node"><svg class="ic"><use href="#i-repo"/></svg><b>GitHub 저장소</b><small>연결한 곳만 봅니다</small></div>
+                <div class="dg-wire"><i></i></div>
+                <div class="dg-node on"><svg class="ic"><use href="#i-cloud"/></svg><b>클라우드</b><small>웹의 Codex · Plus부터</small></div>
+              </div>
+              <div class="dg-vwire"><em>바뀐 내용을 보내옴</em><i style="--dl:.8s"></i></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-check"/></svg><b>제가 보고 합치기</b><small>노트북을 덮어도 일은 이어집니다</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="tscroll"><table>
+          <thead><tr><th>자리</th><th>코드가 도는 곳</th><th>보는 파일</th><th>GitHub</th><th>무료</th></tr></thead>
+          <tbody>
+            <tr><td><b>데스크톱 앱</b><br><span class="small">ChatGPT 앱의 Codex</span></td><td>내 컴퓨터</td><td>연 폴더</td><td>없어도 됨</td><td>됨 (GPT-6 Luna)</td></tr>
+            <tr><td><b>웹 · 클라우드</b><br><span class="small">chatgpt.com의 Codex</span></td><td>OpenAI의 컴퓨터</td><td>연결한 GitHub 저장소</td><td>있어야 함</td><td>안 됨</td></tr>
+            <tr><td><b>터미널</b><br><span class="small">Codex CLI</span></td><td>내 컴퓨터</td><td>명령을 친 폴더</td><td>없어도 됨</td><td>안내 없음</td></tr>
+            <tr><td><b>코드 편집기</b><br><span class="small">VS Code 등의 확장</span></td><td>내 컴퓨터</td><td>열어 둔 파일</td><td>없어도 됨</td><td>안내 없음</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small">2026년 9월 30일 OpenAI 안내 기준입니다. 무료 요금제에서 터미널과 코드 편집기가 되는지는 안내에 따로 적혀 있지 않습니다.</p>
+      </div>
       <p class="small">2026년 9월 30일 한국 결제 화면 기준입니다. Claude는 달러로 결제되고 부가세가 포함된 값입니다. 그 사이에 ChatGPT Go(월 13,000원), Google AI Plus(월 7,500원) 같은 가벼운 요금제도 있습니다.</p>
       <div class="detail">
         <p>유료 요금제는 5시간마다 다시 채워지는 한도와 한 주 동안 쓸 수 있는 한도가 함께 있습니다. ChatGPT Plus의 Codex와 Claude Pro 모두 그렇습니다. 저는 매달 3만 원에서 15만 원 사이의 요금제를 씁니다. 그 이야기는 뒤의 드릴 말씀에서 다시 하겠습니다.</p>
@@ -540,6 +649,26 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <div class="blk">
       <p class="kw">토큰은 AI가 읽고 쓰는 조각입니다</p>
       <p class="brief">요금제 한도는 메시지 개수가 아니라, AI가 읽고 쓴 토큰의 양만큼 줄어듭니다.</p>
+      <div class="dg" style="--cyc:10s" aria-label="300줄짜리 앱을 만들고 두 번 고칠 때 AI가 새로 쓰는 양. 웹 채팅은 900줄, 데스크톱 앱은 306줄">
+        <span class="dg-t">토큰은 글을 잘게 나눈 조각입니다</span>
+        <div class="dg-tokens" aria-hidden="true"><span style="--i:0">기체</span><span style="--i:1"> 입자</span><span style="--i:2"> 상자</span><span style="--i:3">를</span><span style="--i:4"> 만들</span><span style="--i:5">어</span><span style="--i:6"> 줘</span></div>
+        <p class="dg-cap" style="margin:0 0 18px">나누는 방식은 모델마다 조금씩 다릅니다. 부탁문보다 AI가 읽고 쓰는 코드가 훨씬 길어서, 한도는 대부분 코드에서 줄어듭니다.</p>
+        <span class="dg-t">300줄짜리 앱을 만들고 두 번 고칠 때, AI가 새로 쓰는 양</span>
+        <div class="dg-rounds"><span>① 처음 만들기</span><span>② "버튼 색 바꿔 줘"</span><span>③ "글자 키워 줘"</span></div>
+        <div class="dg-bars">
+          <span class="lb">웹 채팅<small>고칠 때마다 전체를 다시</small></span>
+          <div class="track"><span class="seg w" style="--w:33.3%"></span><span class="seg w" style="--w:33.3%"></span><span class="seg w" style="--w:33.3%"></span></div>
+          <span class="num">900줄</span>
+          <span class="lb">데스크톱 앱<small>바뀐 줄만</small></span>
+          <div class="track"><span class="seg w" style="--w:33.3%"></span><span class="seg w" style="--w:.8%"></span><span class="seg w" style="--w:.8%"></span></div>
+          <span class="num">306줄</span>
+        </div>
+        <div class="dg-g2" style="margin-top:16px">
+          <div><span class="dg-t">웹 채팅이 ②와 ③에서 보내는 것</span><div class="dg-code tick"><span class="hd">index.html 전체 300줄</span><span class="ln hl" style="--lw:72%"></span><span class="ln hl" style="--lw:86%"></span><span class="ln hl" style="--lw:58%"></span><span class="ln hl" style="--lw:80%"></span><span class="ln hl" style="--lw:64%"></span><span class="ln hl" style="--lw:90%"></span><span class="ln hl" style="--lw:52%"></span><span class="ln hl" style="--lw:76%"></span><span class="ln hl" style="--lw:68%"></span><span class="ln hl" style="--lw:84%"></span></div></div>
+          <div><span class="dg-t">데스크톱 앱이 ②와 ③에서 고치는 것</span><div class="dg-code tick"><span class="hd">index.html 가운데 몇 줄</span><span class="ln" style="--lw:72%"></span><span class="ln" style="--lw:86%"></span><span class="ln" style="--lw:58%"></span><span class="ln" style="--lw:80%"></span><span class="ln hl" style="--lw:64%"></span><span class="ln" style="--lw:90%"></span><span class="ln" style="--lw:52%"></span><span class="ln" style="--lw:76%"></span><span class="ln" style="--lw:68%"></span><span class="ln" style="--lw:84%"></span></div></div>
+        </div>
+        <p class="dg-cap">앱도 고치기 전에 파일을 읽느라 토큰을 쓰지만, 새로 쓰는 양은 바뀐 줄뿐입니다. 웹 채팅에서도 "바뀐 부분만 보여 줘"라고 하면 덜 쓰지만, 그 부분을 제가 찾아서 바꿔 넣어야 합니다.</p>
+      </div>
       <div class="detail">
         <p>AI는 글을 토큰이라는 작은 조각으로 나눠 읽고 씁니다. 부탁문 몇 줄보다 AI가 읽어야 하는 코드가 훨씬 깁니다. 그래서 "파일 전체를 다시 써 줘"처럼 긴 코드를 통째로 다시 받는 부탁이 가장 많이 씁니다. 데스크톱 앱은 고칠 부분만 바꾸니 덜 쓰고, 웹 채팅은 고칠 때마다 코드 전체를 다시 받으니 더 씁니다.</p>
         <p>대화가 길어지면 AI가 앞부분을 스스로 요약해서 이어 갑니다. 요약하면서 자잘한 약속이 빠질 수 있어서, 꼭 지킬 규칙은 파일에 적어 두고 읽게 하는 편이 안전합니다. 폴더에서 일하는 도구는 파일이 남아 있으니 새 대화를 열어도 이어지고, 코드가 채팅창 안에만 있는 웹 채팅은 새 대화에서 코드를 다시 붙여야 합니다.</p>
@@ -593,11 +722,16 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <div class="blk">
       <p class="kw">구글 설문으로 보면 쉽습니다</p>
       <p class="brief">학생이 보는 설문지 화면, 응답을 받아 두는 구글의 컴퓨터, 응답이 쌓이는 시트. 셋이 각각 프론트엔드, 서버·백엔드, 데이터베이스입니다.</p>
-      <div class="fmap" aria-label="데이터가 가는 길">
-        <div class="nd"><i>프론트엔드</i><b>학생 화면</b><span>설문지</span></div><span class="ar">→</span>
-        <div class="nd"><i>서버 · 백엔드</i><b>받아 주는 곳</b><span>구글의 컴퓨터</span></div><span class="ar">→</span>
-        <div class="nd db"><i>데이터베이스</i><b>쌓이는 곳</b><span>응답 시트</span></div><span class="ar">→</span>
-        <div class="nd"><i>프론트엔드</i><b>교사 화면</b><span>응답 요약</span></div>
+      <div class="dg" aria-label="학생 화면에서 받아 주는 곳을 거쳐 쌓이는 곳과 교사 화면으로 가는 길">
+        <div class="dg-flow">
+          <div class="dg-node"><i>프론트엔드</i><svg class="ic"><use href="#i-phone"/></svg><b>학생 화면</b><small>설문지</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node"><i>서버 · 백엔드</i><svg class="ic"><use href="#i-server"/></svg><b>받아 주는 곳</b><small>구글의 컴퓨터</small></div>
+          <div class="dg-wire"><i style="--dl:.7s"></i></div>
+          <div class="dg-node db"><i>데이터베이스</i><svg class="ic"><use href="#i-db"/></svg><b>쌓이는 곳</b><small>응답 시트</small></div>
+          <div class="dg-wire"><i style="--dl:1.4s"></i></div>
+          <div class="dg-node"><i>프론트엔드</i><svg class="ic"><use href="#i-teacher"/></svg><b>교사 화면</b><small>응답 요약</small></div>
+        </div>
       </div>
       <div class="detail">
         <p>오늘 만드는 한 파일짜리 도구에는 서버가 없습니다. 화면만 있어서, 학생이 무엇을 누르든 그 기록은 학생 기기의 브라우저 안에만 저장됩니다. 학생들의 답을 제 화면으로 모으려면 받아 주는 곳과 쌓아 두는 곳, 곧 서버와 데이터베이스가 있어야 합니다.</p>
@@ -609,6 +743,32 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <div class="grid2">
         <div class="box yes"><b>서버 없이 됩니다</b><p>시뮬레이션, 퀴즈, 타이머, 칠판 강의 화면. 링크 하나로 나눠 주고, 기록은 각자 기기에만 저장됩니다.</p></div>
         <div class="box"><b>서버가 있어야 됩니다</b><p>학생 제출 모으기, 여러 기기가 같은 화면을 함께 쓰기, 다른 기기에서 이어 하기, 교사 관리 화면, AI 연결.</p></div>
+      </div>
+      <div class="dg" aria-label="서버가 없을 때와 있을 때 학생 기록이 가는 곳">
+        <div class="dg-tabs"><button type="button" data-v="no" aria-pressed="true">서버 없이</button><button type="button" data-v="yes" aria-pressed="false">서버가 있으면</button></div>
+        <div data-view="no">
+          <div class="dg-g3">
+            <div class="dg-node"><svg class="ic"><use href="#i-phone"/></svg><b>학생 1</b><small>이 기기에만 저장</small></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-phone"/></svg><b>학생 2</b><small>이 기기에만 저장</small></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-phone"/></svg><b>학생 3</b><small>이 기기에만 저장</small></div>
+          </div>
+          <div class="dg-node ghost" style="margin-top:12px"><svg class="ic"><use href="#i-teacher"/></svg><b>교사 화면</b><small>학생들의 기록이 오지 않습니다</small></div>
+        </div>
+        <div data-view="yes">
+          <div class="dg-fan">
+            <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>학생 1</b></div>
+            <div class="dg-wire w1"><i></i></div>
+            <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>학생 2</b></div>
+            <div class="dg-wire w1"><i style="--dl:.6s"></i></div>
+            <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>학생 3</b></div>
+            <div class="dg-wire w1"><i style="--dl:1.2s"></i></div>
+            <div class="dg-vwire fanv"><i></i></div>
+            <div class="dg-node db hub"><i>서버 · 데이터베이스</i><svg class="ic"><use href="#i-db"/></svg><b>한곳에 모임</b>
+              <table class="dg-tbl" style="--cyc:6s"><tr><th>누가</th><th>답</th></tr><tr class="new" style="--dl:.8s"><td>학생 1</td><td>…</td></tr><tr class="new" style="--dl:1.4s"><td>학생 2</td><td>…</td></tr><tr class="new" style="--dl:2s"><td>학생 3</td><td>…</td></tr></table></div>
+            <div class="dg-wire w2"><i style="--dl:1.6s"></i></div>
+            <div class="dg-node dst"><svg class="ic"><use href="#i-teacher"/></svg><b>교사 화면</b><small>모두 한눈에</small></div>
+          </div>
+        </div>
       </div>
       <p class="note warn">학생 정보를 모으는 순간 개인정보를 다루게 됩니다. 2026학년도부터 학교에서 쓰는 에듀테크와 소프트웨어는 학교운영위원회 심의를 거치게 되었으니, 직접 만든 앱이라도 학생 정보를 모은다면 학교의 절차를 먼저 확인합니다.</p>
       <p><a class="btn to-data" href="data.html">③ 학생 데이터·AI 연결 매뉴얼 →</a></p>
@@ -626,6 +786,15 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <p class="kw">프롬프트 엔지니어링에서, 부탁문을 부탁하기로</p>
       <p class="brief">무엇을 만들고 싶은지 대충 말하고, 코딩 AI에게 줄 부탁문을 먼저 써 달라고 합니다.</p>
       <div class="pr"><span class="pl">부탁문을 부탁하는 부탁</span><button class="btn cp" type="button">복사</button><div class="txt">나는 중학교 과학 교사야. 수업에서 [만들고 싶은 것]을 웹 페이지로 만들고 싶어. 코딩 AI에게 줄 부탁문을 써 줘. 쓰기 전에 네가 알아야 할 것을 나에게 하나씩 물어봐 줘.</div></div>
+      <div class="dg" aria-label="대충 말하면 채팅 AI가 되묻고 부탁문을 쓰고, 그 부탁문으로 코딩 AI가 만드는 흐름">
+        <div class="dg-flow">
+          <div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>나</b><small>"이런 걸 만들고 싶어"<br>대충 말하기</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-chat"/></svg><b>채팅 AI</b><small>궁금한 것을 되묻고<br>부탁문을 씀</small></div>
+          <div class="dg-wire"><em>부탁문</em><i style="--dl:1.1s"></i></div>
+          <div class="dg-node"><svg class="ic"><use href="#i-code"/></svg><b>코딩 AI</b><small>그 부탁문으로 만듦</small></div>
+        </div>
+      </div>
       <div class="detail">
         <p>몇 해 전만 해도 AI에게 역할을 정해 주고 형식을 못 박는 요령을 따로 배웠습니다. 지금 모델들은 사람 말을 훨씬 잘 알아들어서 부탁문도 잘 씁니다. 막연할 때는 부탁문부터 받아 보고, 수업에 맞지 않는 줄만 고쳐 보내면 됩니다. 어떤 부탁이든 끝에 "만들기 전에 궁금한 것을 먼저 물어봐 줘"를 붙이면 결과가 한결 나아집니다.</p>
       </div>
@@ -986,13 +1155,19 @@ const WORKS = [
   { r: 1, id: 'scienceworld', t: '과학탐험월드', tag: '중1·중2 · 통합 허브', u: 'scienceworld/science-exploration-world.html',
     d: '단원별 시뮬레이션과 가상 실험실을 한 세계 안에 모았습니다. 지금까지 만든 수업 웹앱 대부분이 여기 들어 있습니다.',
     p: '지금까지 만든 수업 페이지 링크를 단원별로 모아 보여 주는 허브를 만들어 줘. 링크 목록은 코드 맨 위 한곳에 모아 두고, 검색창을 넣어 줘.' },
+  { r: 1, id: 'clicksci', t: 'CLICK SCIENCE', tag: '중1~3 · 시뮬레이션 모음 · 개발 중', u: 'sim-lab/',
+    d: '제가 만든 과학 시뮬레이션과 가상 실험실을 교육과정 단원 순서로 모으는 곳입니다. 지금 23개 단원에 시뮬레이션 130여 개가 들어 있고, 비어 있는 단원의 실험실을 하나씩 새로 만들고 있습니다.',
+    p: '내가 만든 과학 시뮬레이션 링크들을 교육과정 단원 순서로 모아 보여 주는 갤러리를 만들어 줘. 목록은 코드 맨 위 한곳에 모으고, 학년과 과목으로 거르는 단추와 검색창을 넣어 줘.' },
   { r: 2, id: 'sparkle', t: '놀러오세요 전기의 숲', tag: '중2 · 전기와 자기', u: 'electricity/sparkle-island/',
     d: '숲 주민들의 부탁을 해결하며 전류, 전압, 저항과 회로를 탐구하는 게임입니다. 나만의 탐험일지가 채워집니다.',
     p: '[단원] 개념을 탐구하는 게임을 만들고 싶어. 마을 주민의 부탁을 하나씩 해결하면 개념이 하나씩 쌓이는 구조로, 부탁 목록과 장면 순서부터 표로 짜 줘. 코드는 아직 쓰지 마.' },
   { r: 2, id: 'lemon', t: '레몬 백작의 부탁', tag: '고1 통합과학 · 산과 염기', u: 'science-islands/lemon-island/',
     d: '레몬 왕국 아이들에게 번진 중화병을 두 연구자의 조수가 되어 풀어 가는 3D 탐험 게임입니다. 겨울쌤의 수업 「레몬 백작의 부탁」을 바탕으로 만들었습니다.',
     p: '[단원] 개념을 이야기로 푸는 탐험 게임을 만들고 싶어. 이야기 줄거리와 장면 목록부터 표로 짜 줘. 코드는 아직 쓰지 마.' },
-  { r: 2, id: 'gameworld', t: '클래스 게임 월드', tag: '학급 · 남는 5분', u: 'brain-break-lab/',
+  { r: 2, id: 'ecocity', t: 'NET ZERO ECO-CITY', tag: '고1 통합과학 · 과학을 잇다', u: 'ai-science-it/',
+    d: '탄소 중립 도시를 설계할 근거를 모으며 3D 마을을 돌아다니는 탐구 게임입니다. 노동규 선생님의 수업 시나리오를 바탕으로 만들었고, 건물 3D 모형 일부는 Meshy로 만들었습니다.',
+    p: '[단원] 탐구 활동을 3D 마을을 돌아다니며 하는 게임으로 만들고 싶어. 마을 지도, 장소마다 할 탐구, 학생이 모을 기록을 표로 먼저 짜 줘. 코드는 아직 쓰지 마.' },
+  { r: 2, id: 'gameworld', t: 'CLASS GAME WORLD', tag: '학급 · 남는 5분 · brain-break-lab', u: 'brain-break-lab/sonic.html',
     d: '남는 5분, 학급 행사, 수업 전환에 바로 띄우는 교실 미니게임 모음입니다. 전자칠판 화면에 맞췄고 준비물이 없습니다.',
     p: '전자칠판에 띄우는 교실 미니게임을 만들어 줘. [게임 규칙]. 버튼 하나로 시작하고, 글씨는 교실 뒤에서도 보이게 크게 해 줘.' },
   { r: 2, id: 'goldenbell', t: '도전 골든벨', tag: '수업 도입', u: 'class-tools/goldenbell/',
@@ -1010,6 +1185,9 @@ const WORKS = [
   { r: 3, id: 'stamp', t: '과학 칭찬 도장판', tag: '학급 · 서버', u: 'class-tools/stamp-board/',
     d: '학생에게는 캐릭터를 키우는 도장판이고, 교사에게는 30초 만에 끝나는 관찰 기록부입니다. 다른 선생님이 각자 설치해 쓰시는 판도 있습니다.',
     p: '학생마다 칭찬 도장을 모으는 도장판을 만들고 싶어. 기록이 여러 기기에서 이어져야 하니 서버를 어떻게 붙여야 하는지, 학생 정보는 무엇을 저장하지 말아야 하는지부터 알려 줘.' },
+  { r: 3, id: 'classkit', t: '우리 반 도구 꾸러미', tag: '다른 선생님용 · 설치 안내', u: 'class-kit/setup/guide.html',
+    d: '질문나무(해누리 질문 과수원의 다른 학교판), 칭찬 도장판, 진도 트래커를 다른 선생님이 각자의 Supabase에 설치해 쓰시도록 정리한 판입니다. 학교 이름과 색, 도장판의 역량 이름은 설정 파일(config.js) 하나에서 바꿉니다.',
+    p: '내가 만든 앱을 다른 선생님도 각자 설치해 쓰실 수 있게 나누고 싶어. 선생님마다 바꿔야 하는 값(학교 이름, 서버 주소와 키, 색)을 설정 파일 하나에 모으고, 설치 순서를 차례로 안내하는 페이지를 만들어 줘.' },
   { r: 3, id: 'mbl', t: 'MBL 센서 수업 허브', tag: '실험 · 서버', u: 'mblclasshub/',
     d: '센서로 모은 모둠 데이터를 한 화면에 모아 비교합니다. 참여 코드 6자리로 학생이 들어오고, 교사 화면과 발표 화면이 따로 있습니다.',
     p: '모둠별 실험 측정값을 입력하면 우리 반 전체 결과가 그래프 하나에 모이는 페이지를 만들고 싶어. 학생 이름 없이 모둠 번호로만 받게 하고, 필요한 서버부터 설명해 줘.' },
@@ -1019,6 +1197,10 @@ const WORKS = [
   { r: 4, id: 'worksheet', t: '학습지 스튜디오', tag: '교사 · A4 학습지', u: 'teacher-toolkit/worksheet-studio/',
     d: '수업 내용을 블록으로 조립해 A4 학습지를 만듭니다. 교사용 원본 하나에서 학생용과 정답지를 한 번에 뽑고, [AI로 만들기]에서 AI가 써 준 학습지 파일(JSON)을 붙여넣으면 바로 조판됩니다.',
     p: '학습지 스튜디오의 [AI로 만들기]에 있는 설계서를 채워서 AI에게 주고, 받은 결과를 다시 스튜디오에 붙여넣어 학습지로 만들어 보자.' },
+  { r: 4, id: 'ws-elec', t: '전기와 자기 개념정리 학습지', tag: '중2 · 학습지 스튜디오로 만든 것', u: 'growing-teachers/vibecoding/ws/elec-ws1.pdf',
+    more: [['학습지 1 · 마찰 전기', 'growing-teachers/vibecoding/ws/elec-ws1.pdf'], ['학습지 2 · 정전기 유도', 'growing-teachers/vibecoding/ws/elec-ws2.pdf'], ['학습지 3 · 전류·전압·저항', 'growing-teachers/vibecoding/ws/elec-ws3.pdf'], ['학습지 4 · 옴의 법칙', 'growing-teachers/vibecoding/ws/elec-ws4.pdf'], ['학습지 5 · 직렬·병렬 연결', 'growing-teachers/vibecoding/ws/elec-ws5.pdf'], ['학습지 6 · 전기 에너지의 전환', 'growing-teachers/vibecoding/ws/elec-ws6.pdf'], ['한 장 정리 · 옴의 법칙과 연결', 'growing-teachers/vibecoding/ws/elec-summary.pdf']],
+    d: '학습지 스튜디오로 만든 전기와 자기 단원 개념정리 학습지 여섯 장과 한 장 정리입니다. 직렬·병렬과 소비 전력 강의 화면은 학습지 5와 6의 빈칸에 한 장씩 맞췄습니다. 스튜디오가 정답지도 함께 만들어 주지만, 여기에는 학생용만 올렸습니다.',
+    p: '첨부한 학습지의 빈칸을 위에서부터 ①, ②, ③ 순서로 번호를 매기고, 빈칸마다 정답과 그 빈칸이 들어 있는 문장을 표로 정리해 줘.' },
   { r: 4, id: 'curriculum', t: '과학 교육과정 나선지도', tag: '교사 · 교육과정', u: 'teacher-toolkit/science-curriculum-map/',
     d: '2022 개정 과학과 초3~고3의 108개 단원을 지하철 노선도로 펼쳤습니다. 단원을 누르면 성취기준과 해설, 앞뒤 학습 연계가 나옵니다.',
     p: '내가 가르치는 단원들을 학년 순서대로 잇는 노선도를 만들어 줘. 단원 목록과 연결은 코드 맨 위 목록에 넣고, 역을 누르면 설명이 나오게 해 줘.' },
@@ -1028,6 +1210,12 @@ const WORKS = [
   { r: 4, id: 'pdf', t: 'PDF 만능 도구', tag: '교사 · 업무', u: 'class-tools/pdf-tool/',
     d: '병합, 분할, 압축, 쪽번호, 워터마크, 글자 추출까지 열한 가지를 합니다. 파일이 컴퓨터 밖으로 나가지 않습니다.',
     p: '여러 PDF를 하나로 합치는 페이지를 만들어 줘. 파일은 서버로 보내지 말고 브라우저 안에서만 처리해 줘.' },
+  { r: 4, id: 'board', t: '해누리 알리미 · 교실 공지 보드', tag: '학교 · 교실 전자칠판 · 서버', u: 'class-tools/notice-board/?demo=1&class=2-3',
+    d: '학교 모든 교실의 전자칠판에 늘 켜 두는 공지 화면입니다. 선생님들이 관리 화면에서 공지, 학생 호출, 평가 일정을 올리면 그 반 화면에 바로 뜨고, 시간표와 급식, 날씨도 함께 보여 줍니다. 사진과 링크는 예시 자료 화면입니다.',
+    p: '교실 전자칠판에 늘 띄워 두는 공지 화면을 만들고 싶어. 선생님이 관리 화면에서 올린 공지가 반별 화면에 바로 뜨게 하려면 어떤 서버와 표가 필요한지부터 설명해 줘. 학생 이름을 화면에 어떻게 줄여 보여 줄지도 같이 정하자.' },
+  { r: 4, id: 'todays', t: '오늘의 해누리', tag: '교직원 · 아침 알림장 · 서버', u: 'todays-haenuri/',
+    d: '선생님 컴퓨터를 켜면 저절로 뜨는 교직원용 아침 알림장입니다. 오늘의 행사와 회의, 제출 기한, 부서별 안내, 급식과 급식지도 당번, 학사 일정을 한 화면에 모았습니다. 사진은 지어낸 예시 자료로 그린 화면입니다.',
+    p: '교직원이 아침에 컴퓨터를 켜면 오늘 챙길 일(행사, 제출 기한, 부서 안내, 급식)을 한 화면에 보여 주는 알림장을 만들고 싶어. 로그인한 교직원만 보게 하려면 무엇이 필요한지부터 알려 줘.' },
   { r: 4, id: 'gth', t: 'GiteacherHub', tag: '연수 · 나눔', u: 'growing-teachers/giteacherhub/',
     d: '선생님들이 바이브코딩으로 만든 교실 앱을 올리고 서로 열어 보는 보관함입니다. 오늘 나눔 시간에 씁니다.',
     p: '선생님들이 만든 HTML 파일을 올리고 서로 열어 볼 수 있는 보관함을 만들고 싶어. 다른 사람이 올린 파일을 안전하게 미리 보려면 무엇을 조심해야 하는지부터 알려 줘.' }
@@ -1160,5 +1348,6 @@ renderGallery();
 /* 처음 한 번: 저장된 도구 불러오기 */
 (function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
 </script>
+<script src="dg.js"></script>
 </body>
 </html>

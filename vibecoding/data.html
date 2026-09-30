@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>③ 학생 데이터·AI 연결 · 바이브코딩 연수 · 해누리중 조승재</title>
-<meta name="description" content="내 앱에 Supabase를 붙여 학생 제출을 모으고, AI API를 키를 숨긴 채 연결하는 60분 매뉴얼. 프론트엔드·백엔드·API·환경변수·CORS를 학교에 빗댄 용어 사전, 회사별 결제 한도 거는 법, 키 유출 대응, 학생에게 내놓기 전 다섯 가지 점검을 정리했습니다.">
+<meta name="description" content="내 앱에 Supabase를 붙여 학생 제출을 모으고, AI API를 키를 숨긴 채 연결하는 60분 매뉴얼. 프론트엔드·백엔드·API·환경변수·CORS를 앱 하나를 뜯어 보며 익히는 그림, Supabase를 쓰는 까닭, 회사별 결제 한도 거는 법, 키 유출 대응, 학생에게 내놓기 전 다섯 가지 점검을 정리했습니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="dg.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
    연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
@@ -272,6 +273,51 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
 .provtbl td:nth-child(2){min-width:9em}
 .shot.span2{grid-row:span 2}
 .shot.span3{grid-row:span 3}
+
+/* 과정마다 '왜' */
+.steps .why{display:block;margin-top:6px;font-size:.88em;color:var(--ink2);line-height:1.5}
+.steps .why::before{content:"왜 · ";color:var(--blue);font-weight:600}
+html[data-mode="present"] .steps .why{display:none}
+.cmp td:first-child{white-space:nowrap}
+.cmp td{font-size:.92em}
+
+/* 앱 한 벌 뜯어 보기 */
+.anat{display:grid;grid-template-columns:minmax(122px,1.1fr) 40px minmax(110px,1fr) 40px minmax(132px,1.2fr) 40px minmax(100px,.95fr);grid-template-rows:auto 30px auto auto;row-gap:12px;align-items:center}
+.anat>*{position:relative;z-index:1}
+.anat .grp{grid-column:3/6;grid-row:1/5;align-self:stretch;z-index:0;border:1.5px dashed #c9ced6;border-radius:var(--r3);margin:-8px -10px;background:#fbfbfd;transition:border-color .35s,background-color .35s,opacity .35s}
+.anat .grp b{position:absolute;top:10px;left:14px;right:10px;font-size:.8rem;color:var(--ink2);font-weight:600}
+.anat .grp b small{display:block;font-weight:400;color:var(--ink3);font-size:.72rem;margin-top:2px}
+.dg[data-steps].stepping .anat .grp.hit{border-color:var(--dgc);background:var(--blue-t)}
+.anat .host{grid-column:1;grid-row:1}
+.anat .hv{grid-column:1;grid-row:2;height:100%;margin:0 auto}
+.anat .app{grid-column:1;grid-row:3/5;align-self:stretch}
+.anat .w1{grid-column:2;grid-row:3}
+.anat .be{grid-column:3;grid-row:3}
+.anat .w2{grid-column:4;grid-row:3}
+.anat .dbn{grid-column:5;grid-row:3}
+.anat .w3{grid-column:6;grid-row:3}
+.anat .tv{grid-column:7;grid-row:3}
+.anat .w4{grid-column:2;grid-row:4}
+.anat .fn{grid-column:3;grid-row:4}
+.anat .w5{grid-column:4/7;grid-row:4}
+.anat .ai{grid-column:7;grid-row:4}
+.anat .dg-wire{flex:none;width:auto;margin:0}
+.anat .dg-chip{margin-top:4px}
+.anat .mini{display:grid;gap:3px;width:100%;margin-top:6px;font-size:.7rem;text-align:left}
+.anat .mini span{display:flex;justify-content:space-between;gap:6px;border:1px solid var(--line);border-radius:5px;padding:2px 6px;background:#fff;color:var(--ink2)}
+.anat .mini span em{font-style:normal;color:var(--ink)}
+.anat .mini .go{justify-content:center;background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.anat .dg-tbl{font-size:.68rem;margin-top:6px}
+.anat .dg-tbl th,.anat .dg-tbl td{padding:2px 5px}
+@media (max-width:720px){
+  .anat{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .anat .grp{display:none}
+  .anat .dg-wire{width:2px;height:30px;align-self:center;margin:4px 0}
+  .anat .dg-wire::before{right:auto;top:auto;bottom:-1px;left:-4px;border:5px solid transparent;border-top:7px solid var(--line);border-bottom:0}
+  .anat .dg-wire>i{left:-4px;top:0;animation-name:dgV}
+  .anat .dg-wire em{left:12px;bottom:auto;top:50%;transform:translateY(-50%)}
+  .anat .hv{height:30px}
+}
 </style>
 </head>
 <body>
@@ -338,35 +384,84 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
 <section class="step" id="s1" data-title="말 익히기" data-min="8">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>딱 여기까지만 알면 되는 말</h2><span class="min"><b>8</b>분</span></div>
-    <p class="goal">AI를 연결한 웹 페이지를 만들 때 만나는 말들을 학교에 빗대어 보겠습니다!</p>
+    <p class="goal">AI를 연결한 웹 앱을 만들 때 만나는 말들을, 앱 하나를 뜯어 보며 익혀보겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">학교에 빗대면 쉽습니다</p>
-      <p class="brief">학생이 보는 교실, 학생이 못 들어오는 교무실, 교무실 창구의 신청서, 금고 속 법인카드로 봅니다.</p>
-      <div class="gl">
-        <div class="g"><b>프론트엔드</b><i>교실 칠판</i><p>학생 기기에 보이는 화면입니다. 오늘 만든 index.html이 여기에 해당합니다.</p><small>GitHub Pages에 올린 앱</small></div>
-        <div class="g"><b>백엔드</b><i>교무실</i><p>학생 눈에 보이지 않는 곳에서 저장하고, 확인하고, 대신 부탁하는 쪽입니다.</p><small>Supabase</small></div>
-        <div class="g"><b>서버</b><i>교무실이 있는 건물</i><p>24시간 켜져 있는 남의 컴퓨터입니다. 백엔드가 여기서 돌아갑니다.</p><small>Supabase, Render</small></div>
-        <div class="g"><b>데이터베이스 (DB)</b><i>기록 캐비닛</i><p>표 모양으로 기록이 쌓이는 곳입니다. 줄 하나가 제출 하나입니다.</p><small>Supabase의 표</small></div>
-        <div class="g"><b>API</b><i>교무실 창구의 신청서 양식</i><p>정해진 양식으로 부탁하면 정해진 모양으로 답이 오는 약속입니다.</p><small>Supabase API, AI 회사의 API</small></div>
-        <div class="g"><b>API 키</b><i>학생증과 법인카드</i><p>창구에 내미는 증표입니다. Supabase의 publishable 키는 학생증처럼 보여도 되고, secret 키와 AI 회사의 키는 법인카드라 보이면 안 됩니다.</p><small>3단계, 5단계</small></div>
-        <div class="g"><b>환경변수</b><i>교무실 금고</i><p>비밀 키를 코드에 적지 않고 서버의 금고에 넣어 두고, 이름으로만 꺼내 씁니다.</p><small>Edge Function의 Secrets</small></div>
-        <div class="g"><b>RLS</b><i>캐비닛 서랍마다 붙인 규칙</i><p>표마다 누가 넣고, 읽고, 고칠 수 있는지 정하는 규칙입니다. 오늘은 "학생은 넣기만"입니다.</p><small>3단계</small></div>
-        <div class="g"><b>Edge Function</b><i>교무실 심부름꾼</i><p>서버에서 돌아가는 작은 함수입니다. 금고의 키로 AI에게 대신 묻고, 답만 돌려줍니다.</p><small>5단계</small></div>
-        <div class="g"><b>CORS</b><i>"우리 교실에서 온 신청서만 읽게 한다"</i><p>브라우저에게 어느 주소의 페이지가 답을 읽어도 되는지 알려 주는 규칙입니다. 브라우저만 지키는 규칙이라 자물쇠는 아닙니다.</p><small>5단계</small></div>
-        <div class="g"><b>GitHub · GitHub Pages</b><i>원본 보관함과 그 앞 게시판</i><p>코드를 보관하고, 누구나 여는 주소로 걸어 줍니다. 서버 코드는 돌리지 못합니다.</p><small>② 배포</small></div>
-        <div class="g"><b>Netlify · Vercel</b><i>게시판에 심부름꾼까지</i><p>페이지를 걸어 주면서 작은 함수도 돌려 줍니다. 비밀 키는 환경변수로 넣습니다.</p><small>Supabase 대신 쓸 때</small></div>
-        <div class="g"><b>Render</b><i>교무실을 통째로 빌려주는 곳</i><p>서버 프로그램을 계속 켜 두는 곳입니다. 무료는 15분 동안 아무도 안 부르면 잠들고, 깨어나는 데 1분쯤 걸립니다.</p><small>Supabase 대신 쓸 때</small></div>
+      <p class="kw">「실험 결과 제출함」 하나로 봅니다</p>
+      <p class="brief">모둠이 측정값과 결론을 내면 교사 화면에 모이고, AI가 결론에 피드백 초안을 붙이는 앱입니다. 이 매뉴얼에서 만드는 앱이기도 합니다.</p>
+      <div class="dg" data-steps data-auto="5200" aria-label="실험 결과 제출함 앱의 부품. 단계를 누르면 해당 부품이 켜집니다">
+        <div class="anat">
+          <div class="grp" data-s="2"><b>Supabase · 서버<small>24시간 켜져 있는 남의 컴퓨터</small></b></div>
+          <div class="dg-node host" data-s="10"><i>배포</i><svg class="ic"><use href="#i-globe"/></svg><b>GitHub Pages</b><small>앱 파일이 있는 주소</small></div>
+          <div class="dg-vwire hv" data-s="10"><i></i></div>
+          <div class="dg-node app" data-s="1 5 6"><i>프론트엔드</i><svg class="ic"><use href="#i-phone"/></svg><b>학생 화면</b><small>index.html</small>
+            <div class="mini" aria-hidden="true"><span>모둠 <em>3</em></span><span>부피 <em>42 mL</em></span><span>결론 <em>누르면 줄었다</em></span><span class="go">제출</span></div>
+            <span class="dg-chip key" data-s="6">sb_publishable_…</span></div>
+          <div class="dg-wire w1" data-s="5"><i></i></div>
+          <div class="dg-node be" data-s="3 5 7"><i>백엔드</i><svg class="ic"><use href="#i-shield"/></svg><b>받아서 확인</b><small>규칙대로 넣고 꺼냄</small><span class="dg-chip blue" data-s="7">RLS · 학생은 넣기만</span></div>
+          <div class="dg-wire w2" data-s="3 7"><i style="--dl:.7s"></i></div>
+          <div class="dg-node db dbn" data-s="4"><i>데이터베이스</i><b>submissions 표</b>
+            <table class="dg-tbl" style="--cyc:7s"><tr><th>모둠</th><th>부피</th><th>결론</th></tr><tr><td>1</td><td>45</td><td>…</td></tr><tr class="new" style="--dl:1.2s"><td>3</td><td>42</td><td>…</td></tr></table></div>
+          <div class="dg-wire w3" data-s="4 7"><i style="--dl:1.4s"></i></div>
+          <div class="dg-node tv" data-s="4 7"><i>프론트엔드</i><svg class="ic"><use href="#i-teacher"/></svg><b>교사 화면</b><small>Table Editor</small></div>
+          <div class="dg-wire w4" data-s="8 9"><i style="--dl:.4s"></i></div>
+          <div class="dg-node fn" data-s="6 8 9"><i>Edge Function</i><svg class="ic"><use href="#i-lock"/></svg><b>대신 묻는 함수</b><span class="dg-chip key" data-s="6 8">금고 속 AI 키</span><span class="dg-chip blue" data-s="9">CORS · 내 앱 주소만</span></div>
+          <div class="dg-wire w5" data-s="8"><em>AI 키를 붙여 대신 물음</em><i style="--dl:1.1s"></i></div>
+          <div class="dg-node ai" data-s="8"><i>AI 회사</i><svg class="ic"><use href="#i-ai"/></svg><b>AI의 API</b><small>답만 돌려줌</small></div>
+        </div>
+        <div class="dg-say">
+          <p data-say="0"><b>「실험 결과 제출함」 한 벌</b><span>아래 단계를 누르거나 [차례로 보기]를 누르면, 그 말에 해당하는 부품이 켜집니다.</span></p>
+          <p data-say="1"><b>프론트엔드</b><span>학생 기기에 보이는 화면입니다. 이 앱에서는 모둠 번호, 부피, 결론을 적고 [제출]을 누르는 index.html 한 파일입니다. 이 파일은 학생 기기의 브라우저로 내려가서 실행되므로, 파일에 적힌 글자는 누구나 F12로 볼 수 있습니다.</span></p>
+          <p data-say="2"><b>서버</b><span>24시간 켜져 있는 남의 컴퓨터입니다. 학생 기기가 꺼져도 제출을 받아 둘 곳이 있어야 해서 필요합니다. 이 앱에서는 Supabase가 서버를 빌려줍니다.</span></p>
+          <p data-say="3"><b>백엔드</b><span>서버에서 돌아가는 프로그램입니다. 들어온 제출을 규칙대로 확인해 표에 넣고, 볼 수 있는 사람에게만 꺼내 줍니다. 학생 눈에는 보이지 않습니다.</span></p>
+          <p data-say="4"><b>데이터베이스</b><span>제출이 한 줄씩 쌓이는 표입니다. 이 앱에서는 submissions 표에 모둠 번호, 부피, 결론, 낸 시각이 한 줄로 들어갑니다. 교사 화면은 이 표를 읽어 보여 줍니다.</span></p>
+          <p data-say="5"><b>API</b><span>앱이 백엔드에게 부탁하는 약속된 주소와 양식입니다. [제출]을 누르면 앱이 프로젝트 주소 뒤의 /rest/v1/submissions 로 "이 줄을 넣어 줘"라는 요청을 보냅니다.</span></p>
+          <p data-say="6"><b>API 키</b><span>요청에 붙이는 출입증입니다. 앱에 넣는 publishable 키는 누구나 볼 수 있다고 보고 쓰고, 표를 지키는 일은 규칙(RLS)이 합니다. AI 회사의 키는 쓴 만큼 결제되므로 앱에 넣지 않고 함수의 금고에 넣습니다.</span></p>
+          <p data-say="7"><b>RLS</b><span>표마다 거는 규칙입니다. 이 앱은 "학생은 넣기만, 읽기는 교사만"입니다. SQL로 만든 표는 RLS를 따로 켜야 하고, 켜지 않으면 publishable 키를 가진 누구나 모든 줄을 읽고 고칠 수 있습니다.</span></p>
+          <p data-say="8"><b>Edge Function · 환경변수</b><span>서버에서 도는 작은 함수입니다. 금고(Secrets)에 넣은 AI 키를 이름으로 꺼내 AI에게 대신 묻고, 답만 앱으로 돌려줍니다. 이렇게 코드 밖 금고에 넣고 이름으로 꺼내 쓰는 값을 환경변수라고 합니다.</span></p>
+          <p data-say="9"><b>CORS</b><span>함수가 브라우저에게 "이 주소의 페이지만 내 답을 읽어도 된다"고 알려 주는 허락입니다. 이 앱의 함수는 내 앱 주소만 허락합니다. 브라우저만 지키는 규칙이라 호출 횟수 제한을 함께 겁니다.</span></p>
+          <p data-say="10"><b>GitHub · 배포</b><span>앱 파일을 보관하고, 누구나 여는 주소로 걸어 주는 곳입니다. GitHub Pages는 파일만 걸어 주고 서버 코드는 돌리지 못해서, 서버 일은 Supabase가 맡습니다.</span></p>
+        </div>
+      </div>
+      <div class="detail">
+        <p>말 뜻을 한 번에 보면 이렇습니다.</p>
+      </div>
+      <div class="gl detail">
+        <div class="g"><b>프론트엔드</b><i>이 앱에서는 학생 화면 index.html</i><p>학생 기기에 보이는 화면입니다. 브라우저로 내려가 실행되므로 누구나 코드를 볼 수 있습니다.</p><small>GitHub Pages에 올린 앱</small></div>
+        <div class="g"><b>백엔드</b><i>이 앱에서는 제출을 받아 확인하는 쪽</i><p>보이지 않는 곳에서 저장하고, 확인하고, 대신 부탁하는 쪽입니다.</p><small>Supabase</small></div>
+        <div class="g"><b>서버</b><i>이 앱에서는 Supabase가 빌려준 컴퓨터</i><p>24시간 켜져 있는 남의 컴퓨터입니다. 백엔드가 여기서 돌아갑니다.</p><small>Supabase, Render</small></div>
+        <div class="g"><b>데이터베이스 (DB)</b><i>이 앱에서는 submissions 표</i><p>표 모양으로 기록이 쌓이는 곳입니다. 줄 하나가 제출 하나입니다.</p><small>Supabase의 표</small></div>
+        <div class="g"><b>API</b><i>이 앱에서는 /rest/v1/submissions 주소</i><p>정해진 주소와 양식으로 부탁하면 정해진 모양으로 답이 오는 약속입니다.</p><small>Supabase API, AI 회사의 API</small></div>
+        <div class="g"><b>API 키</b><i>이 앱에서는 publishable 키와 AI 키</i><p>요청에 붙이는 출입증입니다. publishable 키는 앱에 넣어도 되고, secret 키와 AI 회사의 키는 앱에 넣지 않습니다.</p><small>3단계, 5단계</small></div>
+        <div class="g"><b>환경변수</b><i>이 앱에서는 금고 속 OPENAI_API_KEY</i><p>비밀 키를 코드에 적지 않고 서버의 금고에 넣은 뒤, 이름으로만 꺼내 씁니다.</p><small>Edge Function의 Secrets</small></div>
+        <div class="g"><b>RLS</b><i>이 앱에서는 학생은 넣기만, 읽기는 교사만</i><p>표마다 누가 넣고, 읽고, 고칠 수 있는지 정하는 규칙입니다.</p><small>3단계</small></div>
+        <div class="g"><b>Edge Function</b><i>이 앱에서는 AI에게 대신 묻는 함수</i><p>서버에서 돌아가는 작은 함수입니다. 금고의 키로 AI에게 묻고, 답만 돌려줍니다.</p><small>5단계</small></div>
+        <div class="g"><b>CORS</b><i>이 앱에서는 내 앱 주소만 허락</i><p>어느 주소의 페이지가 답을 읽어도 되는지 브라우저에게 알려 주는 규칙입니다. 브라우저만 지키는 규칙이라 자물쇠는 아닙니다.</p><small>5단계</small></div>
+        <div class="g"><b>GitHub · GitHub Pages</b><i>이 앱에서는 index.html을 보관하고 주소로 걸어 줌</i><p>코드를 보관하고, 누구나 여는 주소로 걸어 줍니다. 서버 코드는 돌리지 못합니다.</p><small>② 배포</small></div>
+        <div class="g"><b>Netlify · Vercel</b><i>이 앱에서는 쓰지 않습니다</i><p>페이지를 걸어 주면서 작은 함수도 돌려 줍니다. 비밀 키는 환경변수로 넣습니다.</p><small>Supabase 대신 쓸 때</small></div>
+        <div class="g"><b>Render</b><i>이 앱에서는 쓰지 않습니다</i><p>서버 프로그램을 계속 켜 두는 곳입니다. 무료는 15분 동안 아무도 안 부르면 잠들고, 깨어나는 데 1분쯤 걸립니다.</p><small>Supabase 대신 쓸 때</small></div>
       </div>
     </div>
 
     <div class="blk">
       <p class="kw">오늘 만드는 두 길</p>
-      <div class="lane"><span class="ll">학생 제출을 모으는 길 · 3~4단계</span>
-        <div class="fmap"><div class="nd"><i>프론트엔드</i><b>학생 화면</b><span>index.html</span></div><span class="ar">→</span><div class="nd"><i>API · publishable 키</i><b>Supabase</b><span>RLS가 문지기</span></div><span class="ar">→</span><div class="nd db"><i>데이터베이스</i><b>표</b><span>교사만 봅니다</span></div></div>
-      </div>
-      <div class="lane"><span class="ll">AI에게 묻는 길 · 5단계</span>
-        <div class="fmap"><div class="nd"><i>프론트엔드</i><b>화면</b><span>키가 없습니다</span></div><span class="ar">→</span><div class="nd safe"><i>백엔드 · 금고에 AI 키</i><b>Edge Function</b><span>횟수를 셉니다</span></div><span class="ar">→</span><div class="nd"><i>AI 회사의 API</i><b>AI</b><span>답만 돌아옵니다</span></div></div>
+      <div class="dg" aria-label="오늘 만드는 두 길. 학생 제출을 모으는 길과 AI에게 묻는 길">
+        <span class="dg-t">학생 제출을 모으는 길 · 3~4단계</span>
+        <div class="dg-flow">
+          <div class="dg-node"><i>프론트엔드</i><svg class="ic"><use href="#i-phone"/></svg><b>학생 화면</b><small>index.html</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node"><i>API · publishable 키</i><svg class="ic"><use href="#i-shield"/></svg><b>Supabase</b><small>RLS가 문지기</small></div>
+          <div class="dg-wire"><i style="--dl:.8s"></i></div>
+          <div class="dg-node db"><i>데이터베이스</i><svg class="ic"><use href="#i-table"/></svg><b>표</b><small>교사만 봅니다</small></div>
+        </div>
+        <span class="dg-t" style="margin-top:18px">AI에게 묻는 길 · 5단계</span>
+        <div class="dg-flow">
+          <div class="dg-node"><i>프론트엔드</i><svg class="ic"><use href="#i-phone"/></svg><b>화면</b><small>키가 없습니다</small></div>
+          <div class="dg-wire"><i></i></div>
+          <div class="dg-node ok"><i>백엔드 · 금고에 AI 키</i><svg class="ic"><use href="#i-lock"/></svg><b>Edge Function</b><small>횟수를 셉니다</small></div>
+          <div class="dg-wire"><i style="--dl:.8s"></i></div>
+          <div class="dg-node"><i>AI 회사의 API</i><svg class="ic"><use href="#i-ai"/></svg><b>AI</b><small>답만 돌아옵니다</small></div>
+        </div>
       </div>
       <div class="detail">
         <p>이 매뉴얼에 나오는 말은 이 정도면 충분합니다. 저도 이 말들을 순서대로 공부한 것이 아니라, 오류를 만날 때마다 하나씩 알게 됐습니다.</p>
@@ -382,12 +477,32 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
     <p class="goal">Supabase에 가입하고, 데이터를 담을 프로젝트를 하나 만들어보겠습니다!</p>
 
     <div class="blk">
+      <p class="kw">왜 Firebase나 Apps Script가 아니라 Supabase인가요</p>
+      <p class="brief">모인 기록이 표로 보이고, AI 키를 숨기는 함수를 카드 등록 없이 쓰고, 한 반이 한꺼번에 제출해도 버팁니다.</p>
+      <div class="tscroll"><table class="cmp">
+        <thead><tr><th></th><th>Supabase</th><th>Firebase (무료 Spark)</th><th>Apps Script + 구글 시트</th></tr></thead>
+        <tbody>
+          <tr><td><b>기록 모양</b></td><td>표 (줄과 칸)</td><td>문서 묶음 (표가 아님)</td><td>시트 (표)</td></tr>
+          <tr><td><b>교사가 보는 화면</b></td><td>Table Editor에서 표로 보고 CSV로 받음</td><td>콘솔에서 문서를 하나씩 봄, CSV로 내보내는 단추는 없음</td><td>시트 그대로</td></tr>
+          <tr><td><b>AI 키 숨기기</b></td><td>Edge Function의 금고, 카드 없이 무료</td><td>Cloud Functions, 카드를 등록하는 Blaze 요금제부터</td><td>스크립트 속성, 카드 없이</td></tr>
+          <tr><td><b>한 반이 한꺼번에</b></td><td>요청 수 제한 없음</td><td>하루 쓰기 2만 번, 읽기 5만 번까지</td><td>한 계정에서 동시에 30개까지 실행</td></tr>
+          <tr><td><b>누가 무엇을 하나</b></td><td>표마다 RLS 규칙</td><td>보안 규칙 (Security Rules)</td><td>웹 앱 공개 범위와 스크립트 안의 확인</td></tr>
+          <tr><td><b>조심할 점</b></td><td>7일 동안 거의 안 쓰면 멈춤, 1년 안에 다시 켬</td><td>파일 저장소(Storage)도 Blaze 요금제부터</td><td>한 번 실행은 6분까지, 여러 명이 한 시트에 쓰면 차례를 지키게 하는 코드가 필요</td></tr>
+        </tbody>
+      </table></div>
+      <div class="detail">
+        <p>저는 세 가지 때문에 Supabase를 씁니다. 첫째, 모인 기록이 엑셀처럼 표로 보여서 Table Editor가 그대로 교사 화면이 되고, CSV로 받아 평가나 기록의 근거로 옮기기 쉽습니다. 둘째, AI 키를 숨기는 함수(Edge Function)를 카드 등록 없이 씁니다. Firebase에서 같은 일을 하려면 카드를 등록하는 Blaze 요금제로 바꿔야 하고, 예산 알림을 걸어도 요금이 저절로 멈추지는 않습니다. 셋째, 한 반이 한꺼번에 제출해도 버팁니다. Apps Script 웹 앱은 한 계정에서 동시에 30개까지 실행되는데, 「나로 실행」으로 두면 학생들의 요청이 모두 제 계정으로 돌아갑니다.</p>
+        <p>구글 시트가 더 편한 때도 있습니다. 이미 시트로 일하고 계시고, 학생들이 한꺼번에 몰리지 않는 설문 같은 수합이라면 Apps Script로 충분합니다. 표의 숫자는 2026년 9월 각 회사의 안내 기준입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
       <p class="kw">GitHub 계정으로 들어갑니다</p>
       <p class="brief">배포에서 쓴 GitHub 계정으로 가입하면 비밀번호를 따로 만들 필요가 없습니다.</p>
       <ol class="steps" data-key="sb">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">supabase.com 에서 [Start your project]</span><span class="how">오른쪽 위 [Sign in]이 보이면 그것을 눌러도 됩니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">[Continue with GitHub]로 로그인</span><span class="how">GitHub 권한을 묻는 화면에서 [Authorize]</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">[New project]에서 이름, 데이터베이스 비밀번호, 지역 정하기</span><span class="how">비밀번호는 [Generate a password] 후 메모장에 저장. 지역(Region)은 Northeast Asia (Seoul)</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">[Continue with GitHub]로 로그인</span><span class="how">GitHub 권한을 묻는 화면에서 [Authorize]</span><span class="why">배포할 때 GitHub을 어차피 쓰니, 계정을 하나로 묶으면 외울 비밀번호가 하나 줄어듭니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">[New project]에서 이름, 데이터베이스 비밀번호, 지역 정하기</span><span class="how">비밀번호는 [Generate a password] 후 메모장에 저장. 지역(Region)은 Northeast Asia (Seoul)</span><span class="why">데이터베이스 비밀번호는 대시보드에서 다시 보여 주지 않고 새로 바꾸는 것만 됩니다. 지역을 서울로 고르는 것은 서버가 가까울수록 학생 화면에 답이 빨리 오기 때문입니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">[Create new project]를 누르고 1~2분 기다리기</span><span class="how">프로젝트 화면이 뜨면 준비 끝</span></div></li>
       </ol>
       <div class="shots">
@@ -404,7 +519,7 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <figure class="shot"><a href="shots/sb-limit.webp" target="_blank" rel="noopener"><img src="shots/sb-limit.webp" alt="무료 프로젝트 한도 안내" width="700" height="475" loading="lazy"></a><figcaption><b>무료 한도</b>무료 프로젝트 두 개를 다 쓰면 셋째는 이렇게 막힙니다. 안 쓰는 프로젝트를 멈추거나 지워야 새로 만들 수 있습니다.</figcaption></figure>
       </div>
       <div class="detail">
-        <p>학기 중에 매주 쓰는 앱이라면 멈출 일이 거의 없고, 방학이 지나면 한 번 다시 켜면 됩니다. 이 숫자들은 2026년 9월 Supabase 안내 기준입니다.</p>
+        <p>학기 중에 매주 쓰는 앱이라면 멈출 일이 거의 없고, 방학이 지나면 한 번 다시 켜면 됩니다. 저는 수업에 쓰는 앱 여러 개의 표를 프로젝트 하나에 함께 둡니다. 무료 프로젝트가 두 개뿐이라 앱마다 프로젝트를 만들 수는 없기 때문입니다. 이 숫자들은 2026년 9월 Supabase 안내 기준입니다.</p>
       </div>
     </div>
   </div>
@@ -420,9 +535,9 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
       <p class="kw">주소 하나, 키 하나</p>
       <p class="brief">Project URL과 Publishable key 두 가지만 앱에 넣습니다.</p>
       <ol class="steps" data-key="api">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">프로젝트 화면 위쪽의 [Connect] 누르기</span><span class="how">Project URL과 Publishable key가 함께 보입니다. [Settings] → [API Keys]에서도 찾을 수 있습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">프로젝트 화면 위쪽의 [Connect] 누르기</span><span class="how">Project URL과 Publishable key가 함께 보입니다. [Settings] → [API Keys]에서도 찾을 수 있습니다</span><span class="why">주소는 어느 프로젝트로 보낼지, 키는 어느 앱에서 온 요청인지 알려 줍니다. 둘이 맞아야 Supabase가 요청을 받아 줍니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Project URL 복사하기</span><span class="how">https://영문자.supabase.co 모양</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">Publishable key 복사하기</span><span class="how">sb_publishable_ 로 시작하는 키</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Publishable key 복사하기</span><span class="how">sb_publishable_ 로 시작하는 키</span><span class="why">앱 파일은 학생 기기로 내려가 누구나 열어 볼 수 있어서, 보여도 괜찮은 키만 앱에 넣습니다.</span></div></li>
       </ol>
       <div class="shots">
         <figure class="shot"><a href="shots/sb-project.webp" target="_blank" rel="noopener"><img src="shots/sb-project.webp" alt="프로젝트 첫 화면" width="1200" height="436" loading="lazy"></a><figcaption><b>프로젝트 첫 화면</b>위쪽 가운데 [Connect], 프로젝트 이름 아래에 Project URL과 [Copy]가 있습니다.</figcaption></figure>
@@ -432,6 +547,43 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
       <div class="grid2">
         <div class="box yes"><b>Publishable key · sb_publishable_</b><p>앱에 넣어도 되는 키입니다. 누구나 볼 수 있다는 전제로 쓰고, 표를 지켜 주는 것은 표마다 거는 규칙(RLS)입니다.</p></div>
         <div class="box no"><b>Secret key · sb_secret_</b><p>모든 규칙을 건너뛰는 열쇠입니다. 앱에도 GitHub에도 넣지 않습니다. AI가 넣으라고 해도 넣지 않습니다.</p></div>
+      </div>
+      <div class="dg" aria-label="규칙(RLS)이 요청을 가려 받는 모습">
+        <div class="dg-tabs">
+          <button type="button" data-v="put" aria-pressed="true" class="ok">학생이 넣기</button>
+          <button type="button" data-v="read" aria-pressed="false" class="bad">누군가 읽기</button>
+          <button type="button" data-v="secret" aria-pressed="false" class="bad">secret 키로</button>
+        </div>
+        <div data-view="put">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-phone"/></svg><b>학생 화면</b><small>"이 줄을 넣어 줘"</small><span class="dg-chip key">sb_publishable_</span></div>
+            <div class="dg-wire ok"><i></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-shield"/></svg><b>규칙 (RLS)</b><small>넣기는 허락</small></div>
+            <div class="dg-wire ok"><i style="--dl:.8s"></i></div>
+            <div class="dg-node db"><svg class="ic"><use href="#i-table"/></svg><b>표에 한 줄</b><small>모둠 3 · 42 mL</small></div>
+          </div>
+        </div>
+        <div data-view="read">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>누군가</b><small>"다 보여 줘"</small><span class="dg-chip key">sb_publishable_</span></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node bad"><svg class="ic"><use href="#i-shield"/></svg><b>규칙 (RLS)</b><small>읽기는 교사만</small></div>
+            <div class="dg-wire bad"><i style="--dl:.8s"></i></div>
+            <div class="dg-node ghost"><svg class="ic"><use href="#i-x"/></svg><b>돌아온 답</b><small>빈 목록</small></div>
+          </div>
+        </div>
+        <div data-view="secret">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>누군가</b><small>앱에서 찾은 키로</small><span class="dg-chip bad">sb_secret_</span></div>
+            <div class="dg-wire bad"><i></i></div>
+            <div class="dg-node ghost"><svg class="ic"><use href="#i-warn"/></svg><b>규칙 (RLS)</b><small>건너뜀</small></div>
+            <div class="dg-wire bad"><i style="--dl:.8s"></i></div>
+            <div class="dg-node bad"><svg class="ic"><use href="#i-table"/></svg><b>모든 줄</b><small>읽고, 고치고, 지움</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="put">publishable 키로 온 부탁은 규칙이 허락한 것만 들어갑니다. 이 앱의 규칙은 "학생은 넣기만"입니다.</p>
+        <p class="dg-cap" data-vsay="read" hidden>같은 키로 읽기를 부탁해도 규칙이 막아서 빈 목록이 돌아갑니다. 앱 안의 publishable 키가 보여도 괜찮은 까닭입니다.</p>
+        <p class="dg-cap" data-vsay="secret" hidden>secret 키는 규칙을 건너뜁니다. 앱이나 GitHub에 들어가면 누구나 모든 줄을 읽고 지울 수 있어서, 앱에는 넣지 않습니다.</p>
       </div>
       <div class="shots">
         <figure class="shot"><a href="shots/sb-secretkeys.webp" target="_blank" rel="noopener"><img src="shots/sb-secretkeys.webp" alt="Publishable key와 Secret keys" width="1200" height="476" loading="lazy"></a><figcaption><b>두 키</b>위가 앱에 넣어도 되는 publishable 키, 아래가 가려진 secret 키입니다. secret 키 옆 눈 모양은 누르지 않습니다.</figcaption></figure>
@@ -459,9 +611,9 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
       </form>
       <div class="pr big" id="pc"><span class="pl">연결 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
       <ol class="steps" data-key="api2">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 표를 만드는 SQL 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 표가 생겼는지 보기</span><span class="how">왼쪽 메뉴 [Table Editor] → 표 이름</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 표를 만드는 SQL 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span><span class="why">표를 마우스로 만들 수도 있지만, 규칙(RLS)까지 한 번에 빠짐없이 걸려면 SQL이 낫습니다. 저도 SQL을 직접 쓰지 않고, AI가 쓴 것을 읽어 본 뒤 실행합니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span><span class="why">SQL로 만든 표는 RLS를 따로 켜야 합니다. 켜지 않으면 publishable 키를 가진 누구나 모든 줄을 읽고 고칠 수 있어서, 부탁문에 RLS를 꼭 넣었습니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 표가 생겼는지 보기</span><span class="how">왼쪽 메뉴 [Table Editor] → 표 이름</span><span class="why">SQL이 제대로 돌았는지 눈으로 봅니다. 표 위쪽에 RLS가 꺼져 있다고 나오거나 규칙 수가 0이면 AI에게 다시 부탁합니다.</span></div></li>
       </ol>
       <div class="shots">
         <figure class="shot"><a href="shots/sb-sql.webp" target="_blank" rel="noopener"><img src="shots/sb-sql.webp" alt="SQL Editor 새 쿼리" width="1200" height="527" loading="lazy"></a><figcaption><b>SQL Editor</b>빈 칸에 받은 SQL을 붙여넣고 오른쪽 위 초록 [Run]을 누릅니다.</figcaption></figure>
@@ -493,12 +645,27 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <div class="box"><b>B · 내 앱에 제출 붙이기</b><p>3단계의 연결 부탁문으로 내 앱에 [제출] 버튼을 붙이고, 아래 순서로 확인합니다.</p></div>
       </div>
       <ol class="steps" data-key="collect">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">휴대폰으로 앱 열기</span><span class="how">배포한 주소가 있으면 휴대폰으로. 아직이면 내 컴퓨터에서 index.html</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">두세 번 제출해 보기</span><span class="how">빈칸으로도, 아주 긴 글로도, 버튼 연타로도</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 모인 줄 보기</span><span class="how">왼쪽 [Table Editor] → 표 이름. 새로고침하면 줄이 늘어납니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">CSV로 내려받기</span><span class="how">표 위쪽의 내보내기(Export) 메뉴에서 CSV. 엑셀에서는 [데이터] → [텍스트/CSV]로 열고 UTF-8을 고릅니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">연습으로 넣은 줄 지우기</span><span class="how">줄 앞 칸을 골라 [Delete]</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">휴대폰으로 앱 열기</span><span class="how">배포한 주소가 있으면 휴대폰으로. 아직이면 내 컴퓨터에서 index.html</span><span class="why">학생은 휴대폰이나 크롬북으로 엽니다. 제 컴퓨터에서 되던 것이 학생 기기에서는 다르게 보이기도 합니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">두세 번 제출해 보기</span><span class="how">빈칸으로도, 아주 긴 글로도, 버튼 연타로도</span><span class="why">학생들은 빈칸으로도 내고, 아주 길게도 쓰고, 버튼을 여러 번 누릅니다. 수업 중에 처음 겪는 것보다 미리 겪는 편이 낫습니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 모인 줄 보기</span><span class="how">왼쪽 [Table Editor] → 표 이름. 새로고침하면 줄이 늘어납니다</span><span class="why">오늘은 이 표가 교사 화면입니다. 교사 화면을 따로 만들지 않아도 모인 답을 바로 봅니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">CSV로 내려받기</span><span class="how">표 위쪽의 내보내기(Export) 메뉴에서 CSV. 엑셀에서는 [데이터] → [텍스트/CSV]로 열고 UTF-8을 고릅니다</span><span class="why">모인 답을 평가나 기록의 근거로 쓰려면 엑셀로 옮겨야 합니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">연습으로 넣은 줄 지우기</span><span class="how">줄 앞 칸을 골라 [Delete]</span><span class="why">연습 줄이 남아 있으면 수업 날 모인 답과 섞입니다.</span></div></li>
       </ol>
+      <div class="dg" aria-label="모둠 기기에서 낸 제출이 표에 한 줄씩 쌓이고, 교사가 표를 보고 CSV로 받는 모습">
+        <div class="dg-fan">
+          <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>1모둠</b></div>
+          <div class="dg-wire w1"><i></i></div>
+          <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>2모둠</b></div>
+          <div class="dg-wire w1"><i style="--dl:.7s"></i></div>
+          <div class="dg-node src"><svg class="ic"><use href="#i-phone"/></svg><b>3모둠</b></div>
+          <div class="dg-wire w1"><i style="--dl:1.4s"></i></div>
+          <div class="dg-vwire fanv"><i></i></div>
+          <div class="dg-node db hub"><i>submissions 표</i>
+            <table class="dg-tbl" style="--cyc:6s"><tr><th>모둠</th><th>부피(mL)</th><th>결론</th></tr><tr class="new" style="--dl:.9s"><td>1</td><td>45</td><td>…</td></tr><tr class="new" style="--dl:1.6s"><td>2</td><td>38</td><td>…</td></tr><tr class="new" style="--dl:2.3s"><td>3</td><td>42</td><td>…</td></tr></table></div>
+          <div class="dg-wire w2"><i style="--dl:2s"></i></div>
+          <div class="dg-node dst"><svg class="ic"><use href="#i-teacher"/></svg><b>교사</b><small>Table Editor로 보고</small><span class="dg-chip blue">CSV로 받기</span></div>
+        </div>
+      </div>
       <div class="shots narrow">
         <figure class="shot"><a href="shots/sb-export.webp" target="_blank" rel="noopener"><img src="shots/sb-export.webp" alt="표 메뉴의 CSV 내보내기" width="712" height="294" loading="lazy"></a><figcaption><b>CSV로 받기</b>표 이름 옆 ⋯에서 Export data의 Export table as CSV를 고릅니다. 아래쪽 Delete table은 누르지 않습니다.</figcaption></figure>
       </div>
@@ -508,6 +675,7 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>제출했는데 표에 줄이 생기지 않습니다.</b> 앱에서 F12를 눌러 [Console]에 빨간 글이 있는지 보고, 그 글을 그대로 AI에게 보냅니다. RLS 규칙이 빠졌거나 표 이름이 다른 경우가 가장 많습니다.</p>
+          <p><b>교사 화면에 1,000줄까지만 보입니다.</b> Supabase는 한 번에 1,000줄까지만 돌려줍니다. 오류 없이 조용히 잘리기 때문에, AI에게 "1,000줄씩 나눠서 모두 받아 오게 고쳐 줘"라고 합니다.</p>
           <p><b>엑셀에서 한글이 깨집니다.</b> CSV 파일을 두 번 눌러 열지 말고, 엑셀의 [데이터] 탭에서 [텍스트/CSV]로 불러와 UTF-8을 고릅니다.</p>
         </div>
       </details>
@@ -538,7 +706,31 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
     <div class="blk">
       <p class="kw">AI 키는 브라우저에 두지 않습니다</p>
       <p class="brief">AI 회사의 키는 쓴 만큼 결제되는 법인카드입니다. 앱 코드에 넣으면 누구나 F12로 볼 수 있습니다.</p>
-      <div class="fmap"><div class="nd"><i>프론트엔드</i><b>내 앱</b><span>부탁만 합니다</span></div><span class="ar">→</span><div class="nd safe"><i>백엔드 · 금고</i><b>Edge Function</b><span>키를 꺼내 대신 묻습니다</span></div><span class="ar">→</span><div class="nd"><i>API</i><b>AI 회사</b><span>답만 돌아옵니다</span></div></div>
+      <div class="dg" aria-label="AI 키를 앱에 넣을 때와 금고에 넣을 때">
+        <div class="dg-tabs"><button type="button" data-v="bad" aria-pressed="true" class="bad">키를 앱에 넣으면</button><button type="button" data-v="good" aria-pressed="false" class="ok">금고에 넣으면</button></div>
+        <div data-view="bad">
+          <div class="dg-flow">
+            <div class="dg-node bad"><svg class="ic"><use href="#i-file"/></svg><b>앱 파일</b><small>KEY = "sk-…"</small></div>
+            <div class="dg-wire bad"><i></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-eye"/></svg><b>F12로 누구나</b><small>파일 속 키가 보임</small></div>
+            <div class="dg-wire bad"><i style="--dl:.7s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>다른 사람</b><small>키를 복사해 마구 부름</small></div>
+            <div class="dg-wire bad"><i style="--dl:1.4s"></i></div>
+            <div class="dg-node bad"><svg class="ic"><use href="#i-card"/></svg><b>내 카드</b><small>쓴 만큼 결제</small></div>
+          </div>
+        </div>
+        <div data-view="good">
+          <div class="dg-flow">
+            <div class="dg-node"><i>프론트엔드</i><svg class="ic"><use href="#i-phone"/></svg><b>내 앱</b><small>키 없이 부탁만</small></div>
+            <div class="dg-wire ok"><i></i></div>
+            <div class="dg-node ok"><i>백엔드 · 금고</i><svg class="ic"><use href="#i-lock"/></svg><b>Edge Function</b><small>키를 꺼내 대신 묻고 횟수를 셈</small></div>
+            <div class="dg-wire ok"><i style="--dl:.7s"></i></div>
+            <div class="dg-node"><i>API</i><svg class="ic"><use href="#i-ai"/></svg><b>AI 회사</b><small>답만 돌려줌</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="bad">앱 파일에 적은 키는 누구나 F12로 봅니다. 누가 가져가 부르면 그만큼 제 카드로 결제됩니다.</p>
+        <p class="dg-cap" data-vsay="good" hidden>키는 함수의 금고에만 있고, 앱을 F12로 열어 봐도 함수 주소만 보입니다. 함수가 부르는 횟수를 세어 넘치면 막습니다.</p>
+      </div>
       <div class="detail">
         <p>앱의 코드는 브라우저로 내려받아 실행되는 것이라, 파일에 적힌 글자는 누구나 볼 수 있습니다. 그래서 AI 키는 Supabase의 Edge Function 같은 서버 쪽 금고에 넣고, 앱은 그 함수에게 부탁만 합니다. 함수가 금고에서 키를 꺼내 AI에게 묻고, 답만 앱으로 돌려줍니다. Netlify나 Vercel의 함수, Render의 서버에 키를 환경변수로 넣어도 같은 구조가 됩니다.</p>
         <p>브라우저는 다른 주소의 서버에 부탁할 때, 그 서버가 "이 주소의 페이지는 답을 읽어도 된다"고 허락해야 답을 보여 줍니다. 이 허락이 CORS입니다. 함수가 내 앱 주소만 허락하면 다른 사이트의 페이지가 내 함수를 끌어다 쓰기 어려워집니다. 다만 CORS는 브라우저만 지키는 규칙이라 다른 프로그램으로 직접 부르는 것까지 막지는 못해서, 호출 횟수 제한과 결제 한도를 함께 겁니다.</p>
@@ -597,11 +789,11 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
       </form>
       <div class="pr big" id="pa"><span class="pl">AI 함수 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
       <ol class="steps" data-key="fn">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">AI 회사에서 결제 한도를 걸고 키 만들기</span><span class="how">위 표의 순서대로. 키는 만들 때 한 번만 보이니 바로 다음 칸으로</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">Supabase의 금고(Secrets)에 키 넣기</span><span class="how">[Edge Functions] → [Secrets] → Key에 <span id="envName">OPENAI_API_KEY</span>, Value에 키 → [Save]. 넣자마자 쓸 수 있습니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">AI 회사에서 결제 한도를 걸고 키 만들기</span><span class="how">위 표의 순서대로. 키는 만들 때 한 번만 보이니 바로 다음 칸으로</span><span class="why">키가 새어 나가면 제 카드로 결제됩니다. 한도를 먼저 걸면 최악의 경우에도 넣은 돈 안에서 멈춥니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">Supabase의 금고(Secrets)에 키 넣기</span><span class="how">[Edge Functions] → [Secrets] → Key에 <span id="envName">OPENAI_API_KEY</span>, Value에 키 → [Save]. 넣자마자 쓸 수 있습니다</span><span class="why">앱 파일에 적은 글자는 F12로 누구나 봅니다. Secrets에 넣은 키는 함수만 꺼내 씁니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 함수 코드와 앱 쪽 코드 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">대시보드에서 함수 만들기</span><span class="how">[Edge Functions] → [Deploy a new function] → [Via Editor] → 함수 코드 붙여넣기 → 이름 정하고 [Deploy function]</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">함수 설정의 Verify JWT 확인하기</span><span class="how">publishable 키로 부르는 함수는 끄고, 대신 함수 안에서 호출 횟수를 셉니다. AI가 알려 준 대로</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">대시보드에서 함수 만들기</span><span class="how">[Edge Functions] → [Deploy a new function] → [Via Editor] → 함수 코드 붙여넣기 → 이름 정하고 [Deploy function]</span><span class="why">함수는 Supabase의 서버에서 돌아서 학생 기기로 내려가지 않습니다. 그래서 키를 꺼내 쓸 수 있습니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">함수 설정의 Verify JWT 확인하기</span><span class="how">publishable 키로 부르는 함수는 끄고, 대신 함수 안에서 호출 횟수를 셉니다. AI가 알려 준 대로</span><span class="why">publishable 키로 부르면 로그인한 사람의 표(JWT)가 없어서, 이 스위치가 켜져 있으면 401 오류로 막힙니다. 대신 함수 안에서 부르는 횟수를 세어 막습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">앱에서 불러 보기</span><span class="how">답이 오면 성공. 오류 글은 그대로 AI에게 보냅니다</span></div></li>
       </ol>
       <div class="shots">
@@ -639,6 +831,19 @@ html[data-mode="present"] .gl .g p,html[data-mode="present"] .gl .g small{displa
         <li><input type="checkbox" aria-label="완료"><div><span class="what">비용이 폭주하지 않게 무엇으로 막는지</span><span class="how">세 겹. 회사 쪽 월 한도와 자동 충전 끄기, 함수의 호출 횟수 제한, 짧은 답과 가벼운 모델</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">서비스가 고장 났을 때 수업 대안이 있는지</span><span class="how">같은 활동을 종이 활동지나 AI 없는 판으로 할 수 있게 준비하고, 앱은 오류가 나도 멈추지 않고 안내 문구를 보여 주게 합니다</span></div></li>
       </ol>
+      <div class="dg" aria-label="요청이 몰려와도 호출 횟수 제한, 짧은 답과 가벼운 모델, 회사 쪽 월 한도의 세 겹에서 막히는 모습">
+        <span class="dg-t">비용 폭주를 막는 세 겹</span>
+        <div class="dg-flow">
+          <div class="dg-node bad"><svg class="ic"><use href="#i-warn"/></svg><b>요청이 몰림</b><small>버튼 연타, 퍼 간 주소</small></div>
+          <div class="dg-wire bad"><i></i><i style="--dl:.35s"></i><i style="--dl:.7s"></i><i style="--dl:1.05s"></i><i style="--dl:1.4s"></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-clock"/></svg><b>함수의 호출 횟수 제한</b><small>1분에 20번, 하루 300번</small></div>
+          <div class="dg-wire"><i style="--dl:.6s"></i></div>
+          <div class="dg-node on"><svg class="ic"><use href="#i-list"/></svg><b>짧은 답 · 가벼운 모델</b><small>한 번에 드는 돈을 줄임</small></div>
+          <div class="dg-wire"><i style="--dl:1.3s"></i></div>
+          <div class="dg-node ok"><svg class="ic"><use href="#i-card"/></svg><b>회사 쪽 월 한도</b><small>넣은 돈에서 멈춤, 자동 충전 끔</small></div>
+        </div>
+        <p class="dg-cap">몰려온 요청은 호출 횟수 제한에서 대부분 걸러지고, 지나간 요청도 한 번에 드는 돈이 작고, 끝에서는 회사 쪽 한도에서 멈춥니다.</p>
+      </div>
       <div class="detail">
         <p>AI 회사나 Supabase도 멈추는 날이 있습니다. 수업 한 차시를 통째로 앱에 걸어 두면 그날 수업이 같이 멈추기 때문에, 앱이 없던 때의 방법을 옆에 남겨 두는 편이 안전합니다.</p>
       </div>
@@ -917,5 +1122,6 @@ af.addEventListener('input', buildAI); af.addEventListener('change', buildAI);
 /* 처음 한 번: 저장된 도구 불러오기 (부탁문이 도구에 맞춰 바뀝니다) */
 (function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
 </script>
+<script src="dg.js"></script>
 </body>
 </html>
