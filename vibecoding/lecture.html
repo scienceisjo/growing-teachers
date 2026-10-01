@@ -473,7 +473,7 @@ html[data-mode="present"] .keys{display:block}
         <div class="box"><span class="n">2</span><b>내 설명 순서</b><p>이 차시에서 평소 하는 말을 순서대로 적은 메모. 학생에게 던지는 질문도 그대로 적습니다.</p></div>
         <div class="box"><span class="n">3</span><b>디자인 설계서</b><p>디자인 서랍에서 고른 DESIGN.md 한 장. 제 강의 화면은 apple 설계서를 썼습니다.</p></div>
         <div class="box"><span class="n">4</span><b>강의화면 설계서</b><p>제 강의 화면의 넘기기 · 빈칸 번호 · 면 색 · 소리 · 대본 · 학생 복습판 규칙을 12절로 정리한 파일입니다. <a href="kit/lecture-spec.md" download="강의화면_설계서.md">강의화면_설계서.md 받기</a></p></div>
-        <div class="box"><span class="n">+</span><b>있으면 좋은 것</b><p>꼭 움직여 보여 주고 싶은 장면이나 비유 하나. 저는 버블티 빨대로 저항을 설명합니다.</p></div>
+        <div class="box"><span class="n">+</span><b>있으면 좋은 것</b><p>꼭 움직여 보여 주고 싶은 장면 1~3개와 쓰고 싶은 비유, 교과서 지도서나 평가 자료에서 뽑은 오개념 주의 목록 3~6줄. 저는 버블티 빨대로 저항을 설명합니다.</p></div>
       </div>
       <ol class="steps" data-key="prep">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">바탕화면에 강의화면 폴더 만들기</span><span class="how">바탕화면 빈 곳 오른쪽 클릭 → [새로 만들기] → [폴더] → 이름 <b>강의화면</b></span></div></li>
@@ -558,10 +558,17 @@ html[data-mode="present"] .keys{display:block}
         <label class="f">수업 시간
           <select name="min"><option value="40">40분</option><option value="45" selected>45분</option><option value="50">50분</option></select>
         </label>
-        <label class="f">꼭 넣고 싶은 비유나 장면 (선택)
+        <label class="f">내가 쓰는 비유 (선택)
           <input type="text" name="analogy" maxlength="120" placeholder="예: 버블티 빨대가 좁을수록 저항이 크다">
         </label>
+        <label class="f full">꼭 움직여 보여 줄 장면 1~3개 (선택 · 한 줄에 하나)
+          <textarea name="motion" maxlength="300" placeholder="예: 선풍기 옆에서 1초마다 에너지 조각이 쌓이는 모습&#10;예: 털가죽으로 풍선을 문지르면 전자가 옮겨 가는 모습"></textarea>
+        </label>
+        <label class="f full">오개념 주의 목록 (선택 · 한 줄에 하나 · 교과서 지도서나 평가 자료에서 3~6줄)
+          <textarea name="miscon" maxlength="600" placeholder="예: 전하는 새로 생기지 않고 옮겨 갈 뿐이다(잃은 수 = 얻은 수)&#10;예: 이동하는 것은 전자뿐이고 원자핵은 제자리에 있다"></textarea>
+        </label>
       </form>
+      <p class="small">제 소비 전력 화면의 선풍기와 에너지 조각처럼 수업의 중심이 되는 움직임은, 어떤 장면을 어떻게 움직일지 제가 정해 줘서 나왔습니다. 오개념 주의 목록은 강의화면 설계서 11절에서 장면마다 확인하는 목록입니다.</p>
       <div class="tplbar"><button class="btn" type="button" id="dlTpl">빈칸 채우기형 템플릿으로 받기 (.txt)</button><span class="small">칸을 비워 둔 부탁문 네 개를 파일로 받아 두고 다른 차시에 다시 씁니다.</span></div>
     </div>
 
@@ -904,7 +911,7 @@ function readL() {
   return {
     grade: f.grade.value, subject: f.subject.value.trim(), unit: f.unit.value.trim(),
     num: (lf.querySelector('[name=num]:checked') || {}).value || 'has', ans: (lf.querySelector('[name=ans]:checked') || {}).value || 'has',
-    min: f.min.value, analogy: f.analogy.value.trim(),
+    min: f.min.value, analogy: f.analogy.value.trim(), motion: f.motion.value.trim(), miscon: f.miscon.value.trim(),
     design: (lf2.querySelector('[name=design]:checked') || {}).value || 'md', student: g.student.checked, sound: g.sound.checked
   };
 }
@@ -915,6 +922,8 @@ function prompts(v, k, tpl) {
   const where = k === 'local' ? '이 폴더의 학습지' : '첨부한 학습지';
   const script = k === 'local' ? '이 폴더의 대본.txt에 적힌 내 설명 순서' : '아래에 붙인 내 설명 순서(대본)';
   const web = k === 'web';
+  const lines = t => String(t || '').split(/\n+/).map(x => x.replace(/^[\s\-•·*]+/, '').trim()).filter(Boolean);
+  const mot = tpl ? ['[장면 1~3개]'] : lines(v.motion), mis = tpl ? ['[주의할 점 3~6줄]'] : lines(v.miscon);
   /* ① 빈칸 지도 */
   const a = [];
   a.push(`나는 ${grade} ${subject} 교사야. ${where}(${unit})를 읽고, 빈칸을 번호 순서대로 표로 정리해 줘. 코드는 아직 쓰지 마.`);
@@ -930,6 +939,7 @@ function prompts(v, k, tpl) {
   else if (v.ans === 'has') a.push('정답은 학습지에 적힌 글자 그대로, 띄어쓰기와 단위까지 똑같이 써 줘.');
   else a.push(`학습지에 정답이 없으니 ${grade} 교과서 수준으로 추측해서 채우고, 추측한 칸마다 (추측)이라고 표시해 줘.`);
   a.push('마지막에 빈칸이 모두 몇 개인지 세어 알려 주고, 학습지 내용 가운데 과학적으로 이상하거나 계산이 맞지 않는 곳이 있으면 따로 알려 줘.');
+  if (mis.length) { a.push('', (tpl ? '(오개념 주의 목록이 있으면) ' : '') + '[오개념 주의 목록] 이 목록은 다음 부탁까지 계속 기억해 줘. 학습지 문장 가운데 이 목록과 부딪치는 곳이 있으면 함께 알려 줘.'); mis.forEach(x => a.push('- ' + x)); }
   /* ② 장면 목록 */
   const b = [];
   const range = web ? '10~12장' : '20~30장';
@@ -943,6 +953,8 @@ function prompts(v, k, tpl) {
     "- '내가 할 말'은 내 대본에서 가져오고, 대본에 없는 숫자나 사실은 지어내지 마. 예시가 꼭 필요하면 (예)라고 표시해 줘.");
   if (tpl) b.push('- (쓰고 싶은 비유가 있으면) 내가 쓰는 비유: [비유]. 이 비유가 들어갈 장면을 정해 줘.');
   else if (v.analogy) b.push(`- 내가 쓰는 비유: ${v.analogy.replace(/[.。]\s*$/, '')}. 이 비유가 들어갈 장면을 정해 줘.`);
+  if (mot.length) { b.push((tpl ? '- (꼭 움직일 장면이 있으면) ' : '- ') + '꼭 움직여 보여 줄 장면은 반드시 넣고, 그 움직임이 어떤 식이나 비례를 따르는지 움직임 칸에 한 줄씩 적어 줘.'); mot.forEach(x => b.push('  · ' + x)); }
+  if (mis.length) b.push((tpl ? '- (오개념 주의 목록이 있으면) ' : '- ') + '빈칸 지도 때 준 오개념 주의 목록과 부딪치는 장면이 없는지 표 아래에 한 줄씩 확인해 줘.');
   if (k !== 'local') b.push('', '[내 설명 순서]', '(여기에 대본을 붙여넣기)');
   /* ③ 만들기 */
   const c = [];
@@ -962,6 +974,8 @@ function prompts(v, k, tpl) {
     '움직임은 장면마다 하나까지, 과학 식으로 계산해서 움직이게 해 줘.',
     '그림은 사진이나 AI가 그린 그림 대신 코드로 그린 도형과 그래프로 그려 줘.',
     '대본과 학습지에 없는 숫자나 사실은 지어내지 마.');
+  if (mot.length) L.push((tpl ? '(꼭 움직일 장면이 있으면) ' : '') + '꼭 움직여 보여 줄 장면은 장면 목록에 적은 식대로 계산해서 움직이게 하고, 화면에 보이는 숫자도 그 계산값으로 보여 줘.');
+  if (mis.length) L.push((tpl ? '(오개념 주의 목록이 있으면) ' : '') + '오개념 주의 목록에 걸리는 그림이나 문장이 없게 만들어 줘.');
   if (tpl) L.push('(디자인) 이 폴더의 DESIGN.md 설계서를 따라 줘. 또는: 흰 바탕에 강조색은 파란색 하나만 써 줘. 한글은 Pretendard 글꼴로.');
   else if (v.design === 'md') L.push((k === 'local' ? '이 폴더의 DESIGN.md 설계서' : web ? '첨부한 DESIGN.md 설계서' : 'DESIGN.md 설계서') + '를 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로.');
   else L.push('흰 바탕에 강조색은 파란색 하나만 써 줘. 한글은 Pretendard 글꼴로.');
@@ -979,13 +993,15 @@ function prompts(v, k, tpl) {
   /* ④ 빈칸 대조 */
   const d = [
     '만든 강의 화면에서 빈칸이 열리는 순서대로 번호 | 정답 | 장면 번호를 표로 뽑아 줘.',
-    '그리고 빈칸 지도와 한 줄씩 대조해서 아래 네 가지를 찾아 줘. 코드는 아직 바꾸지 마.',
+    '그리고 빈칸 지도와 한 줄씩 대조해서 아래를 찾아 줘. 코드는 아직 바꾸지 마.',
     '- 빠진 번호',
     '- 순서가 바뀐 번호',
     '- 글자나 단위가 다른 정답',
-    '- 열리기 전에 제목이나 그림 설명에서 먼저 보여 버리는 정답',
-    '마지막으로 과학적으로 틀렸거나 학생이 오해할 수 있는 장면이 있으면 장면 번호와 함께 알려 줘.'
+    '- 열리기 전에 제목이나 그림 설명에서 먼저 보여 버리는 정답'
   ];
+  if (mot.length) d.push((tpl ? '- (꼭 움직일 장면이 있으면) ' : '- ') + '꼭 움직여 보여 줄 장면이 빠졌거나, 장면 목록에 적은 식과 다르게 움직이는 곳');
+  if (mis.length) d.push((tpl ? '- (오개념 주의 목록이 있으면) ' : '- ') + '오개념 주의 목록에 걸리는 그림이나 문장');
+  d.push('마지막으로 과학적으로 틀렸거나 학생이 오해할 수 있는 장면이 있으면 장면 번호와 함께 알려 줘.');
   return [a.join('\n'), b.join('\n'), c.join('\n'), d.join('\n')];
 }
 function renderL() {
@@ -1001,6 +1017,7 @@ function onTool() { renderL(); }
   const f = lf.elements, g = lf2.elements;
   if (v.grade) f.grade.value = v.grade;
   f.subject.value = v.subject == null ? '과학' : v.subject; f.unit.value = v.unit || ''; f.analogy.value = v.analogy || '';
+  f.motion.value = v.motion || ''; f.miscon.value = v.miscon || '';
   if (v.min) f.min.value = v.min;
   ['num', 'ans'].forEach(n => { const r = lf.querySelector(`[name=${n}][value="${v[n]}"]`); if (r) r.checked = true; });
   const d = lf2.querySelector(`[name=design][value="${v.design}"]`); if (d) d.checked = true;
