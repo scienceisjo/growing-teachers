@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>연수 오프닝 · 해누리중 조승재</title>
-<meta name="description" content="연수 시작과 끝에 쓰는 공용 페이지 — 인사 · 아이스브레이킹 · 선물 꾸러미 · 신청 이유 · 만족도">
+<meta name="description" content="연수 시작과 끝에 쓰는 공용 페이지 — 인사 · 아이스브레이킹 · AI가 본 나 · 선물 꾸러미 · 신청 이유 · 만족도">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
@@ -120,6 +120,31 @@ html[data-mode="present"] .verdict .big{font-size:1.9em}
 .avg{font-size:1.4em;font-weight:600;margin-top:10px}
 .avg small{font-size:.6em;color:var(--ink2);font-weight:400;margin-left:6px}
 
+/* AI가 본 나 */
+.idbox{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;background:#fff}
+.idsteps{margin:0 0 14px;padding-left:1.3em;color:var(--ink2);font-size:.95em}
+.idsteps li{margin:3px 0}
+.idprompt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 14px;font-size:.92em;line-height:1.65;max-height:16em;overflow:auto}
+.idrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0 16px}
+.idbox form{display:grid;gap:8px;margin-top:4px}
+.idbox input,.idbox textarea{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.idbox textarea{min-height:3.6em;resize:vertical}
+.idbox input:focus,.idbox textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.idprev{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-height:1.7em;font-size:.88em;color:var(--ink3)}
+.idprev .k{border:1px solid var(--blue);border-radius:9999px;padding:2px 10px;background:var(--blue-t);color:var(--blue)}
+.idbox .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.idcloud{display:flex;gap:8px 10px;flex-wrap:wrap;align-items:baseline;margin-top:6px}
+.idcloud span{border:1px solid var(--line);border-radius:9999px;padding:4px 13px;background:var(--bg2);line-height:1.3;word-break:keep-all}
+.idcloud span b{color:var(--blue);margin-left:6px;font-size:.8em}
+.idcloud span.top{border-color:var(--blue);background:var(--blue-t)}
+.idempty{color:var(--ink3);font-size:.9em;padding:8px 0}
+.idwall .card{font-size:1.02em}
+.idqr{display:none;align-items:center;gap:16px;margin:0 0 18px}
+html[data-mode="present"] .idqr{display:flex}
+html[data-mode="present"] .idbox{display:none}
+html[data-mode="present"] .idcloud span{padding:6px 18px}
+html[data-mode="present"] .idwall .card{font-size:1.15em}
+
 /* 선물 */
 .gift{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .gift .txt{flex:1;min-width:220px}
@@ -147,8 +172,9 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     <nav class="tabs" id="tabs">
       <button class="tab on" data-p="hello">1 인사</button>
       <button class="tab" data-p="ice">2 아이스브레이킹</button>
-      <button class="tab" data-p="gift">3 선물 꾸러미</button>
-      <button class="tab" data-p="why">4 신청하신 이유</button>
+      <button class="tab" data-p="ident" id="tabIdent">3 AI가 본 나</button>
+      <button class="tab" data-p="gift">4 선물 꾸러미</button>
+      <button class="tab" data-p="why">5 신청하신 이유</button>
       <button class="tab" data-p="close" id="tabClose" style="display:none">⭐ 만족도</button>
     </nav>
     <button class="btn" id="modeBtn">🎤 발표로</button>
@@ -241,7 +267,46 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
 </section>
 
-<!-- ═══ 3 선물 꾸러미 ═══ -->
+<!-- ═══ 3 AI가 본 나 ═══ -->
+<section class="panel" id="p-ident">
+  <h2>AI가 본 우리는 어떤 교사일까요?</h2>
+  <p class="sub">평소 쓰시는 AI에게 물어서, 그동안의 대화로 본 선생님을 한 문장과 키워드로 모아보겠습니다!</p>
+
+  <div class="idqr"><div class="qr" id="identQr"></div><div class="small">폰으로 찍어서 이 탭에서 올려 주세요</div></div>
+
+  <div class="blk">
+    <div class="idbox" id="identBox">
+      <ol class="idsteps only-detail">
+        <li>아래 프롬프트를 복사해서 평소 쓰시는 AI에 붙여넣습니다.</li>
+        <li>AI가 소개를 마치면 마지막 두 줄(한 문장과 키워드)을 아래 칸에 붙여넣습니다.</li>
+        <li>이름은 적지 않으셔도 됩니다. [올리기]를 누르면 앞 화면에 올라갑니다.</li>
+      </ol>
+      <div class="idprompt" id="identPrompt"></div>
+      <div class="idrow"><button class="btn" type="button" id="identCopy">프롬프트 복사</button></div>
+      <form id="identForm" autocomplete="off">
+        <textarea name="sent" rows="2" maxlength="400" placeholder="이 선생님은 ______ 교사입니다." aria-label="AI가 정리한 한 문장"></textarea>
+        <input name="kws" maxlength="120" placeholder="키워드: #____ #____ #____" aria-label="AI가 정리한 키워드">
+        <div class="idprev" id="identPrev"></div>
+        <input name="name" maxlength="30" placeholder="이름 또는 별명 (선택)" aria-label="이름 또는 별명">
+        <div><button class="btn primary big" type="submit">올리기</button></div>
+      </form>
+      <div class="st" id="identSt"></div>
+      <p class="small only-detail" style="margin:10px 0 0">AI의 답변 전체는 선생님만 보시고, 앞 화면에는 한 문장과 키워드만 올라갑니다. 올리기 전에 학생·동료·학교 이름이 들어 있지 않은지 한 번 더 봐주시길 바랍니다~!</p>
+      <p class="small only-detail" style="margin:6px 0 0">AI와 나눈 대화가 많지 않거나 대화 기록 기능을 꺼 두셨다면 AI가 선생님을 알기 어렵습니다. 그때는 두 줄을 직접 적어 주셔도 됩니다.</p>
+    </div>
+  </div>
+
+  <div class="blk">
+    <p class="kw">자주 나온 키워드</p>
+    <div class="idcloud" id="identCloud"></div>
+  </div>
+  <div class="blk">
+    <p class="kw">AI가 정리한 한 문장 <span class="small" id="identCount"></span></p>
+    <div class="wall idwall" id="identWall"></div>
+  </div>
+</section>
+
+<!-- ═══ 4 선물 꾸러미 ═══ -->
 <section class="panel" id="p-gift">
   <h2>연수 선물 꾸러미</h2>
   <p class="sub">제가 실제로 매일 쓰는 무료 프로그램과 단축키를 한 페이지에 모아 두었습니다. QR 하나로 가져가시면 됩니다.</p>
@@ -255,7 +320,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
 </section>
 
-<!-- ═══ 4 신청하신 이유 ═══ -->
+<!-- ═══ 5 신청하신 이유 ═══ -->
 <section class="panel" id="p-why">
   <h2>오늘 연수를 신청하신 이유가 궁금합니다</h2>
   <p class="sub">솔직하게 적어 주시면 그 순서대로 시간을 더 쓰겠습니다.</p>
@@ -322,7 +387,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-22</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-01</span></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
@@ -357,6 +422,9 @@ if(/^https?:\/\//i.test(REFLECT)){
   const rc=document.getElementById('reflectCard'); rc.style.borderBottom='0'; rc.style.paddingBottom='0'; rc.style.marginBottom='0';
 }
 
+const IDENT = (Q.get('ident')||'').trim() !== '0';   // ident=0 이면 「AI가 본 나」 탭을 숨김
+if(!IDENT){ document.getElementById('tabIdent').remove(); document.getElementById('p-ident').remove(); }
+
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
 if(TITLE){ document.getElementById('todayTitle').textContent = TITLE; document.title = TITLE+' · 오프닝'; }
@@ -374,7 +442,7 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(['hello','ice','gift','why'].includes(h) || (h==='close' && SATIS)) show(h);
+const h=location.hash.replace('#',''); if(document.getElementById('p-'+h) && (['hello','ice','ident','gift','why'].includes(h) || (h==='close' && SATIS))) show(h);
 document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
   if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
@@ -457,6 +525,113 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
   load(); setInterval(()=>{ if(box.closest('.panel').classList.contains('on')) load(); }, CONFIG.pollMs);
 });
 
+/* ── AI가 본 나: 프롬프트 복사 → 한 문장 + 키워드 올리기 (표 yeonsu_live 의 kind=ident·idkw, SQL 변경 없음) ── */
+(function(){
+  const box=document.getElementById('identBox'); if(!box) return;
+  const panel=document.getElementById('p-ident'), form=document.getElementById('identForm'), st=document.getElementById('identSt');
+  const sentIn=form.elements.sent, kwIn=form.elements.kws, nameIn=form.elements.name, prev=document.getElementById('identPrev');
+  const cloud=document.getElementById('identCloud'), wall=document.getElementById('identWall'), count=document.getElementById('identCount');
+  const PROMPT=[
+    '지금까지 우리가 나눈 대화를 바탕으로, 나를 한 명의 교사로 소개해 주세요.',
+    '',
+    '이름·나이·가족·건강·사는 곳·정치나 종교 성향 같은 개인적이거나 민감한 정보와, 학생·동료·학교의 이름은 빼 주세요.',
+    '수업·학생·교육에 대한 고민과 실천이 드러나는 대화만 근거로 삼아 주세요.',
+    '',
+    '미리 정해진 기준에 맞춰 평가하지 말고, 대화에서 반복해서 나타난 관심사·질문하는 방식·고민·선택·시도를 종합해서 "이 사람은 어떤 교사인가"를 짚어 주세요.',
+    '',
+    '소개 마지막에 아래 두 줄로 정리해 주세요. 키워드는 짧은 낱말 세 개로 써 주세요.',
+    '이 선생님은 ______ 교사입니다.',
+    '키워드: #____ #____ #____',
+    '',
+    '오늘 연수에서는 이 마지막 두 줄만 앞 화면에 함께 올립니다. 나머지 소개는 저만 봅니다.'
+  ].join('\n');
+  document.getElementById('identPrompt').textContent=PROMPT;
+
+  const cb=document.getElementById('identCopy');
+  cb.addEventListener('click',()=>{
+    const ok=()=>{ cb.textContent='복사됐습니다 — AI에 붙여넣어 주세요'; setTimeout(()=>{ cb.textContent='프롬프트 복사'; },2400); };
+    const fb=()=>{ const ta=document.createElement('textarea'); ta.value=PROMPT; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){ cb.textContent='복사하지 못했습니다 — 글을 직접 선택해 주세요'; } document.body.removeChild(ta); };
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(PROMPT).then(ok,fb); else fb();
+  });
+
+  /* 붙여넣은 글 다듬기: 마크다운 별표·글머리·따옴표 걷기, 문장 칸에 두 줄을 한꺼번에 붙여도 키워드 칸으로 나눔 */
+  const cleanLine=t=>String(t||'').replace(/[*`]+/g,'').replace(/^\s*(?:[-•·>]|\d+[.)])\s+/,'').replace(/^["'“”‘’「」]+|["'“”‘’「」]+$/g,'').replace(/\s+/g,' ').trim();
+  const KW_AT=/(?:^|[\s*])키워드(?:\s*\d+\s*개)?\s*[:：]/i, KW_LABEL=/^[\s*]*(?:키워드(?:\s*\d+\s*개)?|keywords?)\s*[:：]?\s*\**\s*/i;
+  function splitPaste(){
+    const v=sentIn.value, i=v.search(KW_AT); if(i<0) return;
+    const rest=v.slice(i).replace(KW_LABEL,'');
+    if(!kwIn.value.trim()) kwIn.value=rest.split('\n')[0].trim();
+    sentIn.value=v.slice(0,i).replace(/[\s*]+$/,'');
+  }
+  function pickSentence(v){
+    const lines=String(v||'').split(/\n+/).map(cleanLine).filter(Boolean);
+    if(lines.length<=1) return lines[0]||'';
+    const hit=lines.filter(l=>/이\s*선생님은/.test(l)||/교사입니다/.test(l));
+    return hit.length?hit[hit.length-1]:lines[lines.length-1];
+  }
+  function parseKw(str){
+    const t=String(str||'').replace(/[*`]+/g,' ').replace(KW_LABEL,'');
+    const parts=t.includes('#')?t.split('#'):(/[,，、·\/\n]/.test(t)?t.split(/[,，、·\/\n]+/):t.split(/\s+/));
+    const seen=new Set(), out=[];
+    for(let p of parts){
+      p=p.replace(/["'“”‘’「」()\[\]]/g,'').replace(/[.。!?]+$/,'').replace(/\s+/g,' ').trim();
+      if(!p||p.length>20) continue;
+      const k=p.replace(/\s/g,'').toLowerCase(); if(seen.has(k)) continue;
+      seen.add(k); out.push(p); if(out.length>=5) break;
+    }
+    return out;
+  }
+  function renderPrev(){
+    const raw=kwIn.value.trim(); if(!raw){ prev.innerHTML=''; return; }
+    if(/_{3,}/.test(raw)){ prev.textContent='빈칸(____)이 그대로 있습니다. AI가 쓴 키워드를 붙여넣어 주세요.'; return; }
+    const ks=parseKw(raw);
+    prev.innerHTML=ks.length?'<small>올라갈 키워드</small>'+ks.map(k=>`<span class="k">${esc(k)}</span>`).join(''):'키워드를 읽지 못했습니다. # 이나 쉼표로 나눠 적어 주세요.';
+  }
+  sentIn.addEventListener('input',()=>{ splitPaste(); renderPrev(); });
+  sentIn.addEventListener('change',()=>{ const p=pickSentence(sentIn.value); if(p) sentIn.value=p; });
+  kwIn.addEventListener('input',renderPrev);
+
+  if(!ready){ st.textContent='CONFIG.supabase 에 주소와 키를 넣고 SETUP_연수라이브.sql 을 실행하면 이 탭이 켜집니다.'; return; }
+  const MK='opening:mine:'+CODE+':ident'; let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem(MK)||'[]')); }catch(e){}
+  async function insertMany(rows){
+    const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:{...hdr(),'Prefer':'return=representation'},body:JSON.stringify(rows.map(o=>({s:CODE,...o})))});
+    if(!r.ok) throw new Error(r.status); return r.json();
+  }
+  function render(sents,kws){
+    const m=new Map();
+    kws.forEach(r=>{ const t=(r.body||'').trim(); if(!t) return; const k=t.replace(/\s+/g,'').toLowerCase(); const o=m.get(k)||{t,c:0}; o.c++; m.set(k,o); });
+    const arr=[...m.values()].sort((a,b)=>b.c-a.c||a.t.localeCompare(b.t,'ko')), max=arr.length?arr[0].c:1;
+    cloud.innerHTML=arr.length?arr.map(o=>{ const sz=(0.95+(max>1?0.9*(o.c-1)/(max-1):0)).toFixed(2); return `<span class="${max>1&&o.c===max?'top':''}" style="font-size:${sz}em">${esc(o.t)}${o.c>1?`<b>${o.c}</b>`:''}</span>`; }).join(''):'<div class="idempty">아직 올라온 키워드가 없습니다.</div>';
+    wall.innerHTML=sents.length?sents.map(r=>`<div class="card${mine.has(r.id)?' mine':''}"><span class="who">${esc(r.name||'익명')}</span>${esc(r.body)}</div>`).join(''):'<div class="idempty">아직 올라온 문장이 없습니다. 첫 문장을 올려 주세요.</div>';
+    count.textContent=sents.length?'· '+sents.length+'명':'';
+  }
+  async function load(){
+    try{ const [a,b]=await Promise.all([fetchRows('ident'),fetchRows('idkw')]); render(a,b); if(st.dataset.err){ st.textContent=''; delete st.dataset.err; } }
+    catch(e){ st.dataset.err='1'; st.textContent='서버에 닿지 않습니다 ('+e.message+'). 잠시 뒤 다시 열어 주세요.'; }
+  }
+  let sending=false;
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); if(sending) return;
+    splitPaste();
+    const rawS=sentIn.value, rawK=kwIn.value;
+    if(/_{3,}/.test(rawS)||/_{3,}/.test(rawK)){ st.textContent='빈칸(____)이 그대로 있습니다. AI가 쓴 답을 붙여넣어 주세요.'; return; }
+    const sent=pickSentence(rawS), kws=parseKw(rawK), name=nameIn.value.trim().slice(0,30);
+    if(!sent&&!kws.length){ st.textContent='한 문장이나 키워드를 하나 이상 적어 주세요.'; return; }
+    if(sent.length>100){ st.textContent='문장이 100자를 넘습니다. AI가 쓴 마지막 두 줄만 붙여넣어 주세요.'; return; }
+    const rows=[]; if(sent) rows.push({kind:'ident',name,body:sent,n:null}); kws.forEach(k=>rows.push({kind:'idkw',name:'',body:k,n:null}));
+    sending=true; st.textContent='보내는 중…';
+    try{
+      const res=await insertMany(rows); res.filter(r=>r.kind==='ident').forEach(r=>mine.add(r.id));
+      try{ localStorage.setItem(MK,JSON.stringify([...mine])); }catch(e2){}
+      sentIn.value=''; kwIn.value=''; nameIn.value=''; renderPrev();
+      st.textContent='올렸습니다 🙂 앞 화면에서 함께 봐주시길 바랍니다~!'; load();
+    }catch(e2){ st.textContent='보내지 못했습니다 ('+e2.message+'). 다시 눌러 주세요.'; }
+    finally{ setTimeout(()=>{ sending=false; },1500); }
+  });
+  load(); setInterval(()=>{ if(panel.classList.contains('on')) load(); }, CONFIG.pollMs);
+})();
+
 /* ── 강사 패널 ── */
 const admin=document.getElementById('admin');
 document.getElementById('adminCode').textContent=CODE;
@@ -491,6 +666,7 @@ function qrInto(el,u){
 function drawQR(){
   qrInto(document.getElementById('giftQr'), new URL(CONFIG.gift,location.href).href);
   if(/^https?:\/\//i.test(REFLECT)) qrInto(document.getElementById('reflectQr'), REFLECT);
+  const iq=document.getElementById('identQr'); if(iq){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#ident'; qrInto(iq,u.href); }
 }
 if(window.qrcode) drawQR(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load',drawQR); setTimeout(()=>{ if(!window.qrcode) drawQR(); },2500); }
 </script>
