@@ -446,7 +446,7 @@ function viewList(back) {
     <div class="steps3">
       <div><b>1</b><p>연수에서 안내받은 회차 PIN을 넣습니다.</p></div>
       <div><b>2</b><p>만든 앱의 HTML 파일을 올리고 학교급·과목·목적을 고릅니다.</p></div>
-      <div><b>3</b><p>학생 개인정보가 없는지 확인을 거친 뒤 목록에 올라옵니다.</p></div>
+      <div><b>3</b><p>올리면 바로 목록에 올라옵니다. 올리기 전에 학생 이름·사진이 없는지 한 번 더 봐주시길 바랍니다~!</p></div>
     </div>
     <p class="sub">GitHub 계정이 없어도 올릴 수 있습니다.</p>
     <a class="btn primary" href="#/up">앱 올리기</a>
@@ -515,7 +515,7 @@ function renderResults() {
   if (!list.length) {
     const s = S.sessions.find(x => x.code === S.f.s);
     box.innerHTML = s && !S.apps.some(a => a.session_id === s.id)
-      ? `<div class="notice"><b>${esc(s.name)}</b><p>이 회차에는 아직 공개된 앱이 없습니다. 올린 앱은 확인을 거쳐 이곳에 보입니다.</p><button class="btn line" data-f="s" data-v="">전체 보기</button></div>`
+      ? `<div class="notice"><b>${esc(s.name)}</b><p>이 회차에는 아직 올라온 앱이 없습니다. 올린 앱은 바로 이곳에 보입니다.</p><button class="btn line" data-f="s" data-v="">전체 보기</button></div>`
       : `<p class="empty">조건에 맞는 앱이 없습니다. 칩을 「전체」로 바꿔 보세요.</p>`;
     const b = box.querySelector('[data-f]'); if (b) b.onclick = () => { S.f.s = ''; renderFilters(); renderResults(); };
     return;
@@ -605,7 +605,7 @@ async function loadComments(id) {
 }
 function ownerBox(a) {
   const box = $('#ownbox'); if (!box) return;
-  box.innerHTML = `<p class="hint">올릴 때 정한 고치기 비밀번호로 내용을 고치거나 앱을 내릴 수 있습니다. HTML 파일을 바꾸면 확인을 거쳐 다시 공개됩니다.</p>
+  box.innerHTML = `<p class="hint">올릴 때 정한 고치기 비밀번호로 내용을 고치거나 앱을 내릴 수 있습니다.</p>
     <div class="field"><label for="opw">고치기 비밀번호</label><input type="password" id="opw" autocomplete="off"></div>
     <div class="field"><label for="otitle">제목</label><input type="text" id="otitle" maxlength="60" value="${esc(a.title)}"></div>
     <div class="field"><label for="osum">한 줄 소개</label><input type="text" id="osum" maxlength="140" value="${esc(a.summary)}"></div>
@@ -763,15 +763,17 @@ function viewUpload() {
         const id = await API.submit({ p_code: U.code, p_pin: U.pin, p_title: title, p_summary: $('#sum').value.trim(), p_author: $('#au').value.trim(),
           p_level: U.level, p_subject: subject, p_purpose: U.purpose, p_html: U.html, p_thumb: U.thumb || '', p_deploy: dep, p_editpass: pw });
         const mine = load('gth:mine', []); mine.unshift({ id, title, at: new Date().toISOString() }); store('gth:mine', mine.slice(0, 30));
-        S.loaded = false; renderStep3(title); stepTo(3); renderMine();
+        S.loaded = false;
+        let live = false; try { live = !!(await API.one(id)); } catch (e2) {}   // 바로 공개 방식이면 목록에 이미 보임, 확인 방식이면 null
+        renderStep3(title, live); stepTo(3); renderMine();
       } catch (e) { toast(e.message, true); }
       finally { btn.disabled = false; btn.textContent = '올리기'; }
     };
   }
 
-  function renderStep3(title) {
+  function renderStep3(title, live) {
     $('#st3').innerHTML = `<div class="done-box"><img src="icon.svg" alt=""><h2>올렸습니다!</h2>
-      <p>「${esc(title)}」은 확인을 거친 뒤 목록에 올라옵니다.<br>연수 중이라면 곧 보입니다.</p>
+      <p>${live ? `「${esc(title)}」이 지금 목록에 올라가 있습니다.<br>다른 선생님들도 바로 열어 보실 수 있습니다.` : `「${esc(title)}」은 확인을 거친 뒤 목록에 올라옵니다.<br>연수 중이라면 곧 보입니다.`}</p>
       <div class="frow2 center"><a class="btn line" href="#/${U.code ? '?' : ''}" id="tolist">목록으로</a><button class="btn primary" type="button" id="again">하나 더 올리기</button></div></div>`;
     $('#tolist').onclick = e => { e.preventDefault(); S.f.s = U.code; location.hash = '#/'; };
     $('#again').onclick = () => { U.html = ''; U.thumb = ''; U.level = ''; U.purpose = ''; renderStep2(); stepTo(2); };
@@ -802,7 +804,7 @@ function viewAdmin() {
     $('#alog').onclick = go; $('#apw').onkeydown = e => { if (e.key === 'Enter') go(); }; $('#apw').focus();
     return;
   }
-  const A = { apps: [], sessions: [], comments: [] };
+  const A = { apps: [], sessions: [], comments: [] }; let first = true;
   view.innerHTML = `<div class="wrap pad">
     <div class="ah"><h1>관리</h1><button class="btn sm" id="alogout">나가기</button></div>
     <div class="tabs" id="atabs">${[['pending', '확인 대기'], ['public', '공개 중'], ['hidden', '내린 앱'], ['sessions', '회차'], ['comments', '의견'], ['pass', '비밀번호']]
@@ -816,6 +818,7 @@ function viewAdmin() {
     catch (e) { fail(e); return; }
     const c = st => A.apps.filter(a => a.status === st).length;
     $('[data-count="pending"]').textContent = c('pending') ? ' ' + c('pending') : '';
+    if (first) { first = false; if (S.tab === 'pending' && !c('pending')) { S.tab = 'public'; $$('#atabs button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.tab === 'public'))); } }   // 바로 공개 방식이면 확인 대기가 비어 있으니 공개 중부터 보여 줌
     draw();
   }
   const sName = id => { const s = A.sessions.find(x => x.id === id); return s ? fmtDay(s.held_on) + ' ' + s.name : ''; };
