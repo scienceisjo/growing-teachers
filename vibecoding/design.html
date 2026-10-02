@@ -266,6 +266,22 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
 .shot figcaption{padding:8px 12px 10px;font-size:.85rem;color:var(--ink2);line-height:1.45}
 .shot figcaption b{color:var(--ink);font-weight:600;margin-right:.35em}
 
+/* 제 페이지 예시 */
+.exg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:14px 0}
+.ex{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff;display:flex;flex-direction:column;min-width:0}
+.ex.wide{grid-column:span 2}
+.ex .imgs{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line)}
+.ex.wide .imgs{grid-template-columns:1fr 1fr}
+.ex .imgs a{display:block;background:#fff}
+.ex .imgs img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.ex .eb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ex .eb .tg2{font-size:.74rem;font-weight:600;color:var(--blue);margin:0}
+.ex .eb h3{font-size:1.02rem}
+.ex .eb p{font-size:.88rem;color:var(--ink2);margin:0;line-height:1.5}
+.ex .eb .acts{margin-top:auto;padding-top:6px}
+.ex .eb .acts .btn{font-size:.8rem;padding:6px 12px}
+@media (max-width:760px){.exg{grid-template-columns:1fr}.ex.wide{grid-column:auto}}
+html[data-mode="present"] .ex .eb p{display:none}
 </style>
 </head>
 <body>
@@ -314,7 +330,8 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
     </div>
     <div class="flow" id="flow"></div>
     <div class="actions">
-      <a class="btn big primary" href="#s2">추천 서랍 보기 ↓</a>
+      <a class="btn big primary" href="#s2">제가 만든 예 보기 ↓</a>
+      <a class="btn big" href="#s3">추천 서랍 보기 ↓</a>
       <a class="btn big to-basic" href="basic.html">① 기초 매뉴얼로</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
     </div>
@@ -370,10 +387,33 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
   </div>
 </section>
 
-<!-- ═══════════ 2 추천 서랍 ═══════════ -->
-<section class="step" id="s2" data-title="추천 8">
+<!-- ═══════════ 2 제가 만든 예 ═══════════ -->
+<section class="step" id="s2" data-title="제 예시">
   <div class="wrap">
-    <div class="step-h"><span class="num">2</span><h2>교실 앱에 잘 맞는 추천 서랍 8</h2></div>
+    <div class="step-h"><span class="num">2</span><h2>이 설계서로 만든 제 페이지</h2></div>
+    <p class="goal">apple 설계서를 입혀 실제로 만든 제 페이지를 먼저 둘러보겠습니다!</p>
+    <div class="blk">
+      <p class="kw">같은 설계서 한 장으로 종류가 다른 페이지를 만들었습니다</p>
+      <p class="brief">강의 화면, 안내 페이지, 보관함, 포트폴리오. 모두 흰 면과 짙은 면, 파란 강조색 하나, 둥근 카드로 같은 집안처럼 보입니다.</p>
+      <div class="exg" id="exg">
+        <article class="ex wide"><div class="imgs"><a href="https://scienceisjo.github.io/electricity/06-power-lecture.html" target="_blank" rel="noopener"><img src="gallery/power.webp" alt="소비 전력 강의 화면의 검정 표지" width="800" height="500" loading="lazy"></a><a href="https://scienceisjo.github.io/electricity/06-power-lecture.html" target="_blank" rel="noopener"><img src="shots/pow-blank2.webp" alt="소비 전력 강의 화면의 흰 면 학습지 장면, 정답이 파랑으로 열린 모습" width="1200" height="675" loading="lazy"></a></div><div class="eb"><p class="tg2">칠판 강의 화면</p><h3>소비 전력 강의 화면</h3><p>표지는 검정, 학습지 장면은 흰 면으로 번갈아 나오고, 빈칸 정답과 번호 배지에만 파랑을 씁니다.</p><div class="acts"><a class="btn" href="https://scienceisjo.github.io/electricity/06-power-lecture.html" target="_blank" rel="noopener">열어 보기 ↗</a></div></div></article>
+        <article class="ex"><div class="imgs"><a href="https://scienceisjo.github.io/class-kit/setup/guide.html" target="_blank" rel="noopener"><img src="gallery/classkit.webp" alt="우리 반 도구 꾸러미 설치 안내의 첫 화면" width="800" height="500" loading="lazy"></a></div><div class="eb"><p class="tg2">안내 페이지</p><h3>우리 반 도구 꾸러미 설치 안내</h3><p>설치 순서를 흰 면과 회색 면으로 나누고, 단추는 파란 알약 모양 하나만 씁니다.</p><div class="acts"><a class="btn" href="https://scienceisjo.github.io/class-kit/setup/guide.html" target="_blank" rel="noopener">열어 보기 ↗</a></div></div></article>
+        <article class="ex"><div class="imgs"><a href="../giteacherhub/" target="_blank" rel="noopener"><img src="gallery/gth.webp" alt="GiteacherHub 교실 앱 보관함의 첫 화면" width="800" height="500" loading="lazy"></a></div><div class="eb"><p class="tg2">교사용 보관함</p><h3>GiteacherHub</h3><p>목록, 올리기, 관리 화면이 모두 흰 바탕에 파랑 하나, 그림자 없는 카드입니다.</p><div class="acts"><a class="btn" href="../giteacherhub/" target="_blank" rel="noopener">열어 보기 ↗</a></div></div></article>
+        <article class="ex"><div class="imgs"><a href="https://scienceisjo.github.io/studentgithub/" target="_blank" rel="noopener"><img src="gallery/studentgithub.webp" alt="Studentgithub 학생 작품 전시관의 첫 화면" width="800" height="500" loading="lazy"></a></div><div class="eb"><p class="tg2">학생용 전시관</p><h3>Studentgithub</h3><p>보관함과 같은 설계서를 써서, 선생님 사이트와 학생 사이트가 한 집안처럼 보입니다.</p><div class="acts"><a class="btn" href="https://scienceisjo.github.io/studentgithub/" target="_blank" rel="noopener">열어 보기 ↗</a></div></div></article>
+        <article class="ex"><div class="imgs"><a href="../" target="_blank" rel="noopener"><img src="gallery/portfolio.webp" alt="조승재 포트폴리오의 첫 화면" width="800" height="500" loading="lazy"></a></div><div class="eb"><p class="tg2">한 장짜리 소개</p><h3>조승재 포트폴리오</h3><p>검정 맨 위 줄, 흰 면과 회색 면, 큰 제목과 파란 단추 하나로 정리했습니다.</p><div class="acts"><a class="btn" href="../" target="_blank" rel="noopener">열어 보기 ↗</a></div></div></article>
+      </div>
+      <div class="detail">
+        <p>저는 이 페이지들을 만들 때마다 apple 설계서를 AI에게 주고, 로고와 브랜드 이름은 넣지 말고 한글은 Pretendard 글꼴로 해 달라고 덧붙입니다. 설계서에 적힌 색 값과 모서리 둥글기를 그대로 따르기 때문에, 페이지마다 디자인을 따로 부탁하지 않아도 모양이 맞춰집니다.</p>
+        <p>학생이 쓰는 앱과 선생님이 쓰는 앱을 같은 설계서로 만들면 한 세트처럼 보이는 것도 이 때문입니다. 지금 보고 계신 이 페이지도 같은 설계서로 만들었습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 추천 서랍 ═══════════ -->
+<section class="step" id="s3" data-title="추천 8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>교실 앱에 잘 맞는 추천 서랍 8</h2></div>
     <p class="goal">수업용 앱에 입혔을 때 읽기 편한 설계서 여덟 개를 먼저 골라보겠습니다!</p>
     <div class="blk">
       <p class="brief">카드 위쪽 그림은 그 설계서의 바탕색·글자색·버튼색으로 그린 미리보기입니다.</p>
@@ -385,10 +425,10 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
   </div>
 </section>
 
-<!-- ═══════════ 3 쓰는 법 ═══════════ -->
-<section class="step" id="s3" data-title="쓰는 법">
+<!-- ═══════════ 4 쓰는 법 ═══════════ -->
+<section class="step" id="s4" data-title="쓰는 법">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
+    <div class="step-h"><span class="num">4</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
     <p class="goal">폴더에서 일하는 도구는 파일을 두고 읽게 하고, 웹 채팅은 짧은 판을 붙여넣거나 원본을 첨부해보겠습니다!</p>
 
     <div class="blk" data-tool="local">
@@ -467,10 +507,10 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
   </div>
 </section>
 
-<!-- ═══════════ 4 전체 서랍 ═══════════ -->
-<section class="step" id="s4" data-title="전체 74">
+<!-- ═══════════ 5 전체 서랍 ═══════════ -->
+<section class="step" id="s5" data-title="전체 74">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>전체 서랍</h2></div>
+    <div class="step-h"><span class="num">5</span><h2>전체 서랍</h2></div>
     <p class="goal">분류와 바탕 밝기로 거르면서 마음에 드는 설계서를 찾아보겠습니다!</p>
     <div class="blk">
       <div class="dfilter">
@@ -488,10 +528,10 @@ html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(3
   </div>
 </section>
 
-<!-- ═══════════ 5 지킬 것 ═══════════ -->
-<section class="step" id="s5" data-title="지킬 것">
+<!-- ═══════════ 6 지킬 것 ═══════════ -->
+<section class="step" id="s6" data-title="지킬 것">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>입힐 때 지킬 것</h2></div>
+    <div class="step-h"><span class="num">6</span><h2>입힐 때 지킬 것</h2></div>
     <p class="goal">학생들에게 나눠 줄 앱이라 몇 가지만 지켜보겠습니다!</p>
 
     <div class="blk">
