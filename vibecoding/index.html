@@ -357,6 +357,9 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 .morebox .x{border:1px solid var(--line);background:#fff;border-radius:9999px;width:34px;height:34px;cursor:pointer;flex:none}
 .morebox>p{max-width:44em}
 .cx-list{display:grid;gap:8px}
+.grid2.g22{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kr-row+.kr-row{margin-top:10px}
+@media (max-width:640px){.grid2.g22{grid-template-columns:1fr}.kr-row+.kr-row{margin-top:18px;padding-top:18px;border-top:1px dashed var(--line)}}
 </style>
 </head>
 <body>
@@ -469,7 +472,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 <section class="step" id="s3" data-title="도구 지도" data-min="4">
   <div class="wrap">
     <div class="step-h"><span class="num">3</span><h2>바이브코딩 도구 지도</h2><span class="min"><b>4</b>분</span></div>
-    <p class="goal">바이브코딩 도구를 다섯 갈래로 나눠 보고, 요즘 나온 일을 맡기는 AI까지 살펴보겠습니다!</p>
+    <p class="goal">바이브코딩 도구를 다섯 갈래로 나눠 보고, 요즘 나온 일을 맡기는 AI와 한국 선생님이 쓰는 법까지 살펴보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">같은 AI라도 일하는 자리가 다릅니다</p>
@@ -612,6 +615,50 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
         <p>Google의 Gemini Spark는 Gemini 앱에 들어 있는 개인 AI 에이전트입니다. Gmail과 Google 문서, 스프레드시트를 오가며 일하고, 기기를 꺼도 Google의 클라우드에서 일을 이어 갑니다. 한국에서도 한국어로 쓰는데, 개인 Google 계정에 AI Pro 이상 요금제가 있어야 하고 만 18세 이상만 씁니다. 학교 Google 계정으로는 아직 쓸 수 없습니다.</p>
         <p>바이브코딩과는 쓰임이 조금 다릅니다. 이 기능들도 웹 페이지 파일을 만들 수 있지만, 앱을 여러 번 고쳐 가며 키우는 일은 Codex나 Claude의 Code 탭이 맞게 만들어져 있습니다. 공문 여러 개를 읽고 할 일 표를 만들거나, 흩어진 자료로 발표자료 초안을 만드는 것처럼 코드가 아닌 일을 맡기는 쪽입니다.</p>
         <p>맡기는 일이 커질수록 확인할 것도 늘어납니다. 저는 AI에게 일을 시킬 때 학생 개인정보가 든 파일은 넣지 않고, 일을 시킬 폴더를 따로 만들어 그 안에서만 하게 합니다. 메일 보내기나 결제, 파일 지우기처럼 되돌리기 어려운 일은 네 회사 모두 먼저 묻게 되어 있지만, 웹 페이지 속에 AI를 속이려는 글이 숨어 있을 수 있어서 처음 가는 사이트를 오가는 일은 단계마다 확인합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" id="agentKr">
+      <p class="kw">한국 선생님은 이렇게 써 볼 수 있습니다</p>
+      <p class="brief">가진 계정에 따라 지금 바로 되는 것이 다릅니다. 학교 계정만 있을 때, 개인 무료 계정이 있을 때, 개인 유료 요금제가 있을 때로 나눠 정리했습니다.</p>
+      <div class="dg" aria-label="가진 계정에 따라 바로 쓸 수 있는 AI 기능">
+        <div class="dg-tabs"><button type="button" data-v="school" aria-pressed="true">학교 계정만</button><button type="button" data-v="free" aria-pressed="false">개인 무료 계정</button><button type="button" data-v="paid" aria-pressed="false" class="ok">개인 유료 요금제</button></div>
+        <div data-view="school">
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-teacher"/></svg><b>학교 Microsoft 365 계정</b><small>학교에서 받은 계정</small></div><div class="dg-wire"><i style="--dl:0s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-chat"/></svg><b>Microsoft Copilot Chat</b><small>추가 비용 없음</small></div><div class="dg-wire"><i style="--dl:.8s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-paper"/></svg><b>채팅 · 파일 요약</b><small>일 맡기기(Cowork)는 학교 유료 라이선스</small></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-teacher"/></svg><b>SenGPT</b><small>서울 교원 · 센스쿨 계정</small></div><div class="dg-wire"><i style="--dl:.3s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-ai"/></svg><b>SenGPT 에이전트</b><small>캘린더 · 메일 · 드라이브 연결</small></div><div class="dg-wire"><i style="--dl:1.1s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-clock"/></svg><b>정한 시간에 저절로</b><small>대화 예약 · 결과는 메일로</small></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-teacher"/></svg><b>학교 Google 계정</b><small>Workspace for Education</small></div><div class="dg-wire"><i style="--dl:.6s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-chat"/></svg><b>Gemini 앱</b><small>추가 비용 없음 · 학교 관리자가 관리</small></div><div class="dg-wire"><i style="--dl:1.4s"></i></div><div class="dg-node ghost"><svg class="ic"><use href="#i-x"/></svg><b>Gemini Spark는 안 됨</b><small>개인 계정만</small></div></div>
+        </div>
+        <div data-view="free">
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>ChatGPT 무료 계정</b></div><div class="dg-wire"><i style="--dl:0s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-app"/></svg><b>ChatGPT 데스크톱 앱</b><small>Windows · Mac에 설치</small></div><div class="dg-wire"><i style="--dl:.8s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-folder"/></svg><b>Work · 내 폴더에서</b><small>가벼운 일을 조금씩</small></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>Claude 무료 계정</b></div><div class="dg-wire"><i style="--dl:.3s"></i></div><div class="dg-node ghost"><svg class="ic"><use href="#i-x"/></svg><b>Cowork는 안 됨</b><small>Pro부터</small></div><div class="dg-wire"><i style="--dl:1.1s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>채팅 · 아티팩트까지</b></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-person"/></svg><b>Google 개인 무료 계정</b></div><div class="dg-wire"><i style="--dl:.6s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>Gemini 앱</b><small>채팅 · 캔버스</small></div><div class="dg-wire"><i style="--dl:1.4s"></i></div><div class="dg-node ghost"><svg class="ic"><use href="#i-x"/></svg><b>Spark는 안 됨</b><small>AI Pro부터</small></div></div>
+        </div>
+        <div data-view="paid">
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-card"/></svg><b>ChatGPT Plus</b><small>월 29,000원</small></div><div class="dg-wire"><i style="--dl:0s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-cloud"/></svg><b>Work</b><small>웹 · 휴대폰 · 데스크톱 앱</small></div><div class="dg-wire"><i style="--dl:.8s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-table"/></svg><b>보고서 · 표 · 발표자료</b><small>내 폴더와 크롬도 씀</small></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-card"/></svg><b>Claude Pro</b><small>월 22달러</small></div><div class="dg-wire"><i style="--dl:.3s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-app"/></svg><b>Cowork</b><small>데스크톱 앱 · 웹 · 휴대폰</small></div><div class="dg-wire"><i style="--dl:1.1s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-folder"/></svg><b>문서 · 표 · 파일 정리</b><small>일반 대화와 합쳐지는 중</small></div></div>
+            <div class="dg-flow kr-row"><div class="dg-node"><svg class="ic"><use href="#i-card"/></svg><b>Google AI Pro</b><small>월 29,000원</small></div><div class="dg-wire"><i style="--dl:.6s"></i></div><div class="dg-node on"><svg class="ic"><use href="#i-ai"/></svg><b>Gemini Spark</b><small>개인 계정 · 만 18세 이상</small></div><div class="dg-wire"><i style="--dl:1.4s"></i></div><div class="dg-node"><svg class="ic"><use href="#i-clock"/></svg><b>기기를 꺼도 이어서</b><small>Gmail · 문서 · 시트</small></div></div>
+        </div>
+        <p class="dg-cap" data-vsay="school">학교 계정으로 추가 비용 없이 되는 것은 채팅까지입니다. 서울 교원은 SenGPT 에이전트로 캘린더와 메일을 연결하고, 정한 시간에 저절로 일을 시키는 데까지 해 볼 수 있습니다.</p>
+        <p class="dg-cap" data-vsay="free" hidden>무료 계정으로 일을 맡겨 보려면 ChatGPT 데스크톱 앱이 필요합니다. Claude의 Cowork와 Gemini Spark는 무료 계정에서 쓸 수 없습니다.</p>
+        <p class="dg-cap" data-vsay="paid" hidden>개인 유료 요금제가 있으면 웹과 휴대폰에서도 일을 맡깁니다. Gemini Spark는 학교 계정이 아니라 개인 Google 계정에서만 됩니다.</p>
+      </div>
+      <div class="grid2 g22">
+        <div class="box"><b>학생 정보는 넣지 않습니다</b><p>나이스에서 내려받은 파일, 상담 기록처럼 학생 이름이나 학번, 성적이 든 파일은 어떤 기능에도 맡기지 않습니다.</p></div>
+        <div class="box"><b>한글 파일은 PDF로 넣고 Word로 받습니다</b><p>HWP 파일은 제대로 읽지 못하는 경우가 많아서 PDF로 바꿔 넣고, 결과물은 Word 파일로 받아 한글에서 열어 고칩니다. SenGPT는 HWP 파일도 바로 읽습니다.</p></div>
+        <div class="box"><b>학교 계정으로 로그인합니다</b><p>Microsoft Copilot Chat은 학교 계정으로 들어가야 초록 방패가 보이고 학교 계정의 데이터 보호가 붙습니다. 개인 계정으로 들어가면 이 보호가 없습니다.</p></div>
+        <div class="box"><b>보내기는 직접 합니다</b><p>SenGPT 에이전트에 연결한 Microsoft 365 메일은 확인 창 없이 바로 보내질 수 있어서, 메일은 초안까지만 받고 보내기는 제가 합니다.</p></div>
+      </div>
+      <div class="only-detail">
+        <p class="brief" style="margin-top:18px">학교에서 바로 맡겨 볼 만한 일을 부탁문으로 적어 두었습니다. [ ] 안만 바꿔 넣어 주시길 바랍니다~!</p>
+        <div class="pr"><span class="pl">학습지 파일 정리 · 데스크톱 앱에서 내 폴더로</span><button class="btn cp" type="button">복사</button><div class="txt">바탕화면 '2학기 학습지' 폴더의 파일을 차시 순서대로 정리하고, 파일 이름을 '학습지01_주제' 꼴로 바꿔 줘. 파일은 지우지 말고, 바꾸기 전에 바꿀 이름 목록을 먼저 보여 줘.</div></div>
+        <div class="pr"><span class="pl">가정통신문 초안 · 계획서를 첨부해서</span><button class="btn cp" type="button">복사</button><div class="txt">첨부한 체험학습 계획서를 읽고, 학부모님께 보낼 가정통신문 초안을 Word 파일로 만들어 줘. 날짜, 장소, 준비물, 비용은 계획서에 적힌 대로만 쓰고, 계획서에 없는 내용은 [확인 필요]로 비워 둬.</div></div>
+        <div class="pr"><span class="pl">수업 자료 조사표 · 웹을 쓰는 기능에서</span><button class="btn cp" type="button">복사</button><div class="txt">[학년] [과목]의 「[단원 이름]」 단원에서 쓸 수 있는 무료 시뮬레이션이나 영상을 찾아서, 이름과 주소, 한국어 지원 여부, 회원 가입이 필요한지를 표로 정리해 줘. 광고가 많은 사이트는 따로 표시해 줘.</div></div>
+        <div class="pr"><span class="pl">한 주 일정 정리 · SenGPT 에이전트의 대화 예약</span><button class="btn cp" type="button">복사</button><div class="txt">매주 월요일 아침 7시 30분에 내 구글 캘린더에서 이번 주 일정을 읽어, 날짜순으로 정리해 줘. 마감이 있는 일은 맨 위에 따로 모아 줘.</div></div>
+      </div>
+      <div class="detail">
+        <p>서울 선생님이라면 학교 계정으로 쓰는 SenGPT의 에이전트가 가장 가까운 출발점입니다. 컴퓨터를 직접 다루지는 않지만, 구글 캘린더나 메일, 드라이브를 연결해 두고 정한 시간에 저절로 일을 시키는 데까지 됩니다. 에이전트를 만들고 캘린더를 연결하는 순서는 <a href="../sengpt-agent/" target="_blank" rel="noopener">SenGPT 에이전트 기본 실습</a>에, 공문 한 장으로 업무를 맡기는 순서는 <a href="../ai-work/" target="_blank" rel="noopener">AI 활용 업무 효율화 연수</a>에 정리해두었습니다.</p>
+        <p>학교 PC에 앱을 설치할 수 없으면 웹에서 되는 기능부터 씁니다. ChatGPT의 Work는 Plus부터 웹에서 되고, Claude의 Cowork도 Pro부터 웹에서 됩니다. 무료로 Work를 맛보려면 데스크톱 앱이 있어야 해서, 집 컴퓨터에서 해 보는 편이 쉽습니다.</p>
+        <p>학생에게는 직접 쓰게 하지 않습니다. Gemini Spark는 만 18세 이상만 쓰고, Copilot Cowork는 학생 계정에서 쓸 수 없습니다. 이 기능들은 선생님의 업무와 수업 준비를 맡기는 데 씁니다.</p>
       </div>
     </div>
   </div>
