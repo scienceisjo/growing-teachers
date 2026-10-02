@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>바이브코딩 연수 · 말로 만드는 나만의 수업 도구 · 해누리중 조승재</title>
-<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물아홉 점을 전시실처럼 둘러본 뒤 분임별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
+<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, 일을 맡기는 AI(ChatGPT Work·Claude Cowork), HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물아홉 점을 전시실처럼 둘러본 뒤 분임별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="dg.css">
@@ -466,10 +466,10 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 </section>
 
 <!-- ═══════════ 3 도구 지도 ═══════════ -->
-<section class="step" id="s3" data-title="도구 지도" data-min="3">
+<section class="step" id="s3" data-title="도구 지도" data-min="4">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>바이브코딩 도구 지도</h2><span class="min"><b>3</b>분</span></div>
-    <p class="goal">바이브코딩 도구를 다섯 갈래로 나눠 어떤 차이가 있는지 보겠습니다!</p>
+    <div class="step-h"><span class="num">3</span><h2>바이브코딩 도구 지도</h2><span class="min"><b>4</b>분</span></div>
+    <p class="goal">바이브코딩 도구를 다섯 갈래로 나눠 보고, 요즘 나온 일을 맡기는 AI까지 살펴보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">같은 AI라도 일하는 자리가 다릅니다</p>
@@ -558,6 +558,60 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
         <p>Claude in Chrome은 2026년 8월 26일에 정식으로 나왔고, Claude 유료 요금제(Pro 이상)에서 씁니다. ChatGPT는 데스크톱 앱의 설정에서 Computer Use 항목의 Chrome 확장을 설치한 뒤, 대화창에서 @Chrome으로 부릅니다. 둘 다 제가 로그인한 크롬에서 그대로 일합니다. ChatGPT의 확장으로 컴퓨터에 있는 파일을 사이트에 올리려면, 크롬의 확장 프로그램 관리 화면에서 이 확장의 「파일 URL에 대한 액세스 허용」을 켜야 합니다. OpenAI 안내에는 Plus 이상 요금제에 들어 있다고 적혀 있고, 무료와 Go 요금제에서 되는지는 적혀 있지 않습니다.</p>
         <p>로그인된 사이트에서 AI가 대신 누르는 것이라, 결제나 메일 보내기처럼 되돌리기 어려운 일은 맡기지 않습니다. 웹 페이지 안에 AI를 속이려는 글이 숨어 있을 수도 있어서, 처음 가는 사이트에서는 한 단계씩 확인합니다.</p>
         <p>Meshy 무료 요금제는 한 달 100크레딧이고, 무료로 받을 수 있는 모형은 가벼운 모델(Meshy 6 Lite)로 만든 것 한 달 10개까지입니다. 무료로 만든 모형은 Meshy를 출처로 밝히고 씁니다(CC BY 4.0). Meshy는 만 14세 이상이 쓰는 서비스라서, 학생에게 직접 시키지 않고 제가 만들어 수업에 넣습니다. 모두 2026년 9월 안내 기준입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" id="agentWork">
+      <p class="kw"><span class="tag">새로 나온 것</span>일을 통째로 맡기는 AI · ChatGPT Work, Claude Cowork</p>
+      <p class="brief">채팅은 물으면 답하는 데서 끝나지만, ChatGPT Work와 Claude Cowork는 보고서나 표처럼 결과물이 분명한 일을 맡기면 AI가 순서를 스스로 짜서 완성 파일까지 만들어 줍니다. Microsoft와 Google에도 같은 갈래의 기능이 있습니다.</p>
+      <div class="dg" aria-label="채팅에 물을 때와 일을 맡길 때의 차이. 공문 다섯 개로 할 일 표를 만드는 예">
+        <div class="dg-tabs"><button type="button" data-v="chat" aria-pressed="true">채팅에 물으면</button><button type="button" data-v="work" aria-pressed="false" class="ok">일을 맡기면</button></div>
+        <span class="dg-t">예: 공문 다섯 개로 마감일 순 할 일 표 만들기</span>
+        <div data-view="chat">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-paper"/></svg><b>공문 붙여넣기</b><small>한 번에 하나씩</small></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>채팅</b><small>할 일을 글로 답함</small></div>
+            <div class="dg-wire"><i style="--dl:.8s"></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-pencil"/></svg><b>제가 정리</b><small>표로 옮기고 파일로 저장</small></div>
+          </div>
+        </div>
+        <div data-view="work">
+          <div class="dg-fan">
+            <div class="dg-node src"><svg class="ic"><use href="#i-folder"/></svg><b>내 폴더</b><small>공문 PDF 다섯 개</small></div>
+            <div class="dg-wire w1"><i></i></div>
+            <div class="dg-node src"><svg class="ic"><use href="#i-cloud"/></svg><b>연결한 앱</b><small>메일 · 드라이브</small></div>
+            <div class="dg-wire w1"><i style="--dl:.7s"></i></div>
+            <div class="dg-node src"><svg class="ic"><use href="#i-globe"/></svg><b>웹</b><small>교육청 안내 페이지</small></div>
+            <div class="dg-wire w1"><i style="--dl:1.4s"></i></div>
+            <div class="dg-vwire fanv"><i></i></div>
+            <div class="dg-node on hub"><svg class="ic"><use href="#i-ai"/></svg><b>AI 에이전트</b><small>회사의 클라우드 컴퓨터에서<br>읽고, 표로 만들고, 다시 확인</small><span class="dg-chip ok">보내기 · 지우기 전에는 물어봄</span></div>
+            <div class="dg-wire w2"><i style="--dl:2s"></i></div>
+            <div class="dg-node dst ok"><svg class="ic"><use href="#i-table"/></svg><b>완성 파일</b><small>할 일 표.xlsx</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="chat">채팅은 답을 글로 줍니다. 공문을 하나씩 붙여넣고, 답을 표로 옮기고, 파일로 저장하는 일은 제가 합니다.</p>
+        <p class="dg-cap" data-vsay="work" hidden>일을 맡기면 AI가 순서를 스스로 짜서 폴더와 메일, 웹을 오가며 읽고, 표 파일까지 만들어 줍니다. 맡긴 사람은 중간에 AI가 묻는 것에 답하고, 완성된 파일을 확인합니다.</p>
+      </div>
+      <div class="tscroll"><table>
+        <thead><tr><th>회사</th><th>일을 맡기는 기능</th><th>AI가 일하는 곳</th><th>쓰려면</th></tr></thead>
+        <tbody>
+          <tr><td style="white-space:nowrap"><b>OpenAI</b></td><td><b>ChatGPT Work</b><br><span class="small">새 대화 위의 Chat · Work 가운데 Work</span></td><td>OpenAI의 클라우드 컴퓨터. 데스크톱 앱에서는 내 컴퓨터의 파일과 앱, 로그인된 내 크롬도 씁니다</td><td>무료와 Go는 데스크톱 앱에서만 조금. 웹과 휴대폰은 Plus(월 29,000원)부터</td></tr>
+          <tr><td style="white-space:nowrap"><b>Anthropic</b></td><td><b>Claude Cowork</b><br><span class="small">9월부터 일반 대화와 하나로 합쳐지는 중</span></td><td>Anthropic의 클라우드. 데스크톱 앱에서는 내 컴퓨터의 파일도 읽고 씁니다</td><td>Pro(월 22달러) 이상 유료 요금제</td></tr>
+          <tr><td style="white-space:nowrap"><b>Microsoft</b></td><td><b>Copilot Cowork</b><br><span class="small">Microsoft Copilot 안의 Cowork</span></td><td>OneDrive · 메일 · 일정 · Teams 안. 내 PC의 파일은 열지 못하고, 내 PC의 Edge는 씁니다</td><td>학교나 회사가 산 유료 Copilot 라이선스에 쓴 만큼 요금. 교직원은 되고 학생은 안 됩니다</td></tr>
+          <tr><td style="white-space:nowrap"><b>Google</b></td><td><b>Gemini Spark</b><br><span class="small">Gemini 앱의 개인 AI 에이전트</span></td><td>Google의 클라우드. Gmail · 문서 · 스프레드시트를 오가고, 기기를 꺼도 일을 이어 갑니다</td><td>개인 Google 계정에 AI Pro(월 29,000원) 이상, 만 18세 이상. 학교 계정은 아직 안 됩니다</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">2026년 10월 3일 각 회사의 공식 안내 기준입니다. 이름과 요금제가 자주 바뀝니다.</p>
+      <div class="pr"><span class="pl">일을 맡기는 부탁 예시 · 데스크톱 앱에서</span><button class="btn cp" type="button">복사</button><div class="txt">바탕화면 '공문' 폴더에 있는 PDF 파일을 모두 읽고, 할 일과 마감일, 담당 부서를 한 표로 정리한 엑셀 파일을 같은 폴더에 만들어 줘. 파일을 지우거나 옮기지는 말고, 마감일이 적혀 있지 않은 공문은 표 아래에 따로 적어 줘.</div></div>
+      <div class="detail">
+        <p>여기 나온 기능은 저도 아직 써 보지 않아서, 2026년 10월 3일에 각 회사의 안내를 확인해 정리했습니다. 이렇게 일을 맡으면 스스로 순서를 짜서 끝까지 하는 AI를 회사들은 에이전트라고 부릅니다. 이름과 요금제가 자주 바뀌어서, 쓰시기 전에 한 번 더 확인하시길 권합니다.</p>
+        <p>ChatGPT Work는 2026년 7월에 나왔습니다. 대답이나 짧은 초안은 Chat에, 보고서나 발표자료, 표처럼 결과물이 분명한 일은 Work에 맡기도록 나뉘어 있습니다. 예전의 에이전트 모드가 없어지고 그 자리에 들어온 기능이고, 사용량은 Codex와 함께 씁니다. 클라우드에서 일할 때 쓰는 브라우저는 내 크롬과 따로라서, 내가 로그인한 사이트나 저장해 둔 비밀번호를 모릅니다. 데스크톱 앱에서 Work locally를 고르면 내 컴퓨터의 파일과 앱으로 일하고, @Chrome으로 부르면 로그인된 내 크롬에서 일합니다.</p>
+        <p>Claude Cowork는 2026년 1월에 처음 나왔습니다. Claude Code가 코드를 다루는 방식 그대로, 문서나 표, 발표자료 같은 일을 맡기는 기능입니다. 처음에는 쓰는 사람의 컴퓨터 안에서 일했는데, 지금은 Anthropic의 클라우드에서 일하고 데스크톱 앱에서는 내 컴퓨터의 파일도 읽고 씁니다. 10월 6일부터는 Pro와 Max 요금제에서 새로 맡기는 일이 모두 클라우드에서 돌아갑니다. 9월 16일부터는 일반 대화와 하나로 합쳐지는 중이라, Cowork를 따로 고르지 않아도 Claude가 일에 맞게 움직이도록 바뀌고 있습니다.</p>
+        <p>Microsoft의 Copilot Cowork는 Anthropic과 함께 Claude Cowork의 기술을 가져온 것이라 이름도 같습니다. 2026년 6월에 정식으로 나왔고, 메일 보내기, 회의 잡기, Word와 Excel, PowerPoint 파일 만들기를 OneDrive와 메일, 일정 안에서 해 줍니다. 학교 계정(Microsoft 365 A1·A3·A5)에 추가 비용 없이 들어 있는 것은 채팅인 Microsoft Copilot Chat까지이고, Cowork는 학교가 유료 Copilot 라이선스를 사야 씁니다. 교직원은 쓸 수 있고 학생은 아직 쓸 수 없습니다. Microsoft 365 Copilot이라는 이름은 이제 Microsoft Copilot으로 바뀌었습니다.</p>
+        <p>Google의 Gemini Spark는 Gemini 앱에 들어 있는 개인 AI 에이전트입니다. Gmail과 Google 문서, 스프레드시트를 오가며 일하고, 기기를 꺼도 Google의 클라우드에서 일을 이어 갑니다. 한국에서도 한국어로 쓰는데, 개인 Google 계정에 AI Pro 이상 요금제가 있어야 하고 만 18세 이상만 씁니다. 학교 Google 계정으로는 아직 쓸 수 없습니다.</p>
+        <p>바이브코딩과는 쓰임이 조금 다릅니다. 이 기능들도 웹 페이지 파일을 만들 수 있지만, 앱을 여러 번 고쳐 가며 키우는 일은 Codex나 Claude의 Code 탭이 맞게 만들어져 있습니다. 공문 여러 개를 읽고 할 일 표를 만들거나, 흩어진 자료로 발표자료 초안을 만드는 것처럼 코드가 아닌 일을 맡기는 쪽입니다.</p>
+        <p>맡기는 일이 커질수록 확인할 것도 늘어납니다. 저는 AI에게 일을 시킬 때 학생 개인정보가 든 파일은 넣지 않고, 일을 시킬 폴더를 따로 만들어 그 안에서만 하게 합니다. 메일 보내기나 결제, 파일 지우기처럼 되돌리기 어려운 일은 네 회사 모두 먼저 묻게 되어 있지만, 웹 페이지 속에 AI를 속이려는 글이 숨어 있을 수 있어서 처음 가는 사이트를 오가는 일은 단계마다 확인합니다.</p>
       </div>
     </div>
   </div>
