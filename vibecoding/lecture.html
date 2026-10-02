@@ -419,7 +419,7 @@ html[data-mode="present"] .keys{display:block}
         <p class="dg-cap">한 번에 다 만들게 하지 않고, 빈칸 지도와 장면 목록을 먼저 받아 확인한 뒤에 만듭니다.</p>
       </div>
       <div class="detail">
-        <p>강의 화면을 만들 때 저는 평소 수업에서 하는 설명을 순서대로 적은 대본과, 빈칸이 있는 개념정리 학습지, 그리고 디자인 서랍의 apple 설계서를 AI에게 주었습니다. 이 매뉴얼은 그 과정을 네 번의 부탁으로 나눈 것입니다. 한 번에 "강의 화면 만들어 줘"라고 하면 빈칸이 빠지거나 순서가 뒤섞이기 쉬워서, 빈칸 지도와 장면 목록을 먼저 받아 확인한 다음에 만듭니다.</p>
+        <p>강의 화면을 만들 때 저는 평소 수업에서 하는 설명을 순서대로 적은 대본과, 빈칸이 있는 개념정리 학습지, 그리고 디자인 서랍의 apple 설계서를 AI에게 주었습니다. 이 매뉴얼은 그 과정을 네 번의 부탁으로 나눈 것입니다. 한 번에 "강의 화면 만들어 줘"라고 하면 빈칸이 빠지거나 순서가 뒤섞이기 쉬워서, 빈칸 지도와 장면 목록을 먼저 받아 확인한 다음에 만듭니다. 토큰이 넉넉한 Pro 요금제 이상이라면 3단계의 «한 번에 부탁하기»로 네 번을 한 번에 보낼 수도 있습니다.</p>
       </div>
     </div>
 
@@ -472,7 +472,7 @@ html[data-mode="present"] .keys{display:block}
         <div class="box"><span class="n">1</span><b>학습지</b><p>빈칸이 있는 개념정리 학습지 한 장. 정답이 보이는 교사용이면 가장 좋습니다. PDF로 저장합니다.</p></div>
         <div class="box"><span class="n">2</span><b>내 설명 순서</b><p>이 차시에서 평소 하는 말을 순서대로 적은 메모. 학생에게 던지는 질문도 그대로 적습니다.</p></div>
         <div class="box"><span class="n">3</span><b>디자인 설계서</b><p>디자인 서랍에서 고른 DESIGN.md 한 장. 제 강의 화면은 apple 설계서를 썼습니다.</p></div>
-        <div class="box"><span class="n">4</span><b>강의화면 설계서</b><p>제 강의 화면의 넘기기 · 빈칸 번호 · 면 색 · 소리 · 대본 · 학생 복습판 규칙을 12절로 정리한 파일입니다. <a href="kit/lecture-spec.md" download="강의화면_설계서.md">강의화면_설계서.md 받기</a></p></div>
+        <div class="box"><span class="n">4</span><b>강의화면 설계서</b><p>제 강의 화면의 넘기기 · 빈칸 번호 · 면 색 · 소리 · 대본 · 학생 복습판 규칙을 정리한 파일입니다. 맨 앞에 AI가 할 일을 순서대로 적어 두어서, 이 파일과 주제만 줘도 강의 화면이 만들어집니다. <a href="kit/lecture-spec.md" download="강의화면_설계서.md">강의화면_설계서.md 받기</a></p></div>
         <div class="box"><span class="n">+</span><b>있으면 좋은 것</b><p>꼭 움직여 보여 주고 싶은 장면 1~3개와 쓰고 싶은 비유, 교과서 지도서나 평가 자료에서 뽑은 오개념 주의 목록 3~6줄. 저는 버블티 빨대로 저항을 설명합니다.</p></div>
       </div>
       <ol class="steps" data-key="prep">
@@ -570,6 +570,16 @@ html[data-mode="present"] .keys{display:block}
       </form>
       <p class="small">제 소비 전력 화면의 선풍기와 에너지 조각처럼 수업의 중심이 되는 움직임은, 어떤 장면을 어떻게 움직일지 제가 정해 줘서 나왔습니다. 오개념 주의 목록은 강의화면 설계서 11절에서 장면마다 확인하는 목록입니다.</p>
       <div class="tplbar"><button class="btn" type="button" id="dlTpl">빈칸 채우기형 템플릿으로 받기 (.txt)</button><span class="small">칸을 비워 둔 부탁문 네 개를 파일로 받아 두고 다른 차시에 다시 씁니다.</span></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw"><span class="tag">Pro 이상</span>한 번에 부탁하기</p>
+      <p class="brief">토큰이 넉넉한 요금제(Claude Pro, ChatGPT Plus, Google AI Pro 이상)라면 아래 부탁 네 개 대신 이 부탁 하나로 끝까지 만들 수 있습니다.</p>
+      <div class="pr big" id="p0"><span class="pl">한 번에 부탁하기</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="detail">
+        <p>강의화면 설계서 맨 앞(0절)에 AI가 할 일을 순서대로 적어 두어서, 설계서와 학습지를 첨부하고 이 부탁 하나만 보내면 AI가 빈칸 지도와 장면 목록을 스스로 정하고 만들기와 점검까지 이어 갑니다. 학습지가 없으면 주제만 적어도 되고, 그때는 학생용 빈칸 학습지 글도 함께 받습니다.</p>
+        <p>한 번에 보내면 빠른 대신 빈칸 지도의 틀린 정답이 화면까지 그대로 가기 쉽습니다. 그래서 마지막에 나오는 빈칸 표는 인쇄한 학습지와 한 줄씩 맞춰 보고, 고칠 곳은 6단계 카드로 하나씩 고칩니다. 무료 계정이나 한도에 걸릴 때는 아래처럼 네 번에 나눠 보냅니다.</p>
+      </div>
     </div>
 
     <div class="blk">
@@ -1002,12 +1012,31 @@ function prompts(v, k, tpl) {
   if (mot.length) d.push((tpl ? '- (꼭 움직일 장면이 있으면) ' : '- ') + '꼭 움직여 보여 줄 장면이 빠졌거나, 장면 목록에 적은 식과 다르게 움직이는 곳');
   if (mis.length) d.push((tpl ? '- (오개념 주의 목록이 있으면) ' : '- ') + '오개념 주의 목록에 걸리는 그림이나 문장');
   d.push('마지막으로 과학적으로 틀렸거나 학생이 오해할 수 있는 장면이 있으면 장면 번호와 함께 알려 줘.');
-  return [a.join('\n'), b.join('\n'), c.join('\n'), d.join('\n')];
+  /* 한 번에 (Pro 이상) — 설계서 0절의 순서를 그대로 부른다 */
+  const spec = k === 'local' ? '이 폴더의 강의화면_설계서.md' : web ? '첨부한 강의화면_설계서.md' : (tpl ? '이 폴더의(또는 첨부한) 강의화면_설계서.md' : '강의화면_설계서.md');
+  const z = [];
+  z.push(`나는 ${grade} ${subject} 교사야. ${spec} 0절의 «한 번에 만들기» 순서대로 ${unit} 칠판 강의 화면을 끝까지 만들어 줘.`, '');
+  z.push(`- 학습지: ${where}의 빈칸 번호와 정답을 그대로 써 줘.` + (tpl ? ' (학습지가 없으면) 학습지 없이 주제만으로 만들고, 학생용 빈칸 학습지 글도 함께 줘.' : ''));
+  z.push(`- 설명 순서: ${script}를 따르고, 대본에 없는 숫자나 사실은 지어내지 마.`);
+  z.push(`- 수업 시간 ${tpl ? '[수업 시간]' : v.min + '분'}, 장면은 ${range} 안팎.`);
+  if (tpl) z.push('- (쓰고 싶은 비유가 있으면) 꼭 넣을 비유: [비유]');
+  else if (v.analogy) z.push(`- 꼭 넣을 비유: ${v.analogy.replace(/[.。]\s*$/, '')}`);
+  if (tpl) z.push('- (디자인) DESIGN.md 설계서도 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로.');
+  else if (v.design === 'md') z.push('- DESIGN.md 설계서도 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로.');
+  if (!tpl) z.push('- 학생 복습판(?s=1): ' + (v.student ? '넣기' : '빼기') + ' · 효과음: ' + (v.sound ? '넣기' : '빼기'));
+  else z.push('- 학생 복습판(?s=1)·효과음: [넣기/빼기]');
+  z.push('- 빈칸 지도와 장면 목록은 표로 먼저 보여 주고, 내 확인을 기다리지 말고 이어서 만들어 줘.',
+    '- 다 만들면 설계서 12절대로 스스로 빈칸 대조와 과학 점검을 해서 고친 뒤, 빈칸 표와 점검 결과, 네가 정한 것을 보고해 줘.');
+  if (tpl) z.push('', '(앱이면) 파일은 이 폴더에 index.html로 저장하고, 브라우저로 열어 처음부터 끝까지 넘기고 ← 로 되돌아와 확인해 줘.', '(웹 채팅이면) 코드는 <!DOCTYPE html>부터 </html>까지 한 번에 전부 보여 줘. 길어서 끊길 것 같으면 장면을 줄여서라도 끝까지 써 줘.');
+  else if (k === 'local') z.push('', '파일은 이 폴더에 index.html로 저장하고, 브라우저로 열어 처음부터 끝까지 넘기고 ← 로 되돌아와 확인해 줘.');
+  else if (web) z.push('', '코드는 <!DOCTYPE html>부터 </html>까지 한 번에 전부 보여 줘. 길어서 끊길 것 같으면 장면을 줄여서라도 끝까지 써 줘.');
+  if (k !== 'local') z.push('', '[내 설명 순서]', '(여기에 대본을 붙여넣기)');
+  return [a.join('\n'), b.join('\n'), c.join('\n'), d.join('\n'), z.join('\n')];
 }
 function renderL() {
   const v = readL(), k = html.dataset.k || '';
   const ps = prompts(v, k, false);
-  ['p1', 'p2', 'p3', 'p4'].forEach((id, i) => { document.querySelector('#' + id + ' .txt').textContent = ps[i]; });
+  ['p1', 'p2', 'p3', 'p4', 'p0'].forEach((id, i) => { document.querySelector('#' + id + ' .txt').textContent = ps[i]; });
   try { const save = Object.assign({}, v); localStorage.setItem(FKEY, JSON.stringify(save)); } catch (e) {}
 }
 function onTool() { renderL(); }
@@ -1026,7 +1055,7 @@ function onTool() { renderL(); }
 [lf, lf2].forEach(f => { f.addEventListener('input', renderL); f.addEventListener('change', renderL); });
 document.getElementById('dlTpl').addEventListener('click', () => {
   const ps = prompts(readL(), '', true);
-  const names = ['부탁 ① 빈칸 지도', '부탁 ② 장면 목록', '부탁 ③ 만들기', '부탁 ④ 빈칸 대조'];
+  const names = ['부탁 ① 빈칸 지도', '부탁 ② 장면 목록', '부탁 ③ 만들기', '부탁 ④ 빈칸 대조', '한 번에 부탁하기 (Pro 이상 · 위 네 개 대신)'];
   const link = [...document.querySelectorAll('.blk[data-tool="local"] .pr.big')].map(p => '━━━━━━━━ (앱이면 먼저) ' + p.querySelector('.pl').textContent + ' ━━━━━━━━\n' + p.querySelector('.txt').textContent);
   const body = '칠판 강의 화면 부탁문 템플릿\n[ ] 안을 바꾸고, ( ) 줄은 해당할 때만 남겨 쓰세요.\n첨부: 학습지 PDF · 강의화면_설계서.md · DESIGN.md · 대본.txt\n출처: 조승재 · 바이브코딩 연수 · https://scienceisjo.github.io/growing-teachers/vibecoding/lecture.html\n\n'
     + link.concat(ps.map((p, i) => '━━━━━━━━ ' + names[i] + ' ━━━━━━━━\n' + p)).join('\n\n') + '\n';
