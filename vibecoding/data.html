@@ -1050,8 +1050,8 @@ const SCHOOL = (QS.get('school') || '').slice(0, 30);
 (function () {
   const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
   const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
-    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'deploy.html' + sq, 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
-  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; }));
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; if (/^https?:/.test(to[c])) { a.target = '_blank'; a.rel = 'noopener'; } }));
   if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
 })();
 

@@ -726,7 +726,7 @@ html[data-mode="present"] .keys{display:block}
     <div class="blk">
       <p class="kw">시간이 남으면 ② 배포로</p>
       <p class="brief">GitHub에 올려 주소를 받고, 학생들에게 링크로 건네는 데까지 갑니다.</p>
-      <p><a class="btn big to-deploy" href="deploy.html">② GitHub로 배포하기 →</a></p>
+      <p><a class="btn big to-deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener">② GitHub로 배포하기 →</a></p>
     </div>
   </div>
 </section>
@@ -749,7 +749,7 @@ const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
 (function () {
   const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
   document.querySelectorAll('.to-gth-up').forEach(a => { a.href = '../giteacherhub/' + sq + '#/up'; });
-  document.querySelectorAll('.to-deploy').forEach(a => { a.href = 'deploy.html' + sq; });
+  document.querySelectorAll('.to-deploy').forEach(a => { a.href = 'https://scienceisjo.github.io/githubmanual/forstudent.html'; a.target = '_blank'; a.rel = 'noopener'; });
   document.querySelectorAll('.to-hub').forEach(a => { a.href = './' + sq; });
   document.querySelectorAll('.to-design').forEach(a => { a.href = 'design.html' + sq; });
   document.querySelectorAll('.to-lecture').forEach(a => { a.href = 'lecture.html' + sq; });

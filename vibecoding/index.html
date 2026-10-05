@@ -1020,7 +1020,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <div class="mgrid" id="mgrid">
         <a class="mcard to-basic" data-m="basic" href="basic.html"><span class="mn">분임 ① 기초 · 60분</span><b>상상만 하던 수업 도구, 말로 만들기</b><span>가상 실험실, 퀴즈, 타이머 무엇이든 하나를 말로 만들어 보관함에 올립니다.</span><em>코드를 처음 저장해 보시는 분</em></a>
         <a class="mcard to-lecture" data-m="lecture" href="lecture.html"><span class="mn">칠판 강의 화면 · 60분</span><b>학습지 한 장을 칠판 강의 화면으로</b><span>학습지 빈칸에 번호를 매기고, 빈칸과 한 장씩 맞춘 강의 화면을 만듭니다.</span><em>학습지로 수업하시는 분 누구나</em></a>
-        <div class="mcard soon" data-m="deploy"><span class="mn">분임 ② 배포 · 준비 중</span><b>GitHub로 내 도구에 주소 붙이기</b><span>만든 파일을 GitHub에 올려 학생에게 링크로 건넵니다. GitHub Pages, Netlify, Vercel의 차이도 다룹니다.</span><em>파일로 저장해 보신 분</em></div>
+        <a class="mcard to-deploy" data-m="deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><span class="mn">분임 ② 배포 · 60분</span><b>GitHub로 내 도구에 주소 붙이기</b><span>GitHub에 가입하고 저장소를 만든 뒤, 만든 파일을 올려 GitHub Pages로 주소를 받습니다. 그 주소 하나로 학생들에게 건넵니다.</span><em>파일로 저장해 보신 분</em></a>
         <a class="mcard to-data" data-m="data" href="data.html"><span class="mn">분임 ③ 데이터·AI · 60분</span><b>학생 데이터와 AI를 내 앱에 연결하기</b><span>Supabase로 학생 제출을 모으고, 로그인한 교사만 보는 대시보드를 만들고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.</span><em>배포까지 해 보신 분</em></a>
         <a class="mcard to-design" data-m="design" href="design.html"><span class="mn">함께 쓰는 서랍</span><b>디자인 서랍</b><span>설계서(DESIGN.md) 한 장을 골라 만든 앱에 옷을 입힙니다. 설계서 74개가 들어 있습니다.</span><em>어느 분임에서나</em></a>
       </div>
@@ -1064,8 +1064,9 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <div class="blk">
       <p class="kw">다시 보실 곳</p>
       <div class="grid2">
-        <a class="box to-hub" href="./"><b>이 허브</b><p>바이브코딩 기초와 전시실, 분임 매뉴얼로 가는 길</p></a>
+        <a class="box to-hub" href="./" style="grid-column:1/-1"><b>이 허브</b><p>바이브코딩 기초와 전시실, 분임 매뉴얼로 가는 길</p></a>
         <a class="box to-basic" href="basic.html"><b>① 기초</b><p>상상만 하던 수업 도구, 말로 만들기</p></a>
+        <a class="box to-deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><b>② 배포</b><p>GitHub Pages로 내 도구에 주소 붙이기</p></a>
         <a class="box to-lecture" href="lecture.html"><b>칠판 강의 화면</b><p>학습지 한 장을 강의 화면으로</p></a>
         <a class="box to-data" href="data.html"><b>③ 데이터·AI</b><p>학생 데이터와 AI를 내 앱에 연결하기</p></a>
         <a class="box to-design" href="design.html"><b>디자인 서랍</b><p>설계서 74개와 쓰는 법</p></a>
@@ -1108,8 +1109,8 @@ const SCHOOL = (QS.get('school') || '').slice(0, 30);
 (function () {
   const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
   const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
-    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'deploy.html' + sq, 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
-  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; }));
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+  Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; if (/^https?:/.test(to[c])) { a.target = '_blank'; a.rel = 'noopener'; } }));
   if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
 })();
 
@@ -1432,12 +1433,12 @@ renderGallery();
   const res = document.getElementById('qres'), q2 = document.getElementById('q2');
   const OUT = {
     basic: ['① 기초로 가시면 됩니다', '상상만 하던 수업 도구 하나를 말로 만들어 파일로 저장하고, 보관함에 올리는 데까지 갑니다.', 'to-basic', 'basic.html', '① 기초 매뉴얼 열기 →'],
-    deploy: ['② 배포로 가시면 됩니다', '만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. 매뉴얼을 준비하는 동안에는 칠판 강의 화면 매뉴얼로 하나 더 만들어 보셔도 좋습니다.', 'to-lecture', 'lecture.html', '칠판 강의 화면 매뉴얼 열기 →'],
+    deploy: ['② 배포로 가시면 됩니다', '만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. GitHub 가입부터 차례로 따라가고, 일찍 끝나면 ③ 데이터·AI로 이어 가셔도 좋습니다.', 'to-deploy', 'https://scienceisjo.github.io/githubmanual/forstudent.html', '② 배포 매뉴얼 열기 →'],
     data: ['③ 데이터·AI로 가시면 됩니다', 'Supabase로 학생 제출을 모으고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.', 'to-data', 'data.html', '③ 데이터·AI 매뉴얼 열기 →']
   };
   function show(k) {
     const o = OUT[k]; res.hidden = false;
-    res.innerHTML = `<b>${o[0]}</b><p class="brief" style="margin:6px 0 12px">${o[1]}</p><a class="btn big primary" href="${linkWithCode(o[3])}">${o[4]}</a>`;
+    res.innerHTML = `<b>${o[0]}</b><p class="brief" style="margin:6px 0 12px">${o[1]}</p><a class="btn big primary" href="${linkWithCode(o[3])}"${/^https?:/.test(o[3]) ? ' target="_blank" rel="noopener"' : ''}>${o[4]}</a>`;
     document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('hi', c.dataset.m === k));
   }
   document.querySelectorAll('#qz [data-q]').forEach(b => b.addEventListener('click', () => {
