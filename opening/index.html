@@ -160,6 +160,16 @@ html[data-mode="present"] .qr svg{width:220px;height:220px}
 .admin .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .admin .counts{color:var(--ink2);font-size:.9em;margin:8px 0}
 
+/* 미리 열어 두실 페이지 (poll=vibe) */
+.openlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}
+.olink{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff;color:var(--ink);line-height:1.45}
+.olink:hover{border-color:var(--blue);text-decoration:none}
+.olink .no{flex:none;width:1.9em;height:1.9em;border-radius:50%;background:var(--blue-t);color:var(--blue);font-weight:600;font-size:.85em;display:inline-flex;align-items:center;justify-content:center}
+.olink.done{border-color:var(--ok)}
+.olink.done .no{background:var(--ok);color:#fff}
+.olink b{display:block}
+.olink .d{display:block;font-size:.84em;color:var(--ink2);margin-top:2px}
+.ailine{margin:12px 0 0}
 /* 6 오늘 진행 방식 (poll=vibe) — 진행 방향 투표 · 모듈 찾기 */
 .vopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px}
 .vopt{display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;color:var(--ink);cursor:pointer;font:inherit;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
@@ -233,8 +243,9 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <div class="intro">
     <div class="photo" id="photo">사진<br>img/profile.jpg</div>
     <div class="say">
-      <p>선생님들의 시간이 너무나 소중하기 때문에, 이 시간이 의미 있는 시간이 될 수 있도록 많은 준비를 해왔습니다. 그러나 양이 많아서 연수 이후에 많은 과제처럼 남지 않도록, 선생님들께 의미 있다고 여겨지는 것들 위주로 말씀드릴 예정입니다!</p>
-      <p>선생님들을 처음 뵙지만, 이렇게 일과 시간 이후에 혹은 주말에 더 나은 교육을 위해 모여 있다는 것에 든든한 동료애를 느낍니다. 연수보다는 교학공을 한다는 감정으로 선생님들과 많이 소통하고 싶습니다!!</p>
+      <p>방과 후, 가족이나 친구, 아니면 사랑하는 자기 자신과 함께 보내셔야 할 시간을 할애해 주신 만큼, 선생님들께 도움이 될 내용을 많이 준비했습니다. 오늘 고된 하루를 보내셨을 텐데, 이 시간만큼은 즐거운 시간이 되도록 노력하겠습니다!</p>
+      <p><b>PS.</b> 선생님! 연수 중에 다른 바쁜 일이 생기시거나, 지금 당장 처리하셔야 할 급한 업무가 있으실 수 있습니다. 저는 그 사정을 매우매우 잘 이해합니다. 그래서 이 연수 페이지는 연수가 끝나도 지우지 않고 계속 남겨 둡니다. 화면이 🎤 발표 모드로 보이면 오른쪽 위 <span style="white-space:nowrap">[📖 상세로]</span>를 눌러 주세요. 하나의 교안처럼 실습 과정을 쭈욱 따라가실 수 있습니다.</p>
+      <p>그래도 오늘 함께하시면 좋은 점은, 혼자 하실 때 겪으실 시행착오를 덜 겪으신다는 점입니다!</p>
     </div>
   </div>
   <div class="today" id="today">
@@ -248,6 +259,12 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <p class="small" style="margin:0 0 8px">오늘 연수는 모듈형으로 진행됩니다. 설명과 실습을 어떤 비율로 나눌지는 함께 투표로 정하고, 각자 시작할 모듈은 두 질문으로 찾습니다.</p>
       <button type="button" class="btn big" id="goPlan">🧭 진행 방식 정하고 내 모듈 찾기 →</button>
     </div>
+  </div>
+  <div class="blk" id="openFirst" style="display:none">
+    <p class="kw">미리 열어 두실 페이지</p>
+    <p class="small" style="margin:0">하나씩 눌러 새 탭으로 열어 두시면, 연수 중에는 탭만 옮겨 다니며 쓰실 수 있습니다.</p>
+    <div class="openlinks" id="openLinks"></div>
+    <p class="small ailine" id="openAI"></p>
   </div>
   <p class="small only-detail">이 페이지는 연수를 시작할 때와 끝낼 때 쓰는 공용 페이지입니다. 폰으로 열어 두시면 벽에 글을 올릴 수 있고, 앞 화면에는 🎤 발표 모드로 벽만 크게 보입니다.</p>
 </section>
@@ -430,7 +447,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
         <span class="rl"><span class="t">설명 10</span><span class="p">실습 90</span></span>
         <span class="vd">시작하는 법만 짧게 말씀드리고 바로 만들기 시작합니다. 막히는 곳이 생기면 그때 찾아보고, 저에게 물어보시면 됩니다.</span>
         <span class="pc good"><em>좋은 점</em>직접 만드는 시간이 가장 길고, 정말 궁금한 것부터 배우십니다. 이미 조금 써 보신 분께 잘 맞습니다.</span>
-        <span class="pc bad"><em>아쉬운 점</em>「모르겠다 → 그럼 이걸 찾아볼까?」를 되풀이하다 보면 배운 것이 조각조각 남고, 왜 그렇게 되는지 큰 그림은 놓치기 쉽습니다.</span>
+        <span class="pc bad"><em>아쉬운 점</em>「모르겠다, 그럼 이걸 찾아볼까?」를 되풀이하다 보면 배운 것이 조각조각 남고, 왜 그렇게 되는지 큰 그림은 놓치기 쉽습니다.</span>
         <span class="vt"><i><b></b></i><span class="mytag">내 선택</span><span class="vc">0표</span></span>
       </button>
     </div>
@@ -512,22 +529,23 @@ const CONFIG = {
 };
 const Q = new URLSearchParams(location.search);
 const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
-/* 연수 코드별 기본값 — 주소에 t= to= poll= reflect= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
+/* 연수 코드별 기본값 — 주소에 t= to= poll= school= reflect= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
 const PRESET = {
   '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' },
-  'geowon-1006': { t:'바이브코딩 연수', to:'../vibecoding/?s=geowon-1006&school=거원중학교', poll:'vibe' }
+  'geowon-1006': { poll:'vibe', school:'거원중학교' }
 };
 const PR = PRESET[CODE] || {};
-const TITLE = (Q.get('t')||PR.t||'').trim();
-const TO = (Q.get('to')||PR.to||'').trim();
+const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정 · poll=vibe → 바이브코딩 연수 오프닝
+const VIBE = POLL==='vibe';                                 // 바이브코딩 연수 오프닝: 제목·허브 주소 기본값 · 미리 열어 두실 페이지 · 「6 오늘 진행 방식」 탭 — 주소는 opening/?s=코드&poll=vibe&school=학교명
+const SCHOOL = (Q.get('school')||PR.school||'').trim().slice(0,30);
+const TITLE = (Q.get('t')||PR.t||(VIBE?'바이브코딩 연수':'')).trim();
+const TO = (Q.get('to')||PR.to||(VIBE?'../vibecoding/?s='+encodeURIComponent(CODE)+(SCHOOL?'&school='+encodeURIComponent(SCHOOL):''):'')).trim();
 const REFLECT = (Q.get('reflect')||PR.reflect||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
 const SATIS = (Q.get('satis')||'').trim()==='1';   // satis=1 일 때만 ⭐ 만족도 탭 — 평소엔 잠금(만족도는 노션 QR로 따로)
 if(SATIS) document.getElementById('tabClose').style.display='';
-const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정 · poll=vibe → 「6 오늘 진행 방식」 탭(진행 방향 투표 + 모듈 찾기)
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
 if(POLL==='agent'){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; }
-const VIBE = POLL==='vibe';
 if(VIBE){ document.getElementById('tabPlan').style.display=''; document.getElementById('vibeWays').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
@@ -543,7 +561,28 @@ if(!IDENT){ document.getElementById('tabIdent').remove(); document.getElementByI
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
 if(TITLE){ document.getElementById('todayTitle').textContent = TITLE; document.title = TITLE+' · 오프닝'; }
-if(TO){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; }
+if(TO){ const a=document.getElementById('toPage'); a.href=TO; a.style.display='inline-flex'; if(VIBE){ a.target='_blank'; a.rel='noopener'; } }
+/* 바이브코딩 페이지 주소: to= 의 허브 폴더 + 같은 ?s=&school= */
+const HUB=new URL(TO||'../vibecoding/', location.href); HUB.hash='';
+if(!HUB.search && CODE!=='test') HUB.search='?s='+encodeURIComponent(CODE);
+const vlink=p=>{ if(/^https?:/i.test(p)) return p; const u=new URL(p,HUB); u.search=HUB.search; return u.href; };
+if(VIBE){
+  const box=document.getElementById('openLinks');
+  [['바이브코딩 허브','오늘 연수 페이지, 모듈 매뉴얼로 가는 길','./'],
+   ['디자인 서랍','설계서(DESIGN.md)를 골라 만든 앱에 옷 입히기','design.html'],
+   ['GiteacherHub','교실 앱 보관함, 만든 앱을 올리고 둘러보는 곳','../giteacherhub/']].forEach(([t,d,p],i)=>{
+    const a=document.createElement('a'); a.className='olink'; a.href=vlink(p); a.target='_blank'; a.rel='noopener';
+    a.innerHTML=`<span class="no">${i+1}</span><span><b>${t}</b><span class="d">${d}</span></span>`;
+    a.addEventListener('click',()=>{ a.classList.add('done'); a.querySelector('.no').textContent='✓'; });
+    box.appendChild(a);
+  });
+  const ai=document.getElementById('openAI'); ai.textContent='평소 쓰시는 AI 채팅도 하나 열어 두세요. ';
+  [['ChatGPT','https://chatgpt.com/'],['Claude','https://claude.ai/'],['Gemini','https://gemini.google.com/']].forEach(([t,u],i)=>{
+    if(i) ai.appendChild(document.createTextNode(' · '));
+    const a=document.createElement('a'); a.href=u; a.target='_blank'; a.rel='noopener'; a.textContent=t+' ↗'; ai.appendChild(a);
+  });
+  document.getElementById('openFirst').style.display='';
+}
 document.getElementById('giftLink').href = CONFIG.gift;
 (function(){ const im=new Image(); im.onload=()=>{ const p=document.getElementById('photo'); p.innerHTML=''; p.appendChild(im); }; im.alt='조승재'; im.src=CONFIG.photo; })();
 
@@ -757,11 +796,7 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
   if(!/^d[0-9a-f]{12}$/.test(DEV)){ DEV='d'+[...crypto.getRandomValues(new Uint8Array(6))].map(b=>b.toString(16).padStart(2,'0')).join(''); try{ localStorage.setItem('opening:dev',DEV); }catch(e){} }
   const latest=rows=>{ const m=new Map(); rows.forEach(r=>{ const k=r.name||('#'+r.id); if(!m.has(k)) m.set(k,r); }); return [...m.values()]; };   // rows 는 최신순
 
-  /* 모듈 페이지 주소: to= 의 허브 폴더 + 같은 ?s=&school= */
-  const HUB=new URL(TO||'../vibecoding/', location.href); HUB.hash='';
-  if(!HUB.search && CODE!=='test') HUB.search='?s='+encodeURIComponent(CODE);
   const DEPLOY='https://scienceisjo.github.io/githubmanual/forstudent.html';
-  const vlink=p=>{ if(/^https?:/i.test(p)) return p; const u=new URL(p,HUB); u.search=HUB.search; return u.href; };
   [['goLecture','lecture.html'],['goDesign','design.html']].forEach(([id,p])=>{ const a=document.getElementById(id); a.href=vlink(p); a.target='_blank'; a.rel='noopener'; });
 
   /* ① 진행 방향 투표 */
@@ -793,9 +828,9 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
 
   /* ② 모듈 찾기 — 허브 9단계와 같은 두 질문 */
   const MODS={
-    1:{big:'모듈 ① 기초부터 시작하시면 됩니다', why:'상상만 하던 수업 도구 하나를 말로 만들어 파일로 저장하고, 보관함에 올리는 데까지 갑니다.', href:'basic.html', btn:'① 기초 페이지 열기 →'},
-    2:{big:'모듈 ② 배포부터 시작하시면 됩니다', why:'만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. 폴더를 끌어다 놓기만 하는 Netlify·Vercel 매뉴얼도 함께 있습니다.', href:DEPLOY, btn:'② 배포 매뉴얼 열기 →'},
-    3:{big:'모듈 ③ 데이터·AI부터 시작하시면 됩니다', why:'Supabase로 학생 제출을 모으고, 로그인한 교사만 보는 대시보드를 만들고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.', href:'data.html', btn:'③ 데이터·AI 페이지 열기 →'}
+    1:{big:'모듈 ① 기초로 가시면 됩니다', why:'상상만 하던 수업 도구 하나를 말로 만들어 파일로 저장하고, 보관함에 올리는 데까지 갑니다.', href:'basic.html', btn:'① 기초 페이지 열기 →'},
+    2:{big:'모듈 ② 배포로 가시면 됩니다', why:'만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. 폴더를 끌어다 놓기만 하는 Netlify·Vercel 매뉴얼도 함께 있습니다.', href:DEPLOY, btn:'② 배포 매뉴얼 열기 →'},
+    3:{big:'모듈 ③ 데이터·AI로 가시면 됩니다', why:'Supabase로 학생 제출을 모으고, 로그인한 교사만 보는 대시보드를 만들고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.', href:'data.html', btn:'③ 데이터·AI 페이지 열기 →'}
   };
   const LAB={1:'① 기초',2:'② 배포',3:'③ 데이터·AI'};
   const MK='opening:module:'+CODE, mq2=document.getElementById('mq2'), res=document.getElementById('modRes'), modSt=document.getElementById('modSt');
