@@ -1294,6 +1294,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
         <a class="mcard to-data" data-m="data" href="data.html"><span class="mn">모듈 ③ 데이터·AI · 60분</span><b>학생 데이터와 AI를 내 앱에 연결하기</b><span>Supabase로 학생 제출을 모으고, 로그인한 교사만 보는 대시보드를 만들고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.</span><em>배포까지 해 보신 분</em></a>
         <a class="mcard to-design" data-m="design" href="design.html"><span class="mn">함께 쓰는 서랍</span><b>디자인 서랍</b><span>설계서(DESIGN.md) 한 장을 골라 만든 앱에 옷을 입힙니다. 설계서 74개가 들어 있습니다.</span><em>어느 모듈에서나</em></a>
       </div>
+      <p class="brief" style="margin-top:14px">모듈 ② 배포 매뉴얼은 세 가지입니다. 저장소에 올리는 <a class="to-deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener">GitHub Pages</a>, 폴더를 끌어다 놓기만 하는 <a class="to-netlify" href="https://scienceisjo.github.io/githubmanual/netlify.html" target="_blank" rel="noopener">Netlify</a>와 <a class="to-vercel" href="https://scienceisjo.github.io/githubmanual/vercel.html" target="_blank" rel="noopener">Vercel</a> 가운데 어느 것으로 올려도 학생에게 줄 주소가 생깁니다.</p>
     </div>
   </div>
 </section>
@@ -1336,7 +1337,9 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <div class="grid2">
         <a class="box to-hub" href="./" style="grid-column:1/-1"><b>이 허브</b><p>바이브코딩 기초와 전시실, 모듈 매뉴얼로 가는 길</p></a>
         <a class="box to-basic" href="basic.html"><b>① 기초</b><p>상상만 하던 수업 도구, 말로 만들기</p></a>
-        <a class="box to-deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><b>② 배포</b><p>GitHub Pages · Netlify · Vercel로 주소 붙이기</p></a>
+        <a class="box to-deploy" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><b>② 배포 · GitHub Pages</b><p>저장소에 올려 주소 붙이기</p></a>
+        <a class="box to-netlify" href="https://scienceisjo.github.io/githubmanual/netlify.html" target="_blank" rel="noopener"><b>② 배포 · Netlify</b><p>폴더를 끌어다 놓아 주소 붙이기</p></a>
+        <a class="box to-vercel" href="https://scienceisjo.github.io/githubmanual/vercel.html" target="_blank" rel="noopener"><b>② 배포 · Vercel</b><p>끌어다 놓거나 GitHub 저장소와 잇기</p></a>
         <a class="box to-lecture" href="lecture.html"><b>칠판 강의 화면</b><p>학습지 한 장을 강의 화면으로</p></a>
         <a class="box to-data" href="data.html"><b>③ 데이터·AI</b><p>학생 데이터와 AI를 내 앱에 연결하기</p></a>
         <a class="box to-design" href="design.html"><b>디자인 서랍</b><p>설계서 74개와 쓰는 법</p></a>
@@ -1379,7 +1382,7 @@ const SCHOOL = (QS.get('school') || '').slice(0, 30);
 (function () {
   const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
   const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
-    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-netlify': 'https://scienceisjo.github.io/githubmanual/netlify.html', 'to-vercel': 'https://scienceisjo.github.io/githubmanual/vercel.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
   Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; if (/^https?:/.test(to[c])) { a.target = '_blank'; a.rel = 'noopener'; } }));
   if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
 })();
