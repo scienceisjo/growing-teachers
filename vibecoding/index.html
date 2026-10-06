@@ -391,6 +391,14 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
   .stairs .st-band{grid-template-columns:1fr}
   .stairs .st-band .free,.stairs .st-band .paid{grid-column:auto}
 }
+/* 발표 모드 키워드 줄: 상세 문단을 문장마다 키워드로 */
+.pk{border-left:3px solid var(--blue);padding:2px 0 2px 16px;margin:16px 0 0}
+.pk-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.pk-n{flex:none;width:1.6em;height:1.6em;border-radius:50%;background:var(--ink);color:#fff;font-size:.8em;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.pk-k{border:1px solid var(--line);border-radius:9999px;padding:4px 14px;background:#fff;font-weight:600;line-height:1.4}
+.pk-k.dim{color:var(--ink3);font-weight:400}
+.pk-k.hl{border-color:var(--blue);background:var(--blue-t);color:var(--blue)}
+.pk-vs{color:var(--ink3);font-size:.9em}
 /* 토큰 + 시간 + 아이디어 = */
 .dg-plus .op{flex:0 0 34px;align-self:center;text-align:center;font-size:1.5rem;font-weight:600;line-height:1;color:var(--ink3)}
 @media (max-width:640px){.dg-plus .op{flex:0 0 auto;padding:2px 0}}
@@ -492,6 +500,11 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
           <div class="dg-wire wide"><em>또 새 모델</em><i style="--dl:.9s"></i></div>
           <div class="dg-node ghost"><svg class="ic"><use href="#i-clock"/></svg><b>두 달 뒤</b><small>또 달라져 있을 일</small></div>
         </div>
+      </div>
+      <div class="pk only-present" aria-label="발표 때 이야기할 순서">
+        <div class="pk-row"><span class="pk-n">1</span><span class="pk-k">솔직히</span><span class="pk-k">따라가기 벅참</span></div>
+        <div class="pk-row"><span class="pk-n">2</span><span class="pk-k">손 놓으면 놓칠까 봐</span><span class="pk-k">학생들이 살아갈 세상</span><span class="pk-k">교사가 먼저 발 디디기</span><span class="pk-k">계속 찾아보고 익힘</span></div>
+        <div class="pk-row"><span class="pk-n">3</span><span class="pk-k dim">새 기술 소개·경험</span><span class="pk-vs">보다</span><span class="pk-k hl">목표가 분명한 교육 활동</span><span class="pk-k hl">새로운 것을 배우는 능력</span><span class="pk-k hl">제가 할 일</span></div>
       </div>
       <div class="detail">
         <p>토큰, 그러니까 AI 사용량과 시간, 그리고 아이디어만 있다면 선생님이 상상하시는 무엇이든 가능하다고 감히 말씀드릴 수 있습니다. 두 달 전까지 안 되던 것이 새로운 모델이 나오면 가능해지고, 이런 변화의 속도가 너무나 빠릅니다.</p>
