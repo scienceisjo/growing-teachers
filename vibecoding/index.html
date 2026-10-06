@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>바이브코딩 연수 · 말로 만드는 나만의 수업 도구 · 해누리중 조승재</title>
-<meta name="description" content="바이브코딩이 무엇이고 어디까지 되는지, 도구·모델·요금제·토큰, 일을 맡기는 AI(ChatGPT Work·Claude Cowork), HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물아홉 점을 전시실처럼 둘러본 뒤 모듈별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
+<meta name="description" content="바이브코딩이 무엇이고 그것으로 무엇이 가능한지, 도구·모델·요금제·토큰, 일을 맡기는 AI(ChatGPT Work·Claude Cowork), HTML·CSS·JavaScript와 서버까지 기초를 짚고, 강사가 만든 수업 도구 스물아홉 점을 전시실처럼 둘러본 뒤 모듈별 매뉴얼로 직접 만들어 보는 연수 허브입니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="dg.css">
@@ -391,6 +391,9 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
   .stairs .st-band{grid-template-columns:1fr}
   .stairs .st-band .free,.stairs .st-band .paid{grid-column:auto}
 }
+/* 토큰 + 시간 + 아이디어 = */
+.dg-plus .op{flex:0 0 34px;align-self:center;text-align:center;font-size:1.5rem;font-weight:600;line-height:1;color:var(--ink3)}
+@media (max-width:640px){.dg-plus .op{flex:0 0 auto;padding:2px 0}}
 /* 앞으로: 제안 셋 · 허용 셋 */
 .dg .row3{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:2px}
 </style>
@@ -417,7 +420,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <a class="byline big" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="80" height="80" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">바이브코딩 연수</div>
     <h1>말로 만드는 나만의 수업 도구</h1>
-    <p class="lead">바이브코딩이 무엇이고 어디까지 되는지부터 짚고, 제가 만든 것들을 한 바퀴 둘러본 뒤, 모듈로 나뉘어 선생님만의 수업 도구를 직접 만들어보겠습니다!</p>
+    <p class="lead">바이브코딩이 무엇이고 그것으로 무엇이 가능한지부터 짚고, 제가 만든 것들을 한 바퀴 둘러본 뒤, 모듈로 나뉘어 선생님만의 수업 도구를 직접 만들어보겠습니다!</p>
     <div class="pipe" aria-label="오늘의 흐름"><span class="n">바이브코딩 기초</span><span class="a">→</span><span class="n">전시실 둘러보기</span><span class="a">→</span><span class="n">모듈 실습</span><span class="a">→</span><span class="n hi">보관함에서 나눔</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
@@ -442,7 +445,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 <section class="step" id="s1" data-title="바이브코딩이란" data-min="2">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>바이브코딩이란</h2><span class="min"><b>2</b>분</span></div>
-    <p class="goal">바이브코딩이 무엇이고 어디까지 되는지, 무료 계정에서 어떻게 시작해 올라가는지 짚어보겠습니다!</p>
+    <p class="goal">바이브코딩이 무엇이고 그것으로 무엇이 가능한지, 무료 계정에서 어떻게 시작해 올라가는지 짚어보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">코드를 몰라도, 말로 시켜서 만듭니다</p>
@@ -467,17 +470,31 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     </div>
 
     <div class="blk">
-      <p class="kw">어디까지 되나</p>
-      <p class="brief">한 파일짜리 수업 도구는 오늘 백 분 안에 만듭니다. 서버를 붙이면 학생 기록을 모으는 앱까지 갑니다.</p>
-      <div class="grid2">
-        <div class="box yes"><b>한 파일짜리 수업 도구</b><p>시뮬레이션, 퀴즈, 타이머, 칠판 강의 화면. 오늘 모듈 실습에서 만듭니다.</p></div>
-        <div class="box"><b>여러 화면이 이어진 단원 웹앱</b><p>차시 페이지 여러 장을 허브 하나로 묶습니다. 전시실의 전기와 자기 단원이 이렇게 만들어졌습니다.</p></div>
-        <div class="box"><b>학생 기록이 모이는 앱</b><p>서버를 붙이면 제출, 모둠 기록, 교사 화면까지 됩니다. ③ 데이터·AI 매뉴얼에서 다룹니다.</p></div>
-        <div class="box"><b>이야기가 있는 3D 게임</b><p>레몬 백작의 부탁처럼 섬을 돌아다니는 게임도 됩니다. 다만 고치는 데 시간이 오래 걸립니다.</p></div>
-        <div class="box no"><b>아직 사람이 해야 하는 일</b><p>과학적으로 맞는지 확인하는 일, 학생 정보를 지키는 일, 무엇을 만들지 정하는 일입니다.</p></div>
+      <p class="kw">바이브코딩으로 가능한 것은 무엇일까요?</p>
+      <p class="brief">토큰(AI 사용량), 시간, 아이디어만 있다면 선생님이 상상하시는 무엇이든 가능하다고 감히 말씀드릴 수 있습니다.</p>
+      <div class="dg" role="img" aria-label="토큰과 시간과 아이디어를 더하면 선생님이 상상하시는 무엇이든 만들 수 있다는 그림">
+        <div class="dg-flow dg-plus">
+          <div class="dg-node"><svg class="ic"><use href="#i-money"/></svg><b>토큰</b><small>AI 사용량</small></div>
+          <span class="op" aria-hidden="true">+</span>
+          <div class="dg-node"><svg class="ic"><use href="#i-clock"/></svg><b>시간</b></div>
+          <span class="op" aria-hidden="true">+</span>
+          <div class="dg-node"><svg class="ic"><use href="#i-bulb"/></svg><b>아이디어</b></div>
+          <span class="op" aria-hidden="true">=</span>
+          <div class="dg-node ok"><svg class="ic"><use href="#i-cube"/></svg><b>상상하시는 무엇이든</b></div>
+        </div>
+      </div>
+      <div class="dg" role="img" aria-label="두 달 전까지 안 되던 일이 새 모델이 나오면서 되는 일이 되고, 두 달 뒤에는 또 달라져 있는 모습">
+        <span class="dg-t">변화의 속도</span>
+        <div class="dg-flow">
+          <div class="dg-node bad"><svg class="ic"><use href="#i-x"/></svg><b>두 달 전</b><small>안 되던 일</small></div>
+          <div class="dg-wire wide"><em>새 모델</em><i></i></div>
+          <div class="dg-node ok"><svg class="ic"><use href="#i-check"/></svg><b>지금</b><small>되는 일</small></div>
+          <div class="dg-wire wide"><em>또 새 모델</em><i style="--dl:.9s"></i></div>
+          <div class="dg-node ghost"><svg class="ic"><use href="#i-clock"/></svg><b>두 달 뒤</b><small>또 달라져 있을 일</small></div>
+        </div>
       </div>
       <div class="detail">
-        <p>초안은 금방 나옵니다. 시간은 대부분 고치는 데 들어갑니다. 전시실의 큰 작품들도 처음부터 그 모습이었던 것이 아니라, 수업에 쓰면서 여러 번 고쳐 키운 것들입니다.</p>
+        <p>토큰, 그러니까 AI 사용량과 시간, 그리고 아이디어만 있다면 선생님이 상상하시는 무엇이든 가능하다고 감히 말씀드릴 수 있습니다. 두 달 전까지 안 되던 것이 새로운 모델이 나오면 가능해지고, 이런 변화의 속도가 너무나 빠릅니다.</p>
       </div>
     </div>
 
