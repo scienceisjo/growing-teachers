@@ -907,7 +907,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 <section class="step" id="s8" data-title="드릴 말씀" data-min="3">
   <div class="wrap">
     <div class="step-h"><span class="num">8</span><h2>분임으로 흩어지기 전에 드릴 말씀</h2><span class="min"><b>3</b>분</span></div>
-    <p class="goal">실습에 들어가기 전에 바이브코딩에 대해 꼭 드리고 싶은 이야기를 전하겠습니다!</p>
+    <p class="goal">실습에 들어가기 전에 바이브코딩에 대해 꼭 드리고 싶은 이야기와, 다른 선생님 앱을 고쳐 쓰는 법을 전하겠습니다!</p>
 
     <div class="blk">
       <p class="kw">에듀테크 회사들이 걱정이 많다고 합니다</p>
@@ -947,6 +947,40 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     </div>
 
     <div class="blk">
+      <p class="kw">웹앱이 소모품이 되어 가고 있습니다</p>
+      <p class="brief">작년보다 AI가 훨씬 똑똑해져서, 고치는 과정도 거의 없이 한두 번 부탁하면 앱이 완성됩니다.</p>
+      <div class="dg" aria-label="작년에는 오류를 여러 번 고쳐 가며 만들었고, 올해는 한두 번 부탁하면 끝나는 모습">
+        <div class="dg-tabs"><button type="button" data-v="y1" aria-pressed="true">작년</button><button type="button" data-v="y2" aria-pressed="false" class="ok">올해</button></div>
+        <div data-view="y1">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>부탁</b></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node bad"><svg class="ic"><use href="#i-warn"/></svg><b>오류</b><small>CORS, 환경변수, Git</small></div>
+            <div class="dg-wire"><em>묻고 고치기</em><i style="--dl:.6s"></i></div>
+            <div class="dg-node bad"><svg class="ic"><use href="#i-warn"/></svg><b>또 오류</b><small>여러 번 되풀이</small></div>
+            <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-check"/></svg><b>완성</b></div>
+          </div>
+        </div>
+        <div data-view="y2">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>부탁</b></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>한 번 더 부탁</b><small>필요하면</small></div>
+            <div class="dg-wire"><i style="--dl:.6s"></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-check"/></svg><b>완성</b><small>한두 번이면 끝</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="y1">작년에는 오류를 하나씩 잡아 가며 만들었습니다.</p>
+        <p class="dg-cap" data-vsay="y2" hidden>올해는 고치는 과정이 거의 없이 한두 번 부탁하면 끝나는 경우가 많습니다.</p>
+      </div>
+      <div class="detail">
+        <p>작년과 비교하면 AI가 정말 많이 똑똑해졌습니다. 작년에는 오류를 하나씩 잡아 가며 만들었는데, 요즘은 고치는 과정이 거의 없이 한두 번 부탁하면 끝나는 경우가 많습니다. 그러다 보니 웹앱이 소모품처럼 느껴질 때가 있습니다.</p>
+        <p>작년에 만든 웹앱을 올해 다시 쓸까 생각해 보면, 선뜻 그렇다고 하기 어렵습니다. 올해 만든 것도 내년이면 또 마음에 들지 않을 것 같습니다. 같은 부탁을 해도 어떤 요금제를 쓰느냐에 따라 AI가 해내는 수준이 다르다는 것도 마음에 걸립니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
       <p class="kw">선생님만의 설명 방식을 담은 도구</p>
       <p class="brief">누구나 쓰는 멋진 도구보다, 선생님께만 꼭 필요한 도구를 만들어 쓸 수 있는 때가 됐습니다.</p>
       <div class="detail">
@@ -957,9 +991,37 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 
     <div class="blk">
       <p class="kw">화면은 실험실을 대신하지 못합니다</p>
-      <p class="brief">아이들은 화면을 보고 잠깐 감탄할 뿐입니다. 과학은 실험실에서 직접 겪을 때 가장 과학답습니다.</p>
+      <p class="brief">아이들은 화면을 보고 잠깐 감탄할 뿐이고, 화면이 흔해질수록 금방 권태를 느낍니다. 과학은 실험실에서 직접 겪을 때 가장 과학답습니다.</p>
       <div class="detail">
         <p>하나 더 말씀드리면, 저는 이런 걸 만들어 놓고 엄청난 콘텐츠라고 여기는 걸 경계합니다. 아이들은 화면을 보고 잠깐 감탄할 뿐입니다. 선생님들이 저보다 더 잘 아시겠지만, 과학은 실험실에서 직접 보고, 듣고, 만지고, 재미있는 시범 실험을 보면서 겪을 때 가장 과학답다고 생각합니다.</p>
+        <p>3D 시뮬레이터가 쏟아지고 클릭 한 번이면 게임이 나오는 때라, 아이들은 화면에 곧 권태를 느낄 거라고 생각합니다. 그래서 과학 교사인 저는 돌고 돌아 실험과 직접 겪는 경험으로 돌아가는 수업을 하게 될 것 같습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">AI가 많은 일을 해 줄수록, 쓰는 사람은 저입니다</p>
+      <p class="brief">AI가 하지 못하는 저만의 일은 무엇이고, 과학 교사인 저는 어떤 능력을 갖춰야 할까요. 요즘 제가 붙들고 있는 질문입니다.</p>
+      <div class="dg" aria-label="AI가 점점 더 잘하는 일과 교사가 붙들고 있는 일">
+        <div class="dg-g2">
+          <div class="dg-panel"><span class="dg-t">AI가 점점 더 잘하는 일</span>
+            <div class="cx-list">
+              <div class="dg-node"><svg class="ic"><use href="#i-code"/></svg><b>코드 짜고 고치기</b></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-cube"/></svg><b>3D 시뮬레이터, 게임 만들기</b></div>
+              <div class="dg-node"><svg class="ic"><use href="#i-upload"/></svg><b>배포까지 대신하기</b></div>
+            </div>
+          </div>
+          <div class="dg-panel"><span class="dg-t">제가 붙들고 있는 일</span>
+            <div class="cx-list">
+              <div class="dg-node on"><svg class="ic"><use href="#i-person"/></svg><b>우리 반 아이들이 어디서 막히는지 알기</b></div>
+              <div class="dg-node on"><svg class="ic"><use href="#i-check"/></svg><b>설명과 그림이 과학적으로 맞는지 가려내기</b></div>
+              <div class="dg-node on"><svg class="ic"><use href="#i-eye"/></svg><b>실험실에서 직접 보고 만지며 겪게 하기</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <p>그러면 과학 교사인 저는 어떤 능력을 갖춰야 할까요. AI가 하지 못하는 저만의 일은 무엇이고, AI가 수많은 일을 대신해 주게 되었을 때 교사로서 저는 무엇을 할 수 있어야 할까요. 도구가 아무리 좋아져도 그 도구를 쓰는 사람은 저이기 때문에, 이 질문을 선생님들과 함께 나누고 싶었습니다.</p>
+        <p>저도 아직 답을 찾는 중입니다. 지금은 세 가지를 붙들고 있습니다. 우리 반 아이들이 어디서 막히는지 알아보는 일, AI가 만든 설명과 그림이 과학적으로 맞는지 가려내는 일, 그리고 아이들이 실험실에서 직접 보고 만지며 겪게 하는 일입니다.</p>
       </div>
     </div>
 
@@ -968,6 +1030,48 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       <p class="brief">누군가 만들어 둔 게 없을 때 하나를 차근차근 만들고, 아이들과 조금 다른 수업을 한두 번 해 보시면 오늘은 성공입니다.</p>
       <div class="detail">
         <p>그래서 오늘은 너무 큰 기대 없이, 이런 방법이 있다는 것만 가져가셨으면 합니다. 수업 아이디어가 떠올랐는데 누군가 만들어 둔 게 없다면, 그때 하나를 차근차근 만들어 보시면 됩니다. 유료 요금제를 쓰고 계시면 배포까지 그냥 시키시면 되고, 아니시면 오늘 배우신 방법으로 직접 올리시면 됩니다. 그렇게 만든 링크로 아이들과 조금 다른 수업을 한두 번 해 보시면, 저는 그것만으로 오늘이 성공이라고 생각합니다.</p>
+      </div>
+    </div>
+    <div class="blk" id="remix">
+      <p class="kw">다른 선생님이 만든 앱을 고쳐 쓰는 법</p>
+      <p class="brief">처음부터 만들기보다, 마음에 드는 앱을 받아 우리 반에 맞게 조금 고쳐 쓰는 편이 빠를 때가 많습니다.</p>
+      <div class="dg" aria-label="폴더에서 일하는 AI가 있을 때와 웹 채팅만 있을 때, 다른 선생님 앱을 고쳐 쓰는 순서">
+        <div class="dg-tabs"><button type="button" data-v="app" aria-pressed="true">폴더에서 일하는 AI가 있으면</button><button type="button" data-v="web" aria-pressed="false">웹 채팅만 있으면</button></div>
+        <div data-view="app">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-globe"/></svg><b>앱 주소</b><small>부탁문에 붙임</small></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-folder"/></svg><b>AI가 내려받기</b><small>Code 탭 · Codex</small></div>
+            <div class="dg-wire"><i style="--dl:.6s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-browser"/></svg><b>눌러 보며 파악</b><small>어떤 기능이 있는지</small></div>
+            <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-pencil"/></svg><b>우리 반에 맞게</b><small>고칠 곳만 고치기</small></div>
+          </div>
+        </div>
+        <div data-view="web">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-globe"/></svg><b>앱 화면</b><small>Ctrl + U</small></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-code"/></svg><b>페이지 소스</b><small>Ctrl + A, Ctrl + C</small></div>
+            <div class="dg-wire"><i style="--dl:.6s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>웹 채팅에 붙여넣기</b><small>고칠 곳 하나만</small></div>
+            <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-file"/></svg><b>index.html로 저장</b><small>더블클릭해서 확인</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="app">폴더에서 일하는 AI는 주소의 파일을 직접 받아 와서 눌러 보고 고칩니다. 채팅창에 링크만 붙이면 AI는 대개 화면의 글자만 읽어서 코드는 보지 못합니다.</p>
+        <p class="dg-cap" data-vsay="web" hidden>F12의 Elements 화면은 실행되면서 바뀐 모습이라 그대로 복사하면 고장 나기 쉽습니다. 원래 코드는 Ctrl + U로 여는 페이지 소스에 있습니다.</p>
+      </div>
+      <div class="pr"><span class="pl">폴더에서 일하는 AI에게 · 고쳐 쓰기 부탁</span><button class="btn cp" type="button">복사</button><div class="txt">이 주소의 웹앱을 이 폴더에 내려받아 줘: [앱 주소]
+브라우저로 열어 버튼을 눌러 보면서 어떤 기능이 있는지 먼저 정리해 줘. 그다음 [고칠 내용]만 우리 반에 맞게 고쳐 줘. 나머지는 그대로 둬.</div></div>
+      <div class="pr"><span class="pl">웹 채팅에 · 고쳐 쓰기 부탁</span><button class="btn cp" type="button">복사</button><div class="txt">아래는 다른 선생님이 만든 웹앱 코드야. [고칠 내용]만 고쳐 줘. 나머지는 그대로 두고, 고친 코드 전체를 &lt;!DOCTYPE html&gt;부터 &lt;/html&gt;까지 한 번에 보여 줘.
+
+(여기에 페이지 소스를 붙여넣기)</div></div>
+      <div class="grid2 g22">
+        <div class="box"><b>원본을 받는 가장 깔끔한 길</b><p>GiteacherHub에 올라온 앱은 앱 화면의 [원본 받기]로 받습니다. GitHub에 올라온 앱은 저장소의 Code에서 Download ZIP으로 파일을 한꺼번에 받습니다.</p></div>
+        <div class="box"><b>한 파일짜리 앱인지 봅니다</b><p>페이지 소스에 &lt;script src="…"&gt;처럼 다른 파일을 불러오는 줄이 있으면 그 파일도 있어야 돌아갑니다. 파일이 수백 KB로 크면 무료 웹 채팅이 한 번에 다 읽지 못합니다.</p></div>
+        <div class="box"><b>서버 주소와 키를 바꿉니다</b><p>코드에 Supabase 주소와 키가 들어 있으면, 고쳐 쓴 앱의 학생 답이 원래 선생님의 데이터베이스로 갑니다. 그 부분은 빼거나 내 것으로 바꿔 달라고 부탁합니다.</p></div>
+        <div class="box"><b>만든 선생님을 밝힙니다</b><p>내 수업에 고쳐 쓰는 것과 고친 앱을 다시 나누는 것은 다릅니다. 다시 나눌 때는 만든 선생님께 먼저 여쭙고, 출처를 밝힙니다.</p></div>
       </div>
     </div>
   </div>
