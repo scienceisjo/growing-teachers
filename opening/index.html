@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>연수 오프닝 · 해누리중 조승재</title>
-<meta name="description" content="연수 시작과 끝에 쓰는 공용 페이지 — 인사 · 아이스브레이킹 · AI가 본 나 · 선물 꾸러미 · 신청 이유 · 만족도">
+<meta name="description" content="연수 시작과 끝에 쓰는 공용 페이지 — 인사 · 아이스브레이킹 · AI가 본 나 · 선물 꾸러미 · 신청 이유 · 진행 방식 투표 · 만족도">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* ─────────────────────────────────────────────────────────────
@@ -160,6 +160,48 @@ html[data-mode="present"] .qr svg{width:220px;height:220px}
 .admin .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .admin .counts{color:var(--ink2);font-size:.9em;margin:8px 0}
 
+/* 6 오늘 진행 방식 (poll=vibe) — 진행 방향 투표 · 모듈 찾기 */
+.vopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px}
+.vopt{display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;color:var(--ink);cursor:pointer;font:inherit;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.vopt:hover{border-color:var(--ink2)}
+.vopt:active{transform:scale(.99)}
+.vopt.mine{border-color:var(--blue);outline:1px solid var(--blue)}
+.vopt .vh{display:flex;align-items:center;gap:8px;font-size:1.08em}
+.vopt .vno{flex:none;width:1.75em;height:1.75em;border-radius:50%;background:var(--bg2);display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.82em}
+.vopt.mine .vno{background:var(--blue);color:#fff}
+.vopt .mytag{display:none;flex:none;font-size:.7em;color:var(--blue);border:1px solid var(--blue);border-radius:9999px;padding:1px 9px}
+.vopt.mine .mytag{display:inline-block}
+.vopt .ratio{display:flex;gap:2px;height:10px;border-radius:9999px;overflow:hidden}
+.vopt .ratio i{display:block;height:100%}
+.vopt .ratio .t{background:var(--blue)} .vopt .ratio .p{background:var(--ok)}
+.vopt .rl{display:flex;justify-content:space-between;font-size:.8em;margin-top:-6px}
+.vopt .rl .t{color:var(--blue)} .vopt .rl .p{color:var(--ok)}
+.vopt .vd{font-size:.94em}
+.vopt .pc{display:block;font-size:.88em;color:var(--ink2);border-top:1px solid var(--line2);padding-top:9px}
+.vopt .pc em{display:block;font-style:normal;font-weight:600;font-size:.9em;margin-bottom:2px}
+.vopt .pc.good em{color:var(--ok)} .vopt .pc.bad em{color:var(--warn)}
+.vopt .vt{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:10px;border-top:1px solid var(--line2)}
+.vopt .vt i{flex:1;display:block;height:10px;border-radius:9999px;background:var(--blue-t);overflow:hidden}
+.vopt .vt i b{display:block;height:100%;width:0;background:var(--blue);transition:width .4s}
+.vopt .vc{font-size:.86em;color:var(--ink2);white-space:nowrap;min-width:5.2em;text-align:right}
+.vopt.lead .vc{color:var(--blue);font-weight:600}
+#p-plan .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.modmap{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin:14px 0 10px}
+.modmap .mm{flex:1;min-width:150px;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:var(--bg2)}
+.modmap .mm .mn{font-size:.78em;color:var(--blue);font-weight:600}
+.modmap .mm span{font-size:.9em;color:var(--ink2)}
+.modmap .mm em{font-style:normal;font-size:.8em;color:var(--ink3);margin-top:4px}
+.modmap .mm.hi{border-color:var(--blue);background:var(--blue-t)}
+.modmap .arr{align-self:center;flex:none;color:var(--ink3)}
+.modq{border:1px solid var(--line);border-radius:var(--r3);padding:16px 20px;margin-top:12px;background:#fff}
+.modq .pq{padding:12px 0;border-top:1px solid var(--line2)}
+.modq .pq:first-child{border-top:0;padding-top:0}
+.modq .q{font-weight:600;margin-bottom:8px}
+.modq .opts{display:flex;flex-wrap:wrap;gap:8px}
+.modq .verdict{margin-top:12px}
+.modbars .bar{grid-template-columns:7.5em 1fr 3em}
+@media (max-width:720px){ .modmap{flex-direction:column} .modmap .arr{transform:rotate(90deg)} }
+
 footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
 @media (max-width:720px){ .live form{grid-template-columns:1fr} .top .brand small{display:none} .panel{padding:32px 0} }
 </style>
@@ -175,6 +217,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <button class="tab" data-p="ident" id="tabIdent">3 AI가 본 나</button>
       <button class="tab" data-p="gift">4 선물 꾸러미</button>
       <button class="tab" data-p="why">5 신청하신 이유</button>
+      <button class="tab" data-p="plan" id="tabPlan" style="display:none">6 오늘 진행 방식</button>
       <button class="tab" data-p="close" id="tabClose" style="display:none">⭐ 만족도</button>
     </nav>
     <button class="btn" id="modeBtn">🎤 발표로</button>
@@ -200,6 +243,10 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     <div id="twoWays" style="display:none">
       <p class="small" style="margin:0 0 8px">오늘 연수 페이지는 두 갈래입니다. 아이스브레이킹의 네 문항 결과에 따라 둘 중 하나로 갑니다.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn big" id="goA" href="#">🤖 SenGPT 에이전트 기본 실습</a><a class="btn big primary" id="goB" href="#">📄 공문 한 장에서 시작하는 AI 업무 자동화</a></div>
+    </div>
+    <div id="vibeWays" style="display:none;flex-basis:100%">
+      <p class="small" style="margin:0 0 8px">오늘 연수는 모듈형으로 진행됩니다. 설명과 실습을 어떤 비율로 나눌지는 함께 투표로 정하고, 각자 시작할 모듈은 두 질문으로 찾습니다.</p>
+      <button type="button" class="btn big" id="goPlan">🧭 진행 방식 정하고 내 모듈 찾기 →</button>
     </div>
   </div>
   <p class="small only-detail">이 페이지는 연수를 시작할 때와 끝낼 때 쓰는 공용 페이지입니다. 폰으로 열어 두시면 벽에 글을 올릴 수 있고, 앞 화면에는 🎤 발표 모드로 벽만 크게 보입니다.</p>
@@ -348,6 +395,71 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
 </section>
 
+<!-- ═══ 6 오늘 진행 방식 (poll=vibe 일 때만 탭이 보입니다) ═══ -->
+<section class="panel" id="p-plan">
+  <h2>오늘 연수, 어떻게 진행할까요?</h2>
+  <p class="sub">설명과 실습을 어떤 비율로 나눌지, 선생님들과 함께 정해보겠습니다!</p>
+
+  <div class="idqr"><div class="qr" id="planQr"></div><div class="small">폰으로 찍어서 이 탭에서 골라 주세요</div></div>
+
+  <div class="blk">
+    <p class="kw">진행 방향 투표 <span class="small">(익명)</span></p>
+    <p class="small only-detail">하나를 누르시면 바로 올라가고, 다른 것을 누르시면 바뀝니다. 결과를 보고 오늘 시간을 나누겠습니다.</p>
+    <div class="vopts" id="vopts">
+      <button type="button" class="vopt" data-v="1" aria-pressed="false">
+        <span class="vh"><span class="vno">1</span><b>충분히 듣기</b></span>
+        <span class="ratio" aria-hidden="true"><i class="t" style="width:90%"></i><i class="p" style="width:10%"></i></span>
+        <span class="rl"><span class="t">설명 90</span><span class="p">실습 10</span></span>
+        <span class="vd">바이브코딩이 무엇인지, 요금제마다 무엇이 다른지, AI가 지금 어디까지 왔는지, 제가 수업에 써 온 사례까지 차근차근 말씀드립니다. 실습은 맛보기로만 합니다.</span>
+        <span class="pc good"><em>좋은 점</em>전체 그림을 잡고 가십니다. 바이브코딩 페이지의 매뉴얼은 연수가 끝난 뒤에도 그대로 열려 있어서, 실습은 학교에서 천천히 이어 하실 수 있습니다.</span>
+        <span class="pc bad"><em>아쉬운 점</em>듣는 시간이 길어 지루하실 수 있고, 손으로 해 보지 않은 것은 금방 흐려집니다.</span>
+        <span class="vt"><i><b></b></i><span class="mytag">내 선택</span><span class="vc">0표</span></span>
+      </button>
+      <button type="button" class="vopt" data-v="2" aria-pressed="false">
+        <span class="vh"><span class="vno">2</span><b>핵심만 듣고 해 보기</b></span>
+        <span class="ratio" aria-hidden="true"><i class="t" style="width:50%"></i><i class="p" style="width:50%"></i></span>
+        <span class="rl"><span class="t">설명 50</span><span class="p">실습 50</span></span>
+        <span class="vd">꼭 알아야 할 것만 골라 짧게 말씀드리고, 남은 시간에는 매뉴얼을 따라 하나를 직접 만들어 봅니다.</span>
+        <span class="pc good"><em>좋은 점</em>들은 것을 바로 손으로 확인하니 오래 남고, 막히는 곳은 그 자리에서 물어보실 수 있습니다.</span>
+        <span class="pc bad"><em>아쉬운 점</em>요금제 비교나 제 사례 같은 이야기는 짧게 넘어가서, 궁금하시면 페이지로 따로 읽으셔야 합니다. 하나를 끝까지 만들기엔 시간이 빠듯할 수 있습니다.</span>
+        <span class="vt"><i><b></b></i><span class="mytag">내 선택</span><span class="vc">0표</span></span>
+      </button>
+      <button type="button" class="vopt" data-v="3" aria-pressed="false">
+        <span class="vh"><span class="vno">3</span><b>부딪히며 배우기</b></span>
+        <span class="ratio" aria-hidden="true"><i class="t" style="width:10%"></i><i class="p" style="width:90%"></i></span>
+        <span class="rl"><span class="t">설명 10</span><span class="p">실습 90</span></span>
+        <span class="vd">시작하는 법만 짧게 말씀드리고 바로 만들기 시작합니다. 막히는 곳이 생기면 그때 찾아보고, 저에게 물어보시면 됩니다.</span>
+        <span class="pc good"><em>좋은 점</em>직접 만드는 시간이 가장 길고, 정말 궁금한 것부터 배우십니다. 이미 조금 써 보신 분께 잘 맞습니다.</span>
+        <span class="pc bad"><em>아쉬운 점</em>「모르겠다 → 그럼 이걸 찾아볼까?」를 되풀이하다 보면 배운 것이 조각조각 남고, 왜 그렇게 되는지 큰 그림은 놓치기 쉽습니다.</span>
+        <span class="vt"><i><b></b></i><span class="mytag">내 선택</span><span class="vc">0표</span></span>
+      </button>
+    </div>
+    <p class="small" id="planN" style="margin:12px 0 0"></p>
+    <div class="st" id="planSt"></div>
+  </div>
+
+  <div class="blk">
+    <p class="kw">오늘 연수는 모듈형으로 진행됩니다</p>
+    <p class="small">모두가 같은 순서로 따라가지 않고, 지금 선생님께 맞는 모듈부터 시작합니다. 아래 두 질문에 답하시면 그 모듈의 페이지로 가는 단추가 나옵니다.</p>
+    <div class="modmap" id="modMap">
+      <div class="mm" data-m="1"><span class="mn">모듈 ①</span><b>기초</b><span>말로 수업 도구 하나 만들기</span><em>코드를 처음 저장해 보시는 분</em></div>
+      <span class="arr" aria-hidden="true">→</span>
+      <div class="mm" data-m="2"><span class="mn">모듈 ②</span><b>배포</b><span>만든 파일에 주소 붙이기</span><em>파일로 저장해 보신 분</em></div>
+      <span class="arr" aria-hidden="true">→</span>
+      <div class="mm" data-m="3"><span class="mn">모듈 ③</span><b>데이터·AI</b><span>학생 제출 모으기와 AI 연결</span><em>배포까지 해 보신 분</em></div>
+    </div>
+    <p class="small only-detail">한 모듈의 마지막 칸이 다음 모듈의 첫 칸으로 이어집니다. 일찍 끝나시면 다음 모듈로 넘어가시면 됩니다. <a id="goLecture" href="#">칠판 강의 화면</a>(학습지 한 장을 강의 화면으로)과 <a id="goDesign" href="#">디자인 서랍</a>은 어느 모듈에서나 들르실 수 있습니다.</p>
+    <div class="modq" id="modQ">
+      <div class="pq" id="mq1"><div class="q">AI가 준 코드를 파일로 저장해서 브라우저로 열어 보신 적이 있나요?</div><div class="opts"><button type="button" class="opt" data-q="1" data-a="no">아니요</button><button type="button" class="opt" data-q="1" data-a="yes">네</button></div></div>
+      <div class="pq" id="mq2" hidden><div class="q">만든 파일을 주소(링크)로 배포해서 다른 사람에게 보내 보신 적이 있나요?</div><div class="opts"><button type="button" class="opt" data-q="2" data-a="no">아니요</button><button type="button" class="opt" data-q="2" data-a="yes">네</button></div></div>
+      <div class="verdict" id="modRes" hidden></div>
+      <div class="st" id="modSt"></div>
+    </div>
+    <p class="small" style="margin:16px 0 0">모듈별로 시작하실 선생님 <span id="modN"></span></p>
+    <div class="bars modbars" id="modBars"></div>
+  </div>
+</section>
+
 <!-- ═══ ⭐ 만족도 ═══ -->
 <section class="panel" id="p-close">
   <h2>오늘 어떠셨나요?</h2>
@@ -387,7 +499,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-01</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-06</span></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
@@ -402,7 +514,8 @@ const Q = new URLSearchParams(location.search);
 const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
 /* 연수 코드별 기본값 — 주소에 t= to= poll= reflect= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
 const PRESET = {
-  '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' }
+  '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' },
+  'geowon-1006': { t:'바이브코딩 연수', to:'../vibecoding/?s=geowon-1006&school=거원중학교', poll:'vibe' }
 };
 const PR = PRESET[CODE] || {};
 const TITLE = (Q.get('t')||PR.t||'').trim();
@@ -410,10 +523,12 @@ const TO = (Q.get('to')||PR.to||'').trim();
 const REFLECT = (Q.get('reflect')||PR.reflect||'').trim();   // Microsoft Reflect 체크인 링크 — 연수마다 다르게, http(s) 만 받음
 const SATIS = (Q.get('satis')||'').trim()==='1';   // satis=1 일 때만 ⭐ 만족도 탭 — 평소엔 잠금(만족도는 노션 QR로 따로)
 if(SATIS) document.getElementById('tabClose').style.display='';
-const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정
+const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정 · poll=vibe → 「6 오늘 진행 방식」 탭(진행 방향 투표 + 모듈 찾기)
 const PATH_A = (Q.get('a')||'').trim() || '../sengpt-agent/';   // 판정 A: 에이전트 기본 실습
 const PATH_B = (Q.get('b')||'').trim() || '../ai-work/';        // 판정 B: 공문 한 장
-if(POLL){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; }
+if(POLL==='agent'){ document.getElementById('diagBlk').style.display=''; document.getElementById('diagNote').style.display=''; document.getElementById('goA').href=PATH_A; document.getElementById('goB').href=PATH_B; document.getElementById('twoWays').style.display=''; }
+const VIBE = POLL==='vibe';
+if(VIBE){ document.getElementById('tabPlan').style.display=''; document.getElementById('vibeWays').style.display=''; }
 if(/^https?:\/\//i.test(REFLECT)){
   document.getElementById('reflectCard').style.display='';
   document.getElementById('reflectLink').href=REFLECT;
@@ -442,9 +557,9 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(document.getElementById('p-'+h) && (['hello','ice','ident','gift','why'].includes(h) || (h==='close' && SATIS))) show(h);
-document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const i=tabs.findIndex(t=>t.classList.contains('on'));
-  if(e.key==='ArrowRight'&&i<tabs.length-1) show(tabs[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(tabs[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
+const h=location.hash.replace('#',''); if(document.getElementById('p-'+h) && (['hello','ice','ident','gift','why'].includes(h) || (h==='close' && SATIS) || (h==='plan' && VIBE))) show(h);
+document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const vt=tabs.filter(t=>t.style.display!=='none'); const i=vt.findIndex(t=>t.classList.contains('on'));
+  if(e.key==='ArrowRight'&&i<vt.length-1) show(vt[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(vt[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
 /* ── Supabase REST ── */
 const SB=CONFIG.supabase;
@@ -632,6 +747,97 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
   load(); setInterval(()=>{ if(panel.classList.contains('on')) load(); }, CONFIG.pollMs);
 })();
 
+/* ── 6 오늘 진행 방식 (poll=vibe): 진행 방향 투표(kind=plan, n=1~3) + 모듈 찾기(kind=module, n=1~3)
+      기기마다 임의 번호(name)를 붙여 마지막 응답만 셉니다 — 다른 것을 누르면 바뀌고, 여러 번 눌러도 한 표 ── */
+(function(){
+  if(!VIBE) return;
+  const panel=document.getElementById('p-plan');
+  document.getElementById('goPlan').addEventListener('click',()=>show('plan'));
+  let DEV=''; try{ DEV=localStorage.getItem('opening:dev')||''; }catch(e){}
+  if(!/^d[0-9a-f]{12}$/.test(DEV)){ DEV='d'+[...crypto.getRandomValues(new Uint8Array(6))].map(b=>b.toString(16).padStart(2,'0')).join(''); try{ localStorage.setItem('opening:dev',DEV); }catch(e){} }
+  const latest=rows=>{ const m=new Map(); rows.forEach(r=>{ const k=r.name||('#'+r.id); if(!m.has(k)) m.set(k,r); }); return [...m.values()]; };   // rows 는 최신순
+
+  /* 모듈 페이지 주소: to= 의 허브 폴더 + 같은 ?s=&school= */
+  const HUB=new URL(TO||'../vibecoding/', location.href); HUB.hash='';
+  if(!HUB.search && CODE!=='test') HUB.search='?s='+encodeURIComponent(CODE);
+  const DEPLOY='https://scienceisjo.github.io/githubmanual/forstudent.html';
+  const vlink=p=>{ if(/^https?:/i.test(p)) return p; const u=new URL(p,HUB); u.search=HUB.search; return u.href; };
+  [['goLecture','lecture.html'],['goDesign','design.html']].forEach(([id,p])=>{ const a=document.getElementById(id); a.href=vlink(p); a.target='_blank'; a.rel='noopener'; });
+
+  /* ① 진행 방향 투표 */
+  const vopts=[...panel.querySelectorAll('.vopt')], planN=document.getElementById('planN'), planSt=document.getElementById('planSt');
+  const VK='opening:plan:'+CODE;
+  let myVote=0, sending=false; try{ myVote=+(localStorage.getItem(VK)||0); }catch(e){}
+  const markVote=()=>vopts.forEach(b=>{ const on=+b.dataset.v===myVote; b.classList.toggle('mine',on); b.setAttribute('aria-pressed',String(on)); });
+  function renderVote(rows){
+    const L=latest(rows).filter(r=>r.n>=1&&r.n<=3), N=L.length, c=[0,0,0,0];
+    L.forEach(r=>c[r.n]++);
+    const max=Math.max(c[1],c[2],c[3]);
+    vopts.forEach(b=>{ const k=+b.dataset.v, v=c[k], p=N?Math.round(v/N*100):0;
+      b.querySelector('.vt b').style.width=p+'%';
+      b.querySelector('.vc').textContent=N?`${v}표 · ${p}%`:'0표';
+      b.classList.toggle('lead',N>0&&v===max); });
+    planN.textContent=N?`지금까지 ${N}분이 고르셨습니다.`:'아직 고르신 분이 없습니다.';
+    if(!sending&&ready){ const me=L.find(r=>r.name===DEV), n=me?me.n:0; if(n!==myVote){ myVote=n; markVote(); try{ localStorage.setItem(VK,String(n)); }catch(e){} } }
+  }
+  vopts.forEach(b=>b.addEventListener('click',async()=>{
+    const k=+b.dataset.v;
+    if(sending) return;
+    if(k===myVote){ planSt.textContent='이미 고르셨습니다. 다른 것을 누르시면 바뀝니다.'; return; }
+    if(!ready){ planSt.textContent='서버 설정 전이라 표가 모이지 않습니다.'; return; }
+    const prev=myVote; myVote=k; markVote(); sending=true; planSt.textContent='보내는 중…';
+    try{ await insertRow({kind:'plan',name:DEV,body:'',n:k}); try{ localStorage.setItem(VK,String(k)); }catch(e){}
+      planSt.textContent=prev?'바꿨습니다 🙂':'고맙습니다 🙂 다른 것을 누르시면 바뀝니다.'; sending=false; load(); }
+    catch(e){ myVote=prev; markVote(); sending=false; planSt.textContent='보내지 못했습니다 ('+e.message+'). 다시 눌러 주세요.'; }
+  }));
+
+  /* ② 모듈 찾기 — 허브 9단계와 같은 두 질문 */
+  const MODS={
+    1:{big:'모듈 ① 기초부터 시작하시면 됩니다', why:'상상만 하던 수업 도구 하나를 말로 만들어 파일로 저장하고, 보관함에 올리는 데까지 갑니다.', href:'basic.html', btn:'① 기초 페이지 열기 →'},
+    2:{big:'모듈 ② 배포부터 시작하시면 됩니다', why:'만든 파일을 GitHub에 올려 주소를 받고, 학생에게 링크로 건넵니다. 폴더를 끌어다 놓기만 하는 Netlify·Vercel 매뉴얼도 함께 있습니다.', href:DEPLOY, btn:'② 배포 매뉴얼 열기 →'},
+    3:{big:'모듈 ③ 데이터·AI부터 시작하시면 됩니다', why:'Supabase로 학생 제출을 모으고, 로그인한 교사만 보는 대시보드를 만들고, AI API를 안전하게 붙이는 법과 지킬 것을 다룹니다.', href:'data.html', btn:'③ 데이터·AI 페이지 열기 →'}
+  };
+  const LAB={1:'① 기초',2:'② 배포',3:'③ 데이터·AI'};
+  const MK='opening:module:'+CODE, mq2=document.getElementById('mq2'), res=document.getElementById('modRes'), modSt=document.getElementById('modSt');
+  let ans={}, sentMod=0;
+  try{ const o=JSON.parse(localStorage.getItem(MK)||'null'); if(o&&o.a) ans=o.a; sentMod=+(localStorage.getItem(MK+':sent')||0); }catch(e){}
+  const decide=()=>ans.q1==='no'?1:ans.q1==='yes'&&ans.q2==='no'?2:ans.q1==='yes'&&ans.q2==='yes'?3:0;
+  function paint(){
+    document.querySelectorAll('#modQ .opt').forEach(b=>b.classList.toggle('on',ans['q'+b.dataset.q]===b.dataset.a));
+    mq2.hidden=ans.q1!=='yes';
+    const k=decide(), o=MODS[k];
+    document.querySelectorAll('#modMap .mm').forEach(m=>m.classList.toggle('hi',+m.dataset.m===k));
+    res.hidden=!o; if(!o) return;
+    res.innerHTML=`<div class="big">${o.big}</div><div class="why">${o.why}</div>
+      <div class="go"><a class="btn big pick" href="${esc(vlink(o.href))}" target="_blank" rel="noopener">${o.btn}</a><a class="btn big" href="${esc(vlink('lecture.html'))}" target="_blank" rel="noopener">칠판 강의 화면</a></div>
+      <p class="small" style="margin:10px 0 0">학습지로 수업하시면 어느 모듈이든 칠판 강의 화면부터 하셔도 됩니다. 페이지는 새 탭에서 열리고, 이 오프닝은 그대로 남아 있습니다.</p>`;
+  }
+  paint();
+  document.querySelectorAll('#modQ .opt').forEach(b=>b.addEventListener('click',async()=>{
+    if(b.dataset.q==='1') ans={q1:b.dataset.a}; else ans.q2=b.dataset.a;
+    paint();
+    const k=decide(); if(!k) return;
+    try{ localStorage.setItem(MK,JSON.stringify({a:ans})); }catch(e){}
+    if(!ready||k===sentMod) return;
+    try{ await insertRow({kind:'module',name:DEV,body:JSON.stringify(ans),n:k}); sentMod=k; try{ localStorage.setItem(MK+':sent',String(k)); }catch(e){} modSt.textContent=''; load(); }
+    catch(e){ modSt.textContent='모듈별 인원에 넣지 못했습니다 ('+e.message+'). 위 단추는 그대로 쓰시면 됩니다.'; }
+  }));
+  function renderMod(rows){
+    const L=latest(rows).filter(r=>r.n>=1&&r.n<=3), N=L.length, c=[0,0,0,0];
+    L.forEach(r=>c[r.n]++);
+    document.getElementById('modN').textContent=N?`· 지금까지 ${N}분`:'';
+    document.getElementById('modBars').innerHTML=[1,2,3].map(k=>`<div class="bar"><span>${LAB[k]}</span><i><b style="width:${N?c[k]/N*100:0}%"></b></i><span>${c[k]}</span></div>`).join('');
+  }
+
+  async function load(){
+    if(!ready){ planSt.textContent='CONFIG.supabase 에 주소와 키를 넣고 SETUP_연수라이브.sql 을 실행하면 투표가 켜집니다.'; return; }
+    try{ const [a,b]=await Promise.all([fetchRows('plan'),fetchRows('module')]); renderVote(a); renderMod(b); if(planSt.dataset.err){ planSt.textContent=''; delete planSt.dataset.err; } }
+    catch(e){ planSt.dataset.err='1'; planSt.textContent='서버에 닿지 않습니다 ('+e.message+'). 잠시 뒤 다시 열어 주세요.'; }
+  }
+  markVote(); renderVote([]); renderMod([]);
+  load(); setInterval(()=>{ if(panel.classList.contains('on')) load(); }, CONFIG.pollMs);
+})();
+
 /* ── 강사 패널 ── */
 const admin=document.getElementById('admin');
 document.getElementById('adminCode').textContent=CODE;
@@ -666,6 +872,7 @@ function qrInto(el,u){
 function drawQR(){
   qrInto(document.getElementById('giftQr'), new URL(CONFIG.gift,location.href).href);
   if(/^https?:\/\//i.test(REFLECT)) qrInto(document.getElementById('reflectQr'), REFLECT);
+  const pq=document.getElementById('planQr'); if(pq&&VIBE){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#plan'; qrInto(pq,u.href); }
   const iq=document.getElementById('identQr'); if(iq){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#ident'; qrInto(iq,u.href); }
 }
 if(window.qrcode) drawQR(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load',drawQR); setTimeout(()=>{ if(!window.qrcode) drawQR(); },2500); }
