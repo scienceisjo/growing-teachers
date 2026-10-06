@@ -360,6 +360,39 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 .grid2.g22{grid-template-columns:repeat(2,minmax(0,1fr))}
 .kr-row+.kr-row{margin-top:10px}
 @media (max-width:640px){.grid2.g22{grid-template-columns:1fr}.kr-row+.kr-row{margin-top:18px;padding-top:18px;border-top:1px dashed var(--line)}}
+/* 무료 계정에서 시작하는 다섯 칸 — 계단 */
+.stairs .st-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:end;padding-top:14px}
+.stairs .st{position:relative;display:flex;flex-direction:column;gap:3px;min-width:0;min-height:10.5em;border:1px solid var(--line);border-radius:var(--r2);padding:10px 11px;background:#fff;margin-bottom:calc(var(--k) * 30px)}
+.stairs .st::after{content:"";position:absolute;left:-1px;right:-1px;top:calc(100% + 1px);height:calc(var(--k) * 30px);background:var(--bg2);border-radius:0 0 6px 6px}
+.stairs.stepping .st.hit{border-color:var(--blue);background:var(--blue-t)}
+.stairs .st .no{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;border-radius:50%;background:var(--ink);color:#fff;font-size:.74rem;font-weight:600}
+.stairs .st b{font-size:.95rem;line-height:1.3}
+.stairs .st small{font-size:.76rem;color:var(--ink2);line-height:1.4}
+.stairs .st .when{align-self:flex-start;font-size:.7rem;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:8px;padding:2px 7px;line-height:1.35;text-wrap:balance;word-break:keep-all}
+.stairs .st .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:6px}
+.stairs .dg-chip{white-space:normal}
+.stairs .me{display:none;position:absolute;top:-12px;right:8px;border-radius:9999px;background:var(--blue);color:#fff;font-size:.68rem;font-weight:600;padding:2px 9px}
+.stairs .me.vis{display:inline-flex;animation:stIn .35s ease-out}
+.stairs .st-band{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:10px}
+.stairs .st-band span{border-radius:8px;padding:6px 10px;font-size:.76rem;line-height:1.4}
+.stairs .st-band .free{grid-column:1/3;background:var(--ok-t);color:var(--ok)}
+.stairs .st-band .paid{grid-column:3/6;background:var(--warn-t);color:var(--warn)}
+.stairs .st-loop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:10px;border:1px dashed var(--line);border-radius:var(--r2);padding:9px 12px;font-size:.84rem;color:var(--ink2)}
+.stairs .st-loop .spin{flex:none;width:22px;height:22px;color:var(--blue);animation:stSpin 6s linear infinite}
+.stairs .st-loop b{color:var(--ink)}
+.stairs .st-loop .lp-note{display:none;color:var(--blue);font-weight:600}
+.stairs .st-loop .lp-note.vis{display:inline}
+@keyframes stSpin{to{transform:rotate(360deg)}}
+@keyframes stIn{0%{opacity:0;transform:translateY(4px)}100%{opacity:1;transform:none}}
+@media (max-width:640px){
+  .stairs .st-row{grid-template-columns:1fr;gap:14px;padding-top:6px}
+  .stairs .st{margin-bottom:0;margin-left:calc(var(--k) * 10px);min-height:0}
+  .stairs .st::after{display:none}
+  .stairs .st-band{grid-template-columns:1fr}
+  .stairs .st-band .free,.stairs .st-band .paid{grid-column:auto}
+}
+/* 앞으로: 제안 셋 · 허용 셋 */
+.dg .row3{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:2px}
 </style>
 </head>
 <body>
@@ -409,7 +442,7 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
 <section class="step" id="s1" data-title="바이브코딩이란" data-min="2">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>바이브코딩이란</h2><span class="min"><b>2</b>분</span></div>
-    <p class="goal">바이브코딩이 무엇이고, 어디까지 되는지부터 짚어보겠습니다!</p>
+    <p class="goal">바이브코딩이 무엇이고 어디까지 되는지, 무료 계정에서 어떻게 시작해 올라가는지 짚어보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">코드를 몰라도, 말로 시켜서 만듭니다</p>
@@ -445,6 +478,64 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       </div>
       <div class="detail">
         <p>초안은 금방 나옵니다. 시간은 대부분 고치는 데 들어갑니다. 전시실의 큰 작품들도 처음부터 그 모습이었던 것이 아니라, 수업에 쓰면서 여러 번 고쳐 키운 것들입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" id="path">
+      <p class="kw">무료 계정으로 시작해서, 필요할 때 한 칸씩</p>
+      <p class="brief">처음부터 다 배우지 않습니다. 학생에게 보여 주고 싶어지면 배포로, 확인하고 고치기가 번거로워지면 폴더에서 일하는 AI로, 필요가 생길 때마다 한 칸씩 올라갑니다.</p>
+      <div class="dg stairs" data-steps data-auto="5200" role="group" aria-label="무료 계정에서 시작하는 다섯 칸: 맛보기, 배포, 폴더에서 일하는 AI, 학생 데이터, AI 붙이기">
+        <span class="dg-t">무료 계정에서 시작하는 다섯 칸</span>
+        <div class="st-row">
+          <div class="st" data-s="1" style="--k:0"><span class="me" data-show="1">지금 여기</span><span class="no">1</span><b>맛보기</b><small>웹 채팅에서 말로 한 파일 도구 만들기</small><span class="tags"><span class="dg-chip ok">무료</span><span class="dg-chip blue">모듈 ①</span></span></div>
+          <div class="st" data-s="2" style="--k:1"><span class="me" data-show="2">지금 여기</span><span class="when">학생에게 보여 주고 싶을 때</span><span class="no">2</span><b>배포</b><small>주소 하나로 학생에게 건네기</small><span class="tags"><span class="dg-chip ok">무료</span><span class="dg-chip blue">모듈 ②</span></span></div>
+          <div class="st" data-s="3" style="--k:2"><span class="me" data-show="3">지금 여기</span><span class="when">확인하고 고치기가 번거로울 때</span><span class="no">3</span><b>폴더에서 일하는 AI</b><small>AI가 내 컴퓨터 폴더를 직접 열고 고치기</small><span class="tags"><span class="dg-chip">무료는 조금</span><span class="dg-chip blue">모듈 ① 폴더 앱</span></span></div>
+          <div class="st" data-s="4" style="--k:3"><span class="me" data-show="4">지금 여기</span><span class="when">학생 답을 모으고 싶을 때</span><span class="no">4</span><b>학생 데이터</b><small>서버에 모으고, 교사만 보기</small><span class="tags"><span class="dg-chip ok">무료로 시작</span><span class="dg-chip blue">모듈 ③</span></span></div>
+          <div class="st" data-s="5" style="--k:4"><span class="me" data-show="5">지금 여기</span><span class="when">교사 도구에 AI를 붙이고 싶을 때</span><span class="no">5</span><b>AI 붙이기·일 맡기기</b><small>키 숨기기, 결제 한도 걸기</small><span class="tags"><span class="dg-chip key">선불</span><span class="dg-chip blue">모듈 ③</span></span></div>
+        </div>
+        <div class="st-band"><span class="free">1·2칸 · 무료로 충분합니다</span><span class="paid">3~5칸 · 무료로 시작은 되지만, 넉넉히 쓰려면 요금제나 선불을 고민합니다</span></div>
+        <div class="st-loop"><svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span><b>어느 칸에서나 도는 고리</b> 부탁하고, 눌러 보고, 고칩니다.</span><span class="lp-note" data-show="2 3">2칸에서 이 고리가 번거로워지면 3칸으로 올라갑니다.</span></div>
+        <div class="dg-say">
+          <p data-say="0"><b>다섯 칸 한눈에</b><span>아래 단추로 한 칸씩 넘기면 칸마다 배우는 것과 다음 칸으로 올라가는 때가 나옵니다. 「차례로 보기」를 누르면 저절로 넘어갑니다.</span></p>
+          <p data-say="1"><b>맛보기</b><span>웹 채팅에 말로 부탁해 한 파일 도구를 만들고, 채팅 화면의 미리보기로 바로 눌러 봅니다. Claude 아티팩트, Gemini 캔버스, ChatGPT 미리보기가 그 자리이고, 서울 선생님은 SenGPT로도 됩니다. 오늘 모듈 ① 기초가 이 칸입니다.</span></p>
+          <p data-say="2"><b>배포</b><span>학생에게 보여 주고 싶어지면 올라오는 칸입니다. 만든 파일에 주소를 붙여 링크 하나로 건넵니다. GiteacherHub에 올리거나 GitHub Pages, Netlify, Vercel에 올리고, 시크릿 창으로 학생이 보는 화면을 확인합니다. 오늘 모듈 ② 배포가 이 칸입니다.</span></p>
+          <p data-say="3"><b>폴더에서 일하는 AI</b><span>고칠 때마다 코드 전체를 다시 받아 저장하고 다시 올리는 게 번거로워지면 올라오는 칸입니다. AI가 내 컴퓨터 폴더를 직접 열어 파일을 고치고, 여러 파일로 키워도 이어서 고칩니다. ChatGPT 데스크톱 앱의 Codex는 무료 계정도 조금 써 볼 수 있고, 넉넉히 쓰려면 월 3만 원 안팎의 요금제를 고민할 때입니다. 모듈 ① 기초에서 도구를 폴더 앱으로 고르시면 이 칸을 해 보실 수 있습니다.</span></p>
+          <p data-say="4"><b>학생 데이터</b><span>학생 답을 모으고 싶어지면 올라오는 칸입니다. 답을 서버에 모으고, 누가 읽고 쓸 수 있는지 규칙을 세우고, 로그인한 교사만 보는 대시보드를 만듭니다. Supabase는 무료로 시작할 수 있습니다. 오늘 모듈 ③ 데이터·AI가 이 칸부터 다룹니다.</span></p>
+          <p data-say="5"><b>AI 붙이기</b><span>교사 도구에 AI를 붙이거나 일을 통째로 맡기고 싶어지면 올라오는 칸입니다. API 키를 숨기고, 결제 한도를 걸고, 약관과 나이 조건을 확인합니다. API는 선불로 쓴 만큼 냅니다.</span></p>
+        </div>
+      </div>
+      <div class="dg" aria-label="배포한 뒤 한 번 고칠 때마다 드는 걸음을 웹 채팅과 폴더에서 일하는 AI로 비교한 그림">
+        <span class="dg-t">배포한 뒤, 한 번 고칠 때마다 드는 걸음</span>
+        <div class="dg-tabs"><button type="button" data-v="web" aria-pressed="true">웹 채팅으로 고칠 때</button><button type="button" data-v="dir" aria-pressed="false" class="ok">폴더에서 일하는 AI로 고칠 때</button></div>
+        <div data-view="web">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>부탁</b></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-code"/></svg><b>코드 전체 다시 받기</b></div>
+            <div class="dg-wire"><i style="--dl:.5s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-copy"/></svg><b>복사해서 파일에 붙여넣기</b></div>
+            <div class="dg-wire"><i style="--dl:1s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-upload"/></svg><b>저장하고 다시 올리기</b></div>
+            <div class="dg-wire"><i style="--dl:1.5s"></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-eye"/></svg><b>확인</b></div>
+          </div>
+        </div>
+        <div data-view="dir">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>부탁</b></div>
+            <div class="dg-wire wide"><i></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-folder"/></svg><b>AI가 폴더의 파일을 직접 고침</b><small>올리기까지 맡길 수도 있음</small></div>
+            <div class="dg-wire wide"><i style="--dl:.6s"></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-eye"/></svg><b>확인</b></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="web">배포까지 하고 나면, 웹 채팅에서는 한 번 고칠 때마다 이 다섯 걸음을 다시 밟습니다. 열 번 고치면 쉰 걸음입니다.</p>
+        <p class="dg-cap" data-vsay="dir" hidden>폴더에서 일하는 AI는 파일을 직접 고쳐서, 저는 부탁하고 확인만 합니다.</p>
+      </div>
+      <div class="detail">
+        <p>바이브코딩을 배우는 길은 HTML, 서버, API를 차례로 익히는 사다리보다, 무료 계정으로 맛보기부터 시작해서 필요가 생길 때마다 한 칸씩 올라가는 계단에 가깝다고 생각합니다. 학생에게 보여 주고 싶어지면 배포를 배우고, 확인하고 고치기가 번거로워지면 폴더에서 일하는 AI로 옮겨 갑니다.</p>
+        <p>확인하고 고치기는 어느 칸에서나 계속 돕니다. 다만 웹 채팅에서는 고칠 때마다 코드 전체를 다시 받아 저장하고 다시 올려야 해서, 배포까지 해 보면 이 고리가 금방 무거워집니다. 그때가 폴더에서 일하는 AI로 올라갈 때이고, 무료와 유료의 갈림길도 대개 이 칸입니다.</p>
+        <p>1칸과 2칸만으로도 링크 하나로 아이들에게 건네는 수업 도구를 만들 수 있습니다. 오늘 모듈 ① 기초가 1칸, ② 배포가 2칸, ③ 데이터·AI가 4칸과 5칸을 맡고 있습니다.</p>
       </div>
     </div>
   </div>
@@ -976,7 +1067,51 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
       </div>
       <div class="detail">
         <p>작년과 비교하면 AI가 정말 많이 똑똑해졌습니다. 작년에는 오류를 하나씩 잡아 가며 만들었는데, 요즘은 고치는 과정이 거의 없이 한두 번 부탁하면 끝나는 경우가 많습니다. 그러다 보니 웹앱이 소모품처럼 느껴질 때가 있습니다.</p>
-        <p>작년에 만든 웹앱을 올해 다시 쓸까 생각해 보면, 선뜻 그렇다고 하기 어렵습니다. 올해 만든 것도 내년이면 또 마음에 들지 않을 것 같습니다. 같은 부탁을 해도 어떤 요금제를 쓰느냐에 따라 AI가 해내는 수준이 다르다는 것도 마음에 걸립니다.</p>
+        <p>작년에 만든 웹앱을 올해 다시 쓸까 생각해 보면, 선뜻 그렇다고 하기 어렵습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">앞으로 어떻게 달라질까요?</p>
+      <p class="brief">「이런 걸 하고 싶어」라고 말하면 AI가 여러 제안을 하고, 저는 허용, 허용, 허용을 누르게 될 것 같습니다. 겉보기에 대단한 결과물이 넘쳐날수록 저는 세 가지를 계속 묻습니다.</p>
+      <div class="dg" aria-label="지금은 교사가 부탁하고 확인하며 다시 부탁하고, 앞으로는 AI가 제안하고 교사가 허용을 누르는 모습">
+        <div class="dg-tabs"><button type="button" data-v="now" aria-pressed="true">지금</button><button type="button" data-v="next" aria-pressed="false">앞으로</button></div>
+        <div data-view="now">
+          <div class="dg-flow">
+            <div class="dg-node on"><svg class="ic"><use href="#i-teacher"/></svg><b>제가 부탁</b><small>「이런 앱을 만들어 줘」</small></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-code"/></svg><b>AI가 만들기</b></div>
+            <div class="dg-wire"><i style="--dl:.6s"></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-eye"/></svg><b>제가 확인하고 다시 부탁</b></div>
+            <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-check"/></svg><b>완성</b></div>
+          </div>
+        </div>
+        <div data-view="next">
+          <div class="dg-flow">
+            <div class="dg-node"><svg class="ic"><use href="#i-chat"/></svg><b>「이런 걸 하고 싶어」</b><small>한 문장</small></div>
+            <div class="dg-wire"><i></i></div>
+            <div class="dg-node on"><svg class="ic"><use href="#i-ai"/></svg><b>AI가 제안</b><span class="row3"><span class="dg-chip blue">제안 1</span><span class="dg-chip blue">제안 2</span><span class="dg-chip blue">제안 3</span></span></div>
+            <div class="dg-wire"><i style="--dl:.6s"></i></div>
+            <div class="dg-node"><svg class="ic"><use href="#i-cursor"/></svg><b>제가 할 일</b><span class="row3"><span class="dg-chip ok pop" style="--cyc:4s;--dl:.2s">허용</span><span class="dg-chip ok pop" style="--cyc:4s;--dl:.7s">허용</span><span class="dg-chip ok pop" style="--cyc:4s;--dl:1.2s">허용</span></span></div>
+            <div class="dg-wire"><i style="--dl:1.2s"></i></div>
+            <div class="dg-node ok"><svg class="ic"><use href="#i-check"/></svg><b>완성</b><small>배포까지</small></div>
+          </div>
+        </div>
+        <p class="dg-cap" data-vsay="now">지금은 제가 부탁하고, 나온 것을 확인해 다시 부탁합니다. 무엇을 만들지는 제가 정합니다.</p>
+        <p class="dg-cap" data-vsay="next" hidden>앞으로는 AI가 먼저 제안하고, 저는 허용을 누르며 따라가게 될 것 같습니다.</p>
+      </div>
+      <div class="dg" aria-label="결과물이 넘쳐날수록 계속 묻는 세 가지 질문">
+        <span class="dg-t">결과물이 넘쳐날수록 계속 묻는 세 가지</span>
+        <div class="dg-g3 dg-seq" style="--n:3;--cyc:7.5s">
+          <div class="dg-node" style="--i:0"><svg class="ic"><use href="#i-person"/></svg><b>학생에게 필요한 학습 경험인가?</b></div>
+          <div class="dg-node" style="--i:1"><svg class="ic"><use href="#i-board"/></svg><b>교육을 위한 기술인가, 기술을 위한 교육인가?</b></div>
+          <div class="dg-node" style="--i:2"><svg class="ic"><use href="#i-eye"/></svg><b>AI가 주지 못하는 것은 무엇인가?</b></div>
+        </div>
+      </div>
+      <div class="detail">
+        <p>오늘 만든 결과물도 1년 뒤에 보면 촌스럽게 느껴질 수 있습니다. AI는 점점 에이전트, 그러니까 정말 제 비서처럼 거의 모든 일을 해내는 쪽으로 가고 있습니다. 앞으로는 「이런 걸 하고 싶어」라고 말하면 AI가 여러 제안을 내놓고, 저는 그 제안을 허용, 허용, 허용 하며 따라가는 모습이 될 것 같습니다.</p>
+        <p>같은 부탁을 해도 유료 구독을 할수록 AI가 해내는 수준이 높아서, 겉보기에 대단한 결과물이 넘쳐나게 될 겁니다. 이럴 때일수록 저는 세 가지를 계속 묻습니다. 이것이 학생에게 필요한 학습 경험인지, 교육을 위한 기술인지 기술을 위한 교육인지, 그리고 AI가 주지 못하는 것은 무엇인지입니다. 이 질문들로 제 나름의 기준을 찾아가려 합니다.</p>
       </div>
     </div>
 
