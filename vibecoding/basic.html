@@ -381,7 +381,7 @@ html[data-mode="present"] .keys{display:block}
       <p class="brief">요즘은 하고 싶은 것을 말하고, 모르는 것은 AI가 먼저 묻게 합니다.</p>
       <div class="detail">
         <p>몇 해 전만 해도 AI에게 원하는 결과를 얻으려면 역할을 정해 주고 형식을 못 박는 요령, 이른바 프롬프트 엔지니어링을 따로 배웠습니다. 지금 모델들은 사람 말을 훨씬 잘 알아들어서, 저는 요령보다 어떤 수업 장면에서 무엇을 하는 도구인지 정확히 말하는 데 시간을 씁니다. 그리고 부탁문 끝에 "만들기 전에 궁금한 것을 먼저 물어봐 줘"를 꼭 붙입니다.</p>
-        <p>그래도 AI가 잘 놓치는 것이 있습니다. 가상 실험실이라면 숫자에 단위를 안 붙이거나, 식으로 계산하지 않고 그럴듯하게 그리거나, 슬라이더 끝에서 화면이 깨집니다. 퀴즈라면 정답이 틀려 있거나, 문제가 코드 곳곳에 흩어져 나중에 고치기 어렵습니다. 그래서 아래 빌더는 고르신 도구 종류에 맞는 규칙을 저절로 붙입니다.</p>
+        <p>그래도 AI가 잘 놓치는 것이 있습니다. 가상 실험실이라면 숫자에 단위를 안 붙이거나, 식으로 계산하지 않고 그럴듯하게 그리거나, 슬라이더 끝에서 화면이 깨집니다. 퀴즈라면 정답이 틀려 있거나, 문제가 코드 곳곳에 흩어져 나중에 고치기 어렵습니다. 이야기·방탈출이라면 단서와 정답이 어긋나 다음 방이 열리지 않기도 합니다. 그래서 아래 빌더는 고르신 도구 종류에 맞는 규칙을 저절로 붙입니다.</p>
       </div>
     </div>
 
@@ -389,23 +389,33 @@ html[data-mode="present"] .keys{display:block}
       <p class="kw"><span class="tag">빌더</span>칸을 채우면 부탁문이 완성됩니다</p>
       <p class="brief">완성된 부탁문을 복사해 도구에 붙여넣습니다.</p>
       <div class="ideas" id="ideas">
-        <span class="il">떠오르지 않으면 예시로 채워 보기</span>
-        <button type="button" data-idea="gas">기체 입자 실험실</button>
-        <button type="button" data-idea="bulb">전구 밝기 비교</button>
-        <button type="button" data-idea="elem">원소 기호 퀴즈</button>
+        <span class="il">떠오르지 않으면 예시로 채워 보기 · 모든 교과</span>
+        <button type="button" data-idea="escape">방탈출 이야기 학습</button>
+        <button type="button" data-idea="social">사회 문제 해결 프로젝트</button>
+        <button type="button" data-idea="cards">낱말 카드 뒤집기</button>
+        <button type="button" data-idea="debate">찬반 토론 준비판</button>
+        <button type="button" data-idea="timeline">연표·순서 맞추기</button>
         <button type="button" data-idea="bell">모둠 골든벨</button>
         <button type="button" data-idea="timer">모둠 활동 타이머</button>
         <button type="button" data-idea="pick">발표 순서 뽑기</button>
+      </div>
+      <div class="ideas">
+        <span class="il">과학</span>
+        <button type="button" data-idea="gas">기체 입자 실험실</button>
+        <button type="button" data-idea="bulb">전구 밝기 비교</button>
+        <button type="button" data-idea="elem">원소 기호 퀴즈</button>
         <button type="button" data-idea="state">상태 변화 분류</button>
         <button type="button" data-idea="order">실험 순서 맞추기</button>
       </div>
       <form class="bform" id="builder" onsubmit="return false">
         <div class="f full">만들 도구
           <div class="opts row kinds">
-            <label><input type="radio" name="kind" value="lab" checked> 가상 실험실·시뮬레이션</label>
-            <label><input type="radio" name="kind" value="quiz"> 퀴즈·게임</label>
-            <label><input type="radio" name="kind" value="class"> 수업 진행 도구</label>
+            <label><input type="radio" name="kind" value="quiz" checked> 퀴즈·게임</label>
+            <label><input type="radio" name="kind" value="story"> 이야기·방탈출</label>
+            <label><input type="radio" name="kind" value="project"> 문제 해결 프로젝트</label>
             <label><input type="radio" name="kind" value="activity"> 활동 페이지</label>
+            <label><input type="radio" name="kind" value="class"> 수업 진행 도구</label>
+            <label><input type="radio" name="kind" value="lab"> 가상 실험실·시뮬레이션</label>
             <label><input type="radio" name="kind" value="free"> 그 밖의 무엇이든</label>
           </div>
         </div>
@@ -415,10 +425,10 @@ html[data-mode="present"] .keys{display:block}
           </select>
         </label>
         <label class="f">과목
-          <input type="text" name="subject" maxlength="20" value="과학" placeholder="예: 과학">
+          <input type="text" name="subject" maxlength="20" placeholder="예: 국어 · 수학 · 과학 (비워도 됩니다)">
         </label>
         <label class="f full">단원 (선택)
-          <input type="text" name="unit" maxlength="40" placeholder="예: 기체의 성질">
+          <input type="text" name="unit" maxlength="40" placeholder="예: 기체의 성질 · 조선 후기 사회 · 문장의 짜임">
         </label>
         <label class="f full">만들고 싶은 도구
           <textarea name="scene" maxlength="300" placeholder=""></textarea>
@@ -436,11 +446,13 @@ html[data-mode="present"] .keys{display:block}
         <label class="f" id="miscBox">틀리게 보여 주면 안 되는 것
           <select name="misc">
             <option value="">고르지 않음</option>
+            <optgroup label="과학">
             <option value="gas">기체 · 입자 운동</option>
             <option value="state">물질의 상태 변화</option>
             <option value="circuit">전기 회로</option>
             <option value="light">빛의 반사·굴절</option>
             <option value="force">힘과 운동</option>
+            </optgroup>
             <option value="own">직접 쓰기</option>
           </select>
           <textarea name="miscOwn" maxlength="300" placeholder="예: 전자는 전류와 반대 방향으로 움직인다" hidden></textarea>
@@ -581,9 +593,9 @@ html[data-mode="present"] .keys{display:block}
       <p class="kw">눈으로 네 가지</p>
       <ol class="steps" data-key="s4">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">끝까지 밀고, 빠르게 여러 번 눌러 보기</span><span class="how">슬라이더는 양 끝과 0까지, 버튼은 연달아, 빈칸은 비운 채로. 화면이 깨지거나 NaN이 뜨면 적어 두기</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">숫자마다 단위, 용어는 교과서대로인지 보기</span><span class="how">압력 kPa·atm, 온도 ℃·K, 부피 mL처럼</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">정답과 계산이 맞는지 보기</span><span class="how">퀴즈라면 정답을 하나씩, 그래프라면 모양까지. 보일 법칙이면 직선이 아니라 반비례 곡선</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">학생이 이 화면만 보고 잘못 배울 곳 찾기</span><span class="how">예: 온도를 올렸더니 입자 크기가 커진다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">숫자마다 단위, 용어는 교과서대로인지 보기</span><span class="how">과학은 압력 kPa·온도 ℃·부피 mL처럼, 다른 교과는 용어·연도·맞춤법까지</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">정답과 계산이 맞는지 보기</span><span class="how">퀴즈라면 정답을 하나씩, 방탈출이라면 단서와 정답이 이어지는지, 그래프라면 모양까지. 보일 법칙이면 직선이 아니라 반비례 곡선</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">학생이 이 화면만 보고 잘못 배울 곳 찾기</span><span class="how">예: 온도를 올렸더니 입자 크기가 커진다 · 사건 순서가 뒤바뀐 연표</span></div></li>
       </ol>
     </div>
 
@@ -638,6 +650,8 @@ html[data-mode="present"] .keys{display:block}
         <div class="pr"><span class="pl">고칠 값 한곳에 모으기</span><button class="btn cp" type="button">복사</button><div class="txt">문제·명단·시간처럼 나중에 내가 바꿀 값을 코드 맨 위 한곳에 모으고, 어디를 고치면 되는지 주석을 달아 줘. 화면은 바꾸지 마.</div></div>
         <div class="pr"><span class="pl">전체 화면 버튼</span><button class="btn cp" type="button">복사</button><div class="txt">오른쪽 위에 전체 화면 버튼을 넣어 줘. 나머지는 그대로 둬.</div></div>
         <div class="pr"><span class="pl">처음 화면에 사용법</span><button class="btn cp" type="button">복사</button><div class="txt">처음 화면에 이 페이지를 어떻게 쓰는지 한 줄로 적어 줘. 나머지는 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">힌트 단추</span><button class="btn cp" type="button">복사</button><div class="txt">문제마다 [힌트] 단추를 넣어 줘. 힌트는 누를 때마다 하나씩 열리고, 정답은 바로 보이지 않게 해 줘. 다른 곳은 그대로 둬.</div></div>
+        <div class="pr"><span class="pl">한 장으로 모아 인쇄</span><button class="btn cp" type="button">복사</button><div class="txt">마지막 화면에 학생이 쓴 내용을 한 장으로 모아 보여 주고, [인쇄] 단추를 누르면 A4 한 장에 인쇄되게 해 줘. 다른 곳은 그대로 둬.</div></div>
         <div class="pr"><span class="pl">되돌리기</span><button class="btn cp" type="button">복사</button><div class="txt">방금 고치기 전으로 되돌려 줘.</div></div>
         <div class="pr"><span class="pl">짜임 설명 듣기</span><button class="btn cp" type="button">복사</button><div class="txt">이 파일이 어떻게 짜여 있는지, 나중에 숫자를 바꾸려면 어디를 보면 되는지 쉬운 말로 알려 줘. 코드는 바꾸지 마.</div></div>
       </div>
@@ -733,7 +747,7 @@ html[data-mode="present"] .keys{display:block}
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-07</span></footer>
 
 <div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
 
@@ -871,6 +885,12 @@ const KINDS = {
   activity: { name: '학생 활동', who: '학생이 하는 일', ph: '예: 물질의 상태 변화 이름을 알맞은 화살표에 끌어다 놓는 활동', acts: [
     '카드를 끌어다 알맞은 칸에 분류합니다.', '카드를 알맞은 순서로 늘어놓습니다.', '빈칸에 낱말을 채우고 확인합니다.', '스스로 답을 확인하고 다시 해 봅니다.'],
     rules: ['끌어다 놓기는 마우스와 터치 모두 되게 합니다.', '정답 확인 버튼과 다시 하기 버튼을 둡니다.', '다 만들면 정답을 표로 따로 보여 주세요. 정답이 맞는지 제가 확인하겠습니다.'] },
+  story: { name: '이야기·방탈출 학습', who: '학생이 하는 일', ph: '예: 사라진 열쇠를 찾는 방탈출. 방마다 단원 문제를 풀어 얻은 단서로 다음 방의 자물쇠를 엽니다', acts: [
+    '방마다 문제를 풀어 단서를 얻고 다음 방을 엽니다.', '이야기 속 갈림길에서 선택지를 고릅니다.', '막히면 힌트를 하나씩 열어 봅니다.', '마지막 방에서 모은 단서로 수수께끼를 풉니다.'],
+    rules: ['이야기, 방 순서, 문제·정답·힌트·해설은 코드 맨 위 목록 하나에 모아 둡니다.', '방마다 문제를 맞혀야 다음 방이 열리고, 틀리면 다시 풀 수 있게 합니다.', '힌트는 한 번에 하나씩 열리게 하고, 정답을 바로 알려 주지 않습니다.', '처음부터 다시 하기 버튼을 둡니다.', '다 만들면 방마다 문제·정답·힌트를 표로 따로 보여 주세요. 정답과 단서가 이어지는지 제가 확인하겠습니다.'] },
+  project: { name: '문제 해결 프로젝트', who: '학생이 하는 일', ph: '예: 우리 동네 문제 하나를 골라 원인을 살펴보고, 해결 방법을 비교해 실천 계획을 세우는 프로젝트 페이지', acts: [
+    '해결할 문제를 고르고 왜 문제인지 적습니다.', '주어진 자료를 살펴보고 원인을 찾습니다.', '해결 방법 여러 개를 기준에 따라 비교합니다.', '실천 계획을 쓰고 발표용 한 장으로 정리합니다.'],
+    rules: ['단계를 나눠 한 화면에 한 단계씩 보여 주고, 지금 몇 단계인지 표시합니다.', '학생이 쓴 내용은 이 기기 안에만 저장하고 어디로도 보내지 않습니다.', '마지막에 학생이 쓴 내용을 한 장으로 모아 보여 주고, 인쇄할 수 있게 합니다.', '자료나 통계를 넣는다면 출처를 함께 적고, 없는 숫자는 지어내지 않습니다.'] },
   free: { name: '수업 도구', who: '', ph: '예: 실험 안전 수칙을 한 장씩 넘겨 보며 확인하는 카드 화면. 마지막 장에서 모두 확인했다는 표시가 나옵니다', acts: [], rules: [] }
 };
 const IDEAS = {
@@ -881,13 +901,18 @@ const IDEAS = {
   timer: { kind: 'class', unit: '', scene: '모둠 활동 시간에 띄우는 타이머. 남은 시간이 1분이면 색이 바뀌고, 끝나면 종소리가 납니다', acts: [0, 2] },
   pick:  { kind: 'class', unit: '', scene: '모둠 번호나 발표 순서를 무작위로 뽑는 추첨기. 한 번 뽑힌 번호는 다시 나오지 않습니다', acts: [0, 1] },
   state: { kind: 'activity', unit: '물질의 상태 변화', scene: '물질의 상태 변화 이름을 알맞은 화살표에 끌어다 놓는 활동', acts: [0, 3] },
-  order: { kind: 'activity', unit: '', scene: '실험 순서가 적힌 카드 여섯 장을 알맞은 순서로 늘어놓는 활동', acts: [1, 3] }
+  order: { kind: 'activity', unit: '', scene: '실험 순서가 적힌 카드 여섯 장을 알맞은 순서로 늘어놓는 활동', acts: [1, 3] },
+  escape:   { kind: 'story', unit: '', scene: '사라진 열쇠를 찾는 방탈출. 방마다 이번 단원 문제를 풀어 얻은 단서로 다음 방의 자물쇠를 엽니다', acts: [0, 2, 3] },
+  social:   { kind: 'project', unit: '', scene: '우리 동네의 문제 하나를 골라 원인을 살펴보고, 해결 방법을 비교해 실천 계획을 세우는 프로젝트 페이지', acts: [0, 1, 2, 3] },
+  cards:    { kind: 'activity', unit: '', scene: '단원 핵심 낱말 카드 열두 장. 앞면에는 낱말이 있고, 누르면 뒤집혀 뜻이 나오며, 섞기 버튼이 있습니다', acts: [3] },
+  debate:   { kind: 'activity', unit: '', scene: '찬성과 반대 근거를 카드에 적어 두 칸으로 나누고, 모둠의 최종 입장과 그 까닭을 한 장으로 정리하는 토론 준비판', acts: [0] },
+  timeline: { kind: 'activity', unit: '', scene: '사건이나 과정이 적힌 카드 여섯 장을 시간 순서대로 늘어놓고, 맞으면 연표에 자리를 잡는 활동', acts: [1, 3] }
 };
 const bform = document.getElementById('builder');
 const pOut = document.querySelector('#pOut .txt');
 const BKEY = CONFIG.key + ':builder2';
 const actsEl = document.getElementById('acts');
-function kindOf() { return (bform.querySelector('[name=kind]:checked') || {}).value || 'lab'; }
+function kindOf() { return (bform.querySelector('[name=kind]:checked') || {}).value || 'quiz'; }
 function renderKind(kind, checked) {
   const K = KINDS[kind] || KINDS.lab;
   document.getElementById('actsBox').hidden = !K.acts.length;
@@ -940,7 +965,9 @@ function buildPrompt() {
   if (v.screen === 'board' || v.screen === 'both') R.push('교실 전자칠판에서 뒷자리 학생도 보이도록 글씨와 버튼을 크게 합니다.');
   if (v.screen === 'pad' || v.screen === 'both') R.push('학생 태블릿처럼 폭이 좁은 화면에서도 버튼이 잘리거나 겹치지 않게 합니다.');
   R.forEach((r, i) => L.push((i + 1) + '. ' + r));
-  if (K.rules.length) { L.push(''); L.push(`[${K.name} 규칙]`); K.rules.forEach((r, i) => L.push((i + 1) + '. ' + r)); }
+  const sci = /과학|물리|화학|생명|지구/.test(v.subject);
+  const rules = K.rules.map(r => sci ? r : r.replace('과학 식을 코드에 적은 뒤 그 식으로', '따라야 할 식이나 규칙을 코드에 적은 뒤 그대로'));
+  if (rules.length) { L.push(''); L.push(`[${K.name} 규칙]`); rules.forEach((r, i) => L.push((i + 1) + '. ' + r)); }
   const mis = v.kind !== 'lab' ? [] : v.misc === 'own' ? (v.miscOwn ? v.miscOwn.split(/\n+/).filter(Boolean) : []) : (MISC[v.misc] || []);
   if (mis.length) { L.push(''); L.push('[틀리게 보여 주면 안 되는 것]'); mis.forEach(m => L.push('- ' + m)); }
   L.push('');
@@ -952,18 +979,18 @@ function buildPrompt() {
 }
 (function restoreBuilder() {
   let v = null; try { v = JSON.parse(localStorage.getItem(BKEY) || 'null'); } catch (e) {}
-  if (!v) { renderKind('lab'); return; }
+  if (!v) { renderKind(kindOf()); return; }
   const f = bform.elements;
   const kr = bform.querySelector(`[name=kind][value="${v.kind}"]`); if (kr) kr.checked = true;
   renderKind(kindOf(), v.acts || []);
   if (v.grade) f.grade.value = v.grade;
-  f.subject.value = v.subject == null ? '과학' : v.subject;
+  f.subject.value = v.subject == null ? '' : v.subject;
   f.unit.value = v.unit || ''; f.scene.value = v.scene || ''; f.misc.value = v.misc || ''; f.miscOwn.value = v.miscOwn || '';
   const sc = bform.querySelector(`[name=screen][value="${v.screen}"]`); if (sc) sc.checked = true;
 })();
 bform.addEventListener('change', e => { if (e.target.name === 'kind') renderKind(kindOf()); buildPrompt(); });
 bform.addEventListener('input', buildPrompt);
-document.querySelectorAll('#ideas [data-idea]').forEach(b => b.addEventListener('click', () => {
+document.querySelectorAll('.ideas [data-idea]').forEach(b => b.addEventListener('click', () => {
   const I = IDEAS[b.dataset.idea]; if (!I) return;
   const kr = bform.querySelector(`[name=kind][value="${I.kind}"]`); if (kr) kr.checked = true;
   renderKind(I.kind, I.acts);

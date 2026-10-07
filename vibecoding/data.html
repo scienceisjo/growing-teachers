@@ -392,7 +392,7 @@ html[data-mode="present"] .steps .why{display:none}
 
     <div class="blk">
       <p class="kw">「실험 결과 제출함」 하나로 봅니다</p>
-      <p class="brief">모둠이 측정값과 결론을 내면 교사 화면에 모이고, AI가 결론에 피드백 초안을 붙이는 앱입니다. 이 매뉴얼에서 만드는 앱이기도 합니다.</p>
+      <p class="brief">모둠이 측정값과 결론을 내면 교사 화면에 모이고, AI가 결론에 피드백 초안을 붙이는 앱입니다. 이 매뉴얼에서 만드는 앱이기도 합니다. 다른 교과라면 「감상문 제출함」이나 「탐구 보고서 제출함」으로 바꿔 읽으셔도 부품은 같습니다.</p>
       <div class="dg" data-steps data-auto="5200" aria-label="실험 결과 제출함 앱의 부품. 단계를 누르면 해당 부품이 켜집니다">
         <div class="anat">
           <div class="grp" data-s="2"><b>Supabase · 서버<small>24시간 켜져 있는 남의 컴퓨터</small></b></div>
@@ -642,7 +642,7 @@ html[data-mode="present"] .steps .why{display:none}
           <input type="text" name="table" maxlength="40" value="submissions" spellcheck="false">
         </label>
         <label class="f full">모을 내용
-          <textarea name="cols" maxlength="300" placeholder="예: 모둠 번호(1~8), 측정한 부피(mL, 숫자), 결론(글, 300자까지)"></textarea>
+          <textarea name="cols" maxlength="300" placeholder="예: 모둠 번호(1~8), 측정한 부피(mL, 숫자), 결론(글, 300자까지)&#10;예: 모둠 번호(1~8), 고른 작품 제목(글), 감상(글, 300자까지)"></textarea>
         </label>
       </form>
       <div class="pr big" id="pc"><span class="pl">연결 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
@@ -827,7 +827,7 @@ html[data-mode="present"] .steps .why{display:none}
         <div class="box"><b>학생 글에 피드백 초안</b><p>실험 결론이나 서술형 답을 넣으면 채점 기준에 맞춘 피드백 초안이 나옵니다. 교사가 읽고 고쳐서 돌려줍니다.</p></div>
         <div class="box"><b>질문 모으고 나누기</b><p>학생 질문을 주제별로 묶고, 수업에서 다룰 만한 질문을 골라 줍니다.</p></div>
         <div class="box"><b>문제 바꿔 만들기</b><p>같은 개념으로 숫자와 상황만 바꾼 연습 문제를 만듭니다.</p></div>
-        <div class="box"><b>대화 상대</b><p>과학자나 물질이 되어 학생 질문에 답하는 역할 놀이입니다. 학생이 AI와 직접 대화하므로 아래 기준을 먼저 봅니다.</p></div>
+        <div class="box"><b>대화 상대</b><p>역사 속 인물, 작품 속 인물, 과학자처럼 누군가가 되어 학생 질문에 답하는 역할 놀이입니다. 학생이 AI와 직접 대화하므로 아래 기준을 먼저 봅니다.</p></div>
       </div>
       <p class="note warn">학생이 AI와 직접 대화하는 앱은 회사 약관과 법을 먼저 확인합니다. OpenAI API는 미성년자가 쓰게 하려면 보호자 동의와 나이에 맞는 안전장치를 두게 되어 있고, Anthropic(Claude) API는 미성년자가 쓰는 서비스에 나이 확인, 내용 거르기, AI라는 사실 밝히기 같은 안전장치를 요구합니다. 개인정보 보호법은 만 14세 미만의 개인정보를 처리하려면 법정대리인의 동의를 받게 합니다. Google(Gemini API)은 제가 아직 잘 알지 못해 준비 중입니다.</p>
       <div class="detail">
@@ -907,7 +907,7 @@ html[data-mode="present"] .steps .why{display:none}
           </div>
         </div>
         <label class="f full">AI가 할 일
-          <textarea name="task" maxlength="400" placeholder="예: 학생이 쓴 실험 결론을 받아서, 채점 기준에 맞춰 잘한 점 하나와 고칠 점 하나를 두 문장으로 써 줘. 채점 기준: 변인을 밝혔는가, 결과의 수치를 근거로 들었는가"></textarea>
+          <textarea name="task" maxlength="400" placeholder="예: 학생이 쓴 실험 결론을 받아서, 채점 기준에 맞춰 잘한 점 하나와 고칠 점 하나를 두 문장으로 써 줘. 채점 기준: 변인을 밝혔는가, 결과의 수치를 근거로 들었는가&#10;예: 학생이 쓴 감상문을 받아서, 채점 기준에 맞춰 잘한 점 하나와 고칠 점 하나를 두 문장으로 써 줘. 채점 기준: 표현 방법을 찾았는가, 느낀 점의 까닭을 밝혔는가"></textarea>
         </label>
         <label class="f full">내 앱 주소 (허락할 주소)
           <input type="url" name="origin" placeholder="https://아이디.github.io" spellcheck="false">
@@ -1032,7 +1032,7 @@ html[data-mode="present"] .steps .why{display:none}
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-09-30</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-07</span></footer>
 
 <div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>p</kbd> 📖/🎤</div>
 
@@ -1050,7 +1050,7 @@ const SCHOOL = (QS.get('school') || '').slice(0, 30);
 (function () {
   const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
   const to = { 'to-gth-up': '../giteacherhub/' + sq + '#/up', 'to-gth': '../giteacherhub/' + sq, 'to-hub': './' + sq, 'to-basic': 'basic.html' + sq,
-    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
+    'to-lecture': 'lecture.html' + sq, 'to-deploy': 'https://scienceisjo.github.io/githubmanual/forstudent.html', 'to-netlify': 'https://scienceisjo.github.io/githubmanual/netlify.html', 'to-vercel': 'https://scienceisjo.github.io/githubmanual/vercel.html', 'to-data': 'data.html' + sq, 'to-design': 'design.html' + sq };
   Object.keys(to).forEach(c => document.querySelectorAll('.' + c).forEach(a => { a.href = to[c]; if (/^https?:/.test(to[c])) { a.target = '_blank'; a.rel = 'noopener'; } }));
   if (SCHOOL) document.querySelectorAll('[data-school]').forEach(el => { el.textContent = SCHOOL; el.hidden = false; });
 })();
@@ -1130,14 +1130,14 @@ function toggleTimer() {
 tmT.addEventListener('click', toggleTimer);
 document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
 setCurrent(0);
-function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+function go(i, d) { d = d || 1; i = Math.max(0, Math.min(i, steps.length - 1)); while (steps[i] && steps[i].hidden) { i += d; if (i < 0 || i >= steps.length) return; } steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
 document.addEventListener('keydown', e => {
   const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
   if (document.querySelector('dialog[open]')) return;
   if (e.key === 'p') { modeBtn.click(); return; }
   if (html.dataset.mode !== 'present') return;
-  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
-  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1, 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1, -1); }
   if (e.key === 't') toggleTimer();
   if (e.key === 'c') html.classList.toggle('cue-on');
 });
