@@ -516,7 +516,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-06</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-07</span></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
@@ -529,10 +529,10 @@ const CONFIG = {
 };
 const Q = new URLSearchParams(location.search);
 const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — 연수별 본체 CONFIG.code 와 같아야 합니다
-/* 연수 코드별 기본값 — 주소에 t= to= poll= school= reflect= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
+/* 연수 코드별 기본값 — 주소에 t= to= poll= school= reflect= hide= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
 const PRESET = {
   '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' },
-  'geowon-1006': { poll:'vibe', school:'거원중학교' }
+  'geowon-1006': { poll:'vibe', school:'거원중학교', hide:'ice,why' }
 };
 const PR = PRESET[CODE] || {};
 const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정 · poll=vibe → 바이브코딩 연수 오프닝
@@ -557,6 +557,10 @@ if(/^https?:\/\//i.test(REFLECT)){
 
 const IDENT = (Q.get('ident')||'').trim() !== '0';   // ident=0 이면 「AI가 본 나」 탭을 숨김
 if(!IDENT){ document.getElementById('tabIdent').remove(); document.getElementById('p-ident').remove(); }
+/* hide=ice,why → 이번 연수에서 그 탭을 잠금(탭과 내용을 뺌). PRESET 의 hide 도 같음. 선물 꾸러미(gift)는 잠그지 않음 */
+const HIDE = (Q.get('hide')||PR.hide||'').split(',').map(x=>x.trim()).filter(x=>['ice','ident','why','plan'].includes(x));
+HIDE.forEach(p=>{ const t=document.querySelector('.tab[data-p="'+p+'"]'), sec=document.getElementById('p-'+p); if(t) t.remove(); if(sec) sec.remove(); });
+(function(){ let n=0; document.querySelectorAll('#tabs .tab').forEach(t=>{ if(t.style.display==='none') return; const m=t.textContent.match(/^\d+\s+(.+)$/); if(m) t.textContent=(++n)+' '+m[1]; }); })();   // 남은 탭 번호를 1부터 다시
 
 /* ── 제목·링크·사진 ── */
 document.getElementById('brandTitle').textContent = TITLE ? ' · '+TITLE : '';
@@ -789,7 +793,7 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
 /* ── 6 오늘 진행 방식 (poll=vibe): 진행 방향 투표(kind=plan, n=1~3) + 모듈 찾기(kind=module, n=1~3)
       기기마다 임의 번호(name)를 붙여 마지막 응답만 셉니다 — 다른 것을 누르면 바뀌고, 여러 번 눌러도 한 표 ── */
 (function(){
-  if(!VIBE) return;
+  if(!VIBE || !document.getElementById('p-plan')) return;
   const panel=document.getElementById('p-plan');
   document.getElementById('goPlan').addEventListener('click',()=>show('plan'));
   let DEV=''; try{ DEV=localStorage.getItem('opening:dev')||''; }catch(e){}
@@ -902,6 +906,7 @@ document.getElementById('clearBtn').addEventListener('click',async()=>{
 
 /* ── QR ── */
 function qrInto(el,u){
+  if(!el) return;
   if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
   el.innerHTML=`<span class="url">${esc(u)}</span>`; }
 function drawQR(){
