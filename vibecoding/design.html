@@ -247,6 +247,13 @@ html[data-mode="present"] .keys{display:block}
 .dcard .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
 .dcard .acts .btn{font-size:.76rem;padding:5px 10px}
 .dcount{font-size:.86rem;color:var(--ink2);margin:4px 0 0}
+.kcard .kthumb{display:block;aspect-ratio:16/10;background:#f2f2f2;border-bottom:1px solid var(--line);overflow:hidden}
+.kcard .kthumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.kcard .kthumb:hover img{transform:scale(1.03)}
+.kcard ul{margin:2px 0 0;padding-left:1.1em;font-size:.84rem;color:var(--ink2);line-height:1.5}
+.kcard ul li{margin:0}
+.pr-box{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r3);background:#f6f8fb;padding:14px 16px}
+.pr-box p{margin:0;flex:1;line-height:1.6}
 html[data-mode="present"] .dgrid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:60;padding:16px}
 .modal .mbox{background:#fff;border-radius:var(--r3);width:100%;max-width:900px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
@@ -332,6 +339,7 @@ html[data-mode="present"] .ex .eb p{display:none}
     <div class="actions">
       <a class="btn big primary" href="#s2">제가 만든 예 보기 ↓</a>
       <a class="btn big" href="#s3">추천 서랍 보기 ↓</a>
+      <a class="btn big" href="#kr">한글 서랍 보기 ↓</a>
       <a class="btn big to-basic" href="basic.html">① 기초 매뉴얼로</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
     </div>
@@ -425,10 +433,31 @@ html[data-mode="present"] .ex .eb p{display:none}
   </div>
 </section>
 
-<!-- ═══════════ 4 쓰는 법 ═══════════ -->
+<!-- ═══════════ 4 한글 서랍 ═══════════ -->
+<section class="step" id="kr" data-title="한글 서랍">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>한글 글꼴로 만든 서랍 8</h2></div>
+    <p class="goal">한글 글꼴까지 정해 둔 설계서로, 같은 내용이 디자인만 바뀌면 얼마나 달라지는지 보겠습니다!</p>
+    <div class="blk">
+      <p class="brief">여덟 설계서로 같은 홈페이지(주제: 행복한 교사로 살아간다는 것)를 만들었습니다. 그림을 누르면 예시 홈페이지가 열립니다.</p>
+      <div class="dgrid kgrid" id="krgrid"><p class="small">불러오는 중입니다…</p></div>
+      <div class="detail">
+        <p>위의 서랍은 외국 회사 누리집을 본뜬 설계서라 한글 글꼴이 없습니다. 그래서 한글은 늘 Pretendard로 대신했습니다. 이 여덟 개는 처음부터 한글 글꼴(명조·손글씨·픽셀 글꼴 등)을 정해 두고 제가 새로 썼습니다.</p>
+        <p>설계서 앞부분에는 사람이 읽는 사용법이, 뒷부분에는 AI에게 주는 지시서가 들어 있습니다. 지시서에는 만들기 전에 화면 구성안을 먼저 보여 줄 것, 사실을 지어내지 말 것, 코드를 생략하지 말 것, 내보내기 전에 스스로 점검할 것이 적혀 있어서, 파일 하나만 첨부해도 AI가 같은 순서로 일합니다.</p>
+        <p>이 짜임은 한글 글꼴 슬라이드 디자인을 모아 둔 <a href="https://k-slide.web.app/" target="_blank" rel="noopener">k-slide</a>에서 배웠습니다. 그곳 설계서는 발표 슬라이드용이고, 여기 여덟 개는 웹 페이지와 수업 앱용으로 새로 썼습니다.</p>
+      </div>
+    </div>
+    <div class="blk">
+      <p class="kw">이렇게 부탁해 보세요</p>
+      <div class="pr-box"><p>첨부한 DESIGN.md를 끝까지 읽고, 그 규칙대로 우리 학급 소개 홈페이지를 만들어 줘. 먼저 화면 구성안을 보여 주고, 내가 좋다고 하면 index.html 파일 하나로 만들어 줘.</p><button class="btn" type="button" data-copy-prev>복사</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 쓰는 법 ═══════════ -->
 <section class="step" id="s4" data-title="쓰는 법">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
+    <div class="step-h"><span class="num">5</span><h2>쓰는 법은 도구마다 다릅니다</h2></div>
     <p class="goal">폴더에서 일하는 도구는 파일을 두고 읽게 하고, 웹 채팅은 짧은 판을 붙여넣거나 원본을 첨부해보겠습니다!</p>
 
     <div class="blk" data-tool="local">
@@ -507,10 +536,10 @@ html[data-mode="present"] .ex .eb p{display:none}
   </div>
 </section>
 
-<!-- ═══════════ 5 전체 서랍 ═══════════ -->
+<!-- ═══════════ 6 전체 서랍 ═══════════ -->
 <section class="step" id="s5" data-title="전체 74">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>전체 서랍</h2></div>
+    <div class="step-h"><span class="num">6</span><h2>전체 서랍</h2></div>
     <p class="goal">분류와 바탕 밝기로 거르면서 마음에 드는 설계서를 찾아보겠습니다!</p>
     <div class="blk">
       <div class="dfilter">
@@ -528,10 +557,10 @@ html[data-mode="present"] .ex .eb p{display:none}
   </div>
 </section>
 
-<!-- ═══════════ 6 지킬 것 ═══════════ -->
+<!-- ═══════════ 7 지킬 것 ═══════════ -->
 <section class="step" id="s6" data-title="지킬 것">
   <div class="wrap">
-    <div class="step-h"><span class="num">6</span><h2>입힐 때 지킬 것</h2></div>
+    <div class="step-h"><span class="num">7</span><h2>입힐 때 지킬 것</h2></div>
     <p class="goal">학생들에게 나눠 줄 앱이라 몇 가지만 지켜보겠습니다!</p>
 
     <div class="blk">
@@ -684,7 +713,7 @@ async function onCardClick(e) {
     const d = await getData(slug);
     if (b.dataset.act === 'short') copyText(d.short, b);
     if (b.dataset.act === 'dl') {
-      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([d.full], { type: 'text/markdown;charset=utf-8' })); a.download = 'DESIGN.md';
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([withGuide(d.full, it.brand)], { type: 'text/markdown;charset=utf-8' })); a.download = 'DESIGN.md';
       document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
       toast('다운로드 폴더에 DESIGN.md로 받았습니다. (' + it.brand + ')');
     }
@@ -707,6 +736,54 @@ function openView(it, d) {
     m.querySelectorAll('.seg2 button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   });
   document.body.appendChild(m);
+}
+
+/* ── 한글 서랍 ── */
+const KR_BASE = 'design/kr/';
+function kcard(it) {
+  return `<article class="dcard kcard" data-kslug="${esc(it.slug)}">
+    <a class="kthumb" href="${KR_BASE}${esc(it.slug)}/" target="_blank" rel="noopener" aria-label="${esc(it.name)} 예시 홈페이지 열기"><img src="${KR_BASE}${esc(it.slug)}/thumb.webp" alt="" loading="lazy" width="640" height="400"></a>
+    <div class="db"><h3>${esc(it.name)}</h3><ul>${it.lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+      <p class="tg">${esc(it.light)} · 꾸밈 ${esc(it.density)} · 제목 ${esc(it.title)} · 본문 ${esc(it.body)}</p>
+      <div class="acts"><a class="btn" href="${KR_BASE}${esc(it.slug)}/" target="_blank" rel="noopener">예시 보기</a><button class="btn primary" type="button" data-kact="dl">DESIGN.md 받기</button><button class="btn" type="button" data-kact="copy">설계서 복사</button></div></div></article>`;
+}
+const KMD = new Map();
+function getKmd(slug) { if (!KMD.has(slug)) KMD.set(slug, fetch(KR_BASE + encodeURIComponent(slug) + '.md').then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })); return KMD.get(slug); }
+function saveMd(text, label) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/markdown;charset=utf-8' })); a.download = 'DESIGN.md';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  toast('다운로드 폴더에 DESIGN.md로 받았습니다. (' + label + ')');
+}
+document.getElementById('krgrid').addEventListener('click', async e => {
+  const b = e.target.closest('[data-kact]'); if (!b) return;
+  const slug = b.closest('.kcard').dataset.kslug, name = b.closest('.kcard').querySelector('h3').textContent;
+  try { const t = await getKmd(slug); if (b.dataset.kact === 'dl') saveMd(t, name); else copyText(t, b); }
+  catch (err) { toast('설계서를 불러오지 못했습니다. 잠시 뒤 다시 눌러 주세요.'); }
+});
+fetch(KR_BASE + 'index.json').then(r => r.json()).then(j => { document.getElementById('krgrid').innerHTML = (j.items || []).map(kcard).join(''); })
+  .catch(() => { document.getElementById('krgrid').innerHTML = '<p class="small">한글 서랍을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.</p>'; });
+document.querySelectorAll('[data-copy-prev]').forEach(b => b.addEventListener('click', () => copyText(b.previousElementSibling.innerText.trim(), b)));
+
+/* ── 받은 DESIGN.md 맨 앞에 붙는 AI 지시서 ── */
+function withGuide(full, brand) {
+  return `# ${brand} 느낌 디자인 설계서 (DESIGN.md)
+
+> 이 파일을 AI에게 첨부하거나 붙여 넣고 "이 설계서대로 만들어 줘" 또는 "기능은 그대로 두고 디자인만 바꿔 줘"라고 부탁하세요.
+> 원문은 영어 설계서입니다. 바로 아래 지시서는 조승재(바이브코딩 연수 디자인 서랍)가 덧붙였습니다.
+
+## AI에게 주는 지시서 (원문보다 먼저 지킬 것)
+1. 코드를 쓰기 전에 화면 구성안(구역마다 제목·내용 한 줄·쓸 부품)을 먼저 보여 주고 확인을 받으세요. 사용자가 "바로 만들어 줘"라고 했으면 건너뜁니다.
+2. 이미 있는 앱을 받았다면 기능·글·숫자·계산식은 그대로 두고 디자인만 바꾸세요.
+3. 아래 원문의 색 값·모서리·그림자·간격을 따르세요. 새 색을 만들지 마세요.
+4. 로고와 브랜드 이름은 넣지 마세요. 한글은 Pretendard 글꼴(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css)로 보이게 하세요.
+5. 본문 16px 이상, 제목 두 줄 이내, 한글은 word-break:keep-all, 휴대폰 폭(390px)에서 가로로 넘치지 않게 하세요.
+6. 사용자가 주지 않은 사실·숫자·인용을 지어내지 마세요. 그림 파일 대신 SVG·CSS로 그리세요.
+7. 결과는 index.html 파일 하나로 주세요. "(생략)"이나 "..." 없이 <!DOCTYPE html>부터 </html>까지 전부 쓰고, 끊기면 "이어서"라는 말에 끊긴 곳부터 이어 쓰세요.
+8. 내보내기 전에 1~7을 하나씩 다시 확인하세요.
+
+---
+
+${full}`;
 }
 document.getElementById('picks').addEventListener('click', onCardClick);
 document.getElementById('all').addEventListener('click', onCardClick);
