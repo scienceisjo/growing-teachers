@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>행복한 교사로 살아간다는 것 · 블록 프레임</title>
-<meta name="description" content="「블록 프레임」 설계서(DESIGN.md)로 만든 예시 홈페이지입니다. 주제: 행복한 교사로 살아간다는 것.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<title>행복한 교사로 살아간다는 것 · 보랏빛 밤</title>
+<meta name="description" content="「보랏빛 밤」 설계서(DESIGN.md)로 만든 예시 홈페이지입니다. 주제: 행복한 교사로 살아간다는 것.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
@@ -34,51 +34,46 @@ img,svg{max-width:100%}
 .foot .small{font-size:13px;opacity:.75;margin-top:6px}
 @media(max-width:760px){.cards,.asks{grid-template-columns:1fr}.habit-wrap{grid-template-columns:1fr}.nav nav{display:none}.timeline li{grid-template-columns:64px 1fr;gap:2px 14px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-:root{--paper:#fffdf6;--ink:#000;--p1:#ffd6e0;--p2:#c7f0d8;--p3:#fff1a8;--p4:#cde7ff;--p5:#e3d4ff}
-body{background:var(--paper);color:var(--ink);font-family:'Pretendard Variable',Pretendard,sans-serif;font-weight:500;font-size:17px;line-height:1.65}
-h1,h2,h3,.logo,.num,.mnum b,time{font-family:'Black Han Sans',sans-serif;font-weight:400}
-.nav{background:var(--p3);border-bottom:4px solid var(--ink)}.logo{font-size:22px}.nav nav a{font-weight:700;border:3px solid var(--ink);padding:4px 12px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
-.eyebrow{display:inline-block;background:var(--ink);color:var(--p3);font-weight:700;font-size:14px;padding:4px 12px;margin:0 0 16px}
-.hero{padding:90px 0 100px;background:repeating-linear-gradient(-45deg,transparent 0 22px,rgba(0,0,0,.05) 22px 26px)}
-.hero h1{font-size:clamp(46px,8vw,96px);line-height:1.05;margin:0 0 24px;display:inline-block;background:var(--p1);border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:14px 26px;transform:rotate(-1.5deg)}
-.lead{max-width:600px;font-size:19px;margin:18px 0 34px;background:#fff;border:4px solid var(--ink);padding:16px 20px;box-shadow:8px 8px 0 var(--ink)}
-.btn{border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:12px 26px;font-weight:800;color:var(--ink);font-size:17px;transition:transform .1s,box-shadow .1s}
-.btn.primary{background:var(--p2)}.btn.ghost{background:var(--p4)}.btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
-.deco svg{position:absolute;right:6%;top:40px;width:150px;animation:spin 14s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.sec{padding:80px 0;border-top:4px solid var(--ink)}.sec:nth-of-type(odd){background:#fff}
-h2{font-size:clamp(32px,4.6vw,54px);margin:0 0 36px;line-height:1.1}
-.timeline{gap:16px}.timeline li{border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:14px 18px;background:var(--p4)}
-.timeline li:nth-child(2){background:var(--p3)}.timeline li:nth-child(3){background:var(--p1)}.timeline li:nth-child(4){background:var(--p2)}.timeline li:nth-child(5){background:var(--p5)}
-.timeline time{font-size:26px}.timeline b{font-weight:800;font-size:18px}
-.cards{gap:28px}.card{border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:26px;background:var(--p1);transform:rotate(-2deg)}
-.card:nth-child(2){background:var(--p2);transform:rotate(1.5deg)}.card:nth-child(3){background:var(--p5);transform:rotate(-1deg)}
-.card .num{font-size:44px}.card h3{font-size:24px;margin:6px 0 10px}.card p{margin:0}
-.quote{background:var(--p3)!important}.quote blockquote{margin:0;font-family:'Black Han Sans',sans-serif;font-size:clamp(30px,4.6vw,56px);line-height:1.2}.cite{font-weight:800;margin-top:18px}
-.checks li{border:4px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:12px 16px;background:#fff}.checks li.on{background:var(--p2)}.checks input{accent-color:#000}
-.meter{border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:22px;background:var(--p5)}.mlabel{margin:0;font-weight:800}.mnum{margin:4px 0 12px;font-size:22px}.mnum b{font-size:66px}
-.meter .bar{border:3px solid var(--ink);height:20px;background:#fff}.meter .bar i{background:var(--ink)}
-.asks{gap:24px}.q{border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:22px;background:var(--p4)}.q:nth-child(2){background:var(--p3)}.q:nth-child(3){background:var(--p1)}.q b{display:block;font-size:20px;font-weight:800;margin-bottom:6px}.q p{margin:0}
-.paper{border:4px solid var(--ink);box-shadow:10px 10px 0 var(--ink);background:#fff;padding:40px;max-width:780px;transform:rotate(.6deg)}.sign{text-align:right;font-weight:800}
-.foot{background:var(--ink);color:#fff;padding:28px 0;font-weight:600}.foot a{color:var(--p3)}
+:root{--plum:#2a1f3d;--hanji:#f7f3ea;--mint:#7fd1b9;--mdk:#2f8c74;--op:#ece6f5;--oh:#2a2433;--dd:rgba(236,230,245,.3);--dl:rgba(42,36,51,.25)}
+body{background:var(--hanji);color:var(--oh);font-family:'Pretendard Variable',Pretendard,sans-serif;font-size:17px;line-height:1.8}
+h1,h2,h3,.logo,.num,time,.mnum b,blockquote,.q b{font-family:'Nanum Myeongjo',serif;font-weight:800}
+em{font-style:normal;color:var(--mdk)}.hero em,.sec:nth-of-type(odd) em{color:var(--mint)}
+.nav{background:var(--plum);color:var(--op);border-bottom:1px dashed var(--dd)}.logo{font-size:19px}.nav nav a{font-size:14px;opacity:.85}
+.eyebrow{color:var(--mdk);font-size:14px;margin:0 0 16px;font-weight:600}
+.hero{background:var(--plum);color:var(--op);padding:130px 0 120px}.hero .eyebrow{color:var(--mint)}.hero h1{font-size:clamp(44px,7vw,84px);line-height:1.2;margin:0 0 28px}
+.lead{max-width:600px;opacity:.85;font-size:19px;margin:0 0 40px}
+.btn{border:1px dashed var(--mint);color:var(--mint);padding:12px 28px;border-radius:100px;font-size:15px}.btn.primary{background:var(--mint);color:var(--plum);border-style:solid}
+.deco svg{position:absolute;right:8%;top:60px;width:150px}
+.sec{padding:96px 0;border-top:1px dashed var(--dl)}.sec:nth-of-type(odd){background:var(--plum);color:var(--op);border-top-color:var(--dd)}.sec:nth-of-type(odd) .eyebrow{color:var(--mint)}
+h2{font-size:clamp(30px,4vw,48px);margin:0 0 40px;line-height:1.3}
+.timeline li{padding:20px 0;border-top:1px dashed var(--dl)}.timeline time{color:var(--mdk);font-size:28px}.timeline b{font-weight:600}.timeline span{opacity:.82}
+.sec:nth-of-type(odd) .timeline li,.sec:nth-of-type(odd) .checks li{border-top-color:var(--dd)}.sec:nth-of-type(odd) time{color:var(--mint)}
+.cards{gap:36px}.card .num{color:var(--mint);font-size:64px;line-height:1}.card h3{font-size:23px;margin:10px 0 12px;padding-top:12px;border-top:1px dashed var(--dd)}.card p{opacity:.82;margin:0}
+.quote blockquote{margin:0;font-size:clamp(30px,4.2vw,50px);line-height:1.45}.cite{color:var(--mdk);font-size:14px;margin-top:22px}
+.checks{gap:0}.checks li{border-top:1px dashed var(--dd);padding:16px 0}.checks input{accent-color:var(--mint)}.checks li.on span{color:var(--mint)}
+.meter{border-top:1px dashed var(--mint);padding-top:18px}.mlabel{margin:0;font-size:14px;color:var(--mint)}.mnum b{font-size:72px;color:var(--mint)}.meter .bar{height:6px;border-radius:100px;background:var(--dd)}.meter .bar i{background:var(--mint);border-radius:100px}
+.asks{gap:30px}.q{padding-top:16px;border-top:1px dashed var(--dl)}.q b{display:block;font-size:23px;margin-bottom:10px}.q p{margin:0;opacity:.85}
+.paper{max-width:720px;border:1px dashed var(--dd);padding:40px}.sign{color:var(--mint)!important;font-family:'Nanum Myeongjo',serif;font-weight:700;text-align:right}
+.foot{background:var(--hanji);padding:30px 0;font-size:14px;border-top:1px dashed var(--dl)}.foot a{color:var(--mdk)}
 </style>
 </head>
 <body>
 <header class="nav"><div class="wrap"><a class="logo" href="#top">행복한 교사</a><nav><a href="#day">하루</a><a href="#stories">이야기</a><a href="#habits">작은 습관</a><a href="#letter">편지</a></nav></div></header>
-<section class="hero" id="top"><div class="deco" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M50 4 61 38 96 38 68 59 79 94 50 72 21 94 32 59 4 38 39 38Z" fill="#fff1a8" stroke="#000" stroke-width="4" stroke-linejoin="round"/></svg></div><div class="wrap">
+<section class="hero" id="top"><div class="deco" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#7fd1b9" stroke-width="2"><path d="M62 10a40 40 0 1 0 28 62A32 32 0 1 1 62 10z"/><circle cx="18" cy="20" r="1.6" fill="#ece6f5" stroke="none"/><circle cx="30" cy="88" r="1.2" fill="#ece6f5" stroke="none"/></svg></div><div class="wrap">
 <p class="eyebrow">어느 교사의 기록</p>
-<h1>행복한 교사로<br>살아간다는 것</h1>
+<h1><em>행복한</em> 교사로<br>살아간다는 것</h1>
 <p class="lead">대단한 수업보다, 오늘 한 아이와 눈을 맞춘 순간이 더 오래 남습니다. 교실에서 행복을 지키는 작은 방법들을 모았습니다.</p>
 <div class="cta"><a class="btn primary" href="#habits">작은 습관 보기</a><a class="btn ghost" href="#letter">편지 읽기</a></div>
 </div></section>
 <section class="sec day" id="day"><div class="wrap"><p class="eyebrow">하루의 결</p><h2>교문에서 교문까지</h2><ol class="timeline"><li><time>07:50</time><b>교문 앞</b><span>아이들 이름을 하나씩 불러 줍니다. 이름이 불린 아이는 하루를 조금 다르게 시작합니다.</span></li><li><time>10:40</time><b>쉬는 시간</b><span>창문을 열고 숨을 고릅니다. 오 분이라도 쉬어야 다음 시간의 제가 웃을 수 있습니다.</span></li><li><time>12:30</time><b>점심</b><span>아이들과 같은 줄에 섭니다. 교실에서 듣지 못한 이야기가 급식 줄에서 나옵니다.</span></li><li><time>15:30</time><b>빈 교실</b><span>오늘 고마웠던 장면 하나를 수첩에 적습니다. 힘든 장면보다 오래 남기기 위해서입니다.</span></li><li><time>18:00</time><b>퇴근</b><span>학교 일은 교문에 두고 갑니다. 내일의 수업은 오늘의 저녁이 준비합니다.</span></li></ol></div></section>
 <section class="sec stories" id="stories"><div class="wrap"><p class="eyebrow">세 가지 이야기</p><h2>제가 붙잡고 있는 생각</h2><div class="cards"><article class="card"><span class="num">01</span><h3>잘하는 교사보다 괜찮은 어른</h3><p>아이들은 제 설명보다 제 표정을 먼저 기억합니다. 실수한 날에는 실수했다고 말하는 어른이 되려 합니다.</p></article><article class="card"><span class="num">02</span><h3>동료는 가장 가까운 연수</h3><p>옆 반 선생님과 나눈 오 분이 어떤 연수보다 오래 남을 때가 있습니다. 혼자 끙끙대지 않고 먼저 묻습니다.</p></article><article class="card"><span class="num">03</span><h3>나를 돌보는 것도 수업 준비</h3><p>지친 교사는 아이들의 작은 신호를 놓칩니다. 잠과 밥과 산책을 수업 준비 목록 맨 위에 둡니다.</p></article></div></div></section>
-<section class="sec quote"><div class="wrap"><blockquote>교실이 행복하려면,<br>그 교실에 서 있는 어른부터<br>행복해야 합니다.</blockquote><p class="cite">어느 교사의 수첩에서</p></div></section>
+<section class="sec quote"><div class="wrap"><blockquote>교실이 행복하려면,<br>그 교실에 서 있는 어른부터<br><em>행복해야</em> 합니다.</blockquote><p class="cite">어느 교사의 수첩에서</p></div></section>
 <section class="sec habits" id="habits"><div class="wrap"><p class="eyebrow">작은 습관</p><h2>오늘 하나만 해 보기</h2><div class="habit-wrap"><ul class="checks"><li><label><input type="checkbox"><span>아침에 아이 세 명의 이름을 먼저 부르기</span></label></li><li><label><input type="checkbox"><span>하루 한 번 「고마워」라고 말하기</span></label></li><li><label><input type="checkbox"><span>쉬는 시간 오 분은 정말 쉬기</span></label></li><li><label><input type="checkbox"><span>퇴근 전, 오늘의 좋은 장면 한 줄 적기</span></label></li><li><label><input type="checkbox"><span>주말 하루는 업무 메신저 열지 않기</span></label></li></ul><div class="meter"><p class="mlabel">오늘 지킨 습관</p><p class="mnum"><b id="cnt">0</b><span> / 5</span></p><div class="bar"><i id="barf"></i></div></div></div></div></section>
 <section class="sec ask"><div class="wrap"><p class="eyebrow">나에게 묻기</p><h2>퇴근길 세 가지 질문</h2><div class="asks"><div class="q"><b>오늘 웃은 순간은?</b><p>아주 작아도 괜찮습니다. 웃었던 장면 하나면 충분합니다.</p></div><div class="q"><b>오늘 나를 도와준 사람은?</b><p>고마운 얼굴을 떠올리면 내일 먼저 인사할 사람이 생깁니다.</p></div><div class="q"><b>내일 덜어 낼 일 하나는?</b><p>더할 일보다 뺄 일을 먼저 정하면 하루에 숨 쉴 틈이 생깁니다.</p></div></div></div></section>
 <section class="sec letter" id="letter"><div class="wrap"><div class="paper"><p class="eyebrow">내년의 나에게</p><h2>편지</h2><p>올해의 나는 완벽한 수업을 하지 못했습니다. 그래도 아이들이 교실 문을 열고 들어올 때마다 웃으며 맞이하려 애썼습니다.</p><p>내년의 나에게 부탁합니다. 바쁜 날일수록 아이 한 명과 눈을 맞추고, 지친 날에는 먼저 쉬어 주세요. 행복한 교사는 대단한 교사가 아니라, 오늘을 잘 살아 낸 교사라는 걸 잊지 말아요.</p><p class="sign">올해의 내가</p></div></div></section>
-<footer id="app-credit" class="foot"><div class="wrap"><p>행복한 교사로 살아간다는 것 · 「블록 프레임」 설계서로 만든 예시 페이지 · <a href="../../../design.html#kr">디자인 서랍으로</a></p><p class="small">© 2026 조승재(과학이조선생) · 해누리중학교 · 최종 업데이트: 2026-10-13</p></div></footer>
+<footer id="app-credit" class="foot"><div class="wrap"><p>행복한 교사로 살아간다는 것 · 「보랏빛 밤」 설계서로 만든 예시 페이지 · <a href="../../../design.html#kr">디자인 서랍으로</a></p><p class="small">© 2026 조승재(과학이조선생) · 해누리중학교 · 최종 업데이트: 2026-10-13</p></div></footer>
 <script>
-(function(){const K='happy-teacher:block-frame',bx=[...document.querySelectorAll('.checks input')];let s=[];try{s=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){}
+(function(){const K='happy-teacher:violet-night',bx=[...document.querySelectorAll('.checks input')];let s=[];try{s=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){}
 function up(){const n=bx.filter(b=>b.checked).length;document.getElementById('cnt').textContent=n;document.getElementById('barf').style.width=(n/bx.length*100)+'%';bx.forEach(b=>b.closest('li').classList.toggle('on',b.checked));try{localStorage.setItem(K,JSON.stringify(bx.map(b=>b.checked)))}catch(e){}}
 bx.forEach((b,i)=>{b.checked=!!s[i];b.addEventListener('change',up)});up();})();
 </script>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>행복한 교사로 살아간다는 것 · 데이지</title>
-<meta name="description" content="「데이지」 설계서(DESIGN.md)로 만든 예시 홈페이지입니다. 주제: 행복한 교사로 살아간다는 것.">
+<title>행복한 교사로 살아간다는 것 · 햇살 게시판</title>
+<meta name="description" content="「햇살 게시판」 설계서(DESIGN.md)로 만든 예시 홈페이지입니다. 주제: 행복한 교사로 살아간다는 것.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
 <style>
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -74,9 +74,9 @@ h2{font-size:clamp(32px,4.4vw,52px);margin:0 0 34px;line-height:1.2}
 <section class="sec habits" id="habits"><div class="wrap"><p class="eyebrow">작은 습관</p><h2>오늘 하나만 해 보기</h2><div class="habit-wrap"><ul class="checks"><li><label><input type="checkbox"><span>아침에 아이 세 명의 이름을 먼저 부르기</span></label></li><li><label><input type="checkbox"><span>하루 한 번 「고마워」라고 말하기</span></label></li><li><label><input type="checkbox"><span>쉬는 시간 오 분은 정말 쉬기</span></label></li><li><label><input type="checkbox"><span>퇴근 전, 오늘의 좋은 장면 한 줄 적기</span></label></li><li><label><input type="checkbox"><span>주말 하루는 업무 메신저 열지 않기</span></label></li></ul><div class="meter"><p class="mlabel">오늘 지킨 습관</p><p class="mnum"><b id="cnt">0</b><span> / 5</span></p><div class="bar"><i id="barf"></i></div></div></div></div></section>
 <section class="sec ask"><div class="wrap"><p class="eyebrow">나에게 묻기</p><h2>퇴근길 세 가지 질문</h2><div class="asks"><div class="q"><b>오늘 웃은 순간은?</b><p>아주 작아도 괜찮습니다. 웃었던 장면 하나면 충분합니다.</p></div><div class="q"><b>오늘 나를 도와준 사람은?</b><p>고마운 얼굴을 떠올리면 내일 먼저 인사할 사람이 생깁니다.</p></div><div class="q"><b>내일 덜어 낼 일 하나는?</b><p>더할 일보다 뺄 일을 먼저 정하면 하루에 숨 쉴 틈이 생깁니다.</p></div></div></div></section>
 <section class="sec letter" id="letter"><div class="wrap"><div class="paper"><p class="eyebrow">내년의 나에게</p><h2>편지</h2><p>올해의 나는 완벽한 수업을 하지 못했습니다. 그래도 아이들이 교실 문을 열고 들어올 때마다 웃으며 맞이하려 애썼습니다.</p><p>내년의 나에게 부탁합니다. 바쁜 날일수록 아이 한 명과 눈을 맞추고, 지친 날에는 먼저 쉬어 주세요. 행복한 교사는 대단한 교사가 아니라, 오늘을 잘 살아 낸 교사라는 걸 잊지 말아요.</p><p class="sign">올해의 내가</p></div></div></section>
-<footer id="app-credit" class="foot"><div class="wrap"><p>행복한 교사로 살아간다는 것 · 「데이지」 설계서로 만든 예시 페이지 · <a href="../../../design.html#kr">디자인 서랍으로</a></p><p class="small">© 2026 조승재(과학이조선생) · 해누리중학교 · 최종 업데이트: 2026-10-13</p></div></footer>
+<footer id="app-credit" class="foot"><div class="wrap"><p>행복한 교사로 살아간다는 것 · 「햇살 게시판」 설계서로 만든 예시 페이지 · <a href="../../../design.html#kr">디자인 서랍으로</a></p><p class="small">© 2026 조승재(과학이조선생) · 해누리중학교 · 최종 업데이트: 2026-10-13</p></div></footer>
 <script>
-(function(){const K='happy-teacher:daisy',bx=[...document.querySelectorAll('.checks input')];let s=[];try{s=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){}
+(function(){const K='happy-teacher:sunny-board',bx=[...document.querySelectorAll('.checks input')];let s=[];try{s=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){}
 function up(){const n=bx.filter(b=>b.checked).length;document.getElementById('cnt').textContent=n;document.getElementById('barf').style.width=(n/bx.length*100)+'%';bx.forEach(b=>b.closest('li').classList.toggle('on',b.checked));try{localStorage.setItem(K,JSON.stringify(bx.map(b=>b.checked)))}catch(e){}}
 bx.forEach((b,i)=>{b.checked=!!s[i];b.addEventListener('change',up)});up();})();
 </script>

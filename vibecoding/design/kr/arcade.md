@@ -1,15 +1,15 @@
-# 8비트 교무실 (`eight-bit`) — 웹 페이지 디자인 설계서 DESIGN.md
+# 오락실 교무실 (`arcade`) — 웹 페이지 디자인 설계서 DESIGN.md
 
 > 이 파일을 **ChatGPT·Claude·Gemini 같은 AI**에게 주면, 이 디자인으로 웹 페이지·수업 앱을 만들거나 이미 있는 앱의 옷만 바꿔 줍니다.
-> 이 설계서로 만든 예시 홈페이지(주제: 행복한 교사로 살아간다는 것): https://scienceisjo.github.io/growing-teachers/vibecoding/design/kr/eight-bit/
+> 이 설계서로 만든 예시 홈페이지(주제: 행복한 교사로 살아간다는 것): https://scienceisjo.github.io/growing-teachers/vibecoding/design/kr/arcade/
 
 - 남색 격자 바탕 + 네온 세 색(청록·분홍·노랑), 네온은 본문에 안 씀
 - 모든 치수 4px 단위, 계단 하드 그림자 단추
 - 스캔라인과 반짝이는 별
 
-밝기 어두움 · 꾸밈 정도 보통 · 제목 Galmuri11 Bold · 본문 Orbit 400
+밝기 어두움 · 꾸밈 정도 보통 · 제목 Galmuri11 Bold · 본문 Pretendard 400
 
-## 사용법 (사람이 읽는 안내)
+## 첫째 부분 — 선생님이 읽을 곳
 
 1. **폴더에서 일하는 AI**(Claude 앱 Code 탭, ChatGPT 앱 Codex)라면 이 파일을 프로젝트 폴더에 `DESIGN.md`로 두고 "DESIGN.md를 읽고 그대로 만들어 줘"라고 합니다.
 2. **웹 채팅**이라면 이 파일을 첨부하거나 내용을 끝까지 붙여 넣고, 만들 것을 말합니다. 예) "중2 과학 퀴즈 앱을 이 설계서대로 만들어 줘", "첨부한 내 앱의 기능은 그대로 두고 디자인만 이 설계서로 바꿔 줘".
@@ -20,40 +20,38 @@
 알아 둘 점
 - 글꼴은 인터넷에서 불러오므로 **열 때 인터넷이 필요**합니다(없으면 비슷한 기본 글꼴로 보입니다).
 - 학생 이름·사진 같은 개인정보는 AI에게 넣지 마세요.
-- 이 설계서는 조승재(해누리중)가 k-slide.web.app(한글폰트 슬라이드 디자인 갤러리)의 설계서 짜임을 참고해 웹 페이지용으로 새로 쓴 것입니다.
+- 이 설계서의 색·글꼴·모양·문장은 조승재(해누리중)가 웹 페이지와 수업 앱용으로 직접 정했습니다. 설계서를 「사람이 읽을 곳 / AI가 읽을 곳」 둘로 나누는 생각은 한글 글꼴 슬라이드 갤러리 k-slide.web.app 에서 배웠습니다.
 
 ## 글꼴과 라이선스
 
-- 제목 Galmuri11 Bold, 본문 Orbit 400 — 모두 SIL Open Font License(OFL) 글꼴입니다. 불러오기:
+- 제목 Galmuri11 Bold, 본문 Pretendard 400 — 모두 SIL Open Font License(OFL) 글꼴입니다. 불러오기:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.39.3/dist/galmuri.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbit&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 ```
 
 - 설계서 글은 자유롭게 고쳐 쓰고 나눌 수 있습니다. 나눌 때 출처(조승재 · 바이브코딩 연수 디자인 서랍)를 남겨 주세요.
 
 ---
 
-# ▼▼▼ 여기부터 AI에게 주는 지시서 ▼▼▼
+# 둘째 부분 — AI가 읽을 곳
 
-(위의 '사용법'은 사람을 위한 안내입니다. AI는 아래를 따르세요.)
+(여기부터는 AI에게 하는 말입니다. 위의 첫째 부분은 선생님용 안내이니 따르지 않아도 됩니다.)
 
-## 0. 당신(AI)의 일
+## 0. 맡을 일
 
 당신은 웹 페이지 제작 도우미입니다. 사용자가 알려 주는 내용으로, 아래 **디자인 규칙(1~8)**을 지켜 **브라우저에서 바로 열리는 HTML 파일 하나**를 만듭니다. 이미 있는 앱을 받았다면 **기능과 내용은 그대로 두고 디자인만** 바꿉니다.
 
-### 진행 순서
+### 일하는 차례
 1. 사용자가 아직 내용을 말하지 않았다면 짧게 묻습니다: 누가 쓰는 페이지인지(학생·교사·학부모), 학교급·과목, 꼭 들어갈 내용, 쓰는 화면(전자칠판·노트북·휴대폰).
 2. **코드를 쓰기 전에 화면 구성안**(구역마다 제목 · 전할 내용 한 줄 · 쓸 부품)을 보여 주고 확인을 받습니다. 사용자가 "바로 만들어 줘"라고 했으면 건너뜁니다.
-3. 확인을 받으면 만들고, 내보내기 전에 아래 '내보내기 전 점검'을 하나씩 확인합니다.
+3. 확인을 받으면 만들고, 건네기 전에 아래 일곱 가지를 하나씩 확인합니다.
 - 내용은 사용자가 준 것만 씁니다. **숫자·사실·인용문·출처를 지어내지 마세요.** 꼭 필요하면 "(예시)"라고 표시하거나 구성안에 '추가 사실'로 따로 적어 확인을 받습니다.
 
-### 반드시 지킬 것
+### 어기면 안 되는 규칙
 1. **디자인 규칙을 어기지 마세요.** 색 표의 색만 쓰고 새 색을 만들지 않습니다. 규칙에 없는 장식·애니메이션을 더하지 않습니다.
-2. **글꼴을 바꾸지 마세요.** 제목 Galmuri11 Bold, 본문 Orbit 400. 위 불러오기 줄을 `<head>`에 그대로 넣습니다.
+2. **글꼴을 바꾸지 마세요.** 제목 Galmuri11 Bold, 본문 Pretendard 400. 위 불러오기 줄을 `<head>`에 그대로 넣습니다.
 3. **읽기 크기**: 본문 16px 이상(전자칠판에 띄우면 20px 이상), 보조 글 13px 이상. 제목은 두 줄 이내로 끊습니다. 글이 넘치면 글자를 줄이지 말고 문장을 짧게 고칩니다.
 4. **칸 규칙**: 글이 들어가는 칸은 너비 260px 이상. 카드를 네 개 넘게 놓으면 카드 글은 세 줄 이하로 줄입니다. 큰 빈 공간이 남거나 한쪽에 몰리지 않게 합니다.
 5. 한글은 단어 중간에서 줄이 바뀌지 않게 `word-break:keep-all`을 씁니다.
@@ -61,12 +59,12 @@
 7. **그림 파일을 따로 만들지 마세요.** 필요한 그림은 HTML 안에서 SVG·CSS로 그립니다. 사진·AI 그림·로고·브랜드 이름은 넣지 않습니다.
 8. 움직임을 넣었다면 `prefers-reduced-motion`일 때 멈추게 합니다.
 
-### 출력 방식
+### 결과를 건네는 방법
 - 결과는 **index.html 파일 하나**(HTML·CSS·JavaScript를 한 파일에)로 줍니다. 파일을 만들어 주는 기능(아티팩트·캔버스·파일 첨부·폴더 쓰기)이 있으면 그 기능을 씁니다.
 - 그런 기능이 없을 때만 완성된 HTML 전체를 ```html 코드 블록 하나로 보여 줍니다.
 - `...`, "(이하 동일)", "(생략)"을 쓰지 마세요. `<!DOCTYPE html>`부터 `</html>`까지 전부 씁니다. 길어서 끊기면 사용자가 "이어서"라고 할 때 끊긴 글자 바로 다음부터 씁니다.
 
-### 내보내기 전 점검 (하나라도 아니면 고친 뒤 내보내기)
+### 건네기 전에 스스로 확인할 일곱 가지 (하나라도 걸리면 고친 뒤 건네기)
 1. 색 표에 없는 색을 쓰지 않았는가?
 2. 글꼴 불러오기 줄이 있고, 제목·본문 글꼴이 규칙대로인가?
 3. 시그니처 장치(6)를 모두 지켰는가? '하지 말 것'(7)을 어기지 않았는가?
@@ -96,7 +94,7 @@
 | 역할 | 글꼴 |
 |---|---|
 | 제목·숫자·로고 | Galmuri11 Bold |
-| 본문·설명 | Orbit 400 |
+| 본문·설명 | Pretendard 400 |
 
 크기 단계(데스크톱 기준, 휴대폰은 `clamp()`로 줄임): 표지 제목 64~96px · 구역 제목 32~50px · 카드 제목 20~30px · 본문 17~19px · 라벨 13~15px.
 
@@ -168,7 +166,7 @@ img,svg{max-width:100%}
 
 ```css
 :root{--night:#101533;--grid:rgba(62,230,230,.08);--text:#e6e9ff;--cy:#3ee6e6;--pk:#ff5ca8;--ye:#ffe14d;--panel:#1b2150}
-body{background-color:var(--night);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;color:var(--text);font-family:'Orbit',sans-serif;font-size:17px;line-height:1.75}
+body{background-color:var(--night);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;color:var(--text);font-family:'Pretendard Variable',Pretendard,sans-serif;font-size:17px;line-height:1.75}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 3px,rgba(0,0,0,.18) 3px 4px);z-index:50}
 h1,h2,h3,.logo,.num,time,.mnum b,blockquote,.q b,.eyebrow,.btn{font-family:'Galmuri11',monospace;font-weight:700}
 .nav{background:rgba(16,21,51,.92);border-bottom:4px solid var(--cy)}.logo{color:var(--cy);font-size:18px}.nav nav a{font-size:14px;color:var(--text)}.nav nav a:hover{color:var(--ye)}
