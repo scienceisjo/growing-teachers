@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>개별 실습 메뉴판 · AI 활용 수업 실습 · 해누리중 조승재</title>
-<meta name="description" content="다음 주 내 수업 한 차시에 쓸 것 하나를 메뉴에서 골라 40분 안에 만드는 개별 실습 페이지. 칠판 강의 화면·손글씨 단권화·문항 세트·시뮬레이션·수업 활동 페이지·수업 여는 3분, 메뉴마다 부탁문 두 개와 완성 기준이 있습니다.">
+<meta name="description" content="다음 주 내 수업 한 차시에 쓸 것 하나를 메뉴에서 골라 40분 동안 만드는 개별 실습 페이지. 칠판 강의 화면·손글씨 단권화·문항 세트·시뮬레이션·수업 활동 페이지·수업 여는 3분·수행평가 채점 기준·실험 데이터 분석·탐구 주제 찾기, 메뉴마다 부탁문 두 개와 완성 기준, 서로 나누는 벽이 있습니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="dg.css">
@@ -269,6 +269,32 @@ html[data-mode="present"] .keys{display:block}
 .fixchips button{border:1px solid var(--line);border-radius:9999px;background:#fff;padding:6px 12px;font:inherit;font-size:.86em;cursor:pointer;text-align:left}
 .fixchips button:hover{border-color:var(--blue)}
 .empty-chosen{color:var(--ink2);border:1px dashed var(--line);border-radius:var(--r3);padding:22px;text-align:center}
+.lvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:10px 0}
+.lv{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:#fff;display:flex;flex-direction:column;gap:3px;color:var(--ink)}
+.lv:hover{border-color:var(--blue);text-decoration:none}
+.lv .lt{display:inline-flex;width:1.9em;height:1.9em;border-radius:50%;background:var(--blue-t);color:var(--blue);align-items:center;justify-content:center;font-weight:700;font-size:.85em}
+.lv b{font-size:1rem} .lv > span:last-child{font-size:.86em;color:var(--ink2)}
+form.share{display:grid;grid-template-columns:140px 1fr 1fr auto;gap:8px;margin:10px 0 4px}
+form.share.one{grid-template-columns:1fr auto}
+form.share input{font:inherit;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+form.share input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.st{font-size:.8em;color:var(--ink3);min-height:1.2em}
+.swall{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:10px}
+.sc{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:#fff;display:flex;flex-direction:column;gap:8px;font-size:.95em}
+.sc.mine{border-color:var(--blue)}
+.sc .who{font-size:.78em;color:var(--blue);font-weight:600}
+.sc .mt{font-size:.78em;color:var(--ink2)}
+.sc .ln{margin:0;line-height:1.5}
+.sc .fbs{list-style:none;margin:0;padding:8px 0 0;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:4px;font-size:.88em;color:var(--ink2)}
+.sc .fbs li::before{content:"💬 "}
+.sc form{display:grid;grid-template-columns:1fr auto;gap:6px}
+.sc form input{font:inherit;font-size:.86rem;border:1px solid var(--line);border-radius:var(--r1);padding:6px 10px}
+.sc form button,.sc .lk{font:inherit;font-size:.8rem;border:1px solid var(--line);border-radius:9999px;background:var(--bg2);padding:4px 11px;cursor:pointer}
+.sc .lk{align-self:flex-start;color:var(--ink2)} .sc .lk b{color:var(--blue);margin-left:4px}
+.sc .lk.on{border-color:var(--blue);background:var(--blue-t);color:var(--blue);cursor:default}
+.swall .empty{grid-column:1/-1;color:var(--ink3);font-size:.9em}
+html[data-mode="present"] form.share,html[data-mode="present"] .sc form{display:none}
+@media (max-width:760px){form.share{grid-template-columns:1fr}}
 html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display:none}
 @media (max-width:760px){.rules{grid-template-columns:1fr}.mine{grid-template-columns:1fr}.tline{grid-template-columns:1fr}}
 </style>
@@ -294,8 +320,8 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
     <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">AI 활용 수업 실습 · 개별 실습</div>
     <h1>다음 주 내 수업에 쓸 것 하나</h1>
-    <p class="lead">오늘 실습은 각자 하나씩입니다. 다음 주에 실제로 들어가실 수업 한 차시를 정하고, 메뉴에서 하나만 골라 40분 안에 교실에 띄울 수 있는 상태까지 만들어 보겠습니다!</p>
-    <div class="pipe" aria-label="흐름"><span class="n">내 수업 적기</span><span class="a">→</span><span class="n">메뉴 하나 고르기</span><span class="a">→</span><span class="n">부탁문 두 번</span><span class="a">→</span><span class="n hi">교실 화면에 띄워 보기</span></div>
+    <p class="lead">남은 시간은 실습을 진행하겠습니다! 다음 주에 실제로 들어가실 수업 한 차시를 정하고, 아래 메뉴에서 하나를 골라 40분 동안 만들어 보겠습니다. 계획만 세우셔도 괜찮아요^^ 만든 것과 계획은 맨 아래 나눔 벽에 올려서 다 같이 나누고 공유해요!</p>
+    <div class="pipe" aria-label="흐름"><span class="n">내 수업 적기</span><span class="a">→</span><span class="n">메뉴 하나 고르기</span><span class="a">→</span><span class="n">부탁문 두 번</span><span class="a">→</span><span class="n hi">나눔 벽에 올리기</span></div>
     <div class="actions"><a class="btn big primary" href="#s2">내 수업 적으러 가기 ↓</a><a class="btn big" href="./">바이브코딩 허브로</a><a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a></div>
   </div>
 </header>
@@ -305,17 +331,17 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
 <section class="step" id="s1" data-title="오늘의 약속" data-min="3">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>실습 약속 세 가지</h2><span class="min"><b>3</b>분</span></div>
-    <p class="goal">「AI로 아무거나 만들어 보세요」가 되지 않도록, 오늘 만들 것의 범위를 먼저 좁혀 보겠습니다!</p>
+    <p class="goal">시작하시기 전에 세 가지만 기억해 주세요!</p>
     <div class="blk">
       <div class="rules">
         <div class="rule"><span class="n">1</span><b>다음 주 내 수업 한 차시</b><p>가상의 수업이 아니라 실제로 들어가실 반, 실제 차시입니다. 그래야 끝나고 바로 쓰실 수 있습니다.</p></div>
-        <div class="rule"><span class="n">2</span><b>메뉴에서 하나만</b><p>여섯 가지 중 하나만 고릅니다. 메뉴마다 부탁문 두 개(설계 → 만들기)와 완성 기준이 있습니다.</p></div>
-        <div class="rule"><span class="n">3</span><b>교실 화면에 띄워 보기까지</b><p>다 만든 기준은 「교실 화면 크기로 열어서 틀린 곳이 없다」입니다. 예쁘게 다듬는 건 그다음입니다.</p></div>
+        <div class="rule"><span class="n">2</span><b>메뉴에서 하나만</b><p>아홉 가지 중 하나만 고릅니다. 메뉴마다 부탁문 두 개(설계 → 만들기)와 완성 기준이 있습니다.</p></div>
+        <div class="rule"><span class="n">3</span><b>교실 화면에 띄워 보기까지</b><p>교실 화면 크기로 열었을 때 틀린 곳이 없으면 완성입니다. 시간이 모자라면 계획만 세우셔도 괜찮습니다.</p></div>
       </div>
-      <div class="tline" aria-label="40분 나누기"><div><b>5분</b>적고 고르기</div><div><b>25분</b>부탁문 두 번 · 고치기</div><div><b>10분</b>점검 · 올리기</div></div>
+      <div class="tline" aria-label="40분 나누기"><div><b>5분</b>적고 고르기</div><div><b>25분</b>부탁문 두 번 · 고치기</div><div><b>10분</b>점검 · 나눔 벽</div></div>
       <div class="detail">
-        <p>연수에서 실습 시간을 드리면 무엇을 만들지 고르다가 시간이 다 가는 경우가 많았습니다. 그래서 오늘은 결과물의 종류를 여섯 가지로 미리 정해 두었습니다. 메뉴는 제가 실제로 수업에 쓰고 있는 것들이고, 메뉴마다 제가 만든 예를 열어 보실 수 있습니다.</p>
-        <p>저는 중학교 교사라 고등학교 수업 내용은 선생님들께서 훨씬 잘 아십니다. 내용은 선생님께서, 만드는 순서와 부탁하는 말은 제가 맡겠습니다!</p>
+        <p>메뉴 가운데 여섯 가지는 제가 실제로 수업에 쓰고 있는 것이라 제가 만든 예를 열어 보실 수 있습니다. 수행평가, 실험 데이터, 탐구 주제 세 가지는 고등학교 수업에 맞춰 더했습니다.</p>
+        <p>고등학교 수업 내용은 선생님들께서 저보다 훨씬 잘 아십니다. 내용은 선생님께서, 만드는 순서와 부탁하는 말은 제가 맡겠습니다!</p>
       </div>
     </div>
   </div>
@@ -347,7 +373,7 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
         <div class="q">① 지금 가지고 오신 자료는?</div>
         <div class="opts2" data-q="have"><button type="button" class="opt2" data-v="ws">학습지</button><button type="button" class="opt2" data-v="book">교과서·내 노트</button><button type="button" class="opt2" data-v="none">머릿속 수업 흐름뿐</button></div>
         <div class="q">② 다음 주 그 수업에서 가장 아쉬운 순간은?</div>
-        <div class="opts2" data-q="when"><button type="button" class="opt2" data-v="open">수업을 열 때</button><button type="button" class="opt2" data-v="explain">설명할 때</button><button type="button" class="opt2" data-v="show">눈에 안 보이는 걸 보여 줄 때</button><button type="button" class="opt2" data-v="check">이해했는지 확인할 때</button><button type="button" class="opt2" data-v="review">단원을 정리할 때</button><button type="button" class="opt2" data-v="flow">학생이 각자 따라갈 때</button></div>
+        <div class="opts2" data-q="when"><button type="button" class="opt2" data-v="open">수업을 열 때</button><button type="button" class="opt2" data-v="explain">설명할 때</button><button type="button" class="opt2" data-v="show">눈에 안 보이는 걸 보여 줄 때</button><button type="button" class="opt2" data-v="check">이해했는지 확인할 때</button><button type="button" class="opt2" data-v="review">단원을 정리할 때</button><button type="button" class="opt2" data-v="flow">학생이 각자 따라갈 때</button><button type="button" class="opt2" data-v="assess">수행평가를 준비할 때</button><button type="button" class="opt2" data-v="data">실험 데이터를 다룰 때</button><button type="button" class="opt2" data-v="inq">탐구 주제를 정할 때</button></div>
         <div class="res" id="qres"></div>
       </div>
       <div class="mgrid" id="mgrid"><article class="mcard" data-m="lecture"><div class="mh"><span class="ic" aria-hidden="true">🧑‍🏫</span><h3>칠판 강의 화면</h3><span class="tm">40분</span></div>
@@ -362,7 +388,13 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
 <p class="out">생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지</p><dl><dt>가져올 것</dt><dd>차시 흐름(지도안이나 머릿속 순서)</dd><dt>이럴 때</dt><dd>학생이 각자 기기로 따라가는 차시</dd></dl>
 <div class="ex"><a href="https://scienceisjo.github.io/gas-properties/03-boyle.html" target="_blank" rel="noopener">과자 봉지 차시 페이지 ↗</a></div><button class="btn primary pick-m" type="button" data-m="lesson">이걸로 할게요</button></article><article class="mcard" data-m="hook"><div class="mh"><span class="ic" aria-hidden="true">💡</span><h3>수업 여는 3분</h3><span class="tm">30분</span></div>
 <p class="out">예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면</p><dl><dt>가져올 것</dt><dd>이번 차시에서 아이들이 놀랄 만한 현상 하나</dd><dt>이럴 때</dt><dd>도입이 늘 고민인 차시</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/class-tools/goldenbell/" target="_blank" rel="noopener">도전 골든벨 ↗</a><a href="https://scienceisjo.github.io/class-tools/jarvis/" target="_blank" rel="noopener">자비스 · 수업 도입 도우미 ↗</a></div><button class="btn primary pick-m" type="button" data-m="hook">이걸로 할게요</button></article></div>
+<div class="ex"><a href="https://scienceisjo.github.io/class-tools/goldenbell/" target="_blank" rel="noopener">도전 골든벨 ↗</a><a href="https://scienceisjo.github.io/class-tools/jarvis/" target="_blank" rel="noopener">자비스 · 수업 도입 도우미 ↗</a></div><button class="btn primary pick-m" type="button" data-m="hook">이걸로 할게요</button></article><article class="mcard" data-m="rubric"><div class="mh"><span class="ic" aria-hidden="true">📋</span><h3>수행평가 채점 기준과 자기 점검표</h3><span class="tm">35분</span></div>
+<p class="out">과제 안내문 + 채점 기준표(상·중·하) + 학생이 내기 전에 스스로 확인하는 점검 화면</p><dl><dt>가져올 것</dt><dd>수행평가 계획(평가 요소와 배점)</dd><dt>이럴 때</dt><dd>서술형·보고서·발표 수행평가</dd></dl>
+<div class="ex"></div><button class="btn primary pick-m" type="button" data-m="rubric">이걸로 할게요</button></article><article class="mcard" data-m="datalab"><div class="mh"><span class="ic" aria-hidden="true">📈</span><h3>실험 데이터 분석 페이지</h3><span class="tm">40분</span></div>
+<p class="out">측정값을 표에 넣으면 그래프·추세선·기울기가 나오는 분석 화면</p><dl><dt>가져올 것</dt><dd>실험 하나와 측정하는 두 양(단위까지)</dd><dt>이럴 때</dt><dd>탐구 실험, 그래프 해석 수업</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">MBL 센서 수업 허브 ↗</a></div><button class="btn primary pick-m" type="button" data-m="datalab">이걸로 할게요</button></article><article class="mcard" data-m="inquiry"><div class="mh"><span class="ic" aria-hidden="true">🧭</span><h3>탐구 주제 찾기 도우미</h3><span class="tm">35분</span></div>
+<p class="out">관심 분야를 고르면 이 단원 개념과 이어지는 탐구 질문 후보와 점검 질문이 나오는 화면</p><dl><dt>가져올 것</dt><dd>과제탐구·탐구 보고서 과제 조건</dd><dt>이럴 때</dt><dd>과제탐구, 탐구 보고서, 주제 탐구 활동</dd></dl>
+<div class="ex"></div><button class="btn primary pick-m" type="button" data-m="inquiry">이걸로 할게요</button></article></div>
     </div>
   </div>
 </section>
@@ -379,6 +411,16 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
       </div>
     </div>
     <div class="blk">
+      <p class="kw">바이브코딩 매뉴얼 하 · 중 · 상</p>
+      <p class="brief">순서를 하나하나 따라가고 싶으시면 아래 매뉴얼을 여셔도 됩니다. 그래도 저는 만들고 싶으신 것을 AI에게 말로 설명하고, 대화하면서 고쳐 나가시는 방법을 더 추천합니다!</p>
+      <div class="lvgrid">
+        <a class="lv to-basic" href="basic.html" target="_blank" rel="noopener"><span class="lt">하</span><b>① 기초 · 말로 만들기</b><span>AI가 준 코드를 파일로 저장해서 열어 보는 것부터</span></a>
+        <a class="lv" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><span class="lt">중</span><b>② 배포 · 내 도구에 주소 붙이기</b><span>GitHub Pages로 학생에게 줄 링크 만들기 (<span class="sub2">Netlify·Vercel도 있음</span>)</span></a>
+        <a class="lv" href="data.html" target="_blank" rel="noopener"><span class="lt">상</span><b>③ 데이터·AI 연결하기</b><span>학생 제출을 모으는 서버와 AI API 붙이기</span></a>
+        <a class="lv" href="lecture.html" target="_blank" rel="noopener"><span class="lt">+</span><b>칠판 강의 화면 매뉴얼</b><span>학습지 한 장을 강의 화면으로, 제 방법 그대로</span></a>
+      </div>
+    </div>
+    <div class="blk">
       <p class="kw">처음 써 보시는 도구라면</p>
       <div class="grid2">
         <div class="box"><b>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)</b><p>부탁문을 붙여 넣고 보냅니다. 결과가 코드로만 나오면 "코드 말고 .html 파일로 만들어 줘"라고 한 번 더 말씀하세요. 캔버스·아티팩트 화면이 열리면 거기서 바로 미리 보실 수 있습니다.</p></div>
@@ -388,18 +430,41 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
   </div>
 </section>
 
-<section class="step" id="s5" data-title="점검·나눔" data-min="10">
+<section class="step" id="s5" data-title="나눔 벽" data-min="10">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>점검하고 나누기</h2><span class="min"><b>10</b>분</span></div>
-    <p class="goal">교실에 띄우기 전에 네 가지만 확인하고, 다 되면 보관함에 올려 주세요!</p>
+    <div class="step-h"><span class="num">5</span><h2>나누고 서로 피드백하기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">만든 것이든 계획이든 한 줄로 올려 주시고, 다른 선생님 글에 한 줄씩 피드백을 남겨 주세요!</p>
     <div class="blk">
+      <p class="kw">오늘 만든 것 · 세운 계획</p>
+      <form class="share" id="ideaForm" autocomplete="off">
+        <input name="name" maxlength="20" placeholder="별명 (선택)">
+        <input name="line" maxlength="140" placeholder="무엇을, 어느 수업의 어느 순간에 쓰실지 한 줄로" required>
+        <input name="link" maxlength="300" placeholder="링크 (선택, GiteacherHub나 배포 주소)">
+        <button class="btn primary" type="submit">올리기</button>
+      </form>
+      <p class="small" id="ideaMeta"></p>
+      <div class="st" id="ideaSt"></div>
+      <div class="swall" id="ideaWall"></div>
+    </div>
+    <div class="blk">
+      <p class="kw">평소에 만들고 싶었던 것</p>
+      <p class="brief">오늘 못 만드셔도 괜찮습니다. 늘 있었으면 했던 수업 도구를 적어 주시면, 다른 선생님이 「나도요」를 누르실 수 있습니다.</p>
+      <form class="share one" id="wishForm" autocomplete="off">
+        <input name="line" maxlength="140" placeholder="예: 학생 실험 보고서를 기준표대로 먼저 점검해 주는 도구" required>
+        <button class="btn primary" type="submit">올리기</button>
+      </form>
+      <div class="st" id="wishSt"></div>
+      <div class="swall" id="wishWall"></div>
+    </div>
+    <div class="blk">
+      <p class="kw">올리기 전에 네 가지만</p>
       <ol class="steps" data-key="check">
         <li><input type="checkbox" aria-label="완료"><span><span class="what">교실 화면 크기로 열어 봤다</span><span class="how">전자칠판이면 전체 화면(F11)으로, 태블릿이면 실제 기기 폭으로.</span></span></li>
         <li><input type="checkbox" aria-label="완료"><span><span class="what">과학 내용을 한 번 읽었다</span><span class="how">단위, 부호(+ −), 화살표 방향, 그림 속 개수와 비율. AI는 그럴듯하게 틀립니다.</span></span></li>
         <li><input type="checkbox" aria-label="완료"><span><span class="what">학생 개인정보가 없다</span><span class="how">학생 이름·학번·사진을 받거나 보여 주지 않는다.</span></span></li>
         <li><input type="checkbox" aria-label="완료"><span><span class="what">파일을 저장했다</span><span class="how">index.html(또는 PDF)을 내 컴퓨터에 받아 두었다.</span></span></li>
       </ol>
-      <div class="submit"><div class="txt"><b>GiteacherHub에 올리기</b><span>다른 선생님 것도 열어 보실 수 있습니다. 한 줄 소개에는 「어느 수업의 어느 순간에 쓰는지」를 적어 주세요.</span></div><a class="btn big primary" id="toGth" href="../giteacherhub/" target="_blank" rel="noopener">보관함 열기 ↗</a></div>
+      <div class="submit"><div class="txt"><b>파일은 GiteacherHub에</b><span>만든 파일을 올리면 다른 선생님들이 열어 보실 수 있습니다. 올린 주소를 위 나눔 벽 링크 칸에 붙여 주세요.</span></div><a class="btn big primary" id="toGth" href="../giteacherhub/" target="_blank" rel="noopener">보관함 열기 ↗</a></div>
     </div>
   </div>
 </section>
@@ -477,7 +542,7 @@ async function copyText(t, btn) {
 
 
 /* ── 실습 메뉴판 ── */
-const MENUS = {"lecture": {"t": "칠판 강의 화면", "ic": "🧑‍🏫", "p": ["나는 {grade} {subject} 교사야. 다음 수업 주제는 「{topic}」이고, 아이들은 보통 「{stuck}」에서 막혀.\n첨부한 학습지의 빈칸에 위에서부터 ①, ②, ③ 번호를 매기고, 빈칸 하나마다 그 답이 드러나는 장면을 한 장씩 짜서 표로 먼저 보여 줘.\n표 칸: 장면 번호 · 화면에 보일 것 · 내가 할 말 한 줄 · 채워지는 빈칸.\n장면은 15장 이상으로 하고, 아이들이 막히는 곳에는 장면을 더 써 줘. 코드는 아직 쓰지 마.", "좋아. 이 표대로 {screen}에 띄울 칠판 강의 화면을 HTML 파일 하나로 만들어 줘.\n- 오른쪽 화살표나 스페이스를 누르면 한 단계씩 넘어가고, 빈칸은 그 장면에서 답이 채워지게.\n- 그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로.\n- 글자는 교실 뒤에서도 보이게 크게.\n코드는 <!DOCTYPE html>부터 </html>까지 생략 없이 전부."], "done": ["학습지 빈칸 번호와 장면 번호가 1:1로 맞는다", "교실 화면 크기로 열어 맨 뒤에서도 글자가 읽힌다", "그림 속 부호·화살표·단위를 한 번씩 확인했다"], "out": "학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)"}, "handnote": {"t": "손글씨 단권화", "ic": "📒", "p": ["첨부한 「손글씨 단권화 설계서」(handnote-spec.md)를 끝까지 읽고 그대로 따라 줘.\n단원: {grade} {subject} 「{topic}」. 아이들이 자주 헷갈리는 곳: 「{stuck}」.\n단원 내용은 아래에 붙여 넣은 교과서·노트 안에서만 써 줘.\n먼저 설계서에 적힌 쪽 구성표(쪽 · 큰 제목 · 소제목 · 그림 · 표 · ★)를 보여 줘.\n\n[단원 내용]\n(여기에 교과서·노트 내용을 붙여 넣거나 파일을 첨부)", "좋아. 구성표대로 여섯 쪽을 만들어 줘. 그림은 이미지 생성 대신 SVG로 직접 그리고, 설계서의 「건네기 전에 확인할 일곱 가지」를 하나씩 확인한 결과도 끝에 알려 줘."], "done": ["여섯 쪽, 마지막 쪽이 찐막 정리다", "그림의 부호·개수·화살표가 본문과 맞는다", "인쇄 미리보기에서 쪽이 넘치지 않는다(배경 그래픽 켜기)"], "out": "한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)"}, "items": {"t": "문항 세트와 바로 채점", "ic": "📝", "p": ["{grade} {subject} 「{topic}」 확인 문항을 만들고 싶어. 아이들은 「{stuck}」에서 자주 틀려.\n문항을 쓰기 전에 표로 먼저 보여 줘: 물어볼 것 · 문항 유형 · 매력적인 오답 · 그 오답이 나오는 생각(오개념).\n선다형 4개, 서술형 1개. 코드는 아직 쓰지 마.", "이 표대로 문항을 써 줘. 선다형은 정답 하나, 선지 길이는 비슷하게, 부정어(않은, 아닌)는 밑줄. 정답과 해설, 서술형 채점 기준(상·중·하)도 붙여 줘.\n그다음 학생이 풀면 바로 채점되고, 고른 오답마다 왜 틀렸는지 한 줄이 나오는 HTML 파일 하나로 만들어 줘. 그림이 필요하면 SVG로 직접 그려 줘."], "done": ["정답이 하나뿐인지 선지를 하나씩 다시 읽었다", "해설이 교과서 범위를 넘지 않는다", "오답 피드백이 「틀렸습니다」가 아니라 까닭을 말한다"], "out": "선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면"}, "sim": {"t": "시뮬레이션 하나", "ic": "🔬", "p": ["{grade} {subject} 「{topic}」에서 아이들이 「{stuck}」을 어려워해. 이걸 보여 줄 시뮬레이션을 만들고 싶어.\n먼저 표로 정리해 줘: 바꿀 수 있는 값(범위·단위) · 화면에 보일 것 · 둘 사이의 식이나 규칙 · 과학적으로 틀리기 쉬운 부분.\n코드는 아직 쓰지 마.", "표대로 {screen}에서 쓸 HTML 파일 하나로 만들어 줘.\n- 그림은 SVG나 캔버스로 직접 그리고, 값은 표의 식으로 계산해.\n- 지금 값과 단위를 화면에 같이 보여 줘.\n- 결과를 예상하고 나서 확인하도록 [예상하기] 단추를 먼저 두어 줘."], "done": ["슬라이더 양 끝 값에서 결과가 말이 되는지 확인했다", "화면의 단위와 숫자가 식과 맞는다", "그림이 오개념을 만들지 않는다(크기·속도·개수)"], "out": "값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)"}, "lesson": {"t": "수업 활동 페이지", "ic": "🗂️", "p": ["{grade} {subject} 「{topic}」 한 차시를 생각 열기 → 탐구 → 정리 → 확인하기 순서로 짜 줘.\n단계마다 학생이 할 일 · 걸리는 시간 · 내가 던질 질문을 표로. 아이들이 막히는 「{stuck}」은 탐구 단계에서 다루게. 코드는 아직 쓰지 마.", "표대로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개. {screen}에서 쓸 거야. 그림은 SVG로 직접 그리고, 학생 이름은 받지 마."], "done": ["네 단계가 한 차시(45~50분) 안에 들어간다", "확인하기 문제 정답이 맞다", "학생 개인정보를 받지 않는다"], "out": "생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지"}, "hook": {"t": "수업 여는 3분", "ic": "💡", "p": ["{grade} {subject} 「{topic}」 수업 첫 3분에 띄울 질문 화면을 만들고 싶어.\n아이들이 「{stuck}」을 스스로 떠올리게 하는 예상하기 질문 세 개를 먼저 제안해 줘. 질문마다 선택지 · 많이 고를 답 · 실제 답 · 반전 한 줄을 표로. 코드는 아직 쓰지 마.", "이 중 두 번째 질문으로 {screen}에 띄울 화면을 HTML 하나로 만들어 줘. 스페이스를 누를 때마다 질문 → 선택지 → (내가 손든 수 입력) → 정답과 반전 순서로. 글자는 크게, 그림은 SVG로 직접."], "done": ["정답과 반전 설명이 과학적으로 맞다", "3분 안에 끝난다(직접 넘겨 보며 재기)", "본 수업으로 넘어가는 마지막 한 문장이 있다"], "out": "예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면"}};
+const MENUS = {"lecture": {"t": "칠판 강의 화면", "ic": "🧑‍🏫", "p": ["나는 {grade} {subject} 교사야. 다음 수업 주제는 「{topic}」이고, 아이들은 보통 「{stuck}」에서 막혀.\n첨부한 학습지의 빈칸에 위에서부터 ①, ②, ③ 번호를 매기고, 빈칸 하나마다 그 답이 드러나는 장면을 한 장씩 짜서 표로 먼저 보여 줘.\n표 칸: 장면 번호 · 화면에 보일 것 · 내가 할 말 한 줄 · 채워지는 빈칸.\n장면은 15장 이상으로 하고, 아이들이 막히는 곳에는 장면을 더 써 줘. 코드는 아직 쓰지 마.", "좋아. 이 표대로 {screen}에 띄울 칠판 강의 화면을 HTML 파일 하나로 만들어 줘.\n- 오른쪽 화살표나 스페이스를 누르면 한 단계씩 넘어가고, 빈칸은 그 장면에서 답이 채워지게.\n- 그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로.\n- 글자는 교실 뒤에서도 보이게 크게.\n코드는 <!DOCTYPE html>부터 </html>까지 생략 없이 전부."], "done": ["학습지 빈칸 번호와 장면 번호가 1:1로 맞는다", "교실 화면 크기로 열어 맨 뒤에서도 글자가 읽힌다", "그림 속 부호·화살표·단위를 한 번씩 확인했다"], "out": "학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)"}, "handnote": {"t": "손글씨 단권화", "ic": "📒", "p": ["첨부한 「손글씨 단권화 설계서」(handnote-spec.md)를 끝까지 읽고 그대로 따라 줘.\n단원: {grade} {subject} 「{topic}」. 아이들이 자주 헷갈리는 곳: 「{stuck}」.\n단원 내용은 아래에 붙여 넣은 교과서·노트 안에서만 써 줘.\n먼저 설계서에 적힌 쪽 구성표(쪽 · 큰 제목 · 소제목 · 그림 · 표 · ★)를 보여 줘.\n\n[단원 내용]\n(여기에 교과서·노트 내용을 붙여 넣거나 파일을 첨부)", "좋아. 구성표대로 여섯 쪽을 만들어 줘. 그림은 이미지 생성 대신 SVG로 직접 그리고, 설계서의 「건네기 전에 확인할 일곱 가지」를 하나씩 확인한 결과도 끝에 알려 줘."], "done": ["여섯 쪽, 마지막 쪽이 찐막 정리다", "그림의 부호·개수·화살표가 본문과 맞는다", "인쇄 미리보기에서 쪽이 넘치지 않는다(배경 그래픽 켜기)"], "out": "한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)"}, "items": {"t": "문항 세트와 바로 채점", "ic": "📝", "p": ["{grade} {subject} 「{topic}」 확인 문항을 만들고 싶어. 아이들은 「{stuck}」에서 자주 틀려.\n문항을 쓰기 전에 표로 먼저 보여 줘: 물어볼 것 · 문항 유형 · 매력적인 오답 · 그 오답이 나오는 생각(오개념).\n선다형 4개, 서술형 1개. 코드는 아직 쓰지 마.", "이 표대로 문항을 써 줘. 선다형은 정답 하나, 선지 길이는 비슷하게, 부정어(않은, 아닌)는 밑줄. 정답과 해설, 서술형 채점 기준(상·중·하)도 붙여 줘.\n그다음 학생이 풀면 바로 채점되고, 고른 오답마다 왜 틀렸는지 한 줄이 나오는 HTML 파일 하나로 만들어 줘. 그림이 필요하면 SVG로 직접 그려 줘."], "done": ["정답이 하나뿐인지 선지를 하나씩 다시 읽었다", "해설이 교과서 범위를 넘지 않는다", "오답 피드백이 「틀렸습니다」가 아니라 까닭을 말한다"], "out": "선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면"}, "sim": {"t": "시뮬레이션 하나", "ic": "🔬", "p": ["{grade} {subject} 「{topic}」에서 아이들이 「{stuck}」을 어려워해. 이걸 보여 줄 시뮬레이션을 만들고 싶어.\n먼저 표로 정리해 줘: 바꿀 수 있는 값(범위·단위) · 화면에 보일 것 · 둘 사이의 식이나 규칙 · 과학적으로 틀리기 쉬운 부분.\n코드는 아직 쓰지 마.", "표대로 {screen}에서 쓸 HTML 파일 하나로 만들어 줘.\n- 그림은 SVG나 캔버스로 직접 그리고, 값은 표의 식으로 계산해.\n- 지금 값과 단위를 화면에 같이 보여 줘.\n- 결과를 예상하고 나서 확인하도록 [예상하기] 단추를 먼저 두어 줘."], "done": ["슬라이더 양 끝 값에서 결과가 말이 되는지 확인했다", "화면의 단위와 숫자가 식과 맞는다", "그림이 오개념을 만들지 않는다(크기·속도·개수)"], "out": "값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)"}, "lesson": {"t": "수업 활동 페이지", "ic": "🗂️", "p": ["{grade} {subject} 「{topic}」 한 차시를 생각 열기 → 탐구 → 정리 → 확인하기 순서로 짜 줘.\n단계마다 학생이 할 일 · 걸리는 시간 · 내가 던질 질문을 표로. 아이들이 막히는 「{stuck}」은 탐구 단계에서 다루게. 코드는 아직 쓰지 마.", "표대로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개. {screen}에서 쓸 거야. 그림은 SVG로 직접 그리고, 학생 이름은 받지 마."], "done": ["네 단계가 한 차시(45~50분) 안에 들어간다", "확인하기 문제 정답이 맞다", "학생 개인정보를 받지 않는다"], "out": "생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지"}, "hook": {"t": "수업 여는 3분", "ic": "💡", "p": ["{grade} {subject} 「{topic}」 수업 첫 3분에 띄울 질문 화면을 만들고 싶어.\n아이들이 「{stuck}」을 스스로 떠올리게 하는 예상하기 질문 세 개를 먼저 제안해 줘. 질문마다 선택지 · 많이 고를 답 · 실제 답 · 반전 한 줄을 표로. 코드는 아직 쓰지 마.", "이 중 두 번째 질문으로 {screen}에 띄울 화면을 HTML 하나로 만들어 줘. 스페이스를 누를 때마다 질문 → 선택지 → (내가 손든 수 입력) → 정답과 반전 순서로. 글자는 크게, 그림은 SVG로 직접."], "done": ["정답과 반전 설명이 과학적으로 맞다", "3분 안에 끝난다(직접 넘겨 보며 재기)", "본 수업으로 넘어가는 마지막 한 문장이 있다"], "out": "예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면"}, "rubric": {"t": "수행평가 채점 기준과 자기 점검표", "ic": "📋", "p": ["나는 {grade} {subject} 교사야. 「{topic}」 수행평가를 준비하고 있어. 학생들은 보통 「{stuck}」을 놓쳐.\n먼저 표로 정리해 줘: 평가 요소 · 상/중/하 기준(눈으로 확인할 수 있는 문장으로) · 학생이 자주 놓치는 것.\n학생 이름이나 성적은 넣지 마. 코드는 아직 쓰지 마.\n\n[평가 요소와 배점]\n(여기에 적기)", "표대로 학생용 과제 안내문과 채점 기준표를 A4 한 장에 인쇄되게 만들고, 학생이 내기 전에 기준마다 체크하며 스스로 점검하는 화면을 HTML 파일 하나로 만들어 줘. 체크한 내용은 학생 기기에만 남게 해 줘."], "done": ["기준 문장이 「잘함」 같은 말이 아니라 눈에 보이는 행동으로 적혀 있다", "배점 합이 맞다", "학생 정보를 받거나 저장하지 않는다"], "out": "과제 안내문 + 채점 기준표(상·중·하) + 학생이 내기 전에 스스로 확인하는 점검 화면"}, "datalab": {"t": "실험 데이터 분석 페이지", "ic": "📈", "p": ["{grade} {subject} 「{topic}」 실험에서 학생들이 측정값을 넣으면 그래프로 관계를 찾는 페이지를 만들고 싶어. 아이들은 「{stuck}」을 어려워해.\n먼저 표로 정리해 줘: 가로축·세로축 양과 단위 · 측정 횟수 · 그래프 종류(점, 추세선) · 계산할 값(기울기, 비례 상수 등) · 이 실험의 오차 원인.\n코드는 아직 쓰지 마.", "표대로 HTML 파일 하나로 만들어 줘.\n- 표에 값을 넣으면 그래프가 바로 그려지고, 추세선과 기울기(단위 포함)가 나오게.\n- 그래프는 SVG나 캔버스로 직접 그리고, 축 이름과 단위를 꼭 붙여 줘.\n- 값은 학생 기기에만 저장하고, CSV로 받을 수 있게."], "done": ["예시 값을 넣어 손으로 계산한 기울기와 같은지 확인했다", "축 이름과 단위가 있다", "빈칸이나 글자를 넣어도 화면이 멈추지 않는다"], "out": "측정값을 표에 넣으면 그래프·추세선·기울기가 나오는 분석 화면"}, "inquiry": {"t": "탐구 주제 찾기 도우미", "ic": "🧭", "p": ["{grade} {subject} 「{topic}」 단원에서 학생들이 탐구 보고서 주제를 정하도록 돕고 싶어. 학생들은 보통 「{stuck}」에서 막혀.\n먼저 표로 보여 줘: 학생 관심 분야 예시 6개 · 분야마다 이어지는 이 단원 개념 · 학교 실험실에서 해 볼 수 있는 탐구 질문 예시 두 개 · 좋은 탐구 질문인지 확인하는 질문 세 개.\n코드는 아직 쓰지 마.", "표대로, 학생이 관심 분야를 고르고 탐구 질문 후보를 본 뒤 확인 질문에 예/아니요로 답하며 자기 질문을 다듬는 화면을 HTML 파일 하나로 만들어 줘. AI를 붙이지 말고 표 안의 내용만으로 움직이게 해 줘."], "done": ["탐구 질문을 학교 실험실에서 실제로 해 볼 수 있다", "개념 연결이 교육과정 범위 안에 있다", "학생 이름을 받지 않는다"], "out": "관심 분야를 고르면 이 단원 개념과 이어지는 탐구 질문 후보와 점검 질문이 나오는 화면"}};
 const FIX = ["글자를 지금보다 한 단계 크게 키워 줘. 나머지는 그대로 둬.", "이 장면(문항)의 그림에서 [무엇]이 틀렸어. [바른 내용]으로 고쳐 줘. 나머지는 그대로 둬.", "색을 두 가지만 쓰게 줄여 줘: 강조 하나, 나머지는 검정·회색.", "휴대폰 화면에서도 가로로 넘치지 않게 고쳐 줘.", "코드 말고 .html 파일로 만들어 줘.", "끊긴 곳 바로 다음부터 이어서 써 줘."];
 const MK = CONFIG.key + ':mine', PK = CONFIG.key + ':menu';
 const mine = document.getElementById('mine');
@@ -512,7 +577,7 @@ document.getElementById('mgrid').addEventListener('click', e => {
 });
 /* 두 질문 → 추천 */
 const ans = {};
-const REC = { open: 'hook', show: 'sim', check: 'items', review: 'handnote', flow: 'lesson' };
+const REC = { open: 'hook', show: 'sim', check: 'items', review: 'handnote', flow: 'lesson', assess: 'rubric', data: 'datalab', inq: 'inquiry' };
 document.getElementById('quiz2').addEventListener('click', e => {
   const b = e.target.closest('.opt2'); if (!b) return; const g = b.parentElement; ans[g.dataset.q] = b.dataset.v;
   g.querySelectorAll('.opt2').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
@@ -524,6 +589,65 @@ document.getElementById('quiz2').addEventListener('click', e => {
 });
 (function () { const sq = CODE ? '?s=' + encodeURIComponent(CODE) : ''; document.getElementById('toGth').href = '../giteacherhub/' + sq; })();
 renderChosen();
+/* ── 나눔 벽: 표 yeonsu_live (s=연수 코드) · 계획 kind=pr-idea · 피드백 kind=pr-fb(body={to,t}) · 만들고 싶었던 것 kind=pr-wish · 나도요 kind=pr-wish-like ── */
+(function () {
+  const SB = {"url": "https://vbvtnmnodeoocbbjauap.supabase.co", "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc"}, S = CODE || 'practice', ok = !!(SB.url && SB.key);
+  const hdr = () => ({ apikey: SB.key, Authorization: 'Bearer ' + SB.key, 'Content-Type': 'application/json' });
+  const rows = kind => fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(S)}&kind=eq.${kind}&select=id,kind,name,body,created_at&order=created_at.desc&limit=1000`, { headers: hdr() }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const add = o => fetch(`${SB.url}/rest/v1/yeonsu_live`, { method: 'POST', headers: { ...hdr(), Prefer: 'return=representation' }, body: JSON.stringify({ s: S, n: null, ...o }) }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(a => a[0]);
+  let DEV = ''; try { DEV = localStorage.getItem('opening:dev') || ''; } catch (e) {}
+  if (!/^d[0-9a-f]{12}$/.test(DEV)) { DEV = 'd' + [...crypto.getRandomValues(new Uint8Array(6))].map(b => b.toString(16).padStart(2, '0')).join(''); try { localStorage.setItem('opening:dev', DEV); } catch (e) {} }
+  const MINE = CONFIG.key + ':wall:' + S; let mine = new Set(); try { mine = new Set(JSON.parse(localStorage.getItem(MINE) || '[]')); } catch (e) {}
+  const keepMine = id => { mine.add(id); try { localStorage.setItem(MINE, JSON.stringify([...mine])); } catch (e) {} };
+  const J = t => { try { return JSON.parse(t); } catch (e) { return null; } };
+  const iw = document.getElementById('ideaWall'), ww = document.getElementById('wishWall'), ist = document.getElementById('ideaSt'), wst = document.getElementById('wishSt');
+  const iform = document.getElementById('ideaForm'), wform = document.getElementById('wishForm'), meta = document.getElementById('ideaMeta');
+  if (!ok) { ist.textContent = '서버 설정이 없어 나눔 벽이 꺼져 있습니다.'; return; }
+  try { iform.elements.name.value = localStorage.getItem('yeonsu:name') || ''; } catch (e) {}
+  function cur() { const m = MENUS[picked], v = val(); return { m: m ? m.t : '', g: [v.grade, v.subject, v.topic].filter(Boolean).join(' · ') }; }
+  function showMeta() { const c = cur(); meta.textContent = (c.m || c.g) ? '함께 올라가는 것: ' + [c.m, c.g].filter(Boolean).join(' / ') : '위에서 메뉴를 고르고 내 수업을 적으시면 함께 올라갑니다.'; }
+  showMeta(); document.getElementById('mgrid').addEventListener('click', () => setTimeout(showMeta, 50)); document.getElementById('mine').addEventListener('input', showMeta);
+  const liked = new Set();
+  async function load() {
+    try {
+      const [ideas, fbs, wishes, likes] = await Promise.all([rows('pr-idea'), rows('pr-fb'), rows('pr-wish'), rows('pr-wish-like')]);
+      const fb = {}; fbs.slice().reverse().forEach(r => { const o = J(r.body); if (o && o.to) (fb[o.to] = fb[o.to] || []).push(o.t); });
+      iw.innerHTML = ideas.length ? ideas.map(r => { const o = J(r.body) || { line: r.body }; const link = /^https?:\/\//i.test(o.link || '') ? `<a href="${esc(o.link)}" target="_blank" rel="noopener">열어 보기 ↗</a>` : '';
+        return `<div class="sc${mine.has(r.id) ? ' mine' : ''}"><span class="who">${esc(r.name || '익명')}</span>${(o.m || o.g) ? `<span class="mt">${esc([o.m, o.g].filter(Boolean).join(' · '))}</span>` : ''}<p class="ln">${esc(o.line || '')}</p>${link}
+          ${(fb[r.id] || []).length ? `<ul class="fbs">${fb[r.id].map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+          <form data-to="${r.id}"><input maxlength="120" placeholder="한 줄 피드백" aria-label="피드백"><button type="submit">남기기</button></form></div>`; }).join('')
+        : '<div class="empty">아직 올라온 글이 없습니다. 계획 한 줄도 좋습니다.</div>';
+      const cnt = {}, seen = new Set(); likes.forEach(l => { const k = l.name + '|' + l.body; if (seen.has(k)) return; seen.add(k); cnt[l.body] = (cnt[l.body] || 0) + 1; if (l.name === DEV) liked.add(String(l.body)); });
+      wishes.sort((a, b) => (cnt[b.id] || 0) - (cnt[a.id] || 0));
+      ww.innerHTML = wishes.length ? wishes.map(r => { const on = liked.has(String(r.id));
+        return `<div class="sc${mine.has(r.id) ? ' mine' : ''}"><p class="ln">${esc(r.body)}</p><button type="button" class="lk${on ? ' on' : ''}" data-id="${r.id}">🙋 ${on ? '나도요!' : '나도요'}<b>${cnt[r.id] || 0}</b></button></div>`; }).join('')
+        : '<div class="empty">아직 없습니다. 늘 있었으면 했던 도구를 적어 주세요.</div>';
+    } catch (e) { ist.textContent = '서버에 닿지 않습니다 (' + e.message + ').'; }
+  }
+  iform.addEventListener('submit', async e => {
+    e.preventDefault(); const f = iform.elements, line = f.line.value.trim(); if (!line) return;
+    const c = cur(), name = f.name.value.trim(); try { localStorage.setItem('yeonsu:name', name); } catch (err) {}
+    ist.textContent = '보내는 중…';
+    try { const r = await add({ kind: 'pr-idea', name, body: JSON.stringify({ line, link: f.link.value.trim(), m: c.m, g: c.g }) }); if (r) keepMine(r.id); f.line.value = ''; f.link.value = ''; ist.textContent = '올렸습니다 🙂'; load(); }
+    catch (err) { ist.textContent = '보내지 못했습니다 (' + err.message + '). 다시 눌러 주세요.'; }
+  });
+  iw.addEventListener('submit', async e => {
+    e.preventDefault(); const fm = e.target.closest('form[data-to]'); if (!fm) return; const inp = fm.querySelector('input'), t = inp.value.trim(); if (!t) return;
+    inp.disabled = true; try { await add({ kind: 'pr-fb', name: '', body: JSON.stringify({ to: +fm.dataset.to, t }) }); load(); } catch (err) { inp.disabled = false; ist.textContent = '피드백을 보내지 못했습니다. 다시 눌러 주세요.'; }
+  });
+  wform.addEventListener('submit', async e => {
+    e.preventDefault(); const line = wform.elements.line.value.trim(); if (!line) return; wst.textContent = '보내는 중…';
+    try { const r = await add({ kind: 'pr-wish', name: '', body: line }); if (r) keepMine(r.id); wform.elements.line.value = ''; wst.textContent = '올렸습니다 🙂'; load(); }
+    catch (err) { wst.textContent = '보내지 못했습니다 (' + err.message + ').'; }
+  });
+  ww.addEventListener('click', async e => {
+    const b = e.target.closest('.lk'); if (!b || b.classList.contains('on')) return; const id = b.dataset.id; liked.add(id); b.classList.add('on');
+    const n = b.querySelector('b'); n.textContent = +n.textContent + 1; b.firstChild.textContent = '🙋 나도요!';
+    try { await add({ kind: 'pr-wish-like', name: DEV, body: id }); } catch (err) { liked.delete(id); } load();
+  });
+  load(); setInterval(() => { const a = document.activeElement; if (document.visibilityState === 'visible' && !(a && a.closest && a.closest('.swall form'))) load(); }, 6000);
+})();
+
 </script>
 <script src="dg.js"></script>
 </body>
