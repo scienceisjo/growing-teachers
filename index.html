@@ -112,6 +112,7 @@ img{max-width:100%}
 .contact a{color:var(--on-dark);font-weight:600;white-space:nowrap}
 .contact a:hover{text-decoration:underline;text-underline-offset:3px}
 .contact .sep{margin:0 10px;opacity:.5}
+@media(max-width:560px){.contact{display:flex;flex-direction:column;align-items:center;gap:2px}.contact .sep{display:none}}
 
 /* ══════════════ 내비 두 줄 ══════════════ */
 .gnav{background:var(--black);color:var(--on-dark);height:44px;position:relative;z-index:60}
@@ -134,10 +135,21 @@ img{max-width:100%}
 .snav .inner{display:flex;align-items:center;gap:var(--s-lg);height:52px}
 .snav .cat{font-size:21px;font-weight:600;letter-spacing:.231px;white-space:nowrap}
 .snav .sp{flex:1}
-.snav nav{display:none;gap:var(--s-lg);font-size:14px;letter-spacing:-.224px}
-@media(min-width:900px){.snav nav{display:flex}}
-.snav nav a{color:var(--ink-80);transition:color .2s ease}
-.snav nav a:hover{color:var(--ink)}
+/* 탭 띠 — 켜진 탭은 파랑 글자 + 파랑 밑줄. 굵어져도 글자 폭이 그대로라 옆 탭이 밀리지 않는다 */
+.snav .tabs{position:relative;display:flex;align-items:stretch;gap:var(--s-lg);height:52px;
+  margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;font-size:14px;letter-spacing:-.224px}
+.snav .tabs::-webkit-scrollbar{display:none}
+.snav .tabs a{position:relative;display:inline-grid;align-items:center;justify-items:center;
+  flex:0 0 auto;padding:0 2px;color:var(--ink-80);white-space:nowrap;transition:color .2s ease}
+.snav .tabs a::before{content:attr(data-t);grid-area:1/1;font-weight:600;height:0;overflow:hidden;visibility:hidden}
+.snav .tabs a>span{grid-area:1/1}
+.snav .tabs a:hover{color:var(--ink)}
+.snav .tabs a:focus-visible{outline:2px solid var(--blue-focus);outline-offset:-4px;border-radius:var(--r-sm)}
+.snav .tabs a[aria-selected="true"]{color:var(--blue)}
+.snav .tabs a[aria-selected="true"]>span{font-weight:600}
+.snav .tabs a[aria-selected="true"]::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:2px;background:var(--blue)}
+@media(max-width:1099px){.snav .btn{display:none}}
+@media(max-width:759px){.snav .cat{display:none}.snav .tabs{margin-left:0}}
 .snav .btn{font-size:14px;padding:7px 16px;min-height:34px}
 
 /* ══════════════ 타일 안쪽 ══════════════ */
@@ -331,9 +343,24 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   .stickybar .inner{justify-content:center}
   .stickybar .btn{flex:1}}
 
+/* ══════════════ 탭 칸 — 한 번에 한 구역만 ══════════════ */
+/* 켜진 탭의 칸이 짧아도 마지막 면이 바닥까지 늘어나, 푸터가 허공에 뜨지 않는다 */
+body{display:flex;flex-direction:column;min-height:100vh}
+main{display:flex;flex-direction:column;flex:1 0 auto}
+.tabpanel>.tile:last-child{flex:1 0 auto}
+.js .tabpanel{display:none}
+.js .tabpanel.is-active{display:flex;flex-direction:column;flex:1 0 auto;animation:panelin .3s cubic-bezier(.25,.46,.45,.94)}
+@keyframes panelin{from{opacity:0}to{opacity:1}}
+footer{border-top:1px solid var(--hairline)}
+@media print{
+  .js .tabpanel{display:block!important;animation:none}
+  .gnav,.snav,.stickybar{display:none!important}
+}
+
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}}
 </style>
+<script>document.documentElement.className+=' js'</script>
 </head>
 <body>
 
@@ -350,22 +377,26 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
 <div class="snav">
   <div class="wrap inner">
     <span class="cat">포트폴리오</span>
-    <span class="sp"></span>
-    <nav>
-      <a href="#letter">여는 편지</a>
-      <a href="#voices">두 시선</a>
-      <a href="#tools">교사 도구</a>
-      <a href="#lesson">수업 생태계</a>
-      <a href="#subject">교과 자료</a>
-      <a href="#training">연수 자료</a>
-      <a href="#gift">선물 꾸러미</a>
+    <nav class="tabs" id="tabs" aria-label="포트폴리오 구역">
+      <a href="#intro" data-tab="intro" data-t="소개"><span>소개</span></a>
+      <a href="#letter" data-tab="letter" data-t="여는 편지"><span>여는 편지</span></a>
+      <a href="#voices" data-tab="voices" data-t="두 시선"><span>두 시선</span></a>
+      <a href="#tools" data-tab="tools" data-t="교사 도구"><span>교사 도구</span></a>
+      <a href="#lesson" data-tab="lesson" data-t="수업 생태계"><span>수업 생태계</span></a>
+      <a href="#subject" data-tab="subject" data-t="교과 자료"><span>교과 자료</span></a>
+      <a href="#training" data-tab="training" data-t="연수 자료"><span>연수 자료</span></a>
+      <a href="#gift" data-tab="gift" data-t="선물 꾸러미"><span>선물 꾸러미</span></a>
+      <a href="#hello" data-tab="hello" data-t="연락처"><span>연락처</span></a>
     </nav>
     <a class="btn btn-fill" href="#tools">자료 둘러보기</a>
   </div>
 </div>
 
+<main id="main">
+
+<div class="tabpanel" data-tab="intro">
 <!-- 히어로 -->
-<section class="tile t-white">
+<section class="tile t-white" id="intro">
   <div class="wrap center">
     <img class="portrait" src="images/profile.webp" width="720" height="720" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()">
     <span class="eyebrow">수업을 사랑하는 과학교사</span>
@@ -391,9 +422,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <h2 class="display-lg">과학교사 조승재</h2>
     </div>
     <div class="cta-row fold-cta">
-      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="false" aria-controls="bioFold" data-open="약력 접기" data-closed="약력 펼쳐보기"><span class="lbl">약력 펼쳐보기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="true" aria-controls="bioFold" data-open="약력 접기" data-closed="약력 펼쳐보기"><span class="lbl">약력 접기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
     </div>
-    <div class="fold" id="bioFold">
+    <div class="fold open" id="bioFold">
       <div class="fold-in">
         <div class="fold-body">
           <dl class="cv">
@@ -415,6 +446,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="letter">
 <!-- 여는 편지 -->
 <section class="tile t-white" id="letter">
   <div class="wrap">
@@ -445,6 +479,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="voices">
 <!-- 두 시선 — 왼쪽은 제가 쓴 다섯 문장, 오른쪽은 아이들이 써준 말(칩을 누르면 인용문 교체) -->
 <section class="tile t-dark" id="voices">
   <div class="wrap">
@@ -476,6 +513,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="tools">
 <!-- 교사 도구 -->
 <section class="tile t-white" id="tools">
   <div class="wrap">
@@ -497,6 +537,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="lesson">
 <!-- 수업 -->
 <section class="tile t-parch" id="lesson">
   <div class="wrap">
@@ -511,28 +554,6 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <a class="card" href="https://scienceisjo.github.io/class-tools/stamp-board/"><h3>과학 칭찬 도장판</h3><p>학생에게는 캐릭터를 키우는 도장판이고, 교사에게는 30초 만에 끝나는 관찰 기록부입니다. 그 기록이 그대로 생기부 근거가 됩니다.</p><span class="go">열어보기 ↗</span></a>
       <a class="card" href="https://scienceisjo.github.io/mblclasshub/"><h3>MBL 센서 수업 허브</h3><p>센서로 모은 모둠 데이터를 한 화면에 모아 비교합니다. 참여 코드 6자리로 학생이 들어오고, 교사 대시보드와 발표 모드가 따로 있습니다.</p><span class="go">열어보기 ↗</span></a>
       <a class="card" href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html"><h3>과학탐험월드</h3><p>중1·중2 과학 단원별 시뮬레이션과 가상 실험실을 모은 통합 허브. 지금까지 만든 수업 웹앱 대부분이 여기 들어 있습니다.</p><span class="go">열어보기 ↗</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- 교과 수업 자료 -->
-<section class="tile t-white" id="subject">
-  <div class="wrap">
-    <div class="tile-head">
-      <span class="eyebrow">교과 수업 자료</span>
-      <h2 class="display-lg">결국 저는 교과 교사입니다</h2>
-      <p class="lead">칠판에 띄우는 강의 화면과 아이들에게 나눠 주는 학습지, 카드를 모았습니다. 제 교실에서 쓰는 그대로이고, 선생님 수업에 맞게 고쳐 쓰셔도 됩니다.</p>
-    </div>
-    <div class="rows">
-      <div class="row"><span class="n">01</span><div class="b"><a class="main" href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html"><span class="ev">중2 · 전기와 자기 · 칠판용 강의 화면 <span class="sep">·</span>방향키로 넘기는 38장면</span><h3>소비 전력과 전력량 — 전자칠판에 띄우는 강의 화면</h3><p>PPT 대신 HTML 한 장으로 만든 강의 화면입니다. 빈칸이 학습지와 1:1로 맞물려 채워지고, 선풍기가 돌고 주전자가 끓는 소리까지 들어 있습니다. 화살표 키로 넘기시면 됩니다</p></a><div class="sub"><a href="https://scienceisjo.github.io/electricity/">전기와 자기 단원 전체 보기</a></div></div><a class="go" href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html" aria-hidden="true" tabindex="-1">↗</a></div>
-      <div class="row"><span class="n">02</span><div class="b"><a class="main" href="vibecoding/lecture.html"><span class="ev">만드는 방법 <span class="sep">·</span>선생님의 AI에게 그대로 건네는 설계서와 부탁문</span><h3>이런 강의 화면을 직접 만드시려면</h3><p>제가 쓰는 규칙서(무대 크기·단계 진행·빈칸 번호·색 약속·소리·과학 정확성 점검표)와, AI에게 붙여 넣을 부탁문을 그대로 열어 두었습니다. 실제로 이 설계서만 받아 3D 프린터 수업 화면을 만드신 선생님 사례도 함께 담았습니다</p></a><div class="sub"><a href="vibecoding/kit/lecture-spec.md">강의 화면 설계서 원문(.md)</a><a href="vibecoding/">바이브코딩 교안 전체</a></div></div><a class="go" href="vibecoding/lecture.html" aria-hidden="true" tabindex="-1">↗</a></div>
-      <div class="row"><span class="n">03</span><div class="b"><a class="main" href="subject/electricity-worksheet-student.pdf"><span class="ev">중2 · 전기와 자기 · 학습지 <span class="sep">·</span>8장 · 학생용 16쪽 · 정답 포함 24쪽</span><h3>전기와 자기 개념정리 학습지 — 수업 순서 그대로 빈칸</h3><p>차시마다 두 쪽, 제가 설명하는 차례대로 빈칸을 놓았습니다. 칠판 강의 화면의 빈칸과 번호가 1:1로 맞물려 있어 같이 쓰시면 그대로 굴러갑니다. 정답은 학습지 뒤에 한 쪽씩 붙여 둔 교사용에 있습니다</p></a><div class="sub"><a href="subject/electricity-worksheet-teacher.pdf">정답까지 든 교사용 24쪽</a><a href="https://scienceisjo.github.io/electricity/">맞물리는 강의 화면 보기</a></div></div><a class="go" href="subject/electricity-worksheet-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
-      <a class="row" href="subject/electricity-handnote.pdf"><span class="n">04</span><span class="b"><span class="ev">중2 · 전기와 자기 <span class="sep">·</span>PDF 6쪽</span><h3>전기와 자기 손글씨 단권화 — 한 단원을 여섯 쪽에</h3><p>시험 전에 아이들이 들고 다니며 볼 수 있도록 단원 전체를 손글씨로 정리했습니다. 마지막 「찐막 정리」까지 들어 있습니다</p></span><span class="go">↗</span></a>
-      <div class="row"><span class="n">05</span><div class="b"><a class="main" href="subject/electricity-cards.html"><span class="ev">중2 · 전기와 자기 <span class="sep">·</span>카드 15장 · 1350×1080</span><h3>한 장에 한 개념 — 전기와 자기 카드 15장</h3><p>마찰 전기부터 전동기까지, 개념 하나를 카드 한 장에 담았습니다. 수업 끝에 띄워 두거나 인쇄해 교실에 붙여 두셔도 되고, 아이들이 휴대전화로 넘겨 보기도 좋습니다</p></a><div class="sub"><a href="subject/electricity-cards.zip">카드 15장 한 번에 받기(.zip)</a></div></div><a class="go" href="subject/electricity-cards.html" aria-hidden="true" tabindex="-1">↗</a></div>
-      <div class="row"><span class="n">06</span><div class="b"><a class="main" href="subject/electricity-workbook-student.pdf"><span class="ev">중2 · 전기와 자기 · 유형 문제집 <span class="sep">·</span>학생용 25쪽 · 정답과 해설 14쪽</span><h3>WORKOUT — 중단원 유형 문제집</h3><p>중단원별로 유형을 모아 만든 문제집입니다. 문항마다 생각 메모 칸과 틀린 까닭을 적는 칸을 두어, 다시 볼 때 무엇을 몰랐는지가 남도록 했습니다. 정답과 해설은 교사용에 따로 있습니다</p></a><div class="sub"><a href="subject/electricity-workbook-teacher.pdf">정답과 해설(교사용) 14쪽</a></div></div><a class="go" href="subject/electricity-workbook-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
-      <div class="row"><span class="n">07</span><div class="b"><a class="main" href="subject/astronomy-worksheet-student.pdf"><span class="ev">중2 · 별과 우주 · 학습지 <span class="sep">·</span>6차시 개념정리 학습지 · PDF</span><h3>별과 우주 개념정리 학습지 — 손글씨 노트를 그대로 옮겨</h3><p>제가 칠판에 쓰는 순서 그대로 빈칸을 놓고, 그림은 전부 다시 그렸습니다. 학생용과 정답이 든 교사용이 한 벌이고, 학습지 스튜디오에서 열어 고치실 수 있도록 원본 파일도 함께 두었습니다</p></a><div class="sub"><a href="subject/astronomy-worksheet-teacher.pdf">교사용(정답 포함)</a><a href="subject/astronomy-worksheet-json.zip">학습지 스튜디오 원본(.zip)</a><a href="https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/">학습지 스튜디오 열기</a></div></div><a class="go" href="subject/astronomy-worksheet-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
-      <a class="row" href="subject/astronomy-handnote.pdf"><span class="n">08</span><span class="b"><span class="ev">중2 · 별과 우주 <span class="sep">·</span>PDF 6쪽</span><h3>별과 우주 손글씨 단권화 — 한 단원을 여섯 쪽에</h3><p>연주 시차부터 팽창하는 우주까지, 단원 전체를 손글씨로 한 번에 훑도록 정리했습니다. 마지막 「찐막 정리」 한 장이 들어 있습니다</p></span><span class="go">↗</span></a>
-      <div class="row"><span class="n">09</span><div class="b"><a class="main" href="subject/astronomy-cards.html"><span class="ev">중2 · 별과 우주 <span class="sep">·</span>카드 15장 · 1350×1080</span><h3>한 장에 한 개념 — 별과 우주 카드 15장</h3><p>연주 시차, 별의 등급과 색, 성운과 성단, 팽창하는 우주까지 개념 하나를 카드 한 장에 담고, 마지막 한 장에 단원 전체를 다시 묶었습니다</p></a><div class="sub"><a href="subject/astronomy-cards.zip">카드 15장 한 번에 받기(.zip)</a></div></div><a class="go" href="subject/astronomy-cards.html" aria-hidden="true" tabindex="-1">↗</a></div>
     </div>
   </div>
 </section>
@@ -559,6 +580,34 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="subject">
+<!-- 교과 수업 자료 -->
+<section class="tile t-white" id="subject">
+  <div class="wrap">
+    <div class="tile-head">
+      <span class="eyebrow">교과 수업 자료</span>
+      <h2 class="display-lg">결국 저는 교과 교사입니다</h2>
+      <p class="lead">칠판에 띄우는 강의 화면과 아이들에게 나눠 주는 학습지, 카드를 모았습니다. 제 교실에서 쓰는 그대로이고, 선생님 수업에 맞게 고쳐 쓰셔도 됩니다.</p>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="n">01</span><div class="b"><a class="main" href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html"><span class="ev">중2 · 전기와 자기 · 칠판용 강의 화면 <span class="sep">·</span>방향키로 넘기는 38장면</span><h3>소비 전력과 전력량 — 전자칠판에 띄우는 강의 화면</h3><p>PPT 대신 HTML 한 장으로 만든 강의 화면입니다. 빈칸이 학습지와 1:1로 맞물려 채워지고, 선풍기가 돌고 주전자가 끓는 소리까지 들어 있습니다. 화살표 키로 넘기시면 됩니다</p></a><div class="sub"><a href="https://scienceisjo.github.io/electricity/">전기와 자기 단원 전체 보기</a></div></div><a class="go" href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html" aria-hidden="true" tabindex="-1">↗</a></div>
+      <div class="row"><span class="n">02</span><div class="b"><a class="main" href="vibecoding/lecture.html"><span class="ev">만드는 방법 <span class="sep">·</span>선생님의 AI에게 그대로 건네는 설계서와 부탁문</span><h3>이런 강의 화면을 직접 만드시려면</h3><p>제가 쓰는 규칙서(무대 크기·단계 진행·빈칸 번호·색 약속·소리·과학 정확성 점검표)와, AI에게 붙여 넣을 부탁문을 그대로 열어 두었습니다. 실제로 이 설계서만 받아 3D 프린터 수업 화면을 만드신 선생님 사례도 함께 담았습니다</p></a><div class="sub"><a href="vibecoding/kit/lecture-spec.md">강의 화면 설계서 원문(.md)</a><a href="vibecoding/">바이브코딩 교안 전체</a></div></div><a class="go" href="vibecoding/lecture.html" aria-hidden="true" tabindex="-1">↗</a></div>
+      <div class="row"><span class="n">03</span><div class="b"><a class="main" href="subject/electricity-worksheet-student.pdf"><span class="ev">중2 · 전기와 자기 · 학습지 <span class="sep">·</span>8장 · 학생용 16쪽 · 정답 포함 24쪽</span><h3>전기와 자기 개념정리 학습지 — 수업 순서 그대로 빈칸</h3><p>차시마다 두 쪽, 제가 설명하는 차례대로 빈칸을 놓았습니다. 칠판 강의 화면의 빈칸과 번호가 1:1로 맞물려 있어 같이 쓰시면 그대로 굴러갑니다. 정답은 학습지 뒤에 한 쪽씩 붙여 둔 교사용에 있습니다</p></a><div class="sub"><a href="subject/electricity-worksheet-teacher.pdf">정답까지 든 교사용 24쪽</a><a href="https://scienceisjo.github.io/electricity/">맞물리는 강의 화면 보기</a></div></div><a class="go" href="subject/electricity-worksheet-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
+      <a class="row" href="subject/electricity-handnote.pdf"><span class="n">04</span><span class="b"><span class="ev">중2 · 전기와 자기 <span class="sep">·</span>PDF 6쪽</span><h3>전기와 자기 손글씨 단권화 — 한 단원을 여섯 쪽에</h3><p>시험 전에 아이들이 들고 다니며 볼 수 있도록 단원 전체를 손글씨로 정리했습니다. 마지막 「찐막 정리」까지 들어 있습니다</p></span><span class="go">↗</span></a>
+      <div class="row"><span class="n">05</span><div class="b"><a class="main" href="subject/electricity-cards.html"><span class="ev">중2 · 전기와 자기 <span class="sep">·</span>카드 15장 · 1350×1080</span><h3>한 장에 한 개념 — 전기와 자기 카드 15장</h3><p>마찰 전기부터 전동기까지, 개념 하나를 카드 한 장에 담았습니다. 수업 끝에 띄워 두거나 인쇄해 교실에 붙여 두셔도 되고, 아이들이 휴대전화로 넘겨 보기도 좋습니다</p></a><div class="sub"><a href="subject/electricity-cards.zip">카드 15장 한 번에 받기(.zip)</a></div></div><a class="go" href="subject/electricity-cards.html" aria-hidden="true" tabindex="-1">↗</a></div>
+      <div class="row"><span class="n">06</span><div class="b"><a class="main" href="subject/electricity-workbook-student.pdf"><span class="ev">중2 · 전기와 자기 · 유형 문제집 <span class="sep">·</span>학생용 25쪽 · 정답과 해설 14쪽</span><h3>WORKOUT — 중단원 유형 문제집</h3><p>중단원별로 유형을 모아 만든 문제집입니다. 문항마다 생각 메모 칸과 틀린 까닭을 적는 칸을 두어, 다시 볼 때 무엇을 몰랐는지가 남도록 했습니다. 정답과 해설은 교사용에 따로 있습니다</p></a><div class="sub"><a href="subject/electricity-workbook-teacher.pdf">정답과 해설(교사용) 14쪽</a></div></div><a class="go" href="subject/electricity-workbook-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
+      <div class="row"><span class="n">07</span><div class="b"><a class="main" href="subject/astronomy-worksheet-student.pdf"><span class="ev">중2 · 별과 우주 · 학습지 <span class="sep">·</span>6차시 개념정리 학습지 · PDF</span><h3>별과 우주 개념정리 학습지 — 손글씨 노트를 그대로 옮겨</h3><p>제가 칠판에 쓰는 순서 그대로 빈칸을 놓고, 그림은 전부 다시 그렸습니다. 학생용과 정답이 든 교사용이 한 벌이고, 학습지 스튜디오에서 열어 고치실 수 있도록 원본 파일도 함께 두었습니다</p></a><div class="sub"><a href="subject/astronomy-worksheet-teacher.pdf">교사용(정답 포함)</a><a href="subject/astronomy-worksheet-json.zip">학습지 스튜디오 원본(.zip)</a><a href="https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/">학습지 스튜디오 열기</a></div></div><a class="go" href="subject/astronomy-worksheet-student.pdf" aria-hidden="true" tabindex="-1">↗</a></div>
+      <a class="row" href="subject/astronomy-handnote.pdf"><span class="n">08</span><span class="b"><span class="ev">중2 · 별과 우주 <span class="sep">·</span>PDF 6쪽</span><h3>별과 우주 손글씨 단권화 — 한 단원을 여섯 쪽에</h3><p>연주 시차부터 팽창하는 우주까지, 단원 전체를 손글씨로 한 번에 훑도록 정리했습니다. 마지막 「찐막 정리」 한 장이 들어 있습니다</p></span><span class="go">↗</span></a>
+      <div class="row"><span class="n">09</span><div class="b"><a class="main" href="subject/astronomy-cards.html"><span class="ev">중2 · 별과 우주 <span class="sep">·</span>카드 15장 · 1350×1080</span><h3>한 장에 한 개념 — 별과 우주 카드 15장</h3><p>연주 시차, 별의 등급과 색, 성운과 성단, 팽창하는 우주까지 개념 하나를 카드 한 장에 담고, 마지막 한 장에 단원 전체를 다시 묶었습니다</p></a><div class="sub"><a href="subject/astronomy-cards.zip">카드 15장 한 번에 받기(.zip)</a></div></div><a class="go" href="subject/astronomy-cards.html" aria-hidden="true" tabindex="-1">↗</a></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="tabpanel" data-tab="training">
 <!-- 연수 자료 -->
 <section class="tile t-white" id="training">
   <div class="wrap">
@@ -568,9 +617,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
       <p class="lead">연수에서 쓴 자료를 진행한 순서대로 열어 두었습니다. 참석하지 않으셨어도 내용을 따라오실 수 있게 만들었습니다.</p>
     </div>
     <div class="cta-row fold-cta">
-      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="false" aria-controls="trainingFold" data-open="연수 목록 접기" data-closed="연수 목록 펼쳐보기"><span class="lbl">연수 목록 펼쳐보기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="btn btn-ghost fold-btn" type="button" aria-expanded="true" aria-controls="trainingFold" data-open="연수 목록 접기" data-closed="연수 목록 펼쳐보기"><span class="lbl">연수 목록 접기</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
     </div>
-    <div class="fold" id="trainingFold"><div class="fold-in"><div class="fold-body">
+    <div class="fold open" id="trainingFold"><div class="fold-in"><div class="fold-body">
     <div class="rows">
       <a class="row" href="kkoribyeol.html"><span class="n">01</span><span class="b"><span class="ev"><time datetime="2026-06">2026. 6.</time><span class="sep">·</span>2026학년도 교간형 전문적 학습공동체 「꼬리별」 6월 워크숍</span><h3>말로 만드는 과학 수업</h3><p>AI를 활용한 수업 콘텐츠 개발 역량 강화. 코드 대신 말로 시키는 과학 시뮬레이터, ChatGPT·Canva 인포그래픽과 만화까지 보지 말고 손으로 만들어 보는 워크숍</p></span><span class="go">↗</span></a>
       <a class="row" href="lessondesignquiz.html"><span class="n">02</span><span class="b"><span class="ev"><time datetime="2026-06">2026. 6.</time><span class="sep">·</span>2026 학교로 찾아가는 수업 평가혁신 직무연수 · 도곡중학교</span><h3>모두가 답하는 교실</h3><p>온라인 퀴즈·평가 도구를 활용한 참여형 수업 설계. 퀴즈앤·젭퀴즈를 견주어 고르고, 수업 모형과 결합한 퀴즈를 직접 만듭니다 · 2시간 실습</p></span><span class="go">↗</span></a>
@@ -594,6 +643,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="gift">
 <!-- 연수 선물 꾸러미 -->
 <section class="tile t-parch" id="gift">
   <div class="wrap">
@@ -615,6 +667,9 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
   </div>
 </section>
 
+</div>
+
+<div class="tabpanel" data-tab="hello">
 <!-- 닫는 말 -->
 <section class="tile t-dark-3" id="hello">
   <div class="wrap center">
@@ -630,6 +685,86 @@ body.has-bar footer{padding-bottom:calc(64px + var(--s-lg))}
     </div>
   </div>
 </section>
+
+</div>
+
+</main>
+
+<script>
+/* ───── 탭: 한 번에 한 구역만 보이고, 주소의 #이름으로 그 탭이 바로 열린다 ─────
+   자바스크립트가 안 돌면(.js 가 없으면) 예전처럼 한 장으로 이어서 보인다 */
+(function(){
+  var doc=document, root=doc.documentElement;
+  try{
+    var bar=doc.getElementById('tabs');
+    if(!bar || !root.classList.contains('js')) return;
+    var tabs=[].slice.call(bar.querySelectorAll('a[data-tab]'));
+    var panels={};
+    [].forEach.call(doc.querySelectorAll('.tabpanel'),function(p){ panels[p.getAttribute('data-tab')]=p; });
+    var cur=null;
+
+    bar.setAttribute('role','tablist');
+    tabs.forEach(function(a){
+      var id=a.getAttribute('data-tab'), p=panels[id];
+      a.setAttribute('role','tab'); a.id='tab-'+id; a.setAttribute('aria-controls','panel-'+id);
+      p.id='panel-'+id; p.setAttribute('role','tabpanel'); p.setAttribute('aria-labelledby','tab-'+id);
+    });
+
+    function show(id){
+      if(!panels[id]) id='intro';
+      if(id===cur) return;
+      cur=id;
+      for(var k in panels) panels[k].classList.toggle('is-active', k===id);
+      tabs.forEach(function(a){
+        var on=a.getAttribute('data-tab')===id;
+        a.setAttribute('aria-selected', on?'true':'false');
+        a.tabIndex=on?0:-1;
+        if(on && bar.scrollWidth>bar.clientWidth){
+          bar.scrollTo({left:a.offsetLeft-(bar.clientWidth-a.offsetWidth)/2, behavior:'smooth'});
+        }
+      });
+    }
+
+    /* #이름 → 그 이름이 든 탭을 연다. 이 페이지 구역이 아닌 이름은 건드리지 않고 false 를 돌려준다 */
+    function go(hash, how, quiet){
+      var id=(hash||'').replace(/^#/,'');
+      if(!id){ show('intro'); if(!quiet) window.scrollTo({top:0, behavior:'instant'}); return true; }
+      var el=doc.getElementById(id), panel=el && el.closest ? el.closest('.tabpanel') : null;
+      if(!panel) return false;
+      show(panel.getAttribute('data-tab'));
+      if(how && location.hash!=='#'+id){
+        if(how==='push') history.pushState(null,'','#'+id); else history.replaceState(null,'','#'+id);
+      }
+      if(el===panel.querySelector('.tile')) window.scrollTo({top:0, behavior:'instant'});
+      else el.scrollIntoView({behavior:quiet?'auto':'smooth', block:'start'});
+      return true;
+    }
+
+    doc.addEventListener('click',function(e){
+      if(e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
+      var a=e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if(!a || a.getAttribute('href').length<2) return;
+      if(go(a.getAttribute('href'),'push')) e.preventDefault();
+    });
+    function back(){ if(!go(location.hash,null,true)) show('intro'); }
+    window.addEventListener('popstate',back);
+    window.addEventListener('hashchange',back);
+
+    bar.addEventListener('keydown',function(e){
+      var i=tabs.indexOf(doc.activeElement), n=null;
+      if(i<0) return;
+      if(e.key==='ArrowRight') n=tabs[(i+1)%tabs.length];
+      else if(e.key==='ArrowLeft') n=tabs[(i+tabs.length-1)%tabs.length];
+      else if(e.key==='Home') n=tabs[0];
+      else if(e.key==='End') n=tabs[tabs.length-1];
+      if(!n) return;
+      e.preventDefault(); n.focus(); go('#'+n.getAttribute('data-tab'),'replace');
+    });
+
+    back();
+  }catch(err){ root.classList.remove('js'); }
+})();
+</script>
 
 <footer>
   <div class="wrap">
