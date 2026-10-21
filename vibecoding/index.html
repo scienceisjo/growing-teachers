@@ -249,6 +249,20 @@ html[data-mode="present"] .keys{display:block}
 .meta [data-school]::before{content:"🏫 "}
 
 /* 전시실 */
+.roomtabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+.roomtabs button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:8px 16px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink);display:inline-flex;align-items:baseline;gap:6px}
+.roomtabs button small{font-size:.72em;color:var(--ink3)}
+.roomtabs button em{font-style:normal;font-size:.75em;color:var(--ink2);background:var(--bg2);border-radius:9999px;padding:0 7px}
+.roomtabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.roomtabs button[aria-selected="true"] small,.roomtabs button[aria-selected="true"] em{color:#fff;background:transparent}
+.svgcmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.svgcmp .box ul{margin:6px 0 0;padding-left:1.1em;color:var(--ink2);font-size:.93em}
+.svgdemo{border:1px solid var(--line);border-radius:var(--r3);padding:14px 16px;background:#fff;margin:12px 0}
+.svgdemo svg{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+.svgdemo .ctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:.92em}
+.svgdemo input[type=range]{flex:1;min-width:160px;accent-color:var(--blue)}
+.speclinks{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+@media (max-width:720px){.svgcmp{grid-template-columns:1fr}}
 .room{margin:34px 0 6px}
 .room:first-of-type{margin-top:10px}
 .room-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -580,13 +594,40 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <p class="goal">제가 수업과 업무에 쓰려고 만든 것들을 전시실처럼 한 바퀴 둘러보겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">액자를 누르면 크게 보입니다</p>
+      <p class="kw">방을 고르고, 액자를 누르면 크게 보입니다</p>
       <p class="brief">작품마다 무엇에 쓰는지 적어 두었습니다. 마음에 드는 작품에 별을 붙여 두시면 모듈 실습 때 아이디어로 다시 꺼내 보실 수 있습니다.</p>
       <div class="detail">
         <p>액자를 누르면 큰 화면과 함께 비슷한 것을 만들어 보는 첫 부탁이 나옵니다. 실습에서 무엇을 만들지 막막하시면 그 부탁을 복사해 시작하셔도 됩니다. 다른 선생님들이 만든 것은 나눔 시간에 GiteacherHub에서 함께 봅니다.</p>
       </div>
+      <div class="roomtabs" id="roomtabs" role="tablist" aria-label="전시실"></div>
       <div id="gallery"></div>
       <div class="picked" id="picked" hidden><b>별을 붙인 작품</b><ul id="pickedList"></ul></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">과학 그림은 이미지 생성 대신 SVG로 그립니다</p>
+      <p class="brief">제1전시실의 자료는 그림을 전부 SVG(도형과 글자를 좌표로 적는 그림)로 그렸습니다. 과학 교과에서는 이 차이가 큽니다.</p>
+      <div class="svgcmp">
+        <div class="box no"><b>AI 이미지 생성으로 그리면</b><ul><li>그림 속 글자가 깨지거나 엉뚱한 글자가 들어갑니다</li><li>+ − 개수, 화살표 방향, 눈금이 그럴듯하게 틀립니다</li><li>한 곳만 고치려 해도 그림 전체를 다시 뽑아야 합니다</li></ul></div>
+        <div class="box yes"><b>SVG로 그리면</b><ul><li>글자는 글자로 들어가서 깨지지 않고, 인쇄해도 선명합니다</li><li>개수·방향·비율을 숫자로 정하니 틀린 곳을 찾기 쉽습니다</li><li>틀린 곳은 그 줄만 고치면 되고, 움직이게도 만들 수 있습니다</li></ul></div>
+      </div>
+      <div class="svgdemo">
+        <svg id="svgInd" viewBox="0 0 560 190" role="img" aria-label="정전기 유도: (+) 대전체를 가까이 가져가면 금속 막대의 전자가 가까운 쪽으로 모입니다">
+          <rect x="250" y="62" width="280" height="76" rx="10" fill="#f5f5f7" stroke="#86868b" stroke-width="2"/>
+          <g id="indRod"><rect x="0" y="66" width="120" height="68" rx="8" fill="#fbe9e7" stroke="#d64541" stroke-width="2"/><g fill="#d64541" font-size="22" font-weight="700" text-anchor="middle"><text x="30" y="108">+</text><text x="60" y="108">+</text><text x="90" y="108">+</text></g><text x="60" y="56" text-anchor="middle" font-size="14" fill="#1d1d1f">(+) 대전체</text></g>
+          <g id="indPlus" fill="#d64541" font-size="20" font-weight="700" text-anchor="middle"></g>
+          <g id="indMinus"></g>
+          <text x="390" y="168" text-anchor="middle" font-size="14" fill="#1d1d1f">금속 막대</text>
+          <text id="indCount" x="390" y="40" text-anchor="middle" font-size="14" fill="#6e6e73"></text>
+        </svg>
+        <div class="ctl"><span>멀리</span><input type="range" id="indT" min="0" max="100" value="0" aria-label="대전체 거리"><span>가까이</span></div>
+        <p class="small" style="margin:6px 0 0">막대를 밀면 대전체가 다가오고 전자(−)가 가까운 쪽으로 모입니다. 전자 수와 양전하 수는 늘 그대로이고, 이 그림은 SVG 마흔 줄 남짓입니다.</p>
+      </div>
+      <div class="detail">
+        <p>AI에게 그림을 부탁할 때 저는 "이미지 생성 대신 SVG로 직접 그려 줘. 그림 속 글자도 SVG 글자로."라고 덧붙입니다. 오늘 개별 실습 메뉴판의 부탁문에도 이 문장이 모두 들어 있습니다.</p>
+        <p>손글씨 단권화도 같은 방법으로 만들었습니다. 같은 모양을 만드실 수 있도록 쪽 짜임, 색 약속, 그림 규칙, 건네기 전 확인할 것까지 설계서 한 장으로 정리해 두었습니다. 파일을 AI에게 첨부하고 단원 내용만 함께 주시면 됩니다.</p>
+      </div>
+      <div class="speclinks"><a class="btn" href="kit/handnote-spec.md" target="_blank" rel="noopener">📒 손글씨 단권화 설계서(.md)</a><a class="btn" href="kit/lecture-spec.md" target="_blank" rel="noopener">🧑‍🏫 칠판 강의 화면 설계서(.md)</a><a class="btn" href="practice.html" data-keep-s>📋 개별 실습 메뉴판</a></div>
     </div>
   </div>
 </section>
@@ -1250,6 +1291,11 @@ a.mcard:hover{border-color:var(--blue);text-decoration:none}
     <p class="goal">두 가지 질문에 답해 모듈을 고르고, 매뉴얼을 따라 직접 만들어보겠습니다!</p>
 
     <div class="blk">
+      <p class="kw">다음 주 내 수업에 쓸 것 하나를 만들고 싶으시면</p>
+      <div class="submit"><div class="txt"><b>📋 개별 실습 메뉴판</b><span>칠판 강의 화면 · 손글씨 단권화 · 문항 세트 · 시뮬레이션 · 수업 활동 페이지 · 수업 여는 3분 중 하나를 골라 40분 안에 만듭니다. 내 수업을 적으면 부탁문 두 개가 채워져 나옵니다.</span></div><a class="btn big primary" href="practice.html" data-keep-s>메뉴판 열기 →</a></div>
+    </div>
+
+    <div class="blk">
       <p class="kw">두 가지만 답하면 모듈이 정해집니다</p>
       <div class="qz" id="qz">
         <div class="q" id="q1"><b>AI가 준 코드를 파일로 저장해서 브라우저로 열어 보신 적이 있나요?</b>
@@ -1501,7 +1547,7 @@ document.addEventListener('click', e => {
 /* ═══ 전시실 ═══ */
 const G = 'https://scienceisjo.github.io/';
 const ROOMS = [
-  { no: '제1전시실', name: '칠판 강의 화면', d: '학습지 빈칸과 한 장씩 맞춘 강의 화면입니다.', link: ['to-lecture', 'lecture.html', '만드는 법 보기 →'] },
+  { no: '제1전시실', name: '교과 자료', d: '학습지와 맞물리는 칠판 강의 화면, 손글씨 단권화, 유형 문제집, 한 장 카드처럼 제 교과 수업에 바로 쓰는 자료입니다. 그림은 모두 이미지 생성 대신 SVG와 도형으로 그렸습니다.', link: ['to-lecture', 'lecture.html', '강의 화면 만드는 법 보기 →'] },
   { no: '제2전시실', name: '실험실과 단원 웹앱', d: '차시 페이지와 시뮬레이션, 단원을 통째로 담은 웹앱입니다.' },
   { no: '제3전시실', name: '놀이와 이야기', d: '게임과 이야기로 여는 수업, 교실을 깨우는 도구입니다.' },
   { no: '제4전시실', name: '수업이 흐르는 곳', d: '학생이 들어와 기록을 남기는 곳입니다. 서버를 붙여 만들었습니다.', link: ['to-data', 'data.html', '서버 붙이는 법 보기 →'] },
@@ -1518,6 +1564,18 @@ const WORKS = [
     more: [['압력', 'gas-properties/01-pressure-lecture.html'], ['기체의 압력', 'gas-properties/02-gas-pressure-lecture.html'], ['압력과 부피', 'gas-properties/03-boyle-lecture.html']],
     d: '학습지 세 장의 빈칸 48개를 강의 화면 세 벌에 한 장씩 맞췄습니다. 상자 속 기체 입자가 장면 안에서 움직입니다.',
     p: '이 장면에 상자 속 기체 입자가 움직이는 시뮬레이션을 넣어 줘. 입자의 크기는 바뀌지 않게 하고, 온도가 높을수록 빠르게, 부피가 작을수록 벽에 자주 부딪히도록 식으로 계산해 줘.' },
+  { r: 0, id: 'handnote-elec', t: '전기와 자기 손글씨 단권화', tag: '중2 · PDF 6쪽 · 찐막 정리 포함', u: 'growing-teachers/subject/electricity-handnote.pdf',
+    more: [['전기와 자기 6쪽', 'growing-teachers/subject/electricity-handnote.pdf'], ['별과 우주 6쪽', 'growing-teachers/subject/astronomy-handnote.pdf'], ['손글씨 단권화 설계서(.md)', 'growing-teachers/vibecoding/kit/handnote-spec.md']],
+    d: '한 단원을 A4 여섯 쪽 손글씨 노트로 정리한 시험 대비 자료입니다. 전하 그림, 비교 표, 마지막 쪽 「찐막 정리」까지 들어 있고, 그림은 모두 도형으로 그려서 + − 개수와 화살표가 틀어지지 않습니다. 같은 모양으로 만드실 수 있게 설계서를 올려 두었습니다.',
+    p: '첨부한 「손글씨 단권화 설계서」(handnote-spec.md)를 끝까지 읽고 그대로 따라 줘. 단원 내용은 내가 붙여 넣은 교과서·노트 안에서만 쓰고, 먼저 쪽 구성표를 보여 줘.' },
+  { r: 0, id: 'workbook-elec', t: 'WORKOUT · 전기와 자기 유형 문제집', tag: '중2 · 학생용 25쪽 · 정답과 해설 14쪽', u: 'growing-teachers/subject/electricity-workbook-student.pdf',
+    more: [['학생용 25쪽', 'growing-teachers/subject/electricity-workbook-student.pdf'], ['정답과 해설(교사용) 14쪽', 'growing-teachers/subject/electricity-workbook-teacher.pdf']],
+    d: '중단원별 유형을 모아 문항마다 생각 메모 칸과 틀린 까닭 칸을 둔 문제집입니다. 문항 그림도 SVG로 그려서, 그림 속 값을 바꿔 새 문항을 만들기 쉽습니다.',
+    p: '[단원] 확인 문항을 만들고 싶어. 문항을 쓰기 전에 물어볼 것 · 매력적인 오답 · 그 오답이 나오는 생각을 표로 먼저 보여 줘. 그림이 필요하면 이미지 생성 대신 SVG로 직접 그려 줘.' },
+  { r: 0, id: 'cards-elec', t: '한 장에 한 개념 · 카드 15장', tag: '중2 · 전기와 자기 · 별과 우주', u: 'growing-teachers/subject/electricity-cards.html',
+    more: [['전기와 자기 카드', 'growing-teachers/subject/electricity-cards.html'], ['별과 우주 카드', 'growing-teachers/subject/astronomy-cards.html']],
+    d: '개념 하나를 카드 한 장(1350×1080)에 담아 수업 끝에 띄우거나 교실에 붙여 두는 정리 카드입니다. 마지막 한 장에 단원 전체를 다시 묶었습니다.',
+    p: '[단원]의 핵심 개념을 카드 한 장에 하나씩, 열다섯 장으로 정리해 줘. 카드 크기는 1350×1080, 그림은 SVG로 직접 그리고, 먼저 카드별 제목과 한 줄 내용을 표로 보여 줘.' },
   { r: 1, id: 'boyle', t: '과자 봉지 차시 페이지', tag: '중1 · 기체의 성질', u: 'gas-properties/03-boyle.html',
     d: '"산에 오르니 과자 봉지가 부풀었다"에서 출발해, 주사기와 압력 센서로 압력과 부피의 관계를 찾는 차시 페이지입니다. 생각 열기부터 확인하기까지 한 페이지에 담았습니다.',
     p: '[차시 주제] 수업을 생각 열기, 탐구, 정리, 확인하기 순서로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개를 넣어 줘.' },
@@ -1575,7 +1633,7 @@ const WORKS = [
   { r: 4, id: 'worksheet', t: '학습지 스튜디오', tag: '교사 · A4 학습지', u: 'teacher-toolkit/worksheet-studio/',
     d: '수업 내용을 블록으로 조립해 A4 학습지를 만듭니다. 교사용 원본 하나에서 학생용과 정답지를 한 번에 뽑고, [AI로 만들기]에서 AI가 써 준 학습지 파일(JSON)을 붙여넣으면 바로 조판됩니다.',
     p: '학습지 스튜디오의 [AI로 만들기]에 있는 설계서를 채워서 AI에게 주고, 받은 결과를 다시 스튜디오에 붙여넣어 학습지로 만들어 보자.' },
-  { r: 4, id: 'ws-elec', t: '전기와 자기 개념정리 학습지', tag: '중2 · 학습지 스튜디오로 만든 것', u: 'growing-teachers/vibecoding/ws/elec-ws1.pdf',
+  { r: 0, id: 'ws-elec', t: '전기와 자기 개념정리 학습지', tag: '중2 · 학습지 스튜디오로 만든 것', u: 'growing-teachers/vibecoding/ws/elec-ws1.pdf',
     more: [['학습지 1 · 마찰 전기', 'growing-teachers/vibecoding/ws/elec-ws1.pdf'], ['학습지 2 · 정전기 유도', 'growing-teachers/vibecoding/ws/elec-ws2.pdf'], ['학습지 3 · 전류·전압·저항', 'growing-teachers/vibecoding/ws/elec-ws3.pdf'], ['학습지 4 · 옴의 법칙', 'growing-teachers/vibecoding/ws/elec-ws4.pdf'], ['학습지 5 · 직렬·병렬 연결', 'growing-teachers/vibecoding/ws/elec-ws5.pdf'], ['학습지 6 · 전기 에너지의 전환', 'growing-teachers/vibecoding/ws/elec-ws6.pdf'], ['한 장 정리 · 옴의 법칙과 연결', 'growing-teachers/vibecoding/ws/elec-summary.pdf']],
     d: '학습지 스튜디오로 만든 전기와 자기 단원 개념정리 학습지 여섯 장과 한 장 정리입니다. 직렬·병렬과 소비 전력 강의 화면은 학습지 5와 6의 빈칸에 한 장씩 맞췄습니다. 스튜디오가 정답지도 함께 만들어 주지만, 여기에는 학생용만 올렸습니다.',
     p: '첨부한 학습지의 빈칸을 위에서부터 ①, ②, ③ 순서로 번호를 매기고, 빈칸마다 정답과 그 빈칸이 들어 있는 문장을 표로 정리해 줘.' },
@@ -1604,9 +1662,12 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 function linkWithCode(href) { return CODE && !/^https?:/.test(href) ? href + '?s=' + encodeURIComponent(CODE) : href; }
 function renderGallery() {
   let n = 0;
+  WORKS.sort((a, b) => a.r - b.r);
+  const RT = (() => { try { return +(localStorage.getItem(CONFIG.key + ':room') || 0); } catch (e) { return 0; } })();
+  document.getElementById('roomtabs').innerHTML = ROOMS.map((R, ri) => `<button type="button" role="tab" data-room="${ri}" aria-selected="${ri === RT}"><small>${R.no}</small>${R.name}<em>${WORKS.filter(w => w.r === ri).length}</em></button>`).join('');
   document.getElementById('gallery').innerHTML = ROOMS.map((R, ri) => {
     const ws = WORKS.filter(w => w.r === ri);
-    return `<div class="room"><div class="room-h"><span class="no">${R.no}</span><h3>${R.name}</h3><span class="d">${R.d}</span>${R.link ? `<a href="${linkWithCode(R.link[1])}">${R.link[2]}</a>` : ''}</div>
+    return `<div class="room" data-room="${ri}"${ri === RT ? '' : ' hidden'}><div class="room-h"><span class="no">${R.no}</span><h3>${R.name}</h3><span class="d">${R.d}</span>${R.link ? `<a href="${linkWithCode(R.link[1])}">${R.link[2]}</a>` : ''}</div>
       <div class="wall">${ws.map(w => { n++; const no = String(n).padStart(2, '0'); w.no = no; return `<div class="work">
         <button class="frame" type="button" data-w="${w.id}" aria-label="${esc(w.t)} 크게 보기"><img src="gallery/${w.id}.webp" alt="${esc(w.t)} 화면" width="800" height="500" loading="lazy"></button>
         <div class="plate"><span class="wno">작품 ${no}</span><b>${esc(w.t)}</b><span class="tg2">${esc(w.tag)}</span><p>${esc(w.d)}</p></div>
@@ -1641,6 +1702,12 @@ function openWork(id) {
   document.getElementById('lbMore').innerHTML = more + `<button class="star" id="lbStar" type="button" data-star="${w.id}" aria-pressed="${stars.includes(w.id)}">★ 별</button>`;
   if (lb.showModal) lb.showModal(); else lb.setAttribute('open', '');
 }
+document.getElementById('roomtabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-room]'); if (!b) return; const k = b.dataset.room;
+  document.querySelectorAll('#roomtabs [data-room]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+  document.querySelectorAll('#gallery .room').forEach(r => { r.hidden = r.dataset.room !== k; });
+  try { localStorage.setItem(CONFIG.key + ':room', k); } catch (err) {}
+});
 document.addEventListener('click', e => {
   const f = e.target.closest('[data-w]'); if (f) { openWork(f.dataset.w); return; }
   const s = e.target.closest('[data-star]'); if (s) { toggleStar(s.dataset.star); return; }
@@ -1648,6 +1715,22 @@ document.addEventListener('click', e => {
 document.getElementById('lbX').addEventListener('click', () => lb.close());
 lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 renderGallery();
+
+/* ═══ SVG 데모 · 정전기 유도 — 전자 수 6, 양전하 수 6 은 늘 그대로 ═══ */
+(function () {
+  const t = document.getElementById('indT'); if (!t) return;
+  const NS = 'http://www.w3.org/2000/svg', rod = document.getElementById('indRod'), pl = document.getElementById('indPlus'), mi = document.getElementById('indMinus'), cnt = document.getElementById('indCount');
+  const XS = [280, 324, 368, 412, 456, 500];
+  XS.forEach(x => { const e = document.createElementNS(NS, 'text'); e.setAttribute('x', x); e.setAttribute('y', 92); e.textContent = '+'; pl.appendChild(e); });
+  const els = XS.map(() => { const g = document.createElementNS(NS, 'g'); g.innerHTML = '<circle r="11" fill="#eaf2fb" stroke="#2f6fd0" stroke-width="2"/><text y="6" text-anchor="middle" font-size="20" font-weight="700" fill="#2f6fd0">−</text>'; mi.appendChild(g); return g; });
+  function draw() {
+    const k = t.value / 100;
+    rod.setAttribute('transform', `translate(${10 + k * 110},0)`);
+    els.forEach((g, i) => { const home = XS[i], near = 268 + i * 26; const x = home + (near - home) * k; g.setAttribute('transform', `translate(${x},118)`); });
+    cnt.textContent = '양전하 6개 · 전자 6개 (그대로)';
+  }
+  t.addEventListener('input', draw); draw();
+})();
 
 /* ═══ 몸 비유 데모 · 기체 입자 상자 ═══
    2차원 맥스웰 분포(레일리)로 빠르기를 뽑고, 평균 빠르기가 √T 에 비례하게 맞춥니다. 입자 반지름은 그대로. */

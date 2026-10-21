@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개별 실습 메뉴판 · AI 활용 수업 실습 · 해누리중 조승재</title>
+<meta name="description" content="다음 주 내 수업 한 차시에 쓸 것 하나를 메뉴에서 골라 40분 안에 만드는 개별 실습 페이지. 칠판 강의 화면·손글씨 단권화·문항 세트·시뮬레이션·수업 활동 페이지·수업 여는 3분, 메뉴마다 부탁문 두 개와 완성 기준이 있습니다.">
+<link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="dg.css">
+<style>
+
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 강사 ── */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+
+/* ── 도구 고르기 ── */
+.pick{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:0 0 26px;background:var(--bg2)}
+.pick p{margin:0 0 10px;font-weight:600}
+.toolpick{display:flex;flex-wrap:wrap;gap:8px}
+.toolpick button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:9px 18px;font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.toolpick button:hover{border-color:var(--ink2)}
+.toolpick button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toolpick button small{display:block;font-size:.72em;opacity:.8;font-weight:400}
+.tl{display:inline-block;font-size:.72em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.12em .65em;margin-right:.45em;vertical-align:.08em;white-space:nowrap}
+html[data-t] .tl{display:none}
+[hidden]{display:none!important}
+.toolgroup{margin:0 0 12px}
+.toolgroup:last-child{margin-bottom:0}
+.tg{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);margin:0 0 6px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* ── 실습 ── */
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::-webkit-details-marker{display:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+html[data-mode="present"] details.stuck{display:none}
+
+/* ── 비교 상자·링크 카드 ── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box.no b{color:var(--bad)} .box.yes b{color:var(--ok)}
+.box.yes{border-color:var(--ok)}
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+
+/* ── 프롬프트 카드 ── */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 84px 12px 14px;margin:12px 0;font-size:.95em}
+.pr .pl{display:block;font-size:.8em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink)}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.78rem;padding:5px 11px}
+html[data-mode="present"] .pr{font-size:.75em}
+html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
+.fixgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 12px}
+.pr.big .txt{max-height:none}
+html[data-mode="present"] .pr.big .txt{max-height:14em}
+
+/* ── 부탁문 빌더 ── */
+.bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
+.bform .full{grid-column:1/-1}
+.bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.bform input[type=text],.bform select,.bform textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.bform textarea{min-height:4.4em;resize:vertical;line-height:1.5}
+.bform input:focus,.bform select:focus,.bform textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem;cursor:pointer}
+.opts input{width:1.1em;height:1.1em;margin:.2em 0 0;accent-color:var(--blue);flex:none}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 16px}
+html[data-mode="present"] .bform{font-size:.8em}
+
+/* ── 코드 도우미 ── */
+.helper{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:14px 0;background:#fff}
+.helper textarea{width:100%;min-height:9em;font-family:var(--mono);font-size:.82rem;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;resize:vertical;line-height:1.45}
+.helper textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.hbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+.hmsg{font-size:.88em;color:var(--ink2)}
+.hmsg.bad{color:var(--bad)} .hmsg.ok{color:var(--ok)}
+.hframe{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-top:12px}
+.hframe iframe{display:block;width:100%;height:440px;border:0;background:#fff}
+
+/* ── 표 ── */
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+  .bform{grid-template-columns:1fr}
+  .pr{padding-right:14px;padding-top:44px}
+  .fixgrid{grid-template-columns:1fr}
+}
+@media print{
+  .top,.keys,.cue{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+
+/* ── 실습 메뉴판 ── */
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.rule{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff}
+.rule .n{display:inline-flex;width:1.9em;height:1.9em;border-radius:50%;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-weight:600;font-size:.85em;margin-bottom:8px}
+.rule b{display:block;font-size:1.08em;margin-bottom:4px}
+.rule p{margin:0;color:var(--ink2);font-size:.93em}
+.rule.no{background:var(--bg2)} .rule.no .n{background:var(--ink3)}
+.tline{display:grid;grid-template-columns:5fr 25fr 10fr;gap:4px;margin:16px 0 6px}
+.tline div{border-radius:var(--r1);padding:10px 12px;font-size:.9em;background:var(--blue-t);color:var(--blue)}
+.tline div b{display:block;font-size:1.05em}
+.tline div:nth-child(2){background:var(--blue);color:#fff}
+.tline div:nth-child(3){background:var(--ok-t);color:var(--ok)}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:14px 0}
+.mcard{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:8px}
+.mcard.on{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-t)}
+.mcard.rec{border-color:var(--ok)} .mcard.rec .mh::after{content:"추천";font-size:.72em;color:var(--ok);border:1px solid var(--ok);border-radius:9999px;padding:1px 8px;margin-left:auto}
+.mh{display:flex;align-items:center;gap:8px}
+.mh .ic{font-size:1.4em} .mh h3{font-size:1.12rem} .mh .tm{margin-left:auto;font-size:.78em;color:var(--ink2);white-space:nowrap}
+.mcard.rec .mh .tm{margin-left:6px}
+.mcard .out{margin:0;font-weight:600;font-size:.95em}
+.mcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.88em}
+.mcard dt{color:var(--ink3)} .mcard dd{margin:0;color:var(--ink2)}
+.mcard .ex{display:flex;flex-direction:column;gap:2px;font-size:.86em}
+.mcard .pick-m{margin-top:auto}
+.mine{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:12px 0}
+.mine label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
+.mine .full{grid-column:1/-1}
+.mine input,.mine select{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.mine input:focus,.mine select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.quiz2{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:var(--bg2);margin:14px 0}
+.quiz2 .q{font-weight:600;margin:6px 0 8px}
+.quiz2 .opts2{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.opt2{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;background:#fff;cursor:pointer;font:inherit;font-size:.95em}
+.opt2[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-t);color:var(--blue)}
+.quiz2 .res{margin-top:6px;font-weight:600;color:var(--ok);min-height:1.4em}
+.chosen{border:1px solid var(--blue);border-radius:var(--r3);padding:18px 20px;background:#fff}
+.chosen h3{font-size:1.3rem;margin-bottom:4px}
+.chosen .pstep{font-size:.8rem;font-weight:600;color:var(--blue);margin:16px 0 0}
+.fixchips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.fixchips button{border:1px solid var(--line);border-radius:9999px;background:#fff;padding:6px 12px;font:inherit;font-size:.86em;cursor:pointer;text-align:left}
+.fixchips button:hover{border-color:var(--blue)}
+.empty-chosen{color:var(--ink2);border:1px dashed var(--line);border-radius:var(--r3);padding:22px;text-align:center}
+html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display:none}
+@media (max-width:760px){.rules{grid-template-columns:1fr}.mine{grid-template-columns:1fr}.tline{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">개별 실습 메뉴판<small>AI 활용 수업 실습</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <div class="timer" id="timer" title="현재 단계 경과 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan"></span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">AI 활용 수업 실습 · 개별 실습</div>
+    <h1>다음 주 내 수업에 쓸 것 하나</h1>
+    <p class="lead">오늘 실습은 각자 하나씩입니다. 다음 주에 실제로 들어가실 수업 한 차시를 정하고, 메뉴에서 하나만 골라 40분 안에 교실에 띄울 수 있는 상태까지 만들어 보겠습니다!</p>
+    <div class="pipe" aria-label="흐름"><span class="n">내 수업 적기</span><span class="a">→</span><span class="n">메뉴 하나 고르기</span><span class="a">→</span><span class="n">부탁문 두 번</span><span class="a">→</span><span class="n hi">교실 화면에 띄워 보기</span></div>
+    <div class="actions"><a class="btn big primary" href="#s2">내 수업 적으러 가기 ↓</a><a class="btn big" href="./">바이브코딩 허브로</a><a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a></div>
+  </div>
+</header>
+
+<main>
+
+<section class="step" id="s1" data-title="오늘의 약속" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>실습 약속 세 가지</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">「AI로 아무거나 만들어 보세요」가 되지 않도록, 오늘 만들 것의 범위를 먼저 좁혀 보겠습니다!</p>
+    <div class="blk">
+      <div class="rules">
+        <div class="rule"><span class="n">1</span><b>다음 주 내 수업 한 차시</b><p>가상의 수업이 아니라 실제로 들어가실 반, 실제 차시입니다. 그래야 끝나고 바로 쓰실 수 있습니다.</p></div>
+        <div class="rule"><span class="n">2</span><b>메뉴에서 하나만</b><p>여섯 가지 중 하나만 고릅니다. 메뉴마다 부탁문 두 개(설계 → 만들기)와 완성 기준이 있습니다.</p></div>
+        <div class="rule"><span class="n">3</span><b>교실 화면에 띄워 보기까지</b><p>다 만든 기준은 「교실 화면 크기로 열어서 틀린 곳이 없다」입니다. 예쁘게 다듬는 건 그다음입니다.</p></div>
+      </div>
+      <div class="tline" aria-label="40분 나누기"><div><b>5분</b>적고 고르기</div><div><b>25분</b>부탁문 두 번 · 고치기</div><div><b>10분</b>점검 · 올리기</div></div>
+      <div class="detail">
+        <p>연수에서 실습 시간을 드리면 무엇을 만들지 고르다가 시간이 다 가는 경우가 많았습니다. 그래서 오늘은 결과물의 종류를 여섯 가지로 미리 정해 두었습니다. 메뉴는 제가 실제로 수업에 쓰고 있는 것들이고, 메뉴마다 제가 만든 예를 열어 보실 수 있습니다.</p>
+        <p>저는 중학교 교사라 고등학교 수업 내용은 선생님들께서 훨씬 잘 아십니다. 내용은 선생님께서, 만드는 순서와 부탁하는 말은 제가 맡겠습니다!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s2" data-title="내 수업" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>다음 주 내 수업 적기</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">여기 적으신 내용이 아래 부탁문에 저절로 들어갑니다. 이 기기에만 저장됩니다.</p>
+    <div class="blk">
+      <form class="mine" id="mine" autocomplete="off">
+        <label>학년<select name="grade"><option>고1</option><option>고2</option><option>고3</option><option>중1</option><option>중2</option><option>중3</option></select></label>
+        <label>과목<input name="subject" placeholder="예: 통합과학, 화학, 물리학, 생명과학, 지구과학"></label>
+        <label class="full">다음 주 수업 주제(차시)<input name="topic" placeholder="예: 산과 염기의 중화 반응"></label>
+        <label class="full">아이들이 자주 막히는 곳 한 줄<input name="stuck" placeholder="예: 중화가 일어나면 용액이 늘 중성이 된다고 생각한다"></label>
+        <label class="full">띄울 화면<select name="screen"><option>교실 전자칠판</option><option>학생 태블릿·크롬북</option><option>학생 휴대폰</option><option>인쇄(A4)</option></select></label>
+      </form>
+      <p class="small">학생 이름, 학교 이름, 성적은 적지 않습니다. 부탁문에 들어가 AI에게 그대로 넘어가기 때문입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s3" data-title="메뉴 고르기" data-min="3">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>메뉴에서 하나 고르기</h2><span class="min"><b>3</b>분</span></div>
+    <p class="goal">고르기 어려우시면 두 질문에 답해 보세요. 맞는 메뉴에 「추천」이 붙습니다.</p>
+    <div class="blk">
+      <div class="quiz2" id="quiz2">
+        <div class="q">① 지금 가지고 오신 자료는?</div>
+        <div class="opts2" data-q="have"><button type="button" class="opt2" data-v="ws">학습지</button><button type="button" class="opt2" data-v="book">교과서·내 노트</button><button type="button" class="opt2" data-v="none">머릿속 수업 흐름뿐</button></div>
+        <div class="q">② 다음 주 그 수업에서 가장 아쉬운 순간은?</div>
+        <div class="opts2" data-q="when"><button type="button" class="opt2" data-v="open">수업을 열 때</button><button type="button" class="opt2" data-v="explain">설명할 때</button><button type="button" class="opt2" data-v="show">눈에 안 보이는 걸 보여 줄 때</button><button type="button" class="opt2" data-v="check">이해했는지 확인할 때</button><button type="button" class="opt2" data-v="review">단원을 정리할 때</button><button type="button" class="opt2" data-v="flow">학생이 각자 따라갈 때</button></div>
+        <div class="res" id="qres"></div>
+      </div>
+      <div class="mgrid" id="mgrid"><article class="mcard" data-m="lecture"><div class="mh"><span class="ic" aria-hidden="true">🧑‍🏫</span><h3>칠판 강의 화면</h3><span class="tm">40분</span></div>
+<p class="out">학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)</p><dl><dt>가져올 것</dt><dd>쓰고 계신 학습지 한 장(PDF·사진·한글 파일)</dd><dt>이럴 때</dt><dd>설명하는 시간이 긴 차시, 판서가 많은 차시</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html" target="_blank" rel="noopener">소비 전력 강의 화면 ↗</a><a href="lecture.html" target="_blank" rel="noopener">제 방법 그대로 만들기(규칙서) ↗</a></div><button class="btn primary pick-m" type="button" data-m="lecture">이걸로 할게요</button></article><article class="mcard" data-m="handnote"><div class="mh"><span class="ic" aria-hidden="true">📒</span><h3>손글씨 단권화</h3><span class="tm">40분</span></div>
+<p class="out">한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)</p><dl><dt>가져올 것</dt><dd>교과서 해당 쪽이나 내 수업 노트, 단원 차례</dd><dt>이럴 때</dt><dd>시험 전 복습 자료, 단원 마무리</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/growing-teachers/subject/electricity-handnote.pdf" target="_blank" rel="noopener">전기와 자기 손글씨 단권화 ↗</a><a href="kit/handnote-spec.md" target="_blank" rel="noopener">손글씨 단권화 설계서(.md) ↗</a></div><button class="btn primary pick-m" type="button" data-m="handnote">이걸로 할게요</button></article><article class="mcard" data-m="items"><div class="mh"><span class="ic" aria-hidden="true">📝</span><h3>문항 세트와 바로 채점</h3><span class="tm">35분</span></div>
+<p class="out">선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면</p><dl><dt>가져올 것</dt><dd>성취기준이나 교과서 쪽, 기존 문항이 있으면 함께</dd><dt>이럴 때</dt><dd>차시 끝 확인하기, 형성평가</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/growing-teachers/subject/electricity-workbook-student.pdf" target="_blank" rel="noopener">전기와 자기 유형 문제집(학생용) ↗</a></div><button class="btn primary pick-m" type="button" data-m="items">이걸로 할게요</button></article><article class="mcard" data-m="sim"><div class="mh"><span class="ic" aria-hidden="true">🔬</span><h3>시뮬레이션 하나</h3><span class="tm">40분</span></div>
+<p class="out">값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)</p><dl><dt>가져올 것</dt><dd>보여 주고 싶은 관계 하나(예: 부피와 압력)</dd><dt>이럴 때</dt><dd>실험이 어렵거나 눈에 안 보이는 현상</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/sim-lab/" target="_blank" rel="noopener">CLICK SCIENCE 시뮬레이션 모음 ↗</a><a href="https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html" target="_blank" rel="noopener">직렬·병렬 강의 화면 속 움직임 ↗</a></div><button class="btn primary pick-m" type="button" data-m="sim">이걸로 할게요</button></article><article class="mcard" data-m="lesson"><div class="mh"><span class="ic" aria-hidden="true">🗂️</span><h3>수업 활동 페이지</h3><span class="tm">40분</span></div>
+<p class="out">생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지</p><dl><dt>가져올 것</dt><dd>차시 흐름(지도안이나 머릿속 순서)</dd><dt>이럴 때</dt><dd>학생이 각자 기기로 따라가는 차시</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/gas-properties/03-boyle.html" target="_blank" rel="noopener">과자 봉지 차시 페이지 ↗</a></div><button class="btn primary pick-m" type="button" data-m="lesson">이걸로 할게요</button></article><article class="mcard" data-m="hook"><div class="mh"><span class="ic" aria-hidden="true">💡</span><h3>수업 여는 3분</h3><span class="tm">30분</span></div>
+<p class="out">예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면</p><dl><dt>가져올 것</dt><dd>이번 차시에서 아이들이 놀랄 만한 현상 하나</dd><dt>이럴 때</dt><dd>도입이 늘 고민인 차시</dd></dl>
+<div class="ex"><a href="https://scienceisjo.github.io/class-tools/goldenbell/" target="_blank" rel="noopener">도전 골든벨 ↗</a><a href="https://scienceisjo.github.io/class-tools/jarvis/" target="_blank" rel="noopener">자비스 · 수업 도입 도우미 ↗</a></div><button class="btn primary pick-m" type="button" data-m="hook">이걸로 할게요</button></article></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s4" data-title="만들기" data-min="25">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>부탁문 두 번으로 만들기</h2><span class="min"><b>25</b>분</span></div>
+    <p class="goal">설계를 먼저 표로 받고, 표를 고친 다음에 만들어 달라고 하겠습니다!</p>
+    <div class="blk">
+      <div id="chosen"><div class="empty-chosen">3번에서 메뉴를 하나 고르시면 여기에 부탁문이 나옵니다.</div></div>
+      <div class="detail" style="margin-top:16px">
+        <p>처음부터 "만들어 줘"라고 하면 AI가 제 생각대로 다 만들어 버려서 고칠 곳이 많아집니다. 첫 부탁문은 일부러 "코드는 아직 쓰지 마"로 끝납니다. 표를 받으면 틀린 내용, 빠진 장면, 아이들이 막히는 곳을 먼저 고치시고, 그다음 두 번째 부탁문을 보내 주세요.</p>
+        <p>그림은 모두 「이미지 생성 대신 SVG로 직접」이라고 적어 두었습니다. AI 그림은 글자가 깨지고 + − 개수나 화살표 방향이 틀리기 쉽지만, SVG는 도형과 글자를 좌표로 그리기 때문에 틀린 곳을 한 줄만 고치면 됩니다.</p>
+      </div>
+    </div>
+    <div class="blk">
+      <p class="kw">처음 써 보시는 도구라면</p>
+      <div class="grid2">
+        <div class="box"><b>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)</b><p>부탁문을 붙여 넣고 보냅니다. 결과가 코드로만 나오면 "코드 말고 .html 파일로 만들어 줘"라고 한 번 더 말씀하세요. 캔버스·아티팩트 화면이 열리면 거기서 바로 미리 보실 수 있습니다.</p></div>
+        <div class="box"><b>폴더에서 일하는 앱(Codex·Claude Code)</b><p>빈 폴더를 하나 열고, 학습지 같은 자료를 그 폴더에 넣은 뒤 부탁문을 보냅니다. 만든 파일이 폴더에 바로 생깁니다. 자세한 순서는 <a class="to-basic" href="basic.html">① 기초 매뉴얼</a>에 있습니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s5" data-title="점검·나눔" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>점검하고 나누기</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">교실에 띄우기 전에 네 가지만 확인하고, 다 되면 보관함에 올려 주세요!</p>
+    <div class="blk">
+      <ol class="steps" data-key="check">
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">교실 화면 크기로 열어 봤다</span><span class="how">전자칠판이면 전체 화면(F11)으로, 태블릿이면 실제 기기 폭으로.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">과학 내용을 한 번 읽었다</span><span class="how">단위, 부호(+ −), 화살표 방향, 그림 속 개수와 비율. AI는 그럴듯하게 틀립니다.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">학생 개인정보가 없다</span><span class="how">학생 이름·학번·사진을 받거나 보여 주지 않는다.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">파일을 저장했다</span><span class="how">index.html(또는 PDF)을 내 컴퓨터에 받아 두었다.</span></span></li>
+      </ol>
+      <div class="submit"><div class="txt"><b>GiteacherHub에 올리기</b><span>다른 선생님 것도 열어 보실 수 있습니다. 한 줄 소개에는 「어느 수업의 어느 순간에 쓰는지」를 적어 주세요.</span></div><a class="btn big primary" id="toGth" href="../giteacherhub/" target="_blank" rel="noopener">보관함 열기 ↗</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit" style="width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)">© 2026 조승재(과학이조선생) · 해누리중학교 · 최종 업데이트: 2026-10-22</footer>
+
+<script>
+
+const CONFIG = { key: 'vibe-practice' };
+const QS = new URLSearchParams(location.search);
+const CODE = (QS.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+(function () {
+  const sq = CODE ? '?s=' + encodeURIComponent(CODE) : '';
+  document.querySelectorAll('.to-basic').forEach(a => { a.href = 'basic.html' + sq; });
+})();
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ── 모드 ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save = true) {
+  html.dataset.mode = m; modeBtn.textContent = m === 'present' ? '📖 상세로' : '🎤 발표로';
+  if (save) { try { localStorage.setItem(CONFIG.key + ':mode', m); } catch (e) {} }
+}
+(function () { const q = QS.get('mode'); let m = q; if (!m) { try { m = localStorage.getItem(CONFIG.key + ':mode'); } catch (e) {} } setMode(m === 'present' ? 'present' : 'detail', !!q); })();
+modeBtn.addEventListener('click', () => setMode(html.dataset.mode === 'present' ? 'detail' : 'present'));
+
+/* ── 칩·흐름·타이머·키보드·체크칸 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips'), flow = document.getElementById('flow') || document.createElement('div');
+steps.forEach((s, i) => {
+  const title = s.dataset.title || ('단계 ' + (i + 1));
+  const c = document.createElement('a'); c.className = 'chip'; c.href = '#' + s.id; c.innerHTML = `<b>${i + 1}</b>${title}`; chips.appendChild(c);
+  const f = document.createElement('a'); f.href = '#' + s.id; f.innerHTML = `<span class="n">${i + 1}</span><span class="t">${title}</span>`; flow.appendChild(f);
+});
+let current = 0; const chipEls = [...chips.children];
+function setCurrent(i) { current = i; chipEls.forEach((c, j) => { c.classList.toggle('on', j === i); c.classList.toggle('done', j < i); }); updateTimerLabel(); }
+const iob = new IntersectionObserver(es => { const v = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio); if (v.length) setCurrent(steps.indexOf(v[0].target)); }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, .2, .5, 1] });
+steps.forEach(s => iob.observe(s));
+const elapsed = steps.map(() => 0); let running = false, tick = null;
+const tmE = document.getElementById('tmElapsed'), tmT = document.getElementById('tmToggle');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function updateTimerLabel() { tmE.textContent = fmt(elapsed[current]); }
+function toggleTimer() { running = !running; tmT.textContent = running ? '⏸' : '▶'; clearInterval(tick); if (running) tick = setInterval(() => { elapsed[current]++; updateTimerLabel(); }, 1000); }
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', () => { elapsed[current] = 0; updateTimerLabel(); });
+setCurrent(0);
+function go(i) { i = Math.max(0, Math.min(i, steps.length - 1)); steps[i].scrollIntoView({ behavior: 'instant', block: 'start' }); setCurrent(i); }
+document.addEventListener('keydown', e => {
+  const tg = e.target; if ((tg && tg.matches && tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape') { const m = document.querySelector('.modal'); if (m) m.remove(); }
+  if (e.key === 'p') { modeBtn.click(); return; }
+  if (html.dataset.mode !== 'present') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  if (e.key === 't') toggleTimer();
+});
+document.querySelectorAll('.steps').forEach(ol => {
+  const k = CONFIG.key + ':chk:' + (ol.dataset.key || 'x');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const boxes = [...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b, i) => { b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked);
+    b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} }); });
+});
+
+/* ── 알림 ── */
+let toastT;
+function toast(t) { let el = document.querySelector('.toast'); if (!el) { el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); } el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2400); }
+async function copyText(t, btn) {
+  try { await navigator.clipboard.writeText(t); if (btn) { const o = btn.textContent; btn.textContent = '복사했습니다'; setTimeout(() => { btn.textContent = o; }, 1600); } else toast('복사했습니다.'); return true; }
+  catch (e) { toast('복사가 막혀 있습니다. [원문 보기]에서 선택해 복사해 주세요.'); return false; }
+}
+
+
+/* ── 실습 메뉴판 ── */
+const MENUS = {"lecture": {"t": "칠판 강의 화면", "ic": "🧑‍🏫", "p": ["나는 {grade} {subject} 교사야. 다음 수업 주제는 「{topic}」이고, 아이들은 보통 「{stuck}」에서 막혀.\n첨부한 학습지의 빈칸에 위에서부터 ①, ②, ③ 번호를 매기고, 빈칸 하나마다 그 답이 드러나는 장면을 한 장씩 짜서 표로 먼저 보여 줘.\n표 칸: 장면 번호 · 화면에 보일 것 · 내가 할 말 한 줄 · 채워지는 빈칸.\n장면은 15장 이상으로 하고, 아이들이 막히는 곳에는 장면을 더 써 줘. 코드는 아직 쓰지 마.", "좋아. 이 표대로 {screen}에 띄울 칠판 강의 화면을 HTML 파일 하나로 만들어 줘.\n- 오른쪽 화살표나 스페이스를 누르면 한 단계씩 넘어가고, 빈칸은 그 장면에서 답이 채워지게.\n- 그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로.\n- 글자는 교실 뒤에서도 보이게 크게.\n코드는 <!DOCTYPE html>부터 </html>까지 생략 없이 전부."], "done": ["학습지 빈칸 번호와 장면 번호가 1:1로 맞는다", "교실 화면 크기로 열어 맨 뒤에서도 글자가 읽힌다", "그림 속 부호·화살표·단위를 한 번씩 확인했다"], "out": "학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)"}, "handnote": {"t": "손글씨 단권화", "ic": "📒", "p": ["첨부한 「손글씨 단권화 설계서」(handnote-spec.md)를 끝까지 읽고 그대로 따라 줘.\n단원: {grade} {subject} 「{topic}」. 아이들이 자주 헷갈리는 곳: 「{stuck}」.\n단원 내용은 아래에 붙여 넣은 교과서·노트 안에서만 써 줘.\n먼저 설계서에 적힌 쪽 구성표(쪽 · 큰 제목 · 소제목 · 그림 · 표 · ★)를 보여 줘.\n\n[단원 내용]\n(여기에 교과서·노트 내용을 붙여 넣거나 파일을 첨부)", "좋아. 구성표대로 여섯 쪽을 만들어 줘. 그림은 이미지 생성 대신 SVG로 직접 그리고, 설계서의 「건네기 전에 확인할 일곱 가지」를 하나씩 확인한 결과도 끝에 알려 줘."], "done": ["여섯 쪽, 마지막 쪽이 찐막 정리다", "그림의 부호·개수·화살표가 본문과 맞는다", "인쇄 미리보기에서 쪽이 넘치지 않는다(배경 그래픽 켜기)"], "out": "한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)"}, "items": {"t": "문항 세트와 바로 채점", "ic": "📝", "p": ["{grade} {subject} 「{topic}」 확인 문항을 만들고 싶어. 아이들은 「{stuck}」에서 자주 틀려.\n문항을 쓰기 전에 표로 먼저 보여 줘: 물어볼 것 · 문항 유형 · 매력적인 오답 · 그 오답이 나오는 생각(오개념).\n선다형 4개, 서술형 1개. 코드는 아직 쓰지 마.", "이 표대로 문항을 써 줘. 선다형은 정답 하나, 선지 길이는 비슷하게, 부정어(않은, 아닌)는 밑줄. 정답과 해설, 서술형 채점 기준(상·중·하)도 붙여 줘.\n그다음 학생이 풀면 바로 채점되고, 고른 오답마다 왜 틀렸는지 한 줄이 나오는 HTML 파일 하나로 만들어 줘. 그림이 필요하면 SVG로 직접 그려 줘."], "done": ["정답이 하나뿐인지 선지를 하나씩 다시 읽었다", "해설이 교과서 범위를 넘지 않는다", "오답 피드백이 「틀렸습니다」가 아니라 까닭을 말한다"], "out": "선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면"}, "sim": {"t": "시뮬레이션 하나", "ic": "🔬", "p": ["{grade} {subject} 「{topic}」에서 아이들이 「{stuck}」을 어려워해. 이걸 보여 줄 시뮬레이션을 만들고 싶어.\n먼저 표로 정리해 줘: 바꿀 수 있는 값(범위·단위) · 화면에 보일 것 · 둘 사이의 식이나 규칙 · 과학적으로 틀리기 쉬운 부분.\n코드는 아직 쓰지 마.", "표대로 {screen}에서 쓸 HTML 파일 하나로 만들어 줘.\n- 그림은 SVG나 캔버스로 직접 그리고, 값은 표의 식으로 계산해.\n- 지금 값과 단위를 화면에 같이 보여 줘.\n- 결과를 예상하고 나서 확인하도록 [예상하기] 단추를 먼저 두어 줘."], "done": ["슬라이더 양 끝 값에서 결과가 말이 되는지 확인했다", "화면의 단위와 숫자가 식과 맞는다", "그림이 오개념을 만들지 않는다(크기·속도·개수)"], "out": "값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)"}, "lesson": {"t": "수업 활동 페이지", "ic": "🗂️", "p": ["{grade} {subject} 「{topic}」 한 차시를 생각 열기 → 탐구 → 정리 → 확인하기 순서로 짜 줘.\n단계마다 학생이 할 일 · 걸리는 시간 · 내가 던질 질문을 표로. 아이들이 막히는 「{stuck}」은 탐구 단계에서 다루게. 코드는 아직 쓰지 마.", "표대로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개. {screen}에서 쓸 거야. 그림은 SVG로 직접 그리고, 학생 이름은 받지 마."], "done": ["네 단계가 한 차시(45~50분) 안에 들어간다", "확인하기 문제 정답이 맞다", "학생 개인정보를 받지 않는다"], "out": "생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지"}, "hook": {"t": "수업 여는 3분", "ic": "💡", "p": ["{grade} {subject} 「{topic}」 수업 첫 3분에 띄울 질문 화면을 만들고 싶어.\n아이들이 「{stuck}」을 스스로 떠올리게 하는 예상하기 질문 세 개를 먼저 제안해 줘. 질문마다 선택지 · 많이 고를 답 · 실제 답 · 반전 한 줄을 표로. 코드는 아직 쓰지 마.", "이 중 두 번째 질문으로 {screen}에 띄울 화면을 HTML 하나로 만들어 줘. 스페이스를 누를 때마다 질문 → 선택지 → (내가 손든 수 입력) → 정답과 반전 순서로. 글자는 크게, 그림은 SVG로 직접."], "done": ["정답과 반전 설명이 과학적으로 맞다", "3분 안에 끝난다(직접 넘겨 보며 재기)", "본 수업으로 넘어가는 마지막 한 문장이 있다"], "out": "예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면"}};
+const FIX = ["글자를 지금보다 한 단계 크게 키워 줘. 나머지는 그대로 둬.", "이 장면(문항)의 그림에서 [무엇]이 틀렸어. [바른 내용]으로 고쳐 줘. 나머지는 그대로 둬.", "색을 두 가지만 쓰게 줄여 줘: 강조 하나, 나머지는 검정·회색.", "휴대폰 화면에서도 가로로 넘치지 않게 고쳐 줘.", "코드 말고 .html 파일로 만들어 줘.", "끊긴 곳 바로 다음부터 이어서 써 줘."];
+const MK = CONFIG.key + ':mine', PK = CONFIG.key + ':menu';
+const mine = document.getElementById('mine');
+(function () { let v = {}; try { v = JSON.parse(localStorage.getItem(MK) || '{}'); } catch (e) {}
+  const sub = QS.get('subject'); if (sub && !v.subject) v.subject = sub;
+  const gr = QS.get('grade'); if (gr && !v.grade) v.grade = gr;
+  Object.entries(v).forEach(([k, x]) => { if (mine.elements[k]) mine.elements[k].value = x; }); })();
+function val() { const o = {}; ['grade', 'subject', 'topic', 'stuck', 'screen'].forEach(k => o[k] = (mine.elements[k].value || '').trim()); return o; }
+function fill(t) { const v = val(); return t.replace(/\{(grade|subject|topic|stuck|screen)\}/g, (_, k) => v[k] || ({ grade: '○학년', subject: '○○', topic: '수업 주제', stuck: '아이들이 막히는 곳', screen: '교실 화면' })[k]); }
+let picked = ''; try { picked = localStorage.getItem(PK) || ''; } catch (e) {}
+function renderChosen() {
+  const box = document.getElementById('chosen'); const m = MENUS[picked];
+  document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('on', c.dataset.m === picked));
+  if (!m) return;
+  box.innerHTML = `<div class="chosen"><h3>${m.ic} ${esc(m.t)}</h3><p class="small" style="margin:0">${esc(m.out)}</p>
+    <p class="pstep">첫째 부탁 · 설계를 표로 받기</p><div class="pr big"><span class="pl">부탁문 1</span><span class="txt">${esc(fill(m.p[0]))}</span><button class="btn cp" type="button" data-cp="0">복사</button></div>
+    <p class="pstep">둘째 부탁 · 표를 고친 다음 만들기</p><div class="pr big"><span class="pl">부탁문 2</span><span class="txt">${esc(fill(m.p[1]))}</span><button class="btn cp" type="button" data-cp="1">복사</button></div>
+    <p class="pstep">고칠 때 · 한 가지씩, 끝에 「나머지는 그대로 둬」</p><div class="fixchips">${FIX.map((f, i) => `<button type="button" data-fix="${i}">${esc(f)}</button>`).join('')}</div>
+    <p class="pstep">이 메뉴의 완성 기준</p><ol class="steps" data-key="done-${picked}">${m.done.map(d => `<li><input type="checkbox" aria-label="완료"><span><span class="what">${esc(d)}</span></span></li>`).join('')}</ol></div>`;
+  const ol = box.querySelector('.steps'), k = CONFIG.key + ':chk:' + ol.dataset.key; let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
+  const bx = [...ol.querySelectorAll('input')]; bx.forEach((b, i) => { b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked); b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(bx.map(x => x.checked))); } catch (e) {} }); });
+}
+document.getElementById('chosen').addEventListener('click', e => {
+  const c = e.target.closest('[data-cp]'); if (c) { copyText(fill(MENUS[picked].p[+c.dataset.cp]), c); return; }
+  const f = e.target.closest('[data-fix]'); if (f) copyText(FIX[+f.dataset.fix], f);
+});
+mine.addEventListener('input', () => { try { localStorage.setItem(MK, JSON.stringify(val())); } catch (e) {} renderChosen(); });
+mine.addEventListener('change', () => { try { localStorage.setItem(MK, JSON.stringify(val())); } catch (e) {} renderChosen(); });
+document.getElementById('mgrid').addEventListener('click', e => {
+  const b = e.target.closest('.pick-m'); if (!b) return; picked = b.dataset.m; try { localStorage.setItem(PK, picked); } catch (e) {}
+  renderChosen(); document.getElementById('s4').scrollIntoView({ behavior: 'instant', block: 'start' });
+});
+/* 두 질문 → 추천 */
+const ans = {};
+const REC = { open: 'hook', show: 'sim', check: 'items', review: 'handnote', flow: 'lesson' };
+document.getElementById('quiz2').addEventListener('click', e => {
+  const b = e.target.closest('.opt2'); if (!b) return; const g = b.parentElement; ans[g.dataset.q] = b.dataset.v;
+  g.querySelectorAll('.opt2').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  if (!ans.when) return;
+  let r = REC[ans.when] || (ans.have === 'ws' ? 'lecture' : ans.have === 'book' ? 'handnote' : 'lesson');
+  if (ans.when === 'explain' && ans.have !== 'ws') r = ans.have === 'book' ? 'handnote' : 'sim';
+  document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('rec', c.dataset.m === r));
+  document.getElementById('qres').textContent = '추천: ' + MENUS[r].ic + ' ' + MENUS[r].t + (ans.when === 'explain' && ans.have !== 'ws' ? ' (학습지가 있으시면 칠판 강의 화면도 좋습니다)' : '');
+});
+(function () { const sq = CODE ? '?s=' + encodeURIComponent(CODE) : ''; document.getElementById('toGth').href = '../giteacherhub/' + sq; })();
+renderChosen();
+</script>
+<script src="dg.js"></script>
+</body>
+</html>

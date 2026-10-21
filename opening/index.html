@@ -120,6 +120,21 @@ html[data-mode="present"] .verdict .big{font-size:1.9em}
 .avg{font-size:1.4em;font-weight:600;margin-top:10px}
 .avg small{font-size:.6em;color:var(--ink2);font-weight:400;margin-left:6px}
 
+/* 중·고 잇기 */
+.brwall .card{display:flex;flex-direction:column;gap:10px;background:#fff}
+.brwall .card p{margin:0;font-size:1.02em;line-height:1.5}
+.brwall .lk{align-self:flex-start;border:1px solid var(--line);border-radius:9999px;background:var(--bg2);padding:4px 12px;font:inherit;font-size:.86em;cursor:pointer;color:var(--ink2)}
+.brwall .lk b{margin-left:4px;color:var(--blue)}
+.brwall .lk.on{border-color:var(--blue);background:var(--blue-t);color:var(--blue);cursor:default}
+.brwall .card.hot{border-color:var(--blue)}
+.brq form.one{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
+.brq input{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:10px 12px;background:#fff;color:var(--ink);width:100%}
+.brq input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.brwall .empty{grid-column:1/-1;color:var(--ink3);font-size:.9em;padding:8px 0}
+.brq .st{font-size:.8em;color:var(--ink3);margin-top:6px;min-height:1.2em}
+html[data-mode="present"] .brq form,html[data-mode="present"] .brq .small{display:none}
+html[data-mode="present"] .brwall .card p{font-size:1.2em}
+
 /* AI가 본 나 */
 .idbox{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;background:#fff}
 .idsteps{margin:0 0 14px;padding-left:1.3em;color:var(--ink2);font-size:.95em}
@@ -224,6 +239,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     <nav class="tabs" id="tabs">
       <button class="tab on" data-p="hello">1 인사</button>
       <button class="tab" data-p="ice">2 아이스브레이킹</button>
+      <button class="tab" data-p="bridge" id="tabBridge" style="display:none">3 중·고 잇기</button>
       <button class="tab" data-p="ident" id="tabIdent">3 AI가 본 나</button>
       <button class="tab" data-p="gift">4 선물 꾸러미</button>
       <button class="tab" data-p="why">5 신청하신 이유</button>
@@ -329,6 +345,35 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <div class="blk only-detail" id="diagNote" style="display:none">
     <p class="small">판정 기준은 하나입니다. 에이전트를 만들어 봤거나(②) 에이전트가 무엇인지 아는(③ 두 번째·세 번째) 분이 <b>60% 이상</b>이면 공문 한 장으로, 아니면 에이전트 기본 실습으로 갑니다. ④의 희망은 참고로만 봅니다. 결과는 앞 화면에서 같이 보고 정합니다.</p>
   </div>
+</section>
+
+<!-- ═══ 중·고 잇기 (bridge=1 일 때만) ═══ -->
+<section class="panel" id="p-bridge">
+  <h2>고등학교 선생님들께 여쭙니다</h2>
+  <p class="sub">중학교 교사로서 꼭 한번 여쭙고 싶었던 세 가지입니다. 이름 없이 올라가니 편하게 적어 주시고, 다른 선생님 글에 마음이 가면 🤝 공감을 눌러 주세요!</p>
+  <div class="idqr"><div class="qr" id="bridgeQr"></div><div class="small">폰으로 찍어서 이 탭에서 올려 주세요</div></div>
+
+  <div class="blk brq" data-bk="br-not">
+    <p class="kw">중학교에서 「이것」 정말 안 배우나요?</p>
+    <p class="small">"얘들이 이걸 안 배우고 올라온다고?" 싶으셨던 「이것」을 적어 주세요.</p>
+    <form class="one"><input name="body" placeholder="예: 몰(mol), 단위 바꾸기, 그래프 기울기 읽기" maxlength="80" autocomplete="off"><button class="btn primary" type="submit">올리기</button></form>
+    <div class="st"></div><div class="wall brwall"></div>
+  </div>
+
+  <div class="blk brq" data-bk="br-must">
+    <p class="kw">중학교에서 「이것」만큼은 꼭! 가르쳐서 보내 주세요</p>
+    <p class="small">고1 첫 수업에서 이것만 되어 있으면 좋겠다 싶은 「이것」을 적어 주세요.</p>
+    <form class="one"><input name="body" placeholder="예: 실험 결과를 표와 그래프로 정리하기" maxlength="80" autocomplete="off"><button class="btn primary" type="submit">올리기</button></form>
+    <div class="st"></div><div class="wall brwall"></div>
+  </div>
+
+  <div class="blk brq" data-bk="br-mis">
+    <p class="kw">중학교에서 이렇게 배워 와서, 고등학교에서 다시 바로잡으셨던 것</p>
+    <p class="small">아이들 머릿속에 남아 있어서 고등학교에서 다시 고쳐 주셔야 했던 생각이 있다면 적어 주세요.</p>
+    <form class="one"><input name="body" placeholder="예: 전류는 쓰이면서 줄어든다고 생각한다" maxlength="80" autocomplete="off"><button class="btn primary" type="submit">올리기</button></form>
+    <div class="st"></div><div class="wall brwall"></div>
+  </div>
+  <p class="small only-detail">공감 수가 많은 글이 위로 올라옵니다. 모인 글은 제가 중학교 수업을 고칠 때 그대로 쓰겠습니다.</p>
 </section>
 
 <!-- ═══ 3 AI가 본 나 ═══ -->
@@ -516,7 +561,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-07</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-10-22</span></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
@@ -532,7 +577,8 @@ const CODE = (Q.get('s')||'').trim() || 'test';          // 연수 코드 — �
 /* 연수 코드별 기본값 — 주소에 t= to= poll= school= reflect= hide= 가 없으면 여기 것을 씁니다(주소가 짧아도 같은 화면) */
 const PRESET = {
   '2026-yangjin': { t:'공문 한 장, AI 업무 효율화', to:'../ai-work/', poll:'agent', reflect:'https://reflect.do/307c35d8-2680-4168-9019-4449dc12c38b.29386108-9854-7b6e-9583-dd42820fdd8f.dIkpjp7xmCFTLTsNyCxlr1w6K7QTnnBHFUDJgUNZhG6b5SLkW5_K6w9fs_VcsvfiCgglGe5xtkL-WHs6wLje-A' },
-  'geowon-1006': { poll:'vibe', school:'거원중학교', hide:'ice,why' }
+  'geowon-1006': { poll:'vibe', school:'거원중학교', hide:'ice,why' },
+  'gangdong-1023': { poll:'vibe', t:'AI 활용 수업 사례 나눔과 실습', school:'강동송파 수평나 고등 과학 분임', hide:'why,plan', bridge:'1' }
 };
 const PR = PRESET[CODE] || {};
 const POLL = (Q.get('poll')||PR.poll||'').trim();          // poll=agent → 아이스브레이킹 탭 끝에 에이전트 사용 실태 4문항 + 오늘 갈 길 판정 · poll=vibe → 바이브코딩 연수 오프닝
@@ -555,6 +601,8 @@ if(/^https?:\/\//i.test(REFLECT)){
   const rc=document.getElementById('reflectCard'); rc.style.borderBottom='0'; rc.style.paddingBottom='0'; rc.style.marginBottom='0';
 }
 
+const BRIDGE = (Q.get('bridge')||PR.bridge||'').trim()==='1';   // bridge=1 → 「중·고 잇기」 탭(고등학교 선생님께 묻는 세 질문 + 공감)
+if(BRIDGE) document.getElementById('tabBridge').style.display=''; else document.getElementById('p-bridge').remove();
 const IDENT = (Q.get('ident')||'').trim() !== '0';   // ident=0 이면 「AI가 본 나」 탭을 숨김
 if(!IDENT){ document.getElementById('tabIdent').remove(); document.getElementById('p-ident').remove(); }
 /* hide=ice,why → 이번 연수에서 그 탭을 잠금(탭과 내용을 뺌). PRESET 의 hide 도 같음. 선물 꾸러미(gift)는 잠그지 않음 */
@@ -574,7 +622,7 @@ if(VIBE){
   const box=document.getElementById('openLinks');
   [['바이브코딩 허브','오늘 연수 페이지, 모듈 매뉴얼로 가는 길','./'],
    ['디자인 서랍','설계서(DESIGN.md)를 골라 만든 앱에 옷 입히기','design.html'],
-   ['GiteacherHub','교실 앱 보관함, 만든 앱을 올리고 둘러보는 곳','../giteacherhub/']].forEach(([t,d,p],i)=>{
+   ['GiteacherHub','교실 앱 보관함, 만든 앱을 올리고 둘러보는 곳','../giteacherhub/']].concat(BRIDGE?[['개별 실습 메뉴판','오늘 실습에서 만들 것 하나를 고르고 부탁문 받기','practice.html']]:[]).forEach(([t,d,p],i)=>{
     const a=document.createElement('a'); a.className='olink'; a.href=vlink(p); a.target='_blank'; a.rel='noopener';
     a.innerHTML=`<span class="no">${i+1}</span><span><b>${t}</b><span class="d">${d}</span></span>`;
     a.addEventListener('click',()=>{ a.classList.add('done'); a.querySelector('.no').textContent='✓'; });
@@ -600,7 +648,7 @@ modeBtn.addEventListener('click',()=>setMode(html.dataset.mode==='present'?'deta
 const tabs=[...document.querySelectorAll('.tab')];
 function show(p){ tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===p)); document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+p)); history.replaceState(null,'','#'+p); window.scrollTo(0,0); }
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
-const h=location.hash.replace('#',''); if(document.getElementById('p-'+h) && (['hello','ice','ident','gift','why'].includes(h) || (h==='close' && SATIS) || (h==='plan' && VIBE))) show(h);
+const h=location.hash.replace('#',''); if(document.getElementById('p-'+h) && (['hello','ice','ident','gift','why'].includes(h) || (h==='close' && SATIS) || (h==='plan' && VIBE) || (h==='bridge' && BRIDGE))) show(h);
 document.addEventListener('keydown',e=>{ const tg=e.target; if(tg&&tg.matches&&tg.matches('input,textarea')) return; const vt=tabs.filter(t=>t.style.display!=='none'); const i=vt.findIndex(t=>t.classList.contains('on'));
   if(e.key==='ArrowRight'&&i<vt.length-1) show(vt[i+1].dataset.p); if(e.key==='ArrowLeft'&&i>0) show(vt[i-1].dataset.p); if(e.key==='p') modeBtn.click(); });
 
@@ -682,6 +730,47 @@ document.querySelectorAll('.live[data-kind]').forEach(box=>{
   });
   load(); setInterval(()=>{ if(box.closest('.panel').classList.contains('on')) load(); }, CONFIG.pollMs);
 });
+
+
+/* ── 중·고 잇기: 글(kind=br-*) + 공감(kind=br-*-like, name=기기 id, body=글 id) ── */
+(function(){
+  if(!BRIDGE) return;
+  let DEV=''; try{ DEV=localStorage.getItem('opening:dev')||''; }catch(e){}
+  if(!/^d[0-9a-f]{12}$/.test(DEV)){ DEV='d'+[...crypto.getRandomValues(new Uint8Array(6))].map(b=>b.toString(16).padStart(2,'0')).join(''); try{ localStorage.setItem('opening:dev',DEV); }catch(e){} }
+  const panel=document.getElementById('p-bridge');
+  document.querySelectorAll('.brq').forEach(box=>{
+    const K=box.dataset.bk, LK=K+'-like', form=box.querySelector('form'), st=box.querySelector('.st'), wall=box.querySelector('.brwall'), inp=form.elements.body;
+    if(!ready){ st.textContent='CONFIG.supabase 에 주소와 키를 넣고 SETUP_연수라이브.sql 을 실행하면 이 블록이 켜집니다.'; return; }
+    let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem('opening:mine:'+CODE+':'+K)||'[]')); }catch(e){}
+    const liked=new Set();
+    async function load(){
+      try{
+        const [rows,likes]=await Promise.all([fetchRows(K),fetchRows(LK)]);
+        const cnt={}, seen=new Set();
+        likes.forEach(l=>{ const key=l.name+'|'+l.body; if(seen.has(key)) return; seen.add(key); cnt[l.body]=(cnt[l.body]||0)+1; if(l.name===DEV) liked.add(String(l.body)); });
+        rows.sort((a,b)=>(cnt[b.id]||0)-(cnt[a.id]||0) || (b.created_at>a.created_at?1:-1));
+        const top=rows.length?Math.max(...rows.map(r=>cnt[r.id]||0)):0;
+        wall.innerHTML=rows.length?rows.map(r=>{ const c=cnt[r.id]||0, on=liked.has(String(r.id));
+          return `<div class="card${mine.has(r.id)?' mine':''}${top>=2&&c===top?' hot':''}"><p>${esc(r.body)}</p><button type="button" class="lk${on?' on':''}" data-id="${r.id}"${on?' aria-pressed="true"':''}>🤝 ${on?'공감했어요':'공감'}<b>${c}</b></button></div>`; }).join('')
+          :'<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
+      }catch(e){ st.textContent='서버에 닿지 않습니다 ('+e.message+').'; }
+    }
+    wall.addEventListener('click',async e=>{
+      const b=e.target.closest('.lk'); if(!b||b.classList.contains('on')) return;
+      const id=b.dataset.id; liked.add(id); b.classList.add('on'); const n=b.querySelector('b'); n.textContent=+n.textContent+1; b.firstChild.textContent='🤝 공감했어요';
+      try{ await insertRow({kind:LK,name:DEV,body:id,n:null}); }catch(err){ liked.delete(id); st.textContent='공감을 보내지 못했습니다. 다시 눌러 주세요.'; }
+      load();
+    });
+    form.addEventListener('submit',async e=>{
+      e.preventDefault(); const body=(inp.value||'').trim(); if(!body){ inp.focus(); return; }
+      st.textContent='보내는 중…';
+      try{ const row=await insertRow({kind:K,name:'',body,n:null}); if(row){ mine.add(row.id); try{ localStorage.setItem('opening:mine:'+CODE+':'+K,JSON.stringify([...mine])); }catch(e){} }
+        inp.value=''; st.textContent='고맙습니다 🙂'; load(); }
+      catch(err){ st.textContent='보내지 못했습니다 ('+err.message+'). 다시 눌러 주세요.'; }
+    });
+    load(); setInterval(()=>{ if(panel.classList.contains('on')) load(); }, CONFIG.pollMs);
+  });
+})();
 
 /* ── AI가 본 나: 프롬프트 복사 → 한 문장 + 키워드 올리기 (표 yeonsu_live 의 kind=ident·idkw, SQL 변경 없음) ── */
 (function(){
@@ -913,6 +1002,7 @@ function drawQR(){
   qrInto(document.getElementById('giftQr'), new URL(CONFIG.gift,location.href).href);
   if(/^https?:\/\//i.test(REFLECT)) qrInto(document.getElementById('reflectQr'), REFLECT);
   const pq=document.getElementById('planQr'); if(pq&&VIBE){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#plan'; qrInto(pq,u.href); }
+  const bq=document.getElementById('bridgeQr'); if(bq&&BRIDGE){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#bridge'; qrInto(bq,u.href); }
   const iq=document.getElementById('identQr'); if(iq){ const u=new URL(location.href); u.searchParams.delete('mode'); u.searchParams.delete('admin'); u.hash='#ident'; qrInto(iq,u.href); }
 }
 if(window.qrcode) drawQR(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load',drawQR); setTimeout(()=>{ if(!window.qrcode) drawQR(); },2500); }
