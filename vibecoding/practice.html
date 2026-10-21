@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>개별 실습 메뉴판 · AI 활용 수업 실습 · 해누리중 조승재</title>
-<meta name="description" content="다음 주 내 수업 한 차시에 쓸 것 하나를 메뉴에서 골라 40분 동안 만드는 개별 실습 페이지. 칠판 강의 화면·손글씨 단권화·문항 세트·시뮬레이션·수업 활동 페이지·수업 여는 3분·수행평가 채점 기준·실험 데이터 분석·탐구 주제 찾기, 메뉴마다 부탁문 두 개와 완성 기준, 서로 나누는 벽이 있습니다.">
+<title>개별 실습 · AI 활용 수업 실습 · 해누리중 조승재</title>
+<meta name="description" content="판서 수업 중간에 띄우는 개념 설명 화면, 실험실 안전 교육과 실험 과정을 설명하는 실험 안내 화면을 설계서(MD) 두 장과 부탁문 틀로 만드는 개별 실습 페이지. 만든 것과 계획은 나눔 벽에서 서로 피드백합니다.">
 <link rel="icon" type="image/svg+xml" href="../giteacherhub/icon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="dg.css">
@@ -227,44 +227,39 @@ html[data-mode="present"] .keys{display:block}
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 
 
-/* ── 실습 메뉴판 ── */
+/* ── 실습 ── */
 .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
 .rule{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff}
 .rule .n{display:inline-flex;width:1.9em;height:1.9em;border-radius:50%;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-weight:600;font-size:.85em;margin-bottom:8px}
 .rule b{display:block;font-size:1.08em;margin-bottom:4px}
 .rule p{margin:0;color:var(--ink2);font-size:.93em}
-.rule.no{background:var(--bg2)} .rule.no .n{background:var(--ink3)}
-.tline{display:grid;grid-template-columns:5fr 25fr 10fr;gap:4px;margin:16px 0 6px}
+.tline{display:grid;grid-template-columns:5fr 5fr 25fr 5fr;gap:4px;margin:16px 0 6px}
 .tline div{border-radius:var(--r1);padding:10px 12px;font-size:.9em;background:var(--blue-t);color:var(--blue)}
 .tline div b{display:block;font-size:1.05em}
-.tline div:nth-child(2){background:var(--blue);color:#fff}
-.tline div:nth-child(3){background:var(--ok-t);color:var(--ok)}
-.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:14px 0}
-.mcard{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:8px}
-.mcard.on{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-t)}
-.mcard.rec{border-color:var(--ok)} .mcard.rec .mh::after{content:"추천";font-size:.72em;color:var(--ok);border:1px solid var(--ok);border-radius:9999px;padding:1px 8px;margin-left:auto}
-.mh{display:flex;align-items:center;gap:8px}
-.mh .ic{font-size:1.4em} .mh h3{font-size:1.12rem} .mh .tm{margin-left:auto;font-size:.78em;color:var(--ink2);white-space:nowrap}
-.mcard.rec .mh .tm{margin-left:6px}
-.mcard .out{margin:0;font-weight:600;font-size:.95em}
-.mcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.88em}
-.mcard dt{color:var(--ink3)} .mcard dd{margin:0;color:var(--ink2)}
-.mcard .ex{display:flex;flex-direction:column;gap:2px;font-size:.86em}
-.mcard .pick-m{margin-top:auto}
+.tline div:nth-child(3){background:var(--blue);color:#fff}
+.tline div:nth-child(4){background:var(--ok-t);color:var(--ok)}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.tcard{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:6px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.tcard:hover{border-color:var(--blue)}
+.tcard[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-t);background:#fbfdff}
+.tcard .ic{font-size:1.6em} .tcard b{font-size:1.15rem}
+.tcard .when{font-size:.88em;color:var(--blue);font-weight:600}
+.tcard .out{font-size:.9em;color:var(--ink2)}
 .mine{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:12px 0}
 .mine label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
 .mine .full{grid-column:1/-1}
-.mine input,.mine select{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
-.mine input:focus,.mine select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
-.quiz2{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:var(--bg2);margin:14px 0}
-.quiz2 .q{font-weight:600;margin:6px 0 8px}
-.quiz2 .opts2{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-.opt2{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;background:#fff;cursor:pointer;font:inherit;font-size:.95em}
-.opt2[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-t);color:var(--blue)}
-.quiz2 .res{margin-top:6px;font-weight:600;color:var(--ok);min-height:1.4em}
-.chosen{border:1px solid var(--blue);border-radius:var(--r3);padding:18px 20px;background:#fff}
-.chosen h3{font-size:1.3rem;margin-bottom:4px}
-.chosen .pstep{font-size:.8rem;font-weight:600;color:var(--blue);margin:16px 0 0}
+.mine input,.mine select,.mine textarea{font:inherit;font-weight:400;font-size:.95rem;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.mine textarea{min-height:4.6em;resize:vertical;line-height:1.5}
+.mine input:focus,.mine select:focus,.mine textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.files{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.fbox{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;background:#fff}
+.fbox .fn{font-size:.78rem;font-weight:600;color:var(--blue);margin-bottom:6px}
+.fbox p{margin:0 0 10px;color:var(--ink2);font-size:.93em}
+.dl{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line2)}
+.dl span{font-size:.86em;color:var(--ink2)}
+.dla{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px;font-size:.88em}
+.dla .btn{font-size:.8rem;padding:5px 11px}
+.spec{display:flex;flex-direction:column;gap:8px}
 .fixchips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .fixchips button{border:1px solid var(--line);border-radius:9999px;background:#fff;padding:6px 12px;font:inherit;font-size:.86em;cursor:pointer;text-align:left}
 .fixchips button:hover{border-color:var(--blue)}
@@ -294,16 +289,14 @@ form.share input:focus{outline:2px solid var(--blue);outline-offset:1px;border-c
 .sc .lk.on{border-color:var(--blue);background:var(--blue-t);color:var(--blue);cursor:default}
 .swall .empty{grid-column:1/-1;color:var(--ink3);font-size:.9em}
 html[data-mode="present"] form.share,html[data-mode="present"] .sc form{display:none}
-@media (max-width:760px){form.share{grid-template-columns:1fr}}
-html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display:none}
-@media (max-width:760px){.rules{grid-template-columns:1fr}.mine{grid-template-columns:1fr}.tline{grid-template-columns:1fr}}
+@media (max-width:760px){.rules,.tgrid,.files,.mine{grid-template-columns:1fr}.tline{grid-template-columns:1fr}form.share{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <div class="top">
   <div class="wrap">
-    <a class="brand" href="#top">개별 실습 메뉴판<small>AI 활용 수업 실습</small></a>
+    <a class="brand" href="#top">개별 실습<small>AI 활용 수업 실습</small></a>
     <nav class="chips" id="chips" aria-label="단계"></nav>
     <div class="tools">
       <div class="timer" id="timer" title="현재 단계 경과 (t: 시작·멈춤)">
@@ -319,120 +312,97 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
   <div class="wrap">
     <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">AI 활용 수업 실습 · 개별 실습</div>
-    <h1>다음 주 내 수업에 쓸 것 하나</h1>
-    <p class="lead">남은 시간은 실습을 진행하겠습니다! 다음 주에 실제로 들어가실 수업 한 차시를 정하고, 아래 메뉴에서 하나를 골라 40분 동안 만들어 보겠습니다. 계획만 세우셔도 괜찮아요^^ 만든 것과 계획은 맨 아래 나눔 벽에 올려서 다 같이 나누고 공유해요!</p>
-    <div class="pipe" aria-label="흐름"><span class="n">내 수업 적기</span><span class="a">→</span><span class="n">메뉴 하나 고르기</span><span class="a">→</span><span class="n">부탁문 두 번</span><span class="a">→</span><span class="n hi">나눔 벽에 올리기</span></div>
-    <div class="actions"><a class="btn big primary" href="#s2">내 수업 적으러 가기 ↓</a><a class="btn big" href="./">바이브코딩 허브로</a><a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a></div>
+    <h1>다음 주 내 수업에 띄울 화면 하나</h1>
+    <p class="lead">남은 시간은 실습을 진행하겠습니다! 다음 주에 실제로 들어가실 수업 한 차시를 정하고, 아래에서 하나를 골라 40분 동안 만들어 보겠습니다. 계획만 세우셔도 괜찮아요^^ 만든 것과 계획은 맨 아래 나눔 벽에 올려서 다 같이 나누고 공유해요!</p>
+    <div class="pipe" aria-label="흐름"><span class="n">무엇을 만들지 고르기</span><span class="a">→</span><span class="n">파일 두 개 받기</span><span class="a">→</span><span class="n">부탁문 채워 보내기</span><span class="a">→</span><span class="n hi">나눔 벽에 올리기</span></div>
+    <div class="actions"><a class="btn big primary" href="#s2">고르러 가기 ↓</a><a class="btn big" href="./">바이브코딩 허브로</a><a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a></div>
   </div>
 </header>
 
 <main>
 
-<section class="step" id="s1" data-title="오늘의 약속" data-min="3">
+<section class="step" id="s1" data-title="오늘의 실습" data-min="2">
   <div class="wrap">
-    <div class="step-h"><span class="num">1</span><h2>실습 약속 세 가지</h2><span class="min"><b>3</b>분</span></div>
-    <p class="goal">시작하시기 전에 세 가지만 기억해 주세요!</p>
+    <div class="step-h"><span class="num">1</span><h2>오늘 만들 것</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">수업 전체가 아니라, 수업 중에 띄울 화면 하나만 만들어 보겠습니다!</p>
     <div class="blk">
       <div class="rules">
-        <div class="rule"><span class="n">1</span><b>다음 주 내 수업 한 차시</b><p>가상의 수업이 아니라 실제로 들어가실 반, 실제 차시입니다. 그래야 끝나고 바로 쓰실 수 있습니다.</p></div>
-        <div class="rule"><span class="n">2</span><b>메뉴에서 하나만</b><p>아홉 가지 중 하나만 고릅니다. 메뉴마다 부탁문 두 개(설계 → 만들기)와 완성 기준이 있습니다.</p></div>
-        <div class="rule"><span class="n">3</span><b>교실 화면에 띄워 보기까지</b><p>교실 화면 크기로 열었을 때 틀린 곳이 없으면 완성입니다. 시간이 모자라면 계획만 세우셔도 괜찮습니다.</p></div>
+        <div class="rule"><span class="n">1</span><b>판서 사이에 띄울 화면 하나</b><p>눈으로 봐야 이해되는 개념 하나, 또는 실험 전 안전 교육과 실험 과정. 둘 중 하나면 충분합니다.</p></div>
+        <div class="rule"><span class="n">2</span><b>파일 두 개와 부탁문 하나</b><p>설계서(MD) 한 장과 디자인 설계서(DESIGN.md) 한 장을 받아 AI에게 붙이고, 부탁문 칸을 채워 보냅니다.</p></div>
+        <div class="rule"><span class="n">3</span><b>계획만 세우셔도 괜찮습니다</b><p>다 못 만드셔도 장면 목록 표까지 받으시면 다음에 이어서 만드실 수 있습니다.</p></div>
       </div>
-      <div class="tline" aria-label="40분 나누기"><div><b>5분</b>적고 고르기</div><div><b>25분</b>부탁문 두 번 · 고치기</div><div><b>10분</b>점검 · 나눔 벽</div></div>
+      <div class="tline" aria-label="40분 나누기"><div><b>5분</b>고르고 적기</div><div><b>5분</b>파일 받기</div><div><b>25분</b>보내고 대화하며 고치기</div><div><b>5분</b>나눔 벽</div></div>
       <div class="detail">
-        <p>메뉴 가운데 여섯 가지는 제가 실제로 수업에 쓰고 있는 것이라 제가 만든 예를 열어 보실 수 있습니다. 수행평가, 실험 데이터, 탐구 주제 세 가지는 고등학교 수업에 맞춰 더했습니다.</p>
-        <p>고등학교 수업 내용은 선생님들께서 저보다 훨씬 잘 아십니다. 내용은 선생님께서, 만드는 순서와 부탁하는 말은 제가 맡겠습니다!</p>
+        <p>고등학교 수업은 판서로 하시는 경우가 많아서, 수업 전체를 HTML로 옮기실 필요는 없다고 생각합니다. 판서로 설명하시다가 움직이는 그림이 있어야 하는 순간, 실험실에서 안전 수칙과 과정을 한 번에 보여 드려야 하는 순간에 쓰실 화면 하나를 만들어 가시면 좋겠습니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="step" id="s2" data-title="내 수업" data-min="2">
+<section class="step" id="s2" data-title="고르고 적기" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">2</span><h2>다음 주 내 수업 적기</h2><span class="min"><b>2</b>분</span></div>
-    <p class="goal">여기 적으신 내용이 아래 부탁문에 저절로 들어갑니다. 이 기기에만 저장됩니다.</p>
+    <div class="step-h"><span class="num">2</span><h2>무엇을 만들지 고르고, 내 수업 적기</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">셋 중 하나를 고르시고, 아래 칸을 채워 주세요. 적으신 내용이 부탁문에 그대로 들어갑니다.</p>
     <div class="blk">
+      <div class="tgrid" id="tgrid"><button type="button" class="tcard" data-t="concept" aria-pressed="false"><span class="ic" aria-hidden="true">💡</span><b>개념 설명 화면</b><span class="when">눈으로 봐야 이해되는 개념 하나를 설명할 때</span><span class="out">판서하시다가 띄우는 6~12장면짜리 화면. 움직이는 그림이나 값을 바꿔 보는 시뮬레이션이 들어갑니다.</span></button><button type="button" class="tcard" data-t="lab" aria-pressed="false"><span class="ic" aria-hidden="true">🧪</span><b>실험 안내 화면</b><span class="when">실험 전에 안전 교육과 실험 과정을 설명할 때</span><span class="out">안전 수칙 → 준비물 → 과정 → 정리 순서로 넘기는 화면. 마지막에 안전 확인 세 문제와 인쇄용 점검표가 나옵니다.</span></button><button type="button" class="tcard" data-t="free" aria-pressed="false"><span class="ic" aria-hidden="true">✏️</span><b>만들고 싶었던 것</b><span class="when">위 두 가지가 아닌 것을 만들고 싶을 때</span><span class="out">평소 있었으면 했던 수업 도구를 디자인 설계서 하나만 붙여 만듭니다.</span></button></div>
       <form class="mine" id="mine" autocomplete="off">
         <label>학년<select name="grade"><option>고1</option><option>고2</option><option>고3</option><option>중1</option><option>중2</option><option>중3</option></select></label>
         <label>과목<input name="subject" placeholder="예: 통합과학, 화학, 물리학, 생명과학, 지구과학"></label>
         <label class="full">다음 주 수업 주제(차시)<input name="topic" placeholder="예: 산과 염기의 중화 반응"></label>
         <label class="full">아이들이 자주 막히는 곳 한 줄<input name="stuck" placeholder="예: 중화가 일어나면 용액이 늘 중성이 된다고 생각한다"></label>
-        <label class="full">띄울 화면<select name="screen"><option>교실 전자칠판</option><option>학생 태블릿·크롬북</option><option>학생 휴대폰</option><option>인쇄(A4)</option></select></label>
+        <label class="full">띄울 화면<select name="screen"><option>교실 전자칠판</option><option>실험실 프로젝터</option><option>학생 태블릿·크롬북</option></select></label>
+        <div class="full" id="extra"></div>
       </form>
-      <p class="small">학생 이름, 학교 이름, 성적은 적지 않습니다. 부탁문에 들어가 AI에게 그대로 넘어가기 때문입니다.</p>
+      <p class="small">학생 이름, 학교 이름, 성적은 적지 않습니다. 부탁문에 들어가 AI에게 그대로 넘어가기 때문입니다. 적으신 내용은 이 기기에만 저장됩니다.</p>
     </div>
   </div>
 </section>
 
-<section class="step" id="s3" data-title="메뉴 고르기" data-min="3">
+<section class="step" id="s3" data-title="파일 받기" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>메뉴에서 하나 고르기</h2><span class="min"><b>3</b>분</span></div>
-    <p class="goal">고르기 어려우시면 두 질문에 답해 보세요. 맞는 메뉴에 「추천」이 붙습니다.</p>
+    <div class="step-h"><span class="num">3</span><h2>파일 두 개 받기</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">받으신 두 파일을 AI 채팅 창에 끌어다 놓으시면 됩니다!</p>
     <div class="blk">
-      <div class="quiz2" id="quiz2">
-        <div class="q">① 지금 가지고 오신 자료는?</div>
-        <div class="opts2" data-q="have"><button type="button" class="opt2" data-v="ws">학습지</button><button type="button" class="opt2" data-v="book">교과서·내 노트</button><button type="button" class="opt2" data-v="none">머릿속 수업 흐름뿐</button></div>
-        <div class="q">② 다음 주 그 수업에서 가장 아쉬운 순간은?</div>
-        <div class="opts2" data-q="when"><button type="button" class="opt2" data-v="open">수업을 열 때</button><button type="button" class="opt2" data-v="explain">설명할 때</button><button type="button" class="opt2" data-v="show">눈에 안 보이는 걸 보여 줄 때</button><button type="button" class="opt2" data-v="check">이해했는지 확인할 때</button><button type="button" class="opt2" data-v="review">단원을 정리할 때</button><button type="button" class="opt2" data-v="flow">학생이 각자 따라갈 때</button><button type="button" class="opt2" data-v="assess">수행평가를 준비할 때</button><button type="button" class="opt2" data-v="data">실험 데이터를 다룰 때</button><button type="button" class="opt2" data-v="inq">탐구 주제를 정할 때</button></div>
-        <div class="res" id="qres"></div>
+      <div class="files">
+        <div class="fbox"><div class="fn">① 무엇을 어떻게 만들지 — 설계서</div><div class="spec" id="specBox"><p>2번에서 고르시면 맞는 설계서가 여기 나옵니다.</p></div></div>
+        <div class="fbox"><div class="fn">② 어떤 모양으로 — 디자인 설계서(DESIGN.md)</div><p>하나만 고르세요. 프로젝터로 띄우실 거라 밝은 바탕으로 골랐습니다.</p>
+          <div class="dl"><b>모눈 노트</b><span>모눈 바탕 + 빨간 펜 하나, 차분하게 읽히는 화면</span><div class="dla"><a href="design/kr/graph-note/" target="_blank" rel="noopener">예시 보기 ↗</a><button type="button" class="btn" data-dl="design/kr/graph-note.md" data-as="DESIGN.md">DESIGN.md 받기</button></div></div><div class="dl"><b>양피지 잉크</b><span>종이 바탕 + 남색 잉크, 선만 쓰는 단정한 화면</span><div class="dla"><a href="design/kr/parchment-ink/" target="_blank" rel="noopener">예시 보기 ↗</a><button type="button" class="btn" data-dl="design/kr/parchment-ink.md" data-as="DESIGN.md">DESIGN.md 받기</button></div></div><div class="dl"><b>햇살 게시판</b><span>파스텔 면 + 굵은 외곽선, 밝고 활기찬 화면</span><div class="dla"><a href="design/kr/sunny-board/" target="_blank" rel="noopener">예시 보기 ↗</a><button type="button" class="btn" data-dl="design/kr/sunny-board.md" data-as="DESIGN.md">DESIGN.md 받기</button></div></div>
+          <div class="dl"><b>다른 디자인</b><span>설계서 80여 개가 있는 디자인 서랍에서 고르셔도 됩니다.</span><div class="dla"><a href="design.html" target="_blank" rel="noopener">디자인 서랍 열기 ↗</a></div></div></div>
       </div>
-      <div class="mgrid" id="mgrid"><article class="mcard" data-m="lecture"><div class="mh"><span class="ic" aria-hidden="true">🧑‍🏫</span><h3>칠판 강의 화면</h3><span class="tm">40분</span></div>
-<p class="out">학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)</p><dl><dt>가져올 것</dt><dd>쓰고 계신 학습지 한 장(PDF·사진·한글 파일)</dd><dt>이럴 때</dt><dd>설명하는 시간이 긴 차시, 판서가 많은 차시</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/electricity/share/06-power-lecture.html" target="_blank" rel="noopener">소비 전력 강의 화면 ↗</a><a href="lecture.html" target="_blank" rel="noopener">제 방법 그대로 만들기(규칙서) ↗</a></div><button class="btn primary pick-m" type="button" data-m="lecture">이걸로 할게요</button></article><article class="mcard" data-m="handnote"><div class="mh"><span class="ic" aria-hidden="true">📒</span><h3>손글씨 단권화</h3><span class="tm">40분</span></div>
-<p class="out">한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)</p><dl><dt>가져올 것</dt><dd>교과서 해당 쪽이나 내 수업 노트, 단원 차례</dd><dt>이럴 때</dt><dd>시험 전 복습 자료, 단원 마무리</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/growing-teachers/subject/electricity-handnote.pdf" target="_blank" rel="noopener">전기와 자기 손글씨 단권화 ↗</a><a href="kit/handnote-spec.md" target="_blank" rel="noopener">손글씨 단권화 설계서(.md) ↗</a></div><button class="btn primary pick-m" type="button" data-m="handnote">이걸로 할게요</button></article><article class="mcard" data-m="items"><div class="mh"><span class="ic" aria-hidden="true">📝</span><h3>문항 세트와 바로 채점</h3><span class="tm">35분</span></div>
-<p class="out">선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면</p><dl><dt>가져올 것</dt><dd>성취기준이나 교과서 쪽, 기존 문항이 있으면 함께</dd><dt>이럴 때</dt><dd>차시 끝 확인하기, 형성평가</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/growing-teachers/subject/electricity-workbook-student.pdf" target="_blank" rel="noopener">전기와 자기 유형 문제집(학생용) ↗</a></div><button class="btn primary pick-m" type="button" data-m="items">이걸로 할게요</button></article><article class="mcard" data-m="sim"><div class="mh"><span class="ic" aria-hidden="true">🔬</span><h3>시뮬레이션 하나</h3><span class="tm">40분</span></div>
-<p class="out">값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)</p><dl><dt>가져올 것</dt><dd>보여 주고 싶은 관계 하나(예: 부피와 압력)</dd><dt>이럴 때</dt><dd>실험이 어렵거나 눈에 안 보이는 현상</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/sim-lab/" target="_blank" rel="noopener">CLICK SCIENCE 시뮬레이션 모음 ↗</a><a href="https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html" target="_blank" rel="noopener">직렬·병렬 강의 화면 속 움직임 ↗</a></div><button class="btn primary pick-m" type="button" data-m="sim">이걸로 할게요</button></article><article class="mcard" data-m="lesson"><div class="mh"><span class="ic" aria-hidden="true">🗂️</span><h3>수업 활동 페이지</h3><span class="tm">40분</span></div>
-<p class="out">생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지</p><dl><dt>가져올 것</dt><dd>차시 흐름(지도안이나 머릿속 순서)</dd><dt>이럴 때</dt><dd>학생이 각자 기기로 따라가는 차시</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/gas-properties/03-boyle.html" target="_blank" rel="noopener">과자 봉지 차시 페이지 ↗</a></div><button class="btn primary pick-m" type="button" data-m="lesson">이걸로 할게요</button></article><article class="mcard" data-m="hook"><div class="mh"><span class="ic" aria-hidden="true">💡</span><h3>수업 여는 3분</h3><span class="tm">30분</span></div>
-<p class="out">예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면</p><dl><dt>가져올 것</dt><dd>이번 차시에서 아이들이 놀랄 만한 현상 하나</dd><dt>이럴 때</dt><dd>도입이 늘 고민인 차시</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/class-tools/goldenbell/" target="_blank" rel="noopener">도전 골든벨 ↗</a><a href="https://scienceisjo.github.io/class-tools/jarvis/" target="_blank" rel="noopener">자비스 · 수업 도입 도우미 ↗</a></div><button class="btn primary pick-m" type="button" data-m="hook">이걸로 할게요</button></article><article class="mcard" data-m="rubric"><div class="mh"><span class="ic" aria-hidden="true">📋</span><h3>수행평가 채점 기준과 자기 점검표</h3><span class="tm">35분</span></div>
-<p class="out">과제 안내문 + 채점 기준표(상·중·하) + 학생이 내기 전에 스스로 확인하는 점검 화면</p><dl><dt>가져올 것</dt><dd>수행평가 계획(평가 요소와 배점)</dd><dt>이럴 때</dt><dd>서술형·보고서·발표 수행평가</dd></dl>
-<div class="ex"></div><button class="btn primary pick-m" type="button" data-m="rubric">이걸로 할게요</button></article><article class="mcard" data-m="datalab"><div class="mh"><span class="ic" aria-hidden="true">📈</span><h3>실험 데이터 분석 페이지</h3><span class="tm">40분</span></div>
-<p class="out">측정값을 표에 넣으면 그래프·추세선·기울기가 나오는 분석 화면</p><dl><dt>가져올 것</dt><dd>실험 하나와 측정하는 두 양(단위까지)</dd><dt>이럴 때</dt><dd>탐구 실험, 그래프 해석 수업</dd></dl>
-<div class="ex"><a href="https://scienceisjo.github.io/mblclasshub/" target="_blank" rel="noopener">MBL 센서 수업 허브 ↗</a></div><button class="btn primary pick-m" type="button" data-m="datalab">이걸로 할게요</button></article><article class="mcard" data-m="inquiry"><div class="mh"><span class="ic" aria-hidden="true">🧭</span><h3>탐구 주제 찾기 도우미</h3><span class="tm">35분</span></div>
-<p class="out">관심 분야를 고르면 이 단원 개념과 이어지는 탐구 질문 후보와 점검 질문이 나오는 화면</p><dl><dt>가져올 것</dt><dd>과제탐구·탐구 보고서 과제 조건</dd><dt>이럴 때</dt><dd>과제탐구, 탐구 보고서, 주제 탐구 활동</dd></dl>
-<div class="ex"></div><button class="btn primary pick-m" type="button" data-m="inquiry">이걸로 할게요</button></article></div>
+      <div class="detail"><p>설계서는 AI에게 「무엇을, 어떤 순서로, 무엇을 지키며」 만들지 알려 주는 글이고, 디자인 설계서는 색과 글꼴, 모양을 알려 주는 글입니다. 두 장을 붙여 두면 부탁문은 짧게 써도 됩니다. 두 파일 모두 열어서 읽어 보시고 마음대로 고쳐 쓰셔도 됩니다.</p></div>
     </div>
   </div>
 </section>
 
-<section class="step" id="s4" data-title="만들기" data-min="25">
+<section class="step" id="s4" data-title="보내고 고치기" data-min="25">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>부탁문 두 번으로 만들기</h2><span class="min"><b>25</b>분</span></div>
-    <p class="goal">설계를 먼저 표로 받고, 표를 고친 다음에 만들어 달라고 하겠습니다!</p>
+    <div class="step-h"><span class="num">4</span><h2>부탁문 보내고, 대화하며 고치기</h2><span class="min"><b>25</b>분</span></div>
+    <p class="goal">파일 두 개를 붙인 채로 부탁문을 보내고, 받은 표를 보며 고쳐 나가 보겠습니다!</p>
     <div class="blk">
-      <div id="chosen"><div class="empty-chosen">3번에서 메뉴를 하나 고르시면 여기에 부탁문이 나옵니다.</div></div>
-      <div class="detail" style="margin-top:16px">
-        <p>처음부터 "만들어 줘"라고 하면 AI가 제 생각대로 다 만들어 버려서 고칠 곳이 많아집니다. 첫 부탁문은 일부러 "코드는 아직 쓰지 마"로 끝납니다. 표를 받으면 틀린 내용, 빠진 장면, 아이들이 막히는 곳을 먼저 고치시고, 그다음 두 번째 부탁문을 보내 주세요.</p>
-        <p>그림은 모두 「이미지 생성 대신 SVG로 직접」이라고 적어 두었습니다. AI 그림은 글자가 깨지고 + − 개수나 화살표 방향이 틀리기 쉽지만, SVG는 도형과 글자를 좌표로 그리기 때문에 틀린 곳을 한 줄만 고치면 됩니다.</p>
-      </div>
+      <div id="chosen"><div class="empty-chosen">2번에서 무엇을 만들지 고르시면 여기에 부탁문이 나옵니다.</div></div>
     </div>
     <div class="blk">
-      <p class="kw">바이브코딩 매뉴얼 하 · 중 · 상</p>
+      <p class="kw">순서가 더 필요하시면 · 바이브코딩 매뉴얼 하 · 중 · 상</p>
       <p class="brief">순서를 하나하나 따라가고 싶으시면 아래 매뉴얼을 여셔도 됩니다. 그래도 저는 만들고 싶으신 것을 AI에게 말로 설명하고, 대화하면서 고쳐 나가시는 방법을 더 추천합니다!</p>
       <div class="lvgrid">
         <a class="lv to-basic" href="basic.html" target="_blank" rel="noopener"><span class="lt">하</span><b>① 기초 · 말로 만들기</b><span>AI가 준 코드를 파일로 저장해서 열어 보는 것부터</span></a>
-        <a class="lv" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><span class="lt">중</span><b>② 배포 · 내 도구에 주소 붙이기</b><span>GitHub Pages로 학생에게 줄 링크 만들기 (<span class="sub2">Netlify·Vercel도 있음</span>)</span></a>
+        <a class="lv" href="https://scienceisjo.github.io/githubmanual/forstudent.html" target="_blank" rel="noopener"><span class="lt">중</span><b>② 배포 · 내 도구에 주소 붙이기</b><span>GitHub Pages로 학생에게 줄 링크 만들기 (Netlify·Vercel도 있음)</span></a>
         <a class="lv" href="data.html" target="_blank" rel="noopener"><span class="lt">상</span><b>③ 데이터·AI 연결하기</b><span>학생 제출을 모으는 서버와 AI API 붙이기</span></a>
-        <a class="lv" href="lecture.html" target="_blank" rel="noopener"><span class="lt">+</span><b>칠판 강의 화면 매뉴얼</b><span>학습지 한 장을 강의 화면으로, 제 방법 그대로</span></a>
       </div>
     </div>
     <div class="blk">
       <p class="kw">처음 써 보시는 도구라면</p>
       <div class="grid2">
-        <div class="box"><b>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)</b><p>부탁문을 붙여 넣고 보냅니다. 결과가 코드로만 나오면 "코드 말고 .html 파일로 만들어 줘"라고 한 번 더 말씀하세요. 캔버스·아티팩트 화면이 열리면 거기서 바로 미리 보실 수 있습니다.</p></div>
-        <div class="box"><b>폴더에서 일하는 앱(Codex·Claude Code)</b><p>빈 폴더를 하나 열고, 학습지 같은 자료를 그 폴더에 넣은 뒤 부탁문을 보냅니다. 만든 파일이 폴더에 바로 생깁니다. 자세한 순서는 <a class="to-basic" href="basic.html">① 기초 매뉴얼</a>에 있습니다.</p></div>
+        <div class="box"><b>웹 채팅(ChatGPT·Claude·Gemini·SenGPT)</b><p>파일 두 개를 끌어다 놓고 부탁문을 붙여 보냅니다. 결과가 코드로만 나오면 "코드 말고 .html 파일로 만들어 줘"라고 한 번 더 말씀하세요. 캔버스·아티팩트 화면이 열리면 거기서 바로 미리 보실 수 있습니다.</p></div>
+        <div class="box"><b>폴더에서 일하는 앱(Codex·Claude Code)</b><p>빈 폴더에 두 파일을 넣고 부탁문을 보냅니다. 만든 파일이 폴더에 바로 생깁니다.</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="step" id="s5" data-title="나눔 벽" data-min="10">
+<section class="step" id="s5" data-title="나눔 벽" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>나누고 서로 피드백하기</h2><span class="min"><b>10</b>분</span></div>
+    <div class="step-h"><span class="num">5</span><h2>나누고 서로 피드백하기</h2><span class="min"><b>5</b>분</span></div>
     <p class="goal">만든 것이든 계획이든 한 줄로 올려 주시고, 다른 선생님 글에 한 줄씩 피드백을 남겨 주세요!</p>
     <div class="blk">
       <p class="kw">오늘 만든 것 · 세운 계획</p>
@@ -457,12 +427,11 @@ html[data-mode="present"] .mcard dl,html[data-mode="present"] .mcard .ex{display
       <div class="swall" id="wishWall"></div>
     </div>
     <div class="blk">
-      <p class="kw">올리기 전에 네 가지만</p>
+      <p class="kw">교실에 띄우기 전에</p>
       <ol class="steps" data-key="check">
-        <li><input type="checkbox" aria-label="완료"><span><span class="what">교실 화면 크기로 열어 봤다</span><span class="how">전자칠판이면 전체 화면(F11)으로, 태블릿이면 실제 기기 폭으로.</span></span></li>
-        <li><input type="checkbox" aria-label="완료"><span><span class="what">과학 내용을 한 번 읽었다</span><span class="how">단위, 부호(+ −), 화살표 방향, 그림 속 개수와 비율. AI는 그럴듯하게 틀립니다.</span></span></li>
-        <li><input type="checkbox" aria-label="완료"><span><span class="what">학생 개인정보가 없다</span><span class="how">학생 이름·학번·사진을 받거나 보여 주지 않는다.</span></span></li>
-        <li><input type="checkbox" aria-label="완료"><span><span class="what">파일을 저장했다</span><span class="how">index.html(또는 PDF)을 내 컴퓨터에 받아 두었다.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">교실 화면 크기로 열어 봤다</span><span class="how">전체 화면(F11)으로 열어 맨 뒤에서도 글자가 읽히는지.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">과학 내용을 한 번 읽었다</span><span class="how">단위, 부호, 화살표 방향, 그림 속 개수와 비율, 약품 값. AI는 그럴듯하게 틀립니다.</span></span></li>
+        <li><input type="checkbox" aria-label="완료"><span><span class="what">파일을 저장했다</span><span class="how">index.html을 내 컴퓨터에 받아 두었다. 올리고 싶으시면 GiteacherHub에.</span></span></li>
       </ol>
       <div class="submit"><div class="txt"><b>파일은 GiteacherHub에</b><span>만든 파일을 올리면 다른 선생님들이 열어 보실 수 있습니다. 올린 주소를 위 나눔 벽 링크 칸에 붙여 주세요.</span></div><a class="btn big primary" id="toGth" href="../giteacherhub/" target="_blank" rel="noopener">보관함 열기 ↗</a></div>
     </div>
@@ -541,54 +510,59 @@ async function copyText(t, btn) {
 }
 
 
-/* ── 실습 메뉴판 ── */
-const MENUS = {"lecture": {"t": "칠판 강의 화면", "ic": "🧑‍🏫", "p": ["나는 {grade} {subject} 교사야. 다음 수업 주제는 「{topic}」이고, 아이들은 보통 「{stuck}」에서 막혀.\n첨부한 학습지의 빈칸에 위에서부터 ①, ②, ③ 번호를 매기고, 빈칸 하나마다 그 답이 드러나는 장면을 한 장씩 짜서 표로 먼저 보여 줘.\n표 칸: 장면 번호 · 화면에 보일 것 · 내가 할 말 한 줄 · 채워지는 빈칸.\n장면은 15장 이상으로 하고, 아이들이 막히는 곳에는 장면을 더 써 줘. 코드는 아직 쓰지 마.", "좋아. 이 표대로 {screen}에 띄울 칠판 강의 화면을 HTML 파일 하나로 만들어 줘.\n- 오른쪽 화살표나 스페이스를 누르면 한 단계씩 넘어가고, 빈칸은 그 장면에서 답이 채워지게.\n- 그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로.\n- 글자는 교실 뒤에서도 보이게 크게.\n코드는 <!DOCTYPE html>부터 </html>까지 생략 없이 전부."], "done": ["학습지 빈칸 번호와 장면 번호가 1:1로 맞는다", "교실 화면 크기로 열어 맨 뒤에서도 글자가 읽힌다", "그림 속 부호·화살표·단위를 한 번씩 확인했다"], "out": "학습지 빈칸과 한 장씩 맞물리는 강의 화면(장면 15장 이상)"}, "handnote": {"t": "손글씨 단권화", "ic": "📒", "p": ["첨부한 「손글씨 단권화 설계서」(handnote-spec.md)를 끝까지 읽고 그대로 따라 줘.\n단원: {grade} {subject} 「{topic}」. 아이들이 자주 헷갈리는 곳: 「{stuck}」.\n단원 내용은 아래에 붙여 넣은 교과서·노트 안에서만 써 줘.\n먼저 설계서에 적힌 쪽 구성표(쪽 · 큰 제목 · 소제목 · 그림 · 표 · ★)를 보여 줘.\n\n[단원 내용]\n(여기에 교과서·노트 내용을 붙여 넣거나 파일을 첨부)", "좋아. 구성표대로 여섯 쪽을 만들어 줘. 그림은 이미지 생성 대신 SVG로 직접 그리고, 설계서의 「건네기 전에 확인할 일곱 가지」를 하나씩 확인한 결과도 끝에 알려 줘."], "done": ["여섯 쪽, 마지막 쪽이 찐막 정리다", "그림의 부호·개수·화살표가 본문과 맞는다", "인쇄 미리보기에서 쪽이 넘치지 않는다(배경 그래픽 켜기)"], "out": "한 단원을 A4 여섯 쪽에 담은 손글씨 노트(마지막 쪽은 찐막 정리)"}, "items": {"t": "문항 세트와 바로 채점", "ic": "📝", "p": ["{grade} {subject} 「{topic}」 확인 문항을 만들고 싶어. 아이들은 「{stuck}」에서 자주 틀려.\n문항을 쓰기 전에 표로 먼저 보여 줘: 물어볼 것 · 문항 유형 · 매력적인 오답 · 그 오답이 나오는 생각(오개념).\n선다형 4개, 서술형 1개. 코드는 아직 쓰지 마.", "이 표대로 문항을 써 줘. 선다형은 정답 하나, 선지 길이는 비슷하게, 부정어(않은, 아닌)는 밑줄. 정답과 해설, 서술형 채점 기준(상·중·하)도 붙여 줘.\n그다음 학생이 풀면 바로 채점되고, 고른 오답마다 왜 틀렸는지 한 줄이 나오는 HTML 파일 하나로 만들어 줘. 그림이 필요하면 SVG로 직접 그려 줘."], "done": ["정답이 하나뿐인지 선지를 하나씩 다시 읽었다", "해설이 교과서 범위를 넘지 않는다", "오답 피드백이 「틀렸습니다」가 아니라 까닭을 말한다"], "out": "선다형 4문항 + 서술형 1문항, 고른 오답마다 까닭이 나오는 채점 화면"}, "sim": {"t": "시뮬레이션 하나", "ic": "🔬", "p": ["{grade} {subject} 「{topic}」에서 아이들이 「{stuck}」을 어려워해. 이걸 보여 줄 시뮬레이션을 만들고 싶어.\n먼저 표로 정리해 줘: 바꿀 수 있는 값(범위·단위) · 화면에 보일 것 · 둘 사이의 식이나 규칙 · 과학적으로 틀리기 쉬운 부분.\n코드는 아직 쓰지 마.", "표대로 {screen}에서 쓸 HTML 파일 하나로 만들어 줘.\n- 그림은 SVG나 캔버스로 직접 그리고, 값은 표의 식으로 계산해.\n- 지금 값과 단위를 화면에 같이 보여 줘.\n- 결과를 예상하고 나서 확인하도록 [예상하기] 단추를 먼저 두어 줘."], "done": ["슬라이더 양 끝 값에서 결과가 말이 되는지 확인했다", "화면의 단위와 숫자가 식과 맞는다", "그림이 오개념을 만들지 않는다(크기·속도·개수)"], "out": "값 하나를 바꾸면 결과가 바뀌는 그림 한 장(슬라이더 하나~둘)"}, "lesson": {"t": "수업 활동 페이지", "ic": "🗂️", "p": ["{grade} {subject} 「{topic}」 한 차시를 생각 열기 → 탐구 → 정리 → 확인하기 순서로 짜 줘.\n단계마다 학생이 할 일 · 걸리는 시간 · 내가 던질 질문을 표로. 아이들이 막히는 「{stuck}」은 탐구 단계에서 다루게. 코드는 아직 쓰지 마.", "표대로 한 페이지에 담아 줘. 단계는 탭으로 넘기고, 확인하기에는 바로 채점되는 문제 세 개. {screen}에서 쓸 거야. 그림은 SVG로 직접 그리고, 학생 이름은 받지 마."], "done": ["네 단계가 한 차시(45~50분) 안에 들어간다", "확인하기 문제 정답이 맞다", "학생 개인정보를 받지 않는다"], "out": "생각 열기 → 탐구 → 정리 → 확인하기를 탭으로 넘기는 한 차시 페이지"}, "hook": {"t": "수업 여는 3분", "ic": "💡", "p": ["{grade} {subject} 「{topic}」 수업 첫 3분에 띄울 질문 화면을 만들고 싶어.\n아이들이 「{stuck}」을 스스로 떠올리게 하는 예상하기 질문 세 개를 먼저 제안해 줘. 질문마다 선택지 · 많이 고를 답 · 실제 답 · 반전 한 줄을 표로. 코드는 아직 쓰지 마.", "이 중 두 번째 질문으로 {screen}에 띄울 화면을 HTML 하나로 만들어 줘. 스페이스를 누를 때마다 질문 → 선택지 → (내가 손든 수 입력) → 정답과 반전 순서로. 글자는 크게, 그림은 SVG로 직접."], "done": ["정답과 반전 설명이 과학적으로 맞다", "3분 안에 끝난다(직접 넘겨 보며 재기)", "본 수업으로 넘어가는 마지막 한 문장이 있다"], "out": "예상하기 질문 → 손들기 → 반전 공개로 여는 도입 화면"}, "rubric": {"t": "수행평가 채점 기준과 자기 점검표", "ic": "📋", "p": ["나는 {grade} {subject} 교사야. 「{topic}」 수행평가를 준비하고 있어. 학생들은 보통 「{stuck}」을 놓쳐.\n먼저 표로 정리해 줘: 평가 요소 · 상/중/하 기준(눈으로 확인할 수 있는 문장으로) · 학생이 자주 놓치는 것.\n학생 이름이나 성적은 넣지 마. 코드는 아직 쓰지 마.\n\n[평가 요소와 배점]\n(여기에 적기)", "표대로 학생용 과제 안내문과 채점 기준표를 A4 한 장에 인쇄되게 만들고, 학생이 내기 전에 기준마다 체크하며 스스로 점검하는 화면을 HTML 파일 하나로 만들어 줘. 체크한 내용은 학생 기기에만 남게 해 줘."], "done": ["기준 문장이 「잘함」 같은 말이 아니라 눈에 보이는 행동으로 적혀 있다", "배점 합이 맞다", "학생 정보를 받거나 저장하지 않는다"], "out": "과제 안내문 + 채점 기준표(상·중·하) + 학생이 내기 전에 스스로 확인하는 점검 화면"}, "datalab": {"t": "실험 데이터 분석 페이지", "ic": "📈", "p": ["{grade} {subject} 「{topic}」 실험에서 학생들이 측정값을 넣으면 그래프로 관계를 찾는 페이지를 만들고 싶어. 아이들은 「{stuck}」을 어려워해.\n먼저 표로 정리해 줘: 가로축·세로축 양과 단위 · 측정 횟수 · 그래프 종류(점, 추세선) · 계산할 값(기울기, 비례 상수 등) · 이 실험의 오차 원인.\n코드는 아직 쓰지 마.", "표대로 HTML 파일 하나로 만들어 줘.\n- 표에 값을 넣으면 그래프가 바로 그려지고, 추세선과 기울기(단위 포함)가 나오게.\n- 그래프는 SVG나 캔버스로 직접 그리고, 축 이름과 단위를 꼭 붙여 줘.\n- 값은 학생 기기에만 저장하고, CSV로 받을 수 있게."], "done": ["예시 값을 넣어 손으로 계산한 기울기와 같은지 확인했다", "축 이름과 단위가 있다", "빈칸이나 글자를 넣어도 화면이 멈추지 않는다"], "out": "측정값을 표에 넣으면 그래프·추세선·기울기가 나오는 분석 화면"}, "inquiry": {"t": "탐구 주제 찾기 도우미", "ic": "🧭", "p": ["{grade} {subject} 「{topic}」 단원에서 학생들이 탐구 보고서 주제를 정하도록 돕고 싶어. 학생들은 보통 「{stuck}」에서 막혀.\n먼저 표로 보여 줘: 학생 관심 분야 예시 6개 · 분야마다 이어지는 이 단원 개념 · 학교 실험실에서 해 볼 수 있는 탐구 질문 예시 두 개 · 좋은 탐구 질문인지 확인하는 질문 세 개.\n코드는 아직 쓰지 마.", "표대로, 학생이 관심 분야를 고르고 탐구 질문 후보를 본 뒤 확인 질문에 예/아니요로 답하며 자기 질문을 다듬는 화면을 HTML 파일 하나로 만들어 줘. AI를 붙이지 말고 표 안의 내용만으로 움직이게 해 줘."], "done": ["탐구 질문을 학교 실험실에서 실제로 해 볼 수 있다", "개념 연결이 교육과정 범위 안에 있다", "학생 이름을 받지 않는다"], "out": "관심 분야를 고르면 이 단원 개념과 이어지는 탐구 질문 후보와 점검 질문이 나오는 화면"}};
-const FIX = ["글자를 지금보다 한 단계 크게 키워 줘. 나머지는 그대로 둬.", "이 장면(문항)의 그림에서 [무엇]이 틀렸어. [바른 내용]으로 고쳐 줘. 나머지는 그대로 둬.", "색을 두 가지만 쓰게 줄여 줘: 강조 하나, 나머지는 검정·회색.", "휴대폰 화면에서도 가로로 넘치지 않게 고쳐 줘.", "코드 말고 .html 파일로 만들어 줘.", "끊긴 곳 바로 다음부터 이어서 써 줘."];
-const MK = CONFIG.key + ':mine', PK = CONFIG.key + ':menu';
-const mine = document.getElementById('mine');
-(function () { let v = {}; try { v = JSON.parse(localStorage.getItem(MK) || '{}'); } catch (e) {}
-  const sub = QS.get('subject'); if (sub && !v.subject) v.subject = sub;
-  const gr = QS.get('grade'); if (gr && !v.grade) v.grade = gr;
-  Object.entries(v).forEach(([k, x]) => { if (mine.elements[k]) mine.elements[k].value = x; }); })();
-function val() { const o = {}; ['grade', 'subject', 'topic', 'stuck', 'screen'].forEach(k => o[k] = (mine.elements[k].value || '').trim()); return o; }
-function fill(t) { const v = val(); return t.replace(/\{(grade|subject|topic|stuck|screen)\}/g, (_, k) => v[k] || ({ grade: '○학년', subject: '○○', topic: '수업 주제', stuck: '아이들이 막히는 곳', screen: '교실 화면' })[k]); }
+/* ── 실습: 고르기 · 칸 채우기 · 파일 받기 · 부탁문 ── */
+const MENUS = {"concept": {"t": "개념 설명 화면", "ic": "💡", "fields": [["concept", "꼭 보여 주고 싶은 개념 하나", "예: 중화 반응에서 H⁺와 OH⁻가 만나 물이 되는 과정", 0], ["motion", "움직이게 하거나 값을 바꿔 보고 싶은 것", "예: 넣는 염기의 양을 슬라이더로 바꾸면 남는 이온 수와 pH가 바뀌게", 0]], "tpl": "첨부한 개념 설명 화면 설계서(concept-screen-spec.md)와 디자인 설계서(DESIGN.md)를 끝까지 읽고 그대로 따라 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[꼭 보여 주고 싶은 개념] {concept}\n[아이들이 막히는 곳] {stuck}\n[움직이게 하고 싶은 것] {motion}\n[띄울 화면] {screen}\n\n먼저 설계서대로 장면 목록을 표로 보여 줘. 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": ["kit/concept-screen-spec.md", "concept-screen-spec.md", "개념 설명 화면 설계서"], "ex": [["직렬·병렬 강의 화면 속 움직임", "https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html"], ["CLICK SCIENCE 시뮬레이션 모음", "https://scienceisjo.github.io/sim-lab/"]]}, "lab": {"t": "실험 안내 화면", "ic": "🧪", "fields": [["exp", "실험 이름", "예: 산과 염기의 중화 반응 — 지시약 색 변화", 0], ["mat", "기구와 약품(이름·농도·양)", "예: 0.1 M 염산 10 mL, 0.1 M 수산화 나트륨 수용액, BTB 용액, 뷰렛, 삼각 플라스크", 1], ["steps", "실험 순서(대략이면 됩니다)", "1. …\n2. …\n3. …", 1], ["risk", "위험한 점과 폐기 방법", "예: 수산화 나트륨 용액이 눈에 튀면 위험 → 보안경 필수, 폐액은 폐액통에", 1]], "tpl": "첨부한 실험 안내 화면 설계서(lab-guide-spec.md)와 디자인 설계서(DESIGN.md)를 끝까지 읽고 그대로 따라 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[실험] {exp}\n[기구와 약품] {mat}\n[실험 순서] {steps}\n[위험한 점과 폐기 방법] {risk}\n[띄울 화면] {screen}\n\n여기 적지 않은 약품 값·온도·시간은 지어내지 말고 「(선생님 확인)」으로 남겨 줘. 먼저 설계서대로 화면 목록을 표로 보여 줘. 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": ["kit/lab-guide-spec.md", "lab-guide-spec.md", "실험 안내 화면 설계서"], "ex": []}, "free": {"t": "만들고 싶었던 것", "ic": "✏️", "fields": [["what", "만들고 싶은 것", "예: 수업 끝에 띄우는 단원 정리 퀴즈", 0], ["how", "이렇게 움직이면 좋겠다", "예: 스페이스를 누를 때마다 문제 → 정답 → 해설 순서로", 0]], "tpl": "첨부한 디자인 설계서(DESIGN.md)를 먼저 읽고 그 색과 글꼴로 만들어 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[만들고 싶은 것] {what}\n[이렇게 움직이면 좋겠어] {how}\n[아이들이 막히는 곳] {stuck}\n[띄울 화면] {screen}\n\n그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로 써 줘. 만들기 전에 화면 구성을 표로 먼저 보여 주고, 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": null, "ex": []}};
+const FIX = ["글자를 지금보다 한 단계 크게 키워 줘. 나머지는 그대로 둬.", "이 장면의 그림에서 [무엇]이 틀렸어. [바른 내용]으로 고쳐 줘. 나머지는 그대로 둬.", "움직임을 조금 더 천천히 해 줘. 나머지는 그대로 둬.", "장면 하나를 더 넣어 줘: [넣고 싶은 내용]. 나머지는 그대로 둬.", "코드 말고 .html 파일로 만들어 줘.", "끊긴 곳 바로 다음부터 이어서 써 줘."];
+const MK = CONFIG.key + ':mine2', PK = CONFIG.key + ':track';
+const mine = document.getElementById('mine'), extra = document.getElementById('extra');
+let saved = {}; try { saved = JSON.parse(localStorage.getItem(MK) || '{}'); } catch (e) {}
+(function () { const sub = QS.get('subject'); if (sub && !saved.subject) saved.subject = sub; ['grade', 'subject', 'topic', 'stuck', 'screen'].forEach(k => { if (saved[k] != null && mine.elements[k]) mine.elements[k].value = saved[k]; }); })();
 let picked = ''; try { picked = localStorage.getItem(PK) || ''; } catch (e) {}
-function renderChosen() {
-  const box = document.getElementById('chosen'); const m = MENUS[picked];
-  document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('on', c.dataset.m === picked));
-  if (!m) return;
-  box.innerHTML = `<div class="chosen"><h3>${m.ic} ${esc(m.t)}</h3><p class="small" style="margin:0">${esc(m.out)}</p>
-    <p class="pstep">첫째 부탁 · 설계를 표로 받기</p><div class="pr big"><span class="pl">부탁문 1</span><span class="txt">${esc(fill(m.p[0]))}</span><button class="btn cp" type="button" data-cp="0">복사</button></div>
-    <p class="pstep">둘째 부탁 · 표를 고친 다음 만들기</p><div class="pr big"><span class="pl">부탁문 2</span><span class="txt">${esc(fill(m.p[1]))}</span><button class="btn cp" type="button" data-cp="1">복사</button></div>
-    <p class="pstep">고칠 때 · 한 가지씩, 끝에 「나머지는 그대로 둬」</p><div class="fixchips">${FIX.map((f, i) => `<button type="button" data-fix="${i}">${esc(f)}</button>`).join('')}</div>
-    <p class="pstep">이 메뉴의 완성 기준</p><ol class="steps" data-key="done-${picked}">${m.done.map(d => `<li><input type="checkbox" aria-label="완료"><span><span class="what">${esc(d)}</span></span></li>`).join('')}</ol></div>`;
-  const ol = box.querySelector('.steps'), k = CONFIG.key + ':chk:' + ol.dataset.key; let saved = []; try { saved = JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) {}
-  const bx = [...ol.querySelectorAll('input')]; bx.forEach((b, i) => { b.checked = !!saved[i]; b.closest('li').classList.toggle('ok', b.checked); b.addEventListener('change', () => { b.closest('li').classList.toggle('ok', b.checked); try { localStorage.setItem(k, JSON.stringify(bx.map(x => x.checked))); } catch (e) {} }); });
+if (!MENUS[picked]) picked = '';
+function val() { const o = {}; [...mine.elements].forEach(el => { if (el.name) o[el.name] = (el.value || '').trim(); }); return o; }
+function save() { saved = { ...saved, ...val() }; try { localStorage.setItem(MK, JSON.stringify(saved)); } catch (e) {} }
+const DEF = { grade: '○학년', subject: '○○', topic: '수업 주제', stuck: '(아이들이 막히는 곳)', screen: '교실 화면' };
+function fill(t) { const v = val(); return t.replace(/\{(\w+)\}/g, (_, k) => v[k] || DEF[k] || '(적어 주세요)'); }
+function renderExtra() {
+  const m = MENUS[picked]; if (!m) { extra.innerHTML = ''; return; }
+  extra.innerHTML = '<div class="mine" style="margin:0">' + m.fields.map(([k, lab, ph, ta]) => `<label class="full">${esc(lab)}${ta ? `<textarea name="${k}" placeholder="${esc(ph)}">${esc(saved[k] || '')}</textarea>` : `<input name="${k}" placeholder="${esc(ph)}" value="${esc(saved[k] || '')}">`}</label>`).join('') + '</div>';
 }
+function renderSpec() {
+  const m = MENUS[picked], box = document.getElementById('specBox');
+  if (!m) { box.innerHTML = '<p>2번에서 고르시면 맞는 설계서가 여기 나옵니다.</p>'; return; }
+  if (!m.spec) { box.innerHTML = '<p>「만들고 싶었던 것」은 설계서 없이 디자인 설계서만 붙여도 됩니다. 필요하시면 아래 설계서를 골라 함께 붙이세요.</p><div class="dla"><button type="button" class="btn" data-dl="kit/concept-screen-spec.md" data-as="concept-screen-spec.md">개념 설명 화면 설계서</button><button type="button" class="btn" data-dl="kit/handnote-spec.md" data-as="handnote-spec.md">손글씨 단권화 설계서</button></div>'; return; }
+  box.innerHTML = `<b>${esc(m.spec[2])}</b><p style="margin:2px 0 6px">${esc(m.spec[1])} · 무엇을 어떤 순서로, 무엇을 지키며 만들지 적은 글</p><div class="dla"><button type="button" class="btn primary" data-dl="${m.spec[0]}" data-as="${m.spec[1]}">설계서 받기</button><a href="${m.spec[0]}" target="_blank" rel="noopener">열어서 읽기 ↗</a></div>` + (m.ex.length ? `<p class="small" style="margin:10px 0 0">이런 움직임을 넣을 수 있습니다: ${m.ex.map(([a, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(a)} ↗</a>`).join(' · ')}</p>` : '');
+}
+function renderChosen() {
+  const box = document.getElementById('chosen'), m = MENUS[picked];
+  document.querySelectorAll('.tcard').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.t === picked)));
+  if (!m) return;
+  box.innerHTML = `<div class="chosen" style="border:1px solid var(--blue);border-radius:var(--r3);padding:18px 20px;background:#fff"><b style="font-size:1.2rem">${m.ic} ${esc(m.t)}</b>
+    <p class="small" style="margin:4px 0 0">파일 두 개(${m.spec ? esc(m.spec[1]) + ' + ' : ''}DESIGN.md)를 붙이고 아래 부탁문을 보내세요. 빈 칸은 2번에서 채우시면 바로 바뀝니다.</p>
+    <div class="pr big"><span class="pl">부탁문</span><span class="txt" id="prTxt">${esc(fill(m.tpl))}</span><button class="btn cp" type="button" id="prCp">복사</button></div>
+    <p class="small" style="margin:12px 0 4px"><b>표를 받으면</b> 틀린 내용, 빠진 장면을 말로 고쳐 달라고 하시고, 괜찮으면 "좋아, 만들어 줘"라고 보내세요. 고칠 때는 한 가지씩, 끝에 「나머지는 그대로 둬」.</p>
+    <div class="fixchips">${FIX.map((f, i) => `<button type="button" data-fix="${i}">${esc(f)}</button>`).join('')}</div></div>`;
+}
+function update() { save(); const t = document.getElementById('prTxt'); if (t && MENUS[picked]) t.textContent = fill(MENUS[picked].tpl); }
+mine.addEventListener('input', update); mine.addEventListener('change', update);
+document.getElementById('tgrid').addEventListener('click', e => {
+  const b = e.target.closest('.tcard'); if (!b) return; save(); picked = b.dataset.t; try { localStorage.setItem(PK, picked); } catch (err) {}
+  renderExtra(); renderSpec(); renderChosen();
+});
 document.getElementById('chosen').addEventListener('click', e => {
-  const c = e.target.closest('[data-cp]'); if (c) { copyText(fill(MENUS[picked].p[+c.dataset.cp]), c); return; }
+  if (e.target.closest('#prCp')) { copyText(fill(MENUS[picked].tpl), e.target.closest('#prCp')); return; }
   const f = e.target.closest('[data-fix]'); if (f) copyText(FIX[+f.dataset.fix], f);
 });
-mine.addEventListener('input', () => { try { localStorage.setItem(MK, JSON.stringify(val())); } catch (e) {} renderChosen(); });
-mine.addEventListener('change', () => { try { localStorage.setItem(MK, JSON.stringify(val())); } catch (e) {} renderChosen(); });
-document.getElementById('mgrid').addEventListener('click', e => {
-  const b = e.target.closest('.pick-m'); if (!b) return; picked = b.dataset.m; try { localStorage.setItem(PK, picked); } catch (e) {}
-  renderChosen(); document.getElementById('s4').scrollIntoView({ behavior: 'instant', block: 'start' });
-});
-/* 두 질문 → 추천 */
-const ans = {};
-const REC = { open: 'hook', show: 'sim', check: 'items', review: 'handnote', flow: 'lesson', assess: 'rubric', data: 'datalab', inq: 'inquiry' };
-document.getElementById('quiz2').addEventListener('click', e => {
-  const b = e.target.closest('.opt2'); if (!b) return; const g = b.parentElement; ans[g.dataset.q] = b.dataset.v;
-  g.querySelectorAll('.opt2').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  if (!ans.when) return;
-  let r = REC[ans.when] || (ans.have === 'ws' ? 'lecture' : ans.have === 'book' ? 'handnote' : 'lesson');
-  if (ans.when === 'explain' && ans.have !== 'ws') r = ans.have === 'book' ? 'handnote' : 'sim';
-  document.querySelectorAll('.mcard').forEach(c => c.classList.toggle('rec', c.dataset.m === r));
-  document.getElementById('qres').textContent = '추천: ' + MENUS[r].ic + ' ' + MENUS[r].t + (ans.when === 'explain' && ans.have !== 'ws' ? ' (학습지가 있으시면 칠판 강의 화면도 좋습니다)' : '');
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-dl]'); if (!b) return;
+  try { const r = await fetch(b.dataset.dl); if (!r.ok) throw new Error(r.status); const t = await r.text();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([t], { type: 'text/markdown;charset=utf-8' })); a.download = b.dataset.as;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast('다운로드 폴더에 ' + b.dataset.as + '로 받았습니다.'); }
+  catch (err) { toast('받지 못했습니다. 잠시 뒤 다시 눌러 주세요.'); }
 });
 (function () { const sq = CODE ? '?s=' + encodeURIComponent(CODE) : ''; document.getElementById('toGth').href = '../giteacherhub/' + sq; })();
-renderChosen();
+renderExtra(); renderSpec(); renderChosen();
 /* ── 나눔 벽: 표 yeonsu_live (s=연수 코드) · 계획 kind=pr-idea · 피드백 kind=pr-fb(body={to,t}) · 만들고 싶었던 것 kind=pr-wish · 나도요 kind=pr-wish-like ── */
 (function () {
   const SB = {"url": "https://vbvtnmnodeoocbbjauap.supabase.co", "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc"}, S = CODE || 'practice', ok = !!(SB.url && SB.key);
@@ -606,7 +580,7 @@ renderChosen();
   try { iform.elements.name.value = localStorage.getItem('yeonsu:name') || ''; } catch (e) {}
   function cur() { const m = MENUS[picked], v = val(); return { m: m ? m.t : '', g: [v.grade, v.subject, v.topic].filter(Boolean).join(' · ') }; }
   function showMeta() { const c = cur(); meta.textContent = (c.m || c.g) ? '함께 올라가는 것: ' + [c.m, c.g].filter(Boolean).join(' / ') : '위에서 메뉴를 고르고 내 수업을 적으시면 함께 올라갑니다.'; }
-  showMeta(); document.getElementById('mgrid').addEventListener('click', () => setTimeout(showMeta, 50)); document.getElementById('mine').addEventListener('input', showMeta);
+  showMeta(); document.getElementById('tgrid').addEventListener('click', () => setTimeout(showMeta, 50)); document.getElementById('mine').addEventListener('input', showMeta);
   const liked = new Set();
   async function load() {
     try {

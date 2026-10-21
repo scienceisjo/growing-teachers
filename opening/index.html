@@ -622,7 +622,7 @@ if(VIBE){
   const box=document.getElementById('openLinks');
   [['바이브코딩 허브','오늘 연수 페이지, 모듈 매뉴얼로 가는 길','./'],
    ['디자인 서랍','설계서(DESIGN.md)를 골라 만든 앱에 옷 입히기','design.html'],
-   ['GiteacherHub','교실 앱 보관함, 만든 앱을 올리고 둘러보는 곳','../giteacherhub/']].concat(BRIDGE?[['개별 실습 메뉴판','오늘 실습에서 만들 것 하나를 고르고 부탁문 받기','practice.html']]:[]).forEach(([t,d,p],i)=>{
+   ['GiteacherHub','교실 앱 보관함, 만든 앱을 올리고 둘러보는 곳','../giteacherhub/']].concat(BRIDGE?[['개별 실습','개념 설명 화면·실험 안내 화면 만들기, 설계서 받고 부탁문 채우기','practice.html']]:[]).forEach(([t,d,p],i)=>{
     const a=document.createElement('a'); a.className='olink'; a.href=vlink(p); a.target='_blank'; a.rel='noopener';
     a.innerHTML=`<span class="no">${i+1}</span><span><b>${t}</b><span class="d">${d}</span></span>`;
     a.addEventListener('click',()=>{ a.classList.add('done'); a.querySelector('.no').textContent='✓'; });
