@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PDF 제작 자료 · 조승재</title><link rel="icon" href="hnr-tech-mark.webp"><style>
+:root{font-family:'Malgun Gothic',system-ui,sans-serif;color:#202124;background:#fff;line-height:1.7}*{box-sizing:border-box}body{margin:0}a{color:#0066cc;text-decoration:none}a:hover{text-decoration:underline}a:focus-visible{outline:3px solid #009cff;outline-offset:4px}.top{padding:17px 24px;border-bottom:1px solid #dedfe3;display:flex;align-items:center;gap:12px}.top img{width:34px;height:34px;object-fit:contain}.top a{margin-left:auto;font-size:14px}main{max-width:1080px;margin:auto;padding:42px 28px}h1{font-size:36px;line-height:1.3;margin:0 0 18px}h2{font-size:25px;margin:0 0 20px}h3{font-size:18px;margin:12px 0}p{margin:12px 0}.muted{color:#62666e;font-size:15px}.downloads{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}.button{padding:11px 18px;border:1px solid #dedfe3;border-radius:8px;font-size:16px}.primary{background:#0066cc;color:#fff;border-color:#0066cc}section{margin-top:48px;padding-top:30px;border-top:1px solid #dedfe3}table{border-collapse:collapse;width:100%;font-size:16px}th,td{border-bottom:1px solid #dedfe3;text-align:left;vertical-align:top;padding:16px 12px}th{width:28%;font-weight:600}ol,ul{padding-left:24px}li{padding:5px 0}.samples{display:grid;grid-template-columns:1fr 1fr;gap:24px}.samples img{display:block;width:100%;height:310px;object-fit:contain;background:#f5f5f7;border:1px solid #dedfe3;border-radius:8px}.files{columns:2;column-gap:30px}.files li{break-inside:avoid}.note{padding:18px 20px;background:#f5f5f7;border-radius:8px}.note p:first-child{margin-top:0}.note p:last-child{margin-bottom:0}footer{text-align:center;padding:24px;font-size:12px;color:#8a8f98;border-top:1px solid #dedfe3}@media(max-width:650px){main{padding:28px 20px}h1{font-size:30px}.samples{grid-template-columns:1fr}.files{columns:1}th,td{padding:13px 7px}.top{padding:12px 16px;font-size:14px}.downloads{flex-direction:column;align-items:flex-start}}@media print{.top a,.downloads{display:none}main{padding:10mm}section{break-inside:avoid}.samples img{height:70mm}}
+</style></head>
+<body>
+<header class="top"><img src="hnr-tech-mark.webp" alt="HNR TECH" width="128" height="128"><strong>AI 활용 수업 자료</strong><a href="practice.html#pdf-practice">실습 페이지로</a></header>
+<main>
+<h1>PDF 제작 자료</h1>
+<p>손글씨 정리본·단권화·학습지·개념 카드 제작 지침입니다.</p>
+<p class="muted">실제 제작 코드와 작업 과정을 정리한 연수용 자료입니다.</p>
+<div class="downloads"><a class="button primary" href="downloads/teacher-pdf-studio.zip" download>전체 자료 ZIP ↓</a><a class="button" href="downloads/teacher-pdf-studio/SKILL.md" download="SKILL.md">SKILL.md ↓</a><a class="button" href="downloads/teacher-pdf-studio/사용법.md" download>사용법 ↓</a></div>
+<div class="note"><p><strong>SKILL.md는 AI가 참고하는 작업 지침서입니다.</strong></p><p>파일 생성이나 코드 실행을 지원하는 AI 환경에서 수업 자료와 함께 사용합니다. 프로그램이나 글꼴 설치 파일은 아닙니다.</p></div>
+<section><h2>실제 제작 방식</h2><table><tbody>
+<tr><th>손글씨 정리본</th><td>한글 TTF 글꼴 + 모눈·강조·선·도형<br>Python ReportLab으로 PDF 제작</td></tr>
+<tr><th>개념 카드</th><td>개념별로 다시 배치 → 카드 PDF → PNG → ZIP</td></tr>
+<tr><th>과학 그림</th><td>ReportLab 벡터 도형 또는 SVG<br>그림의 연결·부호·방향은 별도 확인</td></tr>
+<tr><th>검수</th><td>쪽수·크기·텍스트 확인 + 모든 쪽을 이미지로 확인<br>수정 후 다시 출력</td></tr>
+</tbody></table></section>
+<section><h2>사용 순서</h2><ol>
+<li>ZIP을 풀고 <strong>SKILL.md</strong>와 <strong>사용법.md</strong>를 확인합니다.</li>
+<li>본인의 학습지·수업 메모와 SKILL.md를 AI에게 전달합니다. 필요한 상세 지침과 검수표도 함께 첨부합니다.</li>
+<li>대상, 형식, 분량, 강조할 내용을 알려 주고 대표 한두 쪽부터 확인합니다.</li>
+<li>수정 후 전체를 제작하고, PDF의 모든 쪽과 편집 가능한 원본을 받습니다.</li>
+</ol><p class="muted">학생 개인정보는 지우고 첨부합니다. 글꼴 파일은 묶음에 포함하지 않았습니다. 사용할 글꼴의 사용 조건을 확인해 주세요.</p></section>
+<section><h2>제작 자료 예시</h2><div class="samples">
+<article><a href="../subject/electricity-handnote.pdf" target="_blank" rel="noopener"><img src="gallery/electricity-handnote.webp" alt="전기와 자기 손글씨 단권화"><h3>손글씨 단권화 PDF ↗</h3></a></article>
+<article><a href="../subject/electricity-cards.html" target="_blank" rel="noopener"><img src="../subject/electricity-cards/02.png" alt="전기와 자기 개념 카드"><h3>개념 카드 ↗</h3></a></article>
+</div></section>
+<section><h2>개별 파일</h2><ul class="files">
+<li><a href="downloads/teacher-pdf-studio/SKILL.md" download>기본 지침 · SKILL.md</a></li>
+<li><a href="downloads/teacher-pdf-studio/사용법.md" download>사용법</a></li>
+<li><a href="downloads/teacher-pdf-studio/examples/요청예시.md" download>AI 요청 예시</a></li>
+<li><a href="downloads/teacher-pdf-studio/references/notes.md" download>정리본·학습지 제작</a></li>
+<li><a href="downloads/teacher-pdf-studio/references/cards.md" download>개념 카드 제작</a></li>
+<li><a href="downloads/teacher-pdf-studio/references/science-figures.md" download>SVG·벡터 과학 그림</a></li>
+<li><a href="downloads/teacher-pdf-studio/references/checklist.md" download>검수표</a></li>
+</ul><p class="muted">원본 코드의 개인 경로·단원별 고정값·배포 파일은 포함하지 않았습니다. 필요한 제작 방식과 검수 기준을 다른 과목에서도 사용할 수 있도록 정리했습니다.</p></section>
+</main><footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>최종 업데이트: 2026-10-22</footer>
+</body></html>

@@ -1,0 +1,161 @@
+{
+  "title": "나선형 교육과정 앱 · 고등학교 과학",
+  "source": "https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/",
+  "extracted": "2026-10-22",
+  "sourceDataSha256": "f72f5268a14c22d5b2f8dea516a1f926b6522b81a0eecc191794eab9189ca2e9",
+  "totalSubjects": 17,
+  "totalUnits": 53,
+  "totalStandards": 272,
+  "fields": [
+    "standards",
+    "haeseol",
+    "goryeo",
+    "limits",
+    "levels.codes"
+  ],
+  "corrections": [
+    {
+      "code": "10통과2-01-03",
+      "field": "haeseol",
+      "reason": "원문 블록과 대조하여 해설 뒤에 붙은 내용 체계 표 문구 제거"
+    }
+  ],
+  "subjects": [
+    {
+      "key": "h1",
+      "name": "통합과학1",
+      "track": "공통과목",
+      "file": "integrated-science-1.md",
+      "units": 3,
+      "standards": 16
+    },
+    {
+      "key": "h2",
+      "name": "통합과학2",
+      "track": "공통과목",
+      "file": "integrated-science-2.md",
+      "units": 3,
+      "standards": 15
+    },
+    {
+      "key": "물리",
+      "name": "물리학",
+      "track": "일반선택",
+      "file": "physics.md",
+      "units": 3,
+      "standards": 18
+    },
+    {
+      "key": "화학",
+      "name": "화학",
+      "track": "일반선택",
+      "file": "chemistry.md",
+      "units": 4,
+      "standards": 15
+    },
+    {
+      "key": "생과",
+      "name": "생명과학",
+      "track": "일반선택",
+      "file": "biology.md",
+      "units": 3,
+      "standards": 19
+    },
+    {
+      "key": "지구",
+      "name": "지구과학",
+      "track": "일반선택",
+      "file": "earth-science.md",
+      "units": 3,
+      "standards": 16
+    },
+    {
+      "key": "역학",
+      "name": "역학과 에너지",
+      "track": "진로선택",
+      "file": "mechanics-energy.md",
+      "units": 3,
+      "standards": 16
+    },
+    {
+      "key": "전자",
+      "name": "전자기와 양자",
+      "track": "진로선택",
+      "file": "electromagnetism-quantum.md",
+      "units": 3,
+      "standards": 17
+    },
+    {
+      "key": "물에",
+      "name": "물질과 에너지",
+      "track": "진로선택",
+      "file": "matter-energy.md",
+      "units": 4,
+      "standards": 14
+    },
+    {
+      "key": "반응",
+      "name": "화학 반응의 세계",
+      "track": "진로선택",
+      "file": "chemical-reactions.md",
+      "units": 3,
+      "standards": 14
+    },
+    {
+      "key": "세포",
+      "name": "세포와 물질대사",
+      "track": "진로선택",
+      "file": "cells-metabolism.md",
+      "units": 3,
+      "standards": 18
+    },
+    {
+      "key": "유전",
+      "name": "생물의 유전",
+      "track": "진로선택",
+      "file": "genetics.md",
+      "units": 3,
+      "standards": 17
+    },
+    {
+      "key": "지시",
+      "name": "지구시스템과학",
+      "track": "진로선택",
+      "file": "earth-systems.md",
+      "units": 3,
+      "standards": 15
+    },
+    {
+      "key": "행우",
+      "name": "행성우주과학",
+      "track": "진로선택",
+      "file": "planetary-space.md",
+      "units": 3,
+      "standards": 15
+    },
+    {
+      "key": "과사",
+      "name": "과학의 역사와 문화",
+      "track": "융합선택",
+      "file": "science-history-culture.md",
+      "units": 3,
+      "standards": 17
+    },
+    {
+      "key": "기환",
+      "name": "기후변화와 환경생태",
+      "track": "융합선택",
+      "file": "climate-ecology.md",
+      "units": 3,
+      "standards": 15
+    },
+    {
+      "key": "융탐",
+      "name": "융합과학 탐구",
+      "track": "융합선택",
+      "file": "convergence-inquiry.md",
+      "units": 3,
+      "standards": 15
+    }
+  ]
+}
