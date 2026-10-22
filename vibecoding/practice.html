@@ -437,6 +437,7 @@ html[data-mode="present"] .pdf-studio .only-present{font-size:1em;line-height:1.
     <div class="blk">
       <div id="chosen"><div class="empty-chosen">2번에서 무엇을 만들지 고르시면 여기에 프롬프트가 나옵니다.</div></div>
       <section class="pdf-studio" id="pdf-practice" aria-labelledby="pdf-heading" hidden>
+        <div class="box"><h3>실제로 만든 PDF 보기</h3><p>아래 자료에서 구성과 디자인을 먼저 살펴보세요. 실습할 때는 전체 분량 대신 내 수업 1차시 분량으로 만들어 보겠습니다.</p><div class="actions"><a class="btn" href="../subject/electricity-handnote.pdf" target="_blank" rel="noopener">손글씨 단권화 PDF ↗</a><a class="btn" href="../subject/electricity-workbook-student.pdf" target="_blank" rel="noopener">전기와 자기 문제집 PDF ↗</a><a class="btn" href="ws/elec-ws4.pdf" target="_blank" rel="noopener">옴의 법칙 학습지 PDF ↗</a></div></div>
         <h3 id="pdf-heading">PDF 만들기</h3>
         <p class="brief">자료 종류와 디자인을 고르면 제작 지침과 요청문이 준비됩니다.</p>
         <p class="small only-detail">이 페이지에서 PDF가 자동 생성되지는 않습니다. 수업 자료는 파일을 만들 수 있는 AI에 직접 첨부해 주세요.</p>
@@ -645,6 +646,8 @@ async function copyText(t, btn) {
 const MENUS = {"concept": {"t": "개념 설명 화면", "ic": "💡", "fields": [["concept", "꼭 보여 주고 싶은 개념 하나", "예: 중화 반응에서 H⁺와 OH⁻가 만나 물이 되는 과정", 0], ["motion", "움직이게 하거나 값을 바꿔 보고 싶은 것", "예: 넣는 염기의 양을 슬라이더로 바꾸면 남는 이온 수와 pH가 바뀌게", 0]], "tpl": "첨부한 개념 설명 화면 설계서(concept-screen-spec.md)와 디자인 설계서(DESIGN.md)를 끝까지 읽고 그대로 따라 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[꼭 보여 주고 싶은 개념] {concept}\n[아이들이 막히는 곳] {stuck}\n[움직이게 하고 싶은 것] {motion}\n[띄울 화면] {screen}\n\n먼저 설계서대로 장면 목록을 표로 보여 줘. 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": ["kit/concept-screen-spec.md", "concept-screen-spec.md", "개념 설명 화면 설계서"], "ex": [["직렬·병렬 강의 화면 속 움직임", "https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html"], ["CLICK SCIENCE 시뮬레이션 모음", "https://scienceisjo.github.io/sim-lab/"]]}, "lab": {"t": "실험 안내 화면", "ic": "🧪", "fields": [["exp", "실험 이름", "예: 산과 염기의 중화 반응 — 지시약 색 변화", 0], ["mat", "기구와 약품(이름·농도·양)", "예: 0.1 M 염산 10 mL, 0.1 M 수산화 나트륨 수용액, BTB 용액, 뷰렛, 삼각 플라스크", 1], ["steps", "실험 순서(대략이면 됩니다)", "1. …\n2. …\n3. …", 1], ["risk", "위험한 점과 폐기 방법", "예: 수산화 나트륨 용액이 눈에 튀면 위험 → 보안경 필수, 폐액은 폐액통에", 1]], "tpl": "첨부한 실험 안내 화면 설계서(lab-guide-spec.md)와 디자인 설계서(DESIGN.md)를 끝까지 읽고 그대로 따라 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[실험] {exp}\n[기구와 약품] {mat}\n[실험 순서] {steps}\n[위험한 점과 폐기 방법] {risk}\n[띄울 화면] {screen}\n\n여기 적지 않은 약품 값·온도·시간은 지어내지 말고 「(선생님 확인)」으로 남겨 줘. 먼저 설계서대로 화면 목록을 표로 보여 줘. 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": ["kit/lab-guide-spec.md", "lab-guide-spec.md", "실험 안내 화면 설계서"], "ex": []}, "free": {"t": "만들고 싶었던 것", "ic": "✏️", "fields": [["what", "만들고 싶은 것", "예: 수업 끝에 띄우는 단원 정리 퀴즈", 0], ["how", "이렇게 움직이면 좋겠다", "예: 스페이스를 누를 때마다 문제 → 정답 → 해설 순서로", 0]], "tpl": "첨부한 디자인 설계서(DESIGN.md)를 먼저 읽고 그 색과 글꼴로 만들어 줘.\n\n[수업] {grade} {subject} 「{topic}」\n[만들고 싶은 것] {what}\n[이렇게 움직이면 좋겠어] {how}\n[아이들이 막히는 곳] {stuck}\n[띄울 화면] {screen}\n\n그림은 이미지 생성 대신 SVG로 직접 그리고, 그림 속 글자도 SVG 글자로 써 줘. 만들기 전에 화면 구성을 표로 먼저 보여 주고, 내가 좋다고 하면 HTML 파일 하나로 만들어 줘.", "spec": null, "ex": []}};
 const FIX = ["글자를 지금보다 한 단계 크게 키워 줘. 나머지는 그대로 둬.", "이 장면의 그림에서 [무엇]이 틀렸어. [바른 내용]으로 고쳐 줘. 나머지는 그대로 둬.", "움직임을 조금 더 천천히 해 줘. 나머지는 그대로 둬.", "장면 하나를 더 넣어 줘: [넣고 싶은 내용]. 나머지는 그대로 둬.", "코드 말고 .html 파일로 만들어 줘.", "끊긴 곳 바로 다음부터 이어서 써 줘."];
 MENUS.pdf = {t:'PDF 자료',ic:'📄',fields:[],tpl:'',spec:null,ex:[]};
+MENUS.concept.ex = [['소비 전력 · 1차시 강의 화면', 'https://scienceisjo.github.io/electricity/06-power-lecture.html'], ['연주운동 · 1차시 수업 화면', 'https://scienceisjo.github.io/solar-system/07-revolution.html']];
+MENUS.lab.ex = [['옴의 법칙 · 탐구 안내', 'https://scienceisjo.github.io/electricity/04-ohm.html']];
 MENUS.concept.tpl = MENUS.concept.tpl.replace('[아이들이 막히는 곳] {stuck}\n', '');
 MENUS.free.fields = [];
 MENUS.free.tpl = '';
@@ -708,6 +711,7 @@ function renderChosen() {
   }
   box.innerHTML = `<div class="chosen" style="border:1px solid var(--blue);border-radius:var(--r3);padding:18px 20px;background:#fff"><b style="font-size:1.2rem">${m.ic} ${esc(m.t)}</b>
     <p class="small only-detail" style="margin:4px 0 0">${m.spec ? esc(m.spec[1]) + ' + ' : ''}DESIGN.md와 선택한 교육과정 파일을 붙이고 아래 프롬프트를 보내세요. 빈 칸은 2번에서 채우시면 바로 바뀝니다.</p>
+    <div class="actions">${m.ex.map(([label, url]) => `<a class="btn" href="${url}" target="_blank" rel="noopener">${esc(label)} ↗</a>`).join('')}</div>
     <p class="small only-present" style="margin:4px 0 0">실습 파일 첨부 → 프롬프트 복사 → AI에 보내기</p>
     <div class="pr big"><span class="pl">프롬프트</span><span class="txt" id="prTxt">${esc(fill(m.tpl))}</span><button class="btn cp" type="button" id="prCp">복사</button></div>
     <p class="small only-detail" style="margin:12px 0 4px"><b>표를 받으면</b> 틀린 내용, 빠진 장면을 말로 고쳐 달라고 하시고, 괜찮으면 "좋아, 만들어 줘"라고 보내세요. 고칠 때는 한 가지씩, 끝에 「나머지는 그대로 둬」.</p>
