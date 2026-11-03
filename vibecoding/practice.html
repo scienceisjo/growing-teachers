@@ -447,7 +447,7 @@ html[data-mode="present"] .pdf-studio .only-present{font-size:1em;line-height:1.
           <div class="only-detail" id="pdf-skill-detail">
           <p>AI가 작업할 때 따라야 할 <b>순서와 기준을 정리해 둔 지침</b>입니다. 기본 파일이 SKILL.md이고, 필요하면 예시·참고자료·제작 코드가 함께 들어갑니다.</p>
           <p>예를 들어 실험 매뉴얼 스킬에는 ‘실제 장비 사진 사용’, ‘한 쪽에 주요 조작 하나’, ‘완성한 모든 쪽의 잘림·겹침 확인’ 같은 기준이 적혀 있습니다. 다른 실험 매뉴얼을 만들 때도 같은 지침을 다시 쓸 수 있습니다.</p>
-          <p><b>이번에 만들 내용은 요청문에, 반복해서 지킬 제작 방식은 스킬에</b> 적어 둔다고 생각하시면 됩니다.</p>
+          <p><b>이번에 만들 내용은 요청문에, 반복해서 지킬 제작 방식은 스킬에</b> 적어 둔다고 생각해 주세요.</p>
           <p><b>이번 실습에서는 별도 설치하지 않습니다.</b> 아래에서 선택한 SKILL.md와 본인 자료를 AI에 첨부하고, “첨부한 지침을 먼저 읽고, 이 방식으로 만들어 줘.”라고 요청하면 됩니다.</p>
           <p class="small" style="margin-bottom:0">MD는 제목·목록 등을 표시할 수 있는 마크다운 문서 파일입니다. 파일을 채팅에 첨부하는 것과 앱에 스킬을 설치하는 것은 다릅니다. 파일을 붙인다고 PDF 생성 기능이 새로 생기는 것도 아닙니다. <a href="https://developers.openai.com/plugins/concepts/skills" target="_blank" rel="noopener">스킬의 구성 · 공식 설명 ↗</a></p>
           </div>
@@ -690,7 +690,7 @@ function renderSpec() {
   const m = MENUS[picked], box = document.getElementById('specBox');
   if (!m) { box.innerHTML = '<p>2번에서 고르시면 맞는 설계서가 여기 나옵니다.</p>'; return; }
   if (picked === 'pdf') return;
-  if (picked === 'free') { box.innerHTML = '<p>자유 제작에는 정해진 설계서가 없습니다. 4번의 탐구 공간·게임 사례를 보고 구상해 보세요. 디자인 파일도 원하는 경우에만 골라 사용하시면 됩니다.</p>'; return; }
+  if (picked === 'free') { box.innerHTML = '<p>자유 제작에는 정해진 설계서가 없습니다. 4번의 탐구 공간·게임 사례를 보고 구상해 보세요. 디자인 파일도 원하는 경우에만 골라 사용해 주세요.</p>'; return; }
   if (!m.spec) { box.innerHTML = '<p>「만들고 싶었던 것」은 설계서 없이 디자인 설계서만 붙여도 됩니다. 필요하시면 아래 설계서를 골라 함께 붙이세요.</p><div class="dla"><button type="button" class="btn" data-dl="kit/concept-screen-spec.md" data-as="concept-screen-spec.md">개념 설명 화면 설계서</button><button type="button" class="btn" data-dl="kit/handnote-spec.md" data-as="handnote-spec.md">손글씨 단권화 설계서</button></div>'; return; }
   box.innerHTML = `<b>${esc(m.spec[2])}</b><p style="margin:2px 0 6px">${esc(m.spec[1])} · 무엇을 어떤 순서로, 무엇을 지키며 만들지 적은 글</p><div class="dla"><button type="button" class="btn primary" data-dl="${m.spec[0]}" data-as="${m.spec[1]}">설계서 받기</button><a href="${m.spec[0]}" target="_blank" rel="noopener">열어서 읽기 ↗</a></div>` + (m.ex.length ? `<p class="small" style="margin:10px 0 0">이런 움직임을 넣을 수 있습니다: ${m.ex.map(([a, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(a)} ↗</a>`).join(' · ')}</p>` : '');
 }
