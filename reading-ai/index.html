@@ -191,6 +191,47 @@ html[data-mode="present"] .keys{display:block}
   .step{break-inside:avoid;padding:20px 0;min-height:0}
 }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+/* ── 디자인 2판: 옅은 회색 바탕 + 흰 카드(그림자 없이 선만) · 굵은 제목 · 발표는 한 장면씩 ── */
+:root{ --h2:1.95rem; }
+html[data-mode="present"]{ --h2:2.7rem; }
+body{background:var(--bg2)}
+.top{background:rgba(255,255,255,.96)}
+.hero{border-bottom:0;padding:44px 0 36px}
+.hero h1{font-weight:700;letter-spacing:-.03em}
+.step{border-bottom:0;padding:44px 0 12px}
+.step-h h2{font-weight:700;letter-spacing:-.03em}
+.step-h .num{width:2.3em;height:2.3em;font-size:1rem}
+.kw{font-weight:700}
+.blk,.blk:first-of-type{background:#fff;border:1px solid var(--line);border-radius:var(--r3);padding:22px 24px;margin:0 0 14px}
+.blk .box{background:var(--bg2);border-color:transparent}
+.blk .live{border:0;padding:0;margin:12px 0 0;background:transparent}
+.blk .card{background:var(--bg2)}
+.flow a,.pipe .n{background:#fff}
+.more-btn{display:inline-block;border:0;background:none;color:var(--blue);font:inherit;font-size:.9rem;font-weight:600;padding:6px 0;margin:2px 0 4px;cursor:pointer}
+.more-btn::after{content:" ↓";font-weight:400}
+.more-btn[aria-expanded="true"]::after{content:" ↑"}
+.detail.folded{display:none}
+.detail{margin-top:4px}
+html[data-mode="present"] .more-btn{display:none}
+/* 발표 모드: 지금 장면 하나만 */
+html[data-mode="present"] main .step{display:none;min-height:0}
+html[data-mode="present"] main .step.cur{display:block;min-height:calc(100vh - 64px)}
+html[data-mode="present"] .hero{display:none}
+html[data-mode="present"].at-cover .hero{display:block;min-height:calc(100vh - 64px)}
+html[data-mode="present"].at-cover main .step{display:none}
+html[data-mode="present"] .blk,html[data-mode="present"] .blk:first-of-type{padding:26px 30px}
+.pager{display:none}
+html[data-mode="present"] .pager{display:flex;gap:10px;align-items:center;margin:20px 0 8px}
+.pager .grow{flex:1}
+.pager .btn{font-size:1rem;padding:11px 20px}
+html[data-mode="present"] footer#app-credit{display:none}
+@media print{
+  body{background:#fff}
+  .blk{border:0;padding:0}
+  .detail.folded{display:block!important}
+  .more-btn,.pager{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -228,8 +269,9 @@ html[data-mode="present"] .keys{display:block}
     <div class="actions">
       <a class="btn big primary" href="#s1">시작하기 ↓</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+      <button class="btn big only-detail" id="foldAll" type="button">글 모두 펼치기</button>
     </div>
-    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장 앞 화면에 띄우는 판입니다. QR로 들어오시면 제가 장면을 넘길 때 선생님 화면도 같이 넘어가고, 위쪽 「따라가기」를 누르면 혼자 앞뒤로 보실 수 있습니다.</p>
+    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장 앞 화면에 띄우는 판입니다. QR로 들어오시면 제가 장면을 넘길 때 선생님 화면도 같이 넘어가고, 위쪽 「따라가기」를 누르면 혼자 앞뒤로 보실 수 있습니다. 블록마다 짧은 설명만 먼저 보이고, 「자세히 읽기」를 누르면 제 이야기를 길게 읽으실 수 있습니다.</p>
   </div>
 </header>
 
@@ -693,7 +735,8 @@ function setMode(m, save=true){
 })();
 modeBtn.addEventListener('click', ()=> setMode(html.dataset.mode==='present' ? 'detail' : 'present'));
 
-/* ── 장면 목록 → 칩 · 표지 흐름 ── */
+/* ── 장면 목록 → 칩 · 표지 흐름 · 이전/다음 ── */
+const hero = document.getElementById('top');
 const steps = [...document.querySelectorAll('.step')];
 const chips = document.getElementById('chips');
 const flow  = document.getElementById('flow');
@@ -705,35 +748,75 @@ steps.forEach((s,i)=>{
   chips.appendChild(c);
   const f = document.createElement('a');
   f.href='#'+s.id; f.innerHTML = `<span class="n">${i+1}</span><span class="t">${esc(title)}</span><span class="m">${min?min+'분':''}</span>`;
+  f.addEventListener('click', e=>{ e.preventDefault(); go(i); });
   flow.appendChild(f);
+  // 발표 모드에서만 보이는 이전·다음
+  const p = document.createElement('nav');
+  p.className = 'pager only-present';
+  const prev = i>0 ? `<button class="btn" data-go="${i-1}">← ${esc(steps[i-1].dataset.title)}</button>` : `<button class="btn" data-go="-1">← 표지</button>`;
+  const next = i<steps.length-1 ? `<button class="btn primary" data-go="${i+1}">${esc(steps[i+1].dataset.title)} →</button>` : '';
+  p.innerHTML = prev + '<span class="grow"></span>' + next;
+  s.querySelector(':scope > .wrap').appendChild(p);
 });
 const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
 { const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-go]'); if(!b) return;
+  e.preventDefault(); go(+b.dataset.go);
+});
+document.querySelectorAll('a[href="#s1"]').forEach(a=>a.addEventListener('click', e=>{ e.preventDefault(); go(0); }));
 
-/* ── 현재 장면 ── */
-let current = 0;
+/* ── 상세 문단: 기본은 접고 「자세히 읽기」로 펼침 ── */
+const details=[...document.querySelectorAll('.detail')];
+function setFold(d, open){
+  d.classList.toggle('folded', !open);
+  const b=d._btn; if(b){ b.setAttribute('aria-expanded', open?'true':'false'); b.textContent = open ? '접기' : '자세히 읽기'; }
+}
+details.forEach(d=>{
+  const b=document.createElement('button');
+  b.type='button'; b.className='more-btn'; d._btn=b;
+  d.before(b);
+  b.addEventListener('click', ()=> setFold(d, d.classList.contains('folded')));
+});
+const allBtn=document.getElementById('foldAll');
+let allOpen = ls.get(CONFIG.key+':open', false);
+function paintAll(){ details.forEach(d=>setFold(d, allOpen)); if(allBtn) allBtn.textContent = allOpen ? '글 모두 접기' : '글 모두 펼치기'; }
+if(allBtn) allBtn.addEventListener('click', ()=>{ allOpen=!allOpen; ls.set(CONFIG.key+':open', allOpen); paintAll(); });
+paintAll();
+
+/* ── 현재 장면 (-1 = 표지) ── */
+let current = -2;
 const chipEls = [...chips.children];
+function applyView(){
+  const present = html.dataset.mode==='present';
+  html.classList.toggle('at-cover', present && current<0);
+  steps.forEach((s,j)=> s.classList.toggle('cur', j===current));
+}
 function setCurrent(i){
-  if(i===current && chipEls[i].classList.contains('on')) return;
+  if(i===current) return;
   current = i;
-  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', j<i); });
-  chipEls[i].scrollIntoView({block:'nearest', inline:'nearest'});
+  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', i>=0 && j<i); });
+  if(i>=0) chipEls[i].scrollIntoView({block:'nearest', inline:'nearest'});
+  applyView();
   updateTimerLabel();
   if(IS_HOST) hostSend();
 }
+// 상세 모드에서는 스크롤 위치로 현재 장면을 정한다. 발표 모드는 넘긴 장면이 곧 현재 장면.
 const io = new IntersectionObserver(es=>{
+  if(html.dataset.mode==='present') return;
   const vis = es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
-  if(vis.length) setCurrent(steps.indexOf(vis[0].target));
+  if(vis.length) setCurrent(vis[0].target===hero ? -1 : steps.indexOf(vis[0].target));
 },{rootMargin:'-30% 0px -55% 0px', threshold:[0,.2,.5,1]});
-steps.forEach(s=>io.observe(s));
+io.observe(hero); steps.forEach(s=>io.observe(s));
 
-/* ── 타이머 ── */
+/* ── 타이머 (장면마다 따로) ── */
 const elapsed = steps.map(()=>0);
 let running=false, tick=null;
 const tmE=document.getElementById('tmElapsed'), tmP=document.getElementById('tmPlan'), tmT=document.getElementById('tmToggle'), timerEl=document.getElementById('timer');
 function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 function updateTimerLabel(){
-  const plan = +steps[current]?.dataset.min || 0;
+  if(current<0){ tmE.textContent='00:00'; tmP.textContent='/ 표지'; timerEl.classList.remove('over'); return; }
+  const plan = +steps[current].dataset.min || 0;
   tmE.textContent = fmt(elapsed[current]);
   tmP.textContent = plan ? `/ ${plan}분` : '';
   timerEl.classList.toggle('over', !!plan && elapsed[current] > plan*60);
@@ -741,13 +824,23 @@ function updateTimerLabel(){
 function toggleTimer(){
   running=!running; tmT.textContent = running ? '⏸' : '▶';
   clearInterval(tick);
-  if(running) tick=setInterval(()=>{ elapsed[current]++; updateTimerLabel(); },1000);
+  if(running) tick=setInterval(()=>{ if(current>=0){ elapsed[current]++; } updateTimerLabel(); },1000);
 }
 tmT.addEventListener('click', toggleTimer);
-document.getElementById('tmReset').addEventListener('click', ()=>{ elapsed[current]=0; updateTimerLabel(); });
+document.getElementById('tmReset').addEventListener('click', ()=>{ if(current>=0) elapsed[current]=0; updateTimerLabel(); });
 
-/* ── 키보드 ── */
-function go(i){ i=Math.max(0,Math.min(i,steps.length-1)); steps[i].scrollIntoView({behavior:'instant',block:'start'}); setCurrent(i); }
+/* ── 장면 이동 · 키보드 ── */
+function go(i){
+  i=Math.max(-1,Math.min(i,steps.length-1));
+  setCurrent(i);
+  if(html.dataset.mode==='present') window.scrollTo({top:0, behavior:'instant'});
+  else (i<0 ? hero : steps[i]).scrollIntoView({behavior:'instant', block:'start'});
+}
+modeBtn.addEventListener('click', ()=>{
+  applyView();
+  if(html.dataset.mode==='present') window.scrollTo({top:0, behavior:'instant'});
+  else if(current>=0) steps[current].scrollIntoView({behavior:'instant', block:'start'});
+});
 document.addEventListener('keydown', e=>{
   const tg=e.target; if((tg&&tg.matches&&tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
   if(e.key==='p'){ modeBtn.click(); return; }
@@ -764,7 +857,7 @@ function hostSend(){
   if(!sbOn) return;
   clearTimeout(hostTimer);
   hostTimer=setTimeout(async ()=>{
-    const id=steps[current].id;
+    const id = current<0 ? 'top' : steps[current].id;
     if(id===hostLast) return;
     try{
       const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:sbHeaders(),body:JSON.stringify({s:CODE,kind:'follow',name:'host',body:id})});
@@ -784,10 +877,10 @@ async function followPoll(){
     const [row]=await r.json(); if(!row) return;
     if(row.id===followLastId) return;
     followLastId=row.id;
-    const i=steps.findIndex(s=>s.id===row.body);
-    if(i<0 || !followOn) return;
+    const i = row.body==='top' ? -1 : steps.findIndex(s=>s.id===row.body);
+    if((i<0 && row.body!=='top') || !followOn) return;
     if(i===current){ followBar.hidden=true; return; }
-    if(typing()){ followTarget=i; followMsg.textContent=`강사 화면이 「${steps[i].dataset.title}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
+    if(typing()){ followTarget=i; followMsg.textContent=`강사 화면이 「${i<0?'표지':steps[i].dataset.title}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
     go(i);
   }catch(e){}
 }
@@ -900,7 +993,14 @@ function drawQRs(){
 }
 if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load', drawQRs); setTimeout(()=>{ if(!window.qrcode) drawQRs(); },2500); }
 
-setCurrent(0);
+// 시작: 주소에 #s3 같은 장면이 있으면 그 장면, 발표 모드면 표지, 상세 모드면 스크롤 위치
+(function(){
+  const h=location.hash.replace('#','');
+  const i=steps.findIndex(s=>s.id===h);
+  if(i>=0) go(i);
+  else if(html.dataset.mode==='present') go(-1);
+  else setCurrent(-1);
+})();
 </script>
 </body>
 </html>
