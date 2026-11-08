@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>칠판 강의 화면 모음 · 중학교 과학</title>
+<meta name="description" content="중학교 과학 칠판 강의 화면과 손글씨 단권화 노트를 한곳에 모았습니다. 전자칠판에 띄우고 방향키로 넘기며 설명하는 HTML 화면입니다.">
+<meta property="og:title" content="칠판 강의 화면 모음 · 중학교 과학">
+<meta property="og:description" content="칠판 강의 18편 · 손글씨 단권화 노트 13편 · 과학 이야기와 시뮬레이터 2편">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--bg:#f4f5f7;--line:#e3e6ea;--ink:#15181c;--ink-dim:#3d4450;--ink-mute:#6b7280;--navy:#26386f;--u:#26386f;--ul:#eceffa;
+ --body:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:inherit}
+.hic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hic.sm{width:16px;height:16px}
+
+/* 위 막대 */
+.topbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
+.topin{max-width:1240px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:10px}
+.brand .mk{width:26px;height:26px;border-radius:50%;background:var(--navy);box-shadow:inset -6px -5px 0 rgba(0,0,0,.18)}
+.brand b{font-size:18px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.kinds{display:flex;gap:4px}
+.kbtn{font:700 14.5px var(--body);padding:9px 16px;border:0;border-radius:10px;background:#f0f2f4;color:var(--ink-mute);cursor:pointer;white-space:nowrap}
+.kbtn:hover{background:#e6e9ec;color:var(--ink)}
+.kbtn[aria-pressed="true"]{background:var(--navy);color:#fff}
+.tsp{flex:1}
+.tcount{font-size:13.5px;font-weight:700;color:var(--ink-dim);background:#f0f2f4;border-radius:8px;padding:6px 10px;white-space:nowrap}
+@media(max-width:860px){.tcount{display:none}}
+@media(max-width:640px){.topin{padding:0 14px;height:58px;gap:8px}.brand{margin-right:0}.brand b{display:none}.kbtn{padding:7px 11px;font-size:13.5px}}
+
+.wrap{max-width:1240px;margin:0 auto;padding:22px 24px 40px}
+@media(max-width:700px){.wrap{padding:16px 14px 32px}}
+
+/* 첫 화면 3단 */
+.top3{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr) minmax(0,.95fr);gap:16px}
+@media(max-width:1100px){.top3{grid-template-columns:1fr 1fr}.hero{grid-column:1/-1}}
+@media(max-width:700px){.top3{grid-template-columns:1fr}}
+.hero{position:relative;overflow:hidden;display:flex;flex-direction:column;border-radius:20px;background:var(--navy);color:#fff;padding:30px 32px;min-height:320px}
+.hero .deco{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero>*:not(.deco){position:relative}
+.hk{font-size:14px;font-weight:700;color:rgba(255,255,255,.8)}
+.hero h1{margin:8px 0 0;font-size:36px;font-weight:800;letter-spacing:-.035em;line-height:1.22;max-width:600px}
+.hs{font-size:15.5px;color:rgba(255,255,255,.85);margin-top:10px}
+.hf{font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.78);margin-top:14px;max-width:560px}
+.ha{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:22px}
+.ha a{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--body);padding:12px 18px;border-radius:12px;text-decoration:none;border:1.5px solid rgba(255,255,255,.55);color:#fff;background:rgba(255,255,255,.08);transition:background .15s}
+.ha a:hover{background:rgba(255,255,255,.2)}
+.ha a.pri{background:#fff;border-color:#fff;color:var(--navy)}
+.ha a.pri:hover{background:#f2f4f7}
+@media(max-width:700px){.hero{padding:24px 22px;min-height:0}.hero h1{font-size:27px}}
+
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
+.ph{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
+.keys{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:14.5px;color:var(--ink-dim)}
+.keys li{display:flex;gap:10px;align-items:baseline}
+.keys kbd{flex:none;min-width:74px;font:700 13px var(--body);color:var(--ink);background:#f0f2f4;border-radius:7px;padding:3px 8px;text-align:center}
+.lbtn{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);text-decoration:none;cursor:pointer;font:inherit;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s}
+.lbtn+.lbtn{margin-top:8px}
+.lbtn:hover{border-color:var(--navy);box-shadow:0 4px 14px -8px rgba(0,0,0,.25)}
+.lbtn .hic{color:var(--navy)}
+.lbtn .t{flex:1;min-width:0;display:flex;flex-direction:column}
+.lbtn b{font-size:15.5px;font-weight:700;line-height:1.35}
+.lbtn small{font-size:12.5px;color:var(--ink-mute);margin-top:2px;line-height:1.45}
+.lbtn .go{flex:none;width:26px;height:26px;border-radius:50%;background:#f0f2f4;display:grid;place-items:center;color:var(--ink-dim);transition:background .15s,color .15s}
+.lbtn:hover .go{background:var(--navy);color:#fff}
+
+/* 단원 탭 + 카드 */
+#units{margin-top:16px;scroll-margin-top:80px}
+.utabs{display:flex;gap:6px;flex-wrap:wrap}
+.utab{display:inline-flex;align-items:center;gap:8px;font:700 15.5px var(--body);padding:12px 20px;border-radius:14px 14px 0 0;border:1px solid var(--line);border-bottom:0;background:#eceef1;color:var(--ink-mute);cursor:pointer}
+.utab small{font-size:12.5px;font-weight:600;opacity:.85}
+.utab:hover{color:var(--ink);background:#e4e7eb}
+.utab[aria-selected="true"]{background:var(--u);border-color:var(--u);color:#fff}
+.upanel{background:#fff;border:1px solid var(--line);border-top:4px solid var(--u);border-radius:0 18px 18px 18px;padding:22px}
+.uhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.uhead h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.03em}
+.uhead .pn{font-size:13.5px;color:var(--ink-mute);font-weight:600}
+.grp{margin-top:18px}
+.grp h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:15.5px;font-weight:800;color:var(--u)}
+.grp h3 .hic{width:18px;height:18px}
+.grp h3 small{font-size:13px;font-weight:600;color:var(--ink-mute)}
+.grp h3 .gd{font-size:13px;font-weight:500;color:var(--ink-mute);margin-left:4px}
+body[data-kind="board"] .grp:not([data-kind="board"]),body[data-kind="note"] .grp:not([data-kind="note"]){display:none}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.lcard{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;text-decoration:none;color:var(--ink);transition:border-color .15s,box-shadow .15s,transform .15s}
+.lcard:hover{border-color:var(--u);box-shadow:0 8px 22px -14px rgba(0,0,0,.35);transform:translateY(-2px)}
+.lcard .th{aspect-ratio:16/9;background:#111;border-bottom:1px solid var(--line)}
+.lcard .th img{display:block;width:100%;height:100%;object-fit:cover}
+.lcard .bd{display:flex;flex-direction:column;gap:8px;padding:14px 16px 16px;flex:1}
+.lc-top{display:flex;align-items:center;gap:8px}
+.lno{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13.5px;font-weight:800;border:2px solid var(--u);color:var(--u);font-variant-numeric:tabular-nums}
+.lno.ic{border:0;background:var(--ul)}
+.lno.ic .hic{width:16px;height:16px}
+.lsh{font-size:12.5px;font-weight:700;color:var(--ink-mute)}
+.lcard h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.4;letter-spacing:-.01em}
+.lcard p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink-mute);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.lgo{margin-top:auto;padding-top:4px;display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--u)}
+@media(max-width:700px){.upanel{padding:14px}.utab{padding:10px 14px;font-size:14px}.lgrid{grid-template-columns:1fr 1fr;gap:10px}.lcard .bd{padding:10px 12px 12px}.lcard h4{font-size:14.5px}.lcard p{display:none}}
+@media(max-width:420px){.lgrid{grid-template-columns:1fr}}
+
+.foot{margin-top:28px;padding-top:18px;border-top:1px dashed var(--line);text-align:center;font-size:12.5px;color:var(--ink-mute);line-height:1.8}
+</style>
+</head>
+<body data-kind="all">
+<header class="topbar"><div class="topin">
+  <a class="brand" href="#top"><span class="mk"></span><b>칠판 강의 화면 모음</b></a>
+  <div class="kinds" role="group" aria-label="보기">
+    <button class="kbtn" data-k="all" aria-pressed="true">전체</button>
+    <button class="kbtn" data-k="board" aria-pressed="false">칠판 강의</button>
+    <button class="kbtn" data-k="note" aria-pressed="false">손글씨 노트</button>
+  </div>
+  <span class="tsp"></span>
+  <span class="tcount">강의 18 · 노트 13 · 이야기·시뮬 2</span>
+</div></header>
+
+<main class="wrap" id="top">
+  <section class="top3">
+    <div class="hero">
+      <svg class="deco" viewBox="0 0 800 340" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" id="stars"></svg>
+      <div class="hk">중학교 과학 · 전자칠판 수업용 HTML</div>
+      <h1>칠판에 띄우고<br>넘기며 설명하는 강의 화면</h1>
+      <div class="hs">칠판 강의 18편 · 손글씨 단권화 노트 13편 · 과학 이야기와 시뮬레이터 2편</div>
+      <div class="hf">화면에서 열리는 빈칸 번호가 개념정리 학습지 번호와 같아서, 학생은 학습지에 받아 적고 선생님은 방향키로 한 단계씩 넘기며 설명합니다.</div>
+      <div class="ha">
+        <a class="pri" href="#units" data-go="board"><svg class="hic sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20l4-4 4 4"/></svg>칠판 강의 보기 ›</a>
+        <a href="#units" data-go="note"><svg class="hic sm" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>손글씨 노트 보기 ›</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="ph">이렇게 넘겨요</h2>
+      <ul class="keys">
+        <li><kbd>→ · Space</kbd>다음 단계 (화면을 눌러도 돼요)</li>
+        <li><kbd>←</kbd>한 단계 전으로</li>
+        <li><kbd>F</kbd>전체 화면</li>
+        <li><kbd>T</kbd>선생님 대본 열고 닫기</li>
+        <li><kbd>O</kbd>장면 목록 열기</li>
+        <li><kbd>펜 단추</kbd>오른쪽 아래 · 레이저와 빨간 펜</li>
+        <li><kbd>?s=1</kbd>주소 끝에 붙이면 학생 복습판</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2 class="ph">두 가지 화면</h2>
+      <button class="lbtn" data-go="board"><svg class="hic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20l4-4 4 4"/></svg>
+        <span class="t"><b>칠판 강의</b><small>학습지 빈칸과 1:1 · 움직이는 과학 그림 · 차시마다 한 편</small></span><span class="go">›</span></button>
+      <button class="lbtn" data-go="note"><svg class="hic" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>
+        <span class="t"><b>손글씨 단권화 노트</b><small>모눈종이에 한 줄씩 써지는 개념 정리 · 복습과 영상 강의용</small></span><span class="go">›</span></button>
+    </div>
+  </section>
+
+  <section id="units">
+    <div class="utabs" role="tablist" id="utabs"></div>
+    <div class="upanel" id="upanel"></div>
+  </section>
+
+  <footer class="foot" id="app-credit">제작 : 과학을 사랑하는 선생님 · © 2026 · All rights reserved · 최종 업데이트: 2026-11-09<br>강의 화면은 각 학교 교과서와 학습지에 맞춰 만든 것이라, 쓰시는 교과서와 빈칸 번호가 다를 수 있어요.</footer>
+</main>
+
+<script>
+const UNITS = [{"id": "elec", "name": "VII. 전기와 자기", "grade": "중2", "c": "#c4570b", "lo": "#fff1e4", "groups": [{"kind": "board", "title": "칠판 강의", "items": [{"t": "마찰하면 생기는 전기", "d": "타닥·찌릿의 정체 → 전기력(척력·인력) → 대전 → 전자의 이동 → 대전열", "sheet": "학습지 1", "no": "1", "url": "https://scienceisjo.github.io/electricity/share/01-friction-lecture.html", "thumb": "thumbs/electricity_01-friction-lecture.webp"}, {"t": "정전기 유도", "d": "문지르지 않은 캔이 끌려온다 → 자유 전자의 이동 → (+)·(−) 대전체 → 두 금속 구 떼는 순서", "sheet": "학습지 2", "no": "2", "url": "https://scienceisjo.github.io/electricity/share/02-induction-lecture.html", "thumb": "thumbs/electricity_02-induction-lecture.webp"}, {"t": "전류 · 전압 · 저항", "d": "스위치를 켜면 곧바로 켜지는 까닭 → 전류의 세기·방향 → 물의 흐름 모형 → 전압 → 저항", "sheet": "학습지 3", "no": "3", "url": "https://scienceisjo.github.io/electricity/share/03-current-lecture.html", "thumb": "thumbs/electricity_03-current-lecture.webp"}, {"t": "옴의 법칙", "d": "두 손잡이(전압·저항) → I = V ÷ R → 표를 그래프로 → 기울기 = 저항의 역수 → 도체·부도체·반도체", "sheet": "학습지 4", "no": "4", "url": "https://scienceisjo.github.io/electricity/share/04-ohm-lecture.html", "thumb": "thumbs/electricity_04-ohm-lecture.webp"}, {"t": "한 줄로 이을까, 나란히 이을까", "d": "저항의 직렬·병렬연결 — 도로·버블티·미끄럼틀·갈림길 비유와 전구 실험", "sheet": "학습지 5", "no": "5", "url": "https://scienceisjo.github.io/electricity/share/05-series-parallel-lecture.html", "thumb": "thumbs/electricity_05-series-parallel-lecture.webp"}, {"t": "전기 에너지의 전환과 소비 전력", "d": "에너지 전환·손실 → 소비 전력(1 W = 1 J/s) → 전력량(Wh) → 에너지 효율", "sheet": "학습지 6", "no": "6", "url": "https://scienceisjo.github.io/electricity/share/06-power-lecture.html", "thumb": "thumbs/electricity_06-power-lecture.webp"}, {"t": "코일 주위의 자기장", "d": "스위치를 켜자 나침반이 돌았다 → 자기장·자기력선 → 전류가 만드는 자기장 → 오른손 규칙 → 전자석", "sheet": "학습지 7", "no": "7", "url": "https://scienceisjo.github.io/electricity/share/07-coil-field-lecture.html", "thumb": "thumbs/electricity_07-coil-field-lecture.webp"}, {"t": "코일이 받는 힘과 전동기", "d": "자석 옆 코일이 움직인다 → 자기장 속 전류가 받는 힘 → 손바닥 규칙 → 전동기 → 스피커", "sheet": "학습지 8", "no": "8", "url": "https://scienceisjo.github.io/electricity/share/08-motor-lecture.html", "thumb": "thumbs/electricity_08-motor-lecture.webp"}]}, {"kind": "note", "title": "손글씨 단권화 노트", "items": [{"t": "마찰 전기", "d": "전하 → 마찰 전기와 대전(전자의 이동) → 전기력 → 대전열 읽기 → 시험 포인트 · 확인 문제", "sheet": "노트 1", "no": "1", "url": "https://scienceisjo.github.io/electricity/share/note-01-friction.html", "thumb": "thumbs/electricity_note-01-friction.webp"}, {"t": "정전기 유도", "d": "대전체를 가까이 → 자유 전자 이동 → 가까운 쪽 반대 전하 → 마찰과 비교 → 붙여 놓은 두 금속 구", "sheet": "노트 2", "no": "2", "url": "https://scienceisjo.github.io/electricity/share/note-02-induction.html", "thumb": "thumbs/electricity_note-02-induction.webp"}, {"t": "전류 · 전압 · 저항", "d": "전류 · 전압 · 저항 → 전류의 방향과 전자의 이동 → 물의 흐름 모형 → 저항의 요인 → 도체 · 부도체 · 반도체", "sheet": "노트 3", "no": "3", "url": "https://scienceisjo.github.io/electricity/share/note-03-current.html", "thumb": "thumbs/electricity_note-03-current.webp"}, {"t": "옴의 법칙", "d": "I = V ÷ R → 비례(직선) → 기울기 = 1/R → 반비례(곡선) → 기본 계산", "sheet": "노트 4", "no": "4", "url": "https://scienceisjo.github.io/electricity/share/note-04-ohm.html", "thumb": "thumbs/electricity_note-04-ohm.webp"}, {"t": "저항의 직렬 · 병렬 연결", "d": "직렬은 전류 같음 · 병렬은 전압 같음 → 전구를 하나 더 → 하나가 끊기면 → 생활 속 이용", "sheet": "노트 5", "no": "5", "url": "https://scienceisjo.github.io/electricity/share/note-05-series-parallel.html", "thumb": "thumbs/electricity_note-05-series-parallel.webp"}, {"t": "전기 에너지와 전력", "d": "에너지 전환 → 소비 전력(W) → 전력량(Wh) → 에너지 효율", "sheet": "노트 6", "no": "6", "url": "https://scienceisjo.github.io/electricity/share/note-06-power.html", "thumb": "thumbs/electricity_note-06-power.webp"}, {"t": "자기장과 전류의 자기 작용", "d": "자기력 → 자기장 · 자기력선 → 전류가 만드는 자기장 → 오른손 규칙 → 전자석", "sheet": "노트 7", "no": "7", "url": "https://scienceisjo.github.io/electricity/share/note-07-magnetic-field.html", "thumb": "thumbs/electricity_note-07-magnetic-field.webp"}, {"t": "코일이 받는 힘과 전동기", "d": "코일이 받는 힘 → 오른손바닥 → 방향을 바꾸면 → 전동기 → 스피커", "sheet": "노트 8", "no": "8", "url": "https://scienceisjo.github.io/electricity/share/note-08-motor.html", "thumb": "thumbs/electricity_note-08-motor.webp"}, {"t": "찐막 총정리", "d": "기말고사 전, 헷갈리는 관계 여섯 가지 최종 점검 → 시험 포인트 → 확인 문제", "sheet": "노트 9", "no": "9", "url": "https://scienceisjo.github.io/electricity/share/note-09-review.html", "thumb": "thumbs/electricity_note-09-review.webp"}]}]}, {"id": "star", "name": "VIII. 별과 우주", "grade": "중2", "c": "#26386f", "lo": "#eceffa", "groups": [{"kind": "board", "title": "칠판 강의", "items": [{"t": "연주시차와 별까지의 거리", "d": "연주 운동 복습 → 눈으로 보는 시차 → 관찰 위치와 거리에 따른 시차 → 연주시차 3D 모형 → 별까지의 거리", "sheet": "학습지 1", "no": "1", "url": "https://scienceisjo.github.io/starandspace/share/lecture-01-parallax.html", "thumb": "thumbs/starandspace_lecture-01-parallax.webp"}, {"t": "별의 밝기와 등급", "d": "멀어진 손전등 → 빛이 퍼지는 면적 → 거리와 밝기의 관계 → 등급으로 나타낸 밝기 → 등급 차와 밝기 비", "sheet": "학습지 2", "no": "2", "url": "https://scienceisjo.github.io/starandspace/share/lecture-02-brightness.html", "thumb": "thumbs/starandspace_lecture-02-brightness.webp"}, {"t": "겉보기·절대 등급과 별의 색", "d": "겉보기 등급 → 10 pc 기준 절대 등급 → 오리온자리 베텔게우스와 리겔 → 별의 색과 표면 온도", "sheet": "학습지 3", "no": "3", "url": "https://scienceisjo.github.io/starandspace/share/lecture-03-magnitude-color.html", "thumb": "thumbs/starandspace_lecture-03-magnitude-color.webp"}, {"t": "우리은하의 구조와 은하수", "d": "맨눈과 망원경으로 본 밤하늘 → 위에서 본 우리은하 → 태양계의 위치 → 은하수 → 계절에 따른 은하수", "sheet": "학습지 4", "no": "4", "url": "https://scienceisjo.github.io/starandspace/share/lecture-04-milkyway.html", "thumb": "thumbs/starandspace_lecture-04-milkyway.webp"}, {"t": "성운과 성단", "d": "흐릿하게 보이는 천체 → 방출·반사·암흑 성운 → 산개 성단과 구상 성단", "sheet": "학습지 5", "no": "5", "url": "https://scienceisjo.github.io/starandspace/share/lecture-05-nebula-clusters.html", "thumb": "thumbs/starandspace_lecture-05-nebula-clusters.webp"}, {"t": "우주 팽창", "d": "외부 은하 → 풍선 모형 → 기준 은하를 바꾸어 볼 때 → 우주의 나이 → 풍선 모형의 한계", "sheet": "학습지 6", "no": "6", "url": "https://scienceisjo.github.io/starandspace/share/lecture-06-expansion.html", "thumb": "thumbs/starandspace_lecture-06-expansion.webp"}]}, {"kind": "extra", "title": "과학 이야기 · 시뮬레이터", "items": [{"t": "광도와 조도로 알아보는 밝기와 거리", "d": "정규 차시와 따로 보는 이야기 · 멀어지면 왜 어두워질까 → 광도와 밝기 → 공 껍질로 퍼지는 빛 → F = L ÷ 4πd² → 태양 빛 1361 W/m² 직접 계산", "sheet": "과학 이야기", "no": "", "url": "https://scienceisjo.github.io/starandspace/share/lecture-story-brightness.html", "thumb": "thumbs/starandspace_lecture-story-brightness.webp"}, {"t": "별 여행 · 우주 항해 시뮬레이터", "d": "태양계에서 비슷하게 밝아 보이는 베가 · 리겔로 직접 날아가 보기 → 거리와 밝기 비교 → 항해 일지에 이상한 점 · 질문 쓰기", "sheet": "시뮬레이터", "no": "", "url": "https://scienceisjo.github.io/starandspace/share/star-trip.html", "thumb": "thumbs/starandspace_star-trip.webp"}]}]}, {"id": "gas", "name": "VI. 기체의 성질", "grade": "중1", "c": "#0a74a8", "lo": "#e6f3fa", "groups": [{"kind": "board", "title": "칠판 강의", "items": [{"t": "압력 — 일정한 면적에 작용하는 힘", "d": "연필 양끝 누르기 → 스펀지 실험대 → 압력 = 힘 ÷ 면적 → 단위 N/m² → 압력 바구니", "sheet": "학습지 1", "no": "1", "url": "https://scienceisjo.github.io/gas-properties/share/01-pressure-lecture.html", "thumb": "thumbs/gas-properties_01-pressure-lecture.webp"}, {"t": "기체의 압력 — 입자의 충돌", "d": "입자가 벽에 부딪혀 가하는 힘 → 모든 방향 → 입자 수와 충돌 횟수 → 생활 속 기체 압력", "sheet": "학습지 2", "no": "2", "url": "https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html", "thumb": "thumbs/gas-properties_02-gas-pressure-lecture.webp"}, {"t": "압력과 부피 — 온도가 일정할 때", "d": "주사기로 누르기 → 입자로 설명하기 → 표와 그래프 → 생활에서 찾기", "sheet": "학습지 3", "no": "3", "url": "https://scienceisjo.github.io/gas-properties/share/03-boyle-lecture.html", "thumb": "thumbs/gas-properties_03-boyle-lecture.webp"}, {"t": "온도와 부피 — 압력이 일정할 때", "d": "냉장고 속 생수병 → 데우면 활발해지는 입자 → 스포이트 물방울 실험 → 표와 그래프 → 생활에서 찾기", "sheet": "학습지 4", "no": "4", "url": "https://scienceisjo.github.io/gas-properties/share/04-charles-lecture.html", "thumb": "thumbs/gas-properties_04-charles-lecture.webp"}]}, {"kind": "note", "title": "손글씨 단권화 노트", "items": [{"t": "기체의 성질 총정리", "d": "압력과 부피 → 온도와 부피 → 두 관계 한눈에 → 생활 속 기체의 부피 변화 → 스스로 확인하기 (20장면)", "sheet": "총정리", "no": "", "url": "https://scienceisjo.github.io/gas-properties/share/note-review.html", "thumb": "thumbs/gas-properties_note-review.webp"}, {"t": "기체의 성질 총정리 · 빈칸 번호판", "d": "총정리 화면에 손글씨 단권화 학습지(2쪽) 빈칸 번호 1~49를 파란 배지로 표시", "sheet": "번호판", "no": "", "url": "https://scienceisjo.github.io/gas-properties/share/note-review-blanks.html", "thumb": "thumbs/gas-properties_note-review-blanks.webp"}, {"t": "기체의 성질 전체 강의", "d": "압력 → 기체의 압력 → 압력과 부피 → 온도와 부피 → 두 관계 한눈에 → 생활 속 기체의 부피 변화 → 스스로 확인하기 (33장면)", "sheet": "전체 강의", "no": "", "url": "https://scienceisjo.github.io/gas-properties/share/note-full.html", "thumb": "thumbs/gas-properties_note-full.webp"}, {"t": "기체의 성질 전체 강의 · 빈칸 번호판", "d": "전체 강의 화면에 손글씨 단권화 최종본(4쪽) 빈칸 번호 1~78을 파란 배지로 표시", "sheet": "번호판", "no": "", "url": "https://scienceisjo.github.io/gas-properties/share/note-full-blanks.html", "thumb": "thumbs/gas-properties_note-full-blanks.webp"}]}]}];
+const IC = {
+  board:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20l4-4 4 4"/>',
+  note:'<path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/>',
+  extra:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3 1.8"/>',
+  arrow:'<path d="M5 12h13M13 6l6 6-6 6"/>'
+};
+const GD = {
+  board:'학습지 빈칸 번호대로 열리는 수업용 화면',
+  note:'개념을 한 장씩 손글씨로 정리한 복습 화면',
+  extra:'정규 차시와 따로 보는 이야기와 체험'
+};
+const svg = (k, c) => `<svg class="hic${c ? ' ' + c : ''}" viewBox="0 0 24 24">${IC[k]}</svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tabs = document.getElementById('utabs'), panel = document.getElementById('upanel');
+
+function count(u, k){ return u.groups.filter(g => g.kind === k).reduce((s, g) => s + g.items.length, 0); }
+function meta(u){
+  const a = [u.grade, '칠판 강의 ' + count(u, 'board') + '편'];
+  if(count(u, 'note')) a.push('손글씨 노트 ' + count(u, 'note') + '편');
+  if(count(u, 'extra')) a.push('이야기·시뮬레이터 ' + count(u, 'extra') + '편');
+  return a.join(' · ');
+}
+function card(it, kind){
+  const no = it.no ? `<span class="lno">${esc(it.no)}</span>` : `<span class="lno ic">${svg(kind === 'extra' ? 'extra' : kind, 'sm')}</span>`;
+  const go = kind === 'note' ? '노트 열기' : kind === 'extra' ? '열기' : '칠판 열기';
+  return `<a class="lcard" href="${esc(it.url)}" target="_blank" rel="noopener">
+    <div class="th"><img src="${esc(it.thumb)}" alt="${esc(it.t)} 첫 화면" loading="lazy" width="640" height="360"></div>
+    <div class="bd"><div class="lc-top">${no}<span class="lsh">${esc(it.sheet)}</span></div>
+    <h4>${esc(it.t)}</h4><p>${esc(it.d)}</p><span class="lgo">${go} ${svg('arrow', 'sm')}</span></div></a>`;
+}
+function show(id){
+  const u = UNITS.find(x => x.id === id) || UNITS[0];
+  document.documentElement.style.setProperty('--u', u.c);
+  document.documentElement.style.setProperty('--ul', u.lo);
+  tabs.querySelectorAll('.utab').forEach(b => b.setAttribute('aria-selected', b.dataset.id === u.id ? 'true' : 'false'));
+  panel.innerHTML = `<div class="uhead"><h2>${esc(u.name)}</h2><span class="pn">${esc(meta(u))}</span></div>` +
+    u.groups.map(g => `<div class="grp" data-kind="${g.kind}"><h3>${svg(g.kind)}${esc(g.title)} <small>${g.items.length}편</small><span class="gd">${GD[g.kind]}</span></h3>
+      <div class="lgrid">${g.items.map(it => card(it, g.kind)).join('')}</div></div>`).join('');
+  try{ history.replaceState(null, '', '#' + u.id); }catch(e){}
+}
+tabs.innerHTML = UNITS.map(u => `<button class="utab" role="tab" data-id="${u.id}">${esc(u.name)} <small>${esc(u.grade)}</small></button>`).join('');
+tabs.addEventListener('click', e => { const b = e.target.closest('.utab'); if(b) show(b.dataset.id); });
+
+function setKind(k){
+  document.body.dataset.kind = k;
+  document.querySelectorAll('.kbtn').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false'));
+  /* 고른 종류가 없는 단원이면 있는 단원으로 */
+  const cur = UNITS.find(u => '#' + u.id === location.hash) || UNITS[0];
+  if(k !== 'all' && !count(cur, k)){ const u = UNITS.find(x => count(x, k)); if(u) show(u.id); }
+}
+document.querySelectorAll('.kbtn').forEach(b => b.addEventListener('click', () => setKind(b.dataset.k)));
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', e => {
+  e.preventDefault(); setKind(b.dataset.go);
+  document.getElementById('units').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}));
+
+/* 첫 화면 별 무늬(씨앗 고정) */
+(function(){
+  const s = document.getElementById('stars'); let x = 7, out = '';
+  const r = () => (x = (x * 9301 + 49297) % 233280) / 233280;
+  for(let i = 0; i < 46; i++){ const cx = 300 + r() * 500, cy = r() * 340, rr = r() < .12 ? 2.4 : r() * 1.3 + .5;
+    out += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rr.toFixed(1)}" fill="#fff" opacity="${(.35 + r() * .55).toFixed(2)}"/>`; }
+  s.innerHTML = out;
+})();
+
+show((location.hash || '').slice(1));
+</script>
+</body>
+</html>
