@@ -232,6 +232,38 @@ html[data-mode="present"] footer#app-credit{display:none}
   .detail.folded{display:block!important}
   .more-btn,.pager{display:none!important}
 }
+
+/* ── v3: 만화 한 장면 · 부탁문 복사 ── */
+.toon{display:none;margin:16px 0 4px;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff}
+.toon.ok{display:block}
+.toon img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:var(--bg2)}
+.toon figcaption{padding:10px 14px;font-size:.88em;color:var(--ink2);border-top:1px solid var(--line)}
+html.cue-on .toon:not(.ok){display:block;border-style:dashed}
+html.cue-on .toon:not(.ok) img{display:none}
+html.cue-on .toon:not(.ok) figcaption::before{content:"그림 자리 · " attr(data-file) " · ";color:var(--warn);font-weight:600}
+html[data-mode="present"] .toon img{max-height:44vh}
+.copy-box{border:1px solid var(--line);border-radius:var(--r3);background:var(--bg2);margin:16px 0;overflow:hidden}
+.copy-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:#fff}
+.copy-box pre{margin:0;padding:14px 16px;white-space:pre-wrap;word-break:keep-all;font-family:inherit;font-size:.92em;line-height:1.7;color:var(--ink)}
+@media print{ .toon:not(.ok),.copy-h .btn{display:none!important} }
+
+/* ── 릴스(인스타그램 임베드) ── */
+.reel-row{display:grid;grid-template-columns:minmax(300px,360px) 1fr;gap:22px;align-items:start;margin-top:14px}
+.reel-row.one{grid-template-columns:minmax(300px,380px)}
+.reel{min-width:0}
+.reel-box{container-type:inline-size;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff}
+/* 인스타 임베드 = 머리 54px + 영상 4:5 + 아래 글 약 150px */
+.reel-box iframe{display:block;width:100%;height:calc(125cqw + 204px);border:0;background:#fff}
+.reel-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;margin-top:6px;font-size:.8em;color:var(--ink3)}
+.reel-foot a{color:var(--blue);text-decoration:none}
+.reel-row .live{margin-top:0}
+.quiz form{grid-template-columns:150px 1fr auto}
+.quiz .answers ol{margin:10px 0 0;padding-left:1.6em}
+.quiz .answers li{padding:4px 0;border-bottom:1px solid var(--line)}
+.quiz .answers .who{color:var(--ink2);margin-left:8px}
+.quiz .answers .tm{color:var(--ink3);font-size:.85em;margin-left:6px}
+@media (max-width:760px){ .reel-row,.reel-row.one{grid-template-columns:1fr} .reel{max-width:400px} }
+@media print{ .reel-box{display:none} }
 </style>
 </head>
 <body>
@@ -257,8 +289,8 @@ html[data-mode="present"] footer#app-credit{display:none}
     <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">2026 개념기반 탐구독서 이해를 위한 강동송파 독서교육교사단 하반기 워크숍</div>
     <h1>독서와 AI 연계</h1>
-    <p class="lead">과학 교사가 AI로 공부하다 겪은 일과 그걸 고친 방법을 말씀드리고, 그 생각으로 만든 읽기 도구를 함께 열어보겠습니다!</p>
-    <div class="pipe" aria-label="오늘의 흐름"><span class="n">질문하는 교실</span><span class="a">→</span><span class="n">「요약해줘」 고백</span><span class="a">→</span><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">지금 독서가 필요한 까닭</span><span class="a">→</span><span class="n hi">읽기 노트</span></div>
+    <p class="lead">제 과학 수업과 직접 만든 도구들, AI로 공부하다 겪은 실패를 말씀드리고, 선생님 교실에 맞는 독서 도구를 만드는 순서까지 함께 보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">질문하는 교실</span><span class="a">→</span><span class="n">연수의 방향</span><span class="a">→</span><span class="n">「요약해줘」 고백</span><span class="a">→</span><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">학생과 AI</span><span class="a">→</span><span class="n hi">나만의 독서 도구</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
       <span>📅 <b>2026. 11. 9.(월) 20:00~21:30</b></span>
@@ -278,10 +310,10 @@ html[data-mode="present"] footer#app-credit{display:none}
 <main>
 
 <!-- ① 인사 -->
-<section class="step" id="s1" data-title="인사" data-min="2">
+<section class="step" id="s1" data-title="인사" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2><span class="min"><b>2</b>분</span></div>
-    <p class="goal">QR로 들어와 화면을 맞추고, 짧은 질문 하나로 시작해보겠습니다!</p>
+    <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">QR로 들어와 화면을 맞추고, 퀴즈 하나와 선생님들의 고민 나눔으로 시작해보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">QR로 들어오시면 제 화면을 따라 넘어갑니다</p>
@@ -298,76 +330,185 @@ html[data-mode="present"] footer#app-credit{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw">요즘 학생들이 글을 읽는 모습에서 눈에 띄는 것이 있으신가요?</p>
-      <div class="live" data-kind="w1" data-max="300">
-        <div class="q">요즘 학생들이 글을 읽는 모습에서 눈에 띄는 것이 있으신가요?</div>
-        <form>
-          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
-          <button class="btn primary" type="submit">올리기</button>
-        </form>
-        <div class="st"></div>
-        <div class="wall"></div>
+      <p class="kw">오프닝 퀴즈: AI로 뭐든 바로 해결한다는 뜻의 신조어는?</p>
+      <p class="brief">가장 먼저 맞히신 선생님께 커피 쿠폰을 드립니다!</p>
+      <div class="reel-row">
+        <div class="reel" data-reel="DfcQLf2vLqE"><div class="reel-box"><iframe src="https://www.instagram.com/reel/DfcQLf2vLqE/embed/" title="EBS 생각의 멸종 릴스" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe></div><div class="reel-foot"><span class="src">EBS 「생각의 멸종」 · 인스타그램 @ebs_yourliteracy</span><a href="https://www.instagram.com/reel/DfcQLf2vLqE/" target="_blank" rel="noopener">인스타그램에서 보기 ↗</a></div></div>
+        <div class="live quiz" data-kind="q_word">
+          <div class="q">정답을 적어 주세요</div>
+          <form>
+            <input name="name" placeholder="이름 (쿠폰 받으실 분)" maxlength="30" autocomplete="off">
+            <input name="body" placeholder="정답" maxlength="40" autocomplete="off">
+            <button class="btn primary" type="submit">제출</button>
+          </form>
+          <div class="st"></div>
+          <div class="small cnt-line"></div>
+          <div class="answers"></div>
+        </div>
       </div>
+      <div class="cue">영상 첫 장면이 문제 · 정답 나오기 전에 멈추기 · 답 목록(먼저 낸 순서)은 진행 화면에서만 보임</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">AI를 못 쓰게 할 수도 없고, 과제를 내면 다 AI로 해 오고</p>
+      <p class="brief">AI 시대 선생님들의 고민을 담은 영상입니다. 독서교육을 하시는 선생님들의 고민도 듣고 싶습니다.</p>
+      <div class="reel-row">
+        <div class="reel" data-reel="DfbzdvHPpLK"><div class="reel-box"><iframe src="https://www.instagram.com/reel/DfbzdvHPpLK/embed/" title="EBS 생각의 멸종 릴스" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe></div><div class="reel-foot"><span class="src">EBS 「생각의 멸종」 · 인스타그램 @ebs_yourliteracy</span><a href="https://www.instagram.com/reel/DfbzdvHPpLK/" target="_blank" rel="noopener">인스타그램에서 보기 ↗</a></div></div>
+        <div class="live" data-kind="w_hard" data-max="300">
+          <div class="q">독서교육을 하시면서 가장 어려운 점은 무엇인가요?</div>
+          <form>
+            <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+            <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
+            <button class="btn primary" type="submit">올리기</button>
+          </form>
+          <div class="st"></div>
+          <div class="wall"></div>
+        </div>
+      </div>
+      <p class="small">적어 주신 어려운 점은 ⑧ 장면에서 독서 도구를 이야기할 때 다시 꺼내 보겠습니다.</p>
     </div>
   </div>
 </section>
 
 <!-- ② 내 수업 소개 -->
-<section class="step" id="s2" data-title="질문하는 교실" data-min="7">
+<section class="step" id="s2" data-title="질문하는 교실" data-min="6">
   <div class="wrap">
-    <div class="step-h"><span class="num">2</span><h2>제 수업으로 드리는 인사</h2><span class="min"><b>7</b>분</span></div>
+    <div class="step-h"><span class="num">2</span><h2>제 수업으로 드리는 인사</h2><span class="min"><b>6</b>분</span></div>
     <p class="goal">교사가 자기를 소개하는 가장 빠른 방법은 자기 수업을 소개하는 것이라고 들어서, 제 과학 시간을 먼저 보여 드리겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">학생들이 질문하지 않던 세 가지 까닭</p>
-      <p class="brief">질문할 틈이 없고, 분위기가 아니고, 혼자 튀기 싫어서였습니다.</p>
+      <p class="kw">제 과학 시간을 한 줄로 말하면, 질문하는 과학 수업입니다</p>
+      <p class="brief">이번 학기 목표는 질문의 활성화 에너지를 낮추는 것이었습니다.</p>
+      <figure class="toon" data-toon="s2-silent"><img src="img/s2-silent.webp" alt="선생님이 질문 있느냐고 묻자 학생들이 모두 눈을 피하며 조용해진 교실"><figcaption>「질문 있는 사람?」 한마디면 교실이 조용해집니다.</figcaption></figure>
+      <div class="detail">
+        <p>저는 화학을 전공했고, 지금은 중학교 2학년에게 별과 우주를 가르치고 있습니다. 화학에서 활성화 에너지는 반응이 일어나려면 넘어야 하는 언덕입니다. 저는 학생들에게 이번 학기 목표를 질문하는 데 드는 에너지를 낮추는 것이라고 말했습니다. 어떤 현상을 보거나 배우다가 나도 모르게 질문이 나올 정도까지 가 보자는 뜻이었습니다.</p>
+        <p>사실 교실을 한순간에 조용하게 만드는 방법이 있습니다. 「질문 있는 사람?」 하고 물으면 됩니다. AI 시대에는 질문하면서 배우는데, 정작 우리 학생들은 질문을 잘 꺼내지 않습니다.</p>
+      </div>
+      <div class="cue">「질문 받겠습니다/질문 있는 사람?」 대목은 받아쓰기가 흐려서 짐작으로 적음 · 말할 때 바로잡기</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생이 질문할 수밖에 없게 하려고 정한 네 가지</p>
       <div class="grid2">
-        <div class="box"><b>질문 시간을 꼭 줍니다</b><p>수업 끝에 질문하는 시간을 빼지 않고 둡니다.</p></div>
-        <div class="box"><b>어떤 질문이든 크게 반응합니다</b><p>나쁜 질문은 없고, 불친절한 답만 있을 뿐이라고 말합니다.</p></div>
-        <div class="box"><b>다 같이 질문합니다</b><p>모두 질문하니 한 사람이 튀지 않습니다.</p></div>
+        <div class="box"><b>질문이 나올 경험부터</b><p>질문할 수밖에 없는 인지적 경험이나 몸으로 겪는 경험을 먼저 줍니다.</p></div>
+        <div class="box"><b>질문한 과정을 기록</b><p>질문이 어떻게 다듬어지고 풀렸는지 남깁니다.</p></div>
+        <div class="box"><b>좋은 질문보다 많은 질문</b><p>질문을 만들다 보면 좋은 질문이 나온다고 봤습니다.</p></div>
+        <div class="box"><b>다음 단계로 가는 질문</b><p>호기심을 끄는 질문에서 멈추지 않고, 수업을 집중해 들은 뒤에 그다음으로 나아가는 질문을 스스로 던지게 합니다.</p></div>
       </div>
       <div class="detail">
-        <p>저는 화학을 전공했고, 지금은 중학교 2학년에게 별과 우주를 가르치고 있습니다. 제 교실의 목표는 학생들에게서 질문이 나오는 교실입니다. 저는 학생들이 질문하지 않는 까닭을 세 가지로 봤습니다. 질문할 틈이 없고, 질문할 분위기가 아니고, 혼자 튀는 게 싫어서입니다.</p>
-        <p>그래서 위의 세 가지를 지금까지 지키고 있습니다. 학생들에게는 2학기 첫 시간부터 "나쁜 질문은 없다, 불친절한 답만 있을 뿐"이라고 말해 왔습니다.</p>
+        <p>학생에게 질문하라고 말하기 전에, 질문이 나올 수밖에 없는 경험을 먼저 주려고 합니다. 그래서 궁금증이 생기도록 사진과 영상으로 질문유발자료를 직접 만듭니다. 그리고 좋은 질문을 만들라고 다그치기보다, 질문을 많이 만들다 보면 그중에 좋은 질문이 나온다고 생각했습니다.</p>
+        <p>호기심을 끄는 질문도 좋지만, 저는 수업을 집중해서 들은 다음에야 나올 수 있는 질문을 학생이 스스로 던져 보기를 바랐습니다.</p>
       </div>
     </div>
 
     <div class="blk">
-      <p class="kw">질문을 끌어내고, 모으고, 칭찬하는 세 가지 장치</p>
+      <p class="kw">질문은 창이 아니라 거울입니다</p>
+      <p class="brief">오리엔테이션 때 학생들에게 한 말입니다.</p>
       <div class="grid2">
-        <div class="box"><b>질문유발자료</b><p>궁금증이 생기도록 사진과 영상 자료를 직접 만듭니다.</p></div>
-        <div class="box"><b>질문과수원</b><p>학생이 질문을 심고, 다듬고, 스스로 답을 찾아 적는 웹앱입니다. 2학년 질문이 1,700개 넘게 모였습니다.</p></div>
-        <div class="box"><b>이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 이번 달 말에 처음 줍니다.</p></div>
+        <div class="box"><b>창</b><p>바깥을 봅니다.</p></div>
+        <div class="box"><b>거울</b><p>나를 봅니다. 어떤 질문을 하는지가 내가 어떤 사람인지, 얼마나 이해했는지를 보여 줍니다.</p></div>
+      </div>
+      <figure class="toon" data-toon="s2-mirror"><img src="img/s2-mirror.webp" alt="학생이 거울 앞에 서서 자기 모습 위로 떠오른 물음표를 바라보는 장면"><figcaption>내가 던진 질문이 나를 비춥니다.</figcaption></figure>
+      <div class="detail">
+        <p>창은 바깥을 보는 것이고, 거울은 자기 자신을 보는 것입니다. 그래서 너희가 어떤 질문을 하는지가 너희가 어떤 사람인지, 얼마나 이해했는지를 말해 준다고 이야기했습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">질문을 모으는 곳, 질문과수원</p>
+      <p class="brief">학생이 질문을 심고, 다듬고, 스스로 답을 찾아 적는 웹앱입니다. 2학년 질문이 1,700개 넘게 모였습니다.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문과수원 열기 ↗</a>
+      </div>
+      <div class="detail" style="margin-top:14px">
+        <p>질문과수원은 제가 만든 웹앱입니다. 학생이 질문을 올리면 친구들이 물을 주고, 제가 되묻기를 달고, 학생은 답을 찾아 적습니다. 11월 초에 세어 보니 2학년 학생들이 올린 질문이 1,700개를 넘었습니다.</p>
+      </div>
+      <div class="cue">질문 수(11-04 기준) 확인 · 함께 소개할 「웹」 링크 받으면 여기에</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">가장 중요하게 여기는 것은 질문하기 편한 교실입니다</p>
+      <div class="grid2">
+        <div class="box"><b>올라온 질문은 바로 읽습니다</b><p>수업을 열 때 학생들이 올린 질문을 모두가 보는 앞에서 읽고, 진지하게 고민하는 모습을 보여 줍니다.</p></div>
+        <div class="box"><b>엉뚱한 질문도 진지하게</b><p>엉뚱한 질문에도 진지하게 피드백을 하고, 질문한 것을 많이 칭찬합니다.</p></div>
+        <div class="box"><b>이번 달부터 이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 줍니다.</p></div>
       </div>
       <div class="detail">
-        <p>질문과수원은 제가 만든 웹앱입니다. 학생이 질문을 올리면 친구들이 물을 주고, 제가 되묻기를 달고, 학생은 답을 찾아 적습니다. 11월 초에 세어 보니 2학년 학생들이 올린 질문이 1,700개를 넘었습니다.</p>
         <p>상은 질문 개수로 주지 않습니다. 끝까지 파고든 학생, 예상이 빗나간 것을 기록한 학생, 배운 것을 생활과 이은 학생처럼 이야기가 있는 학생에게 주려고 이름을 그렇게 지었습니다. 콩글리쉬상은 자판이 영어로 바뀌어 있어도 포기하지 않고 로마자로 질문을 올린 학생에게 주는 상입니다.</p>
       </div>
-      <div class="cue">질문 수(11-04 기준)·첫 시상 시기(11/23~27) 확인</div>
+      <div class="cue">첫 시상 시기(11/23~27) 확인</div>
     </div>
 
     <div class="blk">
-      <p class="kw">개념탐독의 첫 단계와 같은 자리에 있습니다</p>
-      <p class="brief">서울시교육청이 소개한 개념탐독 예시 수업은 개념적 질문을 만드는 것으로 시작합니다.</p>
+      <p class="kw">그럼 독서와는 어떻게 이어질까요?</p>
+      <p class="brief">독서 방법 가운데 하나가 질문하며 읽기라고 합니다.</p>
+      <div class="pipe" aria-label="다음 학기 계획"><span class="n">이번 학기: 질문의 활성화 에너지 낮추기</span><span class="a">→</span><span class="n">다음 학기: 읽기 자료 많이 만들기</span><span class="a">→</span><span class="n hi">읽으면서 질문하고, 질문하며 배우기</span></div>
       <div class="detail">
-        <p>서울시교육청이 2025년 12월에 발표한 독서교육 계획에서 개념탐독 수업은 관계맺기, 탐색하기, 적용하기, 전이하기의 네 단계로 소개되었고, 첫 단계인 관계맺기에 개념적 질문 만들기가 들어 있었습니다. 제가 과학 시간에 하는 일이 그 첫 단계와 같은 자리에 있다고 생각해서 이 연수에 오게 되었습니다.</p>
+        <p>다음 학기에는 읽기 자료를 많이 찾고 만들어서 학생들에게 주고, 학생들이 그 자료를 읽으면서 질문하고, 그 질문으로 배우는 수업을 하려고 합니다.</p>
+        <p>서울시교육청이 2025년 12월에 발표한 독서교육 계획에서 개념탐독 수업은 관계맺기, 탐색하기, 적용하기, 전이하기의 네 단계로 소개되었고, 첫 단계인 관계맺기에 개념적 질문 만들기가 들어 있었습니다. 제가 과학 시간에 해 온 일이 그 첫 단계와 같은 자리에 있다고 생각합니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ③ 고백 -->
-<section class="step" id="s3" data-title="「요약해줘」" data-min="9">
+<!-- ③ 내가 만든 도구 -->
+<section class="step" id="s3" data-title="연수의 방향" data-min="6">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>업무에는 AI가 꼭 필요한데, 공부는 달랐습니다</h2><span class="min"><b>9</b>분</span></div>
-    <p class="goal">제가 업무에서 AI를 어떻게 쓰는지 먼저 말씀드리고, 공부할 때 겪은 실패를 고백해보겠습니다!</p>
+    <div class="step-h"><span class="num">3</span><h2>독서와 AI, 고민이 많았습니다</h2><span class="min"><b>6</b>분</span></div>
+    <p class="goal">이 연수를 어떤 방향으로 준비했는지 말씀드리겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">긴 공문은 AI와 NotebookLM에 맡깁니다</p>
-      <p class="brief">제가 할 일 위주로 정리하고, 다음에 할 일을 묻고, 출처는 쪽수로 확인합니다.</p>
+      <p class="kw">요약만 읽으면, 글과 씨름하며 생각하는 과정이 사라집니다</p>
+      <p class="brief">AI 없이 읽고, 자기 힘으로 정리하는 경험이 왜 필요한지 다룬 영상입니다.</p>
+      <div class="reel-row">
+        <div class="reel" data-reel="DS6lV8ciQrz"><div class="reel-box"><iframe src="https://www.instagram.com/reel/DS6lV8ciQrz/embed/" title="EBS 생각의 멸종 릴스" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe></div><div class="reel-foot"><span class="src">EBS 「생각의 멸종」 · 인스타그램 @ebs_yourliteracy</span><a href="https://www.instagram.com/reel/DS6lV8ciQrz/" target="_blank" rel="noopener">인스타그램에서 보기 ↗</a></div></div>
+        <div class="live vote" data-kind="v_noai" data-opts="네, 그렇습니다|조금 다르게 봅니다">
+          <div class="q">선생님들도 이런 생각으로 독서교육을 하고 계신가요?</div>
+          <div class="opts"></div>
+          <div class="bars"></div>
+          <div class="st"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생이 AI를 쓰는 일은 맨 마지막에 두었습니다</p>
+      <p class="brief">독서만큼은 AI가 발을 들이면 안 되는 곳이라고 생각했기 때문입니다.</p>
+      <div class="pipe" aria-label="연수의 방향"><span class="n hi">선생님이 AI로 독서 도구 만들기</span><span class="a">→</span><span class="n">학생은 그 도구로 스스로 읽고 쓰기</span><span class="a">→</span><span class="n">학생이 AI를 쓰는 일은 맨 마지막</span></div>
       <div class="detail">
-        <p>저는 업무에서는 AI를 거의 필수로 씁니다. 아주 긴 공문이나 디벗 양품화처럼 복잡한 업무가 오면 AI나 NotebookLM에 넣습니다. 그러면 제가 할 일 위주로 정리해 주고, 제 업무 현황을 말하면 다음에 무엇을 하면 되는지 알려 주고, 출처가 궁금하면 몇 쪽에 어떻게 나와 있는지 짚어 줍니다.</p>
+        <p>독서교육과 AI라는 주제를 받고 고민이 많았습니다. 독서만큼은 AI가 발을 들이면 안 되는 곳이라고 생각했기 때문입니다. 그래서 이 연수에서는 학생이 독서할 때 AI를 쓰는 일은 맨 마지막에 두고, 선생님들께서 독서교육에 쓰실 도구를 AI로 만드는 쪽에 무게를 두었습니다. 뒤에서 제가 AI로 만든 독서 도구와 만드는 순서를 보여 드리는 것도 그래서입니다.</p>
+      </div>
+    </div>
+
+    <!-- 작품 링크 받으면 아래 hidden 을 지우고 goal 문장도 되돌리기 -->
+    <div class="blk" id="worksBlk" hidden>
+      <p class="kw">제 교실에서 쓰는 도구들</p>
+      <p class="brief">눌러서 선생님 화면에서 직접 열어 보실 수 있습니다.</p>
+      <div class="grid2" id="works">
+        <!-- 사용자가 고른 링크로 채움 -->
+        <div class="box"><b>(링크 받으면 채움)</b><p>도구 이름 · 한 줄 설명 · 링크</p></div>
+        <div class="box"><b>(링크 받으면 채움)</b><p>도구 이름 · 한 줄 설명 · 링크</p></div>
+        <div class="box"><b>(링크 받으면 채움)</b><p>도구 이름 · 한 줄 설명 · 링크</p></div>
+      </div>
+      <div class="detail">
+        <p>오늘 이야기의 끝은 선생님 교실에 맞는 독서 도구를 선생님이 직접 만들어 가시는 것입니다. 그래서 제가 만든 것들을 먼저 보여 드립니다. 모두 수업하다 불편했던 장면 하나에서 시작했고, AI와 대화하면서 만들었습니다.</p>
+      </div>
+      <div class="cue">보여 드릴 작품 링크는 승재쌤이 골라서 주기로 함</div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 고백 -->
+<section class="step" id="s4" data-title="「요약해줘」" data-min="5">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>만들 때는 AI가 정말 좋았는데, 공부는 달랐습니다</h2><span class="min"><b>5</b>분</span></div>
+    <p class="goal">도구를 만들고 업무를 할 때와 달리, 공부할 때 AI를 쓰다 겪은 실패를 고백해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">도구를 만들 때도, 긴 공문을 읽을 때도 AI를 씁니다</p>
+      <p class="brief">질문과수원 같은 제 수업 도구도 AI와 함께 만들었고, 긴 공문은 NotebookLM에 넣어 제 할 일부터 정리합니다.</p>
+      <div class="detail">
+        <p>아주 긴 공문이나 디벗 양품화처럼 복잡한 업무가 오면 AI나 NotebookLM에 넣습니다. 그러면 제가 할 일 위주로 정리해 주고, 제 업무 현황을 말하면 다음에 무엇을 하면 되는지 알려 주고, 출처가 궁금하면 몇 쪽에 어떻게 나와 있는지 짚어 줍니다.</p>
         <p>출처를 바로 열어 확인할 수 있어서 잘못된 내용이 섞일까 하는 걱정도 훨씬 줄었습니다. 그리고 그 업무는 제가 잘 알고 있어서, 정리된 내용이 이상하면 바로 알아챌 수 있습니다.</p>
       </div>
     </div>
@@ -375,23 +516,10 @@ html[data-mode="present"] footer#app-credit{display:none}
     <div class="blk">
       <p class="kw">공부할 때 제가 가장 많이 한 말, 「요약해줘」</p>
       <p class="brief">과학덕후 학생들의 5분 질문에 답하려고, 전공이 아닌 우주를 5시간씩 공부했습니다.</p>
+      <figure class="toon" data-toon="s4-chase"><img src="img/s4-chase.webp" alt="쉬는 시간 복도로 뛰어나간 선생님이 텅 빈 복도에 혼자 서 있는 장면"><figcaption>다음 시간에 알려 주겠다고 쫓아갔는데, 아이는 없었습니다.</figcaption></figure>
       <div class="detail">
         <p>그런데 공부는 달랐습니다. 과학덕후 학생들은 수업을 마치자마자 5분 동안 질문을 쏟아냅니다. 제 전공이 아닌 우주 질문이라 그 5분을 위해 5시간을 공부했고, 그때 AI에게 가장 많이 한 말이 「요약해줘」였습니다. 답이 바로 나오고 깔끔해서 읽고 나면 다 안 것 같았습니다.</p>
         <p>그러다 한 학생의 질문에 막혀서 "선생님이 조금 더 알아보고 다음 시간에 알려 줄게" 하고 쉬는 시간에 쫓아갔는데, 아이는 없었습니다. 제 권위도 같이 없어졌습니다. 돌아보니 제가 쌓은 지식에는 알맹이가 없었습니다. 요약을 읽고 안다고 착각한 것인데, 심리학에서는 이것을 설명 깊이의 착각이라고 부릅니다. 사람은 '왜'와 '어떻게'를 실제보다 훨씬 잘 안다고 믿다가, 직접 설명해 보려 하면 그 믿음이 무너집니다.</p>
-      </div>
-    </div>
-
-    <div class="blk">
-      <p class="kw">학생들도, 대학생들도 같았습니다</p>
-      <div class="grid2">
-        <div class="box"><span class="big">0명</span><p>고2 진로 독서 발표에서 책을 끝까지 읽은 학생. 줄거리는 AI에게 맡겼다고 했습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
-        <div class="box"><span class="big">국어 64.9%</span><p>서울 중고생 26,531명이 생성형 AI를 가장 많이 쓴 과목</p><span class="src">서울시교육청교육연구정보원, 2025년 7월 조사</span></div>
-        <div class="box"><span class="big">18명 중 15명</span><p>ChatGPT로 에세이를 쓴 뒤, 방금 쓴 자기 글을 제대로 옮기지 못한 대학생</p><span class="src">MIT 미디어랩, 2025, 심사 전 논문</span></div>
-      </div>
-      <div class="detail">
-        <p>EBS 다큐 「다시, 읽기로」 2부에는 고2 교실이 나옵니다. 진로 독서 발표를 했는데 책을 끝까지 읽은 학생이 한 명도 없었고, 반쯤 읽다가 줄거리는 AI에게 맡겼다는 학생이 나옵니다. 한 학생은 혼자 한 과제는 나중에 기억이 나는데 AI에게 맡긴 것은 거의 기억나지 않는다고 말했습니다. 제가 겪은 것과 같았습니다.</p>
-        <p>MIT 미디어랩 연구진은 대학생 54명에게 에세이를 쓰게 하면서 뇌파를 쟀습니다. 처음 쓴 날 ChatGPT로 쓴 18명 가운데 15명이 방금 쓴 자기 글의 문장을 제대로 옮기지 못했고, 검색이나 자기 머리만으로 쓴 사람들은 각각 2명만 그랬습니다. 연구진은 이것을 인지부채라고 불렀습니다. 지금 생각을 아끼면 나중에 이자까지 붙여 갚게 된다고 본 것입니다. 아직 동료 심사를 거치지 않은 논문이라 저는 숫자보다 그 이름이 제 경험과 맞아서 소개합니다.</p>
-        <p>같은 내용을 AI 요약으로 배운 사람이 웹에서 직접 찾아 읽은 사람보다 얕게 알았다는 실험도 있습니다. 실험 7개에 10,462명이 참여한 연구입니다.</p>
       </div>
     </div>
 
@@ -407,10 +535,10 @@ html[data-mode="present"] footer#app-credit{display:none}
   </div>
 </section>
 
-<!-- ④ 바꾼 방법 -->
-<section class="step" id="s4" data-title="질문하며 읽기" data-min="8">
+<!-- ⑤ 바꾼 방법 -->
+<section class="step" id="s5" data-title="질문하며 읽기" data-min="5">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2><span class="min"><b>8</b>분</span></div>
+    <div class="step-h"><span class="num">5</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2><span class="min"><b>5</b>분</span></div>
     <p class="goal">업무 읽기와 공부 읽기가 왜 달랐는지 살펴보고, 제가 바꾼 공부 순서를 보여 드리겠습니다!</p>
 
     <div class="blk">
@@ -428,6 +556,7 @@ html[data-mode="present"] footer#app-credit{display:none}
     <div class="blk">
       <p class="kw">지금 제가 공부하는 순서</p>
       <div class="pipe" aria-label="공부 순서"><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">내 말로 정리</span><span class="a">→</span><span class="n">생각한 과정까지 텍스트로</span><span class="a">→</span><span class="n hi">정리만 AI에게</span></div>
+      <figure class="toon" data-toon="s5-notes"><img src="img/s5-notes.webp" alt="선생님이 질문과 화살표로 어지럽게 적은 메모를 노트북 화면 속 AI가 가지런한 정리로 바꿔 주는 장면"><figcaption>생각은 제가 지저분하게 적고, AI는 정리만 합니다.</figcaption></figure>
       <div class="detail">
         <p>지금은 읽으면서 질문을 적고, 읽은 것을 제 말로 다시 씁니다. 어디서 막혔고 어떻게 풀었는지도 노션에 지저분하게 텍스트로 적어 둡니다. AI에게는 그 지저분한 텍스트를 보기 좋게 정리하는 일만 맡깁니다.</p>
       </div>
@@ -439,11 +568,9 @@ html[data-mode="present"] footer#app-credit{display:none}
         <div class="box"><b>질문하며 읽기</b><p>질문을 만들며 읽은 사람이 시간은 더 걸렸지만 훨씬 많이 기억했습니다. 실험에 참여한 사람들은 "무슨 질문을 해야 하지?"에서 막혔습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
         <div class="box"><b>부분마다 스스로 요약</b><p>한 장이 끝날 때마다 스스로 요약하고, 그 요약을 들고 다음 장으로 넘어갑니다.</p><span class="src">나민애, EBS 「나의 두 번째 교과서」 국어 1강</span></div>
         <div class="box"><b>질문 만들기를 가르치면</b><p>처음 보는 글의 이해력이 올랐습니다. 효과크기 중앙값 0.36(표준화 검사), 0.86(연구자 제작 검사)</p><span class="src">Rosenshine 외, 1996</span></div>
-        <div class="box"><b>먼저 스스로, 그다음 AI</b><p>먼저 스스로 쓰다가 마지막에 AI를 쓴 사람들은 뇌 연결성이 오히려 커졌습니다.</p><span class="src">MIT 미디어랩, 2025, 마지막 회차 18명</span></div>
       </div>
       <div class="detail">
-        <p>이렇게 바꾸고 나서 EBS 다큐를 봤는데, 질문을 만들며 읽은 사람이 시간은 더 걸렸지만 훨씬 많이 기억했다는 실험이 나왔습니다. 실험에 참여한 사람들이 무슨 질문을 해야 할지 몰라 막힌 모습까지 제 학생들과 똑같았습니다. 나민애 교수님은 챕터가 끝날 때마다 스스로 요약하라고 했는데, 제 「요약해줘」와 같은 요약이지만 누가 하느냐가 달랐습니다.</p>
-        <p>MIT 연구의 마지막 회차에서는 먼저 스스로 쓰다가 나중에 AI를 쓴 사람들의 뇌가 오히려 활발했고, 연구진은 스스로 충분히 애쓴 다음에 AI를 쓰라고 제안했습니다. 참여자가 18명뿐이라 조심스럽지만 제 노션 방식과 같은 순서였습니다. 제가 5시간씩 헤매다 찾은 방법이 선생님들께서 교실에서 이미 가르치고 계신 방법이었습니다.</p>
+        <p>이렇게 바꾸고 나서 EBS 다큐를 봤는데, 질문을 만들며 읽은 사람이 시간은 더 걸렸지만 훨씬 많이 기억했다는 실험이 나왔습니다. 실험에 참여한 사람들이 무슨 질문을 해야 할지 몰라 막힌 모습까지 제 학생들과 똑같았습니다. 나민애 교수님은 챕터가 끝날 때마다 스스로 요약하라고 했는데, 제 「요약해줘」와 같은 요약이지만 누가 하느냐가 달랐습니다. 제가 5시간씩 헤매다 찾은 방법이 선생님들께서 교실에서 이미 가르치고 계신 방법이었습니다.</p>
       </div>
     </div>
 
@@ -453,7 +580,7 @@ html[data-mode="present"] footer#app-credit{display:none}
         <div class="q">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</div>
         <form>
           <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
           <button class="btn primary" type="submit">올리기</button>
         </form>
         <div class="st"></div>
@@ -463,11 +590,19 @@ html[data-mode="present"] footer#app-credit{display:none}
   </div>
 </section>
 
-<!-- ⑤ 왜 지금 독서 -->
-<section class="step" id="s5" data-title="지금 독서가 필요한 까닭" data-min="7">
+<!-- ⑥ 왜 지금 독서 -->
+<section class="step" id="s6" data-title="지금 독서가 필요한 까닭" data-min="4">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>지금 독서가 필요한 까닭과 수능 독서가 재는 힘</h2><span class="min"><b>7</b>분</span></div>
-    <p class="goal">AI가 무엇으로 배우는지, 우리 학생들의 읽기 숫자, 수능 독서가 재는 힘을 차례로 보겠습니다!</p>
+    <div class="step-h"><span class="num">6</span><h2>지금 독서가 더 필요한 까닭</h2><span class="min"><b>4</b>분</span></div>
+    <p class="goal">학생들이 AI를 쓰는 까닭부터 보고, AI가 무엇으로 배우는지와 우리 학생들의 읽기 숫자를 함께 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">생각하기도 귀찮으니까</p>
+      <p class="brief">학생들이 AI를 쓰는 까닭을 다룬 영상입니다. 저는 이럴 때일수록 학생들에게 독서가 필요하다고 생각합니다.</p>
+      <div class="reel-row one">
+        <div class="reel" data-reel="DfE1xEmvJ6t"><div class="reel-box"><iframe src="https://www.instagram.com/reel/DfE1xEmvJ6t/embed/" title="EBS 생각의 멸종 릴스" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe></div><div class="reel-foot"><span class="src">EBS 「생각의 멸종」 · 인스타그램 @ebs_yourliteracy</span><a href="https://www.instagram.com/reel/DfE1xEmvJ6t/" target="_blank" rel="noopener">인스타그램에서 보기 ↗</a></div></div>
+      </div>
+    </div>
 
     <div class="blk">
       <p class="kw">AI도 사람이 쓴 글로 배웁니다</p>
@@ -493,29 +628,44 @@ html[data-mode="present"] footer#app-credit{display:none}
         <p>PISA 2025 한국 읽기 점수는 501점으로, 2000년 첫 참여 이후 가장 낮았습니다. 읽기 기초 미달 학생은 2006년 5.8%에서 2025년 17.8%로 세 배가 되었습니다. 그래도 OECD 안에서는 여전히 상위권이라, 저는 추락이라기보다 아래쪽이 두꺼워졌다고 봅니다.</p>
       </div>
     </div>
-
-    <div class="blk">
-      <p class="kw">수능 국어 독서가 재는 힘</p>
-      <p class="brief">다음 주 목요일(11월 19일)이 수능입니다.</p>
-      <div class="grid2">
-        <div class="box"><b>작년 수능 국어 첫 지문</b><p>읽기 능력은 어떻게 자라는가(고프의 단순 관점). 해독이 자란 뒤에는 독서 경험이 독해 능력 발달에 주요한 기여를 한다는 내용이었습니다.</p><span class="src">2026학년도 수능 국어 1~3번</span></div>
-        <div class="box"><b>평가원이 재는 다섯 가지</b><p>어휘·개념, 사실적 이해, 추론적 이해, 비판적 이해, 적용과 창의</p><span class="src">한국교육과정평가원</span></div>
-        <div class="box"><b>지문은 모든 교과에서</b><p>작년 독서 지문은 법(보증 계약), 과학(열팽창), 철학(인격의 동일성)이었습니다.</p><span class="src">2026학년도 수능 국어</span></div>
-        <div class="box"><b>2028학년도부터 독서와 작문</b><p>읽은 글로 써 보고, 그 내용이 지문과 맞는지 점검하는 공부를 권합니다.</p><span class="src">평가원 2028 예시문항 안내</span></div>
-      </div>
-      <div class="detail">
-        <p>작년 수능 국어의 첫 지문이 바로 읽기 능력에 관한 글이었습니다. 글자를 깨친 뒤에는 독서 경험이 독해 능력을 키운다는 내용이라, 나민애 교수님의 말과 그대로 이어졌습니다. 작년 독서 지문이 법, 과학, 철학에서 나왔다는 것은 도덕, 사회, 과학 선생님들의 수업에 나오는 글이 곧 수능 독서 지문이라는 뜻이기도 합니다.</p>
-        <p>2028학년도부터는 국어 선택과목이 없어지고 독서와 작문을 모두 봅니다. 평가원 예시문항 안내에는 읽은 글을 바탕으로 꾸준히 써 보고, 내가 쓴 내용이 지문과 논리적으로 맞는지 점검하라는 내용이 있습니다. 제가 노션에 제 말로 정리하는 것과 같은 방향이라고 생각합니다.</p>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ⑥ AI를 막아야 하나 -->
-<section class="step" id="s6" data-title="AI를 막아야 할까" data-min="4">
+<!-- ⑦ 학생과 AI -->
+<section class="step" id="s7" data-title="학생과 AI" data-min="7">
   <div class="wrap">
-    <div class="step-h"><span class="num">6</span><h2>그럼 AI를 못 쓰게 해야 할까요?</h2><span class="min"><b>4</b>분</span></div>
-    <p class="goal">제가 AI를 좋아하는 이유와 조심하게 된 이유를 함께 말씀드리겠습니다!</p>
+    <div class="step-h"><span class="num">7</span><h2>독서할 때 학생은 AI를 어떻게 써야 할까요?</h2><span class="min"><b>7</b>분</span></div>
+    <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 걱정되는 점, 제가 권하는 순서를 말씀드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">멋진 독후감을 과제로 받으면, 학생에게는 무엇이 남을까요?</p>
+      <p class="brief">요즘 학생들이 독후감을 쓰는 방법을 담은 영상입니다.</p>
+      <div class="reel-row">
+        <div class="reel" data-reel="DSz6IobDI_I"><div class="reel-box"><iframe src="https://www.instagram.com/reel/DSz6IobDI_I/embed/" title="EBS 생각의 멸종 릴스" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe></div><div class="reel-foot"><span class="src">EBS 「생각의 멸종」 · 인스타그램 @ebs_yourliteracy</span><a href="https://www.instagram.com/reel/DSz6IobDI_I/" target="_blank" rel="noopener">인스타그램에서 보기 ↗</a></div></div>
+        <div class="live" data-kind="w_report" data-max="300">
+          <div class="q">선생님께서는 이 문제를 어떻게 풀고 계신가요?</div>
+          <form>
+            <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+            <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
+            <button class="btn primary" type="submit">올리기</button>
+          </form>
+          <div class="st"></div>
+          <div class="wall"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생들은 이미 AI와 함께 읽고 있습니다</p>
+      <div class="grid2">
+        <div class="box"><span class="big">국어 64.9%</span><p>서울 중고생 26,531명이 생성형 AI를 가장 많이 쓴 과목</p><span class="src">서울시교육청교육연구정보원, 2025년 7월 조사</span></div>
+        <div class="box"><span class="big">0명</span><p>고2 진로 독서 발표에서 책을 끝까지 읽은 학생. 줄거리는 AI에게 맡겼다고 했습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
+        <div class="box"><span class="big">열 명 중 넷</span><p>AI 답이 틀릴 수 있어 확인한다는 학생(42.8%). 넷 중 한 명(25.1%)은 숙제에 AI 답을 그대로 베낀다고 답했습니다.</p><span class="src">National Literacy Trust, 2025, 영국 13~18세 6만여 명 조사</span></div>
+      </div>
+      <div class="detail">
+        <p>EBS 다큐 「다시, 읽기로」 2부에는 고2 교실이 나옵니다. 진로 독서 발표를 했는데 책을 끝까지 읽은 학생이 한 명도 없었고, 반쯤 읽다가 줄거리는 AI에게 맡겼다는 학생이 나옵니다. 한 학생은 혼자 한 과제는 나중에 기억이 나는데 AI에게 맡긴 것은 거의 기억나지 않는다고 말했습니다. 제가 겪은 것과 같았습니다.</p>
+      </div>
+    </div>
 
     <div class="blk">
       <p class="kw">궁금한 게 있으면 AI는 정말 좋은 도구입니다</p>
@@ -527,53 +677,72 @@ html[data-mode="present"] footer#app-credit{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw">차이는 생각의 첫 판을 누가 만드느냐였습니다</p>
+      <p class="kw">AI가 질문을 던지는 쪽일 때는 도움이 됐습니다</p>
       <div class="grid2">
-        <div class="box"><b>내가 먼저 말하고 AI가 받아 줄 때</b><p>생각하는 사람은 여전히 나입니다. 뭉뚱그린 내 말에 AI가 낱말을 붙여 줍니다.</p></div>
-        <div class="box"><b>AI가 먼저 쓰고 내가 읽기만 할 때</b><p>읽고 끄덕이는 일만 남고, 다음에 스스로 생각하는 일이 더 무겁게 느껴집니다.</p></div>
+        <div class="box"><b>읽기 전에 AI가 만든 질문</b><p>글을 읽기 전에 AI가 만든 질문에 먼저 답을 짐작해 보게 했더니, 그냥 읽은 사람보다 이해 점수가 크게 올랐습니다. 사람이 만든 질문과 효과가 같았습니다.</p><span class="src">Pan 외, 2025, 영어권 성인 실험</span></div>
+        <div class="box"><b>질문으로 대화하는 챗봇</b><p>독해를 어려워하던 사람은 질문을 주고받는 챗봇과 읽었을 때 점수가 가장 많이 올랐습니다(66.2% → 71.7%).</p><span class="src">Etkin 외, Frontiers in Education, 2025, 미국 18~22세 195명</span></div>
+        <div class="box"><b>질문하며 읽어 주는 스피커</b><p>그림책을 읽어 주며 중간중간 질문하는 스피커는 어른이 질문하며 읽어 준 것만큼 3~6세 아이의 이야기 이해를 높였습니다.</p><span class="src">Xu 외, Child Development, 2022, 생성형 AI 이전의 대본형 스피커</span></div>
       </div>
       <div class="detail">
-        <p>같은 도구인데 한쪽에서는 좋고 한쪽에서는 생각이 귀찮아진 까닭을 따져 보니, 생각의 첫 판을 누가 만드느냐가 달랐습니다. 제가 먼저 말하고 AI가 받아 주면 생각하는 사람은 저입니다. AI가 먼저 쓰고 제가 읽기만 하면, 다음에 스스로 첫 판을 만드는 일이 더 무겁게 느껴졌습니다.</p>
-        <p>그래서 저는 학생에게서 AI를 떼어 놓기보다, 묻고 싶은 마음이 먼저 생기게 하는 일이 교사의 몫이라고 생각합니다. 제가 처음에 말씀드린 질문하는 교실, 그리고 선생님들의 질문하며 읽기가 그 일이라고 봅니다.</p>
+        <p>세 연구 모두 AI가 읽는 사람에게 질문을 던졌다는 점이 같습니다. 선생님들이 가르치시는 질문하며 읽기를 AI가 거든 셈입니다. 다만 성인과 유아를 대상으로 한 짧은 실험이라, 중학생에게 그대로 옮기기는 조심스럽습니다.</p>
       </div>
     </div>
 
     <div class="blk">
-      <p class="kw">학생이 AI를 쓸 때, 괜찮다고 보시는 때와 말리고 싶은 때는 언제인가요?</p>
-      <div class="live" data-kind="w_ai" data-max="300">
-        <div class="q">학생이 AI를 쓸 때, 괜찮다고 보시는 때와 말리고 싶은 때는 언제인가요?</div>
-        <form>
-          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
-          <button class="btn primary" type="submit">올리기</button>
-        </form>
-        <div class="st"></div>
-        <div class="wall"></div>
+      <p class="kw">AI가 답과 요약을 줄 때는 덜 남았습니다</p>
+      <div class="grid2">
+        <div class="box"><span class="big">사흘 뒤</span><p>역사 지문을 AI 챗봇으로만 공부했을 때보다 손으로 노트했을 때 더 많이 이해하고 기억했습니다. 그런데 학생들은 AI가 더 도움이 됐다고 느꼈습니다.</p><span class="src">Kreijkes 외, Computers &amp; Education, 2026, 잉글랜드 14~15세 405명</span></div>
+        <div class="box"><span class="big">76.5% → 67.6%</span><p>원래 잘 읽던 사람이 원문 대신 AI 요약을 읽고 문제를 풀었을 때의 정답률</p><span class="src">Etkin 외, 2025, 위와 같은 연구</span></div>
+        <div class="box"><span class="big">52~85%</span><p>AI가 만든 소설 요약 가운데 중요한 줄거리를 빠뜨린 요약의 비율(모델에 따라 다름)</p><span class="src">Kim 외, FABLES, COLM 2024, 2023~2024년 소설 26권</span></div>
+        <div class="box"><b>더 자신하지만 더 짧게</b><p>같은 글을 ChatGPT 답으로 받은 학생은 그냥 읽은 학생보다 설명을 잘할 거라고 더 자신했지만, 실제로 쓴 설명은 더 짧고 질도 낮았습니다.</p><span class="src">Aslanov 외, 인지과학회 학술대회, 2026, 칠레 대학생 102명</span></div>
+      </div>
+      <div class="detail">
+        <p>영국 실험에서는 AI와 노트를 함께 쓴 학생 넷 중 한 명이 AI 답을 노트에 거의 그대로 옮겼습니다. 칠레 실험은 앞에서 말씀드린 설명 깊이의 착각이 AI 답을 읽을 때 더 커진다는 결과입니다. ChatGPT로 에세이를 쓴 대학생 18명 가운데 15명이 방금 쓴 자기 글을 제대로 옮기지 못했다는 MIT 연구(동료 심사 전)와, AI 요약으로 배운 사람이 웹에서 직접 찾아 읽은 사람보다 얕게 알았다는 실험(7개 실험, 10,462명)도 같은 쪽을 가리킵니다.</p>
+        <p>그런데 같은 Etkin 연구에서 독해를 어려워하던 사람은 질문형 챗봇으로 이득을 봤습니다. 그래서 저는 AI를 쓰느냐 마느냐보다, AI가 질문을 주느냐 답을 주느냐가 더 큰 차이라고 봅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">차이는 생각의 첫 판을 누가 만드느냐였습니다</p>
+      <div class="grid2">
+        <div class="box"><b>내가 먼저 말하고 AI가 받아 줄 때</b><p>생각하는 사람은 여전히 나입니다. 뭉뚱그린 내 말에 AI가 낱말을 붙여 줍니다.</p></div>
+        <div class="box"><b>AI가 먼저 쓰고 내가 읽기만 할 때</b><p>읽고 끄덕이는 일만 남고, 다음에 스스로 생각하는 일이 더 무겁게 느껴집니다.</p></div>
+        <div class="box"><span class="big">+48% → −17%</span><p>그냥 ChatGPT를 쓴 고등학생은 연습 성적이 올랐지만, AI를 빼고 본 시험에서는 안 쓴 학생보다 낮았습니다. 힌트만 주게 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다.</p><span class="src">Bastani 외, PNAS, 2025, 튀르키예 고등학생 약 1,000명</span></div>
+      </div>
+      <figure class="toon" data-toon="s7-first"><img src="img/s7-first.webp" alt="학생이 책을 펴 놓고 공책에 먼저 글을 쓰고, 옆의 태블릿 속 AI는 기다리고 있는 장면"><figcaption>첫 판은 학생이 쓰고, AI는 그다음에 묻습니다.</figcaption></figure>
+      <div class="detail">
+        <p>같은 도구인데 한쪽에서는 좋고 한쪽에서는 생각이 귀찮아진 까닭을 따져 보니, 생각의 첫 판을 누가 만드느냐가 달랐습니다. 제가 먼저 말하고 AI가 받아 주면 생각하는 사람은 저입니다. AI가 먼저 쓰고 제가 읽기만 하면, 다음에 스스로 첫 판을 만드는 일이 더 무겁게 느껴졌습니다.</p>
+        <p>튀르키예 고등학생 약 1,000명이 참여한 수학 실험에서, 일반 ChatGPT를 쓴 학생은 연습 때 성적이 48% 올랐지만 AI를 빼고 본 시험에서는 AI를 쓰지 않은 학생보다 17% 낮았습니다. 정답 대신 힌트를 주도록 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다. 같은 AI라도 어떻게 쓰게 하느냐에 따라 결과가 달라진 것입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생에게 권하는 순서</p>
+      <p class="brief">먼저 읽고 내 말로 쓴 다음, AI에게는 답 대신 질문과 반대 근거를 받습니다.</p>
+      <div class="pipe" aria-label="학생에게 권하는 순서"><span class="n">먼저 읽으며 표시하기</span><span class="a">→</span><span class="n">내 말로 쓰고 질문 만들기</span><span class="a">→</span><span class="n">AI에게 빠진 곳·반대 근거 묻기</span><span class="a">→</span><span class="n hi">글로 돌아가 확인하기</span></div>
+      <div class="grid2">
+        <div class="box"><b>먼저 읽고, 물을 것을 정한 뒤</b><p>교과서를 먼저 읽고 모르는 곳을 표시한 다음, AI에게 물을 질문을 준비하라고 적었습니다.</p><span class="src">경기도교육청 학생용 생성형 AI 가이드라인, 2025</span></div>
+        <div class="box"><b>노트는 AI와 따로</b><p>먼저 읽고 AI로 궁금한 점을 확인한 뒤, 붙여넣기 없이 스스로 노트하게 하라고 권했습니다.</p><span class="src">Kreijkes 외, 2026, 위 영국 실험의 저자 제안</span></div>
+        <div class="box"><b>반대 근거도 묻기</b><p>AI 설명이 틀렸을 때 사람들의 정답률은 35%로 AI 없이 판단할 때(49%)보다 낮았습니다. 참인 까닭과 거짓인 까닭을 함께 보여 주자 56%로 올랐습니다.</p><span class="src">Si 외, NAACL, 2024, 성인 80명</span></div>
+        <div class="box"><b>AI 없이 하는 연습도 따로</b><p>AI를 지름길 대신 학습 파트너로 쓰고, AI 없이 핵심 기능을 연습하는 시간을 따로 두라고 했습니다.</p><span class="src">OECD Digital Education Outlook 2026</span></div>
+      </div>
+      <div class="detail">
+        <p>영국 교육부는 2026년 1월 학교용 AI 제품 기준에, 정답을 먼저 주지 말고 학생의 생각을 먼저 받으라는 항목을 넣었습니다. 제가 읽기 노트와 실험실 도구를 만들 때 지킨 조건과 같습니다.</p>
+        <p>AI를 어디까지 허용할지는 수업마다 다르겠지만, 어떤 순서로 쓰게 할지는 선생님이 도구를 만들 때 정해 둘 수 있습니다. 그 이야기를 다음 장면에서 이어 가겠습니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ⑦ 읽기 노트 -->
-<section class="step" id="s7" data-title="읽기 노트" data-min="9">
+<!-- ⑧ 나만의 독서 도구 -->
+<section class="step" id="s8" data-title="나만의 독서 도구" data-min="8">
   <div class="wrap">
-    <div class="step-h"><span class="num">7</span><h2>작은 독서 도구, 읽기 노트</h2><span class="min"><b>9</b>분</span></div>
-    <p class="goal">이 생각으로 만든 읽기 노트를 함께 열어 보고, 비슷한 도구를 만드는 길을 안내해 드리겠습니다!</p>
-
-    <div class="blk">
-      <p class="kw">첫 판은 학생이, AI는 그다음에</p>
-      <p class="brief">답 대신 힌트를 주게 만든 AI는 학습 손해가 거의 없었다는 실험이 있습니다.</p>
-      <div class="grid2">
-        <div class="box"><span class="big">+48% → −17%</span><p>그냥 ChatGPT를 쓴 고등학생은 연습 성적이 올랐지만, AI를 빼고 본 시험에서는 안 쓴 학생보다 낮았습니다.</p><span class="src">Bastani 외, PNAS, 2025, 튀르키예 고등학생 약 1,000명</span></div>
-        <div class="box"><span class="big">힌트만 주는 AI</span><p>정답 대신 힌트를 주게 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다.</p><span class="src">같은 연구</span></div>
-      </div>
-      <div class="detail">
-        <p>튀르키예 고등학생 약 1,000명이 참여한 수학 실험에서, 일반 ChatGPT를 쓴 학생은 연습 때 성적이 48% 올랐지만 AI를 빼고 본 시험에서는 AI를 쓰지 않은 학생보다 17% 낮았습니다. 정답 대신 힌트를 주도록 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다. 그래서 저는 도구를 만든다면 답을 주는 도구 말고, 학생에게 질문을 되돌려 주는 도구를 만들고 싶었습니다.</p>
-      </div>
-    </div>
+    <div class="step-h"><span class="num">8</span><h2>선생님 교실에 맞는 독서 도구 만들기</h2><span class="min"><b>8</b>분</span></div>
+    <p class="goal">제가 만든 읽기 노트와 작은 도구들을 열어 보고, 처음에 적어 주신 어려움을 도구로 바꾸는 순서를 같이 보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">읽기 노트에서 학생이 하는 일</p>
+      <p class="brief">학생이 먼저 쓰고, AI는 그다음에 열리게 만든 도구입니다.</p>
       <div class="grid2">
         <div class="box"><b>읽기 전</b><p>이 책에서 알고 싶은 것을 질문 하나로 적습니다.</p></div>
         <div class="box"><b>부분마다</b><p>내 말로 한두 줄 요약하고, 읽으며 생긴 질문을 적습니다. 앞에서 쓴 요약이 다음 부분 위에 이어서 보입니다.</p></div>
@@ -604,27 +773,56 @@ html[data-mode="present"] footer#app-credit{display:none}
         <a class="btn primary" href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">읽기 노트 실험실 열기 ↗</a>
       </div>
       <div class="detail" style="margin-top:14px">
-        <p>열 개 모두 학생이 먼저 생각해서 쓰게 만들었고, 서버 없이 그 기기에만 저장됩니다. AI가 나오는 도구는 학생이 다 쓴 뒤에만 부탁문이 열리고, 그 부탁문도 답이 아니라 질문을 받도록 적었습니다.</p>
+        <p>열 개 모두 학생이 먼저 생각해서 쓰게 만들었고, 서버 없이 그 기기에만 저장됩니다. AI가 나오는 도구는 학생이 다 쓴 뒤에만 부탁문이 열리고, 그 부탁문도 AI에게서 질문을 받도록 적었습니다.</p>
         <p>개념탐독을 하시는 선생님들께는 개념 렌즈 노트가, 국어 수업에는 문단 지도와 두 글 견주기가 바로 쓰실 만할 것 같아 함께 소개합니다. 아직 프로토타입이라 수업에 맞게 고쳐 쓰실 수 있도록 하나하나를 파일 한 장으로 만들었습니다.</p>
       </div>
     </div>
 
     <div class="blk">
-      <p class="kw">이런 도구는 선생님들도 만드실 수 있습니다</p>
-      <p class="brief">만드는 법은 바이브코딩 매뉴얼에 순서대로 정리해두었습니다.</p>
+      <p class="kw">처음에 적어 주신 어려운 점을 다시 보겠습니다</p>
+      <p class="brief">이 가운데 하나를 골라 도구로 바꾼다면 무엇부터 할지 생각해 보시면 좋겠습니다.</p>
+      <div class="live" data-kind="w_hard" data-readonly>
+        <div class="q">독서교육을 하시면서 가장 어려운 점은 무엇인가요?</div>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">만드는 순서는 이렇습니다</p>
+      <p class="brief">불편했던 장면 하나를 적고, AI에게 부탁하고, 열어 보고, 고쳐 달라고 다시 말합니다.</p>
+      <div class="pipe" aria-label="만드는 순서"><span class="n">불편한 장면 한 줄</span><span class="a">→</span><span class="n">AI에게 부탁문</span><span class="a">→</span><span class="n">HTML 파일로 열어 보기</span><span class="a">→</span><span class="n">고쳐 달라고 다시 말하기</span><span class="a">→</span><span class="n hi">주소로 나누기</span></div>
+      <div class="copy-box">
+        <div class="copy-h"><b>부탁문 예시</b><button class="btn" type="button" data-copy="#promptTool">복사하기</button></div>
+        <pre id="promptTool">나는 중학교 ○○ 교사야. 학생들이 책을 읽을 때 쓰는 작은 웹 도구를 HTML 파일 한 장으로 만들어 줘.
+
+[수업에서 불편한 점]
+학생들이 책을 읽고 나서 "재밌었어요" 말고는 할 말이 없어.
+
+[도구가 할 일]
+학생이 읽은 부분을 자기 말로 두 줄 요약하고, 읽으며 생긴 질문을 하나 적게 해 줘.
+다 쓰면 요약과 질문을 한 화면에 모아 보여 주고, 인쇄할 수 있게 해 줘.
+
+[지킬 것]
+- 학생이 먼저 쓰게 하고, AI가 답을 대신 써 주는 기능은 넣지 마.
+- 서버 없이 그 기기에만 저장되게 해 줘.
+- 휴대폰에서도 글씨가 잘 보이게 해 줘.
+- 이름이나 학번은 받지 마.</pre>
+      </div>
       <div class="actions">
         <a class="btn" href="../vibecoding/" target="_blank" rel="noopener">바이브코딩 연수 허브 ↗</a>
         <a class="btn" href="../vibecoding/basic.html" target="_blank" rel="noopener">① 바이브코딩 기초 ↗</a>
       </div>
       <div class="detail" style="margin-top:14px">
-        <p>오늘은 바이브코딩을 해 보셨다는 전제로, 만드는 과정은 따로 보여 드리지 않고 링크만 두었습니다. 처음이시라면 기초 매뉴얼부터 하나씩 따라오실 수 있습니다.</p>
+        <p>저는 이 부탁문에서 [수업에서 불편한 점]과 [도구가 할 일]만 바꿔 가며 씁니다. 처음 나온 파일이 마음에 들지 않으면 "글씨를 더 크게", "질문을 세 개까지 적게"처럼 하나씩 고쳐 달라고 다시 말합니다. [지킬 것]은 제가 도구를 만들 때마다 넣는 조건입니다.</p>
+        <p>만든 파일을 학생들에게 주소로 나누는 방법과 처음부터 따라 하는 순서는 바이브코딩 매뉴얼에 정리해두었습니다. 오늘은 시간이 짧아 만드는 과정은 보여 드리지 않고 링크로 대신합니다.</p>
       </div>
     </div>
 
     <div class="blk">
       <p class="kw">우리 교실에 이런 독서 도구가 있으면 좋겠다</p>
       <div class="live" data-kind="w_tool" data-max="300">
-        <div class="q">우리 교실에 이런 독서 도구가 있으면 좋겠다, 한 줄로 적어주시길 바랍니다~!</div>
+        <div class="q">처음에 적은 어려움 가운데 하나를 골라, 이런 독서 도구가 있으면 좋겠다고 한 줄로 적어주시길 바랍니다~!</div>
         <form>
           <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
           <textarea name="body" placeholder="예: 반 아이들이 같은 문단에서 만든 질문을 모아 보는 도구" maxlength="300"></textarea>
@@ -637,15 +835,16 @@ html[data-mode="present"] footer#app-credit{display:none}
   </div>
 </section>
 
-<!-- ⑧ 미래 독서 -->
-<section class="step" id="s8" data-title="다음 책" data-min="2">
+<!-- ⑨ 미래 독서 -->
+<section class="step" id="s9" data-title="다음 책" data-min="2">
   <div class="wrap">
-    <div class="step-h"><span class="num">8</span><h2>제가 그려 보는 다음 책</h2><span class="min"><b>2</b>분</span></div>
+    <div class="step-h"><span class="num">9</span><h2>제가 그려 보는 다음 책</h2><span class="min"><b>2</b>분</span></div>
     <p class="goal">마지막으로 제 공상 하나를 말씀드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">전자책 다음의 책</p>
       <div class="pipe" aria-label="다음 책"><span class="n">전자책</span><span class="a">→</span><span class="n">AR로 오감을 채우는 책</span><span class="a">→</span><span class="n">간접경험을 넘어 직접경험</span><span class="a">→</span><span class="n hi">책 안의 저자와 대화</span></div>
+      <figure class="toon" data-toon="s9-author"><img src="img/s9-author.webp" alt="학생이 펼친 책 위로 떠오른 저자와 마주 앉아 이야기를 나누는 장면"><figcaption>책 안의 저자에게 질문하며 읽는 날을 그려 봅니다.</figcaption></figure>
       <div class="detail">
         <p>지금 책의 다음 모습은 전자책입니다. 저는 그 전자책이 AR 같은 기술로 오감을 채우고, 간접경험을 넘어 직접경험을 하게 하는 쪽으로 갈 거라고 생각합니다.</p>
         <p>그리고 책 안에 저자의 페르소나와 지식이 들어가서, 독자가 저자에게 질문하고 소통하며 책을 읽는 때가 올 거라고 봅니다.</p>
@@ -654,10 +853,10 @@ html[data-mode="present"] footer#app-credit{display:none}
   </div>
 </section>
 
-<!-- ⑨ 마무리 -->
-<section class="step" id="s9" data-title="마무리" data-min="2">
+<!-- ⑩ 마무리 -->
+<section class="step" id="s10" data-title="마무리" data-min="2">
   <div class="wrap">
-    <div class="step-h"><span class="num">9</span><h2>마무리</h2><span class="min"><b>2</b>분</span></div>
+    <div class="step-h"><span class="num">10</span><h2>마무리</h2><span class="min"><b>2</b>분</span></div>
 
     <div class="blk">
       <p class="kw">다시 보실 곳</p>
@@ -667,7 +866,7 @@ html[data-mode="present"] footer#app-credit{display:none}
         <div class="box"><b>오늘 이야기의 바탕이 된 영상</b><p><a href="https://www.youtube.com/watch?v=uQYWztR5UKU" target="_blank" rel="noopener">EBS 「다시, 읽기로」 2부</a> · <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">나민애 교수 특강</a></p></div>
       </div>
       <div class="detail">
-        <p>오늘은 과학 교사가 AI로 공부하다 실패한 이야기와, 그걸 고친 방법이 선생님들의 교실에 이미 있었다는 이야기를 드렸습니다. 연수 뒤에도 다시 열어 보실 수 있게 이 페이지와 링크를 그대로 두겠습니다. 이제 선생님들의 사례 나눔으로 넘기겠습니다^^</p>
+        <p>오늘은 제 질문하는 교실과 직접 만든 도구들, AI로 공부하다 실패한 이야기, 그리고 학생이 먼저 생각하게 만든 독서 도구 이야기를 드렸습니다. 처음에 적어 주신 어려움이 선생님만의 독서 도구로 이어지면 좋겠습니다. 연수 뒤에도 다시 열어 보실 수 있게 이 페이지와 링크를 그대로 두겠습니다. 이제 선생님들의 사례 나눔으로 넘기겠습니다^^</p>
       </div>
     </div>
 
@@ -677,7 +876,7 @@ html[data-mode="present"] footer#app-credit{display:none}
         <div class="q">사례 나눔 전에, 오늘 이야기에 덧붙이거나 묻고 싶은 것이 있으신가요?</div>
         <form>
           <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
           <button class="btn primary" type="submit">올리기</button>
         </form>
         <div class="st"></div>
@@ -692,15 +891,25 @@ html[data-mode="present"] footer#app-credit{display:none}
         <li>나민애, EBS 「나의 두 번째 교과서」 국어 1강 「읽기, 큰 세상을 만나는 기쁨」(2024). <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">유튜브</a></li>
         <li>서울특별시교육청, 「AI 시대, '책 읽는 학교, 책 읽는 서울' 독서교육 비전 선포」 보도자료(2025-12-17)</li>
         <li>서울시교육청교육연구정보원, 『서울교육』 264호, 생성형 AI의 교육적 활용 조사(2025년 7월 조사, 중고생 26,531명)</li>
-        <li>Kosmyna 외, Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task, arXiv 2506.08872(2025, 동료 심사 전)</li>
-        <li>Melumad &amp; Yun, Experimental evidence of the effects of large language models versus web search on depth of learning, PNAS Nexus 4(10)(2025)</li>
         <li>Rozenblit &amp; Keil, The misunderstood limits of folk science: an illusion of explanatory depth, Cognitive Science 26(5)(2002)</li>
-        <li>Rosenshine, Meister &amp; Chapman, Teaching Students to Generate Questions: A Review of the Intervention Studies, Review of Educational Research 66(2)(1996)</li>
         <li>교육부 고시 제2022-33호 [별책 5] 국어과 교육과정, [9국02-02] 적용 시 고려 사항</li>
+        <li>Rosenshine, Meister &amp; Chapman, Teaching Students to Generate Questions: A Review of the Intervention Studies, Review of Educational Research 66(2)(1996)</li>
         <li>Meta, Introducing Meta Llama 3(2024-04-18) · Shumailov 외, AI models collapse when trained on recursively generated data, Nature 631(2024)</li>
         <li>교육부, OECD PISA 2025 결과 발표 보도자료(2026-09-08) · 문화체육관광부, 2025년 국민 독서실태 조사(2026-03-06)</li>
-        <li>한국교육과정평가원, 2026학년도 수능 국어 문제지 · 2028학년도 수능 예시문항 안내(2025-04)</li>
+        <li>Kosmyna 외, Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task, arXiv 2506.08872(2025, 동료 심사 전)</li>
+        <li>Melumad &amp; Yun, Experimental evidence of the effects of large language models versus web search on depth of learning, PNAS Nexus 4(10)(2025)</li>
         <li>Bastani 외, Generative AI without guardrails can harm learning: Evidence from high school mathematics, PNAS 122(26)(2025)</li>
+        <li>EBS 「생각의 멸종」 인스타그램 릴스 5편(@ebs_yourliteracy)</li>
+        <li>National Literacy Trust, Young people and teachers' use of generative AI to support literacy in 2025(2025-08)</li>
+        <li>Pan, Schweppe, Teo, Indrajaya &amp; Wenzel, Using ChatGPT-generated prequestions to improve memory and text comprehension, Journal of Applied Research in Memory and Cognition(2025)</li>
+        <li>Etkin, Etkin, Carter &amp; Rolle, Differential effects of GPT-based tools on comprehension of standardized passages, Frontiers in Education 10(2025)</li>
+        <li>Xu 외, Dialogue with a conversational agent promotes children's story comprehension via enhancing engagement, Child Development 93(2)(2022)</li>
+        <li>Kreijkes 외, Effects of LLM use and note-taking on reading comprehension and memory: A randomised experiment in secondary schools, Computers &amp; Education 243(2026)</li>
+        <li>Kim 외, FABLES: Evaluating faithfulness and content selection in book-length summarization, COLM 2024</li>
+        <li>Aslanov, Felmer &amp; Guerra, Overconfidence without understanding? Evidence for an illusion of understanding in AI-assisted explanations, Proceedings of the Cognitive Science Society 48(2026)</li>
+        <li>Si 외, Large language models help humans verify truthfulness – except when they are convincingly wrong, NAACL 2024</li>
+        <li>경기도교육청, 「생성형 인공지능 활용교육 학생용 가이드라인」 중고등학생용(2025-02-24)</li>
+        <li>OECD, Digital Education Outlook 2026, 「Insights on the effective use of generative AI in education」 · Department for Education(England), Generative AI: product safety standards(2026-01 개정)</li>
       </ol>
     </div>
   </div>
@@ -925,11 +1134,11 @@ async function postRow(kind, name, body){
   const [row]=await r.json(); return row;
 }
 
-document.querySelectorAll('.live[data-kind]:not(.vote)').forEach(box=>{
+document.querySelectorAll('.live[data-kind]:not(.vote):not(.quiz)').forEach(box=>{
   const kind=box.dataset.kind, likeKind=kind+'-like';
   const form=box.querySelector('form'), st=box.querySelector('.st'), wall=box.querySelector('.wall'), q=box.querySelector('.q');
-  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
-  nameIn.value=myName;
+  const nameIn=form&&form.querySelector('[name=name]'), bodyIn=form&&form.querySelector('[name=body]');
+  if(nameIn) nameIn.value=myName;
   if(!sbOn){ st.textContent='지금은 글을 모으지 않는 판입니다.'; return; }
   let mine=new Set(ls.get(CONFIG.key+':mine:'+kind, []));
   let busy=false;
@@ -950,7 +1159,7 @@ document.querySelectorAll('.live[data-kind]:not(.vote)').forEach(box=>{
     busy=false;
   }
   q.dataset.text=q.textContent;
-  form.addEventListener('submit', async e=>{
+  if(form) form.addEventListener('submit', async e=>{
     e.preventDefault();
     const name=nameIn.value.trim(), body=bodyIn.value.trim();
     if(!body){ bodyIn.focus(); return; }
@@ -999,6 +1208,60 @@ document.querySelectorAll('.live.vote[data-kind]').forEach(box=>{
   load();
   let t=null;
   new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, CONFIG.pollMs); } }); }).observe(box);
+});
+
+/* ── 오프닝 퀴즈: 기기마다 한 번만 제출, 먼저 낸 순서 목록은 진행 화면(?host=1)에서만 ── */
+document.querySelectorAll('.live.quiz[data-kind]').forEach(box=>{
+  const kind=box.dataset.kind, form=box.querySelector('form'), st=box.querySelector('.st'), list=box.querySelector('.answers'), cnt=box.querySelector('.cnt-line');
+  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
+  nameIn.value=myName;
+  if(!sbOn){ st.textContent='지금은 답을 모으지 않는 판입니다.'; return; }
+  const doneKey=CONFIG.key+':quiz:'+kind+':'+CODE;
+  function lock(){ form.querySelectorAll('input,button').forEach(x=>x.disabled=true); st.textContent='제출했습니다! 정답은 영상 끝에서 확인합니다 🙂'; }
+  if(ls.get(doneKey,false)) lock();
+  const tm=t=>{ const d=new Date(t); return isNaN(d) ? '' : [d.getHours(),d.getMinutes(),d.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':'); };
+  async function load(){
+    try{
+      const rows=(await fetchRows([kind])).slice().reverse();   // 먼저 낸 순서
+      cnt.textContent = rows.length ? `${rows.length}명이 답했습니다` : '';
+      if(IS_HOST) list.innerHTML = rows.length ? '<ol>'+rows.slice(0,40).map(x=>`<li><b>${esc(x.body)}</b><span class="who">${esc(x.name||'익명')}</span><span class="tm">${tm(x.created_at)}</span></li>`).join('')+'</ol>' : '';
+    }catch(e){ st.textContent='서버에 닿지 않습니다. 잠시 뒤 다시 불러옵니다.'; }
+  }
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const name=nameIn.value.trim(), body=bodyIn.value.trim();
+    if(!body){ bodyIn.focus(); return; }
+    myName=name; ls.set('yeonsu:name', name);
+    st.textContent='보내는 중…';
+    try{ await postRow(kind, name, body); ls.set(doneKey,true); bodyIn.value=''; lock(); load(); }
+    catch(err){ st.textContent='보내지 못했습니다. 다시 눌러 주세요.'; }
+  });
+  load();
+  let t=null;
+  new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, 3000); } }); }).observe(box);
+});
+
+/* ── 만화 한 장면: 그림이 실제로 열려야 보이고, 아직 없으면 강사 큐(c)에서만 자리 표시 ── */
+document.querySelectorAll('figure.toon').forEach(f=>{
+  const img=f.querySelector('img'); if(!img) return;
+  const cap=f.querySelector('figcaption'); if(cap) cap.dataset.file=img.getAttribute('src');
+  const ok=()=>{ if(img.naturalWidth) f.classList.add('ok'); };
+  if(img.complete) ok();
+  img.addEventListener('load', ok);
+});
+
+/* ── 부탁문 복사 ── */
+document.addEventListener('click', async e=>{
+  const b=e.target.closest('[data-copy]'); if(!b) return;
+  const el=document.querySelector(b.dataset.copy); if(!el) return;
+  const text=el.innerText;
+  let ok=false;
+  try{ await navigator.clipboard.writeText(text); ok=true; }catch(err){
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); try{ ok=document.execCommand('copy'); }catch(e2){} ta.remove();
+  }
+  const old=b.textContent; b.textContent= ok ? '복사했습니다' : '길게 눌러 복사해 주세요';
+  setTimeout(()=>{ b.textContent=old; }, 1600);
 });
 
 /* ── QR: 이 페이지 📖 상세 주소 ── */
