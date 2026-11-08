@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>독서와 AI 연계 · 해누리중 조승재</title>
+<meta name="description" content="강동송파 독서교육교사단 하반기 워크숍 연수 자료. 과학 교사가 AI로 공부하다 겪은 일, 질문하며 읽기, 읽기 노트.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,.mono{font-family:var(--mono);font-size:.92em}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff;font-family:var(--mono);font-size:.85em}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* 상단 바 */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0;min-width:0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h)}
+.btn.big{font-size:1rem;padding:11px 22px}
+.btn.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.host-badge{font-size:.8rem;color:var(--blue);border:1px solid var(--blue);border-radius:9999px;padding:4px 10px;white-space:nowrap}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* 표지 */
+.hero{padding:48px 0 40px;border-bottom:1px solid var(--line)}
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+html[data-mode="present"] .byline img{width:64px;height:64px}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.1em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:52em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* 단계 */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+html[data-mode="present"] .step{min-height:calc(100vh - 64px)}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* 블록 */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:42em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:42em;margin:0 0 .6em}
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.92em}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* 숫자 상자 */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+.box .big{display:block;font-size:1.6em;font-weight:600;letter-spacing:-.02em;color:var(--ink);line-height:1.2;margin-bottom:4px}
+.box .src{display:block;font-size:.78em;color:var(--ink3);margin-top:6px}
+html[data-mode="present"] .box .src{font-size:.7em}
+
+/* 보여주기 */
+.frame{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:var(--bg2);margin:14px 0}
+.frame iframe{display:block;width:100%;border:0;aspect-ratio:16/10;height:auto;background:#fff}
+.frame .cap{padding:10px 14px;font-size:.84em;color:var(--ink2);border-top:1px solid var(--line);background:#fff}
+
+/* 나눔 벽 */
+.live{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:14px 0;background:#fff}
+.live .q{font-weight:600;font-size:1.08em;margin-bottom:10px}
+.live .q .cnt{font-weight:400;color:var(--ink3);font-size:.8em;margin-left:6px}
+.live form{display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start}
+.live input,.live textarea{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.live textarea{min-height:2.7em;resize:vertical}
+.live input:focus,.live textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.live .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.card{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px 10px;background:var(--bg2);font-size:.95em;display:flex;flex-direction:column;gap:6px}
+.card .who{font-size:.78em;color:var(--blue);font-weight:600}
+.card .body{white-space:pre-wrap}
+.card.mine{border-color:var(--blue)}
+.card .like{align-self:flex-start;border:1px solid var(--line);background:#fff;border-radius:9999px;padding:2px 10px;font:inherit;font-size:.78em;color:var(--ink2);cursor:pointer}
+.card .like.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.live .empty{color:var(--ink3);font-size:.9em;padding:8px 0}
+html[data-mode="present"] .live form,
+html[data-mode="present"] .live .st{display:none}
+/* 투표 */
+.vote .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+html[data-mode="present"] .vote .opts{display:none}
+.vote .bar-row{display:grid;grid-template-columns:9em 1fr 3em;gap:10px;align-items:center;margin:6px 0}
+.vote .bar{height:14px;background:var(--bg2);border-radius:9999px;overflow:hidden}
+.vote .bar i{display:block;height:100%;background:var(--blue);border-radius:9999px;transition:width .4s}
+.vote .bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+
+/* QR */
+.join-row{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.qr{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:8px;line-height:0;min-width:72px;min-height:72px}
+.qr svg{width:130px;height:130px}
+html[data-mode="present"] .qr svg{width:240px;height:240px}
+.qr .url{font-family:var(--mono);font-size:.72rem;color:var(--ink2);line-height:1.3;word-break:break-all;display:block;max-width:220px}
+.join-row .url-text{font-family:var(--mono);font-size:.9em;color:var(--ink2);word-break:break-all}
+
+/* 따라오기 알림 */
+.follow-bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1d1d1f;color:#fff;border-radius:9999px;padding:8px 8px 8px 18px;font-size:.9rem;display:flex;gap:10px;align-items:center;z-index:40;max-width:94vw}
+.follow-bar button{border:0;background:#fff;color:#1d1d1f;border-radius:9999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+
+/* 출처 */
+.refs{font-size:.88em;color:var(--ink2);padding-left:1.2em}
+.refs li{margin:4px 0}
+
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .top .wrap{gap:8px;padding:6px 12px}
+  .live form{grid-template-columns:1fr}
+  .hero{padding:32px 0 28px}
+  .step{padding:40px 0 20px}
+  .vote .bar-row{grid-template-columns:7em 1fr 2.5em}
+}
+@media print{
+  .top,.keys,.cue,.follow-bar,.live form{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0;min-height:0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">독서와 AI<small>해누리중 조승재</small></a>
+    <nav class="chips" id="chips" aria-label="장면"></nav>
+    <div class="tools">
+      <span class="host-badge" id="hostBadge" hidden>진행 화면</span>
+      <button class="btn" id="followBtn" hidden title="강사가 화면을 넘기면 내 화면도 같이 넘어갑니다">따라가기 켬</button>
+      <div class="timer" id="timer" title="이 장면 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 장면 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">2026 개념기반 탐구독서 이해를 위한 강동송파 독서교육교사단 하반기 워크숍</div>
+    <h1>독서와 AI 연계</h1>
+    <p class="lead">과학 교사가 AI로 공부하다 겪은 일과 그걸 고친 방법을 말씀드리고, 그 생각으로 만든 읽기 도구를 함께 열어보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">질문하는 교실</span><span class="a">→</span><span class="n">「요약해줘」 고백</span><span class="a">→</span><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">지금 독서가 필요한 까닭</span><span class="a">→</span><span class="n hi">읽기 노트</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span>📅 <b>2026. 11. 9.(월) 20:00~21:30</b></span>
+      <span>👩‍🏫 <b>강동송파 독서교육교사단 선생님들</b></span>
+      <span>📱 <b>휴대폰이나 노트북</b></span>
+    </div>
+    <div class="flow" id="flow"></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장 앞 화면에 띄우는 판입니다. QR로 들어오시면 제가 장면을 넘길 때 선생님 화면도 같이 넘어가고, 위쪽 「따라가기」를 누르면 혼자 앞뒤로 보실 수 있습니다.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ① 인사 -->
+<section class="step" id="s1" data-title="인사" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">QR로 들어와 화면을 맞추고, 짧은 질문 하나로 시작해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">QR로 들어오시면 제 화면을 따라 넘어갑니다</p>
+      <p class="brief">휴대폰이나 노트북으로 QR을 찍어 들어와주시길 바랍니다~!</p>
+      <div class="join-row">
+        <div class="qr" id="pageQr"></div>
+        <div><span class="url-text" id="pageUrl"></span></div>
+      </div>
+      <div class="detail">
+        <p>공문에는 21시 30분까지로 되어 있지만, 저는 50분 안에 마치고 선생님들의 사례 나눔으로 넘기려고 합니다. 들어오시면 제가 장면을 넘길 때마다 선생님 화면도 같은 장면으로 넘어갑니다. 혼자 앞뒤를 보고 싶으실 때는 위쪽의 「따라가기」를 눌러 끄실 수 있습니다.</p>
+        <p>중간중간 선생님들께 여쭤보는 칸이 있습니다. 적어 주신 글은 앞 화면과 다른 선생님 화면에 바로 뜨고, 이름은 비워 두셔도 됩니다.</p>
+      </div>
+      <div class="cue">진행 화면 주소 = 이 페이지?mode=present&amp;host=1 · 시작 전에 열어 두기</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">요즘 학생들이 글을 읽는 모습에서 눈에 띄는 것이 있으신가요?</p>
+      <div class="live" data-kind="w1" data-max="300">
+        <div class="q">요즘 학생들이 글을 읽는 모습에서 눈에 띄는 것이 있으신가요?</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ② 내 수업 소개 -->
+<section class="step" id="s2" data-title="질문하는 교실" data-min="7">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>제 수업으로 드리는 인사</h2><span class="min"><b>7</b>분</span></div>
+    <p class="goal">교사가 자기를 소개하는 가장 빠른 방법은 자기 수업을 소개하는 것이라고 들어서, 제 과학 시간을 먼저 보여 드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">학생들이 질문하지 않던 세 가지 까닭</p>
+      <p class="brief">질문할 틈이 없고, 분위기가 아니고, 혼자 튀기 싫어서였습니다.</p>
+      <div class="grid2">
+        <div class="box"><b>질문 시간을 꼭 줍니다</b><p>수업 끝에 질문하는 시간을 빼지 않고 둡니다.</p></div>
+        <div class="box"><b>어떤 질문이든 크게 반응합니다</b><p>나쁜 질문은 없고, 불친절한 답만 있을 뿐이라고 말합니다.</p></div>
+        <div class="box"><b>다 같이 질문합니다</b><p>모두 질문하니 한 사람이 튀지 않습니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>저는 화학을 전공했고, 지금은 중학교 2학년에게 별과 우주를 가르치고 있습니다. 제 교실의 목표는 학생들에게서 질문이 나오는 교실입니다. 저는 학생들이 질문하지 않는 까닭을 세 가지로 봤습니다. 질문할 틈이 없고, 질문할 분위기가 아니고, 혼자 튀는 게 싫어서입니다.</p>
+        <p>그래서 위의 세 가지를 지금까지 지키고 있습니다. 학생들에게는 2학기 첫 시간부터 "나쁜 질문은 없다, 불친절한 답만 있을 뿐"이라고 말해 왔습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">질문을 끌어내고, 모으고, 칭찬하는 세 가지 장치</p>
+      <div class="grid2">
+        <div class="box"><b>질문유발자료</b><p>궁금증이 생기도록 사진과 영상 자료를 직접 만듭니다.</p></div>
+        <div class="box"><b>질문과수원</b><p>학생이 질문을 심고, 다듬고, 스스로 답을 찾아 적는 웹앱입니다. 2학년 질문이 1,700개 넘게 모였습니다.</p></div>
+        <div class="box"><b>이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 이번 달 말에 처음 줍니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>질문과수원은 제가 만든 웹앱입니다. 학생이 질문을 올리면 친구들이 물을 주고, 제가 되묻기를 달고, 학생은 답을 찾아 적습니다. 11월 초에 세어 보니 2학년 학생들이 올린 질문이 1,700개를 넘었습니다.</p>
+        <p>상은 질문 개수로 주지 않습니다. 끝까지 파고든 학생, 예상이 빗나간 것을 기록한 학생, 배운 것을 생활과 이은 학생처럼 이야기가 있는 학생에게 주려고 이름을 그렇게 지었습니다. 콩글리쉬상은 자판이 영어로 바뀌어 있어도 포기하지 않고 로마자로 질문을 올린 학생에게 주는 상입니다.</p>
+      </div>
+      <div class="cue">질문 수(11-04 기준)·첫 시상 시기(11/23~27) 확인</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">개념탐독의 첫 단계와 같은 자리에 있습니다</p>
+      <p class="brief">서울시교육청이 소개한 개념탐독 예시 수업은 개념적 질문을 만드는 것으로 시작합니다.</p>
+      <div class="detail">
+        <p>서울시교육청이 2025년 12월에 발표한 독서교육 계획에서 개념탐독 수업은 관계맺기, 탐색하기, 적용하기, 전이하기의 네 단계로 소개되었고, 첫 단계인 관계맺기에 개념적 질문 만들기가 들어 있었습니다. 제가 과학 시간에 하는 일이 그 첫 단계와 같은 자리에 있다고 생각해서 이 연수에 오게 되었습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ③ 고백 -->
+<section class="step" id="s3" data-title="「요약해줘」" data-min="9">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>업무에는 AI가 꼭 필요한데, 공부는 달랐습니다</h2><span class="min"><b>9</b>분</span></div>
+    <p class="goal">제가 업무에서 AI를 어떻게 쓰는지 먼저 말씀드리고, 공부할 때 겪은 실패를 고백해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">긴 공문은 AI와 NotebookLM에 맡깁니다</p>
+      <p class="brief">제가 할 일 위주로 정리하고, 다음에 할 일을 묻고, 출처는 쪽수로 확인합니다.</p>
+      <div class="detail">
+        <p>저는 업무에서는 AI를 거의 필수로 씁니다. 아주 긴 공문이나 디벗 양품화처럼 복잡한 업무가 오면 AI나 NotebookLM에 넣습니다. 그러면 제가 할 일 위주로 정리해 주고, 제 업무 현황을 말하면 다음에 무엇을 하면 되는지 알려 주고, 출처가 궁금하면 몇 쪽에 어떻게 나와 있는지 짚어 줍니다.</p>
+        <p>출처를 바로 열어 확인할 수 있어서 잘못된 내용이 섞일까 하는 걱정도 훨씬 줄었습니다. 그리고 그 업무는 제가 잘 알고 있어서, 정리된 내용이 이상하면 바로 알아챌 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">공부할 때 제가 가장 많이 한 말, 「요약해줘」</p>
+      <p class="brief">과학덕후 학생들의 5분 질문에 답하려고, 전공이 아닌 우주를 5시간씩 공부했습니다.</p>
+      <div class="detail">
+        <p>그런데 공부는 달랐습니다. 과학덕후 학생들은 수업을 마치자마자 5분 동안 질문을 쏟아냅니다. 제 전공이 아닌 우주 질문이라 그 5분을 위해 5시간을 공부했고, 그때 AI에게 가장 많이 한 말이 「요약해줘」였습니다. 답이 바로 나오고 깔끔해서 읽고 나면 다 안 것 같았습니다.</p>
+        <p>그러다 한 학생의 질문에 막혀서 "선생님이 조금 더 알아보고 다음 시간에 알려 줄게" 하고 쉬는 시간에 쫓아갔는데, 아이는 없었습니다. 제 권위도 같이 없어졌습니다. 돌아보니 제가 쌓은 지식에는 알맹이가 없었습니다. 요약을 읽고 안다고 착각한 것인데, 심리학에서는 이것을 설명 깊이의 착각이라고 부릅니다. 사람은 '왜'와 '어떻게'를 실제보다 훨씬 잘 안다고 믿다가, 직접 설명해 보려 하면 그 믿음이 무너집니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생들도, 대학생들도 같았습니다</p>
+      <div class="grid2">
+        <div class="box"><span class="big">0명</span><p>고2 진로 독서 발표에서 책을 끝까지 읽은 학생. 줄거리는 AI에게 맡겼다고 했습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
+        <div class="box"><span class="big">국어 64.9%</span><p>서울 중고생 26,531명이 생성형 AI를 가장 많이 쓴 과목</p><span class="src">서울시교육청교육연구정보원, 2025년 7월 조사</span></div>
+        <div class="box"><span class="big">18명 중 15명</span><p>ChatGPT로 에세이를 쓴 뒤, 방금 쓴 자기 글을 제대로 옮기지 못한 대학생</p><span class="src">MIT 미디어랩, 2025, 심사 전 논문</span></div>
+      </div>
+      <div class="detail">
+        <p>EBS 다큐 「다시, 읽기로」 2부에는 고2 교실이 나옵니다. 진로 독서 발표를 했는데 책을 끝까지 읽은 학생이 한 명도 없었고, 반쯤 읽다가 줄거리는 AI에게 맡겼다는 학생이 나옵니다. 한 학생은 혼자 한 과제는 나중에 기억이 나는데 AI에게 맡긴 것은 거의 기억나지 않는다고 말했습니다. 제가 겪은 것과 같았습니다.</p>
+        <p>MIT 미디어랩 연구진은 대학생 54명에게 에세이를 쓰게 하면서 뇌파를 쟀습니다. 처음 쓴 날 ChatGPT로 쓴 18명 가운데 15명이 방금 쓴 자기 글의 문장을 제대로 옮기지 못했고, 검색이나 자기 머리만으로 쓴 사람들은 각각 2명만 그랬습니다. 연구진은 이것을 인지부채라고 불렀습니다. 지금 생각을 아끼면 나중에 이자까지 붙여 갚게 된다고 본 것입니다. 아직 동료 심사를 거치지 않은 논문이라 저는 숫자보다 그 이름이 제 경험과 맞아서 소개합니다.</p>
+        <p>같은 내용을 AI 요약으로 배운 사람이 웹에서 직접 찾아 읽은 사람보다 얕게 알았다는 실험도 있습니다. 실험 7개에 10,462명이 참여한 연구입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">요약을 읽고 안다고 생각했는데, 막상 설명하려니 막힌 적 있으신가요?</p>
+      <div class="live vote" data-kind="v_sum" data-opts="있습니다|아직 없습니다">
+        <div class="q">요약을 읽고 안다고 생각했는데, 막상 설명하려니 막힌 적 있으신가요?</div>
+        <div class="opts"></div>
+        <div class="bars"></div>
+        <div class="st"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 바꾼 방법 -->
+<section class="step" id="s4" data-title="질문하며 읽기" data-min="8">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2><span class="min"><b>8</b>분</span></div>
+    <p class="goal">업무 읽기와 공부 읽기가 왜 달랐는지 살펴보고, 제가 바꾼 공부 순서를 보여 드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">공문은 처리하려고 읽고, 공부는 달라지려고 읽습니다</p>
+      <div class="grid2">
+        <div class="box"><b>공문 읽기</b><p>읽고 나서 할 일을 처리하는 것이 목적이라 빨리 끝낼수록 좋습니다. 그 업무를 이미 알아서 틀린 곳이 보입니다.</p></div>
+        <div class="box"><b>공부 읽기</b><p>읽고 나서 내 머릿속이 바뀌는 것이 목적이라 읽는 과정이 핵심입니다. 처음 배우는 내용이라 요약을 걸어 둘 곳이 없습니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>업무에서는 그렇게 좋던 AI가 공부에서는 왜 안 됐는지 따져 보니, 읽는 목적이 달랐습니다. 이것은 선생님들께서 늘 가르치시는 내용이었습니다. 읽기 목적에 따라 읽는 방법도 달라집니다. 중학교 국어과 교육과정의 요약 성취기준([9국02-02])에도 요약 규칙을 기계적으로 적용하기보다 읽기 목적을 먼저 정하게 하라는 내용이 있습니다.</p>
+        <p>나민애 교수님도 특강에서 대중서는 참고서처럼 필요한 것만 가져오고, 어려운 책은 핵심 낱말을 다른 사람에게 설명할 수 있을 때까지 읽으라고 했습니다. 저는 공문을 앞의 방법으로, 교과서를 뒤의 방법으로 읽어야 했던 것입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">지금 제가 공부하는 순서</p>
+      <div class="pipe" aria-label="공부 순서"><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">내 말로 정리</span><span class="a">→</span><span class="n">생각한 과정까지 텍스트로</span><span class="a">→</span><span class="n hi">정리만 AI에게</span></div>
+      <div class="detail">
+        <p>지금은 읽으면서 질문을 적고, 읽은 것을 제 말로 다시 씁니다. 어디서 막혔고 어떻게 풀었는지도 노션에 지저분하게 텍스트로 적어 둡니다. AI에게는 그 지저분한 텍스트를 보기 좋게 정리하는 일만 맡깁니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">알고 보니 선생님들이 가르치시는 방법이었습니다</p>
+      <div class="grid2">
+        <div class="box"><b>질문하며 읽기</b><p>질문을 만들며 읽은 사람이 시간은 더 걸렸지만 훨씬 많이 기억했습니다. 실험에 참여한 사람들은 "무슨 질문을 해야 하지?"에서 막혔습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
+        <div class="box"><b>부분마다 스스로 요약</b><p>한 장이 끝날 때마다 스스로 요약하고, 그 요약을 들고 다음 장으로 넘어갑니다.</p><span class="src">나민애, EBS 「나의 두 번째 교과서」 국어 1강</span></div>
+        <div class="box"><b>질문 만들기를 가르치면</b><p>처음 보는 글의 이해력이 올랐습니다. 효과크기 중앙값 0.36(표준화 검사), 0.86(연구자 제작 검사)</p><span class="src">Rosenshine 외, 1996</span></div>
+        <div class="box"><b>먼저 스스로, 그다음 AI</b><p>먼저 스스로 쓰다가 마지막에 AI를 쓴 사람들은 뇌 연결성이 오히려 커졌습니다.</p><span class="src">MIT 미디어랩, 2025, 마지막 회차 18명</span></div>
+      </div>
+      <div class="detail">
+        <p>이렇게 바꾸고 나서 EBS 다큐를 봤는데, 질문을 만들며 읽은 사람이 시간은 더 걸렸지만 훨씬 많이 기억했다는 실험이 나왔습니다. 실험에 참여한 사람들이 무슨 질문을 해야 할지 몰라 막힌 모습까지 제 학생들과 똑같았습니다. 나민애 교수님은 챕터가 끝날 때마다 스스로 요약하라고 했는데, 제 「요약해줘」와 같은 요약이지만 누가 하느냐가 달랐습니다.</p>
+        <p>MIT 연구의 마지막 회차에서는 먼저 스스로 쓰다가 나중에 AI를 쓴 사람들의 뇌가 오히려 활발했고, 연구진은 스스로 충분히 애쓴 다음에 AI를 쓰라고 제안했습니다. 참여자가 18명뿐이라 조심스럽지만 제 노션 방식과 같은 순서였습니다. 제가 5시간씩 헤매다 찾은 방법이 선생님들께서 교실에서 이미 가르치고 계신 방법이었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</p>
+      <div class="live" data-kind="w_purpose" data-max="300">
+        <div class="q">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 왜 지금 독서 -->
+<section class="step" id="s5" data-title="지금 독서가 필요한 까닭" data-min="7">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>지금 독서가 필요한 까닭과 수능 독서가 재는 힘</h2><span class="min"><b>7</b>분</span></div>
+    <p class="goal">AI가 무엇으로 배우는지, 우리 학생들의 읽기 숫자, 수능 독서가 재는 힘을 차례로 보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">AI도 사람이 쓴 글로 배웁니다</p>
+      <div class="grid2">
+        <div class="box"><span class="big">15조 토큰 넘게</span><p>Meta의 Llama 3가 학습한 공개된 글</p><span class="src">Meta, 2024년 4월 발표</span></div>
+        <div class="box"><span class="big">AI 글만 먹으면</span><p>AI가 쓴 글을 다음 AI가 되풀이해 배우면 드문 정보부터 사라지며 망가집니다.</p><span class="src">Shumailov 외, Nature, 2024</span></div>
+      </div>
+      <div class="detail">
+        <p>나민애 교수님은 특강에서 생성형 AI를 만들 때 가장 중요한 것이 로 데이터, 곧 텍스트라고 했습니다. 실제로 Meta는 Llama 3를 공개된 글 15조 토큰 이상으로 학습시켰다고 밝혔습니다. 그리고 AI가 AI가 쓴 글만 계속 배우면 드문 정보부터 사라지면서 망가진다는 연구가 Nature에 실렸습니다. 연구진은 그래서 사람이 쓴 글의 값어치가 더 커진다고 했습니다.</p>
+        <p>나민애 교수님은 사람도 마찬가지라서, 한 번 많이 읽었다고 계속 나오는 게 아니라 주기적으로 계속 읽어야 한다고 했습니다. 기계도 사람이 쓴 글을 계속 읽어야 하는데, 사람은 더 그렇다고 생각합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">우리 학생들의 읽기 숫자</p>
+      <div class="grid2">
+        <div class="box"><span class="big">501점</span><p>PISA 2025 한국 읽기 평균. 처음 참여한 뒤로 가장 낮습니다(2006년 556점).</p><span class="src">교육부, 2026년 9월 발표</span></div>
+        <div class="box"><span class="big">5.8% → 17.8%</span><p>읽기 기초 미달 학생 비율(2006년 → 2025년)</p><span class="src">교육부 PISA 2025 보도자료</span></div>
+        <div class="box"><span class="big">OECD 1~9위</span><p>그래도 읽기는 여전히 OECD 상위권입니다.</p><span class="src">교육부 PISA 2025 보도자료</span></div>
+        <div class="box"><span class="big">38.5%</span><p>1년 동안 책을 한 권이라도 읽은 성인 비율</p><span class="src">문화체육관광부, 2025 국민 독서실태 조사</span></div>
+      </div>
+      <div class="detail">
+        <p>PISA 2025 한국 읽기 점수는 501점으로, 2000년 첫 참여 이후 가장 낮았습니다. 읽기 기초 미달 학생은 2006년 5.8%에서 2025년 17.8%로 세 배가 되었습니다. 그래도 OECD 안에서는 여전히 상위권이라, 저는 추락이라기보다 아래쪽이 두꺼워졌다고 봅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">수능 국어 독서가 재는 힘</p>
+      <p class="brief">다음 주 목요일(11월 19일)이 수능입니다.</p>
+      <div class="grid2">
+        <div class="box"><b>작년 수능 국어 첫 지문</b><p>읽기 능력은 어떻게 자라는가(고프의 단순 관점). 해독이 자란 뒤에는 독서 경험이 독해 능력 발달에 주요한 기여를 한다는 내용이었습니다.</p><span class="src">2026학년도 수능 국어 1~3번</span></div>
+        <div class="box"><b>평가원이 재는 다섯 가지</b><p>어휘·개념, 사실적 이해, 추론적 이해, 비판적 이해, 적용과 창의</p><span class="src">한국교육과정평가원</span></div>
+        <div class="box"><b>지문은 모든 교과에서</b><p>작년 독서 지문은 법(보증 계약), 과학(열팽창), 철학(인격의 동일성)이었습니다.</p><span class="src">2026학년도 수능 국어</span></div>
+        <div class="box"><b>2028학년도부터 독서와 작문</b><p>읽은 글로 써 보고, 그 내용이 지문과 맞는지 점검하는 공부를 권합니다.</p><span class="src">평가원 2028 예시문항 안내</span></div>
+      </div>
+      <div class="detail">
+        <p>작년 수능 국어의 첫 지문이 바로 읽기 능력에 관한 글이었습니다. 글자를 깨친 뒤에는 독서 경험이 독해 능력을 키운다는 내용이라, 나민애 교수님의 말과 그대로 이어졌습니다. 작년 독서 지문이 법, 과학, 철학에서 나왔다는 것은 도덕, 사회, 과학 선생님들의 수업에 나오는 글이 곧 수능 독서 지문이라는 뜻이기도 합니다.</p>
+        <p>2028학년도부터는 국어 선택과목이 없어지고 독서와 작문을 모두 봅니다. 평가원 예시문항 안내에는 읽은 글을 바탕으로 꾸준히 써 보고, 내가 쓴 내용이 지문과 논리적으로 맞는지 점검하라는 내용이 있습니다. 제가 노션에 제 말로 정리하는 것과 같은 방향이라고 생각합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ AI를 막아야 하나 -->
+<section class="step" id="s6" data-title="AI를 막아야 할까" data-min="4">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>그럼 AI를 못 쓰게 해야 할까요?</h2><span class="min"><b>4</b>분</span></div>
+    <p class="goal">제가 AI를 좋아하는 이유와 조심하게 된 이유를 함께 말씀드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">궁금한 게 있으면 AI는 정말 좋은 도구입니다</p>
+      <p class="brief">주변 사람과의 대화나 검색으로는 한계가 있는 것을, AI와는 끝까지 이어서 물을 수 있습니다.</p>
+      <div class="detail">
+        <p>저는 AI를 못 쓰게 하자는 쪽이 아닙니다. 주변 사람과 끝까지 파고드는 대화나 검색엔진으로는 한계가 있는 것을, AI는 이미 배운 것을 바탕으로 대화해 주니까 정보를 모으는 시간이 크게 줄었습니다. 제가 어휘력이 좋은 편이 아니라서 뭉뚱그려 설명해도 "네가 말하려던 게 이거 맞아?" 하면서 대화를 이어 갈 수 있습니다. 흥미가 있고, 배우고 싶고, 궁금한 게 있다면 AI는 정말 좋은 도구입니다.</p>
+        <p>그런데 솔직히 말씀드리면, 깊은 생각이 필요한 주제는 성능 좋은 AI에게 맡기게 되니까 스스로 생각해야 하는 일이 귀찮고 피곤하게 느껴질 때가 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">차이는 생각의 첫 판을 누가 만드느냐였습니다</p>
+      <div class="grid2">
+        <div class="box"><b>내가 먼저 말하고 AI가 받아 줄 때</b><p>생각하는 사람은 여전히 나입니다. 뭉뚱그린 내 말에 AI가 낱말을 붙여 줍니다.</p></div>
+        <div class="box"><b>AI가 먼저 쓰고 내가 읽기만 할 때</b><p>읽고 끄덕이는 일만 남고, 다음에 스스로 생각하는 일이 더 무겁게 느껴집니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>같은 도구인데 한쪽에서는 좋고 한쪽에서는 생각이 귀찮아진 까닭을 따져 보니, 생각의 첫 판을 누가 만드느냐가 달랐습니다. 제가 먼저 말하고 AI가 받아 주면 생각하는 사람은 저입니다. AI가 먼저 쓰고 제가 읽기만 하면, 다음에 스스로 첫 판을 만드는 일이 더 무겁게 느껴졌습니다.</p>
+        <p>그래서 저는 학생에게서 AI를 떼어 놓기보다, 묻고 싶은 마음이 먼저 생기게 하는 일이 교사의 몫이라고 생각합니다. 제가 처음에 말씀드린 질문하는 교실, 그리고 선생님들의 질문하며 읽기가 그 일이라고 봅니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">학생이 AI를 쓸 때, 괜찮다고 보시는 때와 말리고 싶은 때는 언제인가요?</p>
+      <div class="live" data-kind="w_ai" data-max="300">
+        <div class="q">학생이 AI를 쓸 때, 괜찮다고 보시는 때와 말리고 싶은 때는 언제인가요?</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑦ 읽기 노트 -->
+<section class="step" id="s7" data-title="읽기 노트" data-min="9">
+  <div class="wrap">
+    <div class="step-h"><span class="num">7</span><h2>작은 독서 도구, 읽기 노트</h2><span class="min"><b>9</b>분</span></div>
+    <p class="goal">이 생각으로 만든 읽기 노트를 함께 열어 보고, 비슷한 도구를 만드는 길을 안내해 드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">첫 판은 학생이, AI는 그다음에</p>
+      <p class="brief">답 대신 힌트를 주게 만든 AI는 학습 손해가 거의 없었다는 실험이 있습니다.</p>
+      <div class="grid2">
+        <div class="box"><span class="big">+48% → −17%</span><p>그냥 ChatGPT를 쓴 고등학생은 연습 성적이 올랐지만, AI를 빼고 본 시험에서는 안 쓴 학생보다 낮았습니다.</p><span class="src">Bastani 외, PNAS, 2025, 튀르키예 고등학생 약 1,000명</span></div>
+        <div class="box"><span class="big">힌트만 주는 AI</span><p>정답 대신 힌트를 주게 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다.</p><span class="src">같은 연구</span></div>
+      </div>
+      <div class="detail">
+        <p>튀르키예 고등학생 약 1,000명이 참여한 수학 실험에서, 일반 ChatGPT를 쓴 학생은 연습 때 성적이 48% 올랐지만 AI를 빼고 본 시험에서는 AI를 쓰지 않은 학생보다 17% 낮았습니다. 정답 대신 힌트를 주도록 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다. 그래서 저는 도구를 만든다면 답을 주는 도구 말고, 학생에게 질문을 되돌려 주는 도구를 만들고 싶었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">읽기 노트에서 학생이 하는 일</p>
+      <div class="grid2">
+        <div class="box"><b>읽기 전</b><p>이 책에서 알고 싶은 것을 질문 하나로 적습니다.</p></div>
+        <div class="box"><b>부분마다</b><p>내 말로 한두 줄 요약하고, 읽으며 생긴 질문을 적습니다. 앞에서 쓴 요약이 다음 부분 위에 이어서 보입니다.</p></div>
+        <div class="box"><b>읽은 뒤</b><p>처음 질문에 내 말로 답하고, 이 책을 한 문장으로 적습니다.</p></div>
+        <div class="box"><b>AI는 그다음에</b><p>요약을 20자 이상 써야 열리고, 답이 아니라 내 요약에서 빠진 곳을 질문으로 짚어 달라는 부탁문이 나옵니다.</p></div>
+      </div>
+      <div class="frame"><iframe src="https://scienceisjo.github.io/readnote/teacher.html?demo" loading="lazy" title="읽기 노트 선생님 화면 예시"></iframe><div class="cap">선생님 화면 예시입니다. 학생 여섯 명이 『별의 전령』을 읽는 중이라고 가정한 꾸민 기록입니다.</div></div>
+      <div class="actions">
+        <a class="btn primary" href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">학생 화면 체험하기 ↗</a>
+        <a class="btn" href="https://scienceisjo.github.io/readnote/teacher.html?demo" target="_blank" rel="noopener">선생님 화면 예시 ↗</a>
+      </div>
+      <div class="detail" style="margin-top:14px">
+        <p>읽기 노트는 학생이 먼저 쓰게 만든 도구입니다. 선생님 화면에서는 같은 부분을 반 학생들이 어떻게 요약했는지 한 화면에 모아 볼 수 있고, 어느 부분에서 많이 막혔는지도 보입니다. 다음 수업에서 무엇을 짚을지 고를 때 쓰려고 넣은 기능입니다.</p>
+        <p>내년에 제 수업에서 쓰려고 다듬는 중이라, 오늘은 체험 화면과 예시 화면으로 보여 드립니다. 과학 책뿐 아니라 국어, 도덕, 사회 책에서도 쓸 수 있도록 과목과 읽을 부분을 선생님이 정하게 만들었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">이런 도구는 선생님들도 만드실 수 있습니다</p>
+      <p class="brief">만드는 법은 바이브코딩 매뉴얼에 순서대로 정리해두었습니다.</p>
+      <div class="actions">
+        <a class="btn" href="../vibecoding/" target="_blank" rel="noopener">바이브코딩 연수 허브 ↗</a>
+        <a class="btn" href="../vibecoding/basic.html" target="_blank" rel="noopener">① 바이브코딩 기초 ↗</a>
+      </div>
+      <div class="detail" style="margin-top:14px">
+        <p>오늘은 바이브코딩을 해 보셨다는 전제로, 만드는 과정은 따로 보여 드리지 않고 링크만 두었습니다. 처음이시라면 기초 매뉴얼부터 하나씩 따라오실 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">우리 교실에 이런 독서 도구가 있으면 좋겠다</p>
+      <div class="live" data-kind="w_tool" data-max="300">
+        <div class="q">우리 교실에 이런 독서 도구가 있으면 좋겠다, 한 줄로 적어주시길 바랍니다~!</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="예: 반 아이들이 같은 문단에서 만든 질문을 모아 보는 도구" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑧ 미래 독서 -->
+<section class="step" id="s8" data-title="다음 책" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">8</span><h2>제가 그려 보는 다음 책</h2><span class="min"><b>2</b>분</span></div>
+    <p class="goal">마지막으로 제 공상 하나를 말씀드리겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">전자책 다음의 책</p>
+      <div class="pipe" aria-label="다음 책"><span class="n">전자책</span><span class="a">→</span><span class="n">AR로 오감을 채우는 책</span><span class="a">→</span><span class="n">간접경험을 넘어 직접경험</span><span class="a">→</span><span class="n hi">책 안의 저자와 대화</span></div>
+      <div class="detail">
+        <p>지금 책의 다음 모습은 전자책입니다. 저는 그 전자책이 AR 같은 기술로 오감을 채우고, 간접경험을 넘어 직접경험을 하게 하는 쪽으로 갈 거라고 생각합니다.</p>
+        <p>그리고 책 안에 저자의 페르소나와 지식이 들어가서, 독자가 저자에게 질문하고 소통하며 책을 읽는 때가 올 거라고 봅니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑨ 마무리 -->
+<section class="step" id="s9" data-title="마무리" data-min="2">
+  <div class="wrap">
+    <div class="step-h"><span class="num">9</span><h2>마무리</h2><span class="min"><b>2</b>분</span></div>
+
+    <div class="blk">
+      <p class="kw">다시 보실 곳</p>
+      <div class="grid2">
+        <div class="box"><b>읽기 노트</b><p><a href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">학생 화면 체험</a> · <a href="https://scienceisjo.github.io/readnote/teacher.html?demo" target="_blank" rel="noopener">선생님 화면 예시</a></p></div>
+        <div class="box"><b>바이브코딩 매뉴얼</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">기초</a></p></div>
+        <div class="box"><b>오늘 이야기의 바탕이 된 영상</b><p><a href="https://www.youtube.com/watch?v=uQYWztR5UKU" target="_blank" rel="noopener">EBS 「다시, 읽기로」 2부</a> · <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">나민애 교수 특강</a></p></div>
+      </div>
+      <div class="detail">
+        <p>오늘은 과학 교사가 AI로 공부하다 실패한 이야기와, 그걸 고친 방법이 선생님들의 교실에 이미 있었다는 이야기를 드렸습니다. 연수 뒤에도 다시 열어 보실 수 있게 이 페이지와 링크를 그대로 두겠습니다. 이제 선생님들의 사례 나눔으로 넘기겠습니다^^</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">사례 나눔 전에, 오늘 이야기에 덧붙이거나 묻고 싶은 것이 있으신가요?</p>
+      <div class="live" data-kind="w_last" data-max="300">
+        <div class="q">사례 나눔 전에, 오늘 이야기에 덧붙이거나 묻고 싶은 것이 있으신가요?</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="한두 문장이면 충분합니다" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+
+    <div class="blk only-detail">
+      <p class="kw">출처</p>
+      <ol class="refs">
+        <li>EBS 특별기획 「다시, 읽기로」 2부 AI 시대, 읽기의 반격(2025-12-27 방송). <a href="https://www.youtube.com/watch?v=uQYWztR5UKU" target="_blank" rel="noopener">유튜브</a></li>
+        <li>나민애, EBS 「나의 두 번째 교과서」 국어 1강 「읽기, 큰 세상을 만나는 기쁨」(2024). <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">유튜브</a></li>
+        <li>서울특별시교육청, 「AI 시대, '책 읽는 학교, 책 읽는 서울' 독서교육 비전 선포」 보도자료(2025-12-17)</li>
+        <li>서울시교육청교육연구정보원, 『서울교육』 264호, 생성형 AI의 교육적 활용 조사(2025년 7월 조사, 중고생 26,531명)</li>
+        <li>Kosmyna 외, Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task, arXiv 2506.08872(2025, 동료 심사 전)</li>
+        <li>Melumad &amp; Yun, Experimental evidence of the effects of large language models versus web search on depth of learning, PNAS Nexus 4(10)(2025)</li>
+        <li>Rozenblit &amp; Keil, The misunderstood limits of folk science: an illusion of explanatory depth, Cognitive Science 26(5)(2002)</li>
+        <li>Rosenshine, Meister &amp; Chapman, Teaching Students to Generate Questions: A Review of the Intervention Studies, Review of Educational Research 66(2)(1996)</li>
+        <li>교육부 고시 제2022-33호 [별책 5] 국어과 교육과정, [9국02-02] 적용 시 고려 사항</li>
+        <li>Meta, Introducing Meta Llama 3(2024-04-18) · Shumailov 외, AI models collapse when trained on recursively generated data, Nature 631(2024)</li>
+        <li>교육부, OECD PISA 2025 결과 발표 보도자료(2026-09-08) · 문화체육관광부, 2025년 국민 독서실태 조사(2026-03-06)</li>
+        <li>한국교육과정평가원, 2026학년도 수능 국어 문제지 · 2028학년도 수능 예시문항 안내(2025-04)</li>
+        <li>Bastani 외, Generative AI without guardrails can harm learning: Evidence from high school mathematics, PNAS 122(26)(2025)</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-08</span></footer>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 장면 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
+<div class="follow-bar" id="followBar" hidden><span id="followMsg"></span><button id="followGo">그리로 가기</button></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+<script>
+const CONFIG = {
+  key:  'reading-ai',
+  code: 'gangdong-reading-1109',
+  supabase: {
+    url: 'https://vbvtnmnodeoocbbjauap.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc'
+  },
+  pollMs: 5000,       // 나눔 벽 새로고침
+  followMs: 2500      // 따라오기 확인
+};
+
+const params = new URLSearchParams(location.search);
+const IS_HOST = params.has('host');
+const CODE = (params.get('s') || CONFIG.code).slice(0, 60);   // 리허설은 ?s=다른코드 로
+const html = document.documentElement;
+const SB = CONFIG.supabase;
+const sbOn = !!(SB.url && SB.key);
+const sbHeaders = ()=>({ 'apikey':SB.key, 'Authorization':'Bearer '+SB.key, 'Content-Type':'application/json' });
+const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v); }catch(e){ return d; } },
+             set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+// 기기 표시(공감·투표를 기기당 하나로 세려고). 이름이 아니라 무작위 글자입니다.
+let DEV = ls.get('yeonsu:dev', '');
+if(!DEV){ DEV = 'd'+Math.random().toString(36).slice(2,10); ls.set('yeonsu:dev', DEV); }
+
+/* ── 모드 ── */
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save=true){
+  html.dataset.mode = m;
+  modeBtn.textContent = m==='present' ? '📖 상세로' : '🎤 발표로';
+  if(save) ls.set(CONFIG.key+':mode', m);
+}
+(function(){
+  const q = params.get('mode');
+  setMode((q || ls.get(CONFIG.key+':mode','detail'))==='present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', ()=> setMode(html.dataset.mode==='present' ? 'detail' : 'present'));
+
+/* ── 장면 목록 → 칩 · 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow  = document.getElementById('flow');
+steps.forEach((s,i)=>{
+  const title = s.dataset.title, min = s.dataset.min||'';
+  const c = document.createElement('a');
+  c.className='chip'; c.href='#'+s.id; c.innerHTML = `<b>${i+1}</b>${esc(title)}${min?` · ${min}분`:''}`;
+  c.addEventListener('click', e=>{ e.preventDefault(); go(i); });
+  chips.appendChild(c);
+  const f = document.createElement('a');
+  f.href='#'+s.id; f.innerHTML = `<span class="n">${i+1}</span><span class="t">${esc(title)}</span><span class="m">${min?min+'분':''}</span>`;
+  flow.appendChild(f);
+});
+const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
+{ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
+
+/* ── 현재 장면 ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i){
+  if(i===current && chipEls[i].classList.contains('on')) return;
+  current = i;
+  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', j<i); });
+  chipEls[i].scrollIntoView({block:'nearest', inline:'nearest'});
+  updateTimerLabel();
+  if(IS_HOST) hostSend();
+}
+const io = new IntersectionObserver(es=>{
+  const vis = es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
+  if(vis.length) setCurrent(steps.indexOf(vis[0].target));
+},{rootMargin:'-30% 0px -55% 0px', threshold:[0,.2,.5,1]});
+steps.forEach(s=>io.observe(s));
+
+/* ── 타이머 ── */
+const elapsed = steps.map(()=>0);
+let running=false, tick=null;
+const tmE=document.getElementById('tmElapsed'), tmP=document.getElementById('tmPlan'), tmT=document.getElementById('tmToggle'), timerEl=document.getElementById('timer');
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function updateTimerLabel(){
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]);
+  tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', !!plan && elapsed[current] > plan*60);
+}
+function toggleTimer(){
+  running=!running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick);
+  if(running) tick=setInterval(()=>{ elapsed[current]++; updateTimerLabel(); },1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', ()=>{ elapsed[current]=0; updateTimerLabel(); });
+
+/* ── 키보드 ── */
+function go(i){ i=Math.max(0,Math.min(i,steps.length-1)); steps[i].scrollIntoView({behavior:'instant',block:'start'}); setCurrent(i); }
+document.addEventListener('keydown', e=>{
+  const tg=e.target; if((tg&&tg.matches&&tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.key==='p'){ modeBtn.click(); return; }
+  if(html.dataset.mode!=='present') return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); go(current+1); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(current-1); }
+  if(e.key==='t'){ toggleTimer(); }
+  if(e.key==='c'){ html.classList.toggle('cue-on'); }
+});
+
+/* ── 따라오기: 진행 화면(?host=1)이 장면을 넘기면 다른 화면도 그 장면으로 ── */
+let hostTimer=null, hostLast='';
+function hostSend(){
+  if(!sbOn) return;
+  clearTimeout(hostTimer);
+  hostTimer=setTimeout(async ()=>{
+    const id=steps[current].id;
+    if(id===hostLast) return;
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:sbHeaders(),body:JSON.stringify({s:CODE,kind:'follow',name:'host',body:id})});
+      if(r.ok) hostLast=id;
+    }catch(e){}
+  }, 700);
+}
+const followBtn=document.getElementById('followBtn'), followBar=document.getElementById('followBar'), followMsg=document.getElementById('followMsg');
+let followOn = ls.get(CONFIG.key+':follow', true), followLastId=null, followTarget=null;
+function paintFollow(){ followBtn.textContent = followOn ? '따라가기 켬' : '따라가기 끔'; followBtn.classList.toggle('on', followOn); }
+function typing(){ const a=document.activeElement; return !!(a && a.matches && a.matches('input,textarea') && a.value); }
+async function followPoll(){
+  if(document.hidden) return;
+  try{
+    const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CODE)}&kind=eq.follow&select=id,body&order=id.desc&limit=1`,{headers:sbHeaders()});
+    if(!r.ok) return;
+    const [row]=await r.json(); if(!row) return;
+    if(row.id===followLastId) return;
+    followLastId=row.id;
+    const i=steps.findIndex(s=>s.id===row.body);
+    if(i<0 || !followOn) return;
+    if(i===current){ followBar.hidden=true; return; }
+    if(typing()){ followTarget=i; followMsg.textContent=`강사 화면이 「${steps[i].dataset.title}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
+    go(i);
+  }catch(e){}
+}
+document.getElementById('followGo').addEventListener('click', ()=>{ followBar.hidden=true; if(followTarget!=null) go(followTarget); });
+if(IS_HOST){
+  document.getElementById('hostBadge').hidden=false;
+} else if(sbOn){
+  followBtn.hidden=false; paintFollow();
+  followBtn.addEventListener('click', ()=>{ followOn=!followOn; ls.set(CONFIG.key+':follow', followOn); paintFollow(); if(followOn){ followLastId=null; followPoll(); } else followBar.hidden=true; });
+  followPoll();
+  setInterval(followPoll, CONFIG.followMs);
+}
+
+/* ── 나눔 벽 · 투표 (Supabase yeonsu_live, 폴링) ── */
+let myName = ls.get('yeonsu:name', '');
+async function fetchRows(kinds){
+  const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CODE)}&kind=in.(${kinds.map(encodeURIComponent).join(',')})&select=id,kind,name,body,created_at&order=id.desc&limit=800`,{headers:sbHeaders()});
+  if(!r.ok) throw new Error(r.status);
+  return r.json();
+}
+async function postRow(kind, name, body){
+  const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:{...sbHeaders(),'Prefer':'return=representation'},body:JSON.stringify({s:CODE,kind,name,body})});
+  if(!r.ok) throw new Error(r.status);
+  const [row]=await r.json(); return row;
+}
+
+document.querySelectorAll('.live[data-kind]:not(.vote)').forEach(box=>{
+  const kind=box.dataset.kind, likeKind=kind+'-like';
+  const form=box.querySelector('form'), st=box.querySelector('.st'), wall=box.querySelector('.wall'), q=box.querySelector('.q');
+  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
+  nameIn.value=myName;
+  if(!sbOn){ st.textContent='지금은 글을 모으지 않는 판입니다.'; return; }
+  let mine=new Set(ls.get(CONFIG.key+':mine:'+kind, []));
+  let busy=false;
+  async function load(){
+    if(busy) return; busy=true;
+    try{
+      const rows=await fetchRows([kind, likeKind]);
+      const posts=rows.filter(x=>x.kind===kind);
+      const likes={}, myLikes=new Set();
+      rows.filter(x=>x.kind===likeKind).forEach(x=>{ (likes[x.body]=likes[x.body]||new Set()).add(x.name); if(x.name===DEV) myLikes.add(x.body); });
+      q.innerHTML = esc(q.dataset.text||q.textContent) + (posts.length?`<span class="cnt">${posts.length}개</span>`:'');
+      wall.innerHTML = posts.length ? posts.map(x=>{
+        const n=(likes[String(x.id)]||new Set()).size, on=myLikes.has(String(x.id));
+        return `<div class="card${mine.has(x.id)?' mine':''}"><span class="who">${esc(x.name||'익명')}</span><span class="body">${esc(x.body)}</span><button class="like${on?' on':''}" data-id="${x.id}" ${on?'disabled':''} aria-label="공감">공감 ${n||''}</button></div>`;
+      }).join('') : '<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
+      if(st.dataset.err){ st.textContent=''; delete st.dataset.err; }
+    }catch(e){ st.textContent='서버에 닿지 않습니다. 잠시 뒤 다시 불러옵니다.'; st.dataset.err='1'; }
+    busy=false;
+  }
+  q.dataset.text=q.textContent;
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const name=nameIn.value.trim(), body=bodyIn.value.trim();
+    if(!body){ bodyIn.focus(); return; }
+    myName=name; ls.set('yeonsu:name', name);
+    st.textContent='올리는 중…';
+    try{
+      const row=await postRow(kind, name, body);
+      if(row){ mine.add(row.id); ls.set(CONFIG.key+':mine:'+kind, [...mine]); }
+      bodyIn.value=''; st.textContent='올렸습니다. 고맙습니다 🙂'; load();
+    }catch(err){ st.textContent='올리지 못했습니다. 다시 눌러 주세요.'; }
+  });
+  wall.addEventListener('click', async e=>{
+    const b=e.target.closest('.like'); if(!b || b.disabled) return;
+    b.disabled=true; b.classList.add('on');
+    try{ await postRow(likeKind, DEV, b.dataset.id); load(); }catch(err){ b.disabled=false; b.classList.remove('on'); }
+  });
+  load();
+  let t=null;
+  new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, CONFIG.pollMs); } }); }).observe(box);
+});
+
+document.querySelectorAll('.live.vote[data-kind]').forEach(box=>{
+  const kind=box.dataset.kind, opts=box.dataset.opts.split('|');
+  const optBox=box.querySelector('.opts'), bars=box.querySelector('.bars'), st=box.querySelector('.st');
+  if(!sbOn){ st.textContent='지금은 투표를 모으지 않는 판입니다.'; return; }
+  let myVote=ls.get(CONFIG.key+':vote:'+kind, '');
+  optBox.innerHTML=opts.map(o=>`<button class="btn${myVote===o?' on':''}" data-o="${esc(o)}">${esc(o)}</button>`).join('');
+  async function load(){
+    try{
+      const rows=await fetchRows([kind]);
+      const last={};   // 기기마다 마지막 표만 셉니다
+      rows.slice().reverse().forEach(x=>{ if(opts.includes(x.body)) last[x.name]=x.body; });
+      const cnt=Object.fromEntries(opts.map(o=>[o,0]));
+      Object.values(last).forEach(v=>{ cnt[v]++; });
+      const sum=Object.values(cnt).reduce((a,b)=>a+b,0), max=Math.max(1,...Object.values(cnt));
+      bars.innerHTML=opts.map(o=>`<div class="bar-row"><span>${esc(o)}</span><span class="bar"><i style="width:${cnt[o]/max*100}%"></i></span><b>${cnt[o]}</b></div>`).join('') + `<div class="small">모두 ${sum}명</div>`;
+    }catch(e){ st.textContent='서버에 닿지 않습니다. 잠시 뒤 다시 불러옵니다.'; }
+  }
+  optBox.addEventListener('click', async e=>{
+    const b=e.target.closest('[data-o]'); if(!b) return;
+    const o=b.dataset.o; if(o===myVote) return;
+    try{ await postRow(kind, DEV, o); myVote=o; ls.set(CONFIG.key+':vote:'+kind, o);
+      optBox.querySelectorAll('[data-o]').forEach(x=>x.classList.toggle('on', x.dataset.o===o)); st.textContent='답해 주셔서 고맙습니다 🙂'; load();
+    }catch(err){ st.textContent='보내지 못했습니다. 다시 눌러 주세요.'; }
+  });
+  load();
+  let t=null;
+  new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, CONFIG.pollMs); } }); }).observe(box);
+});
+
+/* ── QR: 이 페이지 📖 상세 주소 ── */
+const pageUrl = location.origin + location.pathname + '?mode=detail';
+document.getElementById('pageUrl').textContent = pageUrl.replace(/^https?:\/\//,'');
+function drawQRs(){
+  const el=document.getElementById('pageQr');
+  if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(pageUrl); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
+  el.innerHTML=`<span class="url">${esc(pageUrl)}</span>`;
+}
+if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load', drawQRs); setTimeout(()=>{ if(!window.qrcode) drawQRs(); },2500); }
+
+setCurrent(0);
+</script>
+</body>
+</html>
