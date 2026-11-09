@@ -343,6 +343,7 @@ a.box b{color:var(--blue)}
 .box p a{text-decoration:underline;text-underline-offset:2px}
 .box p.small{margin-top:8px}
 a.src{text-decoration:underline;text-underline-offset:2px}
+.box span.src a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .reveal-wrap{margin-top:16px}
 .reveal-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--line2)}
 .pv{border:0;border-radius:var(--r3);padding:0;width:min(1100px,94vw);max-height:90vh;background:#fff;color:var(--ink)}
@@ -1000,7 +1001,7 @@ html[data-mode="present"] .yt{max-width:calc(62vh * 16 / 9)}
 <section class="step" id="s7" data-title="학생과 AI">
   <div class="wrap">
     <div class="step-h"><span class="num">6</span><h2>독서할 때 학생은 AI를 어떻게 써야 할까요?</h2></div>
-    <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 걱정되는 점, 독서할 때 AI 사용 강령을 말씀드리겠습니다!</p>
+    <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 AI가 나 대신 독서를 하면 생기는 일, 독서할 때 AI 사용 강령을 말씀드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">멋진 독후감을 과제로 받으면, 학생에게는 무엇이 남을까요?</p>
@@ -1050,6 +1051,19 @@ html[data-mode="present"] .yt{max-width:calc(62vh * 16 / 9)}
       </div>
       <div class="detail">
         <p>두 연구 모두 AI가 읽는 사람에게 질문을 던졌다는 점이 같습니다. 선생님들이 가르치시는 질문하며 읽기를 AI가 거든 셈입니다. 다만 성인을 대상으로 한 짧은 실험이라, 중학생에게 그대로 옮기기는 조심스럽습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">AI가 나 대신 독서를 하면 생기는 일(인지의 외주화)</p>
+      <p class="brief">생각하는 일을 AI에게 맡기는 것을 인지의 외주화라고 부릅니다. 독서에서는 AI가 나 대신 읽고 정리하는 것입니다.</p>
+      <div class="grid2">
+        <div class="box"><b>생산적 고군분투가 사라집니다</b><p>스스로 고민하고 모르는 상태를 견디며 개념을 내 것으로 만드는 과정이 사라집니다.</p><a class="src" href="https://dbr.donga.com/article/view/1101/article_no/12193" target="_blank" rel="noopener">DBR, 「AI 시대 '인지적 외주화' 위험 넘어서려면」 ↗</a></div>
+        <div class="box"><b>인지적 부채와 디스킬링</b><p>당장은 편하지만, 길게 보면 스스로 문제를 푸는 힘과 숙련도가 줄어듭니다.</p><span class="src"><a href="https://www.youtube.com/watch?v=ncgX6eEK74g&amp;t=265" target="_blank" rel="noopener">논리학당 영상 ↗</a> · <a href="https://www.youtube.com/watch?v=ZUIaHzOdXOc&amp;t=74" target="_blank" rel="noopener">박남기, 최고의 교수법 영상 ↗</a> · <a href="https://dbr.donga.com/article/view/1101/article_no/12193" target="_blank" rel="noopener">DBR ↗</a></span></div>
+        <div class="box"><b>유창성의 환상과 인지적 위임</b><p>AI가 내놓은 매끄럽고 자신 있는 답을 따져 보지 않고 받아들여, 내가 완벽히 이해했다고 착각합니다.</p><span class="src">아래 Kreijkes 외(2026), Aslanov 외(2026) 연구</span></div>
+      </div>
+      <div class="detail">
+        <p>AI에게 요약을 맡기면 글과 씨름하는 시간이 줄어 당장은 편합니다. 그런데 그 씨름이 개념을 내 것으로 만드는 과정이라, 건너뛰면 스스로 읽는 힘이 줄고 AI의 매끄러운 답을 읽고 다 안 것 같은 착각에 빠집니다. 제가 「요약해줘」로 공부하다 학생 질문에 막힌 것도 이 착각 때문이었습니다. 아래 연구들이 이 세 가지를 숫자로 보여 줍니다.</p>
       </div>
     </div>
 
@@ -1363,6 +1377,8 @@ html[data-mode="present"] .yt{max-width:calc(62vh * 16 / 9)}
         <li>EBSi 교육다큐 「책맹인류」, 「용수철? 아빠 친구 이름 같아요」 혼자서는 교과서도 읽을 수 없다. <a href="https://youtu.be/kEfSJEgWP0o" target="_blank" rel="noopener">유튜브</a></li>
         <li>교육부, OECD PISA 2025 결과 발표 보도자료(2026-09-08) · 문화체육관광부, 2025년 국민 독서실태 조사(2026-03-06)</li>
         <li>Kosmyna 외, Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task, arXiv 2506.08872(2025, 동료 심사 전)</li>
+        <li>동아비즈니스리뷰(DBR), 「AI 시대 '인지적 외주화' 위험 넘어서려면」. <a href="https://dbr.donga.com/article/view/1101/article_no/12193" target="_blank" rel="noopener">기사</a></li>
+        <li>논리학당, 「생성형 AI시대, AI를 어떻게 활용할 것인가?: 인지적 외주화의 위험과 교육적 해법」 · 박남기, 「AI 시대 학습외주화 방지용 교수법」(최고의 교수법). <a href="https://www.youtube.com/watch?v=ncgX6eEK74g" target="_blank" rel="noopener">유튜브 1</a> · <a href="https://www.youtube.com/watch?v=ZUIaHzOdXOc" target="_blank" rel="noopener">유튜브 2</a></li>
         <li>Melumad &amp; Yun, Experimental evidence of the effects of large language models versus web search on depth of learning, PNAS Nexus 4(10)(2025)</li>
         <li>Bastani 외, Generative AI without guardrails can harm learning: Evidence from high school mathematics, PNAS 122(26)(2025)</li>
         <li>EBS 「생각의 멸종」 인스타그램 릴스 5편(@ebs_yourliteracy)</li>
