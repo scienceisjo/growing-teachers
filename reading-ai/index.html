@@ -145,11 +145,9 @@ html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(32
 .card .like{align-self:flex-start;border:1px solid var(--line);background:#fff;border-radius:9999px;padding:2px 10px;font:inherit;font-size:.78em;color:var(--ink2);cursor:pointer}
 .card .like.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
 .live .empty{color:var(--ink3);font-size:.9em;padding:8px 0}
-html[data-mode="present"] .live form,
-html[data-mode="present"] .live .st{display:none}
+/* 발표 모드에서도 의견 올리는 칸을 그대로 보임 */
 /* 투표 */
 .vote .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-html[data-mode="present"] .vote .opts{display:none}
 .vote .bar-row{display:grid;grid-template-columns:9em 1fr 3em;gap:10px;align-items:center;margin:6px 0}
 .vote .bar{height:14px;background:var(--bg2);border-radius:9999px;overflow:hidden}
 .vote .bar i{display:block;height:100%;background:var(--blue);border-radius:9999px;transition:width .4s}
@@ -233,7 +231,7 @@ html[data-mode="present"] footer#app-credit{display:none}
   .more-btn,.pager{display:none!important}
 }
 
-/* ── v3: 만화 한 장면 · 부탁문 복사 ── */
+/* ── v3: 만화 한 장면 · 프롬프트 복사 ── */
 .toon{display:none;margin:16px 0 4px;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff}
 .toon.ok{display:block}
 .toon img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:var(--bg2)}
@@ -454,7 +452,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 @media(max-width:720px){.live.scale form{grid-template-columns:1fr}}
 @media(max-width:560px){ #modeBtn{display:none} .top .tools{gap:6px} .top .tools .btn{padding:6px 10px;font-size:.8rem} }
 
-/* ── v14: 부탁문 채우기 실습 · Gemini 순서 ── */
+/* ── v14: 프롬프트 템플릿 채우기 실습 · Gemini 순서 ── */
 .pt{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:14px 0 6px;padding:16px;border:1px solid var(--line);border-radius:var(--r3);background:#fff}
 .pt .wide,.pt .pt-ex{grid-column:1/-1}
 .pt label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:.95em;color:var(--ink)}
@@ -479,6 +477,14 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 .gsteps li p{margin:0;color:var(--ink2)}
 .gsteps img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r2)}
 @media(max-width:760px){.gsteps li,.gsteps li.noimg{grid-template-columns:36px 1fr}.gsteps li > img{grid-column:1/-1}}
+
+/* ── v15: 유튜브 영상(시작 시점 지정) ── */
+.yt{margin:16px 0 4px;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff}
+.yt-box{position:relative;aspect-ratio:16/9;background:#111}
+.yt-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt figcaption{padding:10px 14px;font-size:.96em;color:var(--ink2);border-top:1px solid var(--line)}
+html[data-mode="present"] .yt{max-width:calc(62vh * 16 / 9)}
+@media print{ .yt-box{display:none} }
 </style>
 </head>
 <body>
@@ -574,7 +580,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <p class="kw">따라 해 보실 수 있는 실습 링크와 페이지</p>
       <p class="brief">도구를 만드는 실습은 오늘 연수 시간 안에 하기 어려워서 다른 이야기들을 가져왔습니다. 대신 연수 뒤에 따라 해 보실 수 있는 자료를 모두 모아 드립니다. 반짝이는 칸은 오늘 오신 선생님들께 특히 쓸모 있을 것 같은 자료이고, 「무엇을 하는 페이지인가요?」를 누르면 자세한 설명이 열립니다.</p>
       <div class="grid2 res-grid">
-        <div class="box res spark"><b>바이브코딩 시작하기</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">① 기초</a> · <a href="../vibecoding/practice.html" target="_blank" rel="noopener">개별 실습</a></p><details class="res-more"><summary>무엇을 하는 페이지인가요?</summary><p><b>연수 허브</b>는 바이브코딩이 무엇이고 무엇을 할 수 있는지 짚고, 제가 만든 것들을 둘러본 뒤 모듈(기초·학생 데이터·디자인·칠판 강의)로 나뉘어 직접 만들어 보는 시작 페이지입니다.</p><p><b>① 기초</b>는 수업하면서 「이런 게 있으면 좋겠다」 싶던 도구 하나를 말로 만들어 보관함에 올리는 데까지 따라 하는 매뉴얼입니다. 도구 열기 → 부탁문 쓰기 → 만들기 → 30초 점검 → 고치기 → 올리기 순서이고, 쓰시는 AI(ChatGPT·Claude·Gemini·SenGPT)를 고르면 그에 맞는 설명만 보입니다. 무료 계정으로도 됩니다.</p><p><b>개별 실습</b>은 다음 주 수업 한 차시를 정해, 칠판 내용을 움직이게 하는 HTML이나 실험 안내 HTML, 또는 문제지·손글씨 단권화·실험 매뉴얼 PDF를 만들어 보는 실습 페이지입니다. 제작 지침과 디자인 파일을 내려받아 AI에게 붙이고 부탁문 칸만 채워 보내면 됩니다.</p></details></div>
+        <div class="box res spark"><b>바이브코딩 시작하기</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">① 기초</a> · <a href="../vibecoding/practice.html" target="_blank" rel="noopener">개별 실습</a></p><details class="res-more"><summary>무엇을 하는 페이지인가요?</summary><p><b>연수 허브</b>는 바이브코딩이 무엇이고 무엇을 할 수 있는지 짚고, 제가 만든 것들을 둘러본 뒤 모듈(기초·학생 데이터·디자인·칠판 강의)로 나뉘어 직접 만들어 보는 시작 페이지입니다.</p><p><b>① 기초</b>는 수업하면서 「이런 게 있으면 좋겠다」 싶던 도구 하나를 말로 만들어 보관함에 올리는 데까지 따라 하는 매뉴얼입니다. 도구 열기 → 프롬프트 쓰기 → 만들기 → 30초 점검 → 고치기 → 올리기 순서이고, 쓰시는 AI(ChatGPT·Claude·Gemini·SenGPT)를 고르면 그에 맞는 설명만 보입니다. 무료 계정으로도 됩니다.</p><p><b>개별 실습</b>은 다음 주 수업 한 차시를 정해, 칠판 내용을 움직이게 하는 HTML이나 실험 안내 HTML, 또는 문제지·손글씨 단권화·실험 매뉴얼 PDF를 만들어 보는 실습 페이지입니다. 제작 지침과 디자인 파일을 내려받아 AI에게 붙이고 프롬프트 칸만 채워 보내면 됩니다.</p></details></div>
         <div class="box res spark"><b>디자인 입히기</b><p><a href="../vibecoding/design.html" target="_blank" rel="noopener">디자인 서랍</a>(DESIGN.md 74벌과 한글 서랍)</p><details class="res-more"><summary>무엇을 하는 페이지인가요?</summary><p>DESIGN.md는 한 웹사이트의 색, 글꼴 크기, 간격, 단추 모양, 해야 할 것과 하지 말 것을 글로 적어 둔 설계서 파일입니다. 서랍에서 마음에 드는 한 장을 골라 만들어 둔 도구와 함께 AI에게 주고 「디자인만 바꿔 줘」라고 하면, 기능은 그대로 두고 옷만 갈아입힙니다.</p><p>잘 알려진 서비스 디자인 74벌, 학교에서 쓰기 좋게 따로 만든 한글 서랍, 제가 실제로 써 본 예시를 함께 볼 수 있습니다. 쓰시는 AI를 고르면 그 AI에서 설계서를 넣는 방법만 보입니다.</p></details></div>
         <div class="box res"><b>수업 페이지 스킬</b><p><a href="../vibecoding/kit/skills/lesson-page-worksheet.zip">학습지형</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">기본형</a> · <a href="../vibecoding/kit/skills/lesson-page-links.zip">시뮬 링크형</a> · <a href="../vibecoding/kit/skills/lesson-page-3d.zip">3D형</a> · <a href="../vibecoding/kit/skills/lesson-template.zip">틀</a> · <a href="../vibecoding/kit/lesson-page-spec.md" target="_blank" rel="noopener">규격서</a></p><details class="res-more"><summary>무엇을 하는 페이지인가요?</summary><p>학생이 혼자 여는 수업용 웹 페이지(표지 + 학습 5단계 탭)를 만드는 스킬 네 가지입니다.</p><p><b>학습지형</b>은 개념정리 학습지의 빈칸·번호·순서를 그대로 옮기고, <b>기본형</b>은 교과서 쪽이나 수업 메모만으로 만듭니다. <b>시뮬 링크형</b>은 PhET처럼 이미 있는 시뮬레이션 링크를 탐구 활동에 넣어 AI가 쓰는 양이 적고, <b>3D형</b>은 three.js로 돌려 볼 수 있는 실험판을 직접 넣는 고급 방식입니다.</p><p><b>틀</b>은 네 스킬이 함께 쓰는 빈 페이지 파일이고, <b>규격서</b>는 AI가 지킬 규칙입니다. AI는 내용 파일 하나만 쓰고, 디자인은 색 파일 값만 바꾸게 되어 있어 매번 비슷한 품질이 나옵니다.</p></details></div>
         <div class="box res"><b>칠판 강의 화면</b><p><a href="../vibecoding/lecture.html" target="_blank" rel="noopener">만드는 법</a> · <a href="../vibecoding/kit/lecture-spec.md" target="_blank" rel="noopener">설계서</a> · <a href="../vibecoding/kit/skills/lecture-board.zip">스킬</a> · <a href="../boards/" target="_blank" rel="noopener">완성한 화면 모음</a></p><details class="res-more"><summary>무엇을 하는 페이지인가요?</summary><p>전자칠판이나 TV에 띄워 방향키로 한 단계씩 넘기며 설명하는 강의 화면(HTML 파일 하나)입니다. 개념정리 학습지의 빈칸과 같은 번호로 빈칸이 열리고, 레이저와 빨간 펜, 학생 복습용 화면이 들어 있습니다.</p><p><b>만드는 법</b>에서는 학습지 한 장을 넣어 빈칸과 맞춘 화면을 만드는 길과, 학습지 없이 수업을 말로 설명해서 간단히 만드는 길 가운데 하나를 골라 따라 합니다. <b>완성한 화면 모음</b>에는 제가 실제 수업에 쓰는 칠판 강의 18편과 손글씨 노트 13편이 있습니다.</p></details></div>
@@ -776,10 +782,10 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <h3>엉뚱한 질문도 진지하게</h3>
       <figure class="toon"><img src="img/cap-odd.webp" alt="포켓몬코일하고 과학코일이랑 연관이 있느냐는 학생 질문과 되묻기"><figcaption>「포켓몬코일하고 과학코일이랑 연관이있나요??」에 단 되묻기. 학생 이름은 가렸습니다.</figcaption></figure>
       <ul class="qlist">
-        <li>코일 없이 세탁기를 만들 수 있을까?<span class="reply">쌤이 대신 세탁기 안에 들어가서 세탁기를 돌려야 해</span></li>
-        <li>히포라테스는 어떻게 별을 보고 6등급으로 나누었을까(주관적인 요소로 나누었을까)<span class="reply">히포크라테스요??피타고리타분</span></li>
-        <li>베텔기우스 이름은 누가 지었을까<span class="reply">배털씨요</span></li>
-        <li>별은 왜 존재하는 걸까?<span class="reply">도덕시간같습니다</span></li>
+        <li>코일 없이 세탁기를 만들 수 있을까?</li>
+        <li>히포라테스는 어떻게 별을 보고 6등급으로 나누었을까(주관적인 요소로 나누었을까)</li>
+        <li>베텔기우스 이름은 누가 지었을까</li>
+        <li>별은 왜 존재하는 걸까?</li>
       </ul>
       <figure class="comic"><img src="../question-workshop/comics/question8.webp" alt="좋은 질문을 가르치는 것만큼 질문을 환영하는 태도가 중요하다는 만화 장면"></figure>
       <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
@@ -913,7 +919,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <div class="pipe" aria-label="공부 순서"><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">내 말로 정리</span><span class="a">→</span><span class="n">생각한 과정까지 텍스트로</span><span class="a">→</span><span class="n hi">정리만 AI에게</span></div>
       <figure class="toon" data-toon="s5-notes"><img src="img/s5-notes.webp" alt="선생님이 질문과 화살표로 어지럽게 적은 메모를 노트북 화면 속 AI가 가지런한 정리로 바꿔 주는 장면"><figcaption>생각은 제가 지저분하게 적고, AI는 정리만 합니다.</figcaption></figure>
       <div class="detail">
-        <p>지금은 읽으면서 질문을 적고, 읽은 것을 제 말로 다시 씁니다. 어디서 막혔고 어떻게 풀었는지도 텍스트로 적어 두고, AI에게는 그 글을 정리하는 일만 맡깁니다. 이 순서가 뒤에서 말씀드릴 학생에게 권하는 순서이자, 읽기 노트에 넣은 기능이 되었습니다.</p>
+        <p>지금은 읽으면서 질문을 적고, 읽은 것을 제 말로 다시 씁니다. 어디서 막혔고 어떻게 풀었는지도 텍스트로 적어 두고, AI에게는 그 글을 정리하는 일만 맡깁니다. 이 순서가 뒤에서 말씀드릴 독서할 때 AI 사용 강령과 읽기 노트에 넣은 기능으로 이어졌습니다.</p>
       </div>
       <div class="actions"><a class="btn" href="#sMore" data-goto="sMore">자세한 이야기는 맨 뒤 「+ 더보기」에 ↓</a></div>
     </div>
@@ -948,13 +954,13 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <p class="kw">AI도 사람이 쓴 글로 배웁니다</p>
       <div class="grid2">
         <div class="box"><span class="big">15조 토큰 넘게</span><p>Meta의 Llama 3가 학습한 공개된 글</p><span class="src">Meta, 2024년 4월 발표</span></div>
-        <div class="box"><span class="big">AI 글만 먹으면</span><p>AI가 쓴 글을 다음 AI가 되풀이해 배우면 드문 정보부터 사라지며 망가집니다.</p><span class="src">Shumailov 외, Nature, 2024</span></div>
+        <div class="box"><span class="big">AI 글만 먹으면</span><p>2024년 7월 Nature에 실린 AI 모델 붕괴(Model Collapse) 연구입니다. AI가 사람이 쓴 진짜 글 대신 다른 AI가 만든 짜깁기 글을 되풀이해 배우면, 복사본을 다시 복사할수록 화질이 깨지듯 결국 바보가 됩니다.</p><a class="src" href="https://www.nature.com/articles/s41586-024-07566-y" target="_blank" rel="noopener">Shumailov 외, Nature, 2024년 7월 ↗</a></div>
         <div class="box"><span class="big">제본을 뜯어 스캔</span><p>Anthropic은 중고 종이책을 사서 제본을 뜯고 한 장씩 스캔해 AI 학습에 썼고, 종이는 버렸습니다. 100만 권이 넘을 수 있다는 추정도 있습니다.</p><a class="src" href="https://www.mcdonaldhopkins.com/insights/news/anthropic-court-provides-early-guidance-on-fair-use" target="_blank" rel="noopener">Bartz v. Anthropic 판결, 미국 연방법원, 2025년 6월 ↗</a></div>
       </div>
       <figure class="toon"><img src="img/s6-scan.webp" alt="헌책 더미에서 로봇 팔이 책등을 잘라 낱장을 스캐너에 넣고, 남은 종이는 수거함에 쌓이며 화면 속 AI가 글을 읽는 장면"><figcaption>중고 종이책을 사서 제본을 뜯고 한 장씩 스캔한 뒤, 종이는 버렸습니다.</figcaption></figure>
       <figure class="toon"><img src="img/s6-court.webp" alt="법정에서 판사가 영수증 꽂힌 헌책에는 O, 해적 깃발 노트북에는 X를 켜고 큰 돈 자루가 놓인 장면"><figcaption>판사는 산 책을 스캔한 건 괜찮다고 봤지만, 몰래 내려받은 책은 15억 달러 합의로 이어졌습니다.</figcaption></figure>
       <div class="detail">
-        <p>나민애 교수님은 특강에서 생성형 AI를 만들 때 가장 중요한 것이 로 데이터, 곧 텍스트라고 했습니다. 실제로 Meta는 Llama 3를 공개된 글 15조 토큰 이상으로 학습시켰다고 밝혔습니다. 그리고 AI가 AI가 쓴 글만 계속 배우면 드문 정보부터 사라지면서 망가진다는 연구가 Nature에 실렸습니다. 연구진은 그래서 사람이 쓴 글의 값어치가 더 커진다고 했습니다.</p>
+        <p>나민애 교수님은 특강에서 생성형 AI를 만들 때 가장 중요한 것이 로 데이터, 곧 텍스트라고 했습니다. 실제로 Meta는 Llama 3를 공개된 글 15조 토큰 이상으로 학습시켰다고 밝혔습니다. 그리고 2024년 7월 Nature에는 AI 모델 붕괴 연구가 실렸습니다. AI가 사람이 쓴 진짜 글 대신 다른 AI가 만든 글을 되풀이해 배우면, 복사본을 계속 다시 복사할 때 화질이 깨지는 것처럼 결국 바보가 된다는 내용입니다. 연구진은 그래서 사람이 쓴 글의 값어치가 더 커진다고 했습니다.</p>
         <p>2025년 6월 미국 법원 판결에서, Anthropic이 중고 종이책을 사서 제본을 뜯어 스캔하고 종이는 버렸다는 사실이 알려졌습니다. 판사는 산 책을 디지털로 바꿔 학습에 쓴 것은 공정 이용으로 봤지만, 불법으로 내려받은 책을 쌓아 둔 것은 따로 문제 삼았고 이 부분은 15억 달러 합의로 이어졌습니다. AI를 만드는 회사가 책을 이렇게까지 모은다는 것 자체가, 사람이 쓴 글이 얼마나 귀한 재료인지 보여 준다고 생각합니다.</p>
         <p>나민애 교수님은 사람도 마찬가지라서, 한 번 많이 읽었다고 계속 나오는 게 아니라 주기적으로 계속 읽어야 한다고 했습니다. 기계도 사람이 쓴 글을 계속 읽어야 하는데, 사람은 더 그렇다고 생각합니다.</p>
       </div>
@@ -982,6 +988,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <div class="box"><span class="big">OECD 1~9위</span><p>그래도 읽기는 여전히 OECD 상위권입니다.</p><span class="src">교육부 PISA 2025 보도자료</span></div>
         <div class="box"><span class="big">38.5%</span><p>1년 동안 책을 한 권이라도 읽은 성인 비율</p><span class="src">문화체육관광부, 2025 국민 독서실태 조사</span></div>
       </div>
+      <figure class="yt"><div class="yt-box"><iframe src="https://www.youtube-nocookie.com/embed/kEfSJEgWP0o?start=798&amp;rel=0" title="EBS 책맹인류, 혼자서는 교과서도 읽을 수 없다" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><figcaption>EBS 교육다큐 「책맹인류」, 「용수철? 아빠 친구 이름 같아요」 혼자서는 교과서도 읽을 수 없다 · 13분 18초부터 재생됩니다. <a href="https://youtu.be/kEfSJEgWP0o?t=798" target="_blank" rel="noopener">유튜브에서 보기 ↗</a></figcaption></figure>
       <div class="detail">
         <p>PISA 2025 한국 읽기 점수는 501점으로, 2000년 첫 참여 이후 가장 낮았습니다. 읽기 기초 미달 학생은 2006년 5.8%에서 2025년 17.8%로 세 배가 되었습니다. 그래도 OECD 안에서는 여전히 상위권이라, 저는 추락이라기보다 아래쪽이 두꺼워졌다고 봅니다.</p>
       </div>
@@ -993,7 +1000,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 <section class="step" id="s7" data-title="학생과 AI">
   <div class="wrap">
     <div class="step-h"><span class="num">6</span><h2>독서할 때 학생은 AI를 어떻게 써야 할까요?</h2></div>
-    <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 걱정되는 점, 제가 권하는 순서를 말씀드리겠습니다!</p>
+    <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 걱정되는 점, 독서할 때 AI 사용 강령을 말씀드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">멋진 독후감을 과제로 받으면, 학생에게는 무엇이 남을까요?</p>
@@ -1040,15 +1047,14 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <div class="grid2">
         <div class="box"><b>읽기 전에 AI가 만든 질문</b><p>글을 읽기 전에 AI가 만든 질문에 먼저 답을 짐작해 보게 했더니, 그냥 읽은 사람보다 이해 점수가 크게 올랐습니다. 사람이 만든 질문과 효과가 같았습니다.</p><a class="src" href="https://doi.org/10.1037/mac0000254" target="_blank" rel="noopener">Pan 외, 2025, 영어권 성인 실험 ↗</a></div>
         <div class="box"><b>질문으로 대화하는 챗봇</b><p>독해를 어려워하던 사람은 질문을 주고받는 챗봇과 읽었을 때 점수가 가장 많이 올랐습니다(66.2% → 71.7%).</p><a class="src" href="https://doi.org/10.3389/feduc.2025.1506752" target="_blank" rel="noopener">Etkin 외, Frontiers in Education, 2025, 미국 18~22세 195명 ↗</a></div>
-        <div class="box"><b>질문하며 읽어 주는 스피커</b><p>그림책을 읽어 주며 중간중간 질문하는 스피커는 어른이 질문하며 읽어 준 것만큼 3~6세 아이의 이야기 이해를 높였습니다.</p><a class="src" href="https://doi.org/10.1111/cdev.13708" target="_blank" rel="noopener">Xu 외, Child Development, 2022, 생성형 AI 이전의 대본형 스피커 ↗</a></div>
       </div>
       <div class="detail">
-        <p>세 연구 모두 AI가 읽는 사람에게 질문을 던졌다는 점이 같습니다. 선생님들이 가르치시는 질문하며 읽기를 AI가 거든 셈입니다. 다만 성인과 유아를 대상으로 한 짧은 실험이라, 중학생에게 그대로 옮기기는 조심스럽습니다.</p>
+        <p>두 연구 모두 AI가 읽는 사람에게 질문을 던졌다는 점이 같습니다. 선생님들이 가르치시는 질문하며 읽기를 AI가 거든 셈입니다. 다만 성인을 대상으로 한 짧은 실험이라, 중학생에게 그대로 옮기기는 조심스럽습니다.</p>
       </div>
     </div>
 
     <div class="blk">
-      <p class="kw">AI가 답과 요약을 줄 때는 덜 남았습니다</p>
+      <p class="kw">AI에게 답을 구하고 요약을 맡겼을 때, 생각은 줄고 안다는 착각은 커졌습니다</p>
       <div class="grid2">
         <div class="box"><span class="big">사흘 뒤</span><p>역사 지문을 AI 챗봇으로만 공부했을 때보다 손으로 노트했을 때 더 많이 이해하고 기억했습니다. 그런데 학생들은 AI가 더 도움이 됐다고 느꼈습니다.</p><a class="src" href="https://doi.org/10.1016/j.compedu.2025.105514" target="_blank" rel="noopener">Kreijkes 외, Computers &amp; Education, 2026, 잉글랜드 14~15세 405명 ↗</a></div>
         <div class="box"><span class="big">76.5% → 67.6%</span><p>원래 잘 읽던 사람이 원문 대신 AI 요약을 읽고 문제를 풀었을 때의 정답률</p><a class="src" href="https://doi.org/10.3389/feduc.2025.1506752" target="_blank" rel="noopener">Etkin 외, 2025, 위와 같은 연구 ↗</a></div>
@@ -1062,32 +1068,30 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
     </div>
 
     <div class="blk">
-      <p class="kw">차이는 생각의 첫 판을 누가 만드느냐였습니다</p>
+      <p class="kw">차이는 AI에게서 답을 받느냐, 생각할 재료를 받느냐였습니다</p>
       <div class="grid2">
-        <div class="box"><b>내가 먼저 말하고 AI가 받아 줄 때</b><p>생각하는 사람은 여전히 나입니다. 뭉뚱그린 내 말에 AI가 낱말을 붙여 줍니다.</p></div>
-        <div class="box"><b>AI가 먼저 쓰고 내가 읽기만 할 때</b><p>읽고 끄덕이는 일만 남고, 다음에 스스로 생각하는 일이 더 무겁게 느껴집니다.</p></div>
+        <div class="box"><b>AI에게서 생각할 재료를 받을 때</b><p>AI가 질문을 던지고 힌트를 주면, 생각하는 사람은 여전히 나입니다. 뭉뚱그린 내 말에 AI가 낱말을 붙여 줍니다.</p></div>
+        <div class="box"><b>AI에게서 답을 받을 때</b><p>읽고 끄덕이는 일만 남고, 다음에 스스로 생각하는 일이 더 무겁게 느껴집니다.</p></div>
         <div class="box"><span class="big">+48% → −17%</span><p>그냥 ChatGPT를 쓴 고등학생은 연습 성적이 올랐지만, AI를 빼고 본 시험에서는 안 쓴 학생보다 낮았습니다. 힌트만 주게 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다.</p><span class="src">Bastani 외, PNAS, 2025, 튀르키예 고등학생 약 1,000명</span></div>
       </div>
-      <figure class="toon" data-toon="s7-first"><img src="img/s7-first.webp" alt="학생이 책을 펴 놓고 공책에 먼저 글을 쓰고, 옆의 태블릿 속 AI는 기다리고 있는 장면"><figcaption>첫 판은 학생이 쓰고, AI는 그다음에 묻습니다.</figcaption></figure>
+      <figure class="toon" data-toon="s7-first"><img src="img/s7-first.webp" alt="학생이 책을 펴 놓고 공책에 먼저 글을 쓰고, 옆의 태블릿 속 AI는 기다리고 있는 장면"><figcaption>학생이 먼저 쓰고, AI는 그다음에 질문을 던집니다.</figcaption></figure>
       <div class="detail">
-        <p>같은 도구인데 한쪽에서는 좋고 한쪽에서는 생각이 귀찮아진 까닭을 따져 보니, 생각의 첫 판을 누가 만드느냐가 달랐습니다. 제가 먼저 말하고 AI가 받아 주면 생각하는 사람은 저입니다. AI가 먼저 쓰고 제가 읽기만 하면, 다음에 스스로 첫 판을 만드는 일이 더 무겁게 느껴졌습니다.</p>
+        <p>같은 도구인데 한쪽에서는 좋고 한쪽에서는 생각이 귀찮아진 까닭을 따져 보니, AI에게서 무엇을 받느냐가 달랐습니다. AI가 질문을 던지거나 힌트를 주면 생각할 재료가 생기고, 생각하는 사람은 여전히 저입니다. AI가 답을 주면 읽고 끄덕이는 일만 남았습니다. 결국 AI를 쓰느냐 마느냐보다, AI를 올바르게 쓰는 것이 중요하다고 생각합니다.</p>
         <p>튀르키예 고등학생 약 1,000명이 참여한 수학 실험에서, 일반 ChatGPT를 쓴 학생은 연습 때 성적이 48% 올랐지만 AI를 빼고 본 시험에서는 AI를 쓰지 않은 학생보다 17% 낮았습니다. 정답 대신 힌트를 주도록 만든 AI를 쓴 학생은 그 손해가 대부분 사라졌습니다. 같은 AI라도 어떻게 쓰게 하느냐에 따라 결과가 달라진 것입니다.</p>
       </div>
     </div>
 
     <div class="blk">
-      <p class="kw">학생에게 권하는 순서</p>
-      <p class="brief">④에서 보신 제 공부 순서를 학생 쪽으로 옮겼습니다. 먼저 읽고 내 말로 쓴 다음, AI에게는 답 대신 질문과 반대 근거를 받습니다.</p>
-      <div class="pipe" aria-label="학생에게 권하는 순서"><span class="n">먼저 읽으며 표시하기</span><span class="a">→</span><span class="n">내 말로 쓰고 질문 만들기</span><span class="a">→</span><span class="n">AI에게 빠진 곳·반대 근거 묻기</span><span class="a">→</span><span class="n hi">글로 돌아가 확인하기</span></div>
+      <p class="kw">독서할 때 AI 사용 강령 세 가지</p>
+      <p class="brief">AI에게서 답 대신 생각할 재료를 받는 방법을 세 가지로 줄였습니다.</p>
       <div class="grid2">
-        <div class="box"><b>먼저 읽고, 물을 것을 정한 뒤</b><p>교과서를 먼저 읽고 모르는 곳을 표시한 다음, AI에게 물을 질문을 준비하라고 적었습니다.</p><a class="src" href="https://www.goe.go.kr/resource/old/BBSMSTR_000000000126/BBS_202502240135525801.pdf" target="_blank" rel="noopener">경기도교육청 학생용 생성형 AI 가이드라인, 2025 ↗</a></div>
-        <div class="box"><b>노트는 AI와 따로</b><p>먼저 읽고 AI로 궁금한 점을 확인한 뒤, 붙여넣기 없이 스스로 노트하게 하라고 권했습니다.</p><a class="src" href="https://doi.org/10.1016/j.compedu.2025.105514" target="_blank" rel="noopener">Kreijkes 외, 2026, 위 영국 실험의 저자 제안 ↗</a></div>
-        <div class="box"><b>반대 근거도 묻기</b><p>AI 설명이 틀렸을 때 사람들의 정답률은 35%로 AI 없이 판단할 때(49%)보다 낮았습니다. 참인 까닭과 거짓인 까닭을 함께 보여 주자 56%로 올랐습니다.</p><a class="src" href="https://aclanthology.org/2024.naacl-long.81" target="_blank" rel="noopener">Si 외, NAACL, 2024, 성인 80명 ↗</a></div>
-        <div class="box"><b>AI 없이 하는 연습도 따로</b><p>AI를 지름길 대신 학습 파트너로 쓰고, AI 없이 핵심 기능을 연습하는 시간을 따로 두라고 했습니다.</p><a class="src" href="https://doi.org/10.1787/062a7394-en" target="_blank" rel="noopener">OECD Digital Education Outlook 2026 ↗</a></div>
+        <div class="box"><span class="big">하나</span><b>AI가 나에게 질문하게 하기</b><p>답을 묻기 전에, 이 글을 읽으며 내가 생각해 볼 질문을 먼저 던져 달라고 합니다.</p><span class="src">앞의 Pan 외(2025), Etkin 외(2025)</span></div>
+        <div class="box"><span class="big">둘</span><b>정답 대신 힌트 받기</b><p>막혔을 때 정답을 달라고 하지 않고, 스스로 답에 닿을 수 있게 힌트를 한 단계씩 달라고 합니다. 교육학에서 말하는 비계를 AI에게 부탁하는 셈입니다.</p><span class="src">앞의 Bastani 외(2025), 힌트만 주게 만든 AI</span></div>
+        <div class="box"><span class="big">셋</span><b>내 말로 설명하고 피드백 받기</b><p>읽은 내용을 내 말로 먼저 설명하고, 빠졌거나 틀린 곳을 짚어 달라고 합니다. 짚어 준 곳은 글로 돌아가 확인합니다.</p><span class="src">설명 깊이의 착각, Rozenblit &amp; Keil(2002)</span></div>
       </div>
       <div class="detail">
-        <p>영국 교육부는 2026년 1월 학교용 AI 제품 기준에, 정답을 먼저 주지 말고 학생의 생각을 먼저 받으라는 항목을 넣었습니다. 제가 읽기 노트와 실험실 도구를 만들 때 지킨 조건과 같습니다.</p>
-        <p>AI를 어디까지 허용할지는 수업마다 다르겠지만, 어떤 순서로 쓰게 할지는 선생님이 도구를 만들 때 정해 둘 수 있습니다. 그 이야기를 다음 장면에서 이어 가겠습니다.</p>
+        <p>앞에서 본 연구들을 제 말로 줄이면 이 세 가지입니다.</p>
+        <p>AI를 어디까지 허용할지는 수업마다 다르겠지만, 어떤 방식으로 쓰게 할지는 선생님이 도구를 만들 때 정해 둘 수 있습니다. 그 이야기를 다음 챕터에서 이어가겠습니다!</p>
       </div>
     </div>
   </div>
@@ -1097,7 +1101,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 <section class="step" id="s8" data-title="나만의 독서 도구">
   <div class="wrap">
     <div class="step-h"><span class="num">7</span><h2>선생님 교실에 맞는 독서 도구 만들기</h2></div>
-    <p class="goal">제가 만든 읽기 노트와 작은 도구들을 열어 보고, 부탁문을 채워 Gemini에서 간단한 독서 도구를 직접 만들어 보겠습니다!</p>
+    <p class="goal">제가 만든 읽기 노트와 작은 도구들을 열어 보고, 프롬프트 템플릿을 채워 Gemini에서 간단한 독서 도구를 직접 만들어 보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">읽기 노트에서 학생이 하는 일</p>
@@ -1106,7 +1110,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <div class="box"><b>읽기 전</b><p>이 책에서 알고 싶은 것을 질문 하나로 적습니다.</p></div>
         <div class="box"><b>부분마다</b><p>내 말로 한두 줄 요약하고, 읽으며 생긴 질문을 적습니다. 앞에서 쓴 요약이 다음 부분 위에 이어서 보입니다.</p></div>
         <div class="box"><b>읽은 뒤</b><p>처음 질문에 내 말로 답하고, 이 책을 한 문장으로 적습니다.</p></div>
-        <div class="box"><b>AI는 그다음에</b><p>요약을 20자 이상 써야 열리고, 답이 아니라 내 요약에서 빠진 곳을 질문으로 짚어 달라는 부탁문이 나옵니다.</p></div>
+        <div class="box"><b>AI는 그다음에</b><p>요약을 20자 이상 써야 열리고, 답이 아니라 내 요약에서 빠진 곳을 질문으로 짚어 달라는 프롬프트가 나옵니다.</p></div>
       </div>
       <div class="frame"><iframe src="https://scienceisjo.github.io/readnote/teacher.html?demo" loading="lazy" title="읽기 노트 선생님 화면 예시"></iframe><div class="cap">선생님 화면 예시입니다. 학생 여섯 명이 『별의 전령』을 읽는 중이라고 가정한 꾸민 기록입니다.</div></div>
       <div class="actions">
@@ -1133,16 +1137,44 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <a class="btn primary" href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">읽기 노트 실험실 열기 ↗</a>
       </div>
       <div class="detail" style="margin-top:14px">
-        <p>열 개 모두 학생이 먼저 생각해서 쓰게 만들었고, 서버 없이 그 기기에만 저장됩니다. AI가 나오는 도구는 학생이 다 쓴 뒤에만 부탁문이 열리고, 그 부탁문도 AI에게서 질문을 받도록 적었습니다.</p>
+        <p>열 개 모두 학생이 먼저 생각해서 쓰게 만들었고, 서버 없이 그 기기에만 저장됩니다. AI가 나오는 도구는 학생이 다 쓴 뒤에만 프롬프트가 열리고, 그 프롬프트도 AI에게서 질문을 받도록 적었습니다.</p>
         <p>개념탐독을 하시는 선생님들께는 개념 렌즈 노트가, 국어 수업에는 문단 지도와 두 글 견주기가 바로 쓰실 만할 것 같아 함께 소개합니다. 도구마다 HTML 파일 하나로 만들었습니다. 다만 제 부족한 아이디어로 만든 것이라, 선생님들께서 쓰고 싶은 프로그램은 직접 AI와 대화하고 질문하며 처음부터 만들어 가시기를 추천드립니다.</p>
       </div>
     </div>
 
 
     <div class="blk">
-      <p class="kw">부탁문을 채워서 독서 도구 하나 만들어 보기</p>
-      <p class="brief">칸을 채우시면 아래 부탁문이 바로 바뀝니다. 비워 두신 칸에는 예시 문장이 들어갑니다.</p>
-      <div class="pipe" aria-label="만드는 순서"><span class="n">불편한 장면 한 줄</span><span class="a">→</span><span class="n">AI에게 부탁문</span><span class="a">→</span><span class="n">HTML 파일로 열어 보기</span><span class="a">→</span><span class="n">고쳐 달라고 다시 말하기</span><span class="a">→</span><span class="n hi">주소로 나누기</span></div>
+      <p class="kw">AI 사용 강령을 도구에 담는 방법</p>
+      <p class="brief">⑥에서 말씀드린 강령을 학생이 지키도록, 도구를 만들 때 미리 넣어 둡니다.</p>
+      <div class="grid2">
+        <div class="box"><b>프롬프트 템플릿</b><p>학생이 빈칸만 채우면 강령에 맞는 프롬프트가 만들어지게 합니다. 학생은 처음부터 올바른 프롬프트로 AI를 씁니다.</p></div>
+        <div class="box"><b>페르소나 문장을 먼저</b><p>프롬프트 맨 앞에 「너는 답을 알려 주지 않고 질문과 힌트로 이끄는 독서 도우미야」 같은 문장을 넣어 둡니다.</p></div>
+        <div class="box"><b>답을 얻은 것을 학습의 끝으로 두지 않기</b><p>답이나 결과물을 얻었다고 학습이 끝난 것으로 보지 않습니다. 웹앱으로 만들기는 어려워서, 수업에서 선생님이 지켜 주셔야 하는 부분이라고 생각합니다.</p></div>
+      </div>
+      <div class="copy-box">
+        <div class="copy-h"><b>학생용 프롬프트 템플릿 예시</b><button class="btn" type="button" data-copy="#promptStudent">복사하기</button></div>
+        <pre id="promptStudent">너는 답을 알려 주지 않고, 질문과 힌트로 내가 스스로 생각하게 돕는 독서 도우미야.
+아래 규칙을 꼭 지켜 줘.
+1. 정답이나 요약을 먼저 말하지 마.
+2. 내가 읽은 부분에서 생각해 볼 질문을 하나씩 던져 줘.
+3. 내가 막히면 정답 대신 힌트를 한 단계씩 줘.
+4. 내가 내 말로 쓴 설명에서 빠졌거나 틀린 곳을 짚어 주고, 글의 어디를 다시 읽으면 좋을지 알려 줘.
+
+[읽은 책과 부분]
+○○
+
+[내 말로 쓴 설명]
+○○</pre>
+      </div>
+      <div class="detail" style="margin-top:14px">
+        <p>읽기 노트에서 요약을 쓴 뒤에 열리는 프롬프트도 같은 생각으로 적었습니다. 아래 실습의 [지킬 것]에서 「학생용 AI 프롬프트 템플릿」을 켜 두시면, 선생님이 만드시는 도구에도 이런 템플릿이 들어갑니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">프롬프트 템플릿을 채워서 독서 도구 하나 만들어 보기</p>
+      <p class="brief">칸을 채우시면 아래 프롬프트가 바로 바뀝니다. 비워 두신 칸에는 예시 문장이 들어갑니다.</p>
+      <div class="pipe" aria-label="만드는 순서"><span class="n">불편한 장면 한 줄</span><span class="a">→</span><span class="n">AI에게 프롬프트</span><span class="a">→</span><span class="n">HTML 파일로 열어 보기</span><span class="a">→</span><span class="n">고쳐 달라고 다시 말하기</span><span class="a">→</span><span class="n hi">주소로 나누기</span></div>
       <div class="pt" id="pt">
         <div class="pt-ex"><span class="lab">예시로 채우기</span><button class="vchip" type="button" data-ex="0">"궁금한 게 없어요"</button><button class="vchip" type="button" data-ex="1">낱말에서 멈춰요</button><button class="vchip" type="button" data-ex="2">"재밌었어요"만 써요</button></div>
         <label>과목·학년<input id="ptSub" placeholder="예: 중학교 2학년 국어" maxlength="40" autocomplete="off"></label>
@@ -1155,10 +1187,11 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
           <label class="ck"><input type="checkbox" value="휴대폰에서도 글씨가 잘 보이게 해 줘." checked>휴대폰에서도 잘 보이게</label>
           <label class="ck"><input type="checkbox" value="이름이나 학번은 받지 마." checked>이름·학번 받지 않기</label>
           <label class="ck"><input type="checkbox" value="다 쓴 내용을 한 화면에 모아 보여 주고, 인쇄할 수 있게 해 줘.">모아 보기·인쇄</label>
+          <label class="ck"><input type="checkbox" value="학생이 다 쓴 뒤에만, AI에게 붙여넣을 학생용 프롬프트 템플릿을 보여 주고 복사할 수 있게 해 줘. 템플릿 맨 앞에는 「너는 답을 알려 주지 않고 질문과 힌트로 이끄는 독서 도우미야」라는 페르소나 문장을 넣고, AI가 질문하기·힌트 주기·내 말로 쓴 설명에 피드백하기만 하도록 적어 줘. 도구가 AI를 직접 부르지는 않게 해 줘." checked>학생용 AI 프롬프트 템플릿</label>
         </fieldset>
       </div>
       <div class="copy-box">
-        <div class="copy-h"><b>완성된 부탁문</b><button class="btn primary" type="button" data-copy="#promptTool">복사하기</button></div>
+        <div class="copy-h"><b>완성된 프롬프트</b><button class="btn primary" type="button" data-copy="#promptTool">복사하기</button></div>
         <pre id="promptTool">나는 중학교 ○○ 교사야. 학생들이 책을 읽을 때 쓰는 작은 웹 도구를 HTML 파일 하나로 만들어 줘.
 
 [수업에서 불편한 점]
@@ -1174,14 +1207,14 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 - 이름이나 학번은 받지 마.</pre>
       </div>
       <div class="detail" style="margin-top:14px">
-        <p>저는 이 부탁문에서 [수업에서 불편한 점]과 [도구가 할 일]만 바꿔 가며 씁니다. 처음 나온 파일이 마음에 들지 않으면 "글씨를 더 크게", "질문을 세 개까지 적게"처럼 하나씩 고쳐 달라고 다시 말합니다. [지킬 것]은 제가 도구를 만들 때마다 넣는 조건입니다.</p>
+        <p>저는 이 프롬프트에서 [수업에서 불편한 점]과 [도구가 할 일]만 바꿔 가며 씁니다. 처음 나온 파일이 마음에 들지 않으면 "글씨를 더 크게", "질문을 세 개까지 적게"처럼 하나씩 고쳐 달라고 다시 말합니다. [지킬 것]은 제가 도구를 만들 때마다 넣는 조건입니다.</p>
         <p>적어 주신 내용은 이 기기에만 남고 어디로도 보내지지 않습니다.</p>
       </div>
     </div>
 
     <div class="blk">
       <p class="kw">Gemini에서 바로 만들어 보기</p>
-      <p class="brief">오늘은 가볍게 해 보는 실습이라 Gemini를 추천드립니다. 다른 AI에도 같은 부탁문을 그대로 붙여넣으시면 됩니다.</p>
+      <p class="brief">오늘은 가볍게 해 보는 실습이라 Gemini를 추천드립니다. 다른 AI에도 같은 프롬프트를 그대로 붙여넣으시면 됩니다.</p>
       <div class="grid2 ai-links">
         <a class="box spark" href="https://gemini.google.com/" target="_blank" rel="noopener"><b>Gemini 열기 ↗</b><p>오늘 추천. 구글 계정으로 들어가 캔버스에서 만든 도구를 바로 써 봅니다.</p></a>
         <a class="box" href="https://claude.ai/" target="_blank" rel="noopener"><b>Claude 열기 ↗</b><p>답에 나온 파일 카드를 누르면 오른쪽 창에서 만든 도구가 열립니다.</p></a>
@@ -1189,9 +1222,9 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       </div>
       <ol class="gsteps" aria-label="Gemini에서 만드는 순서">
         <li><div><b>입력칸 왼쪽 ＋를 누릅니다</b><p>Gemini 새 채팅 화면의 입력칸 왼쪽에 있습니다.</p></div><img src="img/gem-plus.webp" alt="Gemini 입력칸 왼쪽 + 를 눌러 펼친 목록, 파일 업로드부터 Canvas, Deep Research까지" width="700" height="355"></li>
-        <li><div><b>Canvas를 누릅니다</b><p>입력칸 아래에 Canvas가 켜졌는지 확인합니다.</p></div><img src="img/gem-typed.webp" alt="Gemini 입력칸 아래에 Canvas가 켜지고 부탁문이 들어간 화면, 오른쪽에 모델 이름 Flash" width="700" height="250"></li>
+        <li><div><b>Canvas를 누릅니다</b><p>입력칸 아래에 Canvas가 켜졌는지 확인합니다.</p></div><img src="img/gem-typed.webp" alt="Gemini 입력칸 아래에 Canvas가 켜지고 프롬프트가 들어간 화면, 오른쪽에 모델 이름 Flash" width="700" height="250"></li>
         <li class="noimg"><div><b>가장 높은 수준의 모델을 고릅니다</b><p>입력칸 오른쪽의 모델 이름(위 그림의 Flash)을 눌러, 목록에서 가장 높은 수준의 모델을 고릅니다.</p></div></li>
-        <li class="noimg"><div><b>부탁문을 붙여넣고 보냅니다</b><p>위에서 복사한 부탁문을 붙여넣고 오른쪽 ↑ 단추를 누릅니다.</p></div></li>
+        <li class="noimg"><div><b>프롬프트를 붙여넣고 보냅니다</b><p>위에서 복사한 프롬프트를 붙여넣고 오른쪽 ↑ 단추를 누릅니다.</p></div></li>
         <li><div><b>[미리보기]로 써 봅니다</b><p>오른쪽 캔버스에서 만든 도구를 바로 써 보고, 고칠 곳은 한 가지씩 다시 말합니다. [다운로드]를 누르면 HTML 파일로 받습니다.</p></div><img src="img/gem-preview.webp" alt="Gemini 캔버스 미리보기 화면, 위쪽에 코드·미리보기·다운로드 단추" width="1200" height="525"></li>
       </ol>
       <div class="actions">
@@ -1241,7 +1274,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <div class="box"><b>④ 하나씩 고치기</b><p>화면을 캡처해서 보여 주고, 마음에 안 드는 곳을 한 번에 하나씩 말합니다.</p></div>
       </div>
       <div class="copy-box">
-        <div class="copy-h"><b>② 거꾸로 묻기 부탁문</b><button class="btn" type="button" data-copy="#promptRev">복사하기</button></div>
+        <div class="copy-h"><b>② 거꾸로 묻기 프롬프트</b><button class="btn" type="button" data-copy="#promptRev">복사하기</button></div>
         <pre id="promptRev">첨부한 사진(또는 주소)의 디자인을 다른 페이지에도 같은 느낌으로 쓸 수 있게 DESIGN.md 파일로 정리해 줘.
 내용은 빼고 디자인 규칙만 적어 줘.
 - 색: HEX 코드와 어디에 쓰는지(바탕, 글자, 강조, 선)
@@ -1252,7 +1285,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 로고, 상표, 사진 속 글은 넣지 마.</pre>
       </div>
       <div class="copy-box">
-        <div class="copy-h"><b>③·④ 입히고 고치기 부탁문</b><button class="btn" type="button" data-copy="#promptApply">복사하기</button></div>
+        <div class="copy-h"><b>③·④ 입히고 고치기 프롬프트</b><button class="btn" type="button" data-copy="#promptApply">복사하기</button></div>
         <pre id="promptApply">첨부한 DESIGN.md 규칙대로 이 HTML 파일의 디자인만 바꿔 줘.
 기능과 글 내용은 그대로 두고, 바꾼 곳을 짧게 알려 줘.
 
@@ -1290,7 +1323,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
     <div class="step-h"><span class="num">9</span><h2>마무리</h2></div>
 
     <div class="blk">
-      <p class="kw">다시 보실 곳</p>
+      <p class="kw">연수가 끝난 이후, 살펴보시면 도움되실 자료</p>
       <div class="grid2">
         <div class="box"><b>읽기 노트</b><p><a href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">학생 화면 체험</a> · <a href="https://scienceisjo.github.io/readnote/teacher.html?demo" target="_blank" rel="noopener">선생님 화면 예시</a> · <a href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">독서 도구 실험실</a></p></div>
         <div class="box"><b>바이브코딩 연수 자료</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">기초</a> · <a href="../vibecoding/design.html" target="_blank" rel="noopener">디자인 서랍</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">수업 페이지 스킬</a> · <a href="../vibecoding/lecture.html" target="_blank" rel="noopener">칠판 강의 화면</a></p></div>
@@ -1327,6 +1360,7 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <li>교육부 고시 제2022-33호 [별책 5] 국어과 교육과정, [9국02-02] 적용 시 고려 사항</li>
         <li>Rosenshine, Meister &amp; Chapman, Teaching Students to Generate Questions: A Review of the Intervention Studies, Review of Educational Research 66(2)(1996)</li>
         <li>Meta, Introducing Meta Llama 3(2024-04-18) · Shumailov 외, AI models collapse when trained on recursively generated data, Nature 631(2024)</li>
+        <li>EBSi 교육다큐 「책맹인류」, 「용수철? 아빠 친구 이름 같아요」 혼자서는 교과서도 읽을 수 없다. <a href="https://youtu.be/kEfSJEgWP0o" target="_blank" rel="noopener">유튜브</a></li>
         <li>교육부, OECD PISA 2025 결과 발표 보도자료(2026-09-08) · 문화체육관광부, 2025년 국민 독서실태 조사(2026-03-06)</li>
         <li>Kosmyna 외, Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task, arXiv 2506.08872(2025, 동료 심사 전)</li>
         <li>Melumad &amp; Yun, Experimental evidence of the effects of large language models versus web search on depth of learning, PNAS Nexus 4(10)(2025)</li>
@@ -1335,13 +1369,9 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
         <li>National Literacy Trust, Young people and teachers' use of generative AI to support literacy in 2025(2025-08)</li>
         <li>Pan, Schweppe, Teo, Indrajaya &amp; Wenzel, Using ChatGPT-generated prequestions to improve memory and text comprehension, Journal of Applied Research in Memory and Cognition(2025)</li>
         <li>Etkin, Etkin, Carter &amp; Rolle, Differential effects of GPT-based tools on comprehension of standardized passages, Frontiers in Education 10(2025)</li>
-        <li>Xu 외, Dialogue with a conversational agent promotes children's story comprehension via enhancing engagement, Child Development 93(2)(2022)</li>
         <li>Kreijkes 외, Effects of LLM use and note-taking on reading comprehension and memory: A randomised experiment in secondary schools, Computers &amp; Education 243(2026)</li>
         <li>Kim 외, FABLES: Evaluating faithfulness and content selection in book-length summarization, COLM 2024</li>
         <li>Aslanov, Felmer &amp; Guerra, Overconfidence without understanding? Evidence for an illusion of understanding in AI-assisted explanations, Proceedings of the Cognitive Science Society 48(2026)</li>
-        <li>Si 외, Large language models help humans verify truthfulness – except when they are convincingly wrong, NAACL 2024</li>
-        <li>경기도교육청, 「생성형 인공지능 활용교육 학생용 가이드라인」 중고등학생용(2025-02-24)</li>
-        <li>OECD, Digital Education Outlook 2026, 「Insights on the effective use of generative AI in education」 · Department for Education(England), Generative AI: product safety standards(2026-01 개정)</li>
       </ol>
     </div>
   </div>
@@ -1427,12 +1457,12 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
       <p class="kw">같은 순서를 세 번 씁니다</p>
       <p class="brief">제 공부 순서를 학생에게 권하는 순서로, 다시 읽기 노트의 기능으로 옮겼습니다.</p>
       <div class="table-wrap"><table class="map-table">
-        <thead><tr><th>제 공부 순서</th><th>학생에게 권하는 순서 (⑥)</th><th>읽기 노트에 넣은 기능 (⑦)</th></tr></thead>
+        <thead><tr><th>제 공부 순서</th><th>학생에게 권하는 방법</th><th>읽기 노트에 넣은 기능 (⑦)</th></tr></thead>
         <tbody>
           <tr><td>질문하며 읽기</td><td>먼저 읽으며 표시하고 질문 만들기</td><td>읽기 전 질문 칸</td></tr>
           <tr><td>내 말로 정리</td><td>내 말로 쓰기</td><td>부분마다 내 말 요약</td></tr>
           <tr><td>생각한 과정까지 텍스트로</td><td>어디서 막혔는지 적기</td><td>선생님 화면의 막힌 곳 보기</td></tr>
-          <tr><td>정리만 AI에게</td><td>AI에게 빠진 곳·반대 근거 묻기</td><td>요약 20자 뒤에야 열리는 되묻기 부탁문</td></tr>
+          <tr><td>정리만 AI에게</td><td>내 말로 쓴 설명에 AI 피드백 받기</td><td>요약 20자 뒤에야 열리는 되묻기 프롬프트</td></tr>
         </tbody>
       </table></div>
       <div class="detail">
@@ -1964,7 +1994,7 @@ document.addEventListener('click', e=>{
   t.hidden=!t.hidden; b.textContent = t.hidden ? '정답 보기' : '정답 숨기기';
 });
 
-/* ── 부탁문 복사 ── */
+/* ── 프롬프트 복사 ── */
 document.addEventListener('click', async e=>{
   const b=e.target.closest('[data-copy]'); if(!b) return;
   const el=document.querySelector(b.dataset.copy); if(!el) return;
@@ -1988,7 +2018,7 @@ function drawQRs(){
 }
 if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load', drawQRs); setTimeout(()=>{ if(!window.qrcode) drawQRs(); },2500); }
 
-/* ── 부탁문 채우기 실습: 칸을 채우면 부탁문이 바로 바뀜, 이 기기에만 저장 ── */
+/* ── 프롬프트 템플릿 채우기 실습: 칸을 채우면 프롬프트가 바로 바뀜, 이 기기에만 저장 ── */
 (function(){
   const pre=document.getElementById('promptTool'), box=document.getElementById('pt'); if(!pre||!box) return;
   const $=id=>document.getElementById(id);
