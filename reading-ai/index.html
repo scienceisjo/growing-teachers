@@ -275,6 +275,91 @@ html[data-mode="present"]{ --wrap:none; }
 html[data-mode="present"] .toon img{max-height:52vh}
 footer#app-credit{color:var(--ink3)}
 footer#app-credit span{opacity:1!important}
+
+/* ── v5: 장면 탭은 왼쪽 세로 목록 · 본문 글자 키우기 ── */
+:root{ --side:236px; --fs:19px; --kw:1.45rem; --h2:2.2rem; }
+html[data-mode="present"]{ --side:260px; --fs:26px; --kw:2.1rem; --h2:3rem; }
+.top .tools{margin-left:auto}
+.side{position:fixed;top:var(--topH,55px);left:0;bottom:0;width:var(--side);overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:16px 12px 28px;z-index:15}
+.side .chips{display:flex;flex-direction:column;gap:2px;overflow:visible;padding:0}
+.side .chip{display:flex;align-items:baseline;gap:10px;width:100%;white-space:normal;text-align:left;border:0;border-radius:12px;padding:10px 12px;font-size:1rem;line-height:1.35;color:var(--ink2);background:transparent}
+.side .chip b{flex:none;min-width:1.5em;color:var(--ink);font-weight:700}
+.side .chip .t{flex:1}
+.side .chip .m{flex:none;font-size:.86em;color:var(--ink3)}
+.side .chip:hover{background:var(--bg2);text-decoration:none}
+.side .chip.on{background:var(--blue-t);color:var(--blue);font-weight:600}
+.side .chip.on b,.side .chip.on .m{color:var(--blue)}
+.side .chip.done{color:var(--ink3)}
+html[data-mode="present"] .side .chip{font-size:1.08rem;padding:12px 14px}
+.hero,main,footer#app-credit{margin-left:var(--side)}
+footer#app-credit{width:auto}
+
+/* 작은 글자들도 함께 키움 */
+.btn{font-size:.95rem}
+.small{font-size:.94em}
+.meta{font-size:1em}
+.hero .eyebrow{font-size:1rem}
+.byline small{font-size:.92rem}
+.flow .n{font-size:.88em}
+.flow .m{font-size:.9em}
+.pipe .n{font-size:1em}
+.step-h .min{font-size:1.05rem}
+.more-btn{font-size:1.05rem}
+.box p{font-size:1em}
+.box .src{font-size:.86em}
+html[data-mode="present"] .box .src{font-size:.78em}
+.note{font-size:1em}
+.cue{font-size:.92em}
+.frame .cap{font-size:.94em}
+.live .st{font-size:.92em}
+.live .empty{font-size:1em}
+.live .q .cnt{font-size:.86em}
+.card{font-size:1em}
+.card .who,.card .like{font-size:.86em}
+.refs{font-size:.96em}
+.toon figcaption{font-size:.96em}
+.copy-box pre{font-size:1em}
+.reel-foot{font-size:.9em}
+.quiz .answers .tm{font-size:.92em}
+.join-row .url-text{font-size:1em}
+
+/* 좁은 화면: 왼쪽 목록 대신 위쪽 가로 줄 */
+@media (max-width:900px){
+  :root{ --fs:18px; }
+  .side{position:sticky;top:var(--topH,55px);bottom:auto;width:auto;border-right:0;border-bottom:1px solid var(--line);padding:6px 12px;z-index:19;background:rgba(255,255,255,.97)}
+  .side .chips{flex-direction:row;gap:6px;overflow-x:auto}
+  .side .chip{flex:none;width:auto;white-space:nowrap;border:1px solid var(--line);border-radius:9999px;padding:5px 12px;font-size:.88rem;gap:4px}
+  .side .chip .m{display:none}
+  .hero,main,footer#app-credit{margin-left:0}
+}
+@media print{ .side{display:none!important} .hero,main,footer#app-credit{margin-left:0} }
+
+/* ── v6: 눌러서 보기 창 · 정답 보기 · 출처 링크 · 링크 카드 ── */
+.box.show{cursor:pointer}
+.blk .box.show,.blk a.box{border:1px solid transparent}
+.box.show:hover,.box.show:focus-visible,.blk a.box:hover{border-color:var(--blue);outline:none}
+.box .show-hint{display:inline-block;margin-top:10px;font-size:.88em;font-weight:600;color:var(--blue)}
+.box .show-hint::after{content:" ›"}
+a.box{display:block;color:inherit;text-decoration:none}
+a.box b{color:var(--blue)}
+.box p a{text-decoration:underline;text-underline-offset:2px}
+.box p.small{margin-top:8px}
+a.src{text-decoration:underline;text-underline-offset:2px}
+.reveal-wrap{margin-top:16px}
+.reveal-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--line2)}
+.pv{border:0;border-radius:var(--r3);padding:0;width:min(1100px,94vw);max-height:90vh;background:#fff;color:var(--ink)}
+.pv::backdrop{background:rgba(29,29,31,.6)}
+.pv-in{padding:26px 30px 28px;max-height:90vh;overflow:auto}
+.pv-x{float:right;position:sticky;top:0;margin:-6px -10px 0 12px;border:1px solid var(--line);background:#fff;border-radius:9999px;width:44px;height:44px;font-size:1.1rem;cursor:pointer;color:var(--ink)}
+.pv h3{font-size:var(--kw);font-weight:700;letter-spacing:-.02em;line-height:1.3;margin:0 0 .4em}
+.pv .qlist{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}
+.pv .qlist li{background:var(--bg2);border-radius:var(--r2);padding:12px 16px}
+.pv .qlist .reply{display:block;margin-top:6px;color:var(--blue);font-weight:600}
+.pv .qlist .reply::before{content:"제 반응: ";font-weight:400;color:var(--ink2)}
+.pv .comic{margin:16px 0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--bg2)}
+.pv .comic img{display:block;width:100%;height:auto;max-height:62vh;object-fit:contain}
+.pv iframe.ceremony{display:block;width:100%;height:min(68vh,640px);border:1px solid var(--line);border-radius:var(--r2);margin:12px 0}
+@media print{ .pv,.show-hint,.reveal-btn{display:none!important} .reveal-body{display:block!important} }
 </style>
 </head>
 <body>
@@ -282,7 +367,6 @@ footer#app-credit span{opacity:1!important}
 <div class="top">
   <div class="wrap">
     <a class="brand" href="#top">독서와 AI<small>해누리중 조승재</small></a>
-    <nav class="chips" id="chips" aria-label="장면"></nav>
     <div class="tools">
       <span class="host-badge" id="hostBadge" hidden>진행 화면</span>
       <button class="btn" id="followBtn" hidden title="강사가 화면을 넘기면 내 화면도 같이 넘어갑니다">따라가기 켬</button>
@@ -294,6 +378,8 @@ footer#app-credit span{opacity:1!important}
     </div>
   </div>
 </div>
+
+<aside class="side" id="side" aria-label="장면 목록"><nav class="chips" id="chips" aria-label="장면"></nav></aside>
 
 <header class="hero" id="top">
   <div class="wrap">
@@ -321,20 +407,20 @@ footer#app-credit span{opacity:1!important}
 <main>
 
 <!-- ① 인사 -->
-<section class="step" id="s1" data-title="인사" data-min="5">
+<section class="step" id="s1" data-title="인사">
   <div class="wrap">
-    <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2><span class="min"><b>5</b>분</span></div>
+    <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2></div>
     <p class="goal">QR로 들어와 화면을 맞추고, 퀴즈 하나와 선생님들의 고민 나눔으로 시작해보겠습니다!</p>
 
     <div class="blk">
-      <p class="kw">QR로 들어오시면 제 화면을 따라 넘어갑니다</p>
-      <p class="brief">휴대폰이나 노트북으로 QR을 찍어 들어와주시길 바랍니다~!</p>
+      <p class="kw">오늘 연수 진행 링크</p>
+      <p class="brief">특징: 제가 화면을 전환하면, 선생님들의 화면도 자동으로 전환됩니다!</p>
       <div class="join-row">
         <div class="qr" id="pageQr"></div>
         <div><span class="url-text" id="pageUrl"></span></div>
       </div>
       <div class="detail">
-        <p>공문에는 21시 30분까지로 되어 있지만, 저는 50분 안에 마치고 선생님들의 사례 나눔으로 넘기려고 합니다. 들어오시면 제가 장면을 넘길 때마다 선생님 화면도 같은 장면으로 넘어갑니다. 혼자 앞뒤를 보고 싶으실 때는 위쪽의 「따라가기」를 눌러 끄실 수 있습니다.</p>
+        <p>휴대폰이나 노트북으로 QR을 찍어 들어와주시길 바랍니다~! 들어오시면 제가 장면을 넘길 때마다 선생님 화면도 같은 장면으로 넘어갑니다. 혼자 앞뒤를 보고 싶으실 때는 위쪽의 「따라가기」를 눌러 끄실 수 있습니다.</p>
         <p>중간중간 선생님들께 여쭤보는 칸이 있습니다. 적어 주신 글은 앞 화면과 다른 선생님 화면에 바로 뜨고, 이름은 비워 두셔도 됩니다.</p>
       </div>
       <div class="cue">진행 화면 주소 = 이 페이지?mode=present&amp;host=1 · 시작 전에 열어 두기</div>
@@ -357,7 +443,19 @@ footer#app-credit span{opacity:1!important}
           <div class="answers"></div>
         </div>
       </div>
-      <div class="cue">영상 첫 장면이 문제 · 정답 나오기 전에 멈추기 · 답 목록(먼저 낸 순서)은 진행 화면에서만 보임</div>
+      <div class="reveal-wrap">
+        <button class="btn reveal-btn" type="button" data-reveal="quizAns">정답 보기</button>
+        <div class="reveal-body" id="quizAns" hidden>
+          <p class="kw">정답은 「딸깍」입니다</p>
+          <p class="brief">그런데 딸깍은 결과물만 남기고, 그 과정은 쉽게 휘발되거나 애초에 저장되지 않습니다.</p>
+          <div class="grid2">
+            <div class="box"><b>딸깍</b><p>결과물은 바로 남지만, 생각한 과정은 남지 않습니다.</p></div>
+            <div class="box"><b>독서</b><p>글과 씨름한 과정이 읽는 사람 머릿속에 쌓입니다.</p></div>
+          </div>
+          <div class="detail"><p>이런 '대딸깍' 시대에 학생들에게 진짜 배움이 일어나도록 하는 곳이 저는 독서라고 생각합니다.</p></div>
+        </div>
+      </div>
+      <div class="cue">영상 첫 장면이 문제 · 정답 나오기 전에 멈추기 · 답 목록(먼저 낸 순서)은 진행 화면에서만 보임 · 정답 확인 뒤 「정답 보기」</div>
     </div>
 
     <div class="blk">
@@ -376,23 +474,23 @@ footer#app-credit span{opacity:1!important}
           <div class="wall"></div>
         </div>
       </div>
-      <p class="small">적어 주신 어려운 점은 ⑧ 장면에서 독서 도구를 이야기할 때 다시 꺼내 보겠습니다.</p>
+      <p class="small">이 문제를 AI로 해결하는 방법에 대해 마지막에 다시 다뤄보겠습니다.</p>
     </div>
   </div>
 </section>
 
 <!-- ② 내 수업 소개 -->
-<section class="step" id="s2" data-title="질문하는 교실" data-min="6">
+<section class="step" id="s2" data-title="질문하는 교실">
   <div class="wrap">
-    <div class="step-h"><span class="num">2</span><h2>제 수업으로 드리는 인사</h2><span class="min"><b>6</b>분</span></div>
+    <div class="step-h"><span class="num">2</span><h2>제 수업으로 드리는 인사</h2></div>
     <p class="goal">교사가 자기를 소개하는 가장 빠른 방법은 자기 수업을 소개하는 것이라고 들어서, 제 과학 시간을 먼저 보여 드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">제 과학 시간을 한 줄로 말하면, 질문하는 과학 수업입니다</p>
-      <p class="brief">이번 학기 목표는 질문의 활성화 에너지를 낮추는 것이었습니다.</p>
+      <p class="brief">그런데 「질문 있는 사람?」 하고 물으면 교실이 한순간에 조용해집니다.</p>
       <figure class="toon" data-toon="s2-silent"><img src="img/s2-silent.webp" alt="선생님이 질문 있느냐고 묻자 학생들이 모두 눈을 피하며 조용해진 교실"><figcaption>「질문 있는 사람?」 한마디면 교실이 조용해집니다.</figcaption></figure>
       <div class="detail">
-        <p>저는 화학을 전공했고, 지금은 중학교 2학년에게 별과 우주를 가르치고 있습니다. 화학에서 활성화 에너지는 반응이 일어나려면 넘어야 하는 언덕입니다. 저는 학생들에게 이번 학기 목표를 질문하는 데 드는 에너지를 낮추는 것이라고 말했습니다. 어떤 현상을 보거나 배우다가 나도 모르게 질문이 나올 정도까지 가 보자는 뜻이었습니다.</p>
+        <p>저는 화학을 전공했고, 지금은 중학교 2학년에게 별과 우주를 가르치고 있습니다.</p>
         <p>사실 교실을 한순간에 조용하게 만드는 방법이 있습니다. 「질문 있는 사람?」 하고 물으면 됩니다. AI 시대에는 질문하면서 배우는데, 정작 우리 학생들은 질문을 잘 꺼내지 않습니다.</p>
       </div>
       <div class="cue">「질문 받겠습니다/질문 있는 사람?」 대목은 받아쓰기가 흐려서 짐작으로 적음 · 말할 때 바로잡기</div>
@@ -401,16 +499,52 @@ footer#app-credit span{opacity:1!important}
     <div class="blk">
       <p class="kw">학생이 질문할 수밖에 없게 하려고 정한 네 가지</p>
       <div class="grid2">
-        <div class="box"><b>질문이 나올 경험부터</b><p>질문할 수밖에 없는 인지적 경험이나 몸으로 겪는 경험을 먼저 줍니다.</p></div>
-        <div class="box"><b>질문한 과정을 기록</b><p>질문이 어떻게 다듬어지고 풀렸는지 남깁니다.</p></div>
-        <div class="box"><b>좋은 질문보다 많은 질문</b><p>질문을 만들다 보면 좋은 질문이 나온다고 봤습니다.</p></div>
-        <div class="box"><b>다음 단계로 가는 질문</b><p>호기심을 끄는 질문에서 멈추지 않고, 수업을 집중해 들은 뒤에 그다음으로 나아가는 질문을 스스로 던지게 합니다.</p></div>
+        <div class="box show" data-show="pv-exp" role="button" tabindex="0"><b>질문이 나올 경험부터</b><p>질문할 수밖에 없는 인지적 경험이나 몸으로 겪는 경험을 먼저 줍니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-rec" role="button" tabindex="0"><b>질문한 과정을 기록</b><p>질문이 어떻게 다듬어지고 풀렸는지 남깁니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-ea" role="button" tabindex="0"><b>가벼운 목표: 질문의 활성화 에너지 낮추기</b><p>현상을 보거나 배우다가 나도 모르게 질문이 나올 정도까지 가 보는 것이 이번 학기 목표입니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-next" role="button" tabindex="0"><b>다음 단계로 가는 질문</b><p>호기심을 끄는 질문에서 멈추지 않고, 수업을 집중해 들은 뒤에 그다음으로 나아가는 질문을 스스로 던지게 합니다.</p><span class="show-hint">눌러서 보기</span></div>
       </div>
       <div class="detail">
-        <p>학생에게 질문하라고 말하기 전에, 질문이 나올 수밖에 없는 경험을 먼저 주려고 합니다. 그래서 궁금증이 생기도록 사진과 영상으로 질문유발자료를 직접 만듭니다. 그리고 좋은 질문을 만들라고 다그치기보다, 질문을 많이 만들다 보면 그중에 좋은 질문이 나온다고 생각했습니다.</p>
-        <p>호기심을 끄는 질문도 좋지만, 저는 수업을 집중해서 들은 다음에야 나올 수 있는 질문을 학생이 스스로 던져 보기를 바랐습니다.</p>
+        <p>학생에게 질문하라고 말하기 전에, 질문이 나올 수밖에 없는 경험을 먼저 주려고 합니다. 그래서 궁금증이 생기도록 사진과 영상으로 질문유발자료를 직접 만듭니다.</p>
+        <p>호기심을 끄는 질문도 좋지만, 저는 수업을 집중해서 들은 다음에야 나올 수 있는 질문을 학생이 스스로 던져 보기를 바랐습니다. 칸을 누르시면 관련 장면과 제 학생들이 실제로 올린 질문을 보실 수 있습니다.</p>
       </div>
     </div>
+    <template id="pv-exp">
+      <h3>질문이 나올 경험부터</h3>
+      <p class="brief">공을 가장 많이 들이는 곳은 수업 도입입니다. 실험이나 현상을 보고 나온 질문들입니다.</p>
+      <figure class="toon"><img src="img/cap-experience.webp" alt="질문유발자료를 보여 주는 수업 장면"><figcaption>질문유발자료를 보여 주는 수업 장면</figcaption></figure>
+      <ul class="qlist">
+        <li>왜 나침반이 움직였나요</li>
+        <li>스타이로폼 접시에 털가죽을 10초 문지른 것과 1분 문지른 것 중에 어떤 전구가 더 많이 켜질까</li>
+        <li>뜨거운 물에 풍선이 부풀어 오를 때 페트병 여러 개를 뜨거운 물에 넣어 그 위에 에어바운스를 놓으면 에어바운스를 할 수 있나요?</li>
+      </ul>
+      <figure class="comic"><img src="../question-workshop/comics/question6.webp" alt="선생님이 밤늦게 수업 도입 자료를 만드는 만화 장면"></figure>
+      <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
+    </template>
+    <template id="pv-rec">
+      <h3>질문한 과정을 기록</h3>
+      <p class="brief">질문과수원에서는 질문 하나가 열매 하나가 되고, 예상과 정리, 넓히기 같은 칸에 탐구 과정을 남깁니다.</p>
+      <figure class="toon"><img src="img/cap-record.webp" alt="질문과수원에서 학생이 탐구 과정을 기록한 화면"><figcaption>질문과수원 탐구 기록 화면</figcaption></figure>
+      <figure class="comic"><img src="../question-workshop/comics/question7.webp" alt="질문나무 앱에 호기심을 기록하는 만화 장면"></figure>
+      <div class="actions"><a class="btn primary" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문과수원 열기 ↗</a><a class="btn" href="../question-workshop/case-questionuri.html" target="_blank" rel="noopener">질문과수원 사례 페이지 ↗</a></div>
+    </template>
+    <template id="pv-ea">
+      <h3>가벼운 목표: 질문의 활성화 에너지 낮추기</h3>
+      <p class="brief">화학에서 활성화 에너지는 반응이 일어나려면 넘어야 하는 언덕입니다. 질문에도 그런 언덕이 있습니다.</p>
+      <figure class="comic"><img src="../question-workshop/comics/question5.webp" alt="궁금함이 틀릴까 봐, 눈에 띌까 봐, 뭘 물어야 할지 몰라서라는 언덕을 넘지 못하는 만화 장면"></figure>
+      <p>틀릴까 봐, 눈에 띌까 봐, 뭘 물어야 할지 몰라서 궁금해도 문턱을 못 넘으면 질문은 나오지 않습니다. 그래서 이번 학기 목표를 질문하는 데 드는 에너지를 낮추는 것으로 잡았습니다.</p>
+    </template>
+    <template id="pv-next">
+      <h3>다음 단계로 가는 질문</h3>
+      <p class="brief">수업을 듣고 한 걸음 더 나간 질문들입니다.</p>
+      <ul class="qlist">
+        <li>새로운 밝은 별이 발견될 때마다 계속 음수 등급을 만들기보다 그냥 새로운 등급 체계를 만드는 것이 낫지 않을까?</li>
+        <li>전동기를 돌게 하도록 하기 위해서 전류를 흘려줄 때 전류의 방향이 바뀔 때 속도가 감소하면서 전기적인 효율이 감소되는 건가요?</li>
+        <li>만약 전동기나 스피커가 자기장을 받지 않는다면 자기장 말고 어떤 힘으로 움직일 수 있을까?</li>
+      </ul>
+      <figure class="comic"><img src="../question-workshop/comics/question12.webp" alt="학생이 질문을 바탕으로 배우고 교사가 과정을 설계하는 만화 장면"></figure>
+      <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
+    </template>
 
     <div class="blk">
       <p class="kw">질문은 창이 아니라 거울입니다</p>
@@ -440,15 +574,45 @@ footer#app-credit span{opacity:1!important}
     <div class="blk">
       <p class="kw">가장 중요하게 여기는 것은 질문하기 편한 교실입니다</p>
       <div class="grid2">
-        <div class="box"><b>올라온 질문은 바로 읽습니다</b><p>수업을 열 때 학생들이 올린 질문을 모두가 보는 앞에서 읽고, 진지하게 고민하는 모습을 보여 줍니다.</p></div>
-        <div class="box"><b>엉뚱한 질문도 진지하게</b><p>엉뚱한 질문에도 진지하게 피드백을 하고, 질문한 것을 많이 칭찬합니다.</p></div>
-        <div class="box"><b>이번 달부터 이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 줍니다.</p></div>
+        <div class="box show" data-show="pv-fast" role="button" tabindex="0"><b>올라온 질문에 바로 반응합니다(호들갑)</b><p>학생이 질문을 올리면 교사 대시보드에서 바로 보고, 모두가 보는 앞에서 크게 반응합니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-odd" role="button" tabindex="0"><b>엉뚱한 질문도 진지하게</b><p>엉뚱한 질문에도 피드백을 달고, 질문한 것을 많이 칭찬합니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-award" role="button" tabindex="0"><b>이번 달부터 이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 줍니다.</p><span class="show-hint">눌러서 보기</span></div>
       </div>
       <div class="detail">
         <p>상은 질문 개수로 주지 않습니다. 끝까지 파고든 학생, 예상이 빗나간 것을 기록한 학생, 배운 것을 생활과 이은 학생처럼 이야기가 있는 학생에게 주려고 이름을 그렇게 지었습니다. 콩글리쉬상은 자판이 영어로 바뀌어 있어도 포기하지 않고 로마자로 질문을 올린 학생에게 주는 상입니다.</p>
       </div>
-      <div class="cue">첫 시상 시기(11/23~27) 확인</div>
+      <div class="cue">첫 시상 시기(11/23~27) 확인 · 대시보드 캡처는 img/cap-dashboard.webp, 엉뚱한 질문 사진은 img/cap-odd.webp 로 넣으면 보기 창에 뜸</div>
     </div>
+    <template id="pv-fast">
+      <h3>올라온 질문에 바로 반응합니다(호들갑)</h3>
+      <figure class="toon"><img src="img/cap-dashboard.webp" alt="교사 대시보드에 학생 질문이 올라오는 화면"><figcaption>교사 대시보드에 질문이 올라오는 화면</figcaption></figure>
+      <p class="brief">질문과수원에 질문이 올라오면 제가 단 반응들입니다.</p>
+      <ul class="qlist">
+        <li>새로운 밝은 별이 발견될 때마다 계속 음수 등급을 만들기보다 그냥 새로운 등급 체계를 만드는 것이 낫지 않을까?<span class="reply">그러게????????</span></li>
+        <li>전동기를 돌게 하도록 하기 위해서 전류의 방향이 바뀔 때 속도가 감소하면서 전기적인 효율이 감소되는 건가요?<span class="reply">너는 하이닉스 가라 그저 GOAT 역시우~~~</span></li>
+        <li>왜 나침반이 움직였나요<span class="reply">ㅋㅋㅋ그러게요 ㅋㅋㅋㅋ 알아봅시닿 ㅎ</span></li>
+      </ul>
+      <figure class="comic"><img src="../question-workshop/comics/question10.webp" alt="선생님이 학생 질문에 진도를 잠깐 멈추는 만화 장면"></figure>
+      <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
+    </template>
+    <template id="pv-odd">
+      <h3>엉뚱한 질문도 진지하게</h3>
+      <figure class="toon"><img src="img/cap-odd.webp" alt="학생이 올린 엉뚱한 질문 화면"><figcaption>학생이 올린 엉뚱한 질문</figcaption></figure>
+      <ul class="qlist">
+        <li>코일 없이 세탁기를 만들 수 있을까?<span class="reply">쌤이 대신 세탁기 안에 들어가서 세탁기를 돌려야 해</span></li>
+        <li>히포라테스는 어떻게 별을 보고 6등급으로 나누었을까(주관적인 요소로 나누었을까)<span class="reply">히포크라테스요??피타고리타분</span></li>
+        <li>베텔기우스 이름은 누가 지었을까<span class="reply">배털씨요</span></li>
+        <li>별은 왜 존재하는 걸까?<span class="reply">도덕시간같습니다</span></li>
+      </ul>
+      <figure class="comic"><img src="../question-workshop/comics/question8.webp" alt="좋은 질문을 가르치는 것만큼 질문을 환영하는 태도가 중요하다는 만화 장면"></figure>
+      <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
+    </template>
+    <template id="pv-award">
+      <h3>이번 달부터 이달의 상</h3>
+      <p class="brief">이번 달 말에 처음 여는 「해누리 질문 어워즈」 화면입니다.</p>
+      <iframe class="ceremony" src="https://scienceisjo.github.io/questionuri/ceremony.html" title="해누리 질문 어워즈" loading="lazy"></iframe>
+      <div class="actions"><a class="btn primary" href="https://scienceisjo.github.io/questionuri/ceremony.html" target="_blank" rel="noopener">새 창에서 열기 ↗</a></div>
+    </template>
 
     <div class="blk">
       <p class="kw">그럼 독서와는 어떻게 이어질까요?</p>
@@ -463,9 +627,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ③ 내가 만든 도구 -->
-<section class="step" id="s3" data-title="연수의 방향" data-min="6">
+<section class="step" id="s3" data-title="연수의 방향">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>독서와 AI, 고민이 많았습니다</h2><span class="min"><b>6</b>분</span></div>
+    <div class="step-h"><span class="num">3</span><h2>독서와 AI, 고민이 많았습니다</h2></div>
     <p class="goal">이 연수를 어떤 방향으로 준비했는지 말씀드리겠습니다!</p>
 
     <div class="blk">
@@ -510,9 +674,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ④ 고백 -->
-<section class="step" id="s4" data-title="「요약해줘」" data-min="5">
+<section class="step" id="s4" data-title="「요약해줘」">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>만들 때는 AI가 정말 좋았는데, 공부는 달랐습니다</h2><span class="min"><b>5</b>분</span></div>
+    <div class="step-h"><span class="num">4</span><h2>만들 때는 AI가 정말 좋았는데, 공부는 달랐습니다</h2></div>
     <p class="goal">도구를 만들고 업무를 할 때와 달리, 공부할 때 AI를 쓰다 겪은 실패를 고백해보겠습니다!</p>
 
     <div class="blk">
@@ -547,9 +711,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ⑤ 바꾼 방법 -->
-<section class="step" id="s5" data-title="질문하며 읽기" data-min="5">
+<section class="step" id="s5" data-title="질문하며 읽기">
   <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2><span class="min"><b>5</b>분</span></div>
+    <div class="step-h"><span class="num">5</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2></div>
     <p class="goal">업무 읽기와 공부 읽기가 왜 달랐는지 살펴보고, 제가 바꾼 공부 순서를 보여 드리겠습니다!</p>
 
     <div class="blk">
@@ -602,9 +766,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ⑥ 왜 지금 독서 -->
-<section class="step" id="s6" data-title="지금 독서가 필요한 까닭" data-min="4">
+<section class="step" id="s6" data-title="지금 독서가 필요한 까닭">
   <div class="wrap">
-    <div class="step-h"><span class="num">6</span><h2>지금 독서가 더 필요한 까닭</h2><span class="min"><b>4</b>분</span></div>
+    <div class="step-h"><span class="num">6</span><h2>지금 독서가 더 필요한 까닭</h2></div>
     <p class="goal">학생들이 AI를 쓰는 까닭부터 보고, AI가 무엇으로 배우는지와 우리 학생들의 읽기 숫자를 함께 보겠습니다!</p>
 
     <div class="blk">
@@ -643,9 +807,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ⑦ 학생과 AI -->
-<section class="step" id="s7" data-title="학생과 AI" data-min="7">
+<section class="step" id="s7" data-title="학생과 AI">
   <div class="wrap">
-    <div class="step-h"><span class="num">7</span><h2>독서할 때 학생은 AI를 어떻게 써야 할까요?</h2><span class="min"><b>7</b>분</span></div>
+    <div class="step-h"><span class="num">7</span><h2>독서할 때 학생은 AI를 어떻게 써야 할까요?</h2></div>
     <p class="goal">요즘 학생들이 독후감을 쓰는 모습부터 보고, 연구에서 본 좋은 점과 걱정되는 점, 제가 권하는 순서를 말씀드리겠습니다!</p>
 
     <div class="blk">
@@ -671,7 +835,7 @@ footer#app-credit span{opacity:1!important}
       <div class="grid2">
         <div class="box"><span class="big">국어 64.9%</span><p>서울 중고생 26,531명이 생성형 AI를 가장 많이 쓴 과목</p><span class="src">서울시교육청교육연구정보원, 2025년 7월 조사</span></div>
         <div class="box"><span class="big">0명</span><p>고2 진로 독서 발표에서 책을 끝까지 읽은 학생. 줄거리는 AI에게 맡겼다고 했습니다.</p><span class="src">EBS 「다시, 읽기로」 2부</span></div>
-        <div class="box"><span class="big">열 명 중 넷</span><p>AI 답이 틀릴 수 있어 확인한다는 학생(42.8%). 넷 중 한 명(25.1%)은 숙제에 AI 답을 그대로 베낀다고 답했습니다.</p><span class="src">National Literacy Trust, 2025, 영국 13~18세 6만여 명 조사</span></div>
+        <div class="box"><span class="big">열 명 중 넷</span><p>AI 답이 틀릴 수 있어 확인한다는 학생(42.8%). 넷 중 한 명(25.1%)은 숙제에 AI 답을 그대로 베낀다고 답했습니다.</p><a class="src" href="https://literacytrust.org.uk/research-services/research-reports/young-people-and-teachers-use-of-generative-ai-to-support-literacy-in-2025/" target="_blank" rel="noopener">National Literacy Trust, 2025, 영국 13~18세 6만여 명 조사 ↗</a></div>
       </div>
       <div class="detail">
         <p>EBS 다큐 「다시, 읽기로」 2부에는 고2 교실이 나옵니다. 진로 독서 발표를 했는데 책을 끝까지 읽은 학생이 한 명도 없었고, 반쯤 읽다가 줄거리는 AI에게 맡겼다는 학생이 나옵니다. 한 학생은 혼자 한 과제는 나중에 기억이 나는데 AI에게 맡긴 것은 거의 기억나지 않는다고 말했습니다. 제가 겪은 것과 같았습니다.</p>
@@ -690,9 +854,9 @@ footer#app-credit span{opacity:1!important}
     <div class="blk">
       <p class="kw">AI가 질문을 던지는 쪽일 때는 도움이 됐습니다</p>
       <div class="grid2">
-        <div class="box"><b>읽기 전에 AI가 만든 질문</b><p>글을 읽기 전에 AI가 만든 질문에 먼저 답을 짐작해 보게 했더니, 그냥 읽은 사람보다 이해 점수가 크게 올랐습니다. 사람이 만든 질문과 효과가 같았습니다.</p><span class="src">Pan 외, 2025, 영어권 성인 실험</span></div>
-        <div class="box"><b>질문으로 대화하는 챗봇</b><p>독해를 어려워하던 사람은 질문을 주고받는 챗봇과 읽었을 때 점수가 가장 많이 올랐습니다(66.2% → 71.7%).</p><span class="src">Etkin 외, Frontiers in Education, 2025, 미국 18~22세 195명</span></div>
-        <div class="box"><b>질문하며 읽어 주는 스피커</b><p>그림책을 읽어 주며 중간중간 질문하는 스피커는 어른이 질문하며 읽어 준 것만큼 3~6세 아이의 이야기 이해를 높였습니다.</p><span class="src">Xu 외, Child Development, 2022, 생성형 AI 이전의 대본형 스피커</span></div>
+        <div class="box"><b>읽기 전에 AI가 만든 질문</b><p>글을 읽기 전에 AI가 만든 질문에 먼저 답을 짐작해 보게 했더니, 그냥 읽은 사람보다 이해 점수가 크게 올랐습니다. 사람이 만든 질문과 효과가 같았습니다.</p><a class="src" href="https://doi.org/10.1037/mac0000254" target="_blank" rel="noopener">Pan 외, 2025, 영어권 성인 실험 ↗</a></div>
+        <div class="box"><b>질문으로 대화하는 챗봇</b><p>독해를 어려워하던 사람은 질문을 주고받는 챗봇과 읽었을 때 점수가 가장 많이 올랐습니다(66.2% → 71.7%).</p><a class="src" href="https://doi.org/10.3389/feduc.2025.1506752" target="_blank" rel="noopener">Etkin 외, Frontiers in Education, 2025, 미국 18~22세 195명 ↗</a></div>
+        <div class="box"><b>질문하며 읽어 주는 스피커</b><p>그림책을 읽어 주며 중간중간 질문하는 스피커는 어른이 질문하며 읽어 준 것만큼 3~6세 아이의 이야기 이해를 높였습니다.</p><a class="src" href="https://doi.org/10.1111/cdev.13708" target="_blank" rel="noopener">Xu 외, Child Development, 2022, 생성형 AI 이전의 대본형 스피커 ↗</a></div>
       </div>
       <div class="detail">
         <p>세 연구 모두 AI가 읽는 사람에게 질문을 던졌다는 점이 같습니다. 선생님들이 가르치시는 질문하며 읽기를 AI가 거든 셈입니다. 다만 성인과 유아를 대상으로 한 짧은 실험이라, 중학생에게 그대로 옮기기는 조심스럽습니다.</p>
@@ -702,10 +866,10 @@ footer#app-credit span{opacity:1!important}
     <div class="blk">
       <p class="kw">AI가 답과 요약을 줄 때는 덜 남았습니다</p>
       <div class="grid2">
-        <div class="box"><span class="big">사흘 뒤</span><p>역사 지문을 AI 챗봇으로만 공부했을 때보다 손으로 노트했을 때 더 많이 이해하고 기억했습니다. 그런데 학생들은 AI가 더 도움이 됐다고 느꼈습니다.</p><span class="src">Kreijkes 외, Computers &amp; Education, 2026, 잉글랜드 14~15세 405명</span></div>
-        <div class="box"><span class="big">76.5% → 67.6%</span><p>원래 잘 읽던 사람이 원문 대신 AI 요약을 읽고 문제를 풀었을 때의 정답률</p><span class="src">Etkin 외, 2025, 위와 같은 연구</span></div>
-        <div class="box"><span class="big">52~85%</span><p>AI가 만든 소설 요약 가운데 중요한 줄거리를 빠뜨린 요약의 비율(모델에 따라 다름)</p><span class="src">Kim 외, FABLES, COLM 2024, 2023~2024년 소설 26권</span></div>
-        <div class="box"><b>더 자신하지만 더 짧게</b><p>같은 글을 ChatGPT 답으로 받은 학생은 그냥 읽은 학생보다 설명을 잘할 거라고 더 자신했지만, 실제로 쓴 설명은 더 짧고 질도 낮았습니다.</p><span class="src">Aslanov 외, 인지과학회 학술대회, 2026, 칠레 대학생 102명</span></div>
+        <div class="box"><span class="big">사흘 뒤</span><p>역사 지문을 AI 챗봇으로만 공부했을 때보다 손으로 노트했을 때 더 많이 이해하고 기억했습니다. 그런데 학생들은 AI가 더 도움이 됐다고 느꼈습니다.</p><a class="src" href="https://doi.org/10.1016/j.compedu.2025.105514" target="_blank" rel="noopener">Kreijkes 외, Computers &amp; Education, 2026, 잉글랜드 14~15세 405명 ↗</a></div>
+        <div class="box"><span class="big">76.5% → 67.6%</span><p>원래 잘 읽던 사람이 원문 대신 AI 요약을 읽고 문제를 풀었을 때의 정답률</p><a class="src" href="https://doi.org/10.3389/feduc.2025.1506752" target="_blank" rel="noopener">Etkin 외, 2025, 위와 같은 연구 ↗</a></div>
+        <div class="box"><span class="big">52~85%</span><p>AI가 만든 소설 요약 가운데 중요한 줄거리를 빠뜨린 요약의 비율(모델에 따라 다름)</p><a class="src" href="https://arxiv.org/abs/2404.01261" target="_blank" rel="noopener">Kim 외, FABLES, COLM 2024, 2023~2024년 소설 26권 ↗</a></div>
+        <div class="box"><b>더 자신하지만 더 짧게</b><p>같은 글을 ChatGPT 답으로 받은 학생은 그냥 읽은 학생보다 설명을 잘할 거라고 더 자신했지만, 실제로 쓴 설명은 더 짧고 질도 낮았습니다.</p><a class="src" href="https://escholarship.org/uc/item/8cr599sr" target="_blank" rel="noopener">Aslanov 외, 인지과학회 학술대회, 2026, 칠레 대학생 102명 ↗</a></div>
       </div>
       <div class="detail">
         <p>영국 실험에서는 AI와 노트를 함께 쓴 학생 넷 중 한 명이 AI 답을 노트에 거의 그대로 옮겼습니다. 칠레 실험은 앞에서 말씀드린 설명 깊이의 착각이 AI 답을 읽을 때 더 커진다는 결과입니다. ChatGPT로 에세이를 쓴 대학생 18명 가운데 15명이 방금 쓴 자기 글을 제대로 옮기지 못했다는 MIT 연구(동료 심사 전)와, AI 요약으로 배운 사람이 웹에서 직접 찾아 읽은 사람보다 얕게 알았다는 실험(7개 실험, 10,462명)도 같은 쪽을 가리킵니다.</p>
@@ -732,10 +896,10 @@ footer#app-credit span{opacity:1!important}
       <p class="brief">먼저 읽고 내 말로 쓴 다음, AI에게는 답 대신 질문과 반대 근거를 받습니다.</p>
       <div class="pipe" aria-label="학생에게 권하는 순서"><span class="n">먼저 읽으며 표시하기</span><span class="a">→</span><span class="n">내 말로 쓰고 질문 만들기</span><span class="a">→</span><span class="n">AI에게 빠진 곳·반대 근거 묻기</span><span class="a">→</span><span class="n hi">글로 돌아가 확인하기</span></div>
       <div class="grid2">
-        <div class="box"><b>먼저 읽고, 물을 것을 정한 뒤</b><p>교과서를 먼저 읽고 모르는 곳을 표시한 다음, AI에게 물을 질문을 준비하라고 적었습니다.</p><span class="src">경기도교육청 학생용 생성형 AI 가이드라인, 2025</span></div>
-        <div class="box"><b>노트는 AI와 따로</b><p>먼저 읽고 AI로 궁금한 점을 확인한 뒤, 붙여넣기 없이 스스로 노트하게 하라고 권했습니다.</p><span class="src">Kreijkes 외, 2026, 위 영국 실험의 저자 제안</span></div>
-        <div class="box"><b>반대 근거도 묻기</b><p>AI 설명이 틀렸을 때 사람들의 정답률은 35%로 AI 없이 판단할 때(49%)보다 낮았습니다. 참인 까닭과 거짓인 까닭을 함께 보여 주자 56%로 올랐습니다.</p><span class="src">Si 외, NAACL, 2024, 성인 80명</span></div>
-        <div class="box"><b>AI 없이 하는 연습도 따로</b><p>AI를 지름길 대신 학습 파트너로 쓰고, AI 없이 핵심 기능을 연습하는 시간을 따로 두라고 했습니다.</p><span class="src">OECD Digital Education Outlook 2026</span></div>
+        <div class="box"><b>먼저 읽고, 물을 것을 정한 뒤</b><p>교과서를 먼저 읽고 모르는 곳을 표시한 다음, AI에게 물을 질문을 준비하라고 적었습니다.</p><a class="src" href="https://www.goe.go.kr/resource/old/BBSMSTR_000000000126/BBS_202502240135525801.pdf" target="_blank" rel="noopener">경기도교육청 학생용 생성형 AI 가이드라인, 2025 ↗</a></div>
+        <div class="box"><b>노트는 AI와 따로</b><p>먼저 읽고 AI로 궁금한 점을 확인한 뒤, 붙여넣기 없이 스스로 노트하게 하라고 권했습니다.</p><a class="src" href="https://doi.org/10.1016/j.compedu.2025.105514" target="_blank" rel="noopener">Kreijkes 외, 2026, 위 영국 실험의 저자 제안 ↗</a></div>
+        <div class="box"><b>반대 근거도 묻기</b><p>AI 설명이 틀렸을 때 사람들의 정답률은 35%로 AI 없이 판단할 때(49%)보다 낮았습니다. 참인 까닭과 거짓인 까닭을 함께 보여 주자 56%로 올랐습니다.</p><a class="src" href="https://aclanthology.org/2024.naacl-long.81" target="_blank" rel="noopener">Si 외, NAACL, 2024, 성인 80명 ↗</a></div>
+        <div class="box"><b>AI 없이 하는 연습도 따로</b><p>AI를 지름길 대신 학습 파트너로 쓰고, AI 없이 핵심 기능을 연습하는 시간을 따로 두라고 했습니다.</p><a class="src" href="https://doi.org/10.1787/062a7394-en" target="_blank" rel="noopener">OECD Digital Education Outlook 2026 ↗</a></div>
       </div>
       <div class="detail">
         <p>영국 교육부는 2026년 1월 학교용 AI 제품 기준에, 정답을 먼저 주지 말고 학생의 생각을 먼저 받으라는 항목을 넣었습니다. 제가 읽기 노트와 실험실 도구를 만들 때 지킨 조건과 같습니다.</p>
@@ -746,9 +910,9 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ⑧ 나만의 독서 도구 -->
-<section class="step" id="s8" data-title="나만의 독서 도구" data-min="8">
+<section class="step" id="s8" data-title="나만의 독서 도구">
   <div class="wrap">
-    <div class="step-h"><span class="num">8</span><h2>선생님 교실에 맞는 독서 도구 만들기</h2><span class="min"><b>8</b>분</span></div>
+    <div class="step-h"><span class="num">8</span><h2>선생님 교실에 맞는 독서 도구 만들기</h2></div>
     <p class="goal">제가 만든 읽기 노트와 작은 도구들을 열어 보고, 처음에 적어 주신 어려움을 도구로 바꾸는 순서를 같이 보겠습니다!</p>
 
     <div class="blk">
@@ -773,12 +937,12 @@ footer#app-credit span{opacity:1!important}
 
     <div class="blk">
       <p class="kw">같은 생각으로 만든 독서 도구 열 가지</p>
-      <p class="brief">책 고르기부터 질문 사다리, 문단 지도, 개념 렌즈 노트까지 작은 도구 열 개를 실험실에 모아두었습니다.</p>
+      <p class="brief">책 고르기부터 질문 사다리, 문단 지도, 개념 렌즈 노트까지 작은 도구 열 개를 실험실에 모아두었습니다. 이름을 누르면 바로 열립니다.</p>
       <div class="grid2">
-        <div class="box"><b>책 고르기</b><p>이 책, 나한테 맞을까?</p></div>
-        <div class="box"><b>읽는 동안</b><p>질문 사다리 · 낱말 추측 노트 · 문단 지도 · 사실·의견 가르기 · 개념 렌즈 노트</p></div>
-        <div class="box"><b>읽은 뒤</b><p>줄이고 또 줄이기 · 두 글 견주기 · 저자 인터뷰 준비</p></div>
-        <div class="box"><b>선생님 도구</b><p>장르별 질문 카드</p></div>
+        <div class="box"><b>책 고르기</b><p><a href="https://scienceisjo.github.io/readnote/lab/fit-check/" target="_blank" rel="noopener">이 책, 나한테 맞을까?</a></p></div>
+        <div class="box"><b>읽는 동안</b><p><a href="https://scienceisjo.github.io/readnote/lab/question-ladder/" target="_blank" rel="noopener">질문 사다리</a> · <a href="https://scienceisjo.github.io/readnote/lab/word-guess/" target="_blank" rel="noopener">낱말 추측 노트</a> · <a href="https://scienceisjo.github.io/readnote/lab/para-map/" target="_blank" rel="noopener">문단 지도</a> · <a href="https://scienceisjo.github.io/readnote/lab/fact-opinion/" target="_blank" rel="noopener">사실·의견 가르기</a> · <a href="https://scienceisjo.github.io/readnote/lab/concept-lens/" target="_blank" rel="noopener">개념 렌즈 노트</a></p></div>
+        <div class="box"><b>읽은 뒤</b><p><a href="https://scienceisjo.github.io/readnote/lab/shrink/" target="_blank" rel="noopener">줄이고 또 줄이기</a> · <a href="https://scienceisjo.github.io/readnote/lab/two-texts/" target="_blank" rel="noopener">두 글 견주기</a> · <a href="https://scienceisjo.github.io/readnote/lab/author-interview/" target="_blank" rel="noopener">저자 인터뷰 준비</a></p></div>
+        <div class="box"><b>선생님 도구</b><p><a href="https://scienceisjo.github.io/readnote/lab/genre-cards/" target="_blank" rel="noopener">장르별 질문 카드</a></p></div>
       </div>
       <div class="actions">
         <a class="btn primary" href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">읽기 노트 실험실 열기 ↗</a>
@@ -790,8 +954,8 @@ footer#app-credit span{opacity:1!important}
     </div>
 
     <div class="blk">
-      <p class="kw">처음에 적어 주신 어려운 점을 다시 보겠습니다</p>
-      <p class="brief">이 가운데 하나를 골라 도구로 바꾼다면 무엇부터 할지 생각해 보시면 좋겠습니다.</p>
+      <p class="kw">처음에 적어 주신 어려운 점</p>
+      <p class="brief">이 가운데 하나를 골라, AI로 도구를 만들어 해결하는 방법을 다뤄보겠습니다.</p>
       <div class="live" data-kind="w_hard" data-readonly>
         <div class="q">독서교육을 하시면서 가장 어려운 점은 무엇인가요?</div>
         <div class="st"></div>
@@ -831,6 +995,19 @@ footer#app-credit span{opacity:1!important}
     </div>
 
     <div class="blk">
+      <p class="kw">제 바이브코딩 연수 자료</p>
+      <p class="brief">만드는 법부터 디자인, 스킬까지 연수에서 쓰던 자료를 그대로 두었습니다.</p>
+      <div class="grid2">
+        <a class="box" href="../vibecoding/" target="_blank" rel="noopener"><b>바이브코딩 연수 허브 ↗</b><p>제 바이브코딩 연수의 시작 페이지입니다. 기초부터 학생 데이터 연결까지 모듈별로 나뉘어 있습니다.</p></a>
+        <a class="box" href="../vibecoding/design.html" target="_blank" rel="noopener"><b>디자인 서랍 · DESIGN.md ↗</b><p>잘 알려진 서비스의 디자인을 정리한 DESIGN.md 74벌과 한글 서랍입니다. 고른 파일을 AI에게 주면 그 느낌으로 페이지를 바꿔 줍니다.</p></a>
+        <div class="box"><b>수업 페이지 만드는 스킬</b><p><a href="../vibecoding/kit/skills/lesson-page-worksheet.zip">학습지형</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">기본형</a> · <a href="../vibecoding/kit/skills/lesson-page-links.zip">시뮬 링크형</a> · <a href="../vibecoding/kit/skills/lesson-page-3d.zip">3D형</a> · <a href="../vibecoding/kit/skills/lesson-template.zip">틀</a> · <a href="../vibecoding/kit/lesson-page-spec.md" target="_blank" rel="noopener">규격서</a></p><p class="small">AI에게 스킬이나 규격서를 함께 주고 차시 내용만 알려 주시면 같은 틀의 수업 페이지가 나옵니다.</p></div>
+        <div class="box"><b>칠판 강의 화면</b><p><a href="../vibecoding/lecture.html" target="_blank" rel="noopener">만드는 법</a> · <a href="../vibecoding/kit/lecture-spec.md" target="_blank" rel="noopener">설계서</a> · <a href="../vibecoding/kit/skills/lecture-board.zip">스킬</a> · <a href="../boards/" target="_blank" rel="noopener">완성한 화면 모음</a></p></div>
+        <div class="box"><b>설계서 더 보기</b><p><a href="../vibecoding/kit/training-page-spec.md" target="_blank" rel="noopener">연수 페이지</a> · <a href="../vibecoding/kit/concept-screen-spec.md" target="_blank" rel="noopener">개념 설명 화면</a> · <a href="../vibecoding/kit/lab-guide-spec.md" target="_blank" rel="noopener">실험 안내 화면</a></p></div>
+        <a class="box" href="../vibecoding/data.html" target="_blank" rel="noopener"><b>학생 글 모으기 · AI 연결 ↗</b><p>읽기 노트처럼 학생 글을 모아 보는 도구를 만들 때 보시면 됩니다.</p></a>
+      </div>
+    </div>
+
+    <div class="blk">
       <p class="kw">우리 교실에 이런 독서 도구가 있으면 좋겠다</p>
       <div class="live" data-kind="w_tool" data-max="300">
         <div class="q">처음에 적은 어려움 가운데 하나를 골라, 이런 독서 도구가 있으면 좋겠다고 한 줄로 적어주시길 바랍니다~!</div>
@@ -843,13 +1020,46 @@ footer#app-credit span{opacity:1!important}
         <div class="wall"></div>
       </div>
     </div>
+    <div class="blk">
+      <p class="kw">꿀팁: 예쁜 페이지는 거꾸로 묻기(리버스 프롬프팅)로</p>
+      <p class="brief">학생이 열어 보고 싶게 만들려면 페이지가 예쁘기도 해야 합니다. 마음에 드는 디자인을 보여 주고, 그 디자인 규칙을 AI가 거꾸로 적게 합니다.</p>
+      <div class="pipe" aria-label="거꾸로 묻기 순서"><span class="n">레퍼런스 모으기</span><span class="a">→</span><span class="n">거꾸로 묻기: DESIGN.md 받기</span><span class="a">→</span><span class="n">내 페이지에 입히기</span><span class="a">→</span><span class="n hi">캡처 보며 하나씩 고치기</span></div>
+      <div class="grid2">
+        <div class="box"><b>① 레퍼런스 모으기</b><p>일상에서 마음에 드는 포스터, 메뉴판, 책 표지를 사진으로 찍거나, 디자인 서랍 같은 공개 디자인을 고릅니다.</p></div>
+        <div class="box"><b>② 거꾸로 묻기</b><p>사진이나 주소를 주고, 이 디자인을 다시 만들 수 있게 규칙을 DESIGN.md로 적어 달라고 합니다.</p></div>
+        <div class="box"><b>③ 입히기</b><p>만들어 둔 HTML과 DESIGN.md를 함께 주고, 기능과 글은 그대로 두고 디자인만 바꿔 달라고 합니다.</p></div>
+        <div class="box"><b>④ 하나씩 고치기</b><p>화면을 캡처해서 보여 주고, 마음에 안 드는 곳을 한 번에 하나씩 말합니다.</p></div>
+      </div>
+      <div class="copy-box">
+        <div class="copy-h"><b>② 거꾸로 묻기 부탁문</b><button class="btn" type="button" data-copy="#promptRev">복사하기</button></div>
+        <pre id="promptRev">첨부한 사진(또는 주소)의 디자인을 다른 페이지에도 같은 느낌으로 쓸 수 있게 DESIGN.md 파일로 정리해 줘.
+내용은 빼고 디자인 규칙만 적어 줘.
+- 색: HEX 코드와 어디에 쓰는지(바탕, 글자, 강조, 선)
+- 글꼴과 글자 크기(제목, 본문, 작은 글자)
+- 여백, 모서리 둥글기, 선과 그림자
+- 버튼, 카드, 표 모양과 배치
+학생이 읽기 쉽게 글자와 바탕의 대비는 4.5:1 이상으로 맞춰 줘.
+로고, 상표, 사진 속 글은 넣지 마.</pre>
+      </div>
+      <div class="copy-box">
+        <div class="copy-h"><b>③·④ 입히고 고치기 부탁문</b><button class="btn" type="button" data-copy="#promptApply">복사하기</button></div>
+        <pre id="promptApply">첨부한 DESIGN.md 규칙대로 이 HTML 파일의 디자인만 바꿔 줘.
+기능과 글 내용은 그대로 두고, 바꾼 곳을 짧게 알려 줘.
+
+(고칠 때) 캡처한 화면에서 [제목 글자가 작아.] 이것 하나만 고쳐 줘. 나머지는 건드리지 마.</pre>
+      </div>
+      <div class="detail" style="margin-top:14px">
+        <p>결과물을 먼저 보여 주고, 그 결과물을 만들 지시문을 AI가 거꾸로 써 내게 하는 방법을 리버스 프롬프팅이라고 부릅니다. 디자인을 말로 설명하기 어려울 때 특히 쓸모가 있습니다. 한 번 받은 DESIGN.md는 다음 도구를 만들 때도 그대로 다시 쓸 수 있습니다.</p>
+        <p>다만 사진 속 디자인을 통째로 베끼기보다 색, 글꼴, 여백 같은 규칙만 가져오시는 편이 좋습니다. 로고나 상표는 쓰지 않고, 공개 디자인은 출처와 사용 조건을 함께 확인합니다. 고칠 때는 한 번에 여러 가지를 말하면 잘 고쳐진 곳까지 바뀌는 일이 많아서, 저는 캡처 한 장에 고칠 곳 하나씩 말합니다.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ⑨ 미래 독서 -->
-<section class="step" id="s9" data-title="다음 책" data-min="2">
+<section class="step" id="s9" data-title="다음 책">
   <div class="wrap">
-    <div class="step-h"><span class="num">9</span><h2>제가 그려 보는 다음 책</h2><span class="min"><b>2</b>분</span></div>
+    <div class="step-h"><span class="num">9</span><h2>제가 그려 보는 다음 책</h2></div>
     <p class="goal">마지막으로 제 공상 하나를 말씀드리겠습니다!</p>
 
     <div class="blk">
@@ -865,15 +1075,15 @@ footer#app-credit span{opacity:1!important}
 </section>
 
 <!-- ⑩ 마무리 -->
-<section class="step" id="s10" data-title="마무리" data-min="2">
+<section class="step" id="s10" data-title="마무리">
   <div class="wrap">
-    <div class="step-h"><span class="num">10</span><h2>마무리</h2><span class="min"><b>2</b>분</span></div>
+    <div class="step-h"><span class="num">10</span><h2>마무리</h2></div>
 
     <div class="blk">
       <p class="kw">다시 보실 곳</p>
       <div class="grid2">
         <div class="box"><b>읽기 노트</b><p><a href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">학생 화면 체험</a> · <a href="https://scienceisjo.github.io/readnote/teacher.html?demo" target="_blank" rel="noopener">선생님 화면 예시</a> · <a href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">독서 도구 실험실</a></p></div>
-        <div class="box"><b>바이브코딩 매뉴얼</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">기초</a></p></div>
+        <div class="box"><b>바이브코딩 연수 자료</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">기초</a> · <a href="../vibecoding/design.html" target="_blank" rel="noopener">디자인 서랍</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">수업 페이지 스킬</a> · <a href="../vibecoding/lecture.html" target="_blank" rel="noopener">칠판 강의 화면</a></p></div>
         <div class="box"><b>오늘 이야기의 바탕이 된 영상</b><p><a href="https://www.youtube.com/watch?v=uQYWztR5UKU" target="_blank" rel="noopener">EBS 「다시, 읽기로」 2부</a> · <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">나민애 교수 특강</a></p></div>
       </div>
       <div class="detail">
@@ -928,6 +1138,8 @@ footer#app-credit span{opacity:1!important}
 
 </main>
 
+<dialog class="pv" id="pv" aria-label="자세히 보기"><div class="pv-in"><button class="pv-x" type="button" aria-label="닫기">✕</button><div class="pv-body"></div></div></dialog>
+
 <footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-08</span></footer>
 
 <div class="keys"><kbd>←</kbd><kbd>→</kbd> 장면 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
@@ -981,7 +1193,7 @@ const flow  = document.getElementById('flow');
 steps.forEach((s,i)=>{
   const title = s.dataset.title, min = s.dataset.min||'';
   const c = document.createElement('a');
-  c.className='chip'; c.href='#'+s.id; c.innerHTML = `<b>${i+1}</b>${esc(title)}${min?` · ${min}분`:''}`;
+  c.className='chip'; c.href='#'+s.id; c.innerHTML = `<b>${i+1}</b><span class="t">${esc(title)}</span>${min?`<span class="m">${min}분</span>`:''}`;
   c.addEventListener('click', e=>{ e.preventDefault(); go(i); });
   chips.appendChild(c);
   const f = document.createElement('a');
@@ -996,8 +1208,10 @@ steps.forEach((s,i)=>{
   p.innerHTML = prev + '<span class="grow"></span>' + next;
   s.querySelector(':scope > .wrap').appendChild(p);
 });
+function setTopH(){ const t=document.querySelector('.top'); if(t) html.style.setProperty('--topH', t.offsetHeight+'px'); }
+setTopH(); addEventListener('resize', setTopH);
 const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
-{ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
+if(total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
 document.addEventListener('click', e=>{
   const b=e.target.closest('[data-go]'); if(!b) return;
   e.preventDefault(); go(+b.dataset.go);
@@ -1253,12 +1467,41 @@ document.querySelectorAll('.live.quiz[data-kind]').forEach(box=>{
 });
 
 /* ── 만화 한 장면: 그림이 실제로 열려야 보이고, 아직 없으면 강사 큐(c)에서만 자리 표시 ── */
-document.querySelectorAll('figure.toon').forEach(f=>{
+function wireToon(f){
   const img=f.querySelector('img'); if(!img) return;
   const cap=f.querySelector('figcaption'); if(cap) cap.dataset.file=img.getAttribute('src');
   const ok=()=>{ if(img.naturalWidth) f.classList.add('ok'); };
   if(img.complete) ok();
   img.addEventListener('load', ok);
+}
+document.querySelectorAll('figure.toon').forEach(wireToon);
+
+/* ── 눌러서 보기 창 ── */
+const pv=document.getElementById('pv'), pvBody=pv.querySelector('.pv-body');
+function openPv(id){
+  const t=document.getElementById(id); if(!t) return;
+  pvBody.innerHTML=''; pvBody.appendChild(t.content.cloneNode(true));
+  pvBody.querySelectorAll('figure.toon').forEach(wireToon);
+  if(pv.showModal) pv.showModal(); else pv.setAttribute('open','');
+  pv.querySelector('.pv-in').scrollTop=0;
+}
+function closePv(){ if(pv.close) pv.close(); else pv.removeAttribute('open'); pvBody.innerHTML=''; }
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-show]'); if(!b || e.target.closest('a')) return;
+  openPv(b.dataset.show);
+});
+document.addEventListener('keydown', e=>{
+  const b=e.target.closest && e.target.closest('[data-show]');
+  if(b && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); openPv(b.dataset.show); }
+});
+pv.querySelector('.pv-x').addEventListener('click', closePv);
+pv.addEventListener('click', e=>{ if(e.target===pv) closePv(); });
+
+/* ── 퀴즈 정답 보기 ── */
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-reveal]'); if(!b) return;
+  const t=document.getElementById(b.dataset.reveal); if(!t) return;
+  t.hidden=!t.hidden; b.textContent = t.hidden ? '정답 보기' : '정답 숨기기';
 });
 
 /* ── 부탁문 복사 ── */
