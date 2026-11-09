@@ -391,6 +391,13 @@ html.slide .follow-bar{bottom:76px}
 .map-table thead th:last-child{border-top-right-radius:var(--r2)}
 .map-table td:first-child{font-weight:600}
 .map-table td:last-child{color:var(--blue);font-weight:600}
+
+/* ── v11: 바이브코딩 맛보기 영상 ── */
+.vid{margin:16px 0 4px;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff}
+.vid video{display:block;width:100%;height:auto;max-height:70vh;background:#111}
+html[data-mode="present"] .vid video{max-height:60vh}
+.vid figcaption{padding:10px 14px;font-size:.96em;color:var(--ink2);border-top:1px solid var(--line)}
+@media print{ .vid video{display:none} }
 </style>
 </head>
 <body>
@@ -418,8 +425,8 @@ html.slide .follow-bar{bottom:76px}
     <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
     <div class="eyebrow">2026 개념기반 탐구독서 이해를 위한 강동송파 독서교육교사단 하반기 워크숍</div>
     <h1>독서와 AI 연계</h1>
-    <p class="lead">제 과학 수업과 직접 만든 도구들, AI로 공부하다 겪은 실패를 말씀드리고, 선생님 교실에 맞는 독서 도구를 만드는 순서까지 함께 보겠습니다!</p>
-    <div class="pipe" aria-label="오늘의 흐름"><span class="n">질문하는 교실</span><span class="a">→</span><span class="n">연수의 방향</span><span class="a">→</span><span class="n">「요약해줘」 고백</span><span class="a">→</span><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">학생과 AI</span><span class="a">→</span><span class="n hi">나만의 독서 도구</span></div>
+    <p class="lead">오늘 이야기의 중심은 「독서교육을 위한 도구, 바이브코딩으로 만들기」입니다. 제 수업과 AI로 공부하다 겪은 실패, 그리고 그 생각으로 만든 독서 도구를 차례로 보여 드리겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n hi">독서교육 도구, 바이브코딩으로</span><span class="a">→</span><span class="n">질문하는 교실</span><span class="a">→</span><span class="n">연수의 방향</span><span class="a">→</span><span class="n">「요약해줘」 고백</span><span class="a">→</span><span class="n">질문하며 읽기</span><span class="a">→</span><span class="n">학생과 AI</span><span class="a">→</span><span class="n">나만의 독서 도구</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
       <span>📅 <b>2026. 11. 9.(월) 20:00~21:30</b></span>
@@ -442,7 +449,7 @@ html.slide .follow-bar{bottom:76px}
 <section class="step" id="s1" data-title="인사">
   <div class="wrap">
     <div class="step-h"><span class="num">1</span><h2>들어오시는 길</h2></div>
-    <p class="goal">QR로 들어와 화면을 맞추고, 퀴즈 하나와 선생님들의 고민 나눔으로 시작해보겠습니다!</p>
+    <p class="goal">QR로 들어와 오늘의 주제를 확인하고, 퀴즈 하나와 선생님들의 고민 나눔으로 시작해보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">오늘 연수 진행 링크</p>
@@ -456,6 +463,37 @@ html.slide .follow-bar{bottom:76px}
         <p>중간중간 선생님들께 여쭤보는 칸이 있습니다. 적어 주신 글은 앞 화면과 다른 선생님 화면에 바로 뜨고, 이름은 비워 두셔도 됩니다.</p>
       </div>
       <div class="cue">진행 화면 주소 = 이 페이지?mode=present&amp;host=1 · 시작 전에 열어 두기</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">독서교육을 위한 도구, 바이브코딩으로 만들기</p>
+      <p class="brief">오늘 이야기의 중심입니다. 독서교육 방법은 선생님들께서 저보다 잘 아시니, 저는 독서교육에 필요한 도구를 이렇게 만들 수 있다는 것을 보여 드리겠습니다.</p>
+      <figure class="vid">
+        <video src="media/vibe-tetris.mp4" poster="media/vibe-tetris.webp" controls preload="metadata" playsinline></video>
+        <figcaption>바이브코딩 맛보기(45초): 「블럭 대신 책이 떨어지는 테트리스 게임 만들어 줘. 책갈피는 폭탄 기능으로 세 줄을 한꺼번에 없앨 수 있어야 해. 디자인은 사진을 참고해서 만들어」라고 말로 부탁하면, AI가 코드를 써서 게임 한 장을 만들어 줍니다.</figcaption>
+      </figure>
+      <div class="detail">
+        <p>바이브코딩은 코드를 직접 짜지 않고, 만들고 싶은 것을 말로 설명해서 AI가 코드를 쓰게 하는 방법입니다. 영상처럼 한 문단 부탁하고 사진 한 장을 보여 주면 몇 분 안에 돌아가는 화면이 나옵니다.</p>
+        <p>독서와 AI라는 주제에서 철학적인 이야기나 독서교육의 방향은 오늘 함께 나누는 이야기로 두려고 합니다. 독서교육의 방법은 선생님들께서 저보다 훨씬 잘 아십니다. 그래서 오늘은 독서교육에 필요한 도구를 이런 식으로 만들 수 있다는 것을 보여 드리고, 어떤 도구가 필요한지 떠올리기 위해 여러 고민에 함께 답해 보는 시간으로 준비했습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">따라 해 보실 수 있는 실습 링크와 페이지</p>
+      <p class="brief">도구를 만드는 실습은 오늘 연수 시간 안에 하기 어려워서 다른 이야기들을 가져왔습니다. 대신 연수 뒤에 따라 해 보실 수 있는 자료를 모두 모아 드립니다.</p>
+      <div class="grid2">
+        <div class="box"><b>바이브코딩 시작하기</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">① 기초</a> · <a href="../vibecoding/practice.html" target="_blank" rel="noopener">개별 실습</a></p></div>
+        <div class="box"><b>디자인 입히기</b><p><a href="../vibecoding/design.html" target="_blank" rel="noopener">디자인 서랍</a>(DESIGN.md 74벌과 한글 서랍)</p></div>
+        <div class="box"><b>수업 페이지 스킬</b><p><a href="../vibecoding/kit/skills/lesson-page-worksheet.zip">학습지형</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">기본형</a> · <a href="../vibecoding/kit/skills/lesson-page-links.zip">시뮬 링크형</a> · <a href="../vibecoding/kit/skills/lesson-page-3d.zip">3D형</a> · <a href="../vibecoding/kit/skills/lesson-template.zip">틀</a> · <a href="../vibecoding/kit/lesson-page-spec.md" target="_blank" rel="noopener">규격서</a></p></div>
+        <div class="box"><b>칠판 강의 화면</b><p><a href="../vibecoding/lecture.html" target="_blank" rel="noopener">만드는 법</a> · <a href="../vibecoding/kit/lecture-spec.md" target="_blank" rel="noopener">설계서</a> · <a href="../vibecoding/kit/skills/lecture-board.zip">스킬</a> · <a href="../boards/" target="_blank" rel="noopener">완성한 화면 모음</a></p></div>
+        <div class="box"><b>손글씨 단권화</b><p><a href="../vibecoding/kit/handnote-spec.md" target="_blank" rel="noopener">설계서</a> · 예시 <a href="../subject/electricity-handnote.pdf" target="_blank" rel="noopener">전기와 자기</a> · <a href="../subject/astronomy-handnote.pdf" target="_blank" rel="noopener">별과 우주</a> · <a href="../boards/" target="_blank" rel="noopener">손글씨 노트 강의</a></p></div>
+        <div class="box"><b>학생 글 모으기·AI 연결</b><p><a href="../vibecoding/data.html" target="_blank" rel="noopener">③ 학생 데이터·AI 연결</a></p></div>
+        <div class="box"><b>독서 도구</b><p><a href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">읽기 노트 체험</a> · <a href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">독서 도구 실험실</a></p></div>
+        <div class="box"><b>설계서 더 보기</b><p><a href="../vibecoding/kit/training-page-spec.md" target="_blank" rel="noopener">연수 페이지</a> · <a href="../vibecoding/kit/concept-screen-spec.md" target="_blank" rel="noopener">개념 설명 화면</a> · <a href="../vibecoding/kit/lab-guide-spec.md" target="_blank" rel="noopener">실험 안내 화면</a> · <a href="../vibecoding/pdf-guide.html" target="_blank" rel="noopener">PDF 제작 자료</a></p></div>
+      </div>
+      <div class="detail">
+        <p>설계서와 스킬은 AI에게 함께 주고 내용만 알려 주면 같은 틀의 결과물이 나오도록 쓴 파일입니다. 이 연수 페이지도 「연수 페이지」 설계서와 같은 규칙으로 만들었고, 손글씨 단권화와 칠판 강의 화면도 각각의 설계서로 만들었습니다.</p>
+      </div>
     </div>
 
     <div class="blk">
@@ -1116,7 +1154,7 @@ html.slide .follow-bar{bottom:76px}
 (고칠 때) 캡처한 화면에서 [제목 글자가 작아.] 이것 하나만 고쳐 줘. 나머지는 건드리지 마.</pre>
       </div>
       <div class="detail" style="margin-top:14px">
-        <p>결과물을 먼저 보여 주고, 그 결과물을 만들 지시문을 AI가 거꾸로 써 내게 하는 방법을 리버스 프롬프팅이라고 부릅니다. 디자인을 말로 설명하기 어려울 때 특히 쓸모가 있습니다. 한 번 받은 DESIGN.md는 다음 도구를 만들 때도 그대로 다시 쓸 수 있습니다.</p>
+        <p>맨 앞에서 보여 드린 테트리스 영상도 사진 한 장을 함께 주고 「디자인은 사진을 참고해서」라고 부탁한 것입니다. 결과물을 먼저 보여 주고, 그 결과물을 만들 지시문을 AI가 거꾸로 써 내게 하는 방법을 리버스 프롬프팅이라고 부릅니다. 디자인을 말로 설명하기 어려울 때 특히 쓸모가 있습니다. 한 번 받은 DESIGN.md는 다음 도구를 만들 때도 그대로 다시 쓸 수 있습니다.</p>
         <p>다만 사진 속 디자인을 통째로 베끼기보다 색, 글꼴, 여백 같은 규칙만 가져오시는 편이 좋습니다. 로고나 상표는 쓰지 않고, 공개 디자인은 출처와 사용 조건을 함께 확인합니다. 고칠 때는 한 번에 여러 가지를 말하면 잘 고쳐진 곳까지 바뀌는 일이 많아서, 저는 캡처 한 장에 고칠 곳 하나씩 말합니다.</p>
       </div>
     </div>
@@ -1151,6 +1189,7 @@ html.slide .follow-bar{bottom:76px}
       <div class="grid2">
         <div class="box"><b>읽기 노트</b><p><a href="https://scienceisjo.github.io/readnote/?demo" target="_blank" rel="noopener">학생 화면 체험</a> · <a href="https://scienceisjo.github.io/readnote/teacher.html?demo" target="_blank" rel="noopener">선생님 화면 예시</a> · <a href="https://scienceisjo.github.io/readnote/lab/" target="_blank" rel="noopener">독서 도구 실험실</a></p></div>
         <div class="box"><b>바이브코딩 연수 자료</b><p><a href="../vibecoding/" target="_blank" rel="noopener">연수 허브</a> · <a href="../vibecoding/basic.html" target="_blank" rel="noopener">기초</a> · <a href="../vibecoding/design.html" target="_blank" rel="noopener">디자인 서랍</a> · <a href="../vibecoding/kit/skills/lesson-page-basic.zip">수업 페이지 스킬</a> · <a href="../vibecoding/lecture.html" target="_blank" rel="noopener">칠판 강의 화면</a></p></div>
+        <div class="box"><b>손글씨 단권화</b><p><a href="../vibecoding/kit/handnote-spec.md" target="_blank" rel="noopener">설계서</a> · <a href="../subject/electricity-handnote.pdf" target="_blank" rel="noopener">전기와 자기 예시</a> · <a href="../subject/astronomy-handnote.pdf" target="_blank" rel="noopener">별과 우주 예시</a></p></div>
         <div class="box"><b>오늘 이야기의 바탕이 된 영상</b><p><a href="https://www.youtube.com/watch?v=uQYWztR5UKU" target="_blank" rel="noopener">EBS 「다시, 읽기로」 2부</a> · <a href="https://www.youtube.com/watch?v=nNdK6foInCc" target="_blank" rel="noopener">나민애 교수 특강</a></p></div>
       </div>
       <div class="detail">
