@@ -359,6 +359,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 .pv .comic{margin:16px 0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--bg2)}
 .pv .comic img{display:block;width:100%;height:auto;max-height:62vh;object-fit:contain}
 .pv iframe.ceremony{display:block;width:100%;height:min(68vh,640px);border:1px solid var(--line);border-radius:var(--r2);margin:12px 0}
+.pv .toon{margin-top:8px}
+.pv .toon img,html[data-mode="present"] .pv .toon img{max-height:74vh}
 @media print{ .pv,.show-hint,.reveal-btn{display:none!important} .reveal-body{display:block!important} }
 </style>
 </head>
@@ -512,7 +514,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <template id="pv-exp">
       <h3>질문이 나올 경험부터</h3>
       <p class="brief">공을 가장 많이 들이는 곳은 수업 도입입니다. 실험이나 현상을 보고 나온 질문들입니다.</p>
-      <figure class="toon"><img src="img/cap-experience.webp" alt="질문유발자료를 보여 주는 수업 장면"><figcaption>질문유발자료를 보여 주는 수업 장면</figcaption></figure>
+      <figure class="toon"><img src="img/cap-experience.webp" alt="별까지의 여행 시뮬레이터에서 우주선이 베가를 향해 날아가는 화면"><figcaption>수업 도입: 별까지의 여행 시뮬레이터. 직접 날아가 본 뒤 생긴 궁금증을 질문과수원에 올립니다.</figcaption></figure>
       <ul class="qlist">
         <li>왜 나침반이 움직였나요</li>
         <li>스타이로폼 접시에 털가죽을 10초 문지른 것과 1분 문지른 것 중에 어떤 전구가 더 많이 켜질까</li>
@@ -523,8 +525,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </template>
     <template id="pv-rec">
       <h3>질문한 과정을 기록</h3>
-      <p class="brief">질문과수원에서는 질문 하나가 열매 하나가 되고, 예상과 정리, 넓히기 같은 칸에 탐구 과정을 남깁니다.</p>
-      <figure class="toon"><img src="img/cap-record.webp" alt="질문과수원에서 학생이 탐구 과정을 기록한 화면"><figcaption>질문과수원 탐구 기록 화면</figcaption></figure>
+      <p class="brief">질문과수원에서는 질문 하나가 열매 하나가 되고, 다듬기·예상·알아볼 방법·찾기·정리·넓히기 칸에 탐구 과정을 남깁니다.</p>
+      <figure class="toon"><img src="img/cap-record.webp" alt="나침반 질문의 다듬기부터 넓히기까지 칸이 채워진 학생 탐구 과정 화면"><figcaption>학생 탐구 과정: 질문을 다듬고, 찾고, 정리하고, 다음 질문으로 넓힌 기록과 제 되묻기</figcaption></figure>
       <figure class="comic"><img src="../question-workshop/comics/question7.webp" alt="질문나무 앱에 호기심을 기록하는 만화 장면"></figure>
       <div class="actions"><a class="btn primary" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문과수원 열기 ↗</a><a class="btn" href="../question-workshop/case-questionuri.html" target="_blank" rel="noopener">질문과수원 사례 페이지 ↗</a></div>
     </template>
@@ -562,6 +564,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <div class="blk">
       <p class="kw">질문을 모으는 곳, 질문과수원</p>
       <p class="brief">학생이 질문을 심고, 다듬고, 스스로 답을 찾아 적는 웹앱입니다. 2학년 질문이 1,700개 넘게 모였습니다.</p>
+      <figure class="toon"><img src="img/cap-material.webp" alt="질문과수원 학생 화면, 왼쪽에 선생님 자료 목록과 오른쪽에 심기부터 다듬기까지의 단계"><figcaption>학생 화면: 그날 「선생님 자료」를 눌러 보고, 궁금한 것을 한 줄로 심습니다.</figcaption></figure>
       <div class="actions">
         <a class="btn primary" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문과수원 열기 ↗</a>
       </div>
@@ -585,7 +588,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </div>
     <template id="pv-fast">
       <h3>올라온 질문에 바로 반응합니다(호들갑)</h3>
-      <figure class="toon"><img src="img/cap-dashboard.webp" alt="교사 대시보드에 학생 질문이 올라오는 화면"><figcaption>교사 대시보드에 질문이 올라오는 화면</figcaption></figure>
+      <figure class="toon"><img src="img/cap-dashboard.webp" alt="교사 대시보드의 우리 반 과수원 화면, 학생마다 나무 한 그루"><figcaption>교사 대시보드 「우리 반 과수원」: 새 질문이 올라오면 그 학생의 나무가 반짝입니다. 학생 이름은 가렸습니다.</figcaption></figure>
       <p class="brief">질문과수원에 질문이 올라오면 제가 단 반응들입니다.</p>
       <ul class="qlist">
         <li>새로운 밝은 별이 발견될 때마다 계속 음수 등급을 만들기보다 그냥 새로운 등급 체계를 만드는 것이 낫지 않을까?<span class="reply">그러게????????</span></li>
@@ -597,7 +600,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </template>
     <template id="pv-odd">
       <h3>엉뚱한 질문도 진지하게</h3>
-      <figure class="toon"><img src="img/cap-odd.webp" alt="학생이 올린 엉뚱한 질문 화면"><figcaption>학생이 올린 엉뚱한 질문</figcaption></figure>
+      <figure class="toon"><img src="img/cap-odd.webp" alt="포켓몬코일하고 과학코일이랑 연관이 있느냐는 학생 질문과 되묻기"><figcaption>「포켓몬코일하고 과학코일이랑 연관이있나요??」에 단 되묻기. 학생 이름은 가렸습니다.</figcaption></figure>
       <ul class="qlist">
         <li>코일 없이 세탁기를 만들 수 있을까?<span class="reply">쌤이 대신 세탁기 안에 들어가서 세탁기를 돌려야 해</span></li>
         <li>히포라테스는 어떻게 별을 보고 6등급으로 나누었을까(주관적인 요소로 나누었을까)<span class="reply">히포크라테스요??피타고리타분</span></li>
@@ -610,7 +613,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <template id="pv-award">
       <h3>이번 달부터 이달의 상</h3>
       <p class="brief">이번 달 말에 처음 여는 「해누리 질문 어워즈」 화면입니다.</p>
-      <iframe class="ceremony" src="https://scienceisjo.github.io/questionuri/ceremony.html" title="해누리 질문 어워즈" loading="lazy"></iframe>
+      <figure class="toon"><img src="img/cap-award.webp" alt="해누리 질문 어워즈 시상식 첫 화면, 반을 고르는 금색 단추와 레드카펫"><figcaption>「해누리 질문 어워즈」 첫 화면. 반을 고르면 레드카펫이 깔리고 상마다 후보와 수상자가 나옵니다.</figcaption></figure>
       <div class="actions"><a class="btn primary" href="https://scienceisjo.github.io/questionuri/ceremony.html" target="_blank" rel="noopener">새 창에서 열기 ↗</a></div>
     </template>
 
