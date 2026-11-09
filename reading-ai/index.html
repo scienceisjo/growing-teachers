@@ -362,6 +362,35 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 .pv .toon{margin-top:8px}
 .pv .toon img,html[data-mode="present"] .pv .toon img{max-height:74vh}
 @media print{ .pv,.show-hint,.reveal-btn{display:none!important} .reveal-body{display:block!important} }
+
+/* ── v9: 한 장씩 보기(슬라이드) ── */
+html.slide main .step{display:none;min-height:0}
+html.slide main .step.cur{display:block;min-height:calc(100vh - 64px)}
+html.slide .hero{display:none}
+html.slide.at-cover .hero{display:block}
+html.slide.at-cover main .step{display:none}
+html.slide main .step > .wrap > .blk{display:none}
+html.slide main .step > .wrap > .blk.blk-cur{display:block}
+html.slide:not(.blk-first) main .step.cur > .wrap > .goal{display:none}
+html.slide .pager{display:none!important}
+html.slide footer#app-credit{display:none}
+.slide-nav{display:none}
+html.slide .slide-nav{display:flex;position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:35;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:9999px;padding:6px 8px;max-width:94vw}
+.slide-nav .cnt{font-variant-numeric:tabular-nums;color:var(--ink2);padding:0 8px;font-size:.95rem;white-space:nowrap}
+html.slide main{padding-bottom:84px}
+main .step > .wrap > .blk{scroll-margin-top:calc(var(--topH,55px) + 16px)}
+html.slide .follow-bar{bottom:76px}
+@media print{ .slide-nav{display:none!important} }
+
+/* ── v10: 순서 대응표 ── */
+.table-wrap{overflow-x:auto;margin:14px 0}
+.map-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.98em;min-width:560px}
+.map-table th,.map-table td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.map-table thead th{background:var(--bg2);font-weight:700;color:var(--ink)}
+.map-table thead th:first-child{border-top-left-radius:var(--r2)}
+.map-table thead th:last-child{border-top-right-radius:var(--r2)}
+.map-table td:first-child{font-weight:600}
+.map-table td:last-child{color:var(--blue);font-weight:600}
 </style>
 </head>
 <body>
@@ -377,6 +406,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
         <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 장면 다시">↺</button>
       </div>
       <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+      <button class="btn" id="viewBtn" title="s 키로도 바뀝니다. 한 장면 안의 내용을 한 장씩 넘겨 봅니다">한 장씩 보기</button>
     </div>
   </div>
 </div>
@@ -549,8 +579,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </template>
 
     <div class="blk">
-      <p class="kw">질문은 창이 아니라 거울입니다</p>
-      <p class="brief">오리엔테이션 때 학생들에게 한 말입니다.</p>
+      <p class="kw">제가 질문 수업을 하는 이유</p>
+      <p class="brief">질문이라는 거울로 학생들을 바라보기 위해서입니다. 오리엔테이션 때 학생들에게 「질문은 창이 아니라 거울」이라고 말했습니다.</p>
       <div class="grid2">
         <div class="box"><b>창</b><p>바깥을 봅니다.</p></div>
         <div class="box"><b>거울</b><p>나를 봅니다. 어떤 질문을 하는지가 내가 어떤 사람인지, 얼마나 이해했는지를 보여 줍니다.</p></div>
@@ -562,7 +592,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </div>
 
     <div class="blk">
-      <p class="kw">질문을 모으는 곳, 질문과수원</p>
+      <p class="kw">질문하는 수업을 하기 위해 만든 플랫폼 소개: 질문과수원</p>
       <p class="brief">학생이 질문을 심고, 다듬고, 스스로 답을 찾아 적는 웹앱입니다. 2학년 질문이 1,700개 넘게 모였습니다.</p>
       <figure class="toon"><img src="img/cap-material.webp" alt="질문과수원 학생 화면, 왼쪽에 선생님 자료 목록과 오른쪽에 심기부터 다듬기까지의 단계"><figcaption>학생은 그날 「선생님 자료」를 눌러 보고, 궁금한 것을 한 줄로 심습니다.</figcaption></figure>
       <div class="actions">
@@ -577,7 +607,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <div class="blk">
       <p class="kw">가장 중요하게 여기는 것은 질문하기 편한 교실입니다</p>
       <div class="grid2">
-        <div class="box show" data-show="pv-fast" role="button" tabindex="0"><b>올라온 질문에 바로 반응합니다(호들갑)</b><p>학생이 질문을 올리면 교사 대시보드에서 바로 보고, 모두가 보는 앞에서 크게 반응합니다.</p><span class="show-hint">눌러서 보기</span></div>
+        <div class="box show" data-show="pv-fast" role="button" tabindex="0"><b>올라온 질문에 바로 반응합니다(호들갑)</b><p>질문이 올라오면 그 학생의 나무가 반짝이고, 저는 그걸 눌러 보며 정말 호들갑을 떱니다.</p><span class="show-hint">눌러서 보기</span></div>
         <div class="box show" data-show="pv-odd" role="button" tabindex="0"><b>엉뚱한 질문도 진지하게</b><p>엉뚱한 질문에도 피드백을 달고, 질문한 것을 많이 칭찬합니다.</p><span class="show-hint">눌러서 보기</span></div>
         <div class="box show" data-show="pv-award" role="button" tabindex="0"><b>이번 달부터 이달의 상</b><p>교실을 즐겁게 했상, 끝까지 팠상, 예상이 빗나갔상, 실생활로 확장했상, 콩글리쉬상을 줍니다.</p><span class="show-hint">눌러서 보기</span></div>
       </div>
@@ -589,14 +619,6 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <template id="pv-fast">
       <h3>올라온 질문에 바로 반응합니다(호들갑)</h3>
       <figure class="toon"><img src="img/cap-dashboard.webp" alt="교사 대시보드의 우리 반 과수원 화면, 학생마다 나무 한 그루"><figcaption>교사 대시보드 「우리 반 과수원」에서는 새 질문이 올라오면 그 학생의 나무가 반짝입니다. 학생 이름은 가렸습니다.</figcaption></figure>
-      <p class="brief">질문과수원에 질문이 올라오면 제가 단 반응들입니다.</p>
-      <ul class="qlist">
-        <li>새로운 밝은 별이 발견될 때마다 계속 음수 등급을 만들기보다 그냥 새로운 등급 체계를 만드는 것이 낫지 않을까?<span class="reply">그러게????????</span></li>
-        <li>전동기를 돌게 하도록 하기 위해서 전류의 방향이 바뀔 때 속도가 감소하면서 전기적인 효율이 감소되는 건가요?<span class="reply">너는 하이닉스 가라 그저 GOAT 역시우~~~</span></li>
-        <li>왜 나침반이 움직였나요<span class="reply">ㅋㅋㅋ그러게요 ㅋㅋㅋㅋ 알아봅시닿 ㅎ</span></li>
-      </ul>
-      <figure class="comic"><img src="../question-workshop/comics/question10.webp" alt="선생님이 학생 질문에 진도를 잠깐 멈추는 만화 장면"></figure>
-      <p class="small">학생 질문은 반과 이름을 지우고 옮겼습니다.</p>
     </template>
     <template id="pv-odd">
       <h3>엉뚱한 질문도 진지하게</h3>
@@ -618,8 +640,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </template>
 
     <div class="blk">
-      <p class="kw">책은 세상을 보는 창, 읽은 뒤에 던지는 질문은 거울</p>
-      <p class="brief">창밖으로 나가기 전에 거울 앞에서 나를 점검하는 일, 저는 그것이 질문하며 읽기라고 생각합니다.</p>
+      <p class="kw">독서교육 워크숍에서 질문에 대한 이야기를 나눈 이유</p>
+      <p class="brief">책은 세상을 보는 창, 읽은 뒤에 던지는 질문은 거울이기 때문입니다! 창밖으로 나가기 전에 거울 앞에서 나를 점검하는 일, 저는 그것이 질문하며 읽기라고 생각합니다.</p>
       <div class="grid2">
         <div class="box"><b>책이라는 창</b><p>독서는 다른 사람의 머릿속에 들어가 세상을 보는 창입니다. 하지만 책이 곧 세상은 아닙니다.</p><span class="src">김범준 교수(성균관대 물리학과)의 말</span></div>
         <div class="box"><b>질문이라는 거울</b><p>창으로 본 것을 두고 질문을 던지면, 내가 무엇을 알고 무엇을 모르는지가 비칩니다.</p></div>
@@ -686,8 +708,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 <!-- ④ 고백 -->
 <section class="step" id="s4" data-title="「요약해줘」">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>만들 때는 AI가 정말 좋았는데, 공부는 달랐습니다</h2></div>
-    <p class="goal">도구를 만들고 업무를 할 때와 달리, 공부할 때 AI를 쓰다 겪은 실패를 고백해보겠습니다!</p>
+    <div class="step-h"><span class="num">4</span><h2>학습에서 AI - feat. 공문 읽기, 교과서 읽기</h2></div>
+    <p class="goal">공문을 읽을 때와 교과서를 읽을 때 AI가 어떻게 달랐는지, 제 실패와 함께 말씀드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">도구를 만들 때도, 긴 공문을 읽을 때도 AI를 씁니다</p>
@@ -702,30 +724,14 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     <div class="blk">
       <p class="kw">공부할 때 제가 가장 많이 한 말, 「요약해줘」</p>
       <p class="brief">과학덕후 학생들의 5분 질문에 답하려고, 전공이 아닌 우주를 5시간씩 공부했습니다.</p>
-      <figure class="toon" data-toon="s4-chase"><img src="img/s4-chase.webp" alt="쉬는 시간 복도로 뛰어나간 선생님이 텅 빈 복도에 혼자 서 있는 장면"><figcaption>다음 시간에 알려 주겠다고 쫓아갔는데, 아이는 없었습니다.</figcaption></figure>
+      <figure class="toon"><img src="img/s4-five-hours.webp" alt="밤늦게 책상에서 우주 책을 쌓아 두고 노트북에 요약을 부탁하며 시계를 보는 선생님"><figcaption>5분 질문에 답하려고, 전공이 아닌 우주를 5시간씩 「요약해줘」로 공부했습니다.</figcaption></figure>
+      <figure class="toon"><img src="img/s4-stuck.webp" alt="수업이 끝난 교실에서 학생의 질문에 선생님이 대답하지 못하고 말문이 막힌 장면"><figcaption>학생의 질문 하나에 말문이 막혔습니다.</figcaption></figure>
+      <figure class="toon" data-toon="s4-chase"><img src="img/s4-chase.webp" alt="쉬는 시간 복도로 뛰어나간 선생님이 텅 빈 복도에 혼자 서 있는 장면"><figcaption>「요약해줘」 겉핥기식 공부를 하니 남는 게 없어서 학생에게 제대로 답변해 주지 못했습니다 ㅠㅠ</figcaption></figure>
       <div class="detail">
         <p>그런데 공부는 달랐습니다. 과학덕후 학생들은 수업을 마치자마자 5분 동안 질문을 쏟아냅니다. 제 전공이 아닌 우주 질문이라 그 5분을 위해 5시간을 공부했고, 그때 AI에게 가장 많이 한 말이 「요약해줘」였습니다. 답이 바로 나오고 깔끔해서 읽고 나면 다 안 것 같았습니다.</p>
         <p>그러다 한 학생의 질문에 막혀서 "선생님이 조금 더 알아보고 다음 시간에 알려 줄게" 하고 쉬는 시간에 쫓아갔는데, 아이는 없었습니다. 제 권위도 같이 없어졌습니다. 돌아보니 제가 쌓은 지식에는 알맹이가 없었습니다. 요약을 읽고 안다고 착각한 것인데, 심리학에서는 이것을 설명 깊이의 착각이라고 부릅니다. 사람은 '왜'와 '어떻게'를 실제보다 훨씬 잘 안다고 믿다가, 직접 설명해 보려 하면 그 믿음이 무너집니다.</p>
       </div>
     </div>
-
-    <div class="blk">
-      <p class="kw">요약을 읽고 안다고 생각했는데, 막상 설명하려니 막힌 적 있으신가요?</p>
-      <div class="live vote" data-kind="v_sum" data-opts="있습니다|아직 없습니다">
-        <div class="q">요약을 읽고 안다고 생각했는데, 막상 설명하려니 막힌 적 있으신가요?</div>
-        <div class="opts"></div>
-        <div class="bars"></div>
-        <div class="st"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ⑤ 바꾼 방법 -->
-<section class="step" id="s5" data-title="질문하며 읽기">
-  <div class="wrap">
-    <div class="step-h"><span class="num">5</span><h2>왜 달랐을까, 그리고 바꾼 방법</h2></div>
-    <p class="goal">업무 읽기와 공부 읽기가 왜 달랐는지 살펴보고, 제가 바꾼 공부 순서를 보여 드리겠습니다!</p>
 
     <div class="blk">
       <p class="kw">공문은 처리하려고 읽고, 공부는 달라지려고 읽습니다</p>
@@ -739,6 +745,29 @@ a.src{text-decoration:underline;text-underline-offset:2px}
         <p>나민애 교수님도 특강에서 대중서는 참고서처럼 필요한 것만 가져오고, 어려운 책은 핵심 낱말을 다른 사람에게 설명할 수 있을 때까지 읽으라고 했습니다. 저는 공문을 앞의 방법으로, 교과서를 뒤의 방법으로 읽어야 했던 것입니다.</p>
       </div>
     </div>
+
+    <div class="blk">
+      <p class="kw">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</p>
+      <div class="live" data-kind="w_purpose" data-max="300">
+        <div class="q">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</div>
+        <form>
+          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 바꾼 방법 -->
+<section class="step" id="s5" data-title="바꾼 순서">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>바꾼 공부 순서, 그 순서를 도구로</h2></div>
+    <p class="goal">제가 바꾼 공부 순서를 보여 드리고, 이 순서가 학생에게 권할 순서이자 독서 도구에 넣을 순서가 된다는 이야기를 드리겠습니다!</p>
+
 
     <div class="blk">
       <p class="kw">지금 제가 공부하는 순서</p>
@@ -762,17 +791,21 @@ a.src{text-decoration:underline;text-underline-offset:2px}
       </div>
     </div>
 
+
     <div class="blk">
-      <p class="kw">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</p>
-      <div class="live" data-kind="w_purpose" data-max="300">
-        <div class="q">공문을 읽을 때와 책을 읽을 때, 선생님은 읽는 방법이 어떻게 다르신가요?</div>
-        <form>
-          <input name="name" placeholder="이름 (비워도 됩니다)" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="짧게 한두 줄 적어주셔도 됩니닷!" maxlength="300"></textarea>
-          <button class="btn primary" type="submit">올리기</button>
-        </form>
-        <div class="st"></div>
-        <div class="wall"></div>
+      <p class="kw">같은 순서를 세 번 씁니다</p>
+      <p class="brief">제 공부 순서를 학생에게 권하는 순서로, 다시 읽기 노트의 기능으로 옮겼습니다.</p>
+      <div class="table-wrap"><table class="map-table">
+        <thead><tr><th>제 공부 순서</th><th>학생에게 권하는 순서 (⑦)</th><th>읽기 노트에 넣은 기능 (⑧)</th></tr></thead>
+        <tbody>
+          <tr><td>질문하며 읽기</td><td>먼저 읽으며 표시하고 질문 만들기</td><td>읽기 전 질문 칸</td></tr>
+          <tr><td>내 말로 정리</td><td>내 말로 쓰기</td><td>부분마다 내 말 요약</td></tr>
+          <tr><td>생각한 과정까지 텍스트로</td><td>어디서 막혔는지 적기</td><td>선생님 화면의 막힌 곳 보기</td></tr>
+          <tr><td>정리만 AI에게</td><td>AI에게 빠진 곳·반대 근거 묻기</td><td>요약 20자 뒤에야 열리는 되묻기 부탁문</td></tr>
+        </tbody>
+      </table></div>
+      <div class="detail">
+        <p>제가 5시간씩 헤매다 바꾼 순서는 결국 학생에게도 권하고 싶은 순서였고, 도구를 만들 때 지킨 조건이기도 했습니다. 뒤에서 보여 드릴 읽기 노트는 이 표의 오른쪽 칸을 그대로 옮긴 것이고, 실험실 도구들은 내 말로 쓰는 칸에 붙여넣기를 막아 두었습니다. 저는 도구를 만들 때마다 「학생이 먼저 무엇을 쓰게 할지, AI는 언제 열지」를 이 순서로 정합니다.</p>
       </div>
     </div>
   </div>
@@ -782,7 +815,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 <section class="step" id="s6" data-title="지금 독서가 필요한 까닭">
   <div class="wrap">
     <div class="step-h"><span class="num">6</span><h2>지금 독서가 더 필요한 까닭</h2></div>
-    <p class="goal">학생들이 AI를 쓰는 까닭부터 보고, AI가 무엇으로 배우는지와 제가 학생들에게 하려는 말, 우리 학생들의 읽기 숫자를 함께 보겠습니다!</p>
+    <p class="goal">학생들이 AI를 쓰는 까닭부터 보고, AI가 무엇으로 배우는지와 AI가 발달할수록 독서교육이 더 필요한 까닭, 우리 학생들의 읽기 숫자를 함께 보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">생각하기도 귀찮으니까</p>
@@ -809,8 +842,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
     </div>
 
     <div class="blk">
-      <p class="kw">독서 수업을 시작하기 전에 학생들에게 하려는 말</p>
-      <p class="brief">AI 시대에 왜 책을 읽어야 하는지, 저는 학생들에게 이렇게 말해 주려고 합니다.</p>
+      <p class="kw">AI가 발달할수록 우리가 독서교육의 길을 걸어야 하는 이유</p>
+      <p class="brief">AI가 똑똑해질수록 독서교육이 더 필요하다고 생각하는 까닭 세 가지입니다.</p>
       <div class="grid2">
         <div class="box"><b>AI도 사람의 지식으로 배웁니다</b><p>AI도 사람이 쌓은 지식을 배워서 새로운 결과를 냅니다. 사람도 바탕 지식을 쌓고, 그 지식들을 서로 잇는 힘을 길러야 합니다.</p></div>
         <div class="box"><b>글은 머릿속에서 그려야 합니다</b><p>영상은 장면을 다 보여 주지만, 글은 읽는 사람이 직접 그려야 합니다. 그렇게 상상하는 동안 생각이 자랍니다.</p></div>
@@ -818,7 +851,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
       </div>
       <figure class="toon"><img src="img/s6-imagine.webp" alt="한 학생은 화면 속 영상을 멍하니 보고, 옆의 학생은 책을 읽으며 머리 위로 이야기 장면을 떠올리는 장면"><figcaption>영상은 보여 주고, 글은 그리게 합니다.</figcaption></figure>
       <div class="detail">
-        <p>다음 학기에 읽기 자료로 수업을 시작하기 전에, 학생들에게 먼저 이 세 가지를 말해 주려고 합니다. 왜 읽어야 하는지 납득한 학생이 질문도 더 많이 던질 거라고 생각하기 때문입니다.</p>
+        <p>AI가 사람의 글로 배운다면, 사람이 글을 덜 읽고 덜 쓸수록 AI가 배울 글도, 그 글을 알아보는 사람도 줄어듭니다. 저는 그래서 AI가 발달할수록 독서교육의 길을 더 걸어야 한다고 생각합니다. 다음 학기 독서 수업을 시작하기 전에 학생들에게도 이 세 가지를 먼저 말해 주려고 합니다. 왜 읽어야 하는지 납득한 학생이 질문도 더 많이 던질 거라고 생각하기 때문입니다.</p>
       </div>
     </div>
 
@@ -925,7 +958,7 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 
     <div class="blk">
       <p class="kw">학생에게 권하는 순서</p>
-      <p class="brief">먼저 읽고 내 말로 쓴 다음, AI에게는 답 대신 질문과 반대 근거를 받습니다.</p>
+      <p class="brief">⑤에서 보신 제 공부 순서를 학생 쪽으로 옮겼습니다. 먼저 읽고 내 말로 쓴 다음, AI에게는 답 대신 질문과 반대 근거를 받습니다.</p>
       <div class="pipe" aria-label="학생에게 권하는 순서"><span class="n">먼저 읽으며 표시하기</span><span class="a">→</span><span class="n">내 말로 쓰고 질문 만들기</span><span class="a">→</span><span class="n">AI에게 빠진 곳·반대 근거 묻기</span><span class="a">→</span><span class="n hi">글로 돌아가 확인하기</span></div>
       <div class="grid2">
         <div class="box"><b>먼저 읽고, 물을 것을 정한 뒤</b><p>교과서를 먼저 읽고 모르는 곳을 표시한 다음, AI에게 물을 질문을 준비하라고 적었습니다.</p><a class="src" href="https://www.goe.go.kr/resource/old/BBSMSTR_000000000126/BBS_202502240135525801.pdf" target="_blank" rel="noopener">경기도교육청 학생용 생성형 AI 가이드라인, 2025 ↗</a></div>
@@ -1176,7 +1209,8 @@ a.src{text-decoration:underline;text-underline-offset:2px}
 
 <footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-08</span></footer>
 
-<div class="keys"><kbd>←</kbd><kbd>→</kbd> 장면 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 장면 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤 · <kbd>s</kbd> 한 장씩</div>
+<nav class="slide-nav" id="slideNav" aria-label="한 장씩 넘기기"><button class="btn" type="button" id="slPrev">← 이전</button><span class="cnt" id="slideCount"></span><button class="btn primary" type="button" id="slNext">다음 →</button></nav>
 <div class="follow-bar" id="followBar" hidden><span id="followMsg"></span><button id="followGo">그리로 가기</button></div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
@@ -1270,28 +1304,41 @@ function paintAll(){ details.forEach(d=>setFold(d, allOpen)); if(allBtn) allBtn.
 if(allBtn) allBtn.addEventListener('click', ()=>{ allOpen=!allOpen; ls.set(CONFIG.key+':open', allOpen); paintAll(); });
 paintAll();
 
-/* ── 현재 장면 (-1 = 표지) ── */
-let current = -2;
+/* ── 현재 장면 (-1 = 표지) · 한 장씩 보기(curBlk = 장면 안 몇 번째 블록) ── */
+let current = -2, curBlk = 0;
 const chipEls = [...chips.children];
-function applyView(){
-  const present = html.dataset.mode==='present';
-  html.classList.toggle('at-cover', present && current<0);
-  steps.forEach((s,j)=> s.classList.toggle('cur', j===current));
+const blocksOf = i => i<0 || !steps[i] ? [] : [...steps[i].querySelectorAll(':scope > .wrap > .blk')];
+const isSlide = () => html.classList.contains('slide');
+const paged = () => html.dataset.mode==='present' || isSlide();
+const slideCount = document.getElementById('slideCount');
+function paintBlocks(){
+  steps.forEach((s,j)=> blocksOf(j).forEach((b,k)=> b.classList.toggle('blk-cur', j===current && k===curBlk)));
+  html.classList.toggle('blk-first', curBlk===0);
+  const n = blocksOf(current).length;
+  slideCount.textContent = current<0 ? '표지' : `${current+1}. ${steps[current].dataset.title} · ${n ? curBlk+1 : 0} / ${n}`;
 }
-function setCurrent(i){
-  if(i===current) return;
-  current = i;
-  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', i>=0 && j<i); });
-  if(i>=0) chipEls[i].scrollIntoView({block:'nearest', inline:'nearest'});
+function applyView(){
+  html.classList.toggle('at-cover', paged() && current<0);
+  steps.forEach((s,j)=> s.classList.toggle('cur', j===current));
+  paintBlocks();
+}
+function setCurrent(i, b=0){
+  if(i===current && b===curBlk) return;
+  const stepChanged = i!==current;
+  current = i; curBlk = Math.max(0, b);
+  if(stepChanged){
+    chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', i>=0 && j<i); });
+    if(i>=0) chipEls[i].scrollIntoView({block:'nearest', inline:'nearest'});
+    updateTimerLabel();
+  }
   applyView();
-  updateTimerLabel();
   if(IS_HOST) hostSend();
 }
-// 상세 모드에서는 스크롤 위치로 현재 장면을 정한다. 발표 모드는 넘긴 장면이 곧 현재 장면.
+// 이어서 보기(상세)에서는 스크롤 위치로 현재 장면을 정한다. 발표·한 장씩 보기는 넘긴 곳이 곧 현재.
 const io = new IntersectionObserver(es=>{
-  if(html.dataset.mode==='present') return;
+  if(paged()) return;
   const vis = es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
-  if(vis.length) setCurrent(vis[0].target===hero ? -1 : steps.indexOf(vis[0].target));
+  if(vis.length){ const i = vis[0].target===hero ? -1 : steps.indexOf(vis[0].target); if(i!==current) setCurrent(i); }
 },{rootMargin:'-30% 0px -55% 0px', threshold:[0,.2,.5,1]});
 io.observe(hero); steps.forEach(s=>io.observe(s));
 
@@ -1315,46 +1362,88 @@ function toggleTimer(){
 tmT.addEventListener('click', toggleTimer);
 document.getElementById('tmReset').addEventListener('click', ()=>{ if(current>=0) elapsed[current]=0; updateTimerLabel(); });
 
-/* ── 장면 이동 · 키보드 ── */
-function go(i){
+/* ── 장면 이동 · 한 장씩 넘기기 · 키보드 ── */
+function go(i, b=0){
   i=Math.max(-1,Math.min(i,steps.length-1));
-  setCurrent(i);
-  if(html.dataset.mode==='present') window.scrollTo({top:0, behavior:'instant'});
+  const n=blocksOf(i).length;
+  if(b<0) b=n-1;
+  b=Math.max(0, Math.min(b, n-1));
+  setCurrent(i, b);
+  if(paged()) window.scrollTo({top:0, behavior:'instant'});
   else (i<0 ? hero : steps[i]).scrollIntoView({behavior:'instant', block:'start'});
 }
+function next(){
+  if(isSlide() && current>=0 && curBlk < blocksOf(current).length-1) go(current, curBlk+1);
+  else go(current+1, 0);
+}
+function prev(){
+  if(isSlide() && current>=0 && curBlk>0) go(current, curBlk-1);
+  else go(current-1, isSlide() ? -1 : 0);
+}
+document.getElementById('slNext').addEventListener('click', next);
+document.getElementById('slPrev').addEventListener('click', prev);
 modeBtn.addEventListener('click', ()=>{
   applyView();
-  if(html.dataset.mode==='present') window.scrollTo({top:0, behavior:'instant'});
+  if(paged()) window.scrollTo({top:0, behavior:'instant'});
   else if(current>=0) steps[current].scrollIntoView({behavior:'instant', block:'start'});
+});
+// 한 장씩 보기 ↔ 이어서 보기
+const viewBtn=document.getElementById('viewBtn');
+function nearestBlk(){
+  let k=0; blocksOf(current).forEach((b,j)=>{ if(b.getBoundingClientRect().top < innerHeight*0.45) k=j; });
+  return k;
+}
+function setView(v, save=true){
+  html.classList.toggle('slide', v==='slide');
+  viewBtn.textContent = v==='slide' ? '이어서 보기' : '한 장씩 보기';
+  viewBtn.classList.toggle('on', v==='slide');
+  if(save) ls.set(CONFIG.key+':view', v);
+}
+setView((params.get('view') || ls.get(CONFIG.key+':view','scroll'))==='slide' ? 'slide' : 'scroll', !!params.get('view'));
+viewBtn.addEventListener('click', ()=>{
+  const toSlide = !isSlide();
+  const b = toSlide && !html.dataset.mode.includes('present') ? nearestBlk() : 0;
+  setView(toSlide ? 'slide' : 'scroll');
+  if(toSlide){ curBlk=-1; go(current<0 ? -1 : current, b); }
+  else { applyView(); if(paged()) window.scrollTo({top:0, behavior:'instant'}); else if(current>=0){ const blk=blocksOf(current)[curBlk]; (blk||steps[current]).scrollIntoView({behavior:'instant', block:'start'}); } if(IS_HOST) hostSend(); }
 });
 document.addEventListener('keydown', e=>{
   const tg=e.target; if((tg&&tg.matches&&tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  const dlg=document.getElementById('pv'); if(dlg && dlg.open) return;
   if(e.key==='p'){ modeBtn.click(); return; }
-  if(html.dataset.mode!=='present') return;
-  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); go(current+1); }
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(current-1); }
+  if(e.key==='s'){ viewBtn.click(); return; }
+  if(!paged()) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); next(); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
   if(e.key==='t'){ toggleTimer(); }
   if(e.key==='c'){ html.classList.toggle('cue-on'); }
 });
 
-/* ── 따라오기: 진행 화면(?host=1)이 장면을 넘기면 다른 화면도 그 장면으로 ── */
+/* ── 따라오기: 진행 화면(?host=1)이 장면·장을 넘기면 다른 화면도 그리로 ── */
 let hostTimer=null, hostLast='';
 function hostSend(){
   if(!sbOn) return;
   clearTimeout(hostTimer);
   hostTimer=setTimeout(async ()=>{
-    const id = current<0 ? 'top' : steps[current].id;
+    const id = current<0 ? 'top' : steps[current].id + (isSlide() ? '#'+curBlk : '');
     if(id===hostLast) return;
     try{
       const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:sbHeaders(),body:JSON.stringify({s:CODE,kind:'follow',name:'host',body:id})});
       if(r.ok) hostLast=id;
     }catch(e){}
-  }, 700);
+  }, 500);
 }
 const followBtn=document.getElementById('followBtn'), followBar=document.getElementById('followBar'), followMsg=document.getElementById('followMsg');
 let followOn = ls.get(CONFIG.key+':follow', true), followLastId=null, followTarget=null;
 function paintFollow(){ followBtn.textContent = followOn ? '따라가기 켬' : '따라가기 끔'; followBtn.classList.toggle('on', followOn); }
 function typing(){ const a=document.activeElement; return !!(a && a.matches && a.matches('input,textarea') && a.value); }
+function followTo(i, b){
+  if(b==null || i<0){ if(i!==current || isSlide()) go(i, 0); return; }
+  if(isSlide()){ go(i, b); return; }
+  if(i!==current) go(i);
+  const blk=blocksOf(i)[b];
+  if(blk){ curBlk=b; blk.scrollIntoView({behavior:'instant', block:'start'}); }
+}
 async function followPoll(){
   if(document.hidden) return;
   try{
@@ -1363,14 +1452,16 @@ async function followPoll(){
     const [row]=await r.json(); if(!row) return;
     if(row.id===followLastId) return;
     followLastId=row.id;
-    const i = row.body==='top' ? -1 : steps.findIndex(s=>s.id===row.body);
-    if((i<0 && row.body!=='top') || !followOn) return;
-    if(i===current){ followBar.hidden=true; return; }
-    if(typing()){ followTarget=i; followMsg.textContent=`강사 화면이 「${i<0?'표지':steps[i].dataset.title}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
-    go(i);
+    const [sid, bs] = String(row.body).split('#');
+    const b = bs!=null && bs!=='' ? +bs : null;
+    const i = sid==='top' ? -1 : steps.findIndex(s=>s.id===sid);
+    if((i<0 && sid!=='top') || !followOn) return;
+    if(i===current && (b==null || b===curBlk)){ followBar.hidden=true; return; }
+    if(typing()){ followTarget=[i,b]; followMsg.textContent=`강사 화면이 「${i<0?'표지':steps[i].dataset.title}${b!=null?' '+(b+1)+'번째':''}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
+    followTo(i, b);
   }catch(e){}
 }
-document.getElementById('followGo').addEventListener('click', ()=>{ followBar.hidden=true; if(followTarget!=null) go(followTarget); });
+document.getElementById('followGo').addEventListener('click', ()=>{ followBar.hidden=true; if(followTarget) followTo(followTarget[0], followTarget[1]); });
 if(IS_HOST){
   document.getElementById('hostBadge').hidden=false;
 } else if(sbOn){
@@ -1567,7 +1658,7 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
   const h=location.hash.replace('#','');
   const i=steps.findIndex(s=>s.id===h);
   if(i>=0) go(i);
-  else if(html.dataset.mode==='present') go(-1);
+  else if(paged()) go(-1);
   else setCurrent(-1);
 })();
 </script>
