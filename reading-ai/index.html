@@ -264,6 +264,17 @@ html[data-mode="present"] .toon img{max-height:44vh}
 .quiz .answers .tm{color:var(--ink3);font-size:.85em;margin-left:6px}
 @media (max-width:760px){ .reel-row,.reel-row.one{grid-template-columns:1fr} .reel{max-width:400px} }
 @media print{ .reel-box{display:none} }
+
+/* ── v4: 가로로 꽉 차게 · 흐린 회색 글자 진하게(흰 바탕 대비 7:1 이상) ── */
+:root{ --ink2:#3f3f46; --ink3:#52525a; --warn:#7a5400; --wrap:none; }
+html[data-mode="present"]{ --wrap:none; }
+.wrap{padding-left:clamp(16px,3.5vw,56px);padding-right:clamp(16px,3.5vw,56px)}
+.detail,.brief,.hero .lead,.pipe{max-width:none}
+.frame iframe{aspect-ratio:auto;height:clamp(420px,56vw,78vh)}
+.toon img{max-height:520px}
+html[data-mode="present"] .toon img{max-height:52vh}
+footer#app-credit{color:var(--ink3)}
+footer#app-credit span{opacity:1!important}
 </style>
 </head>
 <body>
