@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>12. 원주각 · 칠판 강의</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+body.inking{touch-action:none}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:5}
+
+/* 면 색과 뜻 색 */
+.slide{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;color:var(--fg);background:var(--bg);word-break:keep-all;overflow-wrap:break-word}
+.f-w{--bg:#ffffff;--card:#f5f5f7}
+.f-g{--bg:#f5f5f7;--card:#ffffff}
+.f-w,.f-g{--fg:#1d1d1f;--sub:#6e6e73;--acc:#0066cc;--red:#C4391B;--ind:#3634A3;--o2:#1E8B3E;--co2:#636366;--nut:#9A7400;--waste:#8B5E3C;--neu:#d2d2d7;--dot:#8e8e93;--muscle:#f7ded4;--wall:#c7c7cc}
+.f-k{--bg:#000000;--card:rgba(255,255,255,.07)}
+.f-d{--bg:#1d1d1f;--card:rgba(255,255,255,.06)}
+.f-k,.f-d{--fg:#f5f5f7;--sub:#a1a1a6;--acc:#2997ff;--red:#FF6A3D;--ind:#8E8CFF;--o2:#30D158;--co2:#AEAEB2;--nut:#FFD60A;--waste:#C69C6D;--neu:#48484a;--dot:#aeaeb2;--muscle:#3d2b27;--wall:#636366}
+
+/* 글 */
+.tag{position:absolute;left:120px;top:78px;font-size:28px;font-weight:500;color:var(--sub)}
+.ttl{position:absolute;left:120px;top:116px;margin:0;font-size:64px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.card{position:absolute;background:var(--card);border-radius:18px;padding:30px 40px;font-size:38px;line-height:1.8;letter-spacing:-.01em}
+.card.mid{font-size:36px}
+.txt{position:absolute;font-size:34px;line-height:1.55;letter-spacing:-.01em}
+.sm{font-size:32px;line-height:1.6}
+.q{font-weight:600}
+.sub{color:var(--sub)}
+.acc{color:var(--acc);font-weight:700}
+.lab{display:block;font-size:28px;color:var(--sub);font-weight:600;margin-bottom:6px}
+.copy{position:absolute;left:120px;right:120px;top:1016px;font-size:24px;color:var(--sub)}
+
+/* 빈칸 */
+.bw{white-space:nowrap}
+.bl{position:relative;display:inline-block;min-width:2.6em;margin:0 .12em 0 .9em;padding:0 .3em;border-bottom:3px solid currentColor;line-height:1.25;text-align:center;white-space:nowrap}
+.bl .bn{position:absolute;left:-.84em;top:-.72em;width:38px;height:38px;border-radius:50%;background:var(--acc);color:#fff;font-style:normal;font-size:24px;font-weight:700;line-height:38px;text-align:center}
+.bl .ba{display:inline-block;color:var(--acc);font-weight:700;opacity:0;transform:scale(.55);transition:opacity .3s,transform .55s cubic-bezier(.3,1.7,.5,1)}
+.bl.on .ba{opacity:1;transform:none}
+
+/* 등장 */
+.fx{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.fx.vis{opacity:1;transform:none}
+.sfx{opacity:0;transition:opacity .6s var(--ease)}
+.sfx.vis{opacity:1}
+.inst,.inst *{transition:none!important}
+
+/* 칩·경로 줄·표 */
+.chips{position:absolute;display:flex;flex-wrap:wrap;gap:14px}
+.chip{display:inline-flex;align-items:center;gap:12px;padding:8px 24px;border-radius:999px;background:var(--card);font-size:30px;transition:background .4s,color .4s,opacity .4s}
+.chip i{width:20px;height:20px;border-radius:50%;display:inline-block}
+.chip.ok{background:var(--acc);color:#fff}
+.chip.no{opacity:.35}
+.opt{display:inline-block;padding:0 .35em;border-radius:12px;transition:background .4s,color .4s,opacity .4s}
+.opt.ok{background:var(--acc);color:#fff}
+.opt.no{opacity:.35}
+.pathl{position:absolute;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:32px;background:var(--card);border-radius:18px;padding:22px 32px}
+.pathl b{color:var(--acc);font-weight:700}
+.pathl span{color:var(--sub)}
+.pathl .pl{width:100%;font-size:28px;color:var(--sub);font-weight:600}
+.tbl{position:absolute;border-collapse:separate;border-spacing:10px;font-size:32px}
+.tbl th,.tbl td{background:var(--card);border-radius:14px;padding:18px 12px;text-align:center;line-height:1.35}
+.tbl thead th{background:none;color:var(--sub);font-weight:600;font-size:28px;padding:6px}
+.tbl tbody th{font-weight:700}
+.tbl .ans{color:var(--acc);font-weight:700}
+.tbl tr.gen td,.tbl tr.gen th{background:none;font-weight:700;font-size:34px;padding:8px}
+.cnt{position:absolute}
+.cnt .num{font-size:140px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--acc)}
+.sumc{position:absolute;top:250px;width:528px;height:640px;background:var(--card);border-radius:18px;padding:34px 36px;font-size:32px;line-height:1.6}
+.sumc h3{margin:0 0 18px;font-size:40px;font-weight:700;letter-spacing:-.02em}
+.sumc p{margin:0 0 16px}
+.cv{position:absolute;color:var(--fg)}
+.ctag{left:120px;top:300px;font-size:30px;color:var(--sub);font-weight:500}
+.ctitle{left:120px;top:350px;font-size:96px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.cq{left:120px;top:600px;font-size:40px;line-height:1.55;font-weight:500}
+.cnote{left:120px;top:800px;font-size:28px;color:var(--sub);line-height:1.6}
+
+/* 그림 */
+svg{position:absolute;overflow:visible}
+svg text{fill:var(--fg)}
+.olab{font-size:28px;font-weight:600;text-anchor:middle;fill:var(--sub)!important}
+.chlab{font-size:24px;font-weight:600;text-anchor:middle}
+.vlab{font-size:26px;font-weight:700}
+.tagx{font-size:24px;font-weight:600;fill:var(--sub)!important}
+.ves{fill:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.neu .ves{stroke:var(--neu)}
+.col [data-g="aorta"] .ves,.col [data-g="pv"] .ves{stroke:var(--red);stroke-opacity:.5}
+.col [data-g="vc"] .ves,.col [data-g="pa"] .ves{stroke:var(--ind);stroke-opacity:.5}
+.halo{fill:none;stroke:var(--bg);stroke-width:26}
+.muscle{fill:var(--muscle)}
+.ch{fill-opacity:.32}
+.neu .ch{fill:var(--neu)}
+.col .ch-r{fill:var(--ind)}
+.col .ch-l{fill:var(--red)}
+.bedbox{fill:var(--card)}
+.mesh{fill:none;stroke-width:3;stroke-linecap:round}
+.mesh.main{stroke-width:4}
+.neu .mesh{stroke:var(--neu)}
+.tp{fill:none;stroke:none}
+.trav{stroke:#fff;stroke-width:4}
+.f-w .trav,.f-g .trav{stroke:#1d1d1f}
+.chev{fill:none;stroke:var(--fg);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+.valve{fill:none;stroke:var(--fg);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+[data-g]{transition:opacity .5s var(--ease)}
+[data-g].dim{opacity:.13}
+/* 큰 심장 */
+.bves{fill:none;stroke:var(--neu);stroke-width:26;stroke-linecap:round;stroke-linejoin:round;transition:stroke .5s}
+.hv.hl .bves{stroke:var(--fg)}
+.hlab{font-size:34px;font-weight:600}
+.hlab2{font-size:30px;font-weight:700}
+.valves path{fill:none;stroke:var(--fg);stroke-width:5;stroke-linecap:round;transition:stroke-width .4s}
+.valves.hl path{stroke-width:9}
+.harr path,.varr path{fill:none;stroke:var(--fg);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.lead{fill:none;stroke:var(--sub);stroke-width:2}
+.person{fill:var(--neu)}
+.who text{font-size:28px;font-weight:600}
+/* 혈관 세 가지 */
+.wall{fill:none;stroke:var(--wall)}
+.lumen{fill:none;stroke:var(--bg)}
+.cap{fill:none;stroke:var(--wall);stroke-width:6;stroke-linecap:round}
+.cap.thin{stroke-width:3}
+.big{font-size:36px;font-weight:700}
+.vlab3{font-size:30px;font-weight:700}
+.chev2{fill:none;stroke:var(--dot);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+/* 확대 그림 */
+.cell{fill:var(--card);stroke:var(--wall);stroke-width:2}
+.air{fill:var(--card);stroke:var(--wall);stroke-width:2}
+.clab{font-size:26px;font-weight:600;fill:var(--sub)!important}
+.big2{font-size:30px;font-weight:600;fill:var(--sub)!important}
+.flowlab{font-size:24px;font-weight:600;fill:var(--sub)!important}
+/* 버스 */
+.road{fill:none;stroke:var(--neu);stroke-width:56;stroke-linejoin:round}
+.roadline{fill:none;stroke:var(--bg);stroke-width:4;stroke-dasharray:18 14}
+.stop rect{fill:var(--fg)}
+.stop text{fill:var(--bg)!important;font-size:24px;font-weight:700;text-anchor:middle}
+.busbody{fill:#3a3a3c}
+.win{fill:#f5f5f7}
+.lamp{fill:#FFD60A}
+.blab{font-size:28px;font-weight:600}
+.ppl circle{fill:var(--sub)}
+.ppl text{font-size:26px;font-weight:600}
+/* 정리 그림 */
+.bx{fill:var(--card)}
+.bxl{font-size:34px;font-weight:700;text-anchor:middle}
+.bxs{font-size:28px;font-weight:600;text-anchor:middle}
+.bxcap{font-size:26px;font-weight:600;text-anchor:middle;fill:var(--sub)!important}
+.ar{fill:none;stroke-width:8;stroke-linecap:round}
+.ar.r{stroke:var(--red)} .ar.i{stroke:var(--ind)}
+.blk text.v{font-size:28px;font-weight:700}
+.blk text.e{font-size:26px;font-weight:600}
+.blk text.ln{font-size:34px;font-weight:700}
+.road2{fill:none;stroke:var(--neu);stroke-width:30;stroke-linecap:round}
+.hbox{fill:var(--muscle)}
+
+/* 화면 도구 */
+.ui{font-family:inherit}
+#bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;padding:8px 10px;border-radius:999px;background:rgba(40,40,42,.84);color:#f5f5f7;opacity:0;transition:opacity .3s;z-index:20;pointer-events:none}
+#bar.show{opacity:1;pointer-events:auto}
+#bar button{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center}
+#bar button:hover{background:rgba(255,255,255,.14)}
+#bar .pg{font-size:18px;min-width:76px;text-align:center;font-variant-numeric:tabular-nums}
+#bar svg,#tbBtn svg{position:static;width:22px;height:22px;stroke:#f5f5f7;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#tb{position:fixed;right:18px;bottom:18px;z-index:30;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+#tbBtn{all:unset;cursor:pointer;width:58px;height:58px;border-radius:50%;background:rgba(60,60,64,.45);display:grid;place-items:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#tbBtn svg{width:26px;height:26px}
+#tbBtn.on{background:rgba(255,59,48,.78)}
+#tbPanel{display:none;flex-direction:column;gap:4px;padding:10px;border-radius:18px;background:rgba(30,30,32,.94);color:#f5f5f7;min-width:200px}
+#tb.open #tbPanel{display:flex}
+#tbPanel button{all:unset;cursor:pointer;padding:10px 14px;border-radius:12px;font-size:17px}
+#tbPanel button:hover{background:rgba(255,255,255,.1)}
+#tbPanel button.on{background:#2997ff;color:#fff}
+#tbPanel .row{display:flex;gap:4px}
+#tbPanel .row button{flex:1;text-align:center;padding:8px 4px;font-size:15px}
+#tbPanel .lb{font-size:13px;color:#a1a1a6;padding:6px 6px 0}
+#scr{position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;background:rgba(18,18,20,.95);color:#f5f5f7;padding:18px 28px 26px;font-size:20px;line-height:1.65;display:none;z-index:25}
+#scr.open{display:block}
+#scr .hd{font-size:15px;color:#a1a1a6;margin-bottom:6px}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;z-index:40;overflow:auto;padding:28px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;align-content:start}
+#ov.open{display:grid}
+.th{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;cursor:pointer;outline:3px solid transparent}
+.th.cur{outline-color:#2997ff}
+.th .slide{transform-origin:0 0}
+.th .no{position:absolute;left:8px;top:6px;z-index:2;background:rgba(0,0,0,.65);color:#fff;font-size:14px;padding:2px 8px;border-radius:8px}
+#help{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.7);z-index:45}
+#help.open{display:grid}
+#help .box{background:#1d1d1f;color:#f5f5f7;border-radius:18px;padding:26px 34px;font-size:17px;line-height:1.9;max-width:760px}
+#help b{display:inline-block;min-width:120px;color:#2997ff}
+#bw{position:fixed;inset:0;display:none;z-index:15}
+#bw.b{display:block;background:#000}
+#bw.w{display:block;background:#fff}
+body.stu .tonly{display:none!important}
+@media (prefers-reduced-motion: reduce){.fx,.sfx,.bl .ba{transition-duration:.01s!important}}
+/* ── 수학(원주각) ── */
+.f-w,.f-g{--ins:#1E8B3E;--cen:#C4391B;--arc:#8A3FC0;--jj:#9A7400}
+.f-k,.f-d{--ins:#30D158;--cen:#FF6A3D;--arc:#BF5AF2;--jj:#FFD60A}
+.csub{left:120px;top:585px;font-size:36px;color:var(--sub);font-weight:500}
+.cq{top:670px}
+.cnote{top:830px}
+.pbw{white-space:nowrap}
+.bl.pb{border-bottom:0;min-width:0;margin:0 .08em;padding:0;line-height:inherit}
+.bl.pb .ba{min-width:1.7em;padding:0 .25em;text-align:center}
+.bl.pb.hint .ph{position:absolute;left:0;right:0;top:0;text-align:center;color:var(--sub);font-weight:500;letter-spacing:.25em;pointer-events:none}
+.bl.pb.hint.on .ph{display:none}
+.mv{font-family:'Times New Roman',Times,serif;font-style:italic;font-size:1.1em}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;font-size:.64em;line-height:1.08;text-align:center;margin:0 .08em}
+.fr i{font-style:normal;padding:0 .18em}
+.fr i:first-child{border-bottom:.08em solid currentColor}
+.arcn{position:relative;display:inline-block;padding-top:.16em;line-height:1}
+.arcn::before{content:'';position:absolute;left:6%;right:6%;top:-.06em;height:.3em;border:.07em solid currentColor;border-bottom:0;border-radius:50% 50% 0 0/100% 100% 0 0}
+.proof{line-height:2.05}
+.fig .plab{font:600 34px 'Times New Roman',Times,serif;fill:var(--fg)}
+.fig .alab{font:italic 32px 'Times New Roman',Times,serif;fill:var(--fg)}
+.fig .alab .mv{font-size:1em}
+.fig .dotm{font:600 26px var(--body,sans-serif);fill:var(--fg)}
+.fig .nlab{font-size:28px;font-weight:600;fill:var(--fg)}
+.fig .klab{font-size:28px;font-weight:700}
+.fig .klab.ins{fill:var(--ins)} .fig .klab.cen{fill:var(--cen)}
+.fig .circ{fill:none;stroke:var(--fg);stroke-width:4}
+.fig .wall{fill:none;stroke:var(--neu);stroke-width:18}
+.fig .paint{fill:none;stroke:var(--arc);stroke-width:18;stroke-linecap:round}
+.fig .ln{stroke:var(--fg);stroke-width:4;stroke-linecap:round}
+.fig .ln2{stroke:var(--fg);stroke-width:3;stroke-opacity:.55;stroke-linecap:round}
+.fig .lnC{stroke:var(--cen);stroke-width:4;stroke-linecap:round}
+.fig .lnI{stroke:var(--ins);stroke-width:4;stroke-linecap:round}
+.fig .lnI2{stroke:var(--ins);stroke-width:3;stroke-opacity:.75;stroke-linecap:round}
+.fig .lnG{stroke:var(--sub);stroke-width:3;stroke-dasharray:10 8}
+.fig .aux{stroke:var(--sub);stroke-width:4;stroke-dasharray:12 9;stroke-linecap:round}
+.fig .wI{fill:var(--ins);fill-opacity:.3;stroke:var(--ins);stroke-width:2.5}
+.fig .wI2{fill:var(--ins);fill-opacity:.18;stroke:var(--ins);stroke-width:2}
+.fig .wJ{fill:var(--jj);fill-opacity:.3;stroke:var(--jj);stroke-width:2.5}
+.fig .wC{fill:var(--cen);fill-opacity:.26;stroke:var(--cen);stroke-width:2.5}
+.fig .arcH,.fig .arcH2{fill:none;stroke:var(--arc);stroke-width:8;stroke-linecap:round}
+.fig .pt{fill:var(--fg)} .fig .ptG{fill:var(--sub)}
+.fig .tk{stroke:var(--fg);stroke-width:3}
+.fig .rm{fill:none;stroke:var(--fg);stroke-width:3}
+.fig .cone{fill:var(--ins);fill-opacity:.13}
+.fig .cam{fill:var(--fg)}
+.fig .grab{fill:var(--ins);fill-opacity:.12;stroke:var(--ins);stroke-width:2;stroke-dasharray:6 6;cursor:grab;touch-action:none}
+.readout{position:absolute;display:flex;gap:30px;font-size:30px;font-weight:600;align-items:baseline}
+.readout b{font-size:42px;margin-left:8px;font-variant-numeric:tabular-nums}
+.readout .ins,.fig .ins{color:var(--ins)} .readout .cen{color:var(--cen)}
+.mtbl{position:absolute;border-collapse:separate;border-spacing:8px;font-size:30px}
+.mtbl th,.mtbl td{background:var(--card);border-radius:12px;padding:16px 10px;text-align:center}
+.mtbl thead th{background:none;color:var(--sub);font-size:26px;padding:4px}
+.mtbl .va{color:var(--acc);font-weight:700}
+.mtbl sub{font-size:.7em}
+.mtbl.why th{width:150px;font-size:30px}
+.mtbl.why td{text-align:left;line-height:1.95;padding:18px 26px}
+.kinds3{position:absolute;left:120px;top:800px;width:1680px;height:80px}
+.kinds3>span{position:absolute;top:0;width:400px;text-align:center;font-size:38px}
+.kinds3>span:nth-child(1){left:80px} .kinds3>span:nth-child(2){left:640px} .kinds3>span:nth-child(3){left:1200px}
+.q4{position:absolute;top:306px;font-size:30px;font-weight:700;color:var(--sub)}
+.a4{position:absolute;top:790px;font-size:34px;white-space:nowrap}
+.chain{position:absolute;display:flex;flex-direction:column;gap:12px}
+.chain>div{display:grid;grid-template-columns:1fr auto;gap:2px 16px;background:var(--card);border-radius:14px;padding:14px 24px;font-size:30px;align-items:center}
+.chain b{color:var(--acc)}
+.chain small{grid-column:1/-1;font-size:24px;color:var(--sub)}
+
+.fig .it{font-style:italic;font-family:'Times New Roman',Times,serif}
+.fig .nlab.ins{fill:var(--ins)} .fig .nlab.jj{fill:var(--jj)}
+
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="ink" width="1920" height="1080"></canvas></div>
+<div id="bw" class="ui"></div>
+<div id="bar" class="ui">
+  <button id="bPrev" title="이전 (←)"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <span class="pg" id="pg">1 / 1</span>
+  <button id="bNext" title="다음 (→)"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button id="bSnd" title="소리 (M)"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path id="sndWave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+  <button id="bScr" class="tonly" title="대본 (T)"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 10h14M5 15h9"/></svg></button>
+  <button id="bFs" title="전체 화면 (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+<div id="tb" class="ui">
+  <div id="tbPanel">
+    <button data-t="laser">레이저 (L)</button>
+    <button data-t="pen">빨간 펜 (P)</button>
+    <button data-a="undo">한 획 지우기 (Z)</button>
+    <button data-a="clear">모두 지우기 (C)</button>
+    <div class="lb">손가락으로 그리기</div>
+    <div class="row"><button data-f="auto">자동</button><button data-f="on">켬</button><button data-f="off">끔</button></div>
+    <button data-a="fs">전체 화면 (F)</button>
+  </div>
+  <button id="tbBtn" title="판서 도구"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></button>
+</div>
+<div id="scr" class="ui scroll tonly"></div>
+<div id="ov" class="ui scroll"></div>
+<div id="help" class="ui"><div class="box">
+  <b>→ Space Enter</b>다음 단계 · 화면 누르기 · 왼쪽으로 밀기<br>
+  <b>← Backspace</b>한 단계 전 · 오른쪽 클릭 · 오른쪽으로 밀기<br>
+  <b>F</b>전체 화면 &nbsp; <b>O</b>전체 장면 보기 &nbsp; <b>R</b>지금 단계 다시 보기<br>
+  <b>T</b>대본 열고 닫기 &nbsp; <b>M</b>소리 켜고 끄기<br>
+  <b>B / W</b>검은 화면 / 흰 화면 &nbsp; <b>Home / End</b>처음 / 끝<br>
+  <b>L / P</b>레이저 / 빨간 펜 &nbsp; <b>Z / C</b>한 획 지우기 / 모두 지우기 &nbsp; <b>Esc</b>끄기<br>
+  <b>H</b>이 도움말 닫기
+</div></div>
+<script>
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const STUDENT=new URLSearchParams(location.search).get('s')==='1';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(STUDENT)document.body.classList.add('stu');
+const stage=document.getElementById('stage'),ink=document.getElementById('ink'),ictx=ink.getContext('2d');
+let uid=0;
+const B=(n,a,j='')=>`<span class="bw"><span class="bl" data-n="${n}"><i class="bn">${n}</i><span class="ba">${a}</span></span>${j}</span>`;
+const cv=(cs,n)=>cs.getPropertyValue(n).trim();
+function hex(h){h=h.replace('#','');if(h.length===3)h=[...h].map(c=>c+c).join('');const v=parseInt(h,16);return[v>>16&255,v>>8&255,v&255]}
+function mix(a,b,u){const A=hex(a),C=hex(b);return`rgb(${A.map((x,i)=>Math.round(x+(C[i]-x)*u)).join(',')})`}
+const frac=x=>x-Math.floor(x);
+const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+const COPY='<div class="copy">수업 자료 원본: RYU MATH 「12. 원주각」 학습지·PPT · 칠판 강의 화면 시안 · 그림은 모두 코드로 그림</div>';
+
+/* ---------- 소리 ---------- */
+let AC=null,soundOn=!STUDENT,dingN=0;
+function ac(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
+function tone(f,dur,type,gain,delay,f2){const a=AC;if(!a||a.state!=='running')return;const t=a.currentTime+(delay||0);const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.05)}
+function snd(n){if(!soundOn)return;
+  if(n==='ding'){const s=[0,3,5,7,10][dingN++%5],f=880*Math.pow(2,s/12);tone(f,.5,'sine',.16);tone(f*2,.32,'sine',.05)}
+  else if(n==='tok')tone(620,.08,'triangle',.08);
+  else if(n==='chime')[660,880,1320].forEach((f,i)=>tone(f,.6,'sine',.1,i*.09));
+  else if(n==='beat'){tone(72,.16,'sine',.34,0,48);tone(66,.16,'sine',.26,.25,44)}
+  else if(n==='go')tone(420,.14,'triangle',.07,0,640)}
+
+/* ---------- 수학 그림 도우미 ---------- */
+const D2R = Math.PI / 180, f1 = v => (+v).toFixed(1);
+function circ(cx, cy, R){ return { cx, cy, R, O:[cx, cy], p:a => [cx + R * Math.cos(a * D2R), cy - R * Math.sin(a * D2R)] }; }
+const LN = (a, b, c) => `<line class="${c || 'ln'}" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/>`;
+const DOT = (p, c) => `<circle class="${c || 'pt'}" cx="${f1(p[0])}" cy="${f1(p[1])}" r="6"/>`;
+const TX = (p, t, c, dx, dy) => `<text class="${c || 'plab'}" x="${f1(p[0] + (dx || 0))}" y="${f1(p[1] + (dy || 0))}">${String(t).replace(/<i class="mv">/g, '<tspan class="it">').replace(/<\/i>/g, '</tspan>')}</text>`;
+const CIR = (c, cls) => `<circle class="${cls || 'circ'}" cx="${c.cx}" cy="${c.cy}" r="${c.R}"/>`;
+function outer(c, a, d){ return [c.cx + (c.R + d) * Math.cos(a * D2R), c.cy - (c.R + d) * Math.sin(a * D2R) + 12]; }
+function angOf(V, P){ return Math.atan2(-(P[1] - V[1]), P[0] - V[0]); }
+function wedge(V, P1, P2, r, cls, big){
+  const a1 = angOf(V, P1); let d = angOf(V, P2) - a1;
+  while(d <= -Math.PI) d += 2 * Math.PI; while(d > Math.PI) d -= 2 * Math.PI;
+  if(big) d = d > 0 ? d - 2 * Math.PI : d + 2 * Math.PI;
+  const s = [V[0] + r * Math.cos(a1), V[1] - r * Math.sin(a1)], e = [V[0] + r * Math.cos(a1 + d), V[1] - r * Math.sin(a1 + d)], m = a1 + d / 2;
+  return { svg:`<path class="${cls}" d="M${f1(V[0])},${f1(V[1])} L${f1(s[0])},${f1(s[1])} A${r},${r} 0 ${Math.abs(d) > Math.PI ? 1 : 0} ${d > 0 ? 0 : 1} ${f1(e[0])},${f1(e[1])} Z"/>`,
+    at:k => [V[0] + k * Math.cos(m), V[1] - k * Math.sin(m) + 11], deg:Math.abs(d) / D2R };
+}
+function arcP(c, a1, a2, cls){ const d = ((a2 - a1) % 360 + 360) % 360, s = c.p(a1), e = c.p(a1 + d);
+  return `<path class="${cls}" d="M${f1(s[0])},${f1(s[1])} A${c.R},${c.R} 0 ${d > 180 ? 1 : 0} 0 ${f1(e[0])},${f1(e[1])}"/>`; }
+function unitV(V, P){ const dx = P[0] - V[0], dy = P[1] - V[1], l = Math.hypot(dx, dy); return [dx / l, dy / l]; }
+function tick(a, b, n){ n = n || 1; const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], t = unitV(a, b), u = [-t[1], t[0]]; let s = '';
+  for(let i = 0; i < n; i++){ const o = (i - (n - 1) / 2) * 9, c = [m[0] + t[0] * o, m[1] + t[1] * o];
+    s += `<line class="tk" x1="${f1(c[0] - u[0] * 12)}" y1="${f1(c[1] - u[1] * 12)}" x2="${f1(c[0] + u[0] * 12)}" y2="${f1(c[1] + u[1] * 12)}"/>`; } return s; }
+function rmark(V, P1, P2, s){ s = s || 26; const u1 = unitV(V, P1), u2 = unitV(V, P2), a = [V[0] + u1[0] * s, V[1] + u1[1] * s], b = [a[0] + u2[0] * s, a[1] + u2[1] * s], c = [V[0] + u2[0] * s, V[1] + u2[1] * s];
+  return `<path class="rm" d="M${f1(a[0])},${f1(a[1])} L${f1(b[0])},${f1(b[1])} L${f1(c[0])},${f1(c[1])}"/>`; }
+const FIG = (inner, cls, x, y, w, h) => `<svg class="fig ${cls || ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" style="left:${x}px;top:${y}px">${inner}</svg>`;
+/* 수식 글자 */
+const V = s => `<i class="mv">${s}</i>`;
+const FR = (a, b) => `<span class="fr"><i>${a}</i><i>${b}</i></span>`;
+const HF = FR(1, 2);
+const ARC = s => `<span class="arcn">${s}</span>`;
+let BN = 0;   /* 장면 안 빈칸 차례 — html() 마다 0부터 */
+const PB = (a, hint) => `<span class="pbw"><span class="bl pb${hint ? ' hint' : ''}" data-n="${++BN}">(<span class="ba">${a}</span>${hint ? `<span class="ph">${hint}</span>` : ''})</span></span>`;
+const SET = html => { BN = 0; return html(); };
+
+/* 미술관 그림 — 탐구·표지·적용 문제에서 같이 쓴다 */
+const MUS = { a:150, b:30 };   /* 그림이 걸린 북쪽 벽 = 호 AB, 중심각 120° */
+function museum(c, opt){
+  opt = opt || {}; const A = c.p(opt.a || MUS.a), B = c.p(opt.b || MUS.b);
+  return `${CIR(c, 'wall')}
+  ${arcP(c, opt.b || MUS.b, opt.a || MUS.a, 'paint')}
+  <g data-k="cen" class="${opt.cenCls || ''}">${wedge(c.O, A, B, 70, 'wC').svg}${LN(c.O, A, 'lnC')}${LN(c.O, B, 'lnC')}</g>
+  <g data-k="dyn"></g>
+  ${DOT(c.O)}${TX(c.O, 'O', 'plab', -11, -20)}
+  ${TX(outer(c, opt.a || MUS.a, 34), 'A', 'plab', -12, 0)}${TX(outer(c, opt.b || MUS.b, 34), 'B', 'plab', -8, 0)}
+  ${opt.handle ? `<circle class="grab" data-k="grab" r="34" cx="0" cy="0"/>` : ''}`;
+}
+function museumP(r, theta, opt){
+  opt = opt || {}; const st = r._st, c = st.c, A = c.p(opt.a || MUS.a), B = c.p(opt.b || MUS.b), P = c.p(theta);
+  const w = wedge(P, A, B, 64, 'wI'), wc = wedge(c.O, A, B, 70, 'wC');
+  const cam = unitV(P, c.O), ang = Math.atan2(cam[1], cam[0]) / D2R;
+  r.querySelector('[data-k="dyn"]').innerHTML =
+    `<polygon class="cone" points="${f1(P[0])},${f1(P[1])} ${f1(A[0])},${f1(A[1])} ${f1(B[0])},${f1(B[1])}"/>
+     ${LN(P, A, 'lnI')}${LN(P, B, 'lnI')}${w.svg}
+     <g transform="translate(${f1(P[0])},${f1(P[1])}) rotate(${f1(ang)})"><rect class="cam" x="-20" y="-14" width="34" height="28" rx="6"/><rect class="cam" x="12" y="-8" width="12" height="16" rx="3"/></g>
+     ${TX(outer(c, theta, 40), 'P', 'plab', -10, 6)}`;
+  const g = r.querySelector('[data-k="grab"]'); if(g){ g.setAttribute('cx', f1(P[0])); g.setAttribute('cy', f1(P[1])); }
+  st.theta = theta; st.ins = w.deg; st.cen = wc.deg;
+  r.querySelectorAll('[data-k="ins"]').forEach(e => e.textContent = Math.round(w.deg) + '°');
+  r.querySelectorAll('[data-k="cenv"]').forEach(e => e.textContent = Math.round(wc.deg) + '°');
+}
+function museumInit(r, cx, cy, R, theta, opt){ r._st.c = circ(cx, cy, R); museumP(r, theta, opt); }
+function enableDrag(r, lo, hi){
+  const st = r._st, svg = r.querySelector('svg.fig'), g = r.querySelector('[data-k="grab"]'); if(!g) return;
+  let dragging = false;
+  const toAng = e => { const rc = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal, x = vb.x + (e.clientX - rc.left) * vb.width / rc.width, y = vb.y + (e.clientY - rc.top) * vb.height / rc.height;
+    let a = Math.atan2(-(y - st.c.cy), x - st.c.cx) / D2R; if(a < 0) a += 360; return Math.max(lo, Math.min(hi, a)); };
+  g.addEventListener('pointerdown', e => { if(INK.tool) return; dragging = true; sw = null; e.stopPropagation(); g.setPointerCapture(e.pointerId); st.dragged = true; });
+  g.addEventListener('pointermove', e => { if(!dragging) return; e.stopPropagation(); museumP(r, toAng(e)); });
+  const end = e => { if(!dragging) return; dragging = false; e.stopPropagation(); INK.swallow = true; setTimeout(() => INK.swallow = false, 450); };
+  g.addEventListener('pointerup', end); g.addEventListener('pointercancel', end);
+}
+function moveP(A, to, dur, done){ const r = A.r, from = r._st.theta; A.tw(dur, u => museumP(r, from + (to - from) * ease(u)), done); }
+
+/* 증명 그림(원 하나 · 점 셋) */
+function proofFig(c, P, A, B, opt){
+  opt = opt || {}; const pts = { P:c.p(P), A:c.p(A), B:c.p(B) };
+  return { pts, base:`${CIR(c)}${arcP(c, opt.arcFrom != null ? opt.arcFrom : A, opt.arcTo != null ? opt.arcTo : B, 'arcH')}
+    ${LN(pts.P, pts.A)}${LN(pts.P, pts.B)}${DOT(c.O)}${DOT(pts.P)}${DOT(pts.A)}${DOT(pts.B)}
+    ${TX(outer(c, P, 34), 'P', 'plab', -12, 0)}${TX(outer(c, A, 34), 'A', 'plab', -12, 0)}${TX(outer(c, B, 34), 'B', 'plab', -12, 0)}` };
+}
+
+/* 문제 그림 — 작은 원 */
+function mini(cx, cy, R){ return circ(cx, cy, R); }
+
+/* ---------- 장면 ---------- */
+const S = [
+{face:'k', cover:1, sound:'chime', title:'12. 원주각',
+ html:() => SET(() => `<div class="cv ctag fx in">중3 수학 · 원의 성질 · 12. 원주각</div>
+ <div class="cv ctitle fx in">미술관의<br>사각지대를 없애라</div>
+ <div class="cv csub fx in">위치와 각도의 비밀</div>
+ <div class="cv cq fx in">보는 위치가 달라져도<br>각도의 규칙은 변하지 않을까?</div>
+ <div class="cv cnote fx in">괄호가 열리면 학습지의 같은 괄호에 적어요.${STUDENT ? '<br>화면을 누르거나 → 키로 넘겨요.' : ''}</div>
+ ${FIG(museum(circ(1400, 580, 300)), 'fx in', 1000, 200, 800, 760)}`),
+ init:r => museumInit(r, 1400, 580, 300, 270),
+ loop:(t, r) => museumP(r, 270 + 52 * Math.sin(t / 1700)), steps:[],
+ say:'오늘은 원 모양 미술관에서 CCTV를 어디에 달아야 그림을 빠짐없이 비출 수 있는지 알아봐요. 카메라가 벽을 따라 움직일 때 그림을 비추는 각도가 어떻게 되는지 잘 보세요.'},
+
+{face:'g', tag:'상황과 나의 예상', title:'카메라를 옮기면 시야각은?',
+ html:() => SET(() => `<div class="card mid fx in" style="left:120px;top:250px;width:820px"><b>[상황]</b> 완벽한 원형 구조의 미술관 북쪽 벽(호 AB)에 명작이 전시되어 있다. 정중앙(O)에는 경비원 초소가 있고, 남쪽 벽면을 따라 CCTV 카메라(P)를 설치하여 그림을 감시하려고 한다.</div>
+ <div class="txt q fx in" style="left:120px;top:640px;width:840px">[나의 예상] 카메라 P의 위치를 벽을 따라 왼쪽이나 오른쪽으로 옮기면, 그림을 비추는 시야각은?</div>
+ <div class="chips fx in" style="left:120px;top:800px"><span class="chip">좁아질 것이다</span><span class="chip">넓어질 것이다</span><span class="chip">변함없을 것이다</span></div>
+ ${FIG(museum(circ(1400, 590, 300)) + `<g class="sfx s1" data-k="ghost"></g>`, 'fx in', 1000, 210, 800, 760)}`),
+ init:r => { museumInit(r, 1400, 590, 300, 270); const c = r._st.c, A = c.p(MUS.a), B = c.p(MUS.b);
+   r.querySelector('[data-k="ghost"]').innerHTML = [222, 318].map(a => { const P = c.p(a); return LN(P, A, 'lnG') + LN(P, B, 'lnG') + DOT(P, 'ptG'); }).join(''); },
+ steps:[A => A.show('.s1')],
+ say:'상황을 같이 읽어 볼게요. 카메라를 왼쪽이나 오른쪽으로 옮기면 그림을 비추는 각도가 좁아질까요, 넓어질까요, 그대로일까요? 학습지에 내 예상을 골라 표시해 보세요.'},
+
+{face:'d', tag:'탐구', title:'카메라를 옮기며 시야각 재기',
+ html:() => SET(() => `<table class="mtbl fx in" style="left:120px;top:260px;width:820px">
+  <thead><tr><th>측정 횟수</th><th>카메라 위치</th><th>중앙 경비원 시야각</th><th>CCTV 시야각</th></tr></thead>
+  <tbody>${[1, 2, 3, 4].map(i => `<tr><td>${i}회차</td><td><span class="sfx r${i}">P<sub>${i}</sub></span></td><td><span class="sfx r${i} va" data-k="c${i}"></span></td><td><span class="sfx r${i} va" data-k="i${i}"></span></td></tr>`).join('')}</tbody></table>
+  <div class="txt sm sub fx in" style="left:120px;top:680px;width:820px">수업에서는 알지오매스로 쟀던 값을 여기서는 점 P를 옮기며 바로 잽니다. 각도는 그림의 좌표로 계산한 값이에요.</div>
+  <div class="txt sm fx d5" style="left:120px;top:800px;width:820px">점 P를 손가락이나 마우스로 끌어 직접 옮겨 볼 수 있어요.</div>
+  <div class="readout fx in" style="left:1010px;top:240px"><span>경비원 시야각 <b class="cen" data-k="cenv"></b></span><span>CCTV 시야각 <b class="ins" data-k="ins"></b></span></div>
+  ${FIG(museum(circ(1420, 610, 290), { handle:1 }), 'fx in', 1000, 300, 800, 660)}`),
+ init:r => { museumInit(r, 1420, 610, 290, 270); enableDrag(r, 200, 340); },
+ steps:[1, 2, 3, 4].map((i, k) => A => { const to = [236, 262, 292, 320][k];
+   moveP(A, to, 1300, () => { A.text(`[data-k="c${i}"]`, Math.round(A.st.cen) + '°'); A.text(`[data-k="i${i}"]`, Math.round(A.st.ins) + '°'); A.show('.r' + i); A.sound('tok'); }); })
+   .concat([A => A.show('.d5')]),
+ say:'카메라를 네 군데로 옮기면서 시야각을 재 볼게요. 경비원 시야각은 그대로 120°이고, CCTV 시야각은 어디로 옮겨도 60°가 나와요. 끝나면 점 P를 직접 끌어서 다른 자리에서도 확인해 볼 수 있어요.'},
+
+{face:'w', tag:'분석과 규칙 발견', title:'측정값에서 찾은 규칙',
+ html:() => SET(() => `<div class="card fx in" style="left:120px;top:250px;width:860px">1. 호 AB를 비추는 CCTV의 시야각(원주각)은 위치가 변해도 항상 ${PB('같다')}.<br><br>2. CCTV의 시야각(원주각)은 중앙 경비원의 시야각(중심각) 크기의 ${PB(HF)}이다.<br><br>3. 결론: ∠APB = ${PB(HF)} × ∠AOB</div>
+ ${(() => { const c = circ(1420, 600, 270), f = proofFig(c, 270, 145, 35); const w = wedge(f.pts.P, f.pts.A, f.pts.B, 60, 'wI'), wc = wedge(c.O, f.pts.A, f.pts.B, 58, 'wC');
+   return FIG(f.base + LN(c.O, f.pts.A, 'lnC') + LN(c.O, f.pts.B, 'lnC') + w.svg + wc.svg + TX(c.O, 'O', 'plab', 14, 40) +
+     TX(f.pts.P, '원주각', 'klab ins', 62, -74) + TX(c.O, '중심각', 'klab cen', -100, 44), 'fx in', 1080, 250, 700, 700); })()}`),
+ steps:[A => A.open(1, 200), A => A.open(2, 200), A => A.open(3, 200)],
+ say:'표에서 무엇을 찾았나요? CCTV 시야각은 위치가 바뀌어도 항상 같았고, 경비원 시야각의 절반이었어요. 이 CCTV 시야각처럼 원 위의 점에서 호의 양 끝을 바라본 각이 원주각, 중심에서 바라본 각이 중심각이에요.'},
+
+{face:'g', tag:'정당화', title:'측정이 아니라 증명으로',
+ html:() => SET(() => `<div class="card sm fx in" style="left:120px;top:250px;width:860px"><b>□ 미션</b> 기계의 측정값은 오차가 있을 수 있습니다. 2학년 때 배운 도형의 성질을 이용해, 이 규칙이 100% 참임을 증명해 봅시다.</div>
+ <div class="card sm fx in" style="left:120px;top:470px;width:860px"><b>□ 조건</b> 원의 중심 O가 CCTV 시야각(∠APB)의 한 변 위에 있는 가장 단순한 상황입니다. (보조선 긋기)</div>
+ <div class="txt sm fx g1" style="left:120px;top:700px;width:860px">보조선 OB를 그으면 삼각형 OBP가 생겨요. 두 변 OP, OB는 모두 반지름이에요.</div>
+ ${(() => { const c = circ(1420, 600, 270), f = proofFig(c, 60, 240, 330, { arcFrom:240, arcTo:330 });
+   return FIG(f.base + `<g class="sfx g1">${LN(c.O, f.pts.B, 'aux')}${tick(c.O, f.pts.P)}${tick(c.O, f.pts.B)}</g>` + TX(c.O, 'O', 'plab', -40, -8), 'fx in', 1080, 250, 700, 700); })()}`),
+ steps:[A => A.show('.g1')],
+ say:'측정은 오차가 있을 수 있으니, 2학년 때 배운 이등변삼각형의 성질로 증명해 봐요. 가장 쉬운 경우는 중심 O가 각의 한 변 위에 있을 때예요. 보조선 OB를 그으면 OP와 OB가 둘 다 반지름이라는 게 보이죠?'},
+
+{face:'w', tag:'개념', title:'원주각과 중심각',
+ html:() => SET(() => `<div class="card mid fx in" style="left:120px;top:250px;width:880px">원 O에서 ${PB(ARC('AB'))} 위에 있지 않은 점 P에 대하여<br>① ∠APB를 ${PB(ARC('AB'))}에 대한 ${PB('원주각')}이라 하고,<br>② ${ARC('AB')}를 원주각 ∠APB에 대한 ${PB('호')}라고 한다.<br>③ ${ARC('AB')}에 대한 중심각은 ${PB('하나로')} 정해지지만 원주각은 점 P의 위치에 따라 ${PB('무수히 많다')}.</div>
+ ${(() => { const c = circ(1440, 600, 270), f = proofFig(c, 100, 215, 325); const w = wedge(f.pts.P, f.pts.A, f.pts.B, 58, 'wI'), wc = wedge(c.O, f.pts.A, f.pts.B, 56, 'wC');
+   const more = [140, 60, 170].map(a => { const Q = c.p(a); return LN(Q, f.pts.A, 'lnI2') + LN(Q, f.pts.B, 'lnI2') + wedge(Q, f.pts.A, f.pts.B, 44, 'wI2').svg + DOT(Q, 'ptG'); }).join('');
+   return FIG(f.base + LN(c.O, f.pts.A, 'lnC') + LN(c.O, f.pts.B, 'lnC') + w.svg + wc.svg + TX(c.O, 'O', 'plab', -11, 98) + `<g class="sfx m4">${more}</g>`, 'fx in', 1080, 250, 700, 700); })()}`),
+ steps:[A => A.open(1, 150), A => { A.open(2, 150); A.open(3, 450); }, A => A.open(4, 150), A => { A.open(5, 150); A.open(6, 450); A.show('.m4'); }],
+ say:'이름을 정리할게요. 호 AB 위에 있지 않은 점 P에서 만든 각 APB를 호 AB에 대한 원주각이라고 해요. 중심각은 하나뿐이지만, 원주각은 점 P를 어디에 두느냐에 따라 얼마든지 만들 수 있어요.'},
+
+{face:'d', tag:'원주각의 종류', title:'중심 O는 어디에 있을까?',
+ html:() => SET(() => { const mk = (x, P, A, B, cls) => { const c = circ(x, 560, 180), f = proofFig(c, P, A, B);
+     return f.base + LN(c.O, f.pts.A, 'lnC') + LN(c.O, f.pts.B, 'lnC') + wedge(f.pts.P, f.pts.A, f.pts.B, 44, 'wI').svg + wedge(c.O, f.pts.A, f.pts.B, 40, 'wC').svg + TX(c.O, 'O', 'plab', -38, -8); };
+   return FIG(mk(400, 95, 215, 325) + mk(960, 35, 215, 325) + mk(1520, 15, 215, 290), 'fx in', 120, 300, 1680, 480) +
+   `<div class="kinds3"><span class="fx k1">${PB('내부')}</span><span class="fx k2">${PB('한 변 위')}</span><span class="fx k3">${PB('외부')}</span></div>
+   <div class="txt sm sub fx in" style="left:120px;top:250px;width:1680px">원의 중심 O가 원주각 ∠APB의 어디에 놓이는지에 따라 세 가지로 나눠요.</div>`; }),
+ steps:[A => { A.show('.k1'); A.open(1, 200); }, A => { A.show('.k2'); A.open(2, 200); }, A => { A.show('.k3'); A.open(3, 200); }],
+ say:'점 P의 위치에 따라 중심 O가 각의 안쪽에 있을 때, 한 변 위에 있을 때, 바깥에 있을 때가 생겨요. 세 경우를 모두 증명해야 규칙이 언제나 맞다고 말할 수 있어요.'},
+
+{face:'w', tag:'이유 1 (내부)', title:'중심이 각의 내부에 있을 때',
+ html:() => SET(() => `<div class="card mid proof fx in" style="left:120px;top:240px;width:900px">
+  원 O의 지름 PQ를 그으면<br>
+  △OPA, △OPB는 ${PB('이등변삼각형')}<br>
+  ∠OPA = ∠OAP = ${PB(V('x'))}<br>
+  ∠OPB = ∠OBP = ${PB(V('y'))} 라고 하면, ∠APB = ${PB(V('x') + ' + ' + V('y'))}<br>
+  이때 ∠AOQ = ${PB('2' + V('x'))}, ∠BOQ = ${PB('2' + V('y'))}이므로<br>
+  ∠AOB = ${PB('2' + V('x') + ' + 2' + V('y'))} = ${PB('2(' + V('x') + ' + ' + V('y') + ')')} = 2∠APB<br>
+  <span class="fx e8">이다. 따라서 ∠APB = ${HF}∠AOB이다.</span></div>
+ ${(() => { const c = circ(1450, 590, 280), f = proofFig(c, 100, 215, 325), P = f.pts.P, A = f.pts.A, B = f.pts.B, O = c.O, Q = c.p(280);
+   const wx = wedge(P, A, Q, 70, 'wI'), wy = wedge(P, Q, B, 56, 'wJ'), ax = wedge(A, P, O, 60, 'wI'), by = wedge(B, P, O, 60, 'wJ');
+   const o2x = wedge(O, A, Q, 52, 'wI'), o2y = wedge(O, Q, B, 40, 'wJ');
+   return FIG(f.base + `<g class="sfx e1">${LN(P, Q, 'aux')}${DOT(Q)}${TX(outer(c, 280, 34), 'Q', 'plab', -12, 0)}</g>
+    <g class="sfx e2">${LN(O, A, 'ln2')}${LN(O, B, 'ln2')}${tick(O, P)}${tick(O, A)}${tick(O, B)}</g>
+    <g class="sfx e3">${wx.svg}${ax.svg}${TX(wx.at(98), V('x'), 'alab', -8)}${TX(ax.at(92), V('x'), 'alab', -8)}</g>
+    <g class="sfx e4">${wy.svg}${by.svg}${TX(wy.at(150), V('y'), 'alab', 4)}${TX(B, V('y'), 'alab', -72, 12)}</g>
+    <g class="sfx e6">${o2x.svg}${o2y.svg}${TX(o2x.at(82), '2' + V('x'), 'alab', -18)}${TX(o2y.at(74), '2' + V('y'), 'alab', -18)}</g>` + TX(O, 'O', 'plab', 16, -16), 'fx in', 1100, 240, 700, 720); })()}`),
+ steps:[A => A.show('.e1'), A => { A.show('.e2'); A.open(1, 200); }, A => { A.show('.e3'); A.open(2, 200); }, A => { A.show('.e4'); A.open(3, 200); A.open(4, 600); },
+   A => { A.show('.e6'); A.open(5, 200); A.open(6, 500); }, A => { A.open(7, 200); A.open(8, 500); }, A => A.show('.e8')],
+ say:'지름 PQ를 그으면 삼각형 OPA와 OPB가 생기는데, 두 변이 반지름이라 이등변삼각형이에요. 밑각을 x, y라고 두면 각 AOQ는 삼각형 OPA의 바깥각이라 2x, 각 BOQ는 2y예요. 그래서 중심각은 2(x+y), 원주각의 두 배가 돼요.'},
+
+{face:'g', tag:'이유 2 (한 변 위)', title:'중심이 한 변 위에 있을 때',
+ html:() => SET(() => `<div class="card mid proof fx in" style="left:120px;top:250px;width:880px">
+  △OBP는 ${PB('이등변삼각형')}이므로<br>
+  ∠APB = ${PB('∠OBP')}<br>
+  또 △OBP에서<br>
+  ∠AOB = ${PB('∠APB')} + ${PB('∠OBP')}<br>
+  <span style="padding-left:3.3em">=</span> 2${PB('∠APB')}<br>
+  <span class="fx f6">따라서 ∠APB = ${HF}∠AOB이다.</span></div>
+ ${(() => { const c = circ(1450, 600, 270), f = proofFig(c, 60, 240, 330, { arcFrom:240, arcTo:330 }), P = f.pts.P, A = f.pts.A, B = f.pts.B, O = c.O;
+   const wp = wedge(P, A, B, 74, 'wI'), wb = wedge(B, P, O, 64, 'wI'), wo = wedge(O, A, B, 50, 'wC');
+   return FIG(f.base + LN(O, B, 'aux') + tick(O, P) + tick(O, B) + `<g class="sfx f2">${wp.svg}${wb.svg}${TX(wp.at(104), '●', 'alab dotm')}${TX(wb.at(96), '●', 'alab dotm')}</g>
+    <g class="sfx f4">${wo.svg}${TX(wo.at(86), '●●', 'alab dotm', -14)}</g>` + TX(O, 'O', 'plab', -40, -8), 'fx in', 1100, 250, 700, 700); })()}`),
+ steps:[A => A.open(1, 200), A => { A.show('.f2'); A.open(2, 200); }, A => { A.show('.f4'); A.open(3, 200); A.open(4, 500); }, A => A.open(5, 200), A => A.show('.f6')],
+ say:'이번에는 중심 O가 변 PA 위에 있어요. OP와 OB가 반지름이라 삼각형 OBP는 이등변삼각형이고, 두 밑각이 같아요. 각 AOB는 삼각형 OBP의 바깥각이니 두 밑각의 합, 즉 원주각의 두 배예요.'},
+
+{face:'w', tag:'이유 3 (외부)', title:'중심이 각의 외부에 있을 때',
+ html:() => SET(() => `<div class="card mid proof fx in" style="left:120px;top:250px;width:900px">
+  오른쪽 그림과 같이 원 O의 지름 PQ를 그으면<br>
+  ∠QPB = ${HF}${PB('∠QOB')}, ∠QPA = ${HF}${PB('∠QOA')}<br>
+  이므로 ∠APB = ∠QPB − ${PB('∠QPA')}<br>
+  <span style="padding-left:5.6em">=</span> ${HF}${PB('∠QOB')} − ${HF}${PB('∠QOA')}<br>
+  <span style="padding-left:5.6em">=</span> ${HF}${PB('∠AOB')}<br>
+  <span class="fx h5">따라서 ∠APB = ${HF}∠AOB이다.</span></div>
+ <div class="txt sm sub fx h2" style="left:120px;top:810px;width:900px">∠QPB와 ∠QPA는 중심이 한 변(PQ) 위에 있는 원주각이라 이유 2를 그대로 써요.</div>
+ ${(() => { const c = circ(1450, 600, 270), f = proofFig(c, 15, 225, 280), P = f.pts.P, A = f.pts.A, B = f.pts.B, O = c.O, Q = c.p(195);
+   return FIG(f.base + `<g class="sfx h1">${LN(P, Q, 'aux')}${DOT(Q)}${TX(outer(c, 195, 34), 'Q', 'plab', -12, 0)}</g>
+    <g class="sfx h2">${LN(O, A, 'ln2')}${LN(O, B, 'ln2')}${wedge(P, Q, B, 120, 'wJ').svg}${wedge(P, Q, A, 96, 'wI').svg}</g>
+    <g class="sfx h4">${wedge(O, A, B, 60, 'wC').svg}</g>` + TX(O, 'O', 'plab', 0, -20), 'fx in', 1100, 250, 700, 700); })()}`),
+ steps:[A => A.show('.h1'), A => { A.show('.h2'); A.open(1, 200); A.open(2, 500); }, A => A.open(3, 200), A => { A.show('.h4'); A.open(4, 150); A.open(5, 400); A.open(6, 700); }, A => A.show('.h5')],
+ say:'중심이 각의 바깥에 있을 때도 지름 PQ를 그어요. 그러면 각 QPB와 각 QPA는 이유 2의 경우가 되니까 각각 중심각의 절반이에요. 큰 각에서 작은 각을 빼면 원주각 APB도 중심각 AOB의 절반이 돼요.'},
+
+{face:'d', tag:'결론', title:'세 경우 모두 같은 규칙',
+ html:() => SET(() => `<div class="card fx in" style="left:120px;top:260px;width:860px">이유 1, 2, 3에 의해 원에서 한 호에 대한 ${PB('원주각')}의 크기는 모두 ${PB('같고')}, 그 호에 대한 중심각의 크기의 ${PB(HF)}이다.</div>
+ <div class="readout fx in" style="left:1030px;top:240px"><span>중심각 <b class="cen" data-k="cenv"></b></span><span>원주각 <b class="ins" data-k="ins"></b></span></div>
+ ${FIG(museum(circ(1420, 610, 290)), 'fx in', 1000, 300, 800, 660)}`),
+ init:r => museumInit(r, 1420, 610, 290, 270), loop:(t, r) => museumP(r, 270 + 62 * Math.sin(t / 1500)),
+ steps:[A => A.open(1, 150), A => A.open(2, 150), A => A.open(3, 150)],
+ say:'세 경우를 모두 증명했으니 이제 말할 수 있어요. 한 호에 대한 원주각의 크기는 점 P가 어디에 있든 모두 같고, 중심각의 절반이에요.'},
+
+{face:'w', tag:'적용 문제', title:'CCTV 시야각을 몇 도로?',
+ html:() => SET(() => `<div class="card mid fx in" style="left:120px;top:250px;width:860px">위 원형 미술관에서 중앙 경비원의 시야각(중심각)이 130°일 때, 벽면에 설치된 CCTV의 시야각(원주각)은 몇 도로 설정해야 하는가?</div>
+ <div class="card fx in" style="left:120px;top:560px;width:860px">CCTV 시야각 = ${HF} × 130° = ${PB('65°')}</div>
+ <div class="readout fx in" style="left:1030px;top:240px"><span>중심각 <b class="cen" data-k="cenv"></b></span><span>원주각 <b class="ins" data-k="ins"></b></span></div>
+ ${FIG(museum(circ(1420, 610, 290), { a:155, b:25 }), 'fx in', 1000, 300, 800, 660)}`),
+ init:r => { r._st.c = circ(1420, 610, 290); museumP(r, 270, { a:155, b:25 }); },
+ steps:[A => { A.open(1, 200); moveP2(A); }],
+ say:'중심각이 130°라면 원주각은 그 절반인 65°예요. 카메라 시야각을 65°로 맞추면 남쪽 벽 어디에 달아도 그림 전체를 비출 수 있어요.'},
+
+{face:'g', tag:'더 알아보기', title:'중심각이 180°보다 크거나 같을 때?',
+ html:() => SET(() => `<div class="card mid proof fx in" style="left:120px;top:250px;width:880px">
+  ${ARC('AB')}에 대한 중심각의 크기가 180°보다 크거나 같을 때도 오른쪽 그림과 같이 원 O의 지름 PQ를 그으면<br>
+  ∠APQ = ${PB(HF + '∠AOQ')}, ∠BPQ = ${PB(HF + '∠BOQ')}<br>
+  이므로 ∠APB = ∠APQ + ∠BPQ<br>
+  <span style="padding-left:5.6em">=</span> ${PB(HF + '(∠AOQ + ∠BOQ)')}<br>
+  <span style="padding-left:5.6em">=</span> ${HF}∠AOB</div>
+ ${(() => { const c = circ(1450, 600, 260), P = c.p(90), A = c.p(160), B = c.p(20), Q = c.p(270), O = c.O;
+   return FIG(`${CIR(c)}${arcP(c, 160, 20, 'arcH')}${LN(P, A)}${LN(P, B)}${LN(P, Q, 'aux')}${LN(O, A, 'ln2')}${LN(O, B, 'ln2')}
+    ${wedge(O, A, B, 46, 'wC', true).svg}${wedge(P, A, B, 52, 'wI').svg}
+    ${DOT(O)}${DOT(P)}${DOT(A)}${DOT(B)}${DOT(Q)}${TX(outer(c, 90, 34), 'P', 'plab', -12, 0)}${TX(outer(c, 160, 34), 'A', 'plab', -12, 0)}${TX(outer(c, 20, 34), 'B', 'plab', -12, 0)}${TX(outer(c, 270, 34), 'Q', 'plab', -12, 0)}${TX(O, 'O', 'plab', -40, -26)}`, 'fx in', 1100, 250, 700, 700); })()}`),
+ steps:[A => { A.open(1, 150); A.open(2, 450); }, A => A.open(3, 150)],
+ say:'중심각이 180°를 넘어도 같은 방법이 통해요. 지름 PQ로 나누면 두 부분이 각각 이유 2의 경우가 되니까, 더하면 중심각의 절반이에요.'},
+
+{face:'w', tag:'더 알아보기', title:'호 AB가 반원일 때?',
+ html:() => SET(() => `<div class="card mid fx in" style="left:120px;top:250px;width:860px">오른쪽 그림과 같이 원 O에서 ${ARC('AB')}가 반원일 때, 중심각 ∠AOB의 크기는 ${PB('180°')}이므로 반원에 대한 원주각 ∠APB의 크기는 ${PB('90°')}임을 알 수 있다.</div>
+ <div class="txt sm sub fx a3" style="left:120px;top:600px;width:860px">P를 반원 위 어디로 옮겨도 ∠APB는 직각이에요.</div>
+ ${FIG(`<g data-k="semi"></g>`, 'fx in', 1100, 250, 700, 700)}`),
+ init:r => semiSet(r, 60), loop:(t, r) => { if(r._st.go) semiSet(r, 90 + 55 * Math.sin(t / 1600)); },
+ steps:[A => A.open(1, 150), A => { A.open(2, 150); A.st.go = true; A.show('.a3'); }],
+ say:'호 AB가 반원이면 AB는 지름이고 중심각은 180°예요. 그러니까 원주각은 90°, 반원에 대한 원주각은 언제나 직각이에요.'},
+
+{face:'d', tag:'문제 1', title:'∠x의 크기를 구하시오',
+ html:() => SET(() => {
+   const g = [];
+   { const c = mini(330, 520, 150), P = c.p(95), A = c.p(220), B = c.p(320), O = c.O, wc = wedge(O, A, B, 34, 'wC'), wi = wedge(P, A, B, 40, 'wI');
+     g.push(CIR(c) + LN(P, A) + LN(P, B) + LN(O, A, 'ln2') + LN(O, B, 'ln2') + wc.svg + wi.svg + DOT(O) + TX(wc.at(64), '100°', 'nlab', -32) + TX(wi.at(66), V('x'), 'alab', -8) + TX([O[0], O[1]], 'O', 'plab', -12, -14)); }
+   { const c = mini(750, 520, 150), A = c.p(105), B = c.p(255), P = c.p(180), O = c.O, wc = wedge(O, A, B, 30, 'wC', true), wi = wedge(P, A, B, 30, 'wI');
+     g.push(CIR(c) + LN(P, A) + LN(P, B) + LN(O, A, 'ln2') + LN(O, B, 'ln2') + wc.svg + wi.svg + DOT(O) + TX(wc.at(84), '210°', 'nlab', -32) + TX(wi.at(56), V('x'), 'alab', -6)); }
+   { const c = mini(1170, 520, 150), P = c.p(120), A = c.p(250), B = c.p(290), O = c.O, wc = wedge(O, A, B, 46, 'wC'), wi = wedge(P, A, B, 90, 'wI');
+     g.push(CIR(c) + LN(P, A) + LN(P, B) + LN(O, A, 'ln2') + LN(O, B, 'ln2') + wc.svg + wi.svg + DOT(O) + TX(P, '20°', 'nlab ins', -76, -4) + TX(wc.at(76), V('x'), 'alab', -8)); }
+   { const c = mini(1590, 520, 150), A = c.p(180), B = c.p(0), C = c.p(70), O = c.O;
+     g.push(CIR(c) + LN(A, B) + LN(A, C) + LN(B, C) + rmark(C, A, B, 18) + wedge(B, C, A, 34, 'wJ').svg + wedge(A, B, C, 44, 'wI').svg + DOT(O) +
+       TX(wedge(B, C, A, 34, 'wJ').at(60), '55°', 'nlab', -26) + TX(wedge(A, B, C, 44, 'wI').at(68), V('x'), 'alab', -6) + TX(outer(c, 180, 30), 'A', 'plab', -10) + TX(outer(c, 0, 30), 'B', 'plab', -10) + TX(outer(c, 70, 30), 'C', 'plab', -10)); }
+   return FIG(g.join(''), 'fx in', 120, 320, 1680, 420) +
+   `<div class="qrow">${['(1)', '(2)', '(3)', '(4) AB는 지름'].map((q, i) => `<div class="q4" style="left:${180 + i * 420}px">${q}</div>`).join('')}</div>
+   <div class="arow">${[[HF + ' × 100°', '50°'], [HF + ' × 210°', '105°'], ['2 × 20°', '40°'], ['90° − 55°', '35°']].map((a, i) => `<div class="a4 fx q${i + 1}" style="left:${150 + i * 420}px">${a[0]} = ${PB(a[1])}</div>`).join('')}</div>`; }),
+ steps:[1, 2, 3, 4].map(i => A => { A.show('.q' + i); A.open(i, 250); }),
+ say:'배운 규칙으로 풀어 볼게요. 중심각이 주어지면 절반, 원주각이 주어지면 두 배예요. (4)는 반원에 대한 원주각이 90°라는 것을 쓰면 돼요.'},
+
+{face:'w', tag:'개념', title:'호의 길이와 원주각의 크기',
+ html:() => SET(() => `<div class="card fx in" style="left:120px;top:250px;width:860px">한 원 또는 합동인 두 원에서<br>① ${PB('호')}의 길이가 같으면, ${PB('원주각')}의 크기는 같다.<br>② ${PB('원주각')}의 크기가 같으면, ${PB('호')}의 길이는 같다.</div>
+ ${(() => { const c = circ(1450, 600, 270), P = c.p(95), A = c.p(195), B = c.p(245), C = c.p(295), D = c.p(345);
+   return FIG(`${CIR(c)}<g class="sfx u1">${arcP(c, 195, 245, 'arcH')}${arcP(c, 295, 345, 'arcH')}</g>${LN(P, A)}${LN(P, B)}${LN(P, C)}${LN(P, D)}
+    <g class="sfx u1b">${wedge(P, A, B, 110, 'wI').svg}${wedge(P, C, D, 110, 'wI').svg}</g>${DOT(c.O)}${TX(c.O, 'O', 'plab', -10, -16)}
+    ${[['P', 95], ['A', 195], ['B', 245], ['C', 295], ['D', 345]].map(([t, a]) => TX(outer(c, a, 34), t, 'plab', -12, 0)).join('')}`, 'fx in', 1100, 250, 700, 700); })()}`),
+ steps:[A => { A.show('.u1'); A.open(1, 150); }, A => { A.show('.u1b'); A.open(2, 150); }, A => A.open(3, 150), A => A.open(4, 150)],
+ say:'호 AB와 호 CD의 길이가 같으면 그 호에 대한 원주각의 크기도 같아요. 거꾸로 원주각의 크기가 같으면 호의 길이도 같아요. 왜 그런지는 중심각을 거쳐 생각하면 돼요.'},
+
+{face:'g', tag:'왜 그럴까?', title:'중심각을 거쳐 생각하기',
+ html:() => SET(() => `<div class="txt fx in" style="left:120px;top:240px;width:1680px">(중심각) = (원주각) × 2</div>
+ <table class="mtbl why fx in" style="left:120px;top:320px;width:1080px"><tbody>
+  <tr><th>이유 ①</th><td>호의 길이가 같으면? 두 부채꼴의 ${PB('중심각')}의 크기가 같다.<br>${PB('중심각')}의 크기가 같으면? ${PB('원주각')}의 크기가 같다!</td></tr>
+  <tr><th>이유 ②</th><td>원주각의 크기가 같은 호는? ${PB('중심각')}의 크기가 같다.<br>${PB('중심각')}의 크기가 같은 부채꼴은? ${PB('호')}의 길이가 같다!</td></tr></tbody></table>
+ ${(() => { const c = circ(1540, 640, 220), P = c.p(95), A = c.p(195), B = c.p(245), C = c.p(295), D = c.p(345), O = c.O;
+   return FIG(`${CIR(c)}${arcP(c, 195, 245, 'arcH')}${arcP(c, 295, 345, 'arcH')}<g class="sfx w1">${LN(O, A, 'lnC')}${LN(O, B, 'lnC')}${LN(O, C, 'lnC')}${LN(O, D, 'lnC')}${wedge(O, A, B, 50, 'wC').svg}${wedge(O, C, D, 50, 'wC').svg}</g>
+    ${LN(P, A, 'lnI2')}${LN(P, B, 'lnI2')}${LN(P, C, 'lnI2')}${LN(P, D, 'lnI2')}${DOT(O)}
+    ${[['P', 95], ['A', 195], ['B', 245], ['C', 295], ['D', 345]].map(([t, a]) => TX(outer(c, a, 30), t, 'plab', -12, 0)).join('')}`, 'fx in', 1280, 380, 520, 520); })()}`),
+ steps:[A => { A.show('.w1'); A.open(1, 150); }, A => { A.open(2, 150); A.open(3, 450); }, A => A.open(4, 150), A => { A.open(5, 150); A.open(6, 450); }],
+ say:'호의 길이가 같으면 부채꼴의 중심각이 같고, 원주각은 중심각의 절반이니까 원주각도 같아요. 거꾸로 원주각이 같으면 중심각이 같고, 중심각이 같은 부채꼴은 호의 길이가 같아요.'},
+
+{face:'w', tag:'성질', title:'호의 길이와 원주각은 정비례',
+ html:() => SET(() => `<div class="card fx in" style="left:120px;top:250px;width:860px">호의 길이는 그 호에 대한 원주각의 크기에 ${PB('정비례', 'ㅈ ㅂ ㄹ')}한다.</div>
+ <div class="chain fx c2" style="left:120px;top:470px;width:860px">
+  <div><span>호의 길이 ↔ 중심각의 크기</span><b>정비례</b><small>중1 때 배운 부채꼴의 성질</small></div>
+  <div><span>중심각의 크기 ↔ 원주각의 크기</span><b>정비례</b><small>원주각 = ${HF} × 중심각</small></div>
+  <div class="fx c3"><span>호의 길이 ↔ 원주각의 크기</span><b>정비례</b><small>그래서 두 양도 정비례</small></div></div>
+ ${(() => { const c = circ(1450, 600, 270), P = c.p(100), A = c.p(200), B = c.p(230), C = c.p(260), D = c.p(320);
+   const w1 = wedge(P, A, B, 120, 'wI'), w2 = wedge(P, C, D, 150, 'wJ');
+   return FIG(`${CIR(c)}${arcP(c, 200, 230, 'arcH')}${arcP(c, 260, 320, 'arcH2')}${LN(P, A)}${LN(P, B)}${LN(P, C)}${LN(P, D)}${w1.svg}${w2.svg}${DOT(c.O)}
+    ${TX(w1.at(150), 'θ', 'alab', -8)}${TX(w2.at(184), '2θ', 'alab', -14)}
+    ${[['P', 100], ['A', 200], ['B', 230], ['C', 260], ['D', 320]].map(([t, a]) => TX(outer(c, a, 34), t, 'plab', -12, 0)).join('')}
+    <text class="nlab" x="1180" y="930">${ARC('AB')}</text>`.replace(`<text class="nlab" x="1180" y="930">${ARC('AB')}</text>`, `<text class="nlab" x="1110" y="948">호 AB : 호 CD = 1 : 2</text>`), 'fx in', 1100, 250, 700, 710); })()}`),
+ steps:[A => A.open(1, 150), A => A.show('.c2'), A => A.show('.c3')],
+ say:'호의 길이는 그 호에 대한 원주각의 크기에 정비례해요. 중1 때 호의 길이와 중심각이 정비례한다고 배웠고, 원주각은 중심각의 절반이니 중심각과 정비례해요. 그래서 호의 길이와 원주각도 정비례예요.'},
+
+{face:'d', tag:'문제 2', title:'x의 값을 구하시오',
+ html:() => SET(() => {
+   const g = [];
+   { const c = mini(560, 540, 190), P = c.p(110), Q = c.p(60), A = c.p(185), B = c.p(225), C = c.p(285), D = c.p(325), w1 = wedge(P, A, B, 70, 'wI'), w2 = wedge(Q, C, D, 70, 'wI');
+     g.push(CIR(c) + arcP(c, 185, 225, 'arcH') + arcP(c, 285, 325, 'arcH') + LN(P, A) + LN(P, B) + LN(Q, C) + LN(Q, D) + w1.svg + w2.svg + DOT(c.O) +
+       TX(P, '20°', 'nlab ins', -78, -6) + TX(Q, V('x') + '°', 'alab', 16, -8) + TX(outer(c, 205, 44), '5 cm', 'nlab', -46) + TX(outer(c, 305, 40), '5 cm', 'nlab', -20)); }
+   { const c = mini(1360, 540, 190), P = c.p(100), A = c.p(190), B = c.p(226), C = c.p(250), D = c.p(322), w1 = wedge(P, A, B, 90, 'wI'), w2 = wedge(P, C, D, 130, 'wJ');
+     g.push(CIR(c) + arcP(c, 190, 226, 'arcH') + arcP(c, 250, 322, 'arcH2') + LN(P, A) + LN(P, B) + LN(P, C) + LN(P, D) + w1.svg + w2.svg + DOT(c.O) +
+       TX(P, '18°', 'nlab ins', -96, -10) + TX(w2.at(164), '36°', 'nlab jj', -22) + TX(outer(c, 208, 44), '2 cm', 'nlab', -50) + TX(outer(c, 286, 42), V('x') + ' cm', 'nlab', -30)); }
+   return FIG(g.join(''), 'fx in', 120, 300, 1680, 480) +
+   `<div class="q4" style="left:240px;top:300px">(1)</div><div class="q4" style="left:1040px;top:300px">(2)</div>
+   <div class="a4 fx q1" style="left:240px;top:800px">호의 길이가 같으면 원주각도 같다 → ${V('x')} = ${PB('20')}</div>
+   <div class="a4 fx q2" style="left:1040px;top:800px">18° : 36° = 2 : ${V('x')} → ${V('x')} = ${PB('4')}</div>`; }),
+ steps:[A => { A.show('.q1'); A.open(1, 250); }, A => { A.show('.q2'); A.open(2, 250); }],
+ say:'(1)은 호의 길이가 5 cm로 같으니 원주각도 같아요. (2)는 원주각이 18°에서 36°로 두 배니까 호의 길이도 두 배, 4 cm예요.'},
+
+{face:'g', tag:'정리', title:'오늘 배운 것',
+ html:() => SET(() => `<div class="sumc fx in" style="left:120px"><h3>원주각</h3><p>원 위의 점 P에서 ${ARC('AB')}의 양 끝을 이은 각 ∠APB</p><p>한 호에 대한 중심각은 하나, 원주각은 무수히 많다.</p></div>
+ <div class="sumc fx k1" style="left:696px"><h3>원주각의 성질</h3><p>한 호에 대한 원주각의 크기는 모두 같다.</p><p>∠APB = ${HF}∠AOB</p><p>반원에 대한 원주각은 90°</p></div>
+ <div class="sumc fx k2" style="left:1272px"><h3>호와 원주각</h3><p>호의 길이가 같으면 원주각도 같다. 거꾸로도 성립한다.</p><p>호의 길이는 원주각의 크기에 정비례한다.</p></div>`),
+ steps:[A => A.show('.k1'), A => A.show('.k2')],
+ say:'오늘 배운 것을 정리해요. 원주각의 뜻, 중심각의 절반이라는 성질, 반원에 대한 원주각 90°, 그리고 호의 길이와 원주각의 정비례예요.'},
+
+{face:'k', tag:'마무리', title:'처음 질문의 답', sound:'chime',
+ html:() => SET(() => `<div class="txt q fx in" style="left:120px;top:260px;width:860px;font-size:40px">보는 위치가 달라져도<br>각도의 규칙은 변하지 않을까?</div>
+ <div class="card fx in" style="left:120px;top:440px;width:860px;font-size:36px;line-height:1.7">남쪽 벽 어디에 CCTV를 달아도 그림(${ARC('AB')})을 비추는 시야각은 같아요. 중심각의 ${HF}로 시야각을 맞추면 사각지대 없이 그림 전체를 비출 수 있어요.</div>
+ <div class="readout fx in" style="left:1030px;top:240px"><span>중심각 <b class="cen" data-k="cenv"></b></span><span>원주각 <b class="ins" data-k="ins"></b></span></div>
+ ${FIG(museum(circ(1420, 610, 290)), 'fx in', 1000, 300, 800, 660)}`),
+ init:r => museumInit(r, 1420, 610, 290, 270), loop:(t, r) => museumP(r, 270 + 62 * Math.sin(t / 1500)), steps:[],
+ say:'처음 질문으로 돌아가요. 카메라를 어디로 옮겨도 그림을 비추는 각은 변하지 않았어요. 그래서 시야각을 중심각의 절반으로 맞춘 카메라는 남쪽 벽 어디에 달아도 그림을 빠짐없이 비춰요.'}
+];
+function moveP2(A){ const r = A.r, from = r._st.theta; A.tw(2400, u => museumP(r, from + 50 * Math.sin(u * Math.PI * 2) * (1 - u), { a:155, b:25 }), () => museumP(r, 270, { a:155, b:25 })); }
+function semiSet(r, a){
+  const c = circ(1450, 600, 270), A = c.p(180), B = c.p(0), P = c.p(a), O = c.O, st = r._st; st.c = c;
+  r.querySelector('[data-k="semi"]').innerHTML = `${CIR(c)}${arcP(c, 180, 360, 'arcH')}${LN(A, B, 'lnC')}${LN(P, A)}${LN(P, B)}${wedge(O, B, A, 46, 'wC', true).svg}${rmark(P, A, B, 26)}
+   ${DOT(O)}${DOT(P)}${DOT(A)}${DOT(B)}${TX(outer(c, a, 34), 'P', 'plab', -12, 0)}${TX(outer(c, 180, 34), 'A', 'plab', -12, 0)}${TX(outer(c, 0, 34), 'B', 'plab', -12, 0)}${TX(O, 'O', 'plab', -10, -14)}
+   <text class="nlab" x="1428" y="730">180°</text>`;
+}
+
+/* ---------- 넘기기 엔진 ---------- */
+let cur=0,step=0,root=null,token=0,busyUntil=0;
+const tweens=new Set();
+function tween(dur,fn,done){const tw={tk:token,t0:performance.now(),dur:Math.max(1,dur),fn,done};tweens.add(tw);busyUntil=Math.max(busyUntil,tw.t0+tw.dur)}
+function bump(ms){busyUntil=Math.max(busyUntil,performance.now()+ms)}
+function mkA(r,inst){
+  const q=s=>r.querySelectorAll(s);
+  const A={inst,r,st:r._st,
+    show(s){q(s).forEach(e=>e.classList.add('vis'))},
+    cls(s,c,on){q(s).forEach(e=>e.classList.toggle(c,on!==false))},
+    text(s,t){q(s).forEach(e=>e.textContent=t)},
+    open(n,delay){A.later(delay||0,()=>{q(`.bl[data-n="${n}"]`).forEach(e=>e.classList.add('on'));if(!inst)snd('ding')})},
+    later(ms,fn){if(inst||!ms)fn();else tween(ms,()=>{},fn)},
+    sound(n){if(!inst)snd(n)},
+    dim(keys){dimMap(r,keys)},
+    travel(keys,dur,done){travel(r,keys,dur,inst,done)},
+    tw(dur,fn,done){if(inst||RM){fn(1);done&&done()}else tween(dur,fn,done)}};
+  return A;
+}
+function build(n,host,thumb){
+  const d=S[n],r=document.createElement('div');
+  r.className='slide f-'+d.face;r._st={thumb:!!thumb};
+  r.innerHTML=(d.cover?'':`<div class="tag">${d.tag}</div><h1 class="ttl">${d.title}</h1>`)+d.html()+(n===S.length-1?COPY:'');
+  if(host===stage)stage.insertBefore(r,ink);else host.appendChild(r);
+  if(d.init)d.init(r);
+  return r;
+}
+function clearSlide(){stage.querySelectorAll(':scope>.slide').forEach(e=>e.remove())}
+function render(n,k){
+  token++;tweens.clear();busyUntil=0;if(n!==cur)inkClear();
+  clearSlide();cur=n;step=k;
+  const r=root=build(n,stage);
+  r.classList.add('inst');r.querySelectorAll('.in').forEach(e=>e.classList.add('vis'));
+  const A=mkA(r,true);for(let i=0;i<k;i++)S[n].steps[i](A);
+  void r.offsetWidth;r.classList.remove('inst');changed();
+}
+function enter(n){
+  token++;tweens.clear();busyUntil=0;if(n!==cur)inkClear();
+  clearSlide();cur=n;step=0;
+  const r=root=build(n,stage),ins=[...r.querySelectorAll('.in')];
+  if(RM){r.classList.add('inst');ins.forEach(e=>e.classList.add('vis'));void r.offsetWidth;r.classList.remove('inst')}
+  else{void r.offsetWidth;ins.forEach((e,i)=>{e.style.transitionDelay=(i*.12)+'s';e.classList.add('vis')});
+    const tk=token;setTimeout(()=>{if(tk===token)ins.forEach(e=>e.style.transitionDelay='')},900+ins.length*120);bump(700+ins.length*120)}
+  snd(S[n].sound||'tok');changed();
+}
+function next(){
+  if(ov.classList.contains('open'))return;
+  if(performance.now()<busyUntil)render(cur,step);
+  const d=S[cur];
+  if(step<d.steps.length){d.steps[step](mkA(root,false));step++;bump(600);changed()}
+  else if(cur<S.length-1)enter(cur+1);
+}
+function prev(){if(ov.classList.contains('open'))return;if(step>0)render(cur,step-1);else if(cur>0)render(cur-1,S[cur-1].steps.length)}
+function replay(){if(step>0){render(cur,step-1);next()}else enter(cur)}
+let hashT=0;
+function changed(){
+  clearTimeout(hashT);hashT=setTimeout(()=>{try{history.replaceState(null,'','#'+(cur+1)+'.'+step)}catch(e){}},150);
+  pg.textContent=(cur+1)+' / '+S.length;
+  if(scr.classList.contains('open'))fillScript();
+}
+function fillScript(){const d=S[cur],nx=S[cur+1];scr.innerHTML=`<div class="hd">${cur+1}. ${d.title} · 단계 ${step}/${d.steps.length}${nx?' · 다음: '+nx.title:''}</div><div>${d.say}</div>`}
+function tick(now){
+  requestAnimationFrame(tick);
+  for(const tw of tweens){if(tw.tk!==token){tweens.delete(tw);continue}const u=Math.min(1,Math.max(0,(now-tw.t0)/tw.dur));tw.fn(u);if(u>=1){tweens.delete(tw);tw.done&&tw.done()}}
+  const d=S[cur];if(root&&d.loop)d.loop(RM?2000:now,root);
+  inkDraw(now);
+}
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`scale(${s})`;stage.style.left=((innerWidth-1920*s)/2)+'px';stage.style.top=((innerHeight-1080*s)/2)+'px';if(ov.classList.contains('open'))sizeThumbs()}
+
+/* ---------- 화면 도구 ---------- */
+const pg=document.getElementById('pg'),scr=document.getElementById('scr'),ov=document.getElementById('ov'),help=document.getElementById('help'),bw=document.getElementById('bw'),bar=document.getElementById('bar'),tb=document.getElementById('tb'),tbBtn=document.getElementById('tbBtn');
+function toggleScript(){if(STUDENT)return;scr.classList.toggle('open');if(scr.classList.contains('open'))fillScript()}
+function fs(){if(!document.fullscreenElement){const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el)}else(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
+function setSound(on){soundOn=on;document.getElementById('sndWave').style.display=on?'':'none';if(on)ac()}
+let ovBuilt=false;
+function openOv(){ov.classList.add('open');
+  if(!ovBuilt){ovBuilt=true;S.forEach((d,i)=>{const th=document.createElement('div');th.className='th';ov.appendChild(th);
+    const r=build(i,th,true);r.classList.add('inst');r.querySelectorAll('.in').forEach(e=>e.classList.add('vis'));const A=mkA(r,true);d.steps.forEach(f=>f(A));
+    const no=document.createElement('span');no.className='no';no.textContent=(i+1)+'. '+d.title;th.appendChild(no);
+    th.addEventListener('click',()=>{closeOv();enter(i)})})}
+  sizeThumbs();ov.querySelectorAll('.th').forEach((t,i)=>t.classList.toggle('cur',i===cur))}
+function closeOv(){ov.classList.remove('open')}
+function sizeThumbs(){ov.querySelectorAll('.th').forEach(th=>{const sl=th.querySelector('.slide');if(sl)sl.style.transform=`scale(${th.clientWidth/1920})`})}
+document.getElementById('bPrev').onclick=prev;document.getElementById('bNext').onclick=()=>{ac();next()};
+document.getElementById('bSnd').onclick=()=>setSound(!soundOn);document.getElementById('bScr').onclick=toggleScript;document.getElementById('bFs').onclick=fs;
+bw.onclick=()=>bw.className='ui';
+help.onclick=()=>help.classList.remove('open');
+let barT=0;addEventListener('mousemove',()=>{bar.classList.add('show');clearTimeout(barT);barT=setTimeout(()=>bar.classList.remove('show'),2200)});
+
+/* ---------- 판서: 레이저 · 빨간 펜 ---------- */
+const INK={tool:null,strokes:[],laser:[],drawing:null,swallow:false,dirty:true,
+  finger:(()=>{try{return localStorage.getItem('lb-finger')||'auto'}catch(e){return'auto'}})(),
+  pencil:(()=>{try{return localStorage.getItem('lb-pencil')==='1'}catch(e){return false}})()};
+let sw=null,suppressClick=false;
+function inkClear(){INK.strokes=[];INK.laser=[];INK.dirty=true}
+function setTool(t){INK.tool=INK.tool===t?null:t;document.body.classList.toggle('inking',!!INK.tool);tbBtn.classList.toggle('on',!!INK.tool);tb.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===INK.tool))}
+function setFinger(f){INK.finger=f;try{localStorage.setItem('lb-finger',f)}catch(e){}tb.querySelectorAll('[data-f]').forEach(b=>b.classList.toggle('on',b.dataset.f===f))}
+setFinger(INK.finger);
+tbBtn.addEventListener('click',e=>{e.stopPropagation();tb.classList.toggle('open')});
+tb.querySelectorAll('[data-t]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.t)));
+tb.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>setFinger(b.dataset.f)));
+tb.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a;if(a==='undo'){INK.strokes.pop();INK.dirty=true}else if(a==='clear')inkClear();else if(a==='fs')fs()}));
+function toStage(e){const rc=stage.getBoundingClientRect(),s=rc.width/1920;return{x:(e.clientX-rc.left)/s,y:(e.clientY-rc.top)/s}}
+function shouldDraw(e){if(!INK.tool)return false;if(e.pointerType==='pen')return true;if(e.pointerType==='mouse')return e.button===0;if(e.pointerType==='touch'){if(INK.finger==='on')return true;if(INK.finger==='off')return false;return!INK.pencil}return false}
+const inUI=e=>e.target&&e.target.closest&&e.target.closest('.ui');
+addEventListener('pointerdown',e=>{
+  if(e.pointerType==='pen'&&!INK.pencil){INK.pencil=true;try{localStorage.setItem('lb-pencil','1')}catch(_){}}
+  if(inUI(e))return;
+  if(shouldDraw(e)){e.preventDefault();e.stopPropagation();const s={pts:[toStage(e)],end:0};(INK.tool==='pen'?INK.strokes:INK.laser).push(s);INK.drawing={id:e.pointerId,s};INK.dirty=true;return}
+  if(e.pointerType==='touch')sw={x:e.clientX,y:e.clientY,id:e.pointerId};
+},true);
+addEventListener('pointermove',e=>{if(INK.drawing&&INK.drawing.id===e.pointerId){e.preventDefault();e.stopPropagation();const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const c of(evs.length?evs:[e]))INK.drawing.s.pts.push(toStage(c));INK.dirty=true}},true);
+function endDraw(e){if(INK.drawing&&INK.drawing.id===e.pointerId){e.preventDefault();e.stopPropagation();INK.drawing.s.end=performance.now();INK.drawing=null;INK.swallow=true;setTimeout(()=>INK.swallow=false,450);INK.dirty=true;return true}return false}
+addEventListener('pointerup',e=>{if(endDraw(e))return;if(sw&&sw.id===e.pointerId){const dx=e.clientX-sw.x,dy=e.clientY-sw.y;sw=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.3){suppressClick=true;setTimeout(()=>suppressClick=false,450);if(dx<0){ac();next()}else prev()}}},true);
+addEventListener('pointercancel',e=>{endDraw(e);sw=null},true);
+addEventListener('click',e=>{if(INK.swallow){e.preventDefault();e.stopPropagation();INK.swallow=false}},true);
+addEventListener('click',e=>{if(inUI(e))return;if(suppressClick){suppressClick=false;return}ac();next()});
+addEventListener('contextmenu',e=>{if(inUI(e))return;e.preventDefault();prev()});
+document.addEventListener('touchmove',e=>{if(e.target.closest&&e.target.closest('.scroll'))return;if(document.fullscreenElement||INK.tool)e.preventDefault()},{passive:false});
+function strokePath(p){if(!p.length)return;ictx.beginPath();ictx.moveTo(p[0].x,p[0].y);if(p.length===1)ictx.lineTo(p[0].x+.1,p[0].y);for(let i=1;i<p.length-1;i++){const mx=(p[i].x+p[i+1].x)/2,my=(p[i].y+p[i+1].y)/2;ictx.quadraticCurveTo(p[i].x,p[i].y,mx,my)}if(p.length>1){const l=p[p.length-1];ictx.lineTo(l.x,l.y)}ictx.stroke()}
+function inkDraw(now){
+  if(!INK.dirty&&!INK.laser.length)return;INK.dirty=false;
+  ictx.clearRect(0,0,1920,1080);ictx.lineCap='round';ictx.lineJoin='round';
+  ictx.strokeStyle='#ff3b30';ictx.lineWidth=6;INK.strokes.forEach(s=>strokePath(s.pts));
+  INK.laser=INK.laser.filter(s=>!(s.end&&now-s.end>1300));
+  INK.laser.forEach(s=>{const a=s.end?Math.max(0,Math.min(1,1-(now-s.end-300)/1000)):1;ictx.save();ictx.globalAlpha=a;ictx.shadowColor='rgba(255,40,40,.9)';ictx.shadowBlur=18;ictx.strokeStyle='rgba(255,70,60,.95)';ictx.lineWidth=7;strokePath(s.pts);ictx.restore()});
+}
+
+/* ---------- 키 ---------- */
+addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key,c=e.code;
+  if(k==='ArrowRight'||k===' '||k==='Enter'||k==='PageDown'){e.preventDefault();ac();next();return}
+  if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev();return}
+  if(k==='Home'){e.preventDefault();enter(0);return}
+  if(k==='End'){e.preventDefault();render(S.length-1,S[S.length-1].steps.length);return}
+  if(k==='Escape'){if(INK.tool)setTool(INK.tool);closeOv();help.classList.remove('open');scr.classList.remove('open');tb.classList.remove('open');bw.className='ui';return}
+  switch(c){
+    case'KeyF':fs();break;
+    case'KeyT':case'KeyN':toggleScript();break;
+    case'KeyO':ov.classList.contains('open')?closeOv():openOv();break;
+    case'KeyR':replay();break;
+    case'KeyM':setSound(!soundOn);break;
+    case'KeyB':bw.className=bw.className.includes(' b')?'ui':'ui b';break;
+    case'KeyW':bw.className=bw.className.includes(' w')?'ui':'ui w';break;
+    case'KeyH':help.classList.toggle('open');break;
+    case'KeyL':setTool('laser');break;
+    case'KeyP':setTool('pen');break;
+    case'KeyZ':INK.strokes.pop();INK.dirty=true;break;
+    case'KeyC':inkClear();break;
+  }
+});
+addEventListener('resize',fit);
+
+/* ---------- 시작 ---------- */
+setSound(soundOn);fit();
+(function(){const m=location.hash.match(/^#(\d+)(?:\.(\d+))?/);
+  if(m){const n=Math.min(S.length,Math.max(1,+m[1]))-1,k=Math.min(S[n].steps.length,+(m[2]||0));if(k>0)render(n,k);else enter(n)}else enter(0)})();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
