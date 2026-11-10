@@ -1,0 +1,278 @@
+/* ═══════════════════════════════════════════════════════════════
+   모식도(그림) 부품 — 바이브코딩 연수 페이지 공통
+   .dg 하나가 그림 하나. 화면에 보일 때만 움직이고(.run),
+   "동작 줄이기"를 켠 기기에서는 멈춘 그림으로 보입니다(.still).
+   ═══════════════════════════════════════════════════════════════ */
+.dg{--dgc:var(--blue);position:relative;border:1px solid var(--line);border-radius:var(--r3);padding:18px 18px 14px;margin:14px 0;background:#fff;overflow:hidden}
+.dg *{box-sizing:border-box}
+.dg-t{display:block;font-size:.8rem;font-weight:600;color:var(--ink2);letter-spacing:.02em;margin:0 0 12px}
+.dg-cap{margin:12px 0 0;font-size:.9rem;color:var(--ink2);line-height:1.5}
+.dg-cap b{color:var(--ink)}
+.dg .ic{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.dg .ic.big{width:34px;height:34px}
+.dg .ic.sm{width:18px;height:18px}
+
+/* 움직임은 보일 때만 */
+.dg *,.dg *::before,.dg *::after{animation-play-state:paused}
+.dg.run *,.dg.run *::before,.dg.run *::after{animation-play-state:running}
+.dg.still *,.dg.still *::before,.dg.still *::after{animation:none!important;transition:none!important}
+
+/* ── 상자 ── */
+.dg-node{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-width:0;border:1px solid var(--line);border-radius:var(--r2);padding:10px 10px 9px;background:#fff;color:var(--ink);transition:border-color .3s,background-color .3s,opacity .3s}
+.dg-node b{display:block;font-size:.92rem;line-height:1.3}
+.dg-node small{display:block;font-size:.76rem;color:var(--ink2);line-height:1.35}
+.dg-node i{display:block;font-style:normal;font-size:.7rem;font-weight:600;color:var(--dgc);letter-spacing:.03em}
+.dg-node .ic{color:var(--ink2)}
+.dg-node.on{border-color:var(--dgc);background:var(--blue-t)}
+.dg-node.on .ic{color:var(--dgc)}
+.dg-node.ok{border-color:var(--ok);background:var(--ok-t)}
+.dg-node.ok .ic,.dg-node.ok i{color:var(--ok)}
+.dg-node.bad{border-color:var(--bad);background:var(--bad-t)}
+.dg-node.bad .ic,.dg-node.bad i{color:var(--bad)}
+.dg-node.db{border-color:var(--warn);background:var(--warn-t)}
+.dg-node.db .ic,.dg-node.db i{color:var(--warn)}
+.dg-node.ghost{border-style:dashed;background:var(--bg2)}
+
+/* ── 가로 흐름: 상자 ─ 선 ─ 상자 (좁은 화면에서는 세로) ── */
+.dg-flow{display:flex;align-items:stretch;gap:0}
+.dg-flow>.dg-node{flex:1 1 0}
+.dg-wire{position:relative;flex:0 0 46px;align-self:center;height:2px;background:var(--line);margin:0 4px}
+.dg-wire::before{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--line);border-right:0}
+.dg-wire em{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);font-style:normal;font-size:.68rem;color:var(--ink3);white-space:nowrap}
+.dg-wire>i{position:absolute;top:-4px;left:0;width:10px;height:10px;border-radius:50%;background:var(--dgc);animation:dgH var(--dur,2.2s) linear infinite;animation-delay:var(--dl,0s);opacity:0}
+.dg-wire.back::before{right:auto;left:-1px;border-left:0;border-right:7px solid var(--line)}
+.dg-wire.back>i{animation-name:dgHb}
+.dg-wire.ok>i{background:var(--ok)}
+.dg-wire.bad>i{background:var(--bad)}
+.dg-wire.wide{flex-basis:70px}
+@keyframes dgH{0%{left:0;opacity:0}10%{opacity:1}85%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
+@keyframes dgHb{0%{left:calc(100% - 10px);opacity:0}10%{opacity:1}85%{opacity:1}100%{left:0;opacity:0}}
+@keyframes dgV{0%{top:0;opacity:0}10%{opacity:1}85%{opacity:1}100%{top:calc(100% - 10px);opacity:0}}
+@keyframes dgVb{0%{top:calc(100% - 10px);opacity:0}10%{opacity:1}85%{opacity:1}100%{top:0;opacity:0}}
+.dg.still .dg-wire>i{opacity:1;left:calc(50% - 5px)}
+
+/* 세로선(항상 세로) */
+.dg-vwire{position:relative;width:2px;height:30px;background:var(--line);margin:4px auto}
+.dg-vwire::before{content:"";position:absolute;bottom:-1px;left:-4px;border:5px solid transparent;border-top:7px solid var(--line);border-bottom:0}
+.dg-vwire>i{position:absolute;left:-4px;top:0;width:10px;height:10px;border-radius:50%;background:var(--dgc);animation:dgV var(--dur,1.6s) linear infinite;animation-delay:var(--dl,0s);opacity:0}
+.dg-vwire.up::before{bottom:auto;top:-1px;border-top:0;border-bottom:7px solid var(--line)}
+.dg-vwire.up>i{animation-name:dgVb}
+.dg-vwire em{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:.68rem;color:var(--ink3);white-space:nowrap}
+.dg.still .dg-vwire>i{opacity:1;top:calc(50% - 5px)}
+
+@media (max-width:640px){
+  .dg{padding:14px 12px 12px}
+  .dg-flow{flex-direction:column;align-items:stretch}
+  .dg-flow>.dg-node{flex:none}
+  .dg-flow>.dg-wire{flex:0 0 30px;width:2px;height:auto;align-self:center;margin:4px 0}
+  .dg-flow>.dg-wire::before{right:auto;top:auto;bottom:-1px;left:-4px;border:5px solid transparent;border-top:7px solid var(--line);border-bottom:0}
+  .dg-flow>.dg-wire.back::before{bottom:auto;top:-1px;border-top:0;border-bottom:7px solid var(--line)}
+  .dg-flow>.dg-wire>i{left:-4px;top:0;animation-name:dgV}
+  .dg-flow>.dg-wire.back>i{animation-name:dgVb}
+  .dg-flow>.dg-wire em{left:12px;bottom:auto;top:50%;transform:translateY(-50%)}
+  .dg.still .dg-flow>.dg-wire>i{left:-4px;top:calc(50% - 5px)}
+}
+
+/* ── 차례로 켜지는 상자(순환) ── */
+.dg-seq>.dg-node{animation:dgLit var(--cyc,8s) infinite;animation-delay:calc(var(--i,0) * var(--cyc,8s) / var(--n,4))}
+@keyframes dgLit{0%{border-color:var(--dgc);background:var(--blue-t)}22%{border-color:var(--dgc);background:var(--blue-t)}28%,100%{border-color:var(--line);background:#fff}}
+.dg.still .dg-seq>.dg-node{border-color:var(--line);background:#fff}
+
+/* 돌고 도는 네 칸 */
+.dg-loop{display:grid;grid-template-columns:1fr 120px 1fr;grid-template-rows:auto 44px auto;align-items:center;max-width:700px;margin:0 auto}
+@media (max-width:640px){.dg-loop{grid-template-columns:1fr 34px 1fr}.dg-loop .mid{display:none}}
+.dg-loop .dg-node{min-height:88px}
+.dg-loop .dg-wire{flex:none;width:auto;margin:0}
+.dg-loop .lv{position:relative;justify-self:center;width:2px;height:100%;background:var(--line)}
+.dg-loop .lv>i{position:absolute;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--dgc);opacity:0;animation:dgV 2s linear infinite;animation-delay:var(--dl,0s)}
+.dg-loop .lv.up>i{animation-name:dgVb}
+.dg-loop .lv::before{content:"";position:absolute;left:-4px;border:5px solid transparent}
+.dg-loop .lv:not(.up)::before{bottom:-1px;border-top:7px solid var(--line);border-bottom:0}
+.dg-loop .lv.up::before{top:-1px;border-bottom:7px solid var(--line);border-top:0}
+.dg-loop .dg-wire>i,.dg-loop .lv>i{animation-duration:var(--cyc,8s);animation-delay:var(--dl,0s)}
+.dg-loop .dg-wire>i{animation-name:dgHs}
+.dg-loop .dg-wire.back>i{animation-name:dgHsb}
+.dg-loop .lv>i{animation-name:dgVs}
+.dg-loop .lv.up>i{animation-name:dgVsb}
+@keyframes dgHs{0%{left:0;opacity:1}12.5%{left:calc(100% - 10px);opacity:1}14%,100%{left:calc(100% - 10px);opacity:0}}
+@keyframes dgHsb{0%{left:calc(100% - 10px);opacity:1}12.5%{left:0;opacity:1}14%,100%{left:0;opacity:0}}
+@keyframes dgVs{0%{top:0;opacity:1}12.5%{top:calc(100% - 10px);opacity:1}14%,100%{top:calc(100% - 10px);opacity:0}}
+@keyframes dgVsb{0%{top:calc(100% - 10px);opacity:1}12.5%{top:0;opacity:1}14%,100%{top:0;opacity:0}}
+.dg.still .dg-loop .lv>i{opacity:1;top:calc(50% - 5px)}
+.dg-loop .mid{grid-column:2;grid-row:2;justify-self:center;align-self:center;font-size:.72rem;color:var(--ink3);text-align:center;line-height:1.25}
+
+/* ── 단계 그림(다음 단추로 넘기기) ── */
+.dg-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}
+.dg-ctl button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:6px 14px;font:inherit;font-size:.84rem;cursor:pointer;color:var(--ink)}
+.dg-ctl button:hover{border-color:var(--dgc)}
+.dg-ctl button.pri{background:var(--dgc);border-color:var(--dgc);color:#fff}
+.dg-ctl .dots{display:flex;flex-wrap:wrap;gap:5px;flex:1;min-width:10em}
+.dg-ctl .dots button{padding:3px 9px;font-size:.76rem;color:var(--ink2)}
+.dg-ctl .dots button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.dg-say{margin:12px 0 0;min-height:4.6em;border-left:3px solid var(--dgc);padding:2px 0 2px 12px}
+.dg-say>*{display:none;margin:0}
+.dg-say>.cur{display:block}
+.dg-say b{display:block;font-size:1.02rem;margin-bottom:3px}
+.dg-say span{display:block;font-size:.92rem;color:var(--ink2);line-height:1.55}
+.dg[data-steps] [data-s]{transition:opacity .35s,border-color .35s,background-color .35s}
+.dg[data-steps].stepping [data-s]:not(.hit){opacity:.28}
+.dg[data-steps].stepping [data-s].hit.dg-node{border-color:var(--dgc);background:var(--blue-t)}
+.dg[data-steps].stepping [data-s].hit.dg-node .ic{color:var(--dgc)}
+
+.dg[data-steps].stepping .dg-wire.hit,.dg[data-steps].stepping .dg-vwire.hit{background:var(--dgc)}
+.dg[data-steps].stepping .dg-wire.hit::before{border-left-color:var(--dgc)}
+.dg[data-steps].stepping .dg-vwire.hit::before{border-top-color:var(--dgc)}
+.dg[data-steps].stepping .dg-chip.hit{outline:2px solid var(--dgc);outline-offset:1px}
+
+/* ── 둘 가운데 하나 보기 ── */
+.dg-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.dg-tabs button{border:1px solid var(--line);background:#fff;border-radius:9999px;padding:7px 15px;font:inherit;font-size:.88rem;cursor:pointer;color:var(--ink)}
+.dg-tabs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.dg-tabs button.bad[aria-pressed="true"]{background:var(--bad);border-color:var(--bad)}
+.dg-tabs button.ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.dg [data-view]{display:none}
+.dg [data-view].cur{display:block}
+
+/* ── 막대 ── */
+.dg-bars{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center}
+.dg-bars .lb{font-size:.86rem;font-weight:600;white-space:nowrap}
+.dg-bars .lb small{display:block;font-weight:400;font-size:.74rem;color:var(--ink2)}
+.dg-bars .track{position:relative;height:26px;border-radius:6px;background:var(--bg2);overflow:hidden;display:flex}
+.dg-bars .seg{height:100%;width:0;border-right:2px solid #fff;animation:dgGrow1 var(--cyc,10s) ease-out infinite}
+.dg-bars .seg:nth-child(2){animation-name:dgGrow2}
+.dg-bars .seg:nth-child(3){animation-name:dgGrow3}
+.dg-bars .seg.w{background:var(--dgc)}
+.dg-bars .seg.s{background:#7fb2e5}
+.dg-bars .seg.r{background:#cfd6de}
+.dg-bars .num{font-size:.84rem;font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap;min-width:5.5em;text-align:right}
+@keyframes dgGrow1{0%{width:0}8%,92%{width:var(--w)}100%{width:0}}
+@keyframes dgGrow2{0%,30%{width:0}38%,92%{width:var(--w)}100%{width:0}}
+@keyframes dgGrow3{0%,60%{width:0}68%,92%{width:var(--w)}100%{width:0}}
+/* 막대와 같은 주기로 켜지는 칸 이름 */
+.dg-rounds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.dg-rounds>span{border:1px solid var(--line);border-radius:9999px;padding:4px 10px;font-size:.78rem;text-align:center;color:var(--ink2);animation:dgR1 var(--cyc,10s) infinite}
+.dg-rounds>span:nth-child(2){animation-name:dgR2}
+.dg-rounds>span:nth-child(3){animation-name:dgR3}
+@keyframes dgR1{0%,28%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}30%,100%{border-color:var(--line);background:#fff;color:var(--ink2)}}
+@keyframes dgR2{0%,29%{border-color:var(--line);background:#fff;color:var(--ink2)}30%,58%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}60%,100%{border-color:var(--line);background:#fff;color:var(--ink2)}}
+@keyframes dgR3{0%,59%{border-color:var(--line);background:#fff;color:var(--ink2)}60%,92%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}94%,100%{border-color:var(--line);background:#fff;color:var(--ink2)}}
+.dg.still .dg-rounds>span{border-color:var(--line);background:#fff}
+.dg.still .dg-bars .seg{width:var(--w)}
+
+/* ── 코드 창(작은 그림) ── */
+.dg-code{border:1px solid var(--line);border-radius:8px;background:#fbfbfd;padding:8px 10px;display:flex;flex-direction:column;gap:5px;min-height:92px}
+.dg-code .ln{height:6px;border-radius:3px;background:#d7dbe0;width:var(--lw,80%)}
+.dg-code .ln.hl{background:var(--dgc)}
+.dg-code .hd{font-size:.7rem;color:var(--ink3);margin-bottom:2px}
+.dg-code.tick .ln{animation:dgType var(--cyc,10s) infinite}
+.dg-code.tick .ln.hl{animation:dgType var(--cyc,10s) infinite,dgFlash var(--cyc,10s) infinite}
+@keyframes dgType{0%{width:0}7%,100%{width:var(--lw,80%)}}
+@keyframes dgFlash{0%,30%{background:#d7dbe0}32%,46%{background:var(--dgc)}48%,60%{background:#d7dbe0}62%,76%{background:var(--dgc)}78%,100%{background:#d7dbe0}}
+.dg.still .dg-code .ln{width:var(--lw,80%)}
+
+/* ── 줄이 쌓이는 표 ── */
+.dg-tbl{width:100%;border-collapse:collapse;font-size:.78rem;margin:0}
+.dg-tbl th,.dg-tbl td{border:1px solid var(--line);padding:4px 6px;text-align:left;white-space:nowrap}
+.dg-tbl th{background:var(--bg2);font-weight:600;color:var(--ink2)}
+.dg-tbl tr.new td{animation:dgRow var(--cyc,8s) infinite;animation-delay:var(--dl,0s)}
+@keyframes dgRow{0%{opacity:0;background:var(--blue-t)}6%{opacity:1;background:var(--blue-t)}30%{background:#fff}92%{opacity:1}100%{opacity:0}}
+.dg.still .dg-tbl tr.new td{opacity:1}
+
+/* 반짝(켜졌다 꺼짐) */
+.dg .blink{animation:dgBlink var(--cyc,4s) infinite;animation-delay:var(--dl,0s)}
+@keyframes dgBlink{0%,100%{opacity:.25}20%,60%{opacity:1}}
+.dg .pop{animation:dgPop var(--cyc,4s) infinite;animation-delay:var(--dl,0s)}
+@keyframes dgPop{0%{opacity:0;transform:scale(.85)}10%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+.dg.still .blink,.dg.still .pop{opacity:1;transform:none}
+
+/* 칩(작은 꼬리표) */
+.dg-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:9999px;padding:2px 9px;font-size:.74rem;background:#fff;color:var(--ink2);white-space:nowrap}
+.dg-chip.key{border-color:var(--warn);background:var(--warn-t);color:var(--warn)}
+.dg-chip.bad{border-color:var(--bad);background:var(--bad-t);color:var(--bad)}
+.dg-chip.ok{border-color:var(--ok);background:var(--ok-t);color:var(--ok)}
+.dg-chip.blue{border-color:var(--dgc);background:var(--blue-t);color:var(--dgc)}
+
+/* 격자 */
+.dg-g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dg-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:640px){.dg-g2,.dg-g3{grid-template-columns:1fr}}
+.dg-panel{border:1px solid var(--line2);border-radius:var(--r2);padding:12px;background:var(--bg2)}
+.dg-panel>.dg-t{margin-bottom:10px}
+
+/* 토큰 조각 */
+.dg-tokens{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:0 0 6px}
+.dg-tokens>span{border:1px solid #9cc3ea;background:var(--blue-t);border-radius:5px;padding:2px 7px;font-size:.86rem;animation:dgTok var(--cyc,6s) infinite;animation-delay:calc(var(--i,0) * .25s)}
+@keyframes dgTok{0%{opacity:0;transform:translateY(-4px)}6%,85%{opacity:1;transform:none}100%{opacity:0}}
+.dg.still .dg-tokens>span{opacity:1;transform:none}
+
+/* 여러 기기가 한 곳으로 */
+.dg-fan{display:grid;grid-template-columns:minmax(92px,1fr) 46px minmax(150px,1.4fr) 46px minmax(92px,1fr);grid-template-rows:repeat(3,auto);row-gap:8px;align-items:center}
+.dg-fan>.src{grid-column:1}
+.dg-fan>.w1{grid-column:2;margin:0}
+.dg-fan>.hub{grid-column:3;grid-row:1/4;align-self:stretch}
+.dg-fan>.w2{grid-column:4;grid-row:2;margin:0}
+.dg-fan>.dst{grid-column:5;grid-row:1/4;align-self:center}
+.dg-fan .dg-wire{flex:none;width:auto}
+@media (max-width:640px){
+  .dg-fan{grid-template-columns:repeat(3,1fr);grid-template-rows:auto;column-gap:8px}
+  .dg-fan>.src{grid-column:auto;grid-row:1}
+  .dg-fan>.w1{display:none}
+  .dg-fan>.hub{grid-column:1/4;grid-row:3}
+  .dg-fan>.w2{grid-column:1/4;grid-row:4;justify-self:center;width:2px;height:30px}
+  .dg-fan>.w2::before{right:auto;top:auto;bottom:-1px;left:-4px;border:5px solid transparent;border-top:7px solid var(--line);border-bottom:0}
+  .dg-fan>.w2>i{left:-4px;top:0;animation-name:dgV}
+  .dg-fan>.dst{grid-column:1/4;grid-row:5}
+  .dg-fan>.fanv{display:block;grid-column:1/4;grid-row:2;justify-self:center}
+}
+.dg-fan>.fanv{display:none}
+
+/* AI가 브라우저를 누르는 모습 */
+.dg-win{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;min-width:0}
+.dg-win .bar{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line2);background:var(--bg2);font-size:.74rem;color:var(--ink2)}
+.dg-win .bar::before{content:"";width:34px;height:8px;background:radial-gradient(circle,#d0d0d5 3.5px,transparent 4px) 0 0/12px 8px repeat-x}
+.dg-win .url{flex:1;border:1px solid var(--line);border-radius:9999px;background:#fff;padding:1px 10px;font-family:var(--mono);font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dg-win .body{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 12px 16px}
+.dg-win .act{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--line);border-radius:8px;padding:8px 4px;font-size:.76rem;text-align:center;color:var(--ink2);animation:dgAct1 var(--cyc,9s) infinite}
+.dg-win .act:nth-child(2){animation-name:dgAct2}
+.dg-win .act:nth-child(3){animation-name:dgAct3}
+.dg-win .act .ic{width:20px;height:20px}
+@keyframes dgAct1{0%,8%{border-color:var(--line);background:#fff}12%,30%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}34%,100%{border-color:var(--line);background:#fff}}
+@keyframes dgAct2{0%,40%{border-color:var(--line);background:#fff}44%,62%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}66%,100%{border-color:var(--line);background:#fff}}
+@keyframes dgAct3{0%,72%{border-color:var(--line);background:#fff}76%,94%{border-color:var(--dgc);background:var(--blue-t);color:var(--ink)}97%,100%{border-color:var(--line);background:#fff}}
+.dg-win .cur{position:absolute;width:20px;height:20px;color:var(--ink);fill:#fff;stroke:var(--ink);stroke-width:1.6;left:10%;top:70%;animation:dgCur var(--cyc,9s) infinite}
+@keyframes dgCur{0%{left:4%;top:78%}10%,30%{left:17%;top:48%}42%,62%{left:50%;top:48%}74%,94%{left:83%;top:48%}100%{left:4%;top:78%}}
+.dg.still .dg-win .cur{left:83%;top:48%}
+
+/* 긴 대화가 요약되는 모습: 앞 말풍선이 접히고 요약 칸이 그 자리를 차지 */
+.dg-sum{display:flex;flex-direction:column;gap:6px;min-height:150px}
+.dg-sum .b{align-self:flex-start;max-width:92%;border:1px solid var(--line);border-radius:12px 12px 12px 4px;background:#fff;padding:4px 10px;font-size:.78rem;color:var(--ink2)}
+.dg-sum .b.me{align-self:flex-end;border-radius:12px 12px 4px 12px;background:var(--blue-t);border-color:#9cc3ea;color:var(--ink)}
+.dg-sum .old{max-height:4.5em;overflow:hidden;animation:dgOld var(--cyc,8s) infinite}
+.dg-sum .sm{order:-1;max-height:0;overflow:hidden;opacity:0;border:1px dashed var(--warn);background:var(--warn-t);border-radius:10px;padding:0 10px;font-size:.78rem;color:var(--ink);animation:dgSum var(--cyc,8s) infinite}
+.dg-sum .sm s{color:var(--bad)}
+@keyframes dgOld{0%,35%{opacity:1;max-height:4.5em}50%,88%{opacity:0;max-height:0;padding-top:0;padding-bottom:0;border-width:0;margin-top:-6px}100%{opacity:1;max-height:4.5em}}
+@keyframes dgSum{0%,42%{opacity:0;max-height:0;padding-top:0;padding-bottom:0}54%,88%{opacity:1;max-height:5em;padding-top:7px;padding-bottom:7px}100%{opacity:0;max-height:0;padding-top:0;padding-bottom:0}}
+.dg.still .dg-sum .old{display:none}
+.dg.still .dg-sum .sm{opacity:1;max-height:none;padding:7px 10px}
+
+/* 작은 앱 모형(디자인 비교용) */
+.dg-mock{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px;display:flex;flex-direction:column;gap:7px;min-height:118px}
+.dg-mock i{display:block;height:7px;border-radius:4px;background:#d7dbe0}
+.dg-mock i.t{height:11px;width:62%;background:var(--mc,#1d1d1f)}
+.dg-mock i.l{width:88%}
+.dg-mock i.s{width:64%}
+.dg-mock i.bt{height:22px;width:52%;border-radius:var(--mr,9999px);background:var(--mb,var(--blue));margin-top:auto}
+.dg-mock i.sl{height:4px;width:80%;background:linear-gradient(90deg,var(--mb,var(--blue)) 55%,#d7dbe0 55%)}
+.dg-mocks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dg-mocks>div{animation:dgPop var(--cyc,6s) infinite}
+.dg-mocks>div:nth-child(2){animation-delay:.5s}
+.dg-mocks>div:nth-child(3){animation-delay:1s}
+.dg-mocks small{display:block;text-align:center;font-size:.72rem;color:var(--ink3);margin-top:4px}
+
+/* 발표 모드에서는 조금 크게 */
+html[data-mode="present"] .dg{padding:22px 24px 18px}
+html[data-mode="present"] .dg-node b{font-size:1.02rem}
+html[data-mode="present"] .dg-node small{font-size:.84rem}
+html[data-mode="present"] .dg-cap{font-size:.95rem}
+
+@media print{.dg *{animation:none!important}.dg-wire>i,.dg-vwire>i{display:none}.dg-ctl{display:none}}
