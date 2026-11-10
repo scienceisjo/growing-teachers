@@ -469,6 +469,9 @@ html[data-mode="present"] .res-grid{grid-template-columns:repeat(auto-fill,minma
 .pt-ex{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .pt-ex .lab{font-weight:700;font-size:.92em;color:var(--ink2);margin-right:4px;min-width:4.6em}
 .ex-lab{margin:14px 0 0;font-size:.9em;font-weight:600;color:var(--ink3)}
+html[data-mode="present"] .ex8{gap:10px}
+html[data-mode="present"] .ex8 .box{padding:10px 14px;font-size:.9em}
+.ex-note{margin:14px 0 0;padding:12px 16px;border-left:3px solid var(--blue);background:var(--blue-t);border-radius:0 var(--r2) var(--r2) 0;color:var(--ink)}
 .box .subj{display:block;font-size:.8em;font-weight:600;color:var(--blue);margin-bottom:3px}
 @media(max-width:720px){.pt{grid-template-columns:1fr}}
 .ai-links{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
@@ -995,7 +998,7 @@ html[data-mode="present"] .gsteps.wide li > img{max-height:62vh;width:auto;max-w
     <div class="blk">
       <p class="kw">교과와 업무에 맞춘 예시</p>
       <p class="brief">교과마다, 맡은 업무마다 손이 많이 가는 일이 다릅니다. 그 일을 한 문장으로 적으면 그대로 프롬프트의 「수업에서 불편한 점」이 됩니다.</p>
-      <div class="grid2">
+      <div class="grid2 ex8">
         <div class="box"><span class="subj">담임</span><b>자리를 바꿀 때마다 앞자리 고정, 떨어뜨려 앉힐 짝을 맞추느라 쉬는 시간이 다 갔다</b><p>→ 조건을 지켜 섞는 자리 배치</p></div>
         <div class="box"><span class="subj">모든 교과</span><b>수행평가 채점표를 보며 항목 점수를 더하고 등급을 매기느라 계산기를 두드렸다</b><p>→ 누르면 합계와 등급이 나오는 채점 계산기</p></div>
         <div class="box"><span class="subj">국어</span><b>글이 분량 조건에 맞는지 글자 수와 문단 수를 일일이 셌다</b><p>→ 글자 수·문단 수 세기와 반복 낱말 표시</p></div>
@@ -1005,7 +1008,10 @@ html[data-mode="present"] .gsteps.wide li > img{max-height:62vh;width:auto;max-w
         <div class="box"><span class="subj">체육</span><b>리그전 일정과 순위를 종이에 적어 붙이고 경기마다 고쳐 썼다</b><p>→ 점수만 넣으면 바뀌는 리그 순위표</p></div>
         <div class="box"><span class="subj">음악</span><b>리듬 읽기를 손뼉으로 몇 번씩 쳐 줘도 학생마다 틀리는 곳이 달랐다</b><p>→ 음표 카드로 마디를 채우고 들어 보기</p></div>
       </div>
+      <p class="ex-note">여기 있는 도구들은 이미 다른 분들이 만들어 둔 것이 많습니다. 오늘은 바이브코딩을 맛보는 시간이라 익숙한 도구로 만들어 보고, 그다음에는 찾아봐도 없는 선생님만의 프로그램을 만드는 것을 목표로 하시면 좋습니다.</p>
       <div class="detail">
+        <p>뽑기, 타이머, 채점 계산기는 검색하면 잘 만들어진 사이트가 여럿 나옵니다. 그래도 오늘 직접 만들어 보는 것은, 부탁하고 눌러 보고 고치는 순서를 결과가 익숙한 도구로 한 번 겪어 보기 위해서입니다. 무엇이 나와야 하는지 알고 있으면, 잘못 나온 곳도 바로 보입니다.</p>
+        <p>순서가 손에 익으면, 남이 만든 도구를 쓰면서 늘 아쉬웠던 한 가지나 우리 학교와 선생님 수업에만 있는 일을 「수업에서 불편한 점」 칸에 적어 봅니다. 같은 순서로 부탁하면 선생님 수업에 맞춘 프로그램이 나옵니다.</p>
         <p>아래 템플릿의 예시 단추에 여기 있는 열두 가지가 모두 들어 있습니다. 단추를 누르면 불편한 점과 도구가 할 일이 채워지고, 선생님 교과와 반에 맞게 숫자나 낱말만 바꿔 쓰셔도 됩니다.</p>
         <p>자리 배치나 채점 계산기처럼 선생님 혼자 쓰는 도구는 「쓰는 화면」에서 「선생님 컴퓨터」를 고릅니다. 학생 번호와 점수를 다루는 도구는 「서버 없이 그 기기에서만」을 켜 두어, 기록이 그 컴퓨터 밖으로 나가지 않게 합니다.</p>
       </div>
