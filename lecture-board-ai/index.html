@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="detail">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI로 칠판 강의 화면 1~3장 만들기 · 해누리중 조승재</title>
+<meta name="description" content="같은 프롬프트를 무료·유료 AI에 넣어 견주고, 내 수업 개념 하나로 칠판 강의 화면 1~3장을 만드는 과학 선생님 연수 자료입니다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   연수 페이지 템플릿 · 흰 바탕 · 파란 강조 하나 · 그림자 0
+   두 겹 구조: .kw(키워드 줄, 항상) + .detail(상세, 📖 상세 모드에서만)
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0;
+  --blue:#0066cc; --blue-h:#0055b3; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2; --bad:#b3261e; --bad-t:#f9eae9;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:ui-monospace,'SF Mono',Consolas,monospace;
+  --fs:17px; --lh:1.55; --kw:1.25rem; --h2:1.7rem; --wrap:860px;
+}
+html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wrap:1180px; }
+*{box-sizing:border-box}
+[hidden]{display:none!important}   /* .btn 같은 flex 요소에도 hidden 이 먹게 */
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
+p{margin:0 0 .8em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+b,strong{font-weight:600}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}   /* 한글엔 쓰지 않는다 — 숫자·코드·URL 전용 */
+code{background:var(--bg2);padding:.1em .4em;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:#fff}
+hr{border:0;border-top:1px solid var(--line);margin:2rem 0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.small{font-size:.86em;color:var(--ink2)}
+.muted{color:var(--ink2)}
+.only-present{display:none}
+html[data-mode="present"] .only-present{display:block}
+html[data-mode="present"] .only-detail,
+html[data-mode="present"] .detail{display:none}
+
+/* ── 상단 바 ── */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:54px;max-width:none;padding:6px 20px}
+.top .brand{font-weight:600;white-space:nowrap;color:var(--ink)}
+.top .brand small{font-weight:400;color:var(--ink2);margin-left:6px}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);border-radius:9999px;padding:4px 12px;font-size:.8rem;color:var(--ink2);background:#fff;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--ink);font-weight:600;margin-right:4px}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip.done{color:var(--ink3)}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2)}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.btn.primary:hover{background:var(--blue-h);text-decoration:none}
+.btn.big{font-size:1rem;padding:11px 22px}
+.btn.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.host-badge{font-size:.8rem;color:var(--blue);border:1px solid var(--blue);border-radius:9999px;padding:4px 10px;white-space:nowrap}
+.timer{display:none;align-items:center;gap:6px;font-variant-numeric:tabular-nums;border:1px solid var(--line);border-radius:9999px;padding:4px 6px 4px 12px;font-size:.9rem}
+html[data-mode="present"] .timer{display:inline-flex}
+.timer.over{border-color:var(--bad);color:var(--bad)}
+.timer .t{font-family:var(--mono);min-width:5.2ch}
+.timer .plan{color:var(--ink2);font-size:.8em}
+.timer button{border:0;background:var(--bg2);border-radius:9999px;width:28px;height:28px;cursor:pointer;font:inherit;font-size:.8rem}
+
+/* ── 표지 ── */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.hero .eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;letter-spacing:.01em;margin-bottom:12px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3rem);margin-bottom:12px}
+.hero .lead{font-size:1.15em;color:var(--ink2);max-width:40em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:18px 0 26px;color:var(--ink2);font-size:.95em}
+.meta span b{color:var(--ink);font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 26px}
+.flow a{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink)}
+.flow a:hover{border-color:var(--blue);text-decoration:none}
+.flow .n{font-size:.78em;color:var(--blue);font-weight:600}
+.flow .t{font-weight:600;display:block;margin:2px 0}
+.flow .m{font-size:.8em;color:var(--ink2)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ── 표지 모식도 ── */
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:48em}
+.pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+.pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.pipe .a{color:var(--ink3);font-size:1.1em}
+.pipe.sub{margin:0 0 18px}
+.pipe.sub .t{color:var(--ink2);font-size:.95em}
+html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
+
+/* ── 단계 ── */
+.step{padding:56px 0 24px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.step-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.step-h .num{flex:none;width:2.1em;height:2.1em;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;line-height:1;align-self:center}
+.step-h h2{font-size:var(--h2);flex:1}
+.step-h .min{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+.step-h .min b{color:var(--ink)}
+.step > .wrap > .goal{color:var(--ink2);margin:-10px 0 26px;font-size:1.02em}
+
+/* ── 블록: 키워드 줄 + 상세 ── */
+.blk{padding:22px 0;border-top:1px solid var(--line2)}
+.blk:first-of-type{border-top:0;padding-top:0}
+.kw{font-size:var(--kw);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em}
+.kw .tag{display:inline-block;font-size:.62em;font-weight:600;color:var(--blue);background:var(--blue-t);border-radius:9999px;padding:.2em .7em;vertical-align:middle;margin-right:.5em;letter-spacing:0}
+.detail{max-width:40em}
+.detail > :last-child{margin-bottom:0}
+.brief{color:var(--ink2);max-width:40em;margin:0 0 .6em}           /* 발표 모드에서도 남는 한 줄 설명 */
+html[data-mode="present"] .brief{color:var(--ink);font-size:1.05em}
+
+/* 참고·주의·강사 큐 */
+.note{border-left:3px solid var(--line);padding:6px 0 6px 16px;margin:14px 0;color:var(--ink2);font-size:.95em}
+.note.warn{border-color:var(--warn);color:var(--ink)}
+.note.warn::before{content:"주의 · ";color:var(--warn);font-weight:600}
+.cue{display:none;background:var(--warn-t);border-radius:var(--r1);padding:10px 14px;margin:12px 0;font-size:.82em;color:var(--warn)}
+.cue::before{content:"🗒 큐 · ";font-weight:600}
+html[data-mode="present"].cue-on .cue{display:block}
+
+/* 보여주기 */
+.frame{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:var(--bg2);margin:14px 0}
+.frame iframe,.frame img,.frame video{display:block;width:100%;border:0}
+.frame iframe{aspect-ratio:16/9;height:auto}
+.frame .cap{padding:10px 14px;font-size:.84em;color:var(--ink2);border-top:1px solid var(--line);background:#fff}
+.frame.empty{padding:46px 20px;text-align:center;color:var(--ink3);font-size:.9em}
+
+/* 실습 */
+.steps{list-style:none;margin:10px 0;padding:0;counter-reset:s}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line2)}
+.steps li:first-child{border-top:0}
+.steps input[type=checkbox]{width:1.35em;height:1.35em;margin:.15em 0 0;accent-color:var(--blue);flex:none;cursor:pointer}
+.steps .what{font-weight:600;display:block}
+.steps .how{display:block;color:var(--ink2);font-size:.95em;margin-top:2px}
+html[data-mode="present"] .steps .how{display:none}
+.steps li.ok .what{color:var(--ink3);text-decoration:line-through}
+details.stuck{border:1px solid var(--line);border-radius:var(--r2);padding:0 16px;margin:14px 0;background:#fff}
+details.stuck summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
+details.stuck summary::before{content:"▸ ";color:var(--blue)}
+details.stuck[open] summary::before{content:"▾ "}
+details.stuck .body{padding:0 0 14px;color:var(--ink2);font-size:.95em}
+details.stuck .body b{color:var(--ink)}
+
+/* 나눔 · 실시간 벽 */
+.live{border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px;margin:14px 0;background:#fff}
+.live .q{font-weight:600;font-size:1.08em;margin-bottom:10px}
+.live form{display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start}
+.live input,.live textarea{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+.live textarea{min-height:2.7em;resize:vertical}
+.live input:focus,.live textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.live .st{font-size:.8em;color:var(--ink3);margin-top:8px;min-height:1.2em}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+html[data-mode="present"] .wall{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;background:var(--bg2);font-size:.95em;word-break:keep-all;overflow-wrap:anywhere}
+.card .who{display:block;font-size:.78em;color:var(--blue);font-weight:600;margin-bottom:4px}
+.card.mine{border-color:var(--blue)}
+.live .empty{color:var(--ink3);font-size:.9em;padding:8px 0}
+html[data-mode="present"] .live form{display:none}          /* 앞 화면엔 벽만. 입력은 각자 폰(📖)에서 */
+html[data-mode="present"] .live .st{display:none}
+
+/* OneDrive 제출 · 링크 카드 */
+.submit{border:1px solid var(--line);border-radius:var(--r3);padding:20px 22px;margin:14px 0;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.submit .txt{flex:1;min-width:220px}
+.submit .txt b{display:block;font-size:1.05em;margin-bottom:4px}
+.submit .txt span{color:var(--ink2);font-size:.92em}
+.qr{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:8px;line-height:0;min-width:72px;min-height:72px}
+.qr svg{width:120px;height:120px}
+html[data-mode="present"] .qr svg{width:220px;height:220px}
+.qr .url{font-family:var(--mono);font-size:.72rem;color:var(--ink2);line-height:1.3;word-break:break-all;display:block;max-width:220px}
+
+/* 표·격자 */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.box{border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;background:#fff}
+.box b{display:block;margin-bottom:4px}
+.box p{color:var(--ink2);font-size:.95em;margin:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95em}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+
+/* ── 이 연수에서 더한 부품 ── */
+/* 프로필 줄 */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2);flex:none}
+.byline b{display:block;font-size:1rem;font-weight:600;line-height:1.3}
+.byline small{display:block;font-size:.82rem;color:var(--ink2);line-height:1.35}
+/* 프롬프트 카드 */
+.pr{position:relative;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg2);padding:12px 96px 12px 14px;margin:12px 0;font-size:.9em}
+.pr .pl{display:block;font-size:.85em;color:var(--blue);margin-bottom:6px;font-weight:600}
+.pr .txt{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;color:var(--ink);max-height:300px;overflow:auto}
+.pr .cp{position:absolute;top:8px;right:8px;font-size:.8rem;padding:5px 12px}
+.btn.done{border-color:var(--ok);color:var(--ok)}
+html[data-mode="present"] .pr .txt{max-height:170px;font-size:.78em}
+/* 내려받기 */
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.dlb{display:block;border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;color:var(--ink);background:#fff}
+.dlb:hover{border-color:var(--blue);text-decoration:none}
+.dlb b{display:block}
+.dlb span{display:block;font-size:.85em;color:var(--ink2)}
+.dlb.main{grid-column:1/-1;border-color:var(--blue);background:var(--blue-t)}
+.dlb.main b{color:var(--blue)}
+/* 프롬프트 칸 그림 */
+.anat{display:grid;gap:6px;margin:14px 0}
+.anat .ly{display:grid;grid-template-columns:160px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--r1);padding:9px 14px;background:#fff}
+.anat .ly span{color:var(--ink2);font-size:.92em}
+.anat .ly em{font-style:normal;font-size:.78em;color:var(--ink3);white-space:nowrap}
+.anat .ly.design{background:var(--blue-t);border-color:var(--blue)}
+.anat .ly.design em{color:var(--blue);font-weight:600}
+.anat .ly.opt{border-style:dashed}
+.anat .ly.mat{border:2px solid var(--ink)}
+.anat .ly.mat em{color:var(--ink);font-weight:600}
+/* 점검표 */
+.chk table{margin:8px 0}
+.chk td.c{width:120px;text-align:center;padding:0}
+.chk th input{width:100%;font:inherit;font-size:.85em;border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:6px;padding:4px 6px}
+.chk th input::placeholder{color:rgba(255,255,255,.65)}
+.chk .ox{width:100%;height:42px;border:0;background:transparent;font:inherit;font-size:1.15em;font-weight:600;cursor:pointer;color:var(--ink3)}
+.chk .ox[data-v="o"]{color:var(--ok);background:var(--ok-t)}
+.chk .ox[data-v="s"]{color:var(--warn);background:var(--warn-t)}
+.chk .ox[data-v="x"]{color:var(--bad);background:var(--bad-t)}
+.chk td.min input{width:76px;font:inherit;border:1px solid var(--line);border-radius:6px;padding:4px 6px;text-align:center;margin:6px 0}
+/* 그림 격자 */
+.figs{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:14px 0}
+.figs figure{margin:0;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:#fff}
+.figs img{display:block;width:100%;height:auto;background:var(--bg2)}
+.figs figcaption{padding:10px 12px;font-size:.88em;color:var(--ink2);border-top:1px solid var(--line)}
+.figs figcaption b{display:block;color:var(--ink);margin-bottom:2px}
+/* 재료 칸 */
+.mk{border:1px solid var(--line);border-radius:var(--r3);padding:16px 18px;margin:12px 0;background:#fff;display:grid;gap:10px}
+.mk .row{display:grid;grid-template-columns:160px 1fr;gap:12px;align-items:start}
+.mk .lb{font-weight:600;font-size:.92em;padding-top:8px}
+.mk input:not([type=radio]),.mk textarea,.mk select{font:inherit;font-size:.95em;border:1px solid var(--line);border-radius:var(--r1);padding:8px 12px;width:100%;background:#fff;color:var(--ink)}
+.mk textarea{resize:vertical}
+.mk input:focus,.mk textarea:focus,.mk select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.mk .seg{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
+.mk .seg label{border:1px solid var(--line);border-radius:9999px;padding:6px 14px;cursor:pointer;font-size:.92em}
+.mk .seg label:has(input:checked){border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.mk .seg input{margin:0 6px 0 0;accent-color:var(--blue)}
+.mk details.opt{border-top:1px solid var(--line2);padding-top:10px}
+.mk details.opt summary{cursor:pointer;font-weight:600;color:var(--blue)}
+.mk details.opt .row{margin-top:10px}
+html[data-mode="present"] .mk{display:none}
+/* 자료 표 · 됨/안 됨 표 · QR 줄 */
+table.res td:last-child{width:1%;white-space:nowrap}
+table.srcs td:first-child{width:200px;word-break:break-all}
+table.ox td.o{color:var(--ok)}
+table.ox td.x{color:var(--bad);font-weight:600}
+.qrrow{align-items:center;gap:16px;margin:12px 0}
+html[data-mode="present"] .qrrow.only-present{display:flex}
+.qrrow span{color:var(--ink2)}
+@media (max-width:720px){
+  .anat .ly{grid-template-columns:1fr;gap:2px}
+  .figs{grid-template-columns:1fr}
+  .mk .row{grid-template-columns:1fr;gap:4px}
+  .mk .lb{padding-top:0}
+  .pr{padding:44px 14px 12px}
+  .chk td.c{width:72px}
+}
+
+/* 스킬 폴더 그림 */
+.tree{border:1px solid var(--line);border-radius:var(--r2);padding:8px 16px;margin:14px 0;background:#fff}
+.tree .tr{display:grid;grid-template-columns:250px 1fr;gap:12px;padding:6px 0;border-top:1px solid var(--line2);align-items:baseline}
+.tree .tr:first-child{border-top:0}
+.tree .tr.d1 code{margin-left:24px}
+.tree .tr.d2 code{margin-left:48px}
+.tree code{background:none;padding:0;color:var(--ink);font-weight:600}
+.tree span{color:var(--ink2);font-size:.92em}
+@media (max-width:720px){ .tree .tr{grid-template-columns:1fr;gap:0} }
+/* 푸터 */
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+
+/* 따라오기: 입력 중일 때만 뜨는 아래 막대 */
+.follow-bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);background:var(--ink);color:#fff;border-radius:var(--r3);padding:8px 8px 8px 16px;font-size:.9rem;display:flex;gap:10px;align-items:center;z-index:40;word-break:keep-all}
+.follow-bar button{border:0;background:#fff;color:var(--ink);border-radius:9999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap}
+
+/* 키 안내 */
+.keys{position:fixed;right:14px;bottom:14px;background:rgba(29,29,31,.9);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:.78rem;display:none;z-index:30;line-height:1.7}
+.keys kbd{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+html[data-mode="present"] .keys{display:block}
+
+@media (max-width:720px){
+  .top .brand small{display:none}
+  .top:has(#followBtn:not([hidden])) .brand{display:none}   /* 따라가기 단추가 있으면 칩 자리를 위해 제목을 숨김 */
+  #followBtn .fst{display:none}                               /* 켬/끔은 파란 칠로 구분 */
+  .live form{grid-template-columns:1fr}
+  .hero{padding:40px 0 28px}
+  .step{padding:40px 0 20px}
+}
+@media print{
+  .top,.keys,.cue,.follow-bar{display:none!important}
+  html{--fs:12pt;--wrap:none}
+  .detail,.only-detail{display:block!important}
+  .step{break-inside:avoid;padding:20px 0}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 상단 바: 단계 칩 · 타이머(🎤) · 모드 전환 ═══════════ -->
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">칠판 강의 화면 만들기<small>해누리중 조승재</small></a>
+    <nav class="chips" id="chips" aria-label="단계"></nav>
+    <div class="tools">
+      <span class="host-badge" id="hostBadge" hidden>진행 화면</span>
+      <button class="btn" id="followBtn" hidden aria-pressed="true" title="강사가 화면을 넘기면 내 화면도 같이 넘어갑니다">따라가기<span class="fst"> 켬</span></button>
+      <div class="timer" id="timer" title="현재 단계 경과 / 계획 (t: 시작·멈춤)">
+        <span class="t" id="tmElapsed">00:00</span><span class="plan" id="tmPlan">/ –분</span>
+        <button id="tmToggle" title="시작·멈춤">▶</button><button id="tmReset" title="이 단계 다시">↺</button>
+      </div>
+      <button class="btn" id="modeBtn" title="p 키로도 바뀝니다">🎤 발표로</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 표지 ═══════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <a class="byline" href="../" title="조승재 포트폴리오"><img src="../images/profile.webp" width="56" height="56" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow" id="eyebrow">과학 선생님 연수 · 칠판 강의 화면</div>
+    <h1>AI로 칠판 강의 화면 1~3장 만들기</h1>
+    <p class="lead">같은 프롬프트를 무료 모델과 유료 모델에 넣어 결과를 견주고, 내 수업 개념 하나로 칠판 강의 화면을 만들어보겠습니다!</p>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">프롬프트 하나</span><span class="a">→</span><span class="n">무료·유료 두 모델</span><span class="a">→</span><span class="n">점검표</span><span class="a">→</span><span class="n">디자인 바꾸기</span><span class="a">→</span><span class="n hi">내 개념 1~3장</span></div>
+    <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
+    <div class="meta">
+      <span>⏱ <b>120분</b> (오프닝 10분 · 쉬는 시간 10분 포함)</span>
+      <span>👩‍🏫 <b>중·고등학교 과학 선생님</b></span>
+      <span>💻 <b>노트북 · 크롬 · AI 계정(무료 하나, 유료 하나)</b></span>
+    </div>
+    <div class="flow" id="flow"><!-- 단계 목록은 스크립트가 .step 에서 만듭니다 --></div>
+    <div class="actions">
+      <a class="btn big primary" href="#s1">시작하기 ↓</a>
+      <a class="btn big" id="openingLink" href="../opening/" target="_blank">🙋 오프닝 페이지 (인사 · 아이스브레이킹) ↗</a>
+      <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
+    </div>
+    <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장에서 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ 1 보기·준비 ═══════════ -->
+<section class="step" id="s1" data-title="보기·준비" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">1</span><h2>칠판 강의 화면 보기와 준비</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">칠판 강의 화면을 한 번 넘겨 보고 오늘 쓸 파일과 AI 탭 두 개를 준비해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">칠판 강의 화면은 PPT와 무엇이 다를까요?</p>
+      <p class="brief">→ 키를 누를 때마다 그림이 하나씩 움직이고, 학생 학습지와 같은 번호의 빈칸이 열립니다.</p>
+      <div class="frame empty" data-embed="https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html" data-cap="제가 수업에 쓰는 「기체의 압력」 강의 화면입니다. 화면을 한 번 누른 뒤 → 키로 넘깁니다. 새 창에서 보시려면 아래 단추를 누릅니다.">칠판 강의 화면</div>
+      <p class="only-detail"><a class="btn" href="https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html" target="_blank" rel="noopener">새 창에서 열기 ↗</a></p>
+      <div class="detail">
+        <p>칠판 강의 화면은 전자칠판에 띄워 두고 제가 설명하며 넘기는 HTML 한 파일입니다. 1920×1080 무대 하나에 장면이 이어지고, → 키를 누를 때마다 그림이 움직이거나 빈칸 하나가 열립니다. 학생은 종이 개념정리 학습지를 들고 있다가, 화면에 열린 빈칸을 같은 번호 칸에 받아 적습니다.</p>
+        <p>제가 PPT 대신 이 화면을 쓰는 까닭은 그림이 실제로 움직이기 때문입니다. 기체 입자가 벽에 부딪히는 모습이나 전류가 도는 모습을 애니메이션 설정 없이 그대로 보여 줄 수 있습니다. 설명하면서 빨간 펜과 레이저로 화면 위에 표시하고, 주소 뒤에 <code>?s=1</code>을 붙이면 학생이 혼자 넘겨 보는 복습판이 됩니다.</p>
+        <p>지금까지 만든 화면은 <a href="../boards/" target="_blank">칠판 강의 모음</a>에 단원별로 모아 두었습니다. 한 차시 화면은 20장 안팎이라, 오늘 실습에서는 개념 하나만 골라 1~3장으로 줄였습니다. 3장이면 AI가 2~6분 안에 끝까지 쓰기 때문입니다.</p>
+      </div>
+      <div class="cue">오프닝 10분 뒤 시작 · 화면 하나 넘겨 보이기(빈칸 열기 · 펜 · ?s=1) 3분</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">오늘 쓰는 파일</p>
+      <p class="brief">아래 꾸러미를 받고, 브라우저에 AI 탭을 두 개 열어 두시길 바랍니다~!</p>
+      <div class="dl">
+        <a class="dlb main" href="files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>프롬프트 세 가지 · 점검표 · 재료 목록 · 칠판 강의 스킬 (zip)</span></a>
+        <a class="dlb" href="files/3장판_프롬프트.txt" download><b>3장판 프롬프트 · 기본</b><span>txt</span></a>
+        <a class="dlb" href="files/3장판_프롬프트_손글씨.txt" download><b>3장판 프롬프트 · 손글씨</b><span>txt</span></a>
+        <a class="dlb" href="files/3장판_프롬프트_디자인서랍.txt" download><b>3장판 프롬프트 · 디자인 서랍</b><span>txt</span></a>
+        <a class="dlb" href="files/비교_점검표.md" download><b>비교 점검표</b><span>md · 종이로 쓰실 때</span></a>
+        <a class="dlb" href="files/가져다쓸_재료_목록.md" download><b>가져다 쓸 재료 목록</b><span>md · PhET·GeoGebra·3D 주소</span></a>
+      </div>
+      <ol class="steps" data-key="prep">
+        <li><input type="checkbox"><div><span class="what">꾸러미 받기</span><span class="how">[꾸러미 한 번에 받기]를 누릅니다. 프롬프트는 이 페이지에서 바로 복사할 수도 있습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">무료 AI 탭 열기</span><span class="how">ChatGPT, Gemini, Claude 가운데 하나에 무료 계정으로 로그인합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">유료 AI 탭 열기</span><span class="how">유료 계정이 없으시면 옆 선생님 화면을 함께 봅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">결과가 바로 보이는 창 켜기</span><span class="how">Gemini는 입력칸 아래 [Canvas]를 켭니다. 결과가 코드로만 나오면 「코드 말고 .html 파일로 만들어 줘」라고 한 번 더 보냅니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>탭 두 개를 한꺼번에 여는 까닭은 기다리는 시간 때문입니다. 3장짜리도 모델에 따라 2분에서 6분이 걸려서, 저는 두 모델에 같은 프롬프트를 동시에 보내 두고 그동안 프롬프트를 같이 읽습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 두 모델 비교 ═══════════ -->
+<section class="step" id="s2" data-title="두 모델 비교" data-min="25">
+  <div class="wrap">
+    <div class="step-h"><span class="num">2</span><h2>같은 프롬프트를 두 모델에</h2><span class="min"><b>25</b>분</span></div>
+    <p class="goal">같은 프롬프트를 무료 모델과 유료 모델에 동시에 보내고 나온 화면을 점검표로 견주어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">프롬프트 하나를 두 탭에 붙여 넣기</p>
+      <p class="brief">아래 프롬프트를 복사해 두 탭에 똑같이 붙여 넣어보겠습니다!</p>
+      <div class="pr" data-p="base"><span class="pl">3장판 프롬프트 · 기본 (중1 기체의 압력, 빈칸 ①~⑤)</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="do1">
+        <li><input type="checkbox"><div><span class="what">프롬프트 복사하기</span><span class="how">위 상자의 [복사]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">무료 탭에 붙여 넣고 보내기</span><span class="how">입력칸에 Ctrl+V, 보내기 화살표</span></div></li>
+        <li><input type="checkbox"><div><span class="what">유료 탭에도 똑같이 보내기</span><span class="how">같은 글을 한 글자도 고치지 않고 보냅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">결과 화면 열기</span><span class="how">오른쪽 창(Claude 아티팩트, ChatGPT·Gemini 캔버스)에서 봅니다. 창이 없으면 코드를 복사해 메모장에 붙이고 강의.html 로 저장해 더블클릭합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">끝까지 넘겨 보기</span><span class="how">화면을 한 번 누르고 →, 끝에서 ← 로 처음까지</span></div></li>
+      </ol>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>코드가 중간에 끊겼습니다.</b> 무료 모델은 한 번에 쓰는 길이가 짧아 끊길 수 있습니다. 같은 대화에 「이어서 써 줘」를 보내 끊긴 곳부터 쓰게 합니다. 그래도 이어지지 않으면 점검표의 첫 줄에 ×를 적고 다른 쪽 결과로 넘어갑니다.</p>
+          <p><b>→ 키를 눌러도 넘어가지 않습니다.</b> 커서가 채팅 입력칸에 있으면 키가 화면으로 가지 않습니다. 화면을 한 번 누른 뒤 → 키를 누릅니다.</p>
+          <p><b>메모장으로 저장한 파일이 글자로만 보입니다.</b> 이름이 강의.html.txt 로 저장된 경우입니다. 저장할 때 파일 형식을 「모든 파일」로 바꾸고 이름을 강의.html 로 적습니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>같은 글을 두 모델에 넣어야 결과의 차이가 모델의 차이로 보입니다. 그래서 두 탭에 보낼 때 한 글자도 고치지 않습니다.</p>
+        <p>저는 연수 전에 이 프롬프트를 Claude의 네 모델(Haiku·Sonnet·Opus·Fable)에 같은 조건으로 넣어 봤습니다. 넷 모두 3장을 끝까지 썼고, 걸린 시간은 2분에서 5분 50초였습니다. ChatGPT와 Gemini의 무료 모델은 제가 미리 돌려 보지 못해서, 오늘 선생님들 결과로 함께 보려고 합니다.</p>
+      </div>
+      <div class="cue">보내고 기다리는 동안 다음 블록(프롬프트 칸 읽기) · 5분</div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">프롬프트는 어떤 칸으로 되어 있을까요?</p>
+      <p class="brief">기다리는 동안 프롬프트를 칸별로 읽어보겠습니다!</p>
+      <div class="anat" aria-label="3장판 프롬프트의 칸">
+        <div class="ly"><b>화면</b><span>1920×1080 무대, 장면 3장, 글자 크기 CSS 한 줄</span><em>규칙</em></div>
+        <div class="ly"><b>넘기기</b><span>→ · ← · Space, 한 단계에 움직임 하나, 장면마다 4~7단계</span><em>규칙</em></div>
+        <div class="ly"><b>빈칸</b><span>밑줄과 파란 번호, 학습지와 같은 번호·정답, 관찰 뒤에 열기</span><em>규칙</em></div>
+        <div class="ly design"><b>디자인</b><span>글꼴, 면 색, 강조색, 뜻마다 색 하나</span><em>세 판에서 이 칸만 다름</em></div>
+        <div class="ly"><b>내용 정확성</b><span>주의할 점을 하나씩 지키기, 재료에 없는 숫자·용어 넣지 않기</span><em>규칙</em></div>
+        <div class="ly opt"><b>(선택) 실험실·영상·3D</b><span>주소를 채울 때만 남기는 칸</span><em>선택</em></div>
+        <div class="ly"><b>다 쓴 뒤</b><span>코드를 끊기지 않게 한 번에, 빈칸 표 붙이기</span><em>규칙</em></div>
+        <div class="ly mat"><b>재료</b><span>학년·주제, 표지 질문, 학습지 문장, 그림, 주의할 점</span><em>5단계에서 내 것으로 바꾸는 칸</em></div>
+      </div>
+      <div class="detail">
+        <p>글자 크기는 처음에 숫자로만 적었습니다. 그랬더니 같은 프롬프트인데도 결과마다 제목이 60px, 64px, 68px, 72px로 달랐습니다. 그래서 그대로 넣을 CSS 한 줄을 주었고, 그다음 시험에서는 네 결과 모두 그 줄을 글자 그대로 넣었습니다.</p>
+        <p>「주의할 점」에는 입자 모형에서 학생이 잘못 알기 쉬운 것을 적었습니다. 부피를 줄여도 입자 수와 크기, 빠르기는 그대로이고, 압력은 아래로만이 아니라 모든 벽에 작용합니다. 이 칸을 적어 두었더니 가벼운 모델도 이 규칙을 지켰습니다. 「그림으로 먼저 보여 준 뒤 빈칸을 연다」는 줄은 가벼운 모델이 피스톤을 누르기 전에 정답부터 연 것을 보고 더했습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">점검표로 두 결과 견주기</p>
+      <p class="brief">칸을 누를 때마다 ○ △ × 가 바뀌고, 이 기기에 저장됩니다.</p>
+      <div class="chk" id="chk"></div>
+      <div class="detail">
+        <p>저는 끝까지 넘긴 뒤 ← 로 처음까지 돌아와 보고, 빠르게 연타해 봅니다. 입자는 부피를 줄이기 전과 후에 개수를 세어 봅니다. 종이로 쓰실 분을 위해 같은 표를 <a href="files/비교_점검표.md" download>비교 점검표</a>로 넣어 두었습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3 결과 나눔 ═══════════ -->
+<section class="step" id="s3" data-title="결과 나눔" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">3</span><h2>두 결과에서 달랐던 점</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">두 결과에서 달랐던 점을 한 줄씩 올리고, 제가 미리 돌려 본 네 모델 결과와 나란히 놓아보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">무료 모델과 유료 모델의 결과에서 가장 달랐던 점은 무엇이었나요?</p>
+      <div class="live" data-kind="share1" data-max="300">
+        <div class="q">무료 모델과 유료 모델의 결과에서 가장 달랐던 점을 한두 문장으로 적어 주세요. 어느 AI였는지도 함께 적어 주시면 좋습니다.</div>
+        <form>
+          <input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off">
+          <textarea name="body" placeholder="예) 무료(Gemini)는 정답이 먼저 열렸고, 유료(ChatGPT)는 입자 화살표를 그렸습니다" maxlength="300"></textarea>
+          <button class="btn primary" type="submit">올리기</button>
+        </form>
+        <div class="st"></div>
+        <div class="wall"></div>
+      </div>
+      <div class="qrrow only-present"><div class="qr" data-url=""></div><span>폰으로 찍으면 이 페이지가 열립니다. 3단계에서 글을 올려 주세요.</span></div>
+      <div class="detail"><p>규칙을 지켰는지는 점검표로 보이지만, 어느 화면으로 수업하고 싶은지는 선생님마다 다릅니다. 그래서 점수보다 「달랐던 점」을 묻습니다. 글이 올라오면 두어 분께 그 화면을 앞에 띄워 주시길 부탁드리려고 합니다.</p></div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">제가 미리 돌려 본 네 모델</p>
+      <p class="brief">넷 모두 넘기기·빈칸·입자 규칙은 지켰고, 차이는 수업 순서와 보여 주는 방식에서 났습니다.</p>
+      <div class="figs">
+        <figure><a href="img/m-haiku.webp" target="_blank"><img src="img/m-haiku.webp" width="1920" height="1080" alt="Haiku 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Haiku · 2분 50초</b>피스톤을 누르기 전에 정답이 먼저 열렸고, 글자가 프롬프트보다 작았습니다.</figcaption></figure>
+        <figure><a href="img/m-sonnet.webp" target="_blank"><img src="img/m-sonnet.webp" width="1920" height="1080" alt="Sonnet 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Sonnet · 2분</b>가장 빨랐고, 글자 크기와 순서 모두 프롬프트대로였습니다.</figcaption></figure>
+        <figure><a href="img/m-opus.webp" target="_blank"><img src="img/m-opus.webp" width="1920" height="1350" alt="Opus 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Opus · 5분 50초</b>입자마다 운동 방향 화살표를 그리고, 누르기 전후를 비교하는 상자를 더했습니다.</figcaption></figure>
+        <figure><a href="img/m-fable.webp" target="_blank"><img src="img/m-fable.webp" width="1920" height="1350" alt="Fable 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Fable · 3분 40초</b>충돌 기록 띠로 횟수가 늘어나는 것을 보여 주고, 표지 질문에 답하는 문장으로 끝냈습니다.</figcaption></figure>
+      </div>
+      <div class="detail">
+        <p>11월 13일에 Claude의 네 모델에 오늘과 같은 프롬프트를 넣고, 스킬 없이 한 번에 쓰게 했습니다. 위 그림은 결과 화면을 단계마다 찍어 이어 붙인 것입니다. 넷 모두 빈칸 ①~⑤의 번호와 정답을 지켰고, 부피를 줄여도 입자 수와 빠르기가 그대로였습니다.</p>
+        <p>차이는 규칙이 아니라 수업을 짜는 쪽에서 났습니다. 가벼운 모델은 관찰보다 정답을 먼저 열었고, 상위 모델은 운동 방향 화살표나 충돌 기록 띠처럼 개념을 눈으로 보이게 하는 장치를 스스로 더했습니다.</p>
+        <p>그 전에 학습지 한 장(빈칸 24개)으로 시험했을 때는, 스킬 없이 시킨 중간 모델이 학습지에 없는 정답을 지어냈고 스킬을 준 가벼운 모델은 빈칸 번호와 정답을 다 지켰습니다. 그래서 저는 모델을 고르기 전에 학습지 문장과 정답, 주의할 점부터 챙깁니다.</p>
+        <p class="note">무료 요금제에서 어떤 모델이 답하는지는 서비스마다 달라서, 위 결과는 무료·유료로 나누지 않고 모델 이름으로 적었습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4 디자인 바꾸기 ═══════════ -->
+<section class="step" id="s4" data-title="디자인 바꾸기" data-min="15">
+  <div class="wrap">
+    <div class="step-h"><span class="num">4</span><h2>디자인만 바꿔 보기</h2><span class="min"><b>15</b>분</span></div>
+    <p class="goal">디자인 칸만 다른 프롬프트를 같은 모델에 넣어, 손글씨 노트나 디자인 서랍의 모습으로 바꿔보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">손글씨 노트판</p>
+      <p class="brief">모눈종이 위에 손글씨 글꼴로 한 줄씩 써지고, 형광펜이 그어지는 판입니다.</p>
+      <div class="pr" data-p="hand"><span class="pl">3장판 프롬프트 · 손글씨</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="detail">
+        <p>이 판은 제가 유튜브 개념 강의에 쓰는 손글씨 단권화 노트의 모습을 3장판으로 옮긴 것입니다. 글꼴(나눔손글씨 바른히피)은 인터넷에서 불러오므로, 이 판으로 만든 화면은 열 때 인터넷이 연결되어 있어야 손글씨로 보입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">디자인 서랍판</p>
+      <p class="brief">디자인 서랍에서 DESIGN.md를 하나 받아, 프롬프트와 함께 보내보겠습니다!</p>
+      <ol class="steps" data-key="drawer">
+        <li><input type="checkbox"><div><span class="what">디자인 서랍 열기</span><span class="how"><a href="../vibecoding/design.html" target="_blank">디자인 서랍</a>을 새 탭으로 엽니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">마음에 드는 디자인의 DESIGN.md 받기</span><span class="how">카드의 [DESIGN.md 받기]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">아래 프롬프트 복사하기</span><span class="how">[복사]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">DESIGN.md를 첨부하고 보내기</span><span class="how">입력칸의 첨부 단추(＋ 또는 클립)로 파일을 올리고 프롬프트를 붙여 넣습니다.</span></div></li>
+      </ol>
+      <div class="pr" data-p="drawer"><span class="pl">3장판 프롬프트 · 디자인 서랍 (DESIGN.md 첨부)</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="detail">
+        <p>DESIGN.md는 한 웹사이트의 색, 글꼴 크기, 간격 같은 규칙을 적은 글입니다. 이 프롬프트는 DESIGN.md의 색과 모양은 따르되, 글자 크기와 넘기기·빈칸 규칙은 프롬프트 쪽을 따르게 적어 두었습니다. DESIGN.md에 적힌 웹 페이지 글자 크기는 교실 맨 뒤에서 읽기에 작기 때문입니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">같은 규칙, 다른 겉모습</p>
+      <p class="brief">같은 모델(Sonnet)에 세 판을 넣었더니 넘기기·빈칸·순서는 같고 겉모습만 달라졌습니다.</p>
+      <div class="figs">
+        <figure><a href="img/d-base.webp" target="_blank"><img src="img/d-base.webp" width="1950" height="1110" alt="기본판 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>기본</b>흰색·회색·검정 면을 번갈아 쓰고 파랑 하나로 강조했습니다.</figcaption></figure>
+        <figure><a href="img/d-hand.webp" target="_blank"><img src="img/d-hand.webp" width="1920" height="1350" alt="손글씨판 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>손글씨</b>모눈종이에 손글씨와 형광펜을 썼고, 고친 프롬프트로 만들어 17단계가 됐습니다.</figcaption></figure>
+        <figure><a href="img/d-sunny.webp" target="_blank"><img src="img/d-sunny.webp" width="1950" height="1110" alt="햇살 게시판 디자인 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>디자인 서랍 · 햇살 게시판</b>노랑·하늘·민트 면에 둥근 카드를 썼습니다.</figcaption></figure>
+        <figure><a href="img/d-violet.webp" target="_blank"><img src="img/d-violet.webp" width="1950" height="1110" alt="보랏빛 밤 디자인 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>디자인 서랍 · 보랏빛 밤</b>보라와 한지 면을 번갈아 쓰고 그림을 점선으로 그렸습니다.</figcaption></figure>
+      </div>
+      <div class="detail">
+        <p>11월 13일에 Sonnet 하나로 기본판, 손글씨판, 디자인 서랍판 두 가지(햇살 게시판, 보랏빛 밤)를 만들었습니다. 넷 모두 받은 글자 크기 CSS를 그대로 넣었고, 화면에 쓰인 글자 크기도 그 안에서만 나왔습니다.</p>
+        <p>손글씨판은 처음에 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나눠 단계가 20개까지 늘었습니다. 그래서 「그림은 처음부터 보이고 움직인다」는 줄을 더해 다시 만들었고, 17단계로 줄었습니다. 위 손글씨 그림은 고친 프롬프트로 만든 결과입니다.</p>
+      </div>
+      <div class="cue">이 단계 끝 · 쉬는 시간 10분 · 그동안 5단계에 쓸 학습지 문장 하나 골라 두시길 안내</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5 내 개념으로 ═══════════ -->
+<section class="step" id="s5" data-title="내 개념으로" data-min="30">
+  <div class="wrap">
+    <div class="step-h"><span class="num">5</span><h2>내 개념으로 1~3장 만들기</h2><span class="min"><b>30</b>분</span></div>
+    <p class="goal">내 수업의 개념 하나로 재료 칸을 채워, 내 칠판 강의 화면을 만들어보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">재료 칸 채우기</p>
+      <p class="brief">아래 칸을 채우면 고른 디자인의 프롬프트가 완성됩니다.</p>
+      <form class="mk" id="mk" autocomplete="off">
+        <div class="row"><span class="lb">디자인</span>
+          <div class="seg">
+            <label><input type="radio" name="design" value="base" checked> 기본</label>
+            <label><input type="radio" name="design" value="hand"> 손글씨</label>
+            <label><input type="radio" name="design" value="drawer"> 디자인 서랍 (DESIGN.md 첨부)</label>
+          </div>
+        </div>
+        <label class="row"><span class="lb">학년·주제</span><input name="topic" placeholder="예) 중1 과학 · 기체의 성질 · 기체의 압력"></label>
+        <label class="row"><span class="lb">표지 질문</span><input name="q" placeholder="예) 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?"></label>
+        <label class="row"><span class="lb">장면 ② 학습지 문장</span><textarea name="s2" rows="2" placeholder="한 줄에 한 문장. 빈칸은 ( ① 정답 )처럼 번호와 정답을 괄호 안에"></textarea></label>
+        <label class="row"><span class="lb">장면 ② 그림</span><input name="f2" placeholder="장면 ②에서 움직이는 그림 하나"></label>
+        <label class="row"><span class="lb">장면 ③ 학습지 문장</span><textarea name="s3" rows="2" placeholder="번호는 장면 ②에서 이어서 ( ③ 정답 )"></textarea></label>
+        <label class="row"><span class="lb">장면 ③ 그림</span><input name="f3" placeholder="장면 ③에서 움직이는 그림 하나"></label>
+        <label class="row"><span class="lb">주의할 점</span><textarea name="warn" rows="3" placeholder="학생들이 자주 헷갈리는 것, 아직 배우지 않아 쓰지 않을 낱말. 한 줄에 하나"></textarea></label>
+        <details class="opt">
+          <summary>(선택) 가상실험실·영상·3D 모형 넣기</summary>
+          <label class="row"><span class="lb">실험실·영상 주소</span><input name="sim" placeholder="PhET 주소나 유튜브 주소"></label>
+          <label class="row"><span class="lb">넣을 장면</span><select name="simAt"><option value="②">장면 ②</option><option value="③">장면 ③</option></select></label>
+          <label class="row"><span class="lb">3D 모형(GLB) 주소</span><input name="glb" placeholder="https:// 로 시작하는 .glb 주소"></label>
+          <label class="row"><span class="lb">넣을 장면</span><select name="glbAt"><option value="①">장면 ① 표지</option><option value="②">장면 ②</option><option value="③">장면 ③</option></select></label>
+        </details>
+      </form>
+      <p class="small" id="mkSt">칸을 채우면 아래 프롬프트가 바로 바뀝니다. 적은 내용은 이 기기에만 저장됩니다.</p>
+      <div class="pr" data-p="mine"><span class="pl" id="mineLabel">내 3장판 프롬프트 · 기본</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <ol class="steps" data-key="mine">
+        <li><input type="checkbox"><div><span class="what">디자인 고르기</span><span class="how">4단계에서 마음에 든 판</span></div></li>
+        <li><input type="checkbox"><div><span class="what">학습지 문장과 정답 적기</span><span class="how">장면 ②에 1~2개, 장면 ③에 1~2개. 번호는 학습지 번호 그대로</span></div></li>
+        <li><input type="checkbox"><div><span class="what">주의할 점 적기</span><span class="how">학생이 자주 헷갈리는 것 2~3개, 아직 배우지 않은 낱말</span></div></li>
+        <li><input type="checkbox"><div><span class="what">완성된 프롬프트 복사해 보내기</span><span class="how">디자인 서랍판이면 DESIGN.md도 함께 첨부</span></div></li>
+        <li><input type="checkbox"><div><span class="what">빈칸 번호와 정답 맞춰 보기</span><span class="how">→ 로 넘기며 학습지와 한 줄씩</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>장면은 3장, 빈칸은 3~5개로 잡았습니다. 이 정도면 어느 모델이든 2~6분 안에 끝까지 쓰고, 남은 시간에 한두 번 고쳐 볼 수 있습니다.</p>
+        <p>결과를 가장 크게 바꾸는 칸은 「주의할 점」입니다. 기체의 압력에서 입자 수와 빠르기를 적어 두었더니 네 모델이 모두 지켰습니다. 그래서 저는 내 개념에서 학생들이 자주 틀리는 그림과 아직 배우지 않은 낱말을 이 칸에 먼저 적습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">고칠 때는 한 장면씩</p>
+      <p class="brief">고칠 곳은 한 번에 하나만, 장면 번호와 함께 보내보겠습니다!</p>
+      <div class="pr"><span class="pl">고치기 예시 1</span><button class="btn cp" type="button">복사</button><div class="txt">2번 장면만 고쳐 줘. 입자가 벽에 부딪힐 때 반짝임이 더 잘 보이게 해 줘. 다른 장면은 그대로 둬.</div></div>
+      <div class="pr"><span class="pl">고치기 예시 2</span><button class="btn cp" type="button">복사</button><div class="txt">빈칸 ③이 열리기 전에 그림 이름표에 정답이 먼저 보여. 이름표에서 그 낱말을 빼 줘. 다른 곳은 그대로 둬.</div></div>
+      <div class="pr"><span class="pl">고치기 예시 3</span><button class="btn cp" type="button">복사</button><div class="txt">글자 크기 CSS는 그대로 두고, 3번 장면의 그림만 화면 오른쪽 절반으로 옮겨 줘. 다른 장면은 그대로 둬.</div></div>
+      <div class="detail">
+        <p>한꺼번에 여러 곳을 고쳐 달라고 하면 AI가 파일 전체를 다시 쓰면서 잘 되던 장면까지 바뀌는 일이 생깁니다. 그래서 저는 장면 번호를 적고, 「다른 장면은 그대로 둬」를 붙여 하나씩 고칩니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">가상실험실·영상·3D 모형 붙이기</p>
+      <p class="brief">주소를 위 (선택) 칸에 넣으면 AI가 장면 안에 칸을 만들어 줍니다.</p>
+      <table class="res">
+        <thead><tr><th>과목</th><th>자료</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>화학</td><td><a href="https://phet.colorado.edu/sims/html/gas-properties/latest/gas-properties_ko.html" target="_blank" rel="noopener">PhET 기체의 성질</a></td><td><button class="btn cpu" type="button" data-url="https://phet.colorado.edu/sims/html/gas-properties/latest/gas-properties_ko.html">주소 복사</button></td></tr>
+          <tr><td>물리</td><td><a href="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_ko.html" target="_blank" rel="noopener">PhET 회로 만들기</a></td><td><button class="btn cpu" type="button" data-url="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_ko.html">주소 복사</button></td></tr>
+          <tr><td>물리</td><td><a href="https://phet.colorado.edu/sims/html/bending-light/latest/bending-light_ko.html" target="_blank" rel="noopener">PhET 빛의 굴절</a></td><td><button class="btn cpu" type="button" data-url="https://phet.colorado.edu/sims/html/bending-light/latest/bending-light_ko.html">주소 복사</button></td></tr>
+          <tr><td>생물</td><td><a href="https://phet.colorado.edu/sims/html/natural-selection/latest/natural-selection_ko.html" target="_blank" rel="noopener">PhET 자연 선택</a></td><td><button class="btn cpu" type="button" data-url="https://phet.colorado.edu/sims/html/natural-selection/latest/natural-selection_ko.html">주소 복사</button></td></tr>
+          <tr><td>지구과학</td><td><a href="https://phet.colorado.edu/sims/html/gravity-and-orbits/latest/gravity-and-orbits_ko.html" target="_blank" rel="noopener">PhET 중력과 궤도</a></td><td><button class="btn cpu" type="button" data-url="https://phet.colorado.edu/sims/html/gravity-and-orbits/latest/gravity-and-orbits_ko.html">주소 복사</button></td></tr>
+          <tr><td>3D 모형</td><td><a href="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Mars%202020%20Perseverance%20Rover/Mars%202020%20Perseverance%20Rover.glb" target="_blank" rel="noopener">NASA 퍼서비어런스 탐사 로버(GLB)</a></td><td><button class="btn cpu" type="button" data-url="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Mars%202020%20Perseverance%20Rover/Mars%202020%20Perseverance%20Rover.glb">주소 복사</button></td></tr>
+        </tbody>
+      </table>
+      <p class="note warn">만든 HTML을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않고 「오류 153」이 뜹니다. 칸 아래 「새 창에서 열기」 단추로 유튜브에서 엽니다.</p>
+      <details class="stuck"><summary>막혔을 때</summary>
+        <div class="body">
+          <p><b>유튜브 칸에 「오류 153」이 뜹니다.</b> 파일을 더블클릭해 연 경우입니다. 「새 창에서 열기」로 열거나, 배포한 주소로 열면 칸 안에서 재생됩니다.</p>
+          <p><b>3D 모형 칸이 비어 있습니다.</b> 내 컴퓨터에 있는 GLB 파일을 넣은 경우입니다. 파일로 연 HTML에서는 브라우저가 이 파일을 막습니다. 인터넷 주소의 GLB를 쓰거나 Sketchfab의 퍼가기 코드를 씁니다.</p>
+          <p><b>실험실 칸을 누른 뒤 → 키가 안 먹습니다.</b> 키가 칸 안으로 들어간 것입니다. 칸 밖을 한 번 누르거나 「다음」 단추를 누릅니다.</p>
+        </div>
+      </details>
+      <div class="detail">
+        <p>시뮬레이터나 3D 모형을 AI에게 새로 그려 달라고 하면 코드가 길어지고 기다리는 시간도 늘어납니다. 원리가 틀린 그림이 나올 위험도 있습니다. 그래서 저는 PhET 한국어판처럼 이미 검증된 자료의 주소를 먼저 찾아 붙입니다.</p>
+        <p>과목별 주소는 <a href="files/가져다쓸_재료_목록.md" download>가져다 쓸 재료 목록</a>에 PhET 16개, GeoGebra·Desmos, 3D 모형 출처까지 모아 두었습니다. PhET를 넣은 장면 아래에는 출처 한 줄(PhET Interactive Simulations, University of Colorado Boulder)을 붙입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6 정리 ═══════════ -->
+<section class="step" id="s6" data-title="정리" data-min="10">
+  <div class="wrap">
+    <div class="step-h"><span class="num">6</span><h2>나만의 스킬, 배포, 다시 보실 곳</h2><span class="min"><b>10</b>분</span></div>
+    <p class="goal">프롬프트와 스킬이 어떻게 다른지, 나만의 스킬을 만들거나 GitHub에서 받는 법, 배포하지 않고 파일로 열어도 어디까지 되는지 정리해보겠습니다!</p>
+
+    <div class="blk">
+      <p class="kw">프롬프트, MD 파일, 스킬은 무엇이 다를까요?</p>
+      <p class="brief">셋 다 AI에게 주는 글이고, 다른 점은 얼마나 오래 두고 쓰는가입니다.</p>
+      <table>
+        <thead><tr><th></th><th>쓰는 법</th><th>통하는 범위</th></tr></thead>
+        <tbody>
+          <tr><td><b>프롬프트</b></td><td>만들 때마다 입력칸에 붙여 넣습니다.</td><td>그 메시지 한 번</td></tr>
+          <tr><td><b>MD 파일 첨부</b></td><td>규칙을 적은 .md 파일을 대화에 첨부합니다.</td><td>그 대화 안에서</td></tr>
+          <tr><td><b>프로젝트·Gem 지침</b></td><td>ChatGPT 프로젝트나 Gemini Gem의 지침 칸에 넣어 둡니다.</td><td>그 프로젝트·Gem 안에서</td></tr>
+          <tr><td><b>스킬</b></td><td>한 번 올려 두면 관련된 부탁을 할 때 AI가 꺼내 읽습니다.</td><td>다음 대화에도</td></tr>
+        </tbody>
+      </table>
+      <div class="dl">
+        <a class="dlb" href="files/lecture-board.zip" download><b>칠판 강의 화면 스킬</b><span>lecture-board.zip · 설계서, 과목별 규칙, 실험실·영상·3D 넣기 규칙</span></a>
+        <a class="dlb" href="files/칠판강의_웹채팅판_프롬프트.txt" download><b>칠판 강의 웹채팅판 프롬프트</b><span>txt · 스킬 기능이 없는 AI용</span></a>
+        <a class="dlb" href="files/handwritten-note-lecture.zip" download><b>손글씨 노트 강의 스킬</b><span>zip · 엔진, 예시, 글꼴 포함</span></a>
+        <a class="dlb" href="files/handwritten-note-request.zip" download><b>손글씨 노트 요청서판</b><span>zip · 스킬 기능이 없는 AI용</span></a>
+      </div>
+      <div class="detail">
+        <p>오늘 쓴 3장판 프롬프트는 3,000자 남짓입니다. 20장짜리 한 차시를 만들려면 설계서와 과목별 규칙까지 더해야 해서, 매번 붙여 넣기에는 너무 깁니다. 그래서 저는 이 규칙들을 스킬로 묶어 두고 「칠판 강의 화면 만들어 줘」라고만 부탁합니다.</p>
+        <p>위 zip 파일을 올리는 순서는 바로 아래 「나만의 스킬」 4번에 적었습니다. 스킬 기능이 없는 AI에서는 웹채팅판 프롬프트를 쓰거나, 규칙 파일(.md)을 대화에 첨부해 그 대화 안에서 따르게 합니다. 메뉴 이름과 요금제별로 열려 있는 기능은 자주 바뀌어서, 저는 쓰기 직전에 한 번 확인합니다.</p>
+      </div>
+    </div>
+
+    <div class="blk" id="myskill">
+      <p class="kw">나만의 스킬은 어떻게 만들까요?</p>
+      <p class="brief">스킬은 SKILL.md 파일이 든 폴더 하나입니다. 맨 위에 이름과 설명을 적고, 그 아래에 일하는 순서와 꼭 지킬 것을 적습니다.</p>
+      <div class="tree" aria-label="칠판 강의 화면 스킬 폴더의 짜임">
+        <div class="tr"><code>lecture-board/</code><span>폴더 이름은 스킬 이름(name)과 같게, 영어 소문자와 하이픈으로</span></div>
+        <div class="tr d1"><code>SKILL.md</code><span>맨 위 name · description, 그 아래 일하는 순서와 꼭 지킬 것</span></div>
+        <div class="tr d1"><code>references/</code><span>길어서 따로 둔 규칙 (있을 때만)</span></div>
+        <div class="tr d2"><code>lecture-spec.md</code><span>칠판 강의 화면 설계서</span></div>
+        <div class="tr d2"><code>subject-chemistry.md</code><span>화학 그림·정확성 규칙</span></div>
+      </div>
+      <div class="grid2">
+        <div class="box"><b>AI에게 묶어 달라고 하기</b><p>대화로 규칙을 다 정한 뒤 「지금까지 정한 규칙으로 스킬을 만들어 줘」라고 하면 SKILL.md가 든 폴더를 만들어 줍니다.</p></div>
+        <div class="box"><b>잘 된 프롬프트를 옮기기</b><p>몇 번 고쳐서 잘 된 프롬프트를 SKILL.md 본문에 넣고, 맨 위에 name과 description만 더합니다.</p></div>
+        <div class="box"><b>고칠 점을 한 줄씩 더하기</b><p>AI가 같은 실수를 하면 그 고칠 점을 스킬 파일에 더합니다. 다음 대화부터는 같은 지적을 다시 하지 않아도 됩니다.</p></div>
+      </div>
+      <div class="pr"><span class="pl">SKILL.md 틀 · 괄호 안을 내 것으로 바꿔 씁니다</span><button class="btn cp" type="button">복사</button><div class="txt">---
+name: my-lesson-board
+description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠판 강의 화면을 만든다. "강의 화면 만들어 줘", "학습지 빈칸에 맞춘 개념 설명 화면" 같은 요청에 쓴다.
+---
+
+# (스킬 이름)
+
+## 받을 것
+- 주제와 학년
+- 학습지 문장과 빈칸 정답
+
+## 순서
+1. 빈칸 표(번호 | 정답 | 문장)를 먼저 보여 준다.
+2. 장면 목록을 정한다.
+3. HTML 한 파일로 만든다.
+
+## 꼭 지킬 것
+- 학습지에 없는 정답을 지어내지 않는다.
+- (내 수업에서 AI가 자주 틀렸던 것)
+
+## 다 쓴 뒤
+- 빈칸 표와 스스로 점검한 결과를 짧게 보고한다.</div></div>
+      <ol class="steps" data-key="myskill">
+        <li><input type="checkbox"><div><span class="what">폴더 만들기</span><span class="how">이름은 영어 소문자와 하이픈으로(예: my-lesson-board). SKILL.md 의 name 과 같게 적습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">SKILL.md 쓰기</span><span class="how">위 틀을 복사해 메모장에 붙이고 SKILL.md 로 저장합니다. description 은 200자 안에서 언제 쓰는지를 구체적으로 적습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">폴더째 압축하기</span><span class="how">폴더를 오른쪽 클릭해 [압축(ZIP)]. zip 을 열면 폴더 하나가 보이고, 그 안에 SKILL.md 가 있어야 합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">Claude에 올리기</span><span class="how">[Settings] → [Capabilities]에서 Code execution and file creation 을 켜고, [Customize] → [Skills] → ＋ → [Create skill] → [Upload a skill]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">부탁해서 시험하기</span><span class="how">새 대화에서 부탁해 보고, 스킬을 쓰지 않으면 description 을 고칩니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>스킬에서 가장 중요한 줄은 description입니다. AI는 처음에 스킬의 이름과 설명만 읽고, 부탁이 설명과 맞을 때 본문을 펼쳐 읽기 때문입니다. 그래서 저는 description에 선생님들이 실제로 할 법한 말(「칠판 강의 화면 만들어 줘」)을 그대로 넣습니다.</p>
+        <p>제 스킬은 대부분 Claude와 대화하며 규칙을 정한 뒤, 그 규칙을 스킬로 묶어 달라고 해서 시작했습니다. 그 뒤로 AI가 같은 실수를 하면 고칠 점을 스킬 파일에 한 줄씩 더합니다. 제 말투 검사 스킬은 AI가 쓴 글에서 제가 직접 지적한 표현을 모아 만든 것입니다.</p>
+        <p>여기 적은 메뉴 이름과 요금제는 제가 2026년 11월 14일에 Claude 도움말(영어 화면)을 확인해 정리했습니다. Claude는 무료 요금제에서도 스킬을 올릴 수 있고, 설정에서 코드 실행 기능을 켜야 합니다. ChatGPT도 SKILL.md로 스킬을 만드는 기능을 안내하고 있지만, 어떤 요금제에서 쓸 수 있는지는 아직 확인하지 못했습니다. 스킬 기능이 없는 AI에서는 SKILL.md를 대화에 첨부하거나 Gem·프로젝트의 지침 칸에 넣어 씁니다.</p>
+      </div>
+      <div class="cue">시간이 모자라면 키워드와 폴더 그림만 · 만드는 법은 페이지에 있다고 안내</div>
+    </div>
+
+    <div class="blk" id="ghskill">
+      <p class="kw">GitHub에서 스킬 받아 쓰기</p>
+      <p class="brief">다른 사람이 만든 스킬도 GitHub에서 받아 쓸 수 있습니다. 받은 뒤에는 SKILL.md를 먼저 읽고 올립니다.</p>
+      <table class="srcs">
+        <thead><tr><th>저장소</th><th>들어 있는 것</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://github.com/anthropics/skills" target="_blank" rel="noopener">anthropics/skills</a></td><td>Anthropic이 올린 예시 스킬(Word·PDF·PPT·Excel 문서 만들기 등)과 새 스킬을 만들 때 쓰는 틀(template)</td></tr>
+          <tr><td><a href="https://github.com/epoko77-ai/im-not-ai" target="_blank" rel="noopener">epoko77-ai/im-not-ai</a></td><td>AI가 쓴 한국어 글의 번역투·AI 말투를 고치는 스킬(MIT). Claude Code·Codex·Gemini CLI 설치 안내가 있습니다.</td></tr>
+          <tr><td><a href="https://github.com/dotoridot/korean-humanizer" target="_blank" rel="noopener">dotoridot/korean-humanizer</a></td><td>한국어 AI 문장을 뜻은 그대로 두고 다듬는 스킬(MIT)</td></tr>
+          <tr><td><a href="https://github.com/scienceisjo/growing-teachers/tree/main/lecture-board-ai/files" target="_blank" rel="noopener">scienceisjo/growing-teachers</a></td><td>이 페이지에서 받는 칠판 강의 화면 스킬과 손글씨 노트 강의 스킬도 GitHub의 이 폴더에 들어 있습니다.</td></tr>
+        </tbody>
+      </table>
+      <ol class="steps" data-key="ghskill">
+        <li><input type="checkbox"><div><span class="what">저장소 열고 스킬 폴더 찾기</span><span class="how">예) anthropics/skills 에서 skills 폴더를 열고 쓰고 싶은 스킬 폴더를 고릅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">저장소 내려받기</span><span class="how">저장소 첫 화면의 초록 [Code] 단추 → [Download ZIP]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">압축 풀고 SKILL.md 읽기</span><span class="how">메모장으로 열어 무슨 일을 하는 스킬인지, scripts 폴더(실행되는 코드)가 있는지 봅니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">스킬 폴더 하나만 다시 압축하기</span><span class="how">SKILL.md가 든 폴더 하나만 골라 압축합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">Claude에 올리기</span><span class="how">위 「나만의 스킬」 4번과 같습니다. Claude Code 는 폴더를 내 사용자 폴더의 .claude/skills/ 안에 넣습니다.</span></div></li>
+      </ol>
+      <p class="note warn">스킬에는 AI가 실행하는 코드(scripts 폴더)가 들어 있을 수 있습니다. 저는 출처를 아는 저장소에서 받은 것만 올리고, 올리기 전에 SKILL.md와 scripts를 열어 봅니다. Claude 도움말도 받은 스킬은 켜기 전에 살펴보라고 안내합니다.</p>
+      <div class="detail">
+        <p>저장소 전체를 압축한 파일을 그대로 올리지 않고 스킬 폴더 하나를 따로 압축하는 까닭은, Claude 도움말이 zip 안에 스킬 폴더가 바로 들어 있어야 한다고 안내하기 때문입니다. Claude Code를 쓰시면 <code>/plugin marketplace add anthropics/skills</code> 한 줄로 Anthropic 예시 스킬을 한꺼번에 받을 수도 있습니다.</p>
+        <p>남이 만든 스킬을 고쳐서 다시 나눌 때는 저장소의 LICENSE 파일을 보고 출처를 남깁니다. 제 말투 검사 스킬도 위 두 한국어 저장소(MIT)의 패턴을 일부 빌려 와 우리 말투에 맞게 고쳤고, 스킬 안에 두 저장소의 주소와 라이선스를 적어 두었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">배포하지 않고 파일로 열어도 될까요?</p>
+      <p class="brief">유튜브 칸 하나만 빼면, 더블클릭해 연 파일에서도 효과음·실험실·3D 모형이 됩니다.</p>
+      <table class="ox">
+        <thead><tr><th>기능</th><th>더블클릭해 연 파일</th></tr></thead>
+        <tbody>
+          <tr><td>효과음(Web Audio로 만든 소리), 같은 폴더의 소리 파일</td><td class="o">됩니다. 첫 클릭이나 키 입력 뒤부터 납니다.</td></tr>
+          <tr><td>PhET·GeoGebra 같은 가상실험실 칸</td><td class="o">됩니다</td></tr>
+          <tr><td>인터넷 주소의 3D 모형(model-viewer)</td><td class="o">됩니다</td></tr>
+          <tr><td>인터넷 글꼴, 같은 폴더의 글꼴 파일과 그림</td><td class="o">됩니다</td></tr>
+          <tr><td>체크·위치 기억, 복사 단추</td><td class="o">됩니다</td></tr>
+          <tr><td>유튜브 칸</td><td class="x">안 됩니다. 칸 안에 「오류 153」이 뜹니다.</td></tr>
+          <tr><td>내 컴퓨터의 3D 파일(GLB), 데이터 파일(JSON) 불러오기</td><td class="x">안 됩니다. 브라우저가 막습니다.</td></tr>
+        </tbody>
+      </table>
+      <div class="detail">
+        <p>배포가 어려운 선생님도 계셔서, 11월 14일에 같은 HTML 파일을 크롬에서 더블클릭해 연 것과 배포한 주소로 연 것을 나란히 시험했습니다. 효과음, 같은 폴더의 소리 파일, PhET·GeoGebra 칸, 인터넷 주소의 3D 모형, 글꼴과 그림, 체크 기억과 복사 단추는 두 경우 모두 됐습니다.</p>
+        <p>차이는 두 가지였습니다. 유튜브 칸은 파일로 열면 「오류 153」이 뜨고 재생되지 않았고, 내 컴퓨터의 3D 파일이나 데이터 파일을 불러오는 것은 브라우저가 막았습니다. 그래서 저는 수업 컴퓨터 한 대에서 쓸 때는 파일로 열고, 유튜브만 새 창으로 엽니다. 학생에게 링크로 나눠 주거나 유튜브를 칸 안에서 틀고 싶을 때 배포합니다.</p>
+        <p class="note">크롬에서 시험한 결과입니다. 웨일, 크롬북, 아이패드에서는 아직 시험하지 못했습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">다시 보실 곳</p>
+      <div class="grid2">
+        <div class="box"><b><a href="../boards/" target="_blank">칠판 강의 모음</a></b><p>제가 만든 칠판 강의 화면과 손글씨 노트 강의를 단원별로 모아 두었습니다.</p></div>
+        <div class="box"><b><a href="../vibecoding/lecture.html" target="_blank">칠판 강의 화면 매뉴얼</a></b><p>한 차시 전체를 스킬로 만드는 순서를 적어 두었습니다.</p></div>
+        <div class="box"><b><a href="../vibecoding/design.html" target="_blank">디자인 서랍</a></b><p>디자인 서랍판에 첨부할 DESIGN.md를 고르는 곳입니다.</p></div>
+      </div>
+      <div class="detail">
+        <p>오늘 쓴 프롬프트와 점검표는 2단계에, 스킬 파일은 이 단계에 두었습니다. 다시 열어 보실 때 바로 내 수업 화면으로 이어지도록, 5단계 재료 칸에 적으신 내용은 이 기기에 저장해두었습니다.</p>
+      </div>
+    </div>
+
+    <div class="blk">
+      <p class="kw">만족도 조사 — 다음 연수를 위해 3분만 부탁드립니다</p>
+      <div class="submit">
+        <div class="txt"><b>별점 하나와 한 줄이면 충분합니다</b><span>오프닝 페이지의 마지막 탭에서 받습니다. 이름은 적지 않으셔도 됩니다.</span></div>
+        <a class="btn big primary" id="closingLink" href="../opening/#close" target="_blank">⭐ 만족도 조사 열기</a>
+        <div class="qr" id="closingQr" data-url=""></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-14</span></footer>
+
+<div class="follow-bar" id="followBar" hidden><span id="followMsg"></span><button id="followGo">그리로 가기</button></div>
+
+<div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
+
+<script type="application/json" id="prompts">{"base": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 파란 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (기본)\n- 글꼴: <head>에 이 줄을 넣고 font-family 를 \"Pretendard Variable\", Pretendard, sans-serif 로 한다.\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\">\n- 면 색으로 구획한다: 흰 #ffffff · 밝은 회색 #f5f5f7 · 검정 #000000 · 짙은 회색 #1d1d1f 를 장면마다 번갈아 쓴다. 움직이는 그림 장면은 어두운 면이 잘 어울린다.\n- 강조색은 파랑 하나(밝은 면 #0066cc, 어두운 면 #2997ff). 빈칸 번호 배지와 정답에만 쓴다.\n- 글자 색 #1d1d1f(밝은 면) · #f5f5f7(어두운 면), 보조 글 #6e6e73 · #a1a1a6. 제목 굵기 600, 자간 -0.02em, 제목 위에 회색 작은 꼬리표(28px).\n- 카드: 모서리 18px, 그림자·테두리·그라데이션 없음. 한 장에 글은 적게: 제목 + 학습지 문장 카드 + 그림 하나.\n- 뜻마다 색 하나: 입자 = 초록, 벽에 부딪힌 반짝임 = 흰빛, 미는 힘 화살표 = 보라. 장면이 바뀌어도 같은 뜻은 같은 색.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "hand": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 손글씨는 같은 크기라도 작아 보이므로 더 크게 — 제목 76px, 학습지 문장 46px, 가장 작은 글자 28px 이상.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:76px;line-height:1.2} .sent{font-size:46px;line-height:1.8} .note{font-size:32px;line-height:1.6} .label{font-size:30px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 연필 밑줄 + 파란 동그라미 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 파랑 손글씨로 써진다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (손글씨 노트)\n- 바탕: 아이보리 #fcfbf7 에 40px 모눈(연한 하늘색 선 #dbe8f2). 맨 위 머리줄에 왼쪽 「단원 · 장면 이름」을 작게 쓰고 아래에 초록 가는 선을 긋는다.\n- 글꼴: <head>에 이 두 줄을 넣고 font-family 를 'NanumBaReunHiPi', 'Gaegu', cursive 로 한다(바른히피가 없으면 Gaegu 로 보이게).\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/fonts-archive/NanumBaReunHiPi/subsets/NanumBaReunHiPi-dynamic-subset.css\">\n  <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap\">\n- 색: 큰 제목 초록 #2f7d4c + 초록 형광펜, 소제목 파랑 #2a67a8, 주의 빨강 #c0392b, 보조 글 회색 #55626e. 형광펜은 글자 아래쪽 절반만 칠한 굵은 띠(손으로 그은 듯 살짝 기울게).\n- 노랑 형광펜은 장면마다 가장 중요한 낱말 하나에만 칠한다. 학습지 문장 전체나 여러 줄에 칠하지 않는다(다 칠하면 강조가 사라진다).\n- 손으로 쓰는 효과: 제목 · 핵심 문장 · 빈칸 정답만 왼쪽부터 써지듯 드러난다. 나머지 글은 짧게 떠오른다. 한 단계 안에서 두 줄이 동시에 써지지 않게 차례로.\n- 그림: 연필로 그린 듯한 선(#2b2b2b, 굵기 3~4px)이 그려지듯 나타난다(stroke-dashoffset). 입자는 초록 동그라미, 부딪힌 자리는 노랑으로 잠깐 반짝인다.\n- 상자·카드·그림자 없이 노트 한 장에 적은 느낌으로. 글은 왼쪽 정렬, 줄 간격 넉넉하게.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "drawer": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 강조색 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (함께 보낸 DESIGN.md)\n- 함께 보낸 DESIGN.md 의 색 · 글꼴 · 모양 · 장식을 따른다. 그 안의 글꼴 불러오기 줄을 <head>에 그대로 넣는다.\n- 단, 이 프롬프트의 화면 · 넘기기 · 빈칸 · 정확성 규칙이 DESIGN.md 보다 먼저다. 1920×1080 무대와 글자 크기는 DESIGN.md 의 웹 페이지 크기 규칙 대신 이 프롬프트를 따른다.\n- DESIGN.md 의 「구성안 먼저 보여 주기」는 건너뛰고 바로 만든다. 휴대폰 폭 · 스크롤 구역 같은 웹 페이지용 규칙은 쓰지 않는다.\n- 빈칸 번호 배지와 정답 글자는 DESIGN.md 의 강조색 하나로 칠한다.\n- 그림(입자 · 상자 · 피스톤)도 DESIGN.md 의 선 굵기 · 모서리 · 색 느낌에 맞춘다. 색은 DESIGN.md 색 표 안에서만 고른다.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n\n■ DESIGN.md (여기에 붙여 넣거나 파일로 첨부)\n"}</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   설정 — 연수마다 여기만 바꿉니다
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  key:  'lecture-board-ai',          // localStorage 접두어 (연수마다 다르게 — 체크칸·이름이 섞이지 않게)
+  code: 'lecture-board-ai',               // Supabase 에서 이 연수의 응답을 구분하는 코드. 오프닝 페이지 ?s= 와 같아야 함
+  title: '칠판 강의 화면 만들기',          // 오프닝 페이지 상단에 보일 이름
+  reflect: '',                       // Microsoft Reflect 체크인 링크 — 연수마다 다르게. 비우면 오프닝의 기분 블록이 대신 보임
+  supabase: {
+    url: 'https://vbvtnmnodeoocbbjauap.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc'
+  },
+  pollMs: 6000,                      // 실시간 벽 새로고침 간격
+  followMs: 2500                     // 따라오기: 참여자 화면이 강사 위치를 확인하는 간격
+};
+
+/* ── 주소 값: ?host=1 이면 진행 화면(따라오기 신호를 보냄), ?s=다른코드 면 리허설 ── */
+const params = new URLSearchParams(location.search);
+const IS_HOST = params.has('host');
+let hostSend = null;   // 진행 화면이면 아래 따라오기 구역에서 채움 — 단계를 옮길 때(go·스크롤) 부름
+if(params.get('s')) CONFIG.code = params.get('s').slice(0,60);   // 벽·따라오기·오프닝 링크가 모두 이 코드로 묶임
+
+/* ── 오프닝 페이지 링크: 코드·제목·Reflect 링크를 CONFIG 에서 붙입니다 ── */
+(function(){
+  const q={ s:CONFIG.code, t:CONFIG.title }; if(CONFIG.reflect) q.reflect=CONFIG.reflect;
+  const base='../opening/?'+new URLSearchParams({...q, to:'./'}).toString();
+  document.getElementById('openingLink').href=base;
+  document.getElementById('closingLink').href='../opening/?'+new URLSearchParams(q).toString()+'#close';
+})();
+
+/* ── 모드: 📖 detail / 🎤 present ── */
+const html = document.documentElement;
+const modeBtn = document.getElementById('modeBtn');
+function setMode(m, save=true){
+  html.dataset.mode = m;
+  modeBtn.textContent = m==='present' ? '📖 상세로' : '🎤 발표로';
+  if(save){ try{ localStorage.setItem(CONFIG.key+':mode', m); }catch(e){} }
+}
+(function initMode(){
+  const q = new URLSearchParams(location.search).get('mode');
+  let m = q;
+  if(!m){ try{ m = localStorage.getItem(CONFIG.key+':mode'); }catch(e){} }
+  setMode(m==='present' ? 'present' : 'detail', !!q);
+})();
+modeBtn.addEventListener('click', ()=> setMode(html.dataset.mode==='present' ? 'detail' : 'present'));
+
+/* ── 단계 목록 → 상단 칩 + 표지 흐름 ── */
+const steps = [...document.querySelectorAll('.step')];
+const chips = document.getElementById('chips');
+const flow  = document.getElementById('flow');
+steps.forEach((s,i)=>{
+  const title = s.dataset.title || s.querySelector('h2')?.textContent || ('단계 '+(i+1));
+  const min = s.dataset.min || '';
+  const c = document.createElement('a');
+  c.className='chip'; c.href='#'+s.id; c.innerHTML = `<b>${i+1}</b>${title}${min?` · ${min}분`:''}`;
+  chips.appendChild(c);
+  if(flow){
+    const f = document.createElement('a');
+    f.href='#'+s.id; f.innerHTML = `<span class="n">${i+1}</span><span class="t">${title}</span><span class="m">${min?min+'분':''}</span>`;
+    flow.appendChild(f);
+  }
+});
+const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
+if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분 (오프닝 제외)'; flow.appendChild(f); }
+
+/* ── 현재 단계 추적 (칩 하이라이트 · 타이머 대상) ── */
+let current = 0;
+const chipEls = [...chips.children];
+function setCurrent(i){
+  if(i===current && chipEls[i].classList.contains('on')) return;
+  current = i;
+  chipEls.forEach((c,j)=>{ c.classList.toggle('on', j===i); c.classList.toggle('done', j<i); });
+  updateTimerLabel();
+}
+const io = new IntersectionObserver(es=>{
+  const vis = es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
+  if(vis.length) setCurrent(steps.indexOf(vis[0].target));
+},{rootMargin:'-30% 0px -55% 0px', threshold:[0,.2,.5,1]});
+steps.forEach(s=>io.observe(s));
+
+/* ── 타이머: 단계마다 따로 잽니다 ── */
+const elapsed = steps.map(()=>0);
+let running=false, tick=null;
+const tmE=document.getElementById('tmElapsed'), tmP=document.getElementById('tmPlan'), tmT=document.getElementById('tmToggle'), timerEl=document.getElementById('timer');
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function updateTimerLabel(){
+  const plan = +steps[current]?.dataset.min || 0;
+  tmE.textContent = fmt(elapsed[current]);
+  tmP.textContent = plan ? `/ ${plan}분` : '';
+  timerEl.classList.toggle('over', plan && elapsed[current] > plan*60);
+}
+function toggleTimer(){
+  running=!running; tmT.textContent = running ? '⏸' : '▶';
+  clearInterval(tick);
+  if(running) tick=setInterval(()=>{ elapsed[current]++; updateTimerLabel(); },1000);
+}
+tmT.addEventListener('click', toggleTimer);
+document.getElementById('tmReset').addEventListener('click', ()=>{ elapsed[current]=0; updateTimerLabel(); });
+setCurrent(0);
+
+/* ── 키보드 (발표 모드) — 발표 중엔 스르륵 대신 바로 뜀 ── */
+function go(i){ i=Math.max(0,Math.min(i,steps.length-1)); steps[i].scrollIntoView({behavior:'instant',block:'start'}); setCurrent(i); if(hostSend) hostSend(); }
+function whereAmI(){ return steps[0].getBoundingClientRect().top > innerHeight*0.5 ? 'top' : steps[current].id; }   // 표지가 화면 절반 넘게 보이면 'top'
+document.addEventListener('keydown', e=>{
+  const tg=e.target; if((tg&&tg.matches&&tg.matches('input,textarea,select')) || e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.key==='p'){ modeBtn.click(); return; }
+  if(html.dataset.mode!=='present') return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); go(whereAmI()==='top' ? 0 : current+1); }   // 표지에선 1단계로
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(current-1); }
+  if(e.key==='t'){ toggleTimer(); }
+  if(e.key==='c'){ html.classList.toggle('cue-on'); }
+});
+
+/* ── 실습 체크칸: 기기마다 저장 ── */
+document.querySelectorAll('.steps').forEach(ol=>{
+  const k = CONFIG.key+':chk:'+(ol.dataset.key||ol.closest('.step')?.id||'x');
+  let saved=[]; try{ saved = JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){}
+  const boxes=[...ol.querySelectorAll('input[type=checkbox]')];
+  boxes.forEach((b,i)=>{ b.checked=!!saved[i]; b.closest('li').classList.toggle('ok',b.checked);
+    b.addEventListener('change',()=>{ b.closest('li').classList.toggle('ok',b.checked);
+      try{ localStorage.setItem(k, JSON.stringify(boxes.map(x=>x.checked))); }catch(e){} }); });
+});
+
+/* ── 보여주기 프레임: data-embed 에 주소를 넣으면 iframe/img 로 바뀝니다 ── */
+document.querySelectorAll('.frame[data-embed]').forEach(f=>{
+  const u=f.dataset.embed.trim(); if(!u) return;
+  f.classList.remove('empty'); const cap=f.dataset.cap||'';
+  const isImg=/\.(png|jpe?g|webp|gif|svg)(\?|$)/i.test(u);
+  f.innerHTML = (isImg ? `<img src="${u}" alt="${cap}">` : `<iframe src="${u}" loading="lazy" allowfullscreen></iframe>`) + (cap?`<div class="cap">${cap}</div>`:'');
+});
+
+/* ── 실시간 벽 (Supabase REST, 폴링) ── */
+const SB = CONFIG.supabase;
+const sbHeaders = ()=>({ 'apikey':SB.key, 'Authorization':'Bearer '+SB.key, 'Content-Type':'application/json' });
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let myName=''; try{ myName = localStorage.getItem('yeonsu:name')||''; }catch(e){}
+document.querySelectorAll('.live[data-kind]').forEach(box=>{
+  const kind=box.dataset.kind, form=box.querySelector('form'), st=box.querySelector('.st'), wall=box.querySelector('.wall');
+  const nameIn=form.querySelector('[name=name]'), bodyIn=form.querySelector('[name=body]');
+  nameIn.value=myName;
+  if(!SB.url||!SB.key){ st.textContent='실시간 벽을 켜려면 CONFIG.supabase 에 주소와 키를 넣고, SETUP_연수라이브.sql 을 한 번 실행합니다.'; return; }
+  let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem(CONFIG.key+':mine:'+kind)||'[]')); }catch(e){}
+  async function load(){
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CONFIG.code)}&kind=eq.${encodeURIComponent(kind)}&select=id,name,body,created_at&order=created_at.desc&limit=300`,{headers:sbHeaders()});
+      if(!r.ok) throw new Error(r.status);
+      const rows=await r.json();
+      wall.innerHTML = rows.length ? rows.map(x=>`<div class="card${mine.has(x.id)?' mine':''}"><span class="who">${esc(x.name||'익명')}</span>${esc(x.body)}</div>`).join('') : '<div class="empty">아직 올라온 글이 없습니다. 첫 글을 남겨 주세요.</div>';
+      box.querySelector('.q').dataset.count=rows.length;
+    }catch(e){ st.textContent='서버에 닿지 않습니다 ('+e.message+'). SETUP SQL 을 실행했는지, 주소가 맞는지 확인해 주세요.'; }
+  }
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const name=nameIn.value.trim(), body=bodyIn.value.trim();
+    if(!body){ bodyIn.focus(); return; }
+    myName=name; try{ localStorage.setItem('yeonsu:name',name); }catch(e){}
+    st.textContent='올리는 중…';
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:{...sbHeaders(),'Prefer':'return=representation'},body:JSON.stringify({s:CONFIG.code,kind,name,body})});
+      if(!r.ok) throw new Error(r.status);
+      const [row]=await r.json(); if(row){ mine.add(row.id); try{ localStorage.setItem(CONFIG.key+':mine:'+kind, JSON.stringify([...mine])); }catch(e){} }
+      bodyIn.value=''; st.textContent='올렸습니다. 고맙습니다 🙂'; load();
+    }catch(e){ st.textContent='올리지 못했습니다 ('+e.message+'). 다시 눌러 주세요.'; }
+  });
+  load();
+  let t=null; const vis=new IntersectionObserver(es=>{ es.forEach(en=>{ clearInterval(t); if(en.isIntersecting){ load(); t=setInterval(load, CONFIG.pollMs); } }); }); vis.observe(box);
+});
+
+/* ── 따라오기: 진행 화면(?host=1)이 단계를 옮기면 참여자 화면도 그 단계로 ──
+   강사: 스크롤이 멈추고 0.7초 뒤 yeonsu_live 에 kind=follow, body=단계 id(표지면 'top') 를 한 줄 올림
+   참여자: followMs 마다 그 코드의 마지막 follow 한 줄을 읽어 새 줄이면 그 단계로. 입력칸에 글을 쓰는 중이면 막대만 띄움 */
+const sbOn = !!(SB.url && SB.key);
+const followBtn=document.getElementById('followBtn'), followBar=document.getElementById('followBar'), followMsg=document.getElementById('followMsg');
+function followGo(id){
+  followBar.hidden=true;
+  if(id==='top'){ window.scrollTo({top:0,behavior:'instant'}); return; }
+  const i=steps.findIndex(s=>s.id===id); if(i>=0) go(i);
+}
+if(IS_HOST){
+  const badge=document.getElementById('hostBadge'); badge.hidden=false;
+  if(!sbOn){ badge.textContent='진행 화면 · 서버 없음'; badge.title='CONFIG.supabase 를 넣어야 따라오기 신호가 나갑니다'; }
+  let hostTimer=null, hostLast='';
+  hostSend=()=>{
+    if(!sbOn) return;
+    clearTimeout(hostTimer);
+    hostTimer=setTimeout(async ()=>{
+      const id=whereAmI(); if(id===hostLast) return;
+      try{
+        const r=await fetch(`${SB.url}/rest/v1/yeonsu_live`,{method:'POST',headers:sbHeaders(),body:JSON.stringify({s:CONFIG.code,kind:'follow',name:'host',body:id})});
+        if(r.ok) hostLast=id;
+      }catch(e){}
+    }, 700);
+  };
+  addEventListener('scroll', hostSend, {passive:true});
+  hostSend();
+} else if(sbOn){
+  let followOn=true, followLastId=null, followTarget=null;
+  try{ followOn = localStorage.getItem(CONFIG.key+':follow')!=='0'; }catch(e){}
+  const paint=()=>{ followBtn.querySelector('.fst').textContent = followOn ? ' 켬' : ' 끔'; followBtn.classList.toggle('on', followOn); followBtn.setAttribute('aria-pressed', followOn); };
+  const typing=()=>{ const a=document.activeElement; return !!(a && a.matches && a.matches('input,textarea') && a.value); };
+  const poll=async ()=>{
+    if(document.hidden || !followOn) return;
+    try{
+      const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CONFIG.code)}&kind=eq.follow&select=id,body,created_at&order=id.desc&limit=1`,{headers:sbHeaders()});
+      if(!r.ok) return;
+      const [row]=await r.json(); if(!row || row.id===followLastId) return;
+      followLastId=row.id;
+      if(row.created_at && Date.now()-Date.parse(row.created_at) > 3*3600*1000) return;   // 3시간 넘은 신호는 지난 회차 위치라 따라가지 않음
+      const id=row.body, i=steps.findIndex(s=>s.id===id);
+      if(id!=='top' && i<0) return;
+      if(id===whereAmI()){ followBar.hidden=true; return; }
+      if(typing()){ followTarget=id; followMsg.textContent=`강사 화면이 「${id==='top'?'표지':(steps[i].dataset.title||steps[i].id)}」(으)로 넘어갔습니다`; followBar.hidden=false; return; }
+      followGo(id);
+    }catch(e){}
+  };
+  document.getElementById('followGo').addEventListener('click', ()=>{ if(followTarget) followGo(followTarget); });
+  followBtn.hidden=false; paint();
+  followBtn.addEventListener('click', ()=>{
+    followOn=!followOn; try{ localStorage.setItem(CONFIG.key+':follow', followOn?'1':'0'); }catch(e){}
+    paint(); if(followOn){ followLastId=null; poll(); } else followBar.hidden=true;
+  });
+  poll(); setInterval(poll, CONFIG.followMs);
+}
+
+/* ── QR: data-url 이 비어 있으면 이 페이지(📖 상세) 주소 ── */
+function drawQRs(){
+  document.querySelectorAll('.qr').forEach(el=>{
+    let u=(el.dataset.url||'').trim();
+    if(!u||/^\u3010/.test(u)){
+      const qs=new URLSearchParams({mode:'detail'}); ['s','school'].forEach(k=>{ if(params.get(k)) qs.set(k, params.get(k)); });   // 회차 코드·학교 이름도 함께 실음(host 는 싣지 않음)
+      u = el.id==='closingQr' ? document.getElementById('closingLink').href : location.origin+location.pathname+'?'+qs.toString();
+    }
+    if(window.qrcode){ try{ const q=qrcode(0,'M'); q.addData(u); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:0}); return; }catch(e){} }
+    el.innerHTML=`<span class="url">${esc(u)}</span>`;
+  });
+}
+if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"]').addEventListener('load', drawQRs); setTimeout(()=>{ if(!window.qrcode) drawQRs(); },2500); }
+
+/* ═════════ 이 연수에서 더한 것 ═════════ */
+/* ── 표지 위 학교·모임 이름: ?school= ── */
+(function(){ const sc=(params.get('school')||'').trim().slice(0,40); if(sc){ const e=document.getElementById('eyebrow'); e.textContent=sc+' · '+e.textContent; } })();
+
+/* ── 프롬프트: 빌드 스크립트(yeonsu_3page/build_page.py)가 txt 본문을 #prompts JSON 에 넣습니다 ── */
+const PROMPTS=(()=>{ try{ return JSON.parse(document.getElementById('prompts').textContent); }catch(e){ return {}; } })();
+document.querySelectorAll('.pr[data-p]').forEach(p=>{ const k=p.dataset.p; if(PROMPTS[k]) p.querySelector('.txt').textContent=PROMPTS[k]; });
+
+/* ── 복사 단추: 프롬프트 상자(.cp) · 주소(.cpu) ── */
+async function copyText(t, btn){
+  let ok=false;
+  try{ await navigator.clipboard.writeText(t); ok=true; }catch(e){
+    const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+    try{ ok=document.execCommand('copy'); }catch(e2){} ta.remove();
+  }
+  const old=btn.dataset.label||btn.textContent; btn.dataset.label=old;
+  btn.textContent=ok?'복사했습니다':'복사가 막혔습니다. 글을 직접 선택해 주세요';
+  btn.classList.toggle('done', ok);
+  setTimeout(()=>{ btn.textContent=old; btn.classList.remove('done'); }, 1800);
+}
+document.addEventListener('click', e=>{
+  const b=e.target.closest('.cp, .cpu'); if(!b) return;
+  copyText(b.classList.contains('cpu') ? b.dataset.url : b.closest('.pr').querySelector('.txt').textContent, b);
+});
+
+/* ── 점검표: 칸을 누르면 · → ○ → △ → × 순서로 바뀜, 기기에 저장 ── */
+(function(){
+  const box=document.getElementById('chk'); if(!box) return;
+  const rows=['코드가 끝까지 나왔다','→ 와 ← 로 넘어가고 되돌아온다','빨리 눌러도 깨지지 않는다','빈칸 ①~⑤ 번호와 정답이 맞다','정답이 열리기 전에 먼저 보이지 않는다','부피를 줄여도 입자 수·크기·빠르기가 그대로다','네 벽 모두에 부딪힌다','안 배운 낱말(보일 법칙·반비례·대기압·단위)이 없다','글자가 겹치거나 잘린 곳이 없다'];
+  const K=CONFIG.key+':chk-grid'; let st={}; try{ st=JSON.parse(localStorage.getItem(K)||'{}'); }catch(e){}
+  const save=()=>{ try{ localStorage.setItem(K, JSON.stringify(st)); }catch(e){} };
+  const nx={'':'o',o:'s',s:'x',x:''}, sym={'':'·',o:'○',s:'△',x:'×'}, cols=['a','b'];
+  let h='<table><thead><tr><th>점검</th>'+cols.map((c,i)=>`<th><input data-n="${c}" placeholder="${i?'유료 (AI 이름)':'무료 (AI 이름)'}" value="${esc(st['n'+c]||'')}" aria-label="${i?'유료':'무료'} AI 이름"></th>`).join('')+'</tr></thead><tbody>';
+  rows.forEach((r,i)=>{ h+=`<tr><td>${r}</td>`+cols.map(c=>{ const v=st[c+i]||''; return `<td class="c"><button type="button" class="ox" data-k="${c+i}" data-v="${v}" aria-label="${r}">${sym[v]}</button></td>`; }).join('')+'</tr>'; });
+  h+='<tr><td>걸린 시간(분)</td>'+cols.map(c=>`<td class="c min"><input data-m="${c}" inputmode="decimal" value="${esc(st['m'+c]||'')}" aria-label="걸린 시간"></td>`).join('')+'</tr></tbody></table><button type="button" class="btn reset">점검표 비우기</button>';
+  box.innerHTML=h;
+  box.addEventListener('click', e=>{
+    const b=e.target.closest('.ox'); if(b){ const v=nx[b.dataset.v||'']; b.dataset.v=v; b.textContent=sym[v]; st[b.dataset.k]=v; save(); return; }
+    if(e.target.closest('.reset')){ st={}; save(); box.querySelectorAll('.ox').forEach(x=>{ x.dataset.v=''; x.textContent=sym['']; }); box.querySelectorAll('input').forEach(x=>x.value=''); }
+  });
+  box.addEventListener('input', e=>{ const t=e.target; if(t.dataset.n) st['n'+t.dataset.n]=t.value; if(t.dataset.m) st['m'+t.dataset.m]=t.value; save(); });
+})();
+
+/* ── 재료 칸 → 내 3장판 프롬프트 ── */
+(function(){
+  const f=document.getElementById('mk'); if(!f) return;
+  const out=document.querySelector('.pr[data-p="mine"] .txt'), lab=document.getElementById('mineLabel');
+  const K=CONFIG.key+':mine'; let st={}; try{ st=JSON.parse(localStorage.getItem(K)||'{}'); }catch(e){}
+  [...f.elements].forEach(el=>{ if(!el.name) return; if(el.type==='radio') el.checked=(st.design||'base')===el.value; else if(st[el.name]!=null) el.value=st[el.name]; });
+  const NAMES={base:'기본',hand:'손글씨',drawer:'디자인 서랍 (DESIGN.md 첨부)'};
+  const lines=s=>String(s||'').split(/\n+/).map(x=>x.trim().replace(/^[-·•]\s*/,'')).filter(Boolean);
+  function build(){
+    const v={}; [...f.elements].forEach(el=>{ if(!el.name) return; if(el.type==='radio'){ if(el.checked) v.design=el.value; } else v[el.name]=el.value; });
+    try{ localStorage.setItem(K, JSON.stringify(v)); }catch(e){}
+    const P=PROMPTS[v.design]||'';
+    if(!P){ out.textContent='프롬프트를 불러오지 못했습니다. 페이지를 새로고침해 주세요.'; return; }
+    const iSim=P.indexOf('■ (선택) 가상실험실'), i3d=P.indexOf('■ (선택) 3D 모형'), iAfter=P.indexOf('■ 다 쓴 뒤'), iMat=P.indexOf('■ 재료');
+    const sim=(v.sim||'').trim(), glb=(v.glb||'').trim();
+    let t=P.slice(0,iSim);
+    if(sim) t+=P.slice(iSim,i3d).replace(/ \(넣고 싶을 때만[^)]*\)/,'').replace('장면 (  )','장면 '+v.simAt).replace('(가상실험실 주소 또는 유튜브 주소)',sim);
+    if(glb) t+=P.slice(i3d,iAfter).replace(/ \(넣고 싶을 때만[^)]*\)/,'').replace('장면 (  )','장면 '+v.glbAt).replace('(GLB 주소)',glb);
+    t+=P.slice(iAfter,iMat);
+    const sent=lines(v.s2).map(x=>'- 장면 ②: '+x).concat(lines(v.s3).map(x=>'- 장면 ③: '+x));
+    const fig=[]; if((v.f2||'').trim()) fig.push('- 장면 ②: '+v.f2.trim()); if((v.f3||'').trim()) fig.push('- 장면 ③: '+v.f3.trim());
+    const warn=lines(v.warn).map(x=>'- '+x);
+    t+='■ 재료\n학년·주제: '+(v.topic||'').trim()+'\n표지 질문: '+(v.q||'').trim()
+      +'\n\n학습지 문장\n'+(sent.join('\n')||'- (학습지 문장을 적어 주세요)')
+      +'\n\n그림\n'+(fig.join('\n')||'- (장면마다 움직이는 그림 하나)')
+      +'\n\n주의할 점\n'+(warn.join('\n')||'- (학생들이 자주 헷갈리는 것)')+'\n';
+    out.textContent=t;
+    lab.textContent='내 3장판 프롬프트 · '+NAMES[v.design];
+  }
+  f.addEventListener('input', build); f.addEventListener('change', build);
+  build();
+})();
+</script>
+</body>
+</html>
