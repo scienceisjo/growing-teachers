@@ -176,7 +176,7 @@ html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
 .pr.big .txt{max-height:none}
 html[data-mode="present"] .pr.big .txt{max-height:14em}
 
-/* ── 부탁문 빌더 ── */
+/* ── 프롬프트 빌더 ── */
 .bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
 .bform .full{grid-column:1/-1}
 .bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
@@ -466,7 +466,7 @@ html[data-mode="present"] .ex .eb p{display:none}
       <ol class="steps" data-key="local">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">서랍에서 고르고 DESIGN.md 받기</span><span class="how">카드의 [DESIGN.md 받기] → 다운로드 폴더에 DESIGN.md 이름으로 저장됩니다</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 파일을 수업도구 폴더로 옮기기</span><span class="how">다운로드 폴더의 DESIGN.md → 수업도구 폴더(index.html 옆)로 끌기</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 만든 부탁문 보내기</span><span class="how">새로 만들 때는 ① 기초 부탁문 끝에 붙이고, 이미 만든 앱이면 그대로 보내기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 만든 프롬프트 보내기</span><span class="how">새로 만들 때는 ① 기초 프롬프트 끝에 붙이고, 이미 만든 앱이면 그대로 보내기</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">index.html을 새로고침해서 보기</span><span class="how">마음에 안 들면 "방금 고치기 전으로 되돌려 줘" → 다른 서랍으로</span></div></li>
       </ol>
       <div class="detail">
@@ -479,8 +479,8 @@ html[data-mode="present"] .ex .eb p{display:none}
       <p class="kw"><span class="tl">웹 채팅</span>짧은 판을 붙여넣거나 원본 파일을 첨부합니다</p>
       <p class="brief">붙여넣기가 기본이고, 파일 첨부가 되는 도구라면 원본을 올려도 됩니다.</p>
       <div class="grid2">
-        <div class="box"><b>방법 ① 짧은 판 붙여넣기 (기본)</b><p>서랍 카드의 [짧은 판 복사]나 아래 빌더가 만든 부탁문을 채팅 입력칸에 붙여넣습니다. 무료 계정에서도 가장 안정적입니다.</p></div>
-        <div class="box"><b>방법 ② 원본 파일 첨부</b><p>[DESIGN.md 받기]로 받은 파일을 입력칸의 첨부 버튼(+ 모양이나 클립 모양)으로 올리고, 부탁문에서는 첨부한 DESIGN.md를 읽게 합니다.</p></div>
+        <div class="box"><b>방법 ① 짧은 판 붙여넣기 (기본)</b><p>서랍 카드의 [짧은 판 복사]나 아래 빌더가 만든 프롬프트를 채팅 입력칸에 붙여넣습니다. 무료 계정에서도 가장 안정적입니다.</p></div>
+        <div class="box"><b>방법 ② 원본 파일 첨부</b><p>[DESIGN.md 받기]로 받은 파일을 입력칸의 첨부 버튼(+ 모양이나 클립 모양)으로 올리고, 프롬프트에서는 첨부한 DESIGN.md를 읽게 합니다.</p></div>
       </div>
       <div class="shots">
         <figure class="shot" data-tool="gpt-free"><a href="shots/gpt-attach.webp" target="_blank" rel="noopener"><img src="shots/gpt-attach.webp" alt="ChatGPT의 + 메뉴" width="820" height="380" loading="lazy"></a><figcaption><b>ChatGPT 웹</b>입력칸 왼쪽 +의 [사진 및 파일 추가]로 DESIGN.md를 올립니다.</figcaption></figure>
@@ -488,9 +488,9 @@ html[data-mode="present"] .ex .eb p{display:none}
         <figure class="shot" data-tool="gemini-free"><a href="shots/gemini-tools.webp" target="_blank" rel="noopener"><img src="shots/gemini-tools.webp" alt="Gemini의 + 메뉴" width="700" height="355" loading="lazy"></a><figcaption><b>Gemini 웹</b>입력칸 왼쪽 +의 [파일 업로드]로 올립니다.</figcaption></figure>
       </div>
       <ol class="steps" data-key="web">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일, 전달 방법을 고르기</span><span class="how">방법 ①이면 짧은 판이 부탁문 안에 저절로 들어갑니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">아래 빌더에서 서랍과 할 일, 전달 방법을 고르기</span><span class="how">방법 ①이면 짧은 판이 프롬프트 안에 저절로 들어갑니다</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">방법 ②라면 먼저 DESIGN.md를 받아 채팅에 첨부하기</span><span class="how">카드의 [DESIGN.md 받기] → 채팅 입력칸의 첨부 버튼 → 다운로드 폴더의 DESIGN.md</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">만든 부탁문을 복사해 채팅에 보내기</span><span class="how">앱을 만든 그 대화에 이어서 보내면 코드를 다시 붙이지 않아도 됩니다. 새 대화면 부탁문의 [지금 코드] 자리에 index.html 코드를 붙이기</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">만든 프롬프트를 복사해 채팅에 보내기</span><span class="how">앱을 만든 그 대화에 이어서 보내면 코드를 다시 붙이지 않아도 됩니다. 새 대화면 프롬프트의 [지금 코드] 자리에 index.html 코드를 붙이기</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">받은 코드 전체를 코드 도우미로 저장하기</span><span class="how">① 기초 3단계의 코드 도우미 → [index.html로 저장]</span></div></li>
       </ol>
       <div class="detail">
@@ -501,8 +501,8 @@ html[data-mode="present"] .ex .eb p{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw"><span class="tag">빌더</span>디자인 부탁문 만들기</p>
-      <p class="brief">서랍과 할 일을 고르면 쓰시는 도구에 맞는 부탁문이 완성됩니다.</p>
+      <p class="kw"><span class="tag">빌더</span>디자인 프롬프트 만들기</p>
+      <p class="brief">서랍과 할 일을 고르면 쓰시는 도구에 맞는 프롬프트가 완성됩니다.</p>
       <form class="bform" id="dbuilder" onsubmit="return false">
         <label class="f">서랍 고르기
           <select name="slug" id="dslug"><option value="apple">Apple</option></select>
@@ -520,8 +520,8 @@ html[data-mode="present"] .ex .eb p{display:none}
           </div>
         </div>
       </form>
-      <p class="note" id="noTool">위쪽에서 도구를 고르시면 도구에 맞는 부탁문이 나옵니다. 지금은 ChatGPT·Claude 앱 기준입니다.</p>
-      <div class="pr big" id="dOut"><span class="pl">디자인 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <p class="note" id="noTool">위쪽에서 도구를 고르시면 도구에 맞는 프롬프트가 나옵니다. 지금은 ChatGPT·Claude 앱 기준입니다.</p>
+      <div class="pr big" id="dOut"><span class="pl">디자인 프롬프트</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
     </div>
 
     <div class="blk">
@@ -567,7 +567,7 @@ html[data-mode="present"] .ex .eb p{display:none}
       <p class="kw">로고와 브랜드 이름은 넣지 않습니다</p>
       <p class="brief">빌려 오는 것은 색과 모양이지, 그 회사의 이름이 아닙니다.</p>
       <div class="detail">
-        <p>설계서에는 로고가 없지만, AI가 가끔 제목이나 버튼에 브랜드 이름을 넣습니다. 학생들에게 나눠 주는 앱이 그 회사에서 만든 것처럼 보이면 안 되기 때문에, 빌더가 만드는 부탁문에는 "로고와 브랜드 이름은 넣지 마"가 늘 들어갑니다.</p>
+        <p>설계서에는 로고가 없지만, AI가 가끔 제목이나 버튼에 브랜드 이름을 넣습니다. 학생들에게 나눠 주는 앱이 그 회사에서 만든 것처럼 보이면 안 되기 때문에, 빌더가 만드는 프롬프트에는 "로고와 브랜드 이름은 넣지 마"가 늘 들어갑니다.</p>
       </div>
     </div>
 
@@ -801,7 +801,7 @@ document.getElementById('dq').addEventListener('input', e => { F.q = e.target.va
 document.getElementById('flight').addEventListener('click', e => { const b = e.target.closest('[data-light]'); if (!b) return; F.light = b.dataset.light; document.querySelectorAll('#flight button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderAll(); });
 document.getElementById('fcat').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; F.cat = b.dataset.cat; document.querySelectorAll('#fcat button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderAll(); });
 
-/* ── 디자인 부탁문 빌더 ── */
+/* ── 디자인 프롬프트 빌더 ── */
 const dForm = document.getElementById('dbuilder'), dOut = document.querySelector('#dOut .txt');
 let buildSeq = 0;
 async function buildDesignPrompt() {
@@ -815,14 +815,14 @@ async function buildDesignPrompt() {
   let text;
   if (k === 'web' && deliver === 'attach') {
     text = mode === 'new'
-      ? `첨부한 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽고 그대로 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 부탁문을 붙여넣기)`
+      ? `첨부한 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽고 그대로 따라 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 프롬프트를 붙여넣기)`
       : `첨부한 DESIGN.md 설계서(${it.brand} 느낌)를 먼저 읽어 줘. 그다음 앱의 디자인만 이 설계서의 색·글꼴 크기·모양으로 바꿔 줘. ${keep} 고친 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[지금 코드]\n(같은 대화에서 이어서 부탁하면 이 줄은 지워도 됩니다. 새 대화라면 지금 index.html 코드를 통째로 붙여넣기)`;
   } else if (k === 'web') {
     dOut.textContent = '짧은 판을 불러오는 중입니다…';
     let d; try { d = await getData(it.slug); } catch (e) { dOut.textContent = '설계서를 불러오지 못했습니다. 잠시 뒤 다시 골라 주세요.'; return; }
     if (seq !== buildSeq) return;
     text = mode === 'new'
-      ? `[디자인 설계서]\n${d.short}\n\n위 설계서의 색·글꼴 크기·모양으로 아래 부탁대로 만들어 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 부탁문을 붙여넣기)`
+      ? `[디자인 설계서]\n${d.short}\n\n위 설계서의 색·글꼴 크기·모양으로 아래 부탁대로 만들어 줘. 로고와 브랜드 이름은 넣지 말고, 한글은 Pretendard 글꼴로 보이게 해 줘. 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[부탁]\n(여기에 ① 기초에서 만든 프롬프트를 붙여넣기)`
       : `[디자인 설계서]\n${d.short}\n\n위 설계서의 색·글꼴 크기·모양으로 앱의 디자인만 바꿔 줘. ${keep} 고친 코드는 <!DOCTYPE html>부터 </html>까지 중간을 줄이지 말고 전부 보여 줘.\n\n[지금 코드]\n(같은 대화에서 이어서 부탁하면 이 줄은 지워도 됩니다. 새 대화라면 지금 index.html 코드를 통째로 붙여넣기)`;
   } else {
     text = mode === 'new'

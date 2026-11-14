@@ -176,7 +176,7 @@ html[data-mode="present"] .pr .txt{max-height:6.5em;overflow:auto}
 .pr.big .txt{max-height:none}
 html[data-mode="present"] .pr.big .txt{max-height:14em}
 
-/* ── 부탁문 빌더 ── */
+/* ── 프롬프트 빌더 ── */
 .bform{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin:14px 0}
 .bform .full{grid-column:1/-1}
 .bform label.f,.bform .f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92em}
@@ -355,7 +355,7 @@ html[data-mode="present"] .steps .why{display:none}
       <span>🔑 <b>GitHub 계정</b></span>
     </div>
     <div class="pick">
-      <p>먼저 쓰시는 도구를 골라 주세요. 고르신 도구에 맞는 부탁문이 나옵니다.</p>
+      <p>먼저 쓰시는 도구를 골라 주세요. 고르신 도구에 맞는 프롬프트가 나옵니다.</p>
       <div class="toolgroup">
         <span class="tg">폴더에서 일하는 앱 · 유료 계정</span>
         <div class="toolpick" role="group" aria-label="폴더에서 일하는 앱">
@@ -527,7 +527,7 @@ html[data-mode="present"] .steps .why{display:none}
       </div>
       <div class="detail">
         <p>Edge Function은 Supabase의 서버에서 돌아가는 작은 프로그램입니다. 학생 화면이 부르면 대신 일을 하고 결과만 돌려줍니다. 금고(Secrets)에 넣은 값은 이 함수 코드에서만 이름으로 꺼내 쓸 수 있습니다.</p>
-        <p>비유가 맞지 않는 곳도 있습니다. 행정실 주무관님은 이상한 품의를 보면 되물을 줄 알지만, 함수는 코드에 적힌 규칙대로만 움직입니다. 그래서 하루에 몇 번까지 부를지, 어느 주소에서 온 부탁만 받을지를 함수 코드 안에 미리 적습니다. 6단계의 부탁문 빌더가 이 규칙을 넣어 줍니다.</p>
+        <p>비유가 맞지 않는 곳도 있습니다. 행정실 주무관님은 이상한 품의를 보면 되물을 줄 알지만, 함수는 코드에 적힌 규칙대로만 움직입니다. 그래서 하루에 몇 번까지 부를지, 어느 주소에서 온 부탁만 받을지를 함수 코드 안에 미리 적습니다. 6단계의 프롬프트 빌더가 이 규칙을 넣어 줍니다.</p>
         <p>Supabase는 이 행정실을 카드 등록 없이 무료로 빌려줍니다(한 달 50만 번까지). Firebase에도 같은 일을 하는 Cloud Functions가 있지만, 쓰려면 Blaze 요금제로 바꾸고 카드를 등록해야 합니다. Apps Script에도 스크립트 속성이라는 금고가 있어 카드 없이 쓸 수 있지만, 한 계정에서 동시에 30건까지만 일합니다.</p>
       </div>
     </div>
@@ -628,8 +628,8 @@ html[data-mode="present"] .steps .why{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw"><span class="tag">빌더</span>연결 부탁문</p>
-      <p class="brief">복사한 주소와 키, 모을 내용을 적으면 부탁문이 완성됩니다.</p>
+      <p class="kw"><span class="tag">빌더</span>연결 프롬프트</p>
+      <p class="brief">복사한 주소와 키, 모을 내용을 적으면 프롬프트가 완성됩니다.</p>
       <form class="bform" id="cf" onsubmit="return false" autocomplete="off">
         <label class="f">Project URL
           <input type="url" name="url" placeholder="https://abcdefgh.supabase.co" spellcheck="false">
@@ -645,10 +645,10 @@ html[data-mode="present"] .steps .why{display:none}
           <textarea name="cols" maxlength="300" placeholder="예: 모둠 번호(1~8), 측정한 부피(mL, 숫자), 결론(글, 300자까지)&#10;예: 모둠 번호(1~8), 고른 작품 제목(글), 감상(글, 300자까지)"></textarea>
         </label>
       </form>
-      <div class="pr big" id="pc"><span class="pl">연결 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="pr big" id="pc"><span class="pl">연결 프롬프트</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
       <ol class="steps" data-key="api2">
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 표를 만드는 SQL 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span><span class="why">표를 마우스로 만들 수도 있지만, 규칙(RLS)까지 한 번에 빠짐없이 걸려면 SQL이 낫습니다. 저도 SQL을 직접 쓰지 않고, AI가 쓴 것을 읽어 본 뒤 실행합니다.</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span><span class="why">SQL로 만든 표는 RLS를 따로 켜야 합니다. 켜지 않으면 publishable 키를 가진 누구나 모든 줄을 읽고 고칠 수 있어서, 부탁문에 RLS를 꼭 넣었습니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">프롬프트를 보내 표를 만드는 SQL 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span><span class="why">표를 마우스로 만들 수도 있지만, 규칙(RLS)까지 한 번에 빠짐없이 걸려면 SQL이 낫습니다. 저도 SQL을 직접 쓰지 않고, AI가 쓴 것을 읽어 본 뒤 실행합니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에 붙여 실행하기</span><span class="how">왼쪽 메뉴 [SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span><span class="why">SQL로 만든 표는 RLS를 따로 켜야 합니다. 켜지 않으면 publishable 키를 가진 누구나 모든 줄을 읽고 고칠 수 있어서, 프롬프트에 RLS를 꼭 넣었습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Table Editor에서 표가 생겼는지 보기</span><span class="how">왼쪽 메뉴 [Table Editor] → 표 이름</span><span class="why">SQL이 제대로 돌았는지 눈으로 봅니다. 표 위쪽에 RLS가 꺼져 있다고 나오거나 규칙 수가 0이면 AI에게 다시 부탁합니다.</span></div></li>
       </ol>
       <div class="shots">
@@ -656,7 +656,7 @@ html[data-mode="present"] .steps .why{display:none}
         <figure class="shot"><a href="shots/sb-table.webp" target="_blank" rel="noopener"><img src="shots/sb-table.webp" alt="Table Editor의 표" width="1200" height="527" loading="lazy"></a><figcaption><b>Table Editor</b>왼쪽에서 표를 누르면 줄이 보입니다. 위쪽 RLS policy 옆 숫자가 걸어 둔 규칙 개수입니다.</figcaption></figure>
       </div>
       <div class="detail">
-        <p>주소와 키 칸에 넣은 값은 이 페이지 안에서 부탁문을 만드는 데만 쓰이고, 어디에도 저장하거나 보내지 않습니다.</p>
+        <p>주소와 키 칸에 넣은 값은 이 페이지 안에서 프롬프트를 만드는 데만 쓰이고, 어디에도 저장하거나 보내지 않습니다.</p>
       </div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
@@ -678,7 +678,7 @@ html[data-mode="present"] .steps .why{display:none}
       <p class="kw">두 갈래 가운데 하나</p>
       <div class="grid2">
         <div class="box"><b>A · 만들어 둔 도구 설치하기</b><p>칭찬 도장판, 질문나무, 진도 트래커를 내 Supabase에 설치해 쓰는 판입니다. 설치 가이드를 따라갑니다.</p><p style="margin-top:8px"><a class="btn" href="https://scienceisjo.github.io/class-kit/setup/guide.html" target="_blank" rel="noopener">우리 반 도구 꾸러미 설치 가이드 ↗</a></p></div>
-        <div class="box"><b>B · 내 앱에 제출 붙이기</b><p>3단계의 연결 부탁문으로 내 앱에 [제출] 버튼을 붙이고, 아래 순서로 확인합니다.</p></div>
+        <div class="box"><b>B · 내 앱에 제출 붙이기</b><p>3단계의 연결 프롬프트로 내 앱에 [제출] 버튼을 붙이고, 아래 순서로 확인합니다.</p></div>
       </div>
       <ol class="steps" data-key="collect">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">휴대폰으로 앱 열기</span><span class="how">배포한 주소가 있으면 휴대폰으로. 아직이면 내 컴퓨터에서 index.html</span><span class="why">학생은 휴대폰이나 크롬북으로 엽니다. 제 컴퓨터에서 되던 것이 학생 기기에서는 다르게 보이기도 합니다.</span></div></li>
@@ -774,7 +774,7 @@ html[data-mode="present"] .steps .why{display:none}
       <ol class="steps" data-key="dash">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Supabase에서 교사 계정 만들기</span><span class="how">왼쪽 [Authentication] → [Users] → [Add user] → [Create new user] → 교사 이메일과 비밀번호, [Auto Confirm User] 켜기</span><span class="why">대시보드에 들어올 사람을 Supabase가 알아야, 규칙에서 「이 이메일로 로그인한 사람만」을 가를 수 있습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">새 가입은 막기</span><span class="how">[Authentication]의 가입 설정(Sign In / Providers)에서 Allow new users to sign up 끄기. 같은 프로젝트에 학생이 가입해서 쓰는 다른 앱이 있으면 그대로 둡니다</span><span class="why">가입이 열려 있으면 누구나 계정을 만들 수 있습니다. 규칙을 교사 이메일 하나로 좁혀서 읽지는 못하지만, 쓰지 않는 문은 닫는 편이 안전합니다.</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 규칙 SQL과 teacher.html 받기</span><span class="how">아래 빌더에 교사 이메일을 넣고 복사해 보냅니다</span><span class="why">규칙과 화면을 한 대화에서 받아야 표 이름과 칸 이름이 어긋나지 않습니다.</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">프롬프트를 보내 규칙 SQL과 teacher.html 받기</span><span class="how">아래 빌더에 교사 이메일을 넣고 복사해 보냅니다</span><span class="why">규칙과 화면을 한 대화에서 받아야 표 이름과 칸 이름이 어긋나지 않습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">SQL Editor에서 규칙 SQL 실행하기</span><span class="how">[SQL Editor] → [+ New query] → 붙여넣기 → [Run]</span><span class="why">3단계의 「학생은 넣기만」 규칙 옆에 「교사만 읽고 고치기」를 더합니다. 이 규칙이 없으면 로그인해도 대시보드에 아무 줄도 보이지 않습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">teacher.html을 학생 앱과 같은 곳에 올리기</span><span class="how">앱이면 이 폴더에 저장, 웹 채팅이면 받은 코드를 teacher.html로 저장한 뒤 학생 앱과 같은 저장소에 올리고 배포 주소 뒤에 /teacher.html을 붙여 엽니다</span><span class="why">같은 곳에 두면 한 번에 올라가고 연결 정보도 같습니다. 대시보드 주소는 학생에게 알리지 않지만, 알려져도 로그인 없이는 아무것도 보이지 않습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">세 가지로 확인하기</span><span class="how">학생 화면에서 제출하면 대시보드에 바로 보이는지 · 로그아웃하면 사라지는지 · 시크릿 창에서 teacher.html을 열면 로그인 화면만 나오는지</span><span class="why">규칙이 제대로 걸렸는지는 로그인하지 않은 쪽에서 열어 봐야 알 수 있습니다.</span></div></li>
@@ -782,7 +782,7 @@ html[data-mode="present"] .steps .why{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw"><span class="tag">빌더</span>교사 대시보드 부탁문</p>
+      <p class="kw"><span class="tag">빌더</span>교사 대시보드 프롬프트</p>
       <p class="brief">3단계에서 넣은 주소·키·표 이름·모을 내용을 그대로 가져옵니다. 교사 이메일은 이 페이지에 저장하지 않습니다.</p>
       <form class="bform" id="df" onsubmit="return false" autocomplete="off">
         <label class="f">교사 이메일 (로그인할 계정)
@@ -802,13 +802,13 @@ html[data-mode="present"] .steps .why{display:none}
           </div>
         </div>
       </form>
-      <div class="pr big" id="pd"><span class="pl">교사 대시보드 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="pr big" id="pd"><span class="pl">교사 대시보드 프롬프트</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
           <p><b>로그인했는데 표가 비어 있습니다.</b> 규칙 SQL을 실행했는지, 규칙에 적힌 이메일이 교사 계정의 이메일과 같은지 봅니다. 그래도 비어 있으면 F12의 [Console]에 나온 빨간 글을 그대로 AI에게 보냅니다.</p>
           <p><b>로그인하면 「Email not confirmed」가 나옵니다.</b> 계정을 만들 때 [Auto Confirm User]를 켜지 않은 경우입니다. [Users]에서 그 계정을 지우고, 켠 채로 다시 만듭니다. 계정을 지워도 학생 제출은 그대로입니다.</p>
           <p><b>교사 비밀번호를 학생이 알게 됐습니다.</b> [Users]에서 그 계정을 지우고 새 비밀번호로 다시 만듭니다. 이메일이 같으면 규칙을 고칠 필요가 없습니다.</p>
-          <p><b>제출이 많은데 1,000줄까지만 보입니다.</b> 부탁문에 나눠서 받아 오라는 줄이 들어 있습니다. 이미 만든 뒤라면 "1,000줄씩 나눠서 모두 받아 오게 고쳐 줘"라고 합니다.</p>
+          <p><b>제출이 많은데 1,000줄까지만 보입니다.</b> 프롬프트에 나눠서 받아 오라는 줄이 들어 있습니다. 이미 만든 뒤라면 "1,000줄씩 나눠서 모두 받아 오게 고쳐 줘"라고 합니다.</p>
         </div>
       </details>
     </div>
@@ -891,7 +891,7 @@ html[data-mode="present"] .steps .why{display:none}
     </div>
 
     <div class="blk">
-      <p class="kw"><span class="tag">빌더</span>AI 함수 부탁문</p>
+      <p class="kw"><span class="tag">빌더</span>AI 함수 프롬프트</p>
       <p class="brief">함수 코드와 앱 쪽 코드를 한 번에 받습니다. 코드는 대시보드에 붙여넣기만 하면 됩니다.</p>
       <form class="bform" id="af" onsubmit="return false" autocomplete="off">
         <div class="f">AI 회사
@@ -919,11 +919,11 @@ html[data-mode="present"] .steps .why{display:none}
           <select name="rate"><option value="10/100">1분에 10번, 하루 100번</option><option value="20/300" selected>1분에 20번, 하루 300번</option><option value="30/500">1분에 30번, 하루 500번</option></select>
         </label>
       </form>
-      <div class="pr big" id="pa"><span class="pl">AI 함수 부탁문</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="pr big" id="pa"><span class="pl">AI 함수 프롬프트</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
       <ol class="steps" data-key="fn">
         <li><input type="checkbox" aria-label="완료"><div><span class="what">AI 회사에서 결제 한도를 걸고 키 만들기</span><span class="how">위 표의 순서대로. 키는 만들 때 한 번만 보이니 바로 다음 칸으로</span><span class="why">키가 새어 나가면 제 카드로 결제됩니다. 한도를 먼저 걸면 최악의 경우에도 넣은 돈 안에서 멈춥니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">Supabase의 금고(Secrets)에 키 넣기</span><span class="how">[Edge Functions] → [Secrets] → Key에 <span id="envName">OPENAI_API_KEY</span>, Value에 키 → [Save]. 넣자마자 쓸 수 있습니다</span><span class="why">앱 파일에 적은 글자는 F12로 누구나 봅니다. Secrets에 넣은 키는 함수만 꺼내 씁니다.</span></div></li>
-        <li><input type="checkbox" aria-label="완료"><div><span class="what">부탁문을 보내 함수 코드와 앱 쪽 코드 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
+        <li><input type="checkbox" aria-label="완료"><div><span class="what">프롬프트를 보내 함수 코드와 앱 쪽 코드 받기</span><span class="how">되묻는 질문에는 짧게 답합니다</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">대시보드에서 함수 만들기</span><span class="how">[Edge Functions] → [Deploy a new function] → [Via Editor] → 함수 코드 붙여넣기 → 이름 정하고 [Deploy function]</span><span class="why">함수는 Supabase의 서버에서 돌아서 학생 기기로 내려가지 않습니다. 그래서 키를 꺼내 쓸 수 있습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">함수 설정의 Verify JWT 확인하기</span><span class="how">publishable 키로 부르는 함수는 끄고, 대신 함수 안에서 호출 횟수를 셉니다. AI가 알려 준 대로</span><span class="why">publishable 키로 부르면 로그인한 사람의 표(JWT)가 없어서, 이 스위치가 켜져 있으면 401 오류로 막힙니다. 대신 함수 안에서 부르는 횟수를 세어 막습니다.</span></div></li>
         <li><input type="checkbox" aria-label="완료"><div><span class="what">앱에서 불러 보기</span><span class="how">답이 오면 성공. 오류 글은 그대로 AI에게 보냅니다</span></div></li>
@@ -1166,7 +1166,7 @@ document.addEventListener('click', e => {
   copyText(t.innerText.trim(), b);
 });
 
-/* ═══ 연결 부탁문 ═══ (주소·키는 저장하지 않습니다) */
+/* ═══ 연결 프롬프트 ═══ (주소·키는 저장하지 않습니다) */
 const cf = document.getElementById('cf'), af = document.getElementById('af');
 const keyMsg = document.getElementById('keyMsg');
 function checkKey(k) {
@@ -1208,7 +1208,7 @@ function buildConnect() {
   document.querySelector('#pc .txt').textContent = L.join('\n');
 }
 
-/* ═══ AI 함수 부탁문 ═══ */
+/* ═══ AI 함수 프롬프트 ═══ */
 const PROV = { openai: { n: 'OpenAI', env: 'OPENAI_API_KEY' }, anthropic: { n: 'Anthropic(Claude)', env: 'ANTHROPIC_API_KEY' } };
 const AKEY = CONFIG.key + ':ai';
 function buildAI() {
@@ -1257,7 +1257,7 @@ function buildAI() {
   f.task.value = v.task || ''; f.origin.value = v.origin || ''; if (v.len) f.len.value = v.len; if (v.rate) f.rate.value = v.rate;
 })();
 
-/* ═══ 교사 대시보드 부탁문 ═══ (교사 이메일·주소·키는 저장하지 않습니다) */
+/* ═══ 교사 대시보드 프롬프트 ═══ (교사 이메일·주소·키는 저장하지 않습니다) */
 const df = document.getElementById('df');
 const DKEY = CONFIG.key + ':dash';
 function buildDash() {
@@ -1309,7 +1309,7 @@ cf.addEventListener('input', () => { buildConnect(); buildDash(); }); cf.addEven
 df.addEventListener('input', buildDash); df.addEventListener('change', buildDash);
 af.addEventListener('input', buildAI); af.addEventListener('change', buildAI);
 
-/* 처음 한 번: 저장된 도구 불러오기 (부탁문이 도구에 맞춰 바뀝니다) */
+/* 처음 한 번: 저장된 도구 불러오기 (프롬프트가 도구에 맞춰 바뀝니다) */
 (function () { let t = ''; try { t = localStorage.getItem(TOOL_KEY) || ''; } catch (e) {} setTool(TOOLS[t] ? t : ''); })();
 </script>
 <script src="dg.js"></script>
