@@ -269,6 +269,40 @@ html[data-mode="present"] .qrrow.only-present{display:flex}
 .tree code{background:none;padding:0;color:var(--ink);font-weight:600}
 .tree span{color:var(--ink2);font-size:.92em}
 @media (max-width:720px){ .tree .tr{grid-template-columns:1fr;gap:0} }
+/* 계산으로 그리는 SVG 예시 */
+.svgdemo{border:1px solid var(--line);border-radius:var(--r3);background:#fff;margin:14px 0;overflow:hidden}
+.svgdemo .tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.svgdemo .tabs button,.svgdemo .seas button{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:9999px;padding:6px 14px;font:inherit;font-size:.86rem;cursor:pointer}
+.svgdemo .tabs button.on,.svgdemo .seas button.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.svgdemo svg{display:block;width:100%;height:auto;overflow:hidden}
+.svgdemo .ctl{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding:12px 16px;border-top:1px solid var(--line)}
+.svgdemo .ctl label{font-weight:600;font-size:.92em;white-space:nowrap}
+.svgdemo .ctl .v{color:var(--blue);font-variant-numeric:tabular-nums;margin-left:4px}
+.svgdemo .ctl input[type=range]{flex:1;min-width:180px;accent-color:var(--blue)}
+.svgdemo .seas{display:flex;gap:6px;flex-wrap:wrap}
+.svgdemo .readout{margin:0;padding:0 16px 14px;color:var(--ink);font-size:.95em;font-variant-numeric:tabular-nums}
+.svgdemo .lb{font-size:21px;fill:#1d1d1f}
+.svgdemo .lb.s{font-size:19px;fill:#6e6e73}
+.svgdemo .num{font-size:21px;font-weight:600;fill:#1d1d1f}
+.svgdemo .ax{stroke:#1d1d1f;stroke-width:2}
+.svgdemo .nrm{stroke:#86868b;stroke-width:2;stroke-dasharray:8 6}
+.svgdemo .ray{stroke:#9a6b00;stroke-width:4}
+.svgdemo .ray.weak{stroke-width:3;opacity:.7}
+.svgdemo .tip{fill:#9a6b00;stroke:none}
+.svgdemo .ext{stroke:#9a6b00;stroke-width:2;stroke-dasharray:6 6}
+.svgdemo .arc{fill:none;stroke:#1d1d1f;stroke-width:2}
+.svgdemo .water{fill:#eaf2fb}
+.svgdemo .lens{fill:#eaf2fb;stroke:#0066cc;stroke-width:2}
+.svgdemo .dot{fill:#1d1d1f}
+.svgdemo .obj{stroke:#1d1d1f;stroke-width:5}
+.svgdemo .obj.tip{fill:#1d1d1f;stroke:none}
+.svgdemo .img{stroke:#1d8a4e;stroke-width:5}
+.svgdemo .img.v{stroke-dasharray:9 7}
+.svgdemo .img.tip{fill:#1d8a4e;stroke:none;stroke-dasharray:none}
+.svgdemo .ground{fill:#f5f5f7}
+.svgdemo .sun{fill:#9a6b00}
+.svgdemo .sunline{stroke:#9a6b00;stroke-width:3}
+.svgdemo .ghost{stroke:#86868b;stroke-width:2;stroke-dasharray:4 6}
 /* 푸터 */
 footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
 
@@ -366,12 +400,13 @@ html[data-mode="present"] .keys{display:block}
       <p class="kw">오늘 쓰는 파일</p>
       <p class="brief">아래 꾸러미를 받고, 브라우저에 AI 탭을 두 개 열어 두시길 바랍니다~!</p>
       <div class="dl">
-        <a class="dlb main" href="files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>프롬프트 세 가지 · 점검표 · 재료 목록 · 칠판 강의 스킬 (zip)</span></a>
+        <a class="dlb main" href="files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>3장판 프롬프트 세 가지 · SVG 그림 프롬프트 · 점검표 · 재료 목록 · 칠판 강의 스킬 (zip)</span></a>
         <a class="dlb" href="files/3장판_프롬프트.txt" download><b>3장판 프롬프트 · 기본</b><span>txt</span></a>
         <a class="dlb" href="files/3장판_프롬프트_손글씨.txt" download><b>3장판 프롬프트 · 손글씨</b><span>txt</span></a>
         <a class="dlb" href="files/3장판_프롬프트_디자인서랍.txt" download><b>3장판 프롬프트 · 디자인 서랍</b><span>txt</span></a>
         <a class="dlb" href="files/비교_점검표.md" download><b>비교 점검표</b><span>md · 종이로 쓰실 때</span></a>
         <a class="dlb" href="files/가져다쓸_재료_목록.md" download><b>가져다 쓸 재료 목록</b><span>md · PhET·GeoGebra·3D 주소</span></a>
+        <a class="dlb" href="files/SVG_과학그림_프롬프트.txt" download><b>과학 그림 SVG 프롬프트</b><span>txt · 그림 한 장을 계산해서 받을 때</span></a>
       </div>
       <ol class="steps" data-key="prep">
         <li><input type="checkbox"><div><span class="what">꾸러미 받기</span><span class="how">[꾸러미 한 번에 받기]를 누릅니다. 프롬프트는 이 페이지에서 바로 복사할 수도 있습니다.</span></div></li>
@@ -583,6 +618,38 @@ html[data-mode="present"] .keys{display:block}
       </div>
     </div>
 
+    <div class="blk" id="svgfig">
+      <p class="kw">과학 그림은 SVG로, 계산해서 그리게 하기</p>
+      <p class="brief">SVG는 선의 끝점과 각도를 숫자로 적는 그림이라, 식으로 계산한 값이 그대로 그려집니다. 아래 그림은 슬라이더를 움직일 때마다 다시 계산합니다.</p>
+      <div class="svgdemo" id="svgdemo">
+        <div class="tabs" role="tablist">
+          <button type="button" class="on" data-m="refr">물리 · 빛의 반사와 굴절</button>
+          <button type="button" data-m="lens">물리 · 볼록 렌즈의 상</button>
+          <button type="button" data-m="sun">지구과학 · 태양의 남중 고도</button>
+        </div>
+        <svg viewBox="0 0 800 440" role="img" aria-label="계산으로 그린 과학 그림"></svg>
+        <div class="ctl"></div>
+        <p class="readout"></p>
+      </div>
+      <div class="pr" data-p="svg"><span class="pl">과학 그림 SVG 프롬프트 · 괄호 안을 내 그림으로 바꿉니다</span><button class="btn cp" type="button">복사</button><div class="txt"></div></div>
+      <div class="grid2">
+        <div class="box"><b>볼록 렌즈의 상이라면</b><p>그림 칸에 「물체가 2F 밖에 있을 때 볼록 렌즈의 상, 광선 세 개」, 식 칸에 「상 거리 = 물체 거리 × 초점 거리 ÷ (물체 거리 − 초점 거리)」를 적습니다.</p></div>
+        <div class="box"><b>태양의 남중 고도라면</b><p>그림 칸에 「북위 37.5°에서 하지·춘분·추분·동지의 남중 고도」, 식 칸에 「남중 고도 = 90° − 위도 + 적위(하지 23.5°, 동지 −23.5°)」를 적습니다.</p></div>
+      </div>
+      <ol class="steps" data-key="svgfig">
+        <li><input type="checkbox"><div><span class="what">그림 하나 고르기</span><span class="how">내 개념 장면에 들어갈 그림 가운데 각도·길이·위치가 중요한 것</span></div></li>
+        <li><input type="checkbox"><div><span class="what">괄호 채우기</span><span class="how">그림, 쓸 식과 값, 각도를 재는 기준, 학년</span></div></li>
+        <li><input type="checkbox"><div><span class="what">보내고 열어 보기</span><span class="how">결과 창에서 보거나 HTML로 저장해 더블클릭</span></div></li>
+        <li><input type="checkbox"><div><span class="what">AI가 다시 잰 값 확인하기</span><span class="how">마지막 보고의 각도·위치가 식으로 계산한 값과 같은지 봅니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>칠판 강의 화면을 만들면서 써 보니, 과학 그림은 SVG로 그리게 할 때 가장 정확했습니다. SVG는 선의 시작점과 끝점, 호의 각도를 숫자로 적는 그림이라, AI가 삼각함수로 계산한 값을 그대로 좌표에 넣을 수 있기 때문입니다. 위 세 그림도 슬라이더를 움직일 때마다 굴절, 렌즈, 남중 고도의 식으로 각도와 위치를 다시 계산해서 그립니다.</p>
+        <p>그래서 저는 그림을 부탁할 때 「눈대중으로 그리지 말고 계산해서 좌표로 넣는다」와 「쓴 식은 코드 주석으로 남긴다」를 꼭 넣습니다. 쓸 식과 값(굴절률, 초점 거리, 위도)을 같이 주면 AI가 값을 지어내지 않습니다. 글자와 선이 겹치지 않게 한다는 줄도 넣습니다. 그림 속 글자가 화살표에 걸리면 교실 뒤에서 읽히지 않기 때문입니다.</p>
+        <p>이미지를 만들어 주는 AI의 그림은 쓰지 않습니다. 보기에는 그럴듯해도 각도나 화살표 방향이 틀린 그림이 섞여 나올 수 있고, 학생은 화면에 본 모습 그대로 기억하기 때문입니다. 마음에 드는 SVG가 나오면 3장판 프롬프트의 그림 칸에 「아래 SVG를 그대로 쓴다」와 함께 붙여 넣을 수도 있습니다.</p>
+      </div>
+      <div class="cue">3분 · 굴절 슬라이더만 움직여 보이기 · 렌즈·남중 고도는 탭만 눌러 보이기</div>
+    </div>
+
     <div class="blk">
       <p class="kw">고칠 때는 한 장면씩</p>
       <p class="brief">고칠 곳은 한 번에 하나만, 장면 번호와 함께 보내보겠습니다!</p>
@@ -785,7 +852,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
 
 <div class="keys"><kbd>←</kbd><kbd>→</kbd> 단계 이동 · <kbd>t</kbd> 타이머 · <kbd>c</kbd> 강사 큐 · <kbd>p</kbd> 📖/🎤</div>
 
-<script type="application/json" id="prompts">{"base": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 파란 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (기본)\n- 글꼴: <head>에 이 줄을 넣고 font-family 를 \"Pretendard Variable\", Pretendard, sans-serif 로 한다.\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\">\n- 면 색으로 구획한다: 흰 #ffffff · 밝은 회색 #f5f5f7 · 검정 #000000 · 짙은 회색 #1d1d1f 를 장면마다 번갈아 쓴다. 움직이는 그림 장면은 어두운 면이 잘 어울린다.\n- 강조색은 파랑 하나(밝은 면 #0066cc, 어두운 면 #2997ff). 빈칸 번호 배지와 정답에만 쓴다.\n- 글자 색 #1d1d1f(밝은 면) · #f5f5f7(어두운 면), 보조 글 #6e6e73 · #a1a1a6. 제목 굵기 600, 자간 -0.02em, 제목 위에 회색 작은 꼬리표(28px).\n- 카드: 모서리 18px, 그림자·테두리·그라데이션 없음. 한 장에 글은 적게: 제목 + 학습지 문장 카드 + 그림 하나.\n- 뜻마다 색 하나: 입자 = 초록, 벽에 부딪힌 반짝임 = 흰빛, 미는 힘 화살표 = 보라. 장면이 바뀌어도 같은 뜻은 같은 색.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "hand": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 손글씨는 같은 크기라도 작아 보이므로 더 크게 — 제목 76px, 학습지 문장 46px, 가장 작은 글자 28px 이상.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:76px;line-height:1.2} .sent{font-size:46px;line-height:1.8} .note{font-size:32px;line-height:1.6} .label{font-size:30px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 연필 밑줄 + 파란 동그라미 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 파랑 손글씨로 써진다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (손글씨 노트)\n- 바탕: 아이보리 #fcfbf7 에 40px 모눈(연한 하늘색 선 #dbe8f2). 맨 위 머리줄에 왼쪽 「단원 · 장면 이름」을 작게 쓰고 아래에 초록 가는 선을 긋는다.\n- 글꼴: <head>에 이 두 줄을 넣고 font-family 를 'NanumBaReunHiPi', 'Gaegu', cursive 로 한다(바른히피가 없으면 Gaegu 로 보이게).\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/fonts-archive/NanumBaReunHiPi/subsets/NanumBaReunHiPi-dynamic-subset.css\">\n  <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap\">\n- 색: 큰 제목 초록 #2f7d4c + 초록 형광펜, 소제목 파랑 #2a67a8, 주의 빨강 #c0392b, 보조 글 회색 #55626e. 형광펜은 글자 아래쪽 절반만 칠한 굵은 띠(손으로 그은 듯 살짝 기울게).\n- 노랑 형광펜은 장면마다 가장 중요한 낱말 하나에만 칠한다. 학습지 문장 전체나 여러 줄에 칠하지 않는다(다 칠하면 강조가 사라진다).\n- 손으로 쓰는 효과: 제목 · 핵심 문장 · 빈칸 정답만 왼쪽부터 써지듯 드러난다. 나머지 글은 짧게 떠오른다. 한 단계 안에서 두 줄이 동시에 써지지 않게 차례로.\n- 그림: 연필로 그린 듯한 선(#2b2b2b, 굵기 3~4px)이 그려지듯 나타난다(stroke-dashoffset). 입자는 초록 동그라미, 부딪힌 자리는 노랑으로 잠깐 반짝인다.\n- 상자·카드·그림자 없이 노트 한 장에 적은 느낌으로. 글은 왼쪽 정렬, 줄 간격 넉넉하게.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "drawer": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 강조색 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (함께 보낸 DESIGN.md)\n- 함께 보낸 DESIGN.md 의 색 · 글꼴 · 모양 · 장식을 따른다. 그 안의 글꼴 불러오기 줄을 <head>에 그대로 넣는다.\n- 단, 이 프롬프트의 화면 · 넘기기 · 빈칸 · 정확성 규칙이 DESIGN.md 보다 먼저다. 1920×1080 무대와 글자 크기는 DESIGN.md 의 웹 페이지 크기 규칙 대신 이 프롬프트를 따른다.\n- DESIGN.md 의 「구성안 먼저 보여 주기」는 건너뛰고 바로 만든다. 휴대폰 폭 · 스크롤 구역 같은 웹 페이지용 규칙은 쓰지 않는다.\n- 빈칸 번호 배지와 정답 글자는 DESIGN.md 의 강조색 하나로 칠한다.\n- 그림(입자 · 상자 · 피스톤)도 DESIGN.md 의 선 굵기 · 모서리 · 색 느낌에 맞춘다. 색은 DESIGN.md 색 표 안에서만 고른다.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n\n■ DESIGN.md (여기에 붙여 넣거나 파일로 첨부)\n"}</script>
+<script type="application/json" id="prompts">{"base": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 파란 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (기본)\n- 글꼴: <head>에 이 줄을 넣고 font-family 를 \"Pretendard Variable\", Pretendard, sans-serif 로 한다.\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\">\n- 면 색으로 구획한다: 흰 #ffffff · 밝은 회색 #f5f5f7 · 검정 #000000 · 짙은 회색 #1d1d1f 를 장면마다 번갈아 쓴다. 움직이는 그림 장면은 어두운 면이 잘 어울린다.\n- 강조색은 파랑 하나(밝은 면 #0066cc, 어두운 면 #2997ff). 빈칸 번호 배지와 정답에만 쓴다.\n- 글자 색 #1d1d1f(밝은 면) · #f5f5f7(어두운 면), 보조 글 #6e6e73 · #a1a1a6. 제목 굵기 600, 자간 -0.02em, 제목 위에 회색 작은 꼬리표(28px).\n- 카드: 모서리 18px, 그림자·테두리·그라데이션 없음. 한 장에 글은 적게: 제목 + 학습지 문장 카드 + 그림 하나.\n- 뜻마다 색 하나: 입자 = 초록, 벽에 부딪힌 반짝임 = 흰빛, 미는 힘 화살표 = 보라. 장면이 바뀌어도 같은 뜻은 같은 색.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "hand": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 손글씨는 같은 크기라도 작아 보이므로 더 크게 — 제목 76px, 학습지 문장 46px, 가장 작은 글자 28px 이상.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:76px;line-height:1.2} .sent{font-size:46px;line-height:1.8} .note{font-size:32px;line-height:1.6} .label{font-size:30px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 연필 밑줄 + 파란 동그라미 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 파랑 손글씨로 써진다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (손글씨 노트)\n- 바탕: 아이보리 #fcfbf7 에 40px 모눈(연한 하늘색 선 #dbe8f2). 맨 위 머리줄에 왼쪽 「단원 · 장면 이름」을 작게 쓰고 아래에 초록 가는 선을 긋는다.\n- 글꼴: <head>에 이 두 줄을 넣고 font-family 를 'NanumBaReunHiPi', 'Gaegu', cursive 로 한다(바른히피가 없으면 Gaegu 로 보이게).\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/fonts-archive/NanumBaReunHiPi/subsets/NanumBaReunHiPi-dynamic-subset.css\">\n  <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap\">\n- 색: 큰 제목 초록 #2f7d4c + 초록 형광펜, 소제목 파랑 #2a67a8, 주의 빨강 #c0392b, 보조 글 회색 #55626e. 형광펜은 글자 아래쪽 절반만 칠한 굵은 띠(손으로 그은 듯 살짝 기울게).\n- 노랑 형광펜은 장면마다 가장 중요한 낱말 하나에만 칠한다. 학습지 문장 전체나 여러 줄에 칠하지 않는다(다 칠하면 강조가 사라진다).\n- 손으로 쓰는 효과: 제목 · 핵심 문장 · 빈칸 정답만 왼쪽부터 써지듯 드러난다. 나머지 글은 짧게 떠오른다. 한 단계 안에서 두 줄이 동시에 써지지 않게 차례로.\n- 그림: 연필로 그린 듯한 선(#2b2b2b, 굵기 3~4px)이 그려지듯 나타난다(stroke-dashoffset). 입자는 초록 동그라미, 부딪힌 자리는 노랑으로 잠깐 반짝인다.\n- 상자·카드·그림자 없이 노트 한 장에 적은 느낌으로. 글은 왼쪽 정렬, 줄 간격 넉넉하게.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n", "drawer": "교실 전자칠판에 띄워 설명하며 넘기는 「칠판 강의 화면」을 HTML 한 파일로 만들어 줘.\n학생은 종이 학습지를 들고, 화면에서 열리는 빈칸을 같은 번호 칸에 받아 적어.\n\n■ 화면\n- 1920×1080 무대를 창 크기에 맞춰 비율을 지키며 키운다(남는 곳은 검은 띠).\n- 장면은 딱 3장: ① 표지(질문 하나 + 움직이는 그림) ② 개념 ③ 개념.\n- 글자는 크게: 제목 64px, 학습지 문장 38px, 가장 작은 글자 24px 이상. 교실 맨 뒤에서도 읽혀야 한다.\n- 글자 크기는 아래 CSS를 그대로 넣고, 글마다 이 이름(class)을 붙여 쓴다. 다른 크기를 새로 만들지 않는다.\n  .tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}\n  (.tag 꼬리표 · .title 제목 · .sent 학습지 문장(빈칸이 든 글) · .note 보조 설명 · .label 그림 이름표)\n- 한글은 낱말 중간에서 줄이 바뀌지 않게 한다(word-break: keep-all). 제목은 두 줄 안에서 뜻이 끊기지 않는 곳에서 나눈다.\n- 그림은 SVG나 canvas로 직접 그린다. 사진·이모지 그림·외부 라이브러리는 쓰지 않는다(글꼴 불러오기 줄만 허용).\n\n■ 넘기기\n- → · Space · 화면 클릭 = 다음 단계, ← = 한 단계 전.\n- 한 장면 안에서 누를 때마다 하나씩 나타난다. 한 단계에 움직임은 하나만.\n- 장면마다 단계는 4~7개. 장면에 들어오면 그림(상자·입자)은 처음부터 보이고 움직인다. 상자를 그리고 입자를 넣고 이름표를 붙이는 일을 단계마다 따로 나누지 않는다.\n- ←로 돌아와도 같은 모습이어야 한다(빨리 연타해도 깨지지 않게).\n\n■ 빈칸\n- 빈칸은 밑줄 + 강조색 원 안 번호. 처음엔 번호와 밑줄만 보이고, 그 단계가 되면 정답이 나타난다.\n- 아래 학습지 문장의 번호와 정답을 글자 그대로, 번호 순서대로 넣는다.\n- 정답이 열리기 전에 그 답이 제목이나 그림 이름표에 먼저 보이면 안 된다.\n- 그림으로 먼저 보여 준 뒤 그 내용의 빈칸을 연다(관찰 → 빈칸).\n\n■ 디자인 (함께 보낸 DESIGN.md)\n- 함께 보낸 DESIGN.md 의 색 · 글꼴 · 모양 · 장식을 따른다. 그 안의 글꼴 불러오기 줄을 <head>에 그대로 넣는다.\n- 단, 이 프롬프트의 화면 · 넘기기 · 빈칸 · 정확성 규칙이 DESIGN.md 보다 먼저다. 1920×1080 무대와 글자 크기는 DESIGN.md 의 웹 페이지 크기 규칙 대신 이 프롬프트를 따른다.\n- DESIGN.md 의 「구성안 먼저 보여 주기」는 건너뛰고 바로 만든다. 휴대폰 폭 · 스크롤 구역 같은 웹 페이지용 규칙은 쓰지 않는다.\n- 빈칸 번호 배지와 정답 글자는 DESIGN.md 의 강조색 하나로 칠한다.\n- 그림(입자 · 상자 · 피스톤)도 DESIGN.md 의 선 굵기 · 모서리 · 색 느낌에 맞춘다. 색은 DESIGN.md 색 표 안에서만 고른다.\n\n■ 내용 정확성(기능보다 먼저)\n- 학생이 잘못 알게 되는 그림이 없게 한다. 아래 「주의할 점」을 하나씩 지킨다.\n- 재료에 없는 숫자·용어·공식은 넣지 않는다.\n\n■ (선택) 가상실험실·영상 넣기 (넣고 싶을 때만 이 칸을 남기고 주소를 채운다)\n- 장면 (  )에 아래 주소를 16:9 칸으로 넣는다: (가상실험실 주소 또는 유튜브 주소)\n- 유튜브는 youtube-nocookie.com/embed/영상ID 주소로 바꿔 넣고, 자동 재생하지 않는다.\n- 칸 바로 아래에 「새 창에서 열기」 단추를 크게 두고, 그 옆에 출처 한 줄을 둔다. 이 파일을 더블클릭해 열면 유튜브는 칸 안에서 재생되지 않으므로(오류 153) 이 단추로 연다.\n- 장면을 떠나면 영상·실험실을 멈춘다(iframe 주소 비우기).\n- 칸 안을 누르면 → 키가 안 먹으니, 칸 밖에 「다음」 단추를 두고 칸 밖을 누르면 다시 넘어가게 한다.\n\n■ (선택) 3D 모형 넣기 (넣고 싶을 때만 남기고 주소를 채운다)\n- 장면 (  )에 이 3D 모형을 띄운다: (GLB 주소)\n- 3D를 직접 그리지 말고 model-viewer 를 쓴다: <head>에 <script type=\"module\" src=\"https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js\"><\/script>, 장면에 <model-viewer src=\"주소\" camera-controls>.\n- 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.\n\n■ 다 쓴 뒤\n- 코드를 <!DOCTYPE html>부터 <\/html>까지 끊기지 않게 한 번에 쓴다.\n- 코드 아래에 빈칸 표(장면 | 단계 | 번호 | 정답)를 짧게 붙인다.\n\n■ 재료 (1판 공통)\n학년·주제: 중1 과학 · 기체의 성질 · 기체의 압력\n표지 질문: 과자 봉지 속은 꽉 차 있지도 않은데 왜 빵빵하게 버틸까?\n\n학습지 문장\n- 장면 ②: 기체의 압력은 일정한 면적에 기체 입자가 ( ① 충돌 )하여 작용하는 힘이다.\n- 장면 ②: 기체 입자가 ( ② 모든 방향 )으로 운동하면서 충돌하므로, 기체의 압력도 ( ③ 모든 방향 )으로 작용한다.\n- 장면 ③: 온도가 같을 때 기체의 부피가 줄어들면 입자가 벽에 충돌하는 ( ④ 횟수 )가 늘어나 기체의 압력이 ( ⑤ 커진다 ).\n\n그림\n- 장면 ②: 상자 속에서 입자가 움직이며 벽에 부딪히고, 부딪힌 자리가 잠깐 반짝인다. 「모든 방향」 빈칸을 열기 전에 네 벽 모두에 바깥쪽으로 미는 힘 화살표가 나타난다.\n- 장면 ③: 피스톤을 눌러 부피를 줄이면 같은 입자들이 더 자주 벽에 부딪힌다. 피스톤이 움직이는 동안에는 반짝임을 끄고, 멈춘 뒤에 다시 켠다.\n\n주의할 점(입자 모형)\n- 부피를 줄여도 입자 수는 그대로다(전후에 같은 개수).\n- 입자 하나의 크기는 바뀌지 않는다.\n- 온도가 같으므로 부피를 줄여도 입자의 빠르기는 그대로다(빨라지게 그리지 않는다).\n- 입자는 서로 붙지 않고 흩어져 있으며, 벽 밖으로 나가지 않는다.\n- 압력은 아래로만이 아니라 모든 벽에 작용한다.\n- 보일 법칙, 반비례, 대기압, 단위 같은 낱말은 쓰지 않는다.\n\n■ 내 재료 (2판에서 이 칸만 바꿔 쓰기)\n학년·주제:\n표지 질문:\n학습지 문장(번호와 정답을 괄호 안에): 장면 ②에 1~2개, 장면 ③에 1~2개\n그림: 장면마다 움직이는 그림 하나\n주의할 점: 학생들이 자주 헷갈리는 것 2~3개\n\n■ DESIGN.md (여기에 붙여 넣거나 파일로 첨부)\n", "svg": "아래 과학 그림을 SVG로 그려서 HTML 파일 하나로 줘. 더블클릭해서 바로 열어 볼 수 있게.\n\n■ 그림\n(예: 빛이 공기에서 물로 비스듬히 들어갈 때의 반사와 굴절. 입사각 40°)\n\n■ 정확하게\n- 각도·길이·위치는 눈대중으로 그리지 말고 계산해서 좌표로 넣는다. 쓴 식은 코드 주석으로 남긴다.\n- 쓸 식과 값: (예: 굴절은 n1 × sin(입사각) = n2 × sin(굴절각), 공기 1.00, 물 1.33)\n- 각도는 (예: 법선)에서 잰다. 각도마다 호와 숫자를 붙인다.\n- 다 그린 뒤 그림 속 좌표로 각도를 다시 계산해서 맞는지 알려 준다.\n\n■ 보기 좋게\n- 그림 안 글자는 <text>로 쓰고, 글자가 선·화살표와 겹치지 않게 둔다.\n- 뜻마다 색 하나: (예: 빛 = 주황, 법선 = 회색 점선, 물 = 옅은 파랑)\n- 가장 작은 글자도 20px 이상으로 하고, viewBox를 써서 화면 폭에 맞춰 커지게 한다.\n\n■ 학년\n(예: 중학교 2학년) 이 학년이 배우지 않은 식이나 낱말은 그림 글자로 쓰지 않는다. 계산은 코드 안에서만 한다.\n\n■ (선택) 움직이게\n(예: 입사각을 5°~80° 슬라이더로 바꾸면 반사각과 굴절각을 다시 계산해 그리게)\n"}</script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════
@@ -1100,6 +1167,134 @@ document.addEventListener('click', e=>{
   }
   f.addEventListener('input', build); f.addEventListener('change', build);
   build();
+})();
+
+/* ── 계산으로 그리는 SVG 예시 세 가지: 슬라이더를 움직이면 식으로 다시 계산해 그림 ──
+   글자는 후보 자리 가운데 선과 겹치지 않는 첫 자리에 놓는다(글자-선 겹침 0) */
+(function(){
+  const box=document.getElementById('svgdemo'); if(!box) return;
+  const svg=box.querySelector('svg'), ctl=box.querySelector('.ctl'), out=box.querySelector('.readout');
+  const NS='http://www.w3.org/2000/svg', D=Math.PI/180;
+  const r1=v=>Math.round(v*10)/10;
+  let segs=[];                                       // 지금까지 그린 선분(글자 자리 고를 때 피함)
+  const el=(tag,at,text)=>{ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k, typeof at[k]==='number' ? r1(at[k]) : at[k]); if(text!=null) e.textContent=text; svg.appendChild(e); return e; };
+  const line=(x1,y1,x2,y2,cls,k)=>{ segs.push([x1,y1,x2,y2]); return el('line',k?{x1,y1,x2,y2,class:cls,'data-k':k}:{x1,y1,x2,y2,class:cls}); };
+  const txt=(x,y,s,cls,anchor)=>el('text',{x,y,class:cls||'lb','text-anchor':anchor||'middle','dominant-baseline':'middle'},s);
+  // 선분이 글자 상자(조금 넓힘)를 지나는지
+  const cross=(b,[x1,y1,x2,y2])=>{ const L=b.x-3,R=b.x+b.width+3,T=b.y-2,B=b.y+b.height+2;
+    const inR=(x,y)=>x>L&&x<R&&y>T&&y<B; if(inR(x1,y1)||inR(x2,y2)) return true;
+    const o=(ax,ay,bx,by,cx,cy)=>Math.sign((bx-ax)*(cy-ay)-(by-ay)*(cx-ax));
+    const hit=(ax,ay,bx,by)=>o(x1,y1,x2,y2,ax,ay)!==o(x1,y1,x2,y2,bx,by)&&o(ax,ay,bx,by,x1,y1)!==o(ax,ay,bx,by,x2,y2);
+    return hit(L,T,R,T)||hit(R,T,R,B)||hit(R,B,L,B)||hit(L,B,L,T); };
+  const placed=[];                                   // 이미 놓은 글자 상자(글자끼리도 겹치지 않게)
+  function label(s,cls,cands){
+    let best=null, bestN=1e9;
+    for(const [x,y,anc] of cands){
+      const t=txt(x,y,s,cls,anc), b=t.getBBox();
+      const off=b.x<2||b.y<2||b.x+b.width>798||b.y+b.height>438;
+      const n=segs.filter(sg=>cross(b,sg)).length+placed.filter(p=>!(b.x>p.x+p.width+4||b.x+b.width+4<p.x||b.y>p.y+p.height+2||b.y+b.height+2<p.y)).length+(off?5:0);
+      if(n<bestN){ if(best) best.t.remove(); best={t,b}; bestN=n; } else t.remove();
+      if(n===0) break;
+    }
+    placed.push(best.b); return best.t;
+  }
+  const polar=(cx,cy,r,deg)=>[cx+r*Math.cos(deg*D),cy+r*Math.sin(deg*D)];
+  // 화살촉: (x,y)가 촉의 가운데, ang = 나아가는 방향(라디안, 화면 좌표)
+  const head=(x,y,ang,cls)=>{ const L=16,W=7,c=Math.cos(ang),s=Math.sin(ang);
+    const p=[[x+L/2*c,y+L/2*s],[x-L/2*c-W*s,y-L/2*s+W*c],[x-L/2*c+W*s,y-L/2*s-W*c]];
+    el('polygon',{points:p.map(q=>r1(q[0])+','+r1(q[1])).join(' '),class:cls}); };
+  const ray=(x1,y1,x2,y2,cls,k,at)=>{ line(x1,y1,x2,y2,cls,k); const t=at==null?.5:at; head(x1+(x2-x1)*t,y1+(y2-y1)*t,Math.atan2(y2-y1,x2-x1),cls+' tip'); };
+  // 호: 화면 각도 a0 → a1 (라디안, x축에서 시계 방향으로 잼)
+  const arc=(cx,cy,r,a0,a1,cls)=>{ const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    el('path',{d:`M${r1(x0)},${r1(y0)} A${r},${r} 0 ${Math.abs(a1-a0)>Math.PI?1:0} ${a1>a0?1:0} ${r1(x1)},${r1(y1)}`,class:cls||'arc'}); };
+  const reset=()=>{ svg.innerHTML=''; segs=[]; placed.length=0; };
+  // 각도 숫자 후보: 부채꼴 가운데(반지름 여러 개) → 바깥쪽 선 밖
+  const angCands=(cx,cy,mid,outDir,edge)=>{ const c=[]; [100,124,148].forEach(r=>c.push([...polar(cx,cy,r,mid),'middle'])); [20,28,38].forEach(d=>[110,135].forEach(r=>c.push([...polar(cx,cy,r,edge+outDir*d),'middle']))); return c; };
+  function slider(label,min,max,step,val,unit,fn){
+    ctl.innerHTML=`<label>${label} <b class="v"></b></label><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${label}">`;
+    const inp=ctl.querySelector('input'), v=ctl.querySelector('.v');
+    const go=()=>{ v.textContent= typeof unit==='function' ? unit(+inp.value) : inp.value+unit; fn(+inp.value); }; inp.addEventListener('input',go); go();
+  }
+
+  /* ① 빛의 반사와 굴절 — 반사각 = 입사각, 굴절은 n1·sinθ1 = n2·sinθ2 (공기 1.00, 물 1.33) */
+  function refraction(th1){
+    reset(); const O={x:400,y:210}, L=190, n2=1.33;
+    const th2=Math.asin(Math.sin(th1*D)/n2)/D;
+    el('rect',{x:0,y:210,width:800,height:230,class:'water'});
+    line(400,30,400,416,'nrm'); line(0,210,800,210,'ax');
+    const S={x:O.x-L*Math.sin(th1*D),y:O.y-L*Math.cos(th1*D)}, R={x:O.x+L*Math.sin(th1*D),y:O.y-L*Math.cos(th1*D)}, T={x:O.x+L*Math.sin(th2*D),y:O.y+L*Math.cos(th2*D)};
+    ray(S.x,S.y,O.x,O.y,'ray','inc'); ray(O.x,O.y,R.x,R.y,'ray weak','refl'); ray(O.x,O.y,T.x,T.y,'ray','refr');
+    arc(400,210,62,(-90-th1)*D,-90*D); arc(400,210,62,-90*D,(-90+th1)*D); arc(400,210,78,(90-th2)*D,90*D);
+    label('법선','lb s',[[400,16,'middle']]);
+    label('공기','lb s',[[30,36,'start']]); label('물','lb s',[[30,240,'start']]);
+    label(r1(th1)+'°','num',angCands(400,210,-90-th1/2,-1,-90-th1));
+    label(r1(th1)+'°','num',angCands(400,210,-90+th1/2,1,-90+th1));
+    label(r1(th2)+'°','num',angCands(400,210,90-th2/2,-1,90-th2));
+    const tag=(P,s,side)=>{ const ex=O.x+(P.x-O.x)*.9, ey=O.y+(P.y-O.y)*.9; return label(s,'lb s',[[ex+side*12,ey-16,side<0?'end':'start'],[ex+side*12,ey+16,side<0?'end':'start'],[ex-side*12,ey-18,side<0?'start':'end']]); };
+    tag(S,'입사 광선',-1); tag(R,'반사 광선',1); tag(T,'굴절 광선',1);
+    out.textContent=`입사각 ${r1(th1)}° = 반사각 ${r1(th1)}° · 굴절각 ${r1(th2)}° (물의 굴절률 1.33으로 계산)`;
+  }
+
+  /* ② 볼록 렌즈의 상 — 초점 거리 f, 물체 거리 a 이면 상 거리 b = a·f/(a−f), 배율 b/a */
+  function lens(k){
+    reset(); const X=400,Y=220,f=110,h=70,a=k/100*f, Tx=X-a, Ty=Y-h, E=790;
+    line(10,Y,790,Y,'ax'); el('ellipse',{cx:X,cy:Y,rx:13,ry:160,class:'lens'});
+    ray(Tx,Y,Tx,Ty,'obj','obj',1);
+    const P1y=Ty, slope1=h/f;                         // ① 나란히 → 렌즈 뒤 초점 F 지남
+    ray(Tx,Ty,X,P1y,'ray'); ray(X,P1y,E,P1y+slope1*(E-X),'ray');
+    ray(Tx,Ty,X,Y,'ray'); ray(X,Y,E,Y+(h/a)*(E-X),'ray');   // ② 렌즈 가운데 → 곧게
+    let b=null, Ix=null, Iy=null, inside=false;
+    if(Math.abs(a-f)>=1){
+      let P3y;                                         // ③ 앞 초점 쪽 → 렌즈 뒤 나란히
+      if(a>f){ P3y=Y+f*h/(a-f); ray(Tx,Ty,X,P3y,'ray'); }
+      else { P3y=Y-f*h/(f-a); line(X-f,Y,Tx,Ty,'ext'); ray(Tx,Ty,X,P3y,'ray'); }
+      ray(X,P3y,E,P3y,'ray');
+      b=a*f/(a-f); Ix=X+b; Iy=Y+h*b/a; inside=Ix>14&&Ix<786&&Iy>8&&Iy<432;
+      if(b<0 && inside){ [[X,P1y],[X,Y],[X,P3y]].forEach(([x,y])=>line(x,y,Ix,Iy,'ext')); }
+      if(inside) ray(Ix,Y,Ix,Iy,b>0?'img':'img v','img',1);
+    }
+    [[X-f,'F'],[X+f,'F'],[X-2*f,'2F'],[X+2*f,'2F']].forEach(([x,s])=>{ el('circle',{cx:x,cy:Y,r:4.5,class:'dot'});
+      label(s,'lb s',[[x,Y+24,'middle'],[x-12,Y+24,'end'],[x+12,Y+24,'start'],[x,Y-22,'middle'],[x-12,Y-22,'end'],[x+12,Y-22,'start'],[x,Y+50,'middle']]); });
+    label('물체','lb s',[[Tx,Y+50,'middle'],[Tx-12,Ty,'end'],[Tx,Ty-24,'middle'],[Tx+12,Ty-20,'start']]);
+    if(b!=null && inside){ const nm=b>0?'상':'상(허상)';
+      label(nm,'lb s',b>0?[[Ix,Iy+24,'middle'],[Ix+14,Iy,'start'],[Ix-14,Iy,'end'],[Ix,Y-24,'middle']]:[[Ix,Iy-24,'middle'],[Ix-14,Iy,'end'],[Ix+14,Iy-16,'start'],[Ix,Y+50,'middle']]); }
+    if(b==null){ out.textContent='물체가 초점에 있으면 렌즈를 지난 빛이 나란히 나가서 상이 생기지 않습니다.'; return; }
+    const m=Math.abs(b/a), kind=b>0?'거꾸로 선 실상':'바로 선 허상';
+    out.textContent=`볼록 렌즈 · 물체 거리 ${(a/f).toFixed(2)}f → 상 거리 ${b>0?'':'(렌즈 앞쪽) '}${Math.abs(b/f).toFixed(2)}f · ${kind} · ${m.toFixed(2)}배`+(inside?'':' · 상이 그림 밖 먼 곳에 생깁니다');
+  }
+
+  /* ③ 태양의 남중 고도 — 남중 고도 = 90° − 위도 + 태양의 적위(하지 +23.5°, 춘분·추분 0°, 동지 −23.5°) */
+  let season=0;
+  const SEASONS=[['하지',23.5],['춘분·추분',0],['동지',-23.5]];
+  function sun(lat){
+    reset(); const O={x:480,y:340}, R=290;
+    el('rect',{x:0,y:340,width:800,height:100,class:'ground'}); line(40,340,760,340,'ax');
+    const pos=SEASONS.map(([nm,dec])=>{ const alt=90-lat+dec, [x,y]=polar(O.x,O.y,R,180+alt); return {nm,dec,alt,x,y}; });
+    pos.forEach((p,i)=>{ if(i!==season) line(O.x,O.y,p.x,p.y,'ghost'); });
+    const S=pos[season];
+    line(O.x,O.y,S.x,S.y,'sunline','sun'); el('circle',{cx:S.x,cy:S.y,r:17,class:'sun'});
+    segs.push([S.x-18,S.y-18,S.x+18,S.y+18],[S.x-18,S.y+18,S.x+18,S.y-18]);   // 해 둘레도 피함
+    arc(O.x,O.y,74,Math.PI,(180+S.alt)*D); el('circle',{cx:O.x,cy:O.y,r:6,class:'dot'});
+    label('남','lb',[[50,368,'start']]); label('북','lb',[[750,368,'end']]); label('관측자','lb s',[[O.x,O.y+26,'middle']]);
+    label(S.nm,'lb',[[S.x-28,S.y,'end'],[S.x,S.y-34,'middle'],[S.x+28,S.y,'start']]);
+    const c=[]; [102,122,142,165,190].forEach(r=>[0,-6,6,-12,12].forEach(d=>c.push([...polar(O.x,O.y,r,180+S.alt/2+d),'middle'])));
+    label(r1(S.alt)+'°','num',c);
+    pos.forEach((p,i)=>{ if(i!==season) label(p.nm,'lb s',[[p.x-16,p.y,'end'],[p.x,p.y-22,'middle'],[p.x+16,p.y-14,'start']]); });
+    out.textContent=`북위 ${lat}° · ${S.nm} 남중 고도 = 90° − ${lat}° ${S.dec<0?'−':'+'} ${Math.abs(S.dec)}° = ${r1(S.alt)}°`;
+  }
+
+  const MODES={
+    refr:()=>slider('입사각',5,80,1,40,'°',refraction),
+    lens:()=>slider('물체 거리',45,320,5,160,v=>(v/100).toFixed(2)+'f',lens),
+    sun:()=>{ slider('위도(북위)',33,43,0.5,37.5,'°',v=>sun(v));
+      const sw=document.createElement('div'); sw.className='seas';
+      sw.innerHTML=SEASONS.map(([n],i)=>`<button type="button" class="${i===season?'on':''}" data-i="${i}">${n}</button>`).join('');
+      ctl.appendChild(sw);
+      sw.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; season=+b.dataset.i; sw.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); sun(+ctl.querySelector('input').value); }); }
+  };
+  const tabs=box.querySelectorAll('.tabs button');
+  tabs.forEach(t=>t.addEventListener('click',()=>{ tabs.forEach(x=>x.classList.toggle('on',x===t)); MODES[t.dataset.m](); }));
+  MODES.refr();
 })();
 </script>
 </body>
