@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>생물은 어떻게 다양해졌을까 · 중1 과학 칠판 강의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&display=swap">
+<style>
+:root{--board:#f4efe3;--ink:#33302b;--tomato:#f26b4f;--sun:#f7c548;--leaf:#5fb38a;--sea:#4a8fd6;--plum:#9b72cf;--shade:rgba(51,48,43,.18);--sub:rgba(51,48,43,.66);--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+body{font-family:'Gowun Dodum','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:var(--ink);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+body.drawing{touch-action:none}
+.hf{font-family:'Black Han Sans','Malgun Gothic',sans-serif;font-weight:400}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%;overflow:hidden;background:var(--board)}
+.scene{position:absolute;inset:0;display:none;background:var(--board)}
+.scene.cur{display:block;animation:scIn .45s var(--ease)}
+@keyframes scIn{from{opacity:.0}to{opacity:1}}
+.abs{position:absolute}
+svg{display:block;overflow:visible}
+
+/* 등장 */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .7s var(--ease)}
+.rv.on{opacity:1;transform:none}
+.fade{opacity:0;transition:opacity .6s var(--ease)}
+.fade.on{opacity:1}
+.pop{opacity:0;transform:scale(.55);transform-box:fill-box;transform-origin:center;transition:opacity .3s,transform .55s cubic-bezier(.3,1.55,.5,1)}
+.pop.on{opacity:1;transform:none}
+#stage.instant,#stage.instant *{transition:none!important}
+
+/* 머리말 */
+.tag{position:absolute;left:120px;top:78px;font-size:28px;line-height:1;color:var(--sub)}
+.title{position:absolute;left:120px;top:122px;background:var(--plum);color:#fff;font-size:60px;line-height:1;padding:13px 26px 13px;border-radius:6px;box-shadow:0 3px 0 var(--shade);white-space:nowrap}
+.paper{background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade)}
+
+/* 빈칸 */
+.sent{margin:0;font-size:36px;line-height:1.5}
+.blank{white-space:nowrap;margin:0 .12em}
+.bn{display:inline-block;width:40px;height:40px;border-radius:50%;background:var(--sea);color:#fff;font-size:26px;line-height:42px;text-align:center;margin-right:6px;font-style:normal;vertical-align:3px}
+.bl{display:inline-block;min-width:var(--w,180px);border-bottom:4px solid var(--ink);text-align:center;line-height:1.12;padding:0 6px;transition:border-color .4s}
+.ans{display:inline-block;color:var(--sea);font-size:38px;line-height:1.12;opacity:0;transform:scale(.3) translateY(8px);transition:opacity .2s,transform .55s cubic-bezier(.3,1.8,.5,1)}
+.blank.open .ans{opacity:1;transform:none}
+.blank.open .bl{border-bottom-color:var(--sea)}
+
+/* ── 장면 1 표지 ── */
+#sc1 .tag{left:0;right:0;text-align:center}
+.cover-q{position:absolute;left:0;right:0;top:122px;text-align:center}
+.cover-q span{display:inline-block;background:var(--plum);color:#fff;font-size:84px;line-height:1;padding:18px 34px 18px;border-radius:6px;box-shadow:0 3px 0 var(--shade)}
+.ilab{position:absolute;top:726px;transform:translateX(-50%);color:#fff;font-size:32px;line-height:1;padding:10px 20px;border-radius:6px;box-shadow:0 3px 0 var(--shade);white-space:nowrap}
+.mlab{position:absolute;top:500px;width:340px;margin-left:-170px;text-align:center}
+.mlab span{display:inline-block;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade);font-size:32px;line-height:1;padding:10px 18px}
+.strip{position:absolute;left:0;right:0;text-align:center}
+.strip>span{display:inline-flex;align-items:center;gap:14px;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade);font-size:34px;line-height:1.2;padding:10px 26px}
+.strip .bn{margin:0;flex:none}
+.stuhint{position:absolute;right:120px;top:1010px;font-size:26px;color:#fff;display:none}
+body.student .stuhint{display:block}
+.wave{animation:waveX 9s linear infinite}
+.wave.w2{animation-duration:13s;animation-direction:reverse}
+@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-96px)}}
+.peck{transform-origin:-10px 46px;animation:peck 3.2s ease-in-out infinite}
+.peck.late{animation-delay:1.4s}
+@keyframes peck{0%,62%,100%{transform:rotate(0)}70%,80%{transform:rotate(9deg)}}
+.flock .bird{transition:transform 1.15s var(--ease),opacity .5s}
+.flock .bird{transform:translate(-980px,-150px);opacity:0}
+.flock.on .bird{transform:none;opacity:1}
+.flock .arr{opacity:0;transition:opacity .5s .85s}
+.flock.on .arr{opacity:1}
+
+/* ── 장면 2 ── */
+.pbox{position:absolute;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade)}
+.tiles{position:absolute;left:16px;top:16px;right:16px;height:352px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{position:relative;background:var(--board);border-radius:6px;overflow:hidden}
+.tname{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:34px;line-height:36px}
+.chips{position:absolute;left:0;right:0;top:58px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.chip{background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade);font-size:26px;line-height:30px;padding:3px 14px;white-space:nowrap}
+.land{position:absolute;left:0;bottom:0;width:100%;height:84px}
+.cap{position:absolute;left:0;right:0;font-size:24px;line-height:1.2;color:var(--sub);text-align:center}
+.q2{position:absolute;left:0;right:0;top:178px;text-align:center;font-size:46px;line-height:1.1;transition:transform .7s var(--ease)}
+.q2.up{transform:translateY(-150px) scale(.72)}
+.dchips{position:absolute;left:586px;top:96px;width:208px;display:flex;flex-direction:column;gap:18px}
+.dchips .chip{font-size:30px;line-height:36px;padding:8px 14px;text-align:center;border-left:10px solid var(--sun)}
+.card{position:absolute;padding:20px 32px}
+.card .sent+.sent{margin-top:10px}
+.note{margin:16px 0 0;font-size:28px;line-height:1.4;padding:8px 16px;background:var(--board);border-radius:6px;border-left:10px solid var(--ink)}
+
+/* ── 장면 3 시뮬 ── */
+.s3card{padding:18px 36px}
+.s3card .sent{line-height:1.5}
+.s3card .sent+.sent{margin-top:0}
+.panel{position:absolute;top:462px;width:700px;height:498px;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade)}
+.phead{height:62px;display:flex;align-items:center;gap:12px;padding:0 10px 4px 16px;color:#fff;font-size:32px;line-height:1;border-radius:6px 6px 0 0;transition:background-color .45s;-webkit-mask:radial-gradient(6px at 50% 100%,#0000 98%,#000) 50% 0/16px 100% repeat-x;mask:radial-gradient(6px at 50% 100%,#0000 98%,#000) 50% 0/16px 100% repeat-x}
+.phead.cactus{background:var(--leaf)}
+.phead.seed{background:var(--tomato)}
+.phead .ico{width:44px;height:44px;flex:none}
+.envbtn{margin-left:auto;flex:none;height:46px;border:0;border-radius:6px;background:#fff;color:var(--ink);font:24px 'Gowun Dodum',sans-serif;padding:0 14px;box-shadow:0 3px 0 rgba(0,0,0,.18);cursor:pointer}
+.bars{position:absolute;left:0;top:62px;width:700px;height:436px}
+.slab{fill:var(--ink);stroke:var(--ink);stroke-width:0;transition:transform .5s var(--ease),opacity .35s,fill .35s,stroke-width .35s}
+.slab.ghost{fill:rgba(51,48,43,0);stroke-width:1.6;stroke-dasharray:5 3}
+.slab.out{opacity:0}
+.bars.fast .slab{transition-duration:.12s,.12s,.12s,.12s}
+.ref{fill:rgba(51,48,43,.1);opacity:0;transition:opacity .5s}
+.ref.on{opacity:1}
+.clab{font-size:26px;text-anchor:middle;fill:var(--ink);transition:transform .5s var(--ease),opacity .3s}
+.bars.fast .clab{transition-duration:.12s}
+.info{font-size:24px;text-anchor:middle;fill:var(--sub)}
+.axcap{font-size:24px;fill:var(--sub)}
+.ctrl{position:absolute;left:840px;top:462px;width:240px;height:498px;text-align:center}
+.gl{font-size:28px;color:var(--sub);margin-top:4px}
+.gn{font-size:92px;line-height:1;margin:0 0 2px}
+.lg{display:flex;align-items:center;gap:10px;justify-content:center;font-size:24px;line-height:1.2;margin:6px 0}
+.lg i{display:inline-block;width:40px;height:9px;border-radius:2px;background:var(--ink)}
+.lg i.g{background:transparent;border:1.6px dashed var(--ink);height:10px}
+.lg i.r{background:rgba(51,48,43,.12);height:16px}
+.tl{font-size:24px;color:var(--sub);margin:10px 0 8px}
+.sbtn{display:block;width:224px;height:54px;margin:0 auto 8px;border:0;border-radius:6px;background:#fff;box-shadow:0 3px 0 var(--shade);font:26px 'Gowun Dodum',sans-serif;color:var(--ink);cursor:pointer}
+.sbtn.main{background:var(--ink);color:#fff}
+.sbtn:active,.envbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shade)}
+.sum{position:absolute;left:120px;top:460px;width:1680px;height:508px;display:flex;flex-direction:column;justify-content:center;background:var(--board);border-radius:6px;pointer-events:none}
+.sum.on{pointer-events:auto}
+.sumhead{display:flex;align-items:center;justify-content:center;gap:22px}
+.sumhead .chip2{background:var(--plum);color:#fff;font-size:30px;line-height:1;padding:10px 18px;border-radius:6px;box-shadow:0 3px 0 var(--shade)}
+.sumhead .qq{font-size:46px;line-height:1}
+.chain{display:flex;align-items:stretch;justify-content:center;gap:0;margin-top:34px}
+.chain .bx{width:440px;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade);font-size:31px;line-height:1.45;padding:20px 24px;border-top:10px solid var(--sun)}
+.chain .ar{width:70px;display:flex;align-items:center;justify-content:center}
+.sumfoot{text-align:center;font-size:30px;line-height:1.3;margin-top:34px}
+.sumfoot b{font-weight:400;font-family:'Black Han Sans',sans-serif}
+.copy{position:absolute;left:120px;right:120px;top:1006px;font-size:24px;line-height:1.2;color:var(--sub);text-align:center}
+
+/* ── 조작 막대 · 도구 상자 · 패널 ── */
+#ink{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:20}
+#ctl{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(51,48,43,.86);color:#fff;border-radius:6px;padding:8px 12px;font-size:24px;z-index:30;opacity:0;transition:opacity .4s;pointer-events:none}
+#ctl.show{opacity:1;pointer-events:auto}
+#ctl button{border:0;background:rgba(255,255,255,.14);color:#fff;font:24px 'Gowun Dodum',sans-serif;height:46px;min-width:52px;border-radius:6px;padding:0 12px;cursor:pointer}
+#ctl .pg{min-width:190px;text-align:center}
+#tbtn{position:absolute;right:26px;bottom:24px;width:66px;height:66px;border-radius:50%;border:0;background:rgba(51,48,43,.42);color:#fff;font-size:30px;z-index:40;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#tbtn.act{background:rgba(242,107,79,.85)}
+#tbox{position:absolute;right:26px;bottom:104px;width:250px;display:none;flex-direction:column;gap:8px;z-index:40}
+#tbox.open{display:flex}
+#tbox button{height:54px;border:0;border-radius:6px;background:#fff;box-shadow:0 3px 0 var(--shade);font:24px 'Gowun Dodum',sans-serif;color:var(--ink);text-align:left;padding:0 16px;cursor:pointer}
+#tbox button.on{background:var(--tomato);color:#fff}
+.panelx{position:absolute;display:none;z-index:50}
+.panelx.open{display:block}
+#script{left:0;right:0;bottom:0;height:330px;background:rgba(51,48,43,.95);color:var(--board);padding:26px 120px;font-size:28px;line-height:1.5;overflow:auto}
+#script .meta{font-size:24px;color:rgba(244,239,227,.7);margin-bottom:8px}
+#script .cue{margin-top:10px;color:var(--sun)}
+#help{left:420px;top:150px;width:1080px;background:#fff;border-radius:6px;box-shadow:0 3px 0 var(--shade);padding:36px 48px;font-size:28px;line-height:1.55}
+#help h3{margin:0 0 12px;font-size:40px}
+#help .cols{columns:2;column-gap:48px}
+#over{inset:0;background:rgba(51,48,43,.94);padding:120px}
+#over .grid{display:flex;gap:40px;justify-content:center;margin-top:120px}
+#over .th{width:520px;cursor:pointer;color:var(--board);font-size:26px;text-align:center}
+#over .th .box{position:relative;width:520px;height:292.5px;overflow:hidden;border-radius:6px;background:var(--board);margin-bottom:12px;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+#over .th.cur .box{outline:6px solid var(--sun)}
+#over .th .box>section{display:block!important;position:absolute;left:0;top:0;width:1920px;height:1080px;transform:scale(.27083);transform-origin:0 0;animation:none}
+#blk{position:absolute;inset:0;z-index:60;display:none}
+#blk.k{display:block;background:#000}
+#blk.w{display:block;background:#fff}
+@media (prefers-reduced-motion:reduce){.wave,.peck{animation:none}.rv,.fade,.pop,.slab,.flock .bird{transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <clipPath id="shellClip"><path d="M-20,-60 C10,-63 50,-48 70,-16 C84,8 78,40 52,56 C26,70 -22,70 -52,58 C-78,46 -86,16 -76,-12 C-66,-40 -48,-58 -20,-60 Z"/></clipPath>
+  <clipPath id="magClipA"><circle cx="300" cy="385" r="95"/></clipPath>
+  <clipPath id="magClipB"><circle cx="1620" cy="385" r="95"/></clipPath>
+  <marker id="arw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#33302b"/></marker>
+</defs>
+</svg>
+
+<div id="stage">
+
+<!-- ═════════ 장면 1 · 표지 ═════════ -->
+<section class="scene" id="sc1" data-title="생물은 어떻게 다양해졌을까?">
+  <svg class="abs" style="left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080" id="coverSvg"></svg>
+  <div class="tag">중1 과학 · 지구에 살고 있는 다양한 생물</div>
+  <div class="cover-q"><span class="hf">생물은 어떻게 다양해졌을까?</span></div>
+  <div class="ilab hf" style="left:520px;background:var(--leaf)">선인장이 많은 섬</div>
+  <div class="ilab hf" style="left:1420px;background:var(--tomato)">단단한 씨앗이 많은 섬</div>
+  <div class="mlab rv" id="magAlab" style="left:300px"><span>길고 뾰족한 부리</span></div>
+  <div class="mlab rv" id="magBlab" style="left:1620px"><span>크고 두꺼운 부리</span></div>
+  <div class="strip rv" id="strip3" style="top:808px"><span>오래전 이 섬들에 들어온 핀치 무리는 원래 한 종이었다.</span></div>
+  <div class="strip rv" id="strip4" style="top:892px"><span><b class="bn hf">1</b>번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</span></div>
+  <div class="stuhint">화면을 누르거나 → 키로 넘겨요</div>
+</section>
+
+<!-- ═════════ 장면 2 · 생물다양성과 변이 ═════════ -->
+<section class="scene" id="sc2" data-title="지역마다 다르고, 같은 종 안에서도 다르다">
+  <div class="tag">개념 1 · 교과서 52~54쪽</div>
+  <div class="title hf">지역마다 다르고, 같은 종 안에서도 다르다</div>
+
+  <div class="pbox" style="left:120px;top:236px;width:810px;height:424px">
+    <div class="tiles">
+      <div class="tile"><div class="tname hf">북극</div>
+        <div class="chips"><span class="chip rv">북극곰</span><span class="chip rv">북극여우</span></div>
+        <svg class="land" viewBox="0 0 250 84" preserveAspectRatio="none" id="landIce"></svg></div>
+      <div class="tile"><div class="tname hf">숲</div>
+        <div class="chips"><span class="chip rv">반달가슴곰</span><span class="chip rv">고라니</span><span class="chip rv">멧돼지</span><span class="chip rv">다람쥐</span><span class="chip rv">상황버섯</span></div>
+        <svg class="land" viewBox="0 0 250 84" preserveAspectRatio="none" id="landForest"></svg></div>
+      <div class="tile"><div class="tname hf">사막</div>
+        <div class="chips"><span class="chip rv">뿔도마뱀</span><span class="chip rv">뿔방울뱀</span><span class="chip rv">변경주선인장</span></div>
+        <svg class="land" viewBox="0 0 250 84" preserveAspectRatio="none" id="landDesert"></svg></div>
+    </div>
+    <div class="cap" style="top:382px">이름표는 그 지역에 사는 생물 가운데 몇 가지(예)</div>
+  </div>
+
+  <div class="pbox" style="left:990px;top:236px;width:810px;height:424px" id="clamBox">
+    <div class="q2 hf" id="q2">같은 종끼리는 모두 똑같을까?</div>
+    <svg class="abs" style="left:20px;top:70px" width="560" height="300" viewBox="0 0 560 300" id="clamSvg"></svg>
+    <div class="dchips">
+      <span class="chip rv">무늬가 다르다</span>
+      <span class="chip rv">색깔이 다르다</span>
+      <span class="chip rv">크기가 다르다</span>
+    </div>
+    <div class="cap fade" id="clamCap" style="top:382px;left:20px;right:auto;width:560px">모두 바지락(같은 종)</div>
+  </div>
+
+  <div class="card paper" style="left:120px;top:684px;width:810px;height:266px">
+    <p class="sent">특정 지역에 살고 있는 생물의 다양한 정도를 <span class="blank" data-n="1"><b class="bn hf">1</b><span class="bl" style="--w:236px"><span class="ans hf">생물다양성</span></span></span>이라고 한다.</p>
+    <p class="sent">지역마다 살고 있는 생물의 <span class="blank" data-n="2"><b class="bn hf">2</b><span class="bl" style="--w:150px"><span class="ans hf">종류</span></span></span>와 수가 다르다.</p>
+  </div>
+  <div class="card paper" style="left:990px;top:684px;width:810px;height:266px">
+    <p class="sent">같은 종의 생물이라도 생김새, 크기, 색깔 등 특징이 조금씩 다른 것을 <span class="blank" data-n="3"><b class="bn hf">3</b><span class="bl" style="--w:150px"><span class="ans hf">변이</span></span></span>라고 한다.</p>
+    <p class="note rv" id="noteVar">북극곰과 고라니처럼 종이 다른 생물 사이의 차이는 변이가 아니다.</p>
+  </div>
+</section>
+
+<!-- ═════════ 장면 3 · 변이와 생물다양성 (시뮬레이터) ═════════ -->
+<section class="scene" id="sc3" data-title="핀치 무리는 어떻게 달라졌을까">
+  <div class="tag">개념 2 · 교과서 54~55쪽 · 선생님이 조작하는 시뮬레이터</div>
+  <div class="title hf">핀치 무리는 어떻게 달라졌을까</div>
+
+  <div class="card paper s3card" style="left:120px;top:236px;width:1680px;height:202px">
+    <p class="sent">한 종의 생물 무리에도 다양한 변이가 있다.</p>
+    <p class="sent">그중 환경에 알맞은 변이를 지닌 생물이 더 많이 <span class="blank" data-n="4"><b class="bn hf">4</b><span class="bl" style="--w:200px"><span class="ans hf">살아남아</span></span></span> <span class="blank" data-n="5"><b class="bn hf">5</b><span class="bl" style="--w:150px"><span class="ans hf">자손</span></span></span>을 남긴다.</p>
+    <p class="sent">이 과정이 오랜 세월 동안 반복되면 원래의 종과 다른 <span class="blank" data-n="6"><b class="bn hf">6</b><span class="bl" style="--w:220px"><span class="ans hf">새로운 종</span></span></span>이 나타난다.</p>
+  </div>
+
+  <div class="panel" id="panelA" style="left:120px">
+    <div class="phead hf cactus" data-noadvance><svg class="ico" viewBox="-22 -22 44 44"></svg><span class="pt">선인장이 많은 섬</span><button class="envbtn" tabindex="-1" title="이 섬의 먹이 바꾸기">먹이 ⇄</button></div>
+    <svg class="bars" viewBox="0 0 700 436"></svg>
+  </div>
+  <div class="ctrl" id="simCtl" data-noadvance>
+    <div class="gl">세대</div>
+    <div class="gn hf" id="genNum">–</div>
+    <div class="lg"><i></i>핀치 한 마리</div>
+    <div class="lg"><i class="g"></i>이번 세대에 죽음</div>
+    <div class="lg"><i class="r"></i>처음 무리</div>
+    <div class="tl">선생님 조작</div>
+    <button class="sbtn main hf" data-act="next" tabindex="-1">다음 세대 ▶</button>
+    <button class="sbtn" data-act="ten" tabindex="-1">10세대 더 ▶▶</button>
+    <button class="sbtn" data-act="reset" tabindex="-1">처음 무리로</button>
+  </div>
+  <div class="panel" id="panelB" style="left:1100px">
+    <div class="phead hf seed" data-noadvance><svg class="ico" viewBox="-22 -22 44 44"></svg><span class="pt">단단한 씨앗이 많은 섬</span><button class="envbtn" tabindex="-1" title="이 섬의 먹이 바꾸기">먹이 ⇄</button></div>
+    <svg class="bars" viewBox="0 0 700 436"></svg>
+  </div>
+
+  <div class="sum fade" id="sum">
+    <div class="sumhead"><span class="chip2 hf">처음 질문의 답</span><span class="qq hf">생물은 어떻게 다양해졌을까?</span></div>
+    <div class="chain">
+      <div class="bx">한 종의 무리 안에 처음부터 변이가 있다.</div>
+      <div class="ar"><svg width="54" height="40" viewBox="0 0 54 40"><path d="M4,20 H40" stroke="#33302b" stroke-width="6" stroke-linecap="round"/><path d="M30,6 L48,20 L30,34" fill="none" stroke="#33302b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="bx">환경에 알맞은 변이를 지닌 생물이 더 많이 살아남아 자손을 남긴다.</div>
+      <div class="ar"><svg width="54" height="40" viewBox="0 0 54 40"><path d="M4,20 H40" stroke="#33302b" stroke-width="6" stroke-linecap="round"/><path d="M30,6 L48,20 L30,34" fill="none" stroke="#33302b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="bx">오랜 세월 반복되면 새로운 종이 나타나 생물이 다양해진다.</div>
+    </div>
+    <div class="sumfoot">핀치 한 마리의 부리는 평생 그대로. <b>달라지는 것은 무리 안에서 각 부리 모양이 차지하는 비율</b>이다.</div>
+  </div>
+
+  <div class="copy">중1 과학 「지구에 살고 있는 다양한 생물」(교과서 52~55쪽) 강의 화면 · 그림과 시뮬레이터는 코드로 새로 그림</div>
+</section>
+
+<canvas id="ink" width="1920" height="1080"></canvas>
+
+<div id="ctl">
+  <button data-c="prev" title="이전">◀</button>
+  <span class="pg" id="pg">1 / 3</span>
+  <button data-c="next" title="다음">▶</button>
+  <button data-c="snd" id="sndBtn" title="소리 (M)">소리 켬</button>
+  <button data-c="fs" title="전체 화면 (F)">전체 화면</button>
+</div>
+
+<button id="tbtn" title="판서 도구" aria-label="판서 도구">
+  <svg width="30" height="30" viewBox="0 0 30 30"><path d="M5,25 L8,17 L20,5 L25,10 L13,22 Z" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M17,8 L22,13" stroke="#fff" stroke-width="2.6"/></svg>
+</button>
+<div id="tbox">
+  <button data-t="laser">레이저 (L)</button>
+  <button data-t="pen">빨간 펜 (P)</button>
+  <button data-t="undo">한 획 지우기 (Z)</button>
+  <button data-t="clear">모두 지우기 (C)</button>
+  <button data-t="finger" id="fingerBtn">손가락 그리기: 자동</button>
+  <button data-t="fs">전체 화면 (F)</button>
+</div>
+
+<div class="panelx" id="script"></div>
+<div class="panelx" id="help">
+  <h3 class="hf">넘기기와 단축키</h3>
+  <div class="cols">
+    → · Space · Enter · 화면 클릭 : 다음<br>
+    ← · Backspace · 오른쪽 클릭 : 이전<br>
+    Home / End : 처음 / 끝<br>
+    R : 지금 단계 다시 보기<br>
+    O : 전체 장면 보기<br>
+    T 또는 N : 대본 열고 닫기<br>
+    F : 전체 화면<br>
+    M : 소리 켜고 끄기<br>
+    B / W : 검은 화면 / 흰 화면<br>
+    L : 레이저 · P : 빨간 펜<br>
+    Z : 한 획 지우기 · C : 모두 지우기<br>
+    Esc : 판서 끄기 · 창 닫기<br>
+    H : 이 도움말
+  </div>
+</div>
+<div class="panelx" id="over"><div class="hf" style="color:var(--board);font-size:44px;text-align:center">전체 장면</div><div class="grid" id="overGrid"></div></div>
+<div id="blk"></div>
+</div>
+
+<script>
+/*SIM-START*/
+// ── 핀치 무리 시뮬레이터 (규칙은 여기 한 곳에만) ─────────────────────────
+// 부리 모양 칸 k = 1 ~ 7 : 1 = 길고 뾰족한 부리 … 7 = 크고 두꺼운 부리
+// 한 섬에 사는 핀치 수 N = 24마리(예). 섬의 먹이로 살 수 있는 수가 정해져 있다고 보고, 세대마다 자손도 24마리.
+// 처음 무리 START = [1,3,5,6,5,3,1] (합 24) — 모든 부리 모양이 처음부터 무리 안에 섞여 있다(변이).
+//
+// 살아남을 확률 p(k):
+//   선인장이 많은 섬      p(k) = 0.85 − 0.10 × (k − 1)   → 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25
+//   단단한 씨앗이 많은 섬  p(k) = 0.25 + 0.10 × (k − 1)   → 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85
+//   (교과서 해 보기: 부리가 길고 뾰족한 핀치는 가시를 피해 선인장을 먹을 수 있고,
+//    부리가 크고 두꺼운 핀치는 단단한 씨앗을 깨 먹을 수 있어 더 많이 살아남았다.)
+// 같은 칸의 핀치 c마리 가운데 살아남는 수 s = floor(c × p(k) + u),  u = 0~1 난수
+//   → 기댓값이 c × p(k)가 되게 하는 반올림. 한 마리씩 따로 주사위를 굴리는 것보다 덜 흔들려 경향이 잘 보인다.
+//   누가 살아남는지는 같은 칸 안에서 난수로 고른다.
+// 자손: 살아남은 핀치 S마리가 자손 24마리를 나누어 남긴다(한 마리당 floor(24/S)마리, 나머지는 난수로 고른 핀치가 1마리씩 더).
+//   자손은 부모의 부리 칸을 물려받되 조금씩 다르다: 80% 부모와 같은 칸, 10% 한 칸 더 뾰족, 10% 한 칸 더 두껍게(1~7 안에서).
+// 핀치 한 마리(bird)는 태어날 때 부리 칸이 정해지고 Object.freeze 로 얼려 평생 바뀌지 않는다.
+//   바뀌는 것은 무리 안에서 각 부리 칸이 차지하는 수(비율)뿐이다.
+// 난수: mulberry32, 섬마다 씨앗값 고정(왼쪽 섬 5, 오른쪽 섬 10) → 같은 조작이면 언제나 같은 결과.
+var FinchSim = (function(){
+  var K = 7, N = 24, START = [1,3,5,6,5,3,1];
+  var ENV = {
+    cactus: { name:'선인장이 많은 섬',     p:function(k){ return 0.85 - 0.10*(k-1); } },
+    seed:   { name:'단단한 씨앗이 많은 섬', p:function(k){ return 0.25 + 0.10*(k-1); } }
+  };
+  function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function bird(isl, beak, parent){ return Object.freeze({ id: isl.nextId++, beak: beak, born: isl.gen, parent: parent }); }
+  function create(env, seed){
+    var isl = { env: env, seed: seed, rng: mulberry32(seed), gen: 0, phase: 'full', birds: [], alive: null, nextId: 1, extinct: false };
+    START.forEach(function(c, i){ for(var j = 0; j < c; j++) isl.birds.push(bird(isl, i + 1, 0)); });
+    return isl;
+  }
+  function byClass(list){ var g = []; for(var k = 1; k <= K; k++) g.push([]); list.forEach(function(b){ g[b.beak - 1].push(b); }); return g; }
+  function survive(isl){
+    if(isl.phase !== 'full' || isl.extinct) return;
+    var r = isl.rng, alive = new Set();
+    byClass(isl.birds).forEach(function(arr, i){
+      var k = i + 1, s = Math.floor(arr.length * ENV[isl.env].p(k) + r());
+      var idx = arr.map(function(_, j){ return j; });
+      for(var j = idx.length - 1; j > 0; j--){ var q = Math.floor(r() * (j + 1)); var t = idx[j]; idx[j] = idx[q]; idx[q] = t; }
+      for(var m = 0; m < s && m < arr.length; m++) alive.add(arr[idx[m]].id);
+    });
+    isl.alive = alive; isl.phase = 'survived';
+  }
+  function reproduce(isl){
+    if(isl.phase !== 'survived') return;
+    var r = isl.rng, parents = isl.birds.filter(function(b){ return isl.alive.has(b.id); }), S = parents.length, kids = [];
+    isl.gen++;
+    if(S === 0){ isl.birds = []; isl.alive = null; isl.phase = 'full'; isl.extinct = true; return; }
+    var base = Math.floor(N / S), extra = N - base * S, order = parents.map(function(_, j){ return j; });
+    for(var j = order.length - 1; j > 0; j--){ var q = Math.floor(r() * (j + 1)); var t = order[j]; order[j] = order[q]; order[q] = t; }
+    var more = new Set(order.slice(0, extra));
+    parents.forEach(function(p, i){
+      var n = base + (more.has(i) ? 1 : 0);
+      for(var c = 0; c < n; c++){
+        var m = r(), k = p.beak + (m < 0.1 ? -1 : (m < 0.2 ? 1 : 0));
+        kids.push(bird(isl, Math.max(1, Math.min(K, k)), p.id));
+      }
+    });
+    isl.birds = kids; isl.alive = null; isl.phase = 'full';
+  }
+  function nextGen(isl){ if(isl.phase === 'full') survive(isl); reproduce(isl); }
+  function counts(list){ var c = []; for(var k = 0; k < K; k++) c.push(0); list.forEach(function(b){ c[b.beak - 1]++; }); return c; }
+  return { K:K, N:N, START:START, ENV:ENV, create:create, survive:survive, reproduce:reproduce, nextGen:nextGen, counts:counts };
+})();
+/*SIM-END*/
+
+(function(){
+'use strict';
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+var NS = 'http://www.w3.org/2000/svg';
+var INK = '#33302b', SUN = '#f7c548', LEAF = '#5fb38a', BOARD = '#f4efe3', TOMATO = '#f26b4f', SHADE = 'rgba(51,48,43,.18)';
+var STUDENT = /[?&]s=1(&|$)/.test(location.search);
+if(STUDENT) document.body.classList.add('student');
+var stage = $('#stage');
+function f1(n){ return Math.round(n * 10) / 10; }
+
+/* ───── 시간 관리: 애니메이션 중 다음을 누르면 끝 상태로 ───── */
+var INSTANT = false, TM = [];
+function later(fn, ms){
+  var o = { fn: fn, due: performance.now() + ms, id: 0 };
+  TM.push(o);
+  if(!INSTANT) o.id = setTimeout(function(){ var i = TM.indexOf(o); if(i >= 0){ TM.splice(i, 1); fn(); } }, ms);
+}
+function flushTimers(){ var g = 0; while(TM.length && g++ < 5000){ TM.sort(function(a, b){ return a.due - b.due; }); var o = TM.shift(); clearTimeout(o.id); o.fn(); } }
+function instant(fn){
+  if(INSTANT){ if(fn) fn(); flushTimers(); return; }
+  INSTANT = true; stage.classList.add('instant');
+  try{ if(fn) fn(); flushTimers(); }
+  finally{ void stage.offsetHeight; stage.classList.remove('instant'); INSTANT = false; }
+}
+function on(el){ if(el) el.classList.add('on'); }
+
+/* ───── 소리 (WebAudio 합성) ───── */
+var AC = null, muted = STUDENT, dingN = 0, gestured = false;
+function ac(){
+  if(!gestured) return null;
+  if(!AC){ try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ AC = null; } }
+  if(AC && AC.state === 'suspended'){ try{ AC.resume(); }catch(e){} }
+  return AC;
+}
+function tone(f, t0, dur, type, vol, f2){
+  var a = AC; if(!a) return;
+  var o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0;
+  o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); if(f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || .1, t + .012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + .05);
+}
+function sfx(name, anim){
+  if(!anim || INSTANT || muted) return;
+  if(!ac()) return;
+  if(name === 'ding'){ var m = [1, 1.122, 1.26, 1.335, 1.498, 1.68][dingN++ % 6]; tone(880 * m, 0, .5, 'sine', .11); tone(1760 * m, .01, .35, 'sine', .04); }
+  else if(name === 'pop'){ tone(520, 0, .09, 'triangle', .08, 760); }
+  else if(name === 'chirp'){ [0, .16, .3].forEach(function(t, i){ tone(2600 + i * 180, t, .08, 'sine', .05, 3600); }); }
+  else if(name === 'thud'){ tone(180, 0, .18, 'sine', .08, 110); }
+  else if(name === 'grow'){ [0, .07, .14].forEach(function(t, i){ tone(600 + i * 120, t, .08, 'triangle', .05); }); }
+  else if(name === 'tick'){ tone(1200, 0, .04, 'square', .02); }
+  else if(name === 'chime'){ [523.25, 659.25, 783.99, 1046.5].forEach(function(fq, i){ tone(fq, i * .09, .8, 'sine', .07); }); }
+}
+
+/* ───── 그림 재료 ───── */
+// 부리: k = 1(길고 뾰족) ~ 7(크고 두꺼움). (x, y) = 부리 밑동 가운데, 오른쪽을 봄
+function beakD(k, x, y){
+  var t = (k - 1) / 6, L = 44 - 16 * t, D = 10 + 20 * t;
+  var top = y - D / 2, bot = y + D / 2, tip = y + D * 0.1;
+  return 'M' + f1(x) + ',' + f1(top) + ' Q' + f1(x + L * 0.55) + ',' + f1(top + D * 0.04) + ' ' + f1(x + L) + ',' + f1(tip) +
+         ' Q' + f1(x + L * 0.45) + ',' + f1(bot) + ' ' + f1(x) + ',' + f1(bot) + ' Z';
+}
+function mouthD(k, x, y){ var t = (k - 1) / 6, L = 44 - 16 * t, D = 10 + 20 * t; return 'M' + f1(x) + ',' + f1(y + D * .1) + ' L' + f1(x + L * .82) + ',' + f1(y + D * .1); }
+// 머리+부리 아이콘(막대그래프 아래·돋보기 안)
+function headIcon(k){
+  return '<ellipse cx="-12" cy="22" rx="24" ry="15" fill="' + INK + '"/>' +
+         '<circle cx="0" cy="0" r="18" fill="' + INK + '"/>' +
+         '<path d="' + beakD(k, 13, 3) + '" fill="' + SUN + '"/>' +
+         '<path d="' + mouthD(k, 13, 3) + '" stroke="' + INK + '" stroke-opacity=".55" stroke-width="1.6"/>' +
+         '<circle cx="5" cy="-5" r="4.4" fill="' + BOARD + '"/><circle cx="5.9" cy="-5" r="2.4" fill="' + INK + '"/>';
+}
+// 서 있는 핀치(옆모습, 오른쪽을 봄). 발 = (−10, 46)
+function finchStand(k){
+  return '<path d="M-44,2 L-76,12 L-72,21 L-40,13 Z" fill="' + INK + '"/>' +
+         '<ellipse cx="-10" cy="8" rx="35" ry="22" fill="' + INK + '"/>' +
+         '<path d="M-36,2 Q-10,-8 14,8 Q-8,20 -38,14 Z" fill="none" stroke="' + BOARD + '" stroke-opacity=".35" stroke-width="2.2"/>' +
+         '<circle cx="20" cy="-12" r="17" fill="' + INK + '"/>' +
+         '<path d="' + beakD(k, 32, -9) + '" fill="' + SUN + '"/>' +
+         '<path d="' + mouthD(k, 32, -9) + '" stroke="' + INK + '" stroke-opacity=".55" stroke-width="1.6"/>' +
+         '<circle cx="25" cy="-16" r="4" fill="' + BOARD + '"/><circle cx="25.8" cy="-16" r="2.2" fill="' + INK + '"/>' +
+         '<path d="M-16,28 L-19,46 M-3,29 L-1,46 M-27,46 L-11,46 M-9,46 L7,46" stroke="' + INK + '" stroke-width="3.4" stroke-linecap="round" fill="none"/>';
+}
+// 나는 핀치(날개를 든 모습, 다리 접음)
+function finchFly(k){
+  return '<path d="M-44,2 L-74,8 L-70,17 L-40,12 Z" fill="' + INK + '"/>' +
+         '<ellipse cx="-10" cy="6" rx="34" ry="18" fill="' + INK + '"/>' +
+         '<path d="M6,-4 Q-6,-30 -40,-50 Q-30,-28 -26,-4 Z" fill="' + INK + '"/>' +
+         '<path d="M6,-4 Q-6,-30 -40,-50" fill="none" stroke="' + BOARD + '" stroke-opacity=".35" stroke-width="2.2"/>' +
+         '<circle cx="20" cy="-8" r="15" fill="' + INK + '"/>' +
+         '<path d="' + beakD(k, 30, -6) + '" fill="' + SUN + '"/>' +
+         '<circle cx="24" cy="-12" r="3.6" fill="' + BOARD + '"/><circle cx="24.8" cy="-12" r="2" fill="' + INK + '"/>';
+}
+function scallopTop(y0, r, h, w){ var d = 'M0,' + h + ' L0,' + y0; for(var x = 0; x < w; x += 2 * r) d += ' a' + r + ',' + (r * .55) + ' 0 0 1 ' + (2 * r) + ',0'; return d + ' L' + w + ',' + h + ' Z'; }
+function waveLine(y, r, w){ var d = 'M-' + (4 * r) + ',' + y; for(var x = -4 * r; x < w + 4 * r; x += 2 * r) d += ' a' + r + ',' + (r * .5) + ' 0 0 1 ' + (2 * r) + ',0'; return d; }
+
+/* ───── 장면 1 그림 ───── */
+(function buildCover(){
+  var s = '';
+  // 바다(뒤)
+  s += '<path d="' + scallopTop(664, 24, 1080, 1920) + '" fill="#4a8fd6"/>';
+  // 왼쪽 섬 그늘 + 섬
+  var LI = 'M140,716 C220,600 360,522 520,516 C680,510 820,610 900,716 Z';
+  var RI = 'M1060,716 C1140,600 1280,540 1420,538 C1560,536 1700,610 1780,716 Z';
+  s += '<path d="' + LI + '" fill="' + SHADE + '" transform="translate(0,5)"/><path d="' + LI + '" fill="' + SUN + '"/>';
+  [[228, 618, 36, 20], [800, 648, 30, 17]].forEach(function(b){ s += '<ellipse cx="' + b[0] + '" cy="' + (b[1] + 3) + '" rx="' + b[2] + '" ry="' + b[3] + '" fill="' + SHADE + '"/><ellipse cx="' + b[0] + '" cy="' + b[1] + '" rx="' + b[2] + '" ry="' + b[3] + '" fill="' + LEAF + '"/>'; });
+  s += '<path d="' + RI + '" fill="' + SHADE + '" transform="translate(0,5)"/><path d="' + RI + '" fill="' + SUN + '"/>';
+  // 선인장(줄기 + 납작한 마디)
+  s += '<rect x="660" y="452" width="20" height="98" rx="8" fill="' + INK + '" fill-opacity=".82"/>';
+  var pads = [[668, 420, 30, 40, 0], [628, 452, 24, 32, -38], [712, 448, 24, 32, 36], [652, 372, 20, 28, -16], [690, 378, 20, 27, 20]];
+  pads.forEach(function(p){
+    s += '<ellipse cx="' + p[0] + '" cy="' + (p[1] + 3) + '" rx="' + p[2] + '" ry="' + p[3] + '" fill="' + SHADE + '" transform="rotate(' + p[4] + ' ' + p[0] + ' ' + p[1] + ')"/>';
+    s += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="' + p[2] + '" ry="' + p[3] + '" fill="' + LEAF + '" transform="rotate(' + p[4] + ' ' + p[0] + ' ' + p[1] + ')"/>';
+    for(var i = 0; i < 4; i++){ var a = i * 1.7 + p[4] / 40; s += '<circle cx="' + f1(p[0] + Math.cos(a) * p[2] * .5) + '" cy="' + f1(p[1] + Math.sin(a) * p[3] * .5) + '" r="2" fill="' + BOARD + '"/>'; }
+  });
+  // 오른쪽 섬 덤불과 씨앗
+  [[1250, 566, 48, 28], [1640, 592, 58, 34]].forEach(function(b){
+    s += '<ellipse cx="' + b[0] + '" cy="' + (b[1] + 3) + '" rx="' + b[2] + '" ry="' + b[3] + '" fill="' + SHADE + '"/><ellipse cx="' + b[0] + '" cy="' + b[1] + '" rx="' + b[2] + '" ry="' + b[3] + '" fill="' + LEAF + '"/>';
+    for(var i = 0; i < 5; i++) s += '<ellipse cx="' + f1(b[0] - b[2] * .6 + i * b[2] * .3) + '" cy="' + f1(b[1] - b[3] * .3 + (i % 2) * 10) + '" rx="5" ry="3.6" fill="' + INK + '"/>';
+  });
+  [[1418, 534], [1434, 539], [1452, 534], [1442, 545], [1464, 541], [1426, 546]].forEach(function(p, i){ s += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="5.5" ry="4" fill="' + INK + '" transform="rotate(' + (i * 30) + ' ' + p[0] + ' ' + p[1] + ')"/>'; });
+  // 섬의 핀치
+  s += '<g transform="translate(545,456) scale(1.3)"><g class="peck">' + finchStand(1) + '</g></g>';
+  s += '<g transform="translate(1336,486) scale(1.3)"><g class="peck late">' + finchStand(7) + '</g></g>';
+  // 앞 물결
+  s += '<path d="' + scallopTop(700, 24, 1080, 1920) + '" fill="#4a8fd6"/>';
+  s += '<g fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="4">' +
+       '<path class="wave" d="' + waveLine(782, 24, 1920) + '"/>' +
+       '<path class="wave w2" d="' + waveLine(872, 30, 1920) + '"/>' +
+       '<path class="wave" d="' + waveLine(962, 24, 1920) + '"/>' +
+       '<path class="wave w2" d="' + waveLine(1042, 30, 1920) + '"/></g>';
+  // 돋보기 A·B
+  function mag(id, cx, cy, k, clip, lx1, ly1, lx2, ly2){
+    return '<g id="' + id + '" class="fade">' +
+      '<path d="M' + lx1 + ',' + ly1 + ' L' + lx2 + ',' + ly2 + '" stroke="' + INK + '" stroke-width="3" stroke-dasharray="8 7" fill="none"/>' +
+      '<circle cx="' + cx + '" cy="' + (cy + 4) + '" r="104" fill="' + SHADE + '"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="100" fill="#fff"/>' +
+      '<g clip-path="url(#' + clip + ')"><g transform="translate(' + f1(cx - 10.5 * 1.9) + ',' + f1(cy - 9 * 1.9) + ') scale(1.9)">' + headIcon(k) + '</g></g>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="100" fill="none" stroke="' + SUN + '" stroke-width="9"/></g>';
+  }
+  s += mag('magA', 300, 385, 1, 'magClipA', 398, 410, 556, 440);
+  s += mag('magB', 1620, 385, 7, 'magClipB', 1523, 420, 1390, 461);
+  // 오래전 무리(부리가 조금씩 다른 한 종의 무리) + 두 섬으로 가는 화살표
+  var fl = [[820, 310, 3], [900, 300, 5], [980, 312, 2], [1060, 304, 4], [860, 366, 4], [940, 372, 6], [1020, 366, 3]];
+  s += '<g id="flock" class="flock">';
+  s += '<path class="arr" d="M850,410 Q760,440 748,520" fill="none" stroke="' + INK + '" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arw)"/>';
+  s += '<path class="arr" d="M1070,410 Q1170,440 1186,548" fill="none" stroke="' + INK + '" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arw)"/>';
+  fl.forEach(function(b, i){ s += '<g transform="translate(' + b[0] + ',' + b[1] + ') scale(.52)"><g class="bird" style="transition-delay:' + (i * 45) + 'ms">' + finchFly(b[2]) + '</g></g>'; });
+  s += '</g>';
+  $('#coverSvg').innerHTML = s;
+})();
+
+/* ───── 장면 2 그림: 지역 풍경, 바지락 ───── */
+(function buildScene2(){
+  $('#landIce').innerHTML =
+    '<path d="M0,84 L0,44 L40,30 L70,42 L112,22 L150,38 L192,26 L250,40 L250,84 Z" fill="' + SHADE + '" transform="translate(0,4)"/>' +
+    '<path d="M0,84 L0,44 L40,30 L70,42 L112,22 L150,38 L192,26 L250,40 L250,84 Z" fill="#fff" stroke="rgba(51,48,43,.3)" stroke-width="2"/>' +
+    '<path d="M40,30 L46,60 M112,22 L104,58 M192,26 L198,56" stroke="rgba(51,48,43,.22)" stroke-width="2" fill="none"/>' +
+    '<path d="M0,84 L0,64 L60,56 L120,66 L180,54 L250,62 L250,84 Z" fill="' + SHADE + '"/>' +
+    '<path d="M0,84 L0,68 L60,60 L120,70 L180,58 L250,66 L250,84 Z" fill="#fff" stroke="rgba(51,48,43,.3)" stroke-width="2"/>';
+  var fs = '<rect x="0" y="66" width="250" height="18" fill="' + LEAF + '"/>';
+  [[24, 52], [66, 64], [110, 50], [152, 62], [196, 54], [234, 46]].forEach(function(t){
+    var x = t[0], h = t[1];
+    fs += '<rect x="' + (x - 3) + '" y="58" width="6" height="14" fill="' + INK + '" fill-opacity=".8"/>';
+    fs += '<path d="M' + (x - 22) + ',' + 62 + ' L' + x + ',' + (62 - h) + ' L' + (x + 22) + ',62 Z" fill="' + SHADE + '" transform="translate(0,3)"/>';
+    fs += '<path d="M' + (x - 22) + ',' + 62 + ' L' + x + ',' + (62 - h) + ' L' + (x + 22) + ',62 Z" fill="' + LEAF + '"/>';
+  });
+  $('#landForest').innerHTML = fs;
+  $('#landDesert').innerHTML =
+    '<path d="M0,84 L0,50 Q70,26 140,48 Q200,32 250,44 L250,84 Z" fill="' + SUN + '"/>' +
+    '<path d="M0,84 L0,66 Q90,44 170,66 Q215,56 250,62 L250,84 Z" fill="' + SHADE + '" transform="translate(0,-3)"/>' +
+    '<path d="M0,84 L0,66 Q90,44 170,66 Q215,56 250,62 L250,84 Z" fill="' + SUN + '"/>' +
+    '<g fill="' + LEAF + '"><rect x="186" y="10" width="14" height="52" rx="7"/><path d="M186,40 h-14 a6,6 0 0 1 -6,-6 v-14 a6,6 0 0 1 12,0 v8 h8 Z"/><path d="M200,32 h12 v-12 a6,6 0 0 1 12,0 v14 a8,8 0 0 1 -8,8 h-16 Z"/></g>';
+
+  // 바지락 5개 — 한 종, 무늬·색깔·크기가 조금씩 다름
+  var SH = 'M-20,-60 C10,-63 50,-48 70,-16 C84,8 78,40 52,56 C26,70 -22,70 -52,58 C-78,46 -86,16 -76,-12 C-66,-40 -48,-58 -20,-60 Z';
+  function rings(op, sw, col){ var r = ''; [.82, .64, .46, .3].forEach(function(sc){ r += '<path d="' + SH + '" transform="translate(-20,-60) scale(' + sc + ') translate(20,60)" fill="none" stroke="' + (col || INK) + '" stroke-opacity="' + op + '" stroke-width="' + f1(sw / sc) + '"/>'; }); return r; }
+  function ribs(op){ var r = ''; for(var a = -150; a <= -30; a += 12){ var rad = a * Math.PI / 180; r += '<path d="M-20,-60 L' + f1(-20 - Math.cos(rad) * 160) + ',' + f1(-60 - Math.sin(rad) * 160) + '" stroke="' + INK + '" stroke-opacity="' + op + '" stroke-width="1.4"/>'; } return r; }
+  var pat = {
+    zig: '<g fill="none" stroke="' + INK + '" stroke-opacity=".55" stroke-width="6" stroke-linejoin="round"><path d="M-90,-8 l18,14 l18,-14 l18,14 l18,-14 l18,14 l18,-14 l18,14 l18,-14 l18,14"/><path d="M-90,28 l18,14 l18,-14 l18,14 l18,-14 l18,14 l18,-14 l18,14 l18,-14 l18,14"/></g>',
+    ray: '<g fill="' + INK + '" fill-opacity=".38"><path d="M-20,-60 L-74,70 L-46,70 Z"/><path d="M-20,-60 L-8,72 L18,72 Z"/><path d="M-20,-60 L50,64 L72,52 Z"/></g>',
+    dot: (function(){ var d = '<g fill="' + INK + '" fill-opacity=".5">'; [[-50, -10, 5], [-30, 20, 6], [0, -20, 4], [20, 10, 6], [40, -4, 4], [-60, 30, 4], [10, 40, 5], [50, 30, 4], [-10, 0, 3.5], [-40, 46, 4], [30, 50, 3.5]].forEach(function(p){ d += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '"/>'; }); return d + '</g>'; })(),
+    band: rings(.0, 0) + '<path d="' + SH + '" transform="translate(-20,-60) scale(.74) translate(20,60)" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="13"/><path d="' + SH + '" transform="translate(-20,-60) scale(.46) translate(20,60)" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="18"/>',
+    plain: ''
+  };
+  var shells = [
+    { x: 100, y: 82,  s: 1.00, base: SUN, op: .55, p: 'zig' },
+    { x: 282, y: 76,  s: .86,  base: INK, op: .30, p: 'ray' },
+    { x: 462, y: 86,  s: 1.12, base: BOARD, op: 1, p: 'dot' },
+    { x: 192, y: 226, s: .92,  base: INK, op: .56, p: 'band' },
+    { x: 372, y: 232, s: .78,  base: SUN, op: .32, p: 'plain' }
+  ];
+  var s = '';
+  shells.forEach(function(o, i){
+    s += '<g transform="translate(' + o.x + ',' + o.y + ') scale(' + o.s + ')"><g class="rv" style="transition-delay:' + (i * 90) + 'ms">' +
+      '<path d="' + SH + '" fill="' + SHADE + '" transform="translate(0,5)"/>' +
+      '<g clip-path="url(#shellClip)"><path d="' + SH + '" fill="#fff"/><path d="' + SH + '" fill="' + o.base + '" fill-opacity="' + o.op + '"/>' +
+      pat[o.p] + ribs(.1) + rings(.2, 2) + '</g>' +
+      '<path d="' + SH + '" fill="none" stroke="' + INK + '" stroke-opacity=".38" stroke-width="' + f1(2.6 / o.s) + '"/>' +
+      '<ellipse cx="-20" cy="-55" rx="7" ry="5" fill="' + INK + '" fill-opacity=".25"/>' +
+      '</g></g>';
+  });
+  $('#clamSvg').innerHTML = s;
+})();
+
+/* ───── 장면 3 시뮬 화면 ───── */
+var X0 = 50, PITCH = 100, BW = 64, BASE = 322, SP = 16, SHH = 13;
+// 한 칸 높이: 두 섬에서 가장 높은 막대가 250px 안에 들어가게(최대 20px). 두 섬은 늘 같은 눈금.
+function setPitch(lists){ var mx = 1; lists.forEach(function(l){ FinchSim.counts(l).forEach(function(n){ if(n > mx) mx = n; }); }); SP = Math.max(6, Math.min(20, Math.floor(250 / mx))); SHH = SP - 3; }
+var ICON_CACTUS = '<g fill="#fff"><rect x="-4.5" y="-19" width="9" height="39" rx="4.5"/><path d="M-4,6 h-8 a5,5 0 0 1 -5,-5 v-11 a3.6,3.6 0 0 1 7.2,0 v8.6 h5.8 Z"/><path d="M4,-1 h6.4 v-10 a3.6,3.6 0 0 1 7.2,0 v12 a5,5 0 0 1 -5,5 h-8.6 Z"/></g>';
+var ICON_SEED = '<g fill="#fff"><ellipse cx="-9" cy="-4" rx="8" ry="6" transform="rotate(-25 -9 -4)"/><ellipse cx="9" cy="-6" rx="8" ry="6" transform="rotate(20 9 -6)"/><ellipse cx="0" cy="9" rx="8" ry="6" transform="rotate(-8 0 9)"/></g>';
+function makeView(panel){
+  var svg = $('.bars', panel);
+  var st = '<line x1="12" y1="' + (BASE + 1) + '" x2="688" y2="' + (BASE + 1) + '" stroke="' + INK + '" stroke-width="2.5"/>';
+  for(var k = 1; k <= 7; k++){
+    var cx = X0 + (k - 1) * PITCH;
+    st += '<g transform="translate(' + f1(cx - 10.5 * .8) + ',' + (BASE + 34) + ') scale(.8)">' + headIcon(k) + '</g>';
+  }
+  st += '<text class="axcap" x="14" y="426">◀ 길고 뾰족한 부리</text><text class="axcap" x="686" y="426" text-anchor="end">크고 두꺼운 부리 ▶</text>';
+  st += '<text class="info" x="350" y="32"></text><g class="refs"></g><g class="slabs"></g><g class="labs"></g>';
+  svg.innerHTML = st;
+  var labs = [], refs = [];
+  for(var q = 0; q < 7; q++){ var rr = document.createElementNS(NS, 'rect'); rr.setAttribute('class', 'ref'); rr.setAttribute('x', X0 + q * PITCH - BW / 2 - 7); rr.setAttribute('width', BW + 14); rr.setAttribute('rx', 3); $('.refs', svg).appendChild(rr); refs.push(rr); }
+  for(var j = 0; j < 7; j++){ var t = document.createElementNS(NS, 'text'); t.setAttribute('class', 'clab hf'); t.setAttribute('x', X0 + j * PITCH); t.setAttribute('y', 0); t.style.opacity = '0'; $('.labs', svg).appendChild(t); labs.push(t); }
+  return { panel: panel, svg: svg, gS: $('.slabs', svg), info: $('.info', svg), labs: labs, refs: refs, rects: new Map(), visible: false,
+           head: $('.phead', panel), title: $('.pt', panel), ico: $('.ico', panel) };
+}
+var VA = makeView($('#panelA')), VB = makeView($('#panelB'));
+var IA = null, IB = null;
+var SEED_A = 5, SEED_B = 10;
+function setHead(v, isl){
+  v.head.classList.toggle('cactus', isl.env === 'cactus');
+  v.head.classList.toggle('seed', isl.env === 'seed');
+  v.title.textContent = FinchSim.ENV[isl.env].name;
+  v.ico.innerHTML = isl.env === 'cactus' ? ICON_CACTUS : ICON_SEED;
+}
+function renderView(v, birds, alive, opt){
+  opt = opt || {};
+  // 옅은 막대 = 처음 무리(0세대) 분포. 한 세대가 지난 뒤부터 비교용으로 보인다.
+  var showRef = v.visible && !alive && opt.gen > 0;
+  v.refs.forEach(function(r, i){ var h = FinchSim.START[i] * SP + 4; r.setAttribute('y', BASE - h + 1); r.setAttribute('height', h); r.classList.toggle('on', showRef); });
+  var anim = !!opt.anim && !INSTANT, fast = !!opt.fast;
+  var list = v.visible ? birds : [];
+  var groups = [[], [], [], [], [], [], []];
+  list.forEach(function(b){ groups[b.beak - 1].push(b); });
+  var want = new Map(), counts = [];
+  groups.forEach(function(arr, i){
+    arr.sort(function(a, b){ var d = alive ? ((alive.has(b.id) ? 1 : 0) - (alive.has(a.id) ? 1 : 0)) : 0; return d || a.id - b.id; });
+    var nA = 0;
+    arr.forEach(function(b, j){ var dead = !!alive && !alive.has(b.id); if(!dead) nA++; want.set(b.id, { x: X0 + i * PITCH - BW / 2, y: BASE - (j + 1) * SP, dead: dead, j: j }); });
+    counts.push({ n: alive ? nA : arr.length, h: arr.length });
+  });
+  v.rects.forEach(function(el, id){
+    if(want.has(id)) return;
+    v.rects.delete(id);
+    if(!anim || fast){ el.remove(); }
+    else { el.classList.add('out'); later(function(){ el.remove(); }, 420); }
+  });
+  var fresh = [];
+  want.forEach(function(w, id){
+    var el = v.rects.get(id);
+    if(!el){
+      el = document.createElementNS(NS, 'rect');
+      el.setAttribute('class', 'slab'); el.setAttribute('width', BW); el.setAttribute('height', SHH); el.setAttribute('rx', 2); el.setAttribute('data-b', (v === VA ? 'A' : 'B') + id);
+      el.style.transform = 'translate(' + w.x + 'px,' + (w.y - (fast ? 0 : 30)) + 'px)'; el.style.opacity = '0';
+      v.gS.appendChild(el); v.rects.set(id, el); fresh.push([el, w]);
+    } else {
+      el.setAttribute('height', SHH);
+      el.style.transitionDelay = '0ms';
+      el.style.transform = 'translate(' + w.x + 'px,' + w.y + 'px)';
+    }
+    el.classList.toggle('ghost', w.dead);
+  });
+  if(fresh.length){
+    if(anim) void v.svg.getBoundingClientRect();
+    fresh.forEach(function(p){
+      p[0].style.transitionDelay = (anim && !fast) ? (p[1].j * 22 + 'ms') : '0ms';
+      p[0].style.transform = 'translate(' + p[1].x + 'px,' + p[1].y + 'px)';
+      p[0].style.opacity = '';
+    });
+  }
+  counts.forEach(function(c, i){
+    var t = v.labs[i];
+    t.textContent = c.n;
+    var top = Math.max(c.h * SP, showRef ? FinchSim.START[i] * SP + 4 : 0);
+    t.style.transform = 'translateY(' + (BASE - top - 10) + 'px)';
+    t.style.opacity = v.visible ? (c.n ? '1' : '.35') : '0';
+  });
+  if(!v.visible) v.info.textContent = '';
+  else if(alive){ var na = 0; alive.forEach(function(){ na++; }); v.info.textContent = list.length + '마리 가운데 ' + na + '마리 남음'; }
+  else v.info.textContent = '핀치 ' + list.length + '마리';
+}
+function renderSim(opt){
+  setPitch([VA.visible ? IA.birds : [], VB.visible ? IB.birds : []]);
+  opt = opt || {}; opt.gen = IA.gen;
+  renderView(VA, IA.birds, IA.phase === 'survived' ? IA.alive : null, opt);
+  renderView(VB, IB.birds, IB.phase === 'survived' ? IB.alive : null, opt);
+  $('#genNum').textContent = VA.visible ? IA.gen : '–';
+}
+function simReset(){
+  IA = FinchSim.create('cactus', SEED_A); IB = FinchSim.create('seed', SEED_B);
+  VA.visible = VB.visible = false;
+  [VA, VB].forEach(function(v){ v.rects.forEach(function(el){ el.remove(); }); v.rects.clear(); v.svg.classList.remove('fast'); });
+  setHead(VA, IA); setHead(VB, IB);
+  renderSim({ anim: false });
+}
+// 여러 세대를 한 번에: 모델은 바로 끝 상태, 화면은 세대마다 차례로
+function runGens(n, anim){
+  var snaps = [];
+  for(var i = 0; i < n; i++){ FinchSim.nextGen(IA); FinchSim.nextGen(IB); snaps.push([IA.birds, IB.birds, IA.gen]); }
+  if(!anim || INSTANT){ renderSim({ anim: false }); return; }
+  VA.svg.classList.add('fast'); VB.svg.classList.add('fast');
+  snaps.forEach(function(sn, i){
+    later(function(){
+      setPitch([sn[0], sn[1]]);
+      renderView(VA, sn[0], null, { anim: true, fast: true, gen: sn[2] });
+      renderView(VB, sn[1], null, { anim: true, fast: true, gen: sn[2] });
+      $('#genNum').textContent = sn[2];
+      sfx('tick', true);
+      if(i === snaps.length - 1){ VA.svg.classList.remove('fast'); VB.svg.classList.remove('fast'); }
+    }, 60 + i * 140);
+  });
+}
+
+/* ───── 장면 정의 ───── */
+function openBlank(n, anim){ var b = $('.blank[data-n="' + n + '"]'); if(b){ b.classList.add('open'); sfx('ding', anim); } }
+var S1 = {
+  el: $('#sc1'), tag: '표지', title: '생물은 어떻게 다양해졌을까?',
+  script: '오늘 질문은 하나예요. 생물은 어떻게 다양해졌을까요? 선인장이 많은 섬의 핀치와 단단한 씨앗이 많은 섬의 핀치는 부리가 달라요. 그런데 오래전 이 섬들에 들어온 핀치 무리는 원래 한 종이었어요.',
+  cues: ['섬 두 곳에 사는 핀치를 보여 줍니다. 먹이가 다른 두 섬이에요.',
+         '왼쪽 섬 핀치의 부리를 크게 볼까요? 길고 뾰족하죠.',
+         '오른쪽 섬 핀치는 부리가 크고 두꺼워요.',
+         '오래전 이 섬들에 들어온 핀치 무리는 원래 한 종이었어요. 그 무리 안에서도 부리가 조금씩 달랐어요.',
+         '학습지를 꺼내요. 번호가 붙은 칸이 열리면 같은 번호 칸에 적어요.'],
+  reset: function(){},
+  enter: function(a){ sfx('chirp', a); },
+  steps: [
+    function(a){ on($('#magA')); on($('#magAlab')); sfx('pop', a); },
+    function(a){ on($('#magB')); on($('#magBlab')); sfx('pop', a); },
+    function(a){ on($('#flock')); on($('#strip3')); sfx('chirp', a); },
+    function(a){ on($('#strip4')); sfx('pop', a); }
+  ]
+};
+var S2 = {
+  el: $('#sc2'), tag: '개념 1', title: '지역마다 다르고, 같은 종 안에서도 다르다',
+  script: '지역마다 사는 생물이 다르고, 같은 종 안에서도 생물은 조금씩 달라요. 앞의 것이 생물다양성, 뒤의 것이 변이예요. 북극곰과 고라니처럼 종이 다른 생물 사이의 차이는 변이가 아니에요. 이름표는 교과서 그림에 나온 생물 몇 가지를 고른 예예요.',
+  cues: ['북극, 숲, 사막을 비교해 볼까요? 어떤 생물이 살까요?',
+         '지역마다 사는 생물의 이름표예요. 사는 생물이 다르고, 그 수도 다르죠.',
+         '특정 지역에 살고 있는 생물의 다양한 정도, ①번 칸이에요.',
+         '지역마다 살고 있는 생물의 종류와 수가 달라요. ②번 칸.',
+         '이번엔 한 종 안을 들여다볼게요. 모두 바지락이에요.',
+         '무늬, 색깔, 크기가 조금씩 다르죠.',
+         '같은 종인데 특징이 조금씩 다른 것, ③번 칸이에요.',
+         '북극곰과 고라니의 차이도 변이일까요? 종이 다른 생물 사이의 차이는 변이가 아니에요.'],
+  reset: function(){ $('#q2').classList.remove('up'); },
+  enter: function(){},
+  steps: [
+    function(a){ $$('#sc2 .chips .chip').forEach(function(c, i){ c.style.transitionDelay = (i * 70) + 'ms'; on(c); }); sfx('grow', a); },
+    function(a){ openBlank(1, a); },
+    function(a){ openBlank(2, a); },
+    function(a){ $('#q2').classList.add('up'); $$('#clamSvg .rv').forEach(on); on($('#clamCap')); sfx('pop', a); },
+    function(a){ $$('#clamBox .dchips .chip').forEach(function(c, i){ c.style.transitionDelay = (i * 120) + 'ms'; on(c); }); sfx('grow', a); },
+    function(a){ openBlank(3, a); },
+    function(a){ on($('#noteVar')); sfx('pop', a); }
+  ]
+};
+var S3 = {
+  el: $('#sc3'), tag: '개념 2', title: '핀치 무리는 어떻게 달라졌을까',
+  script: '두 섬의 핀치 무리는 똑같이 출발해요. 한 칸이 핀치 한 마리이고, 부리 모양은 태어날 때 정해져 평생 바뀌지 않아요. 섬의 먹이에 알맞은 부리를 지닌 핀치가 더 많이 살아남아 자손을 남기고, 이것이 되풀이되면 무리 안의 부리 비율이 달라져요. 24마리와 살아남을 확률은 이해를 돕는 예이고, 실제로는 10세대보다 훨씬 오랜 세월이 걸려요.',
+  cues: ['원래 한 종이었던 핀치 무리가 두 섬에 나뉘어 산다고 해 볼게요.',
+         '두 섬의 처음 무리는 똑같아요. 같은 종인데도 부리 모양이 조금씩 달라요(변이).',
+         '한 세대 동안 먹이를 잘 먹지 못한 핀치는 죽어요(점선). 어느 쪽 부리가 많이 남았나요?',
+         '환경에 알맞은 변이를 지닌 생물이 더 많이 살아남아요. ④번 칸.',
+         '남은 핀치가 다음 세대를 남겨요. 부모를 닮되 조금씩 달라요.',
+         '부모의 특징을 물려받은 다음 세대, ⑤번 칸.',
+         '10세대까지 되풀이해 볼까요? 두 섬의 무리가 서로 다른 쪽으로 옮겨 가요. 한 마리의 부리가 바뀐 것이 아니에요.',
+         '이 과정이 오랜 세월 반복되면 원래의 종과 다른 종이 나타나요. ⑥번 칸. 시뮬은 이 단계에서 직접 조작해 보세요.',
+         '처음 질문의 답이에요.'],
+  reset: function(){ simReset(); },
+  enter: function(){},
+  steps: [
+    function(a){ VA.visible = VB.visible = true; renderSim({ anim: a }); sfx('grow', a); },
+    function(a){ FinchSim.survive(IA); FinchSim.survive(IB); renderSim({ anim: a }); sfx('thud', a); },
+    function(a){ openBlank(4, a); },
+    function(a){ FinchSim.reproduce(IA); FinchSim.reproduce(IB); renderSim({ anim: a }); sfx('chirp', a); },
+    function(a){ openBlank(5, a); },
+    function(a){ runGens(9, a); },
+    function(a){ openBlank(6, a); },
+    function(a){ on($('#sum')); sfx('chime', a); }
+  ]
+};
+var SC = [S1, S2, S3];
+
+/* ───── 넘기기 ───── */
+var cur = -1, step = 0;
+function showScene(i){
+  SC.forEach(function(s, j){ s.el.classList.toggle('cur', j === i); });
+  if(i !== cur) inkClearAll();
+}
+function resetScene(i){
+  var s = SC[i];
+  $$('.on', s.el).forEach(function(e){ e.classList.remove('on'); });
+  $$('.blank.open', s.el).forEach(function(e){ e.classList.remove('open'); });
+  if(s.reset) s.reset();
+  s.dirty = false;
+}
+function entOn(i){ $$('.ent', SC[i].el).forEach(on); }
+function finishNow(){ instant(null); }
+function jump(i, st){
+  finishNow();
+  showScene(i); cur = i; step = st;
+  instant(function(){ resetScene(i); entOn(i); for(var k = 1; k <= st; k++) SC[i].steps[k - 1](false); });
+  after();
+}
+function enterScene(i){
+  finishNow();
+  showScene(i); cur = i; step = 0;
+  instant(function(){ resetScene(i); });
+  entOn(i);
+  if(SC[i].enter) SC[i].enter(true);
+  after();
+}
+function next(){
+  finishNow();
+  var s = SC[cur];
+  if(step < s.steps.length){
+    if(s.dirty) jump(cur, step);
+    step++; s.steps[step - 1](true); after();
+  } else if(cur < SC.length - 1){ enterScene(cur + 1); }
+}
+function prev(){
+  finishNow();
+  if(step > 0) jump(cur, step - 1);
+  else if(cur > 0) jump(cur - 1, SC[cur - 1].steps.length);
+}
+function replay(){
+  finishNow();
+  if(step === 0) enterScene(cur);
+  else { var st = step; jump(cur, st - 1); step = st; SC[cur].steps[st - 1](true); after(); }
+}
+function after(){
+  var h = '#' + (cur + 1) + '.' + step;
+  try{ history.replaceState(null, '', h); }catch(e){ try{ location.replace(h); }catch(_){} }
+  $('#pg').textContent = (cur + 1) + ' / ' + SC.length + ' · ' + step + '/' + SC[cur].steps.length;
+  renderScript();
+}
+
+/* ───── 시뮬 직접 조작 (선생님) ───── */
+function markDirty(){ S3.dirty = true; }
+$$('#simCtl .sbtn').forEach(function(b){
+  b.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  b.addEventListener('click', function(e){
+    e.stopPropagation(); b.blur(); finishNow(); markDirty();
+    VA.visible = VB.visible = true;
+    var act = b.getAttribute('data-act');
+    if(act === 'next'){
+      if(IA.phase === 'full'){
+        FinchSim.survive(IA); FinchSim.survive(IB); renderSim({ anim: true }); sfx('thud', true);
+        later(function(){ FinchSim.reproduce(IA); FinchSim.reproduce(IB); renderSim({ anim: true }); sfx('chirp', true); }, 1000);
+      } else { FinchSim.reproduce(IA); FinchSim.reproduce(IB); renderSim({ anim: true }); sfx('chirp', true); }
+    } else if(act === 'ten'){
+      if(IA.phase !== 'full'){ FinchSim.reproduce(IA); FinchSim.reproduce(IB); runGens(9, true); }
+      else runGens(10, true);
+    } else if(act === 'reset'){
+      var ea = IA.env, eb = IB.env;
+      IA = FinchSim.create(ea, SEED_A); IB = FinchSim.create(eb, SEED_B);
+      [VA, VB].forEach(function(v){ v.rects.forEach(function(el){ el.remove(); }); v.rects.clear(); });
+      renderSim({ anim: true }); sfx('grow', true);
+    }
+  });
+});
+[[VA, 'A'], [VB, 'B']].forEach(function(p){
+  var btn = $('.envbtn', p[0].panel);
+  btn.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  btn.addEventListener('click', function(e){
+    e.stopPropagation(); btn.blur(); finishNow(); markDirty();
+    var isl = p[1] === 'A' ? IA : IB;
+    isl.env = isl.env === 'cactus' ? 'seed' : 'cactus';
+    setHead(p[0], isl); sfx('pop', true);
+  });
+});
+
+/* ───── 대본 · 도움말 · 전체 보기 ───── */
+var scriptOpen = false;
+function renderScript(){
+  if(!scriptOpen) return;
+  var s = SC[cur], nx = SC[cur + 1];
+  $('#script').innerHTML = '<div class="meta">장면 ' + (cur + 1) + ' / ' + SC.length + ' · ' + s.tag + ' · ' + s.title + ' · 단계 ' + step + '/' + s.steps.length + (nx ? ' · 다음 장면: ' + nx.title : ' · 마지막 장면') + '</div>' +
+    '<div>' + s.script + '</div><div class="cue">지금: ' + (s.cues[step] || '') + '</div>';
+}
+function toggleScript(){ if(STUDENT) return; scriptOpen = !scriptOpen; $('#script').classList.toggle('open', scriptOpen); renderScript(); }
+function toggleHelp(){ $('#help').classList.toggle('open'); }
+function toggleOver(){
+  var o = $('#over');
+  if(o.classList.contains('open')){ o.classList.remove('open'); $('#overGrid').innerHTML = ''; return; }
+  var g = $('#overGrid'); g.innerHTML = '';
+  SC.forEach(function(s, i){
+    var th = document.createElement('div'); th.className = 'th' + (i === cur ? ' cur' : '');
+    var box = document.createElement('div'); box.className = 'box';
+    var c = s.el.cloneNode(true); c.removeAttribute('id'); $$('[id]', c).forEach(function(e){ e.removeAttribute('id'); });
+    box.appendChild(c); th.appendChild(box);
+    var lab = document.createElement('div'); lab.textContent = (i + 1) + '. ' + s.title; th.appendChild(lab);
+    th.addEventListener('click', function(e){ e.stopPropagation(); toggleOver(); if(i === cur) jump(i, 0); else enterScene(i); });
+    g.appendChild(th);
+  });
+  o.classList.add('open');
+}
+['script', 'help', 'over'].forEach(function(id){ $('#' + id).addEventListener('click', function(e){ e.stopPropagation(); if(id === 'help') toggleHelp(); }); });
+
+/* ───── 소리 · 전체 화면 · 검은/흰 화면 ───── */
+function setMute(m){ muted = m; $('#sndBtn').textContent = muted ? '소리 끔' : '소리 켬'; }
+setMute(muted);
+function toggleFS(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(e){} }
+function blk(c){ var b = $('#blk'); if(b.classList.contains(c)) b.className = ''; else b.className = c; }
+
+/* ───── 판서: 레이저 · 빨간 펜 ───── */
+var cv = $('#ink'), cx = cv.getContext('2d');
+var tool = 'none', strokes = [], lasers = [], drawing = null, swallowUntil = 0;
+function ls(k, v){ try{ if(v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); }catch(e){ return null; } }
+var finger = ls('lb_finger') || 'auto', penUsed = ls('lb_pen_used') === '1';
+function toStage(e){ var r = stage.getBoundingClientRect(); return [(e.clientX - r.left) * 1920 / r.width, (e.clientY - r.top) * 1080 / r.height]; }
+function wantDraw(e){
+  if(tool === 'none') return false;
+  if(e.target && e.target.closest && e.target.closest('#tbox,#tbtn,#ctl,.panelx')) return false;
+  if(e.pointerType === 'pen') return true;
+  if(e.pointerType === 'mouse') return e.button === 0;
+  if(finger === 'on') return true;
+  if(finger === 'off') return false;
+  return !penUsed;
+}
+function setTool(t){
+  tool = (tool === t) ? 'none' : t;
+  $$('#tbox [data-t="laser"],#tbox [data-t="pen"]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-t') === tool); });
+  $('#tbtn').classList.toggle('act', tool !== 'none');
+  document.body.classList.toggle('drawing', tool !== 'none');
+}
+function inkClearAll(){ strokes = []; lasers = []; drawInk(); }
+function drawPath(pts){ cx.beginPath(); cx.moveTo(pts[0][0], pts[0][1]); for(var i = 1; i < pts.length; i++) cx.lineTo(pts[i][0], pts[i][1]); if(pts.length === 1) cx.lineTo(pts[0][0] + .1, pts[0][1]); cx.stroke(); }
+var rafOn = false;
+function drawInk(){
+  cx.clearRect(0, 0, 1920, 1080);
+  cx.lineCap = 'round'; cx.lineJoin = 'round';
+  cx.strokeStyle = TOMATO; cx.lineWidth = 6; cx.shadowBlur = 0;
+  strokes.forEach(function(s){ drawPath(s.pts); });
+  var now = performance.now(), keep = [];
+  lasers.forEach(function(l){
+    var a = l.end ? 1 - Math.max(0, now - l.end - 600) / 400 : 1;
+    if(a <= 0) return; keep.push(l);
+    cx.globalAlpha = a; cx.shadowColor = TOMATO; cx.shadowBlur = 18; cx.strokeStyle = TOMATO; cx.lineWidth = 9; drawPath(l.pts);
+    cx.shadowBlur = 0; cx.strokeStyle = '#fff'; cx.lineWidth = 3; drawPath(l.pts); cx.globalAlpha = 1;
+  });
+  lasers = keep;
+  if(lasers.length && !rafOn){ rafOn = true; requestAnimationFrame(function(){ rafOn = false; drawInk(); }); }
+}
+window.addEventListener('pointerdown', function(e){
+  gestured = true;
+  if(e.pointerType === 'pen' && !penUsed){ penUsed = true; ls('lb_pen_used', '1'); }
+  if(!wantDraw(e)) return;
+  e.preventDefault(); e.stopPropagation();
+  drawing = { id: e.pointerId, pts: [toStage(e)] };
+  if(tool === 'pen') strokes.push(drawing); else lasers.push(drawing);
+  drawInk();
+}, true);
+window.addEventListener('pointermove', function(e){
+  if(!drawing || e.pointerId !== drawing.id) return;
+  e.preventDefault(); e.stopPropagation();
+  drawing.pts.push(toStage(e)); drawInk();
+}, true);
+function endDraw(e){
+  if(!drawing || e.pointerId !== drawing.id) return;
+  e.stopPropagation();
+  drawing.end = performance.now(); drawing = null; swallowUntil = performance.now() + 450; drawInk();
+}
+window.addEventListener('pointerup', endDraw, true);
+window.addEventListener('pointercancel', endDraw, true);
+window.addEventListener('click', function(e){ if(performance.now() < swallowUntil){ e.stopPropagation(); e.preventDefault(); swallowUntil = 0; } }, true);
+document.addEventListener('touchmove', function(e){
+  if(e.target && e.target.closest && e.target.closest('#script,#over')) return;
+  if(document.fullscreenElement || tool !== 'none') e.preventDefault();
+}, { passive: false });
+
+$('#tbtn').addEventListener('pointerdown', function(e){ e.stopPropagation(); }, true);
+$('#tbtn').addEventListener('click', function(e){ e.stopPropagation(); $('#tbox').classList.toggle('open'); });
+$('#tbox').addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+$('#tbox').addEventListener('click', function(e){
+  e.stopPropagation();
+  var b = e.target.closest('button'); if(!b) return;
+  var t = b.getAttribute('data-t');
+  if(t === 'laser' || t === 'pen') setTool(t);
+  else if(t === 'undo'){ strokes.pop(); drawInk(); }
+  else if(t === 'clear') inkClearAll();
+  else if(t === 'finger'){ finger = finger === 'auto' ? 'on' : (finger === 'on' ? 'off' : 'auto'); ls('lb_finger', finger); fingerLabel(); }
+  else if(t === 'fs') toggleFS();
+});
+function fingerLabel(){ $('#fingerBtn').textContent = '손가락 그리기: ' + ({ auto: '자동', on: '켬', off: '끔' })[finger]; }
+fingerLabel();
+
+/* ───── 입력: 키 · 클릭 · 밀기 ───── */
+window.addEventListener('keydown', function(e){
+  var t = e.target; if(t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+  gestured = true;
+  if(document.activeElement && document.activeElement !== document.body && stage.contains(document.activeElement)) document.activeElement.blur();
+  ac();
+  var k = e.key;
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  switch(k){
+    case 'ArrowRight': case ' ': case 'Enter': case 'PageDown': case 'ArrowDown': e.preventDefault(); next(); break;
+    case 'ArrowLeft': case 'PageUp': case 'Backspace': case 'ArrowUp': e.preventDefault(); prev(); break;
+    case 'Home': e.preventDefault(); jump(0, 0); break;
+    case 'End': e.preventDefault(); jump(SC.length - 1, SC[SC.length - 1].steps.length); break;
+    default:
+      switch(k.toLowerCase()){
+        case 'f': toggleFS(); break;
+        case 't': case 'n': toggleScript(); break;
+        case 'o': toggleOver(); break;
+        case 'r': replay(); break;
+        case 'm': setMute(!muted); break;
+        case 'b': blk('k'); break;
+        case 'w': blk('w'); break;
+        case 'h': toggleHelp(); break;
+        case 'l': setTool('laser'); break;
+        case 'p': setTool('pen'); break;
+        case 'z': strokes.pop(); drawInk(); break;
+        case 'c': inkClearAll(); break;
+        case 'escape':
+          if(tool !== 'none') setTool(tool);
+          $$('.panelx.open').forEach(function(p){ p.classList.remove('open'); }); scriptOpen = false; $('#overGrid').innerHTML = '';
+          $('#tbox').classList.remove('open'); $('#blk').className = '';
+          break;
+      }
+  }
+});
+function noAdvance(t){ return !!(t && t.closest && t.closest('button,[data-noadvance],#tbox,#tbtn,#ctl,.panelx,#blk')); }
+stage.addEventListener('click', function(e){ ac(); if(noAdvance(e.target)) return; if(swipeUntil > performance.now()) return; next(); });
+stage.addEventListener('contextmenu', function(e){ e.preventDefault(); if(noAdvance(e.target)) return; prev(); });
+$('#blk').addEventListener('click', function(e){ e.stopPropagation(); $('#blk').className = ''; });
+var sw = null, swipeUntil = 0;
+stage.addEventListener('pointerdown', function(e){ if(e.pointerType === 'touch' && !noAdvance(e.target)) sw = { x: e.clientX, y: e.clientY, id: e.pointerId }; });
+stage.addEventListener('pointerup', function(e){
+  if(!sw || e.pointerId !== sw.id) return;
+  var dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.3){ swipeUntil = performance.now() + 500; if(dx < 0) next(); else prev(); }
+});
+$('#ctl').addEventListener('click', function(e){
+  e.stopPropagation(); var b = e.target.closest('button'); if(!b) return;
+  var c = b.getAttribute('data-c'); b.blur();
+  if(c === 'prev') prev(); else if(c === 'next') next(); else if(c === 'snd'){ ac(); setMute(!muted); } else if(c === 'fs') toggleFS();
+});
+var ctlT = 0;
+window.addEventListener('mousemove', function(){ $('#ctl').classList.add('show'); clearTimeout(ctlT); ctlT = setTimeout(function(){ $('#ctl').classList.remove('show'); }, 2200); });
+
+/* ───── 무대 맞추기 · 시작 ───── */
+function fit(){ var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')'; }
+window.addEventListener('resize', fit); fit();
+simReset();
+var m = /^#(\d+)\.(\d+)$/.exec(location.hash || '');
+if(m){ var si = Math.min(SC.length, Math.max(1, +m[1])) - 1; var st = Math.min(SC[si].steps.length, Math.max(0, +m[2])); jump(si, st); }
+else enterScene(0);
+})();
+</script>
+</body>
+</html>

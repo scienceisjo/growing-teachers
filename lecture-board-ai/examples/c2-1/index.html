@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>밀도 — 물질이 뜨고 가라앉는 성질 (칠판 강의 화면)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --blue-l:#0066cc; --blue-d:#2997ff;
+  /* 뜻마다 색 하나: 질량=붉은 주황, 부피=앰버, 밀도=초록, 물=하늘, 빈칸 정답=파랑 */
+  --mass-d:#FF6A3D; --vol-d:#FFD60A; --den-d:#30D158; --water-d:#64D2FF;
+  --mass-l:#C4391B; --vol-l:#9A7400; --den-l:#1E8B3E; --water-l:#0077B6;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none}
+body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;
+  font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  font-weight:400;color:#1d1d1f;background:#000}
+body.drawing #stage{touch-action:none}
+.scene{position:absolute;inset:0;display:none}
+.scene.active{display:block}
+.scene.white{background:#fff;color:#1d1d1f}
+.scene.black{background:#000;color:#f5f5f7}
+.scene.dark{background:#1d1d1f;color:#f5f5f7}
+.abs{position:absolute}
+svg.full{position:absolute;left:0;top:0;width:1920px;height:1080px}
+svg text{font-family:inherit}
+
+/* 머리말 */
+.tag{position:absolute;left:120px;top:78px;font-size:28px;line-height:34px;color:#6e6e73;font-weight:500}
+.black .tag,.dark .tag{color:#a1a1a6}
+.title{position:absolute;left:120px;top:116px;font-size:62px;line-height:76px;font-weight:600;letter-spacing:-.02em;margin:0;white-space:nowrap}
+.pills{position:absolute;right:120px;top:78px;display:flex;gap:10px}
+.pills span{width:40px;height:40px;border-radius:20px;font-size:24px;line-height:40px;text-align:center;font-weight:600;background:#e8e8ed;color:#6e6e73}
+.dark .pills span,.black .pills span{background:rgba(255,255,255,.1);color:#a1a1a6}
+.pills span.now{background:var(--blue-l);color:#fff}
+.dark .pills span.now,.black .pills span.now{background:var(--blue-d);color:#fff}
+
+/* 장면에 들어올 때 */
+.scene.active .enter{animation:enter .7s var(--ease) both}
+.scene.active .enter.e2{animation-delay:.12s}
+.scene.active .enter.e3{animation-delay:.24s}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* 단계마다 나타나는 것 */
+.rv{opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .55s ease,transform .6s var(--ease),visibility 0s .6s}
+.rv.on{opacity:1;visibility:visible;transform:none;transition:opacity .55s ease,transform .6s var(--ease),visibility 0s}
+.fd{opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.fd.on{opacity:1;visibility:visible;transition:opacity .45s ease,visibility 0s}
+.fd.late.on{transition:opacity .4s ease .9s,visibility 0s .9s}
+.fd.mid.on{transition:opacity .4s ease .55s,visibility 0s .55s}
+.instant *:not(.bob){transition:none !important;animation:none !important}
+
+/* 카드와 빈칸 */
+.card{position:absolute;border-radius:18px;background:#f5f5f7}
+.dark .card,.black .card{background:rgba(255,255,255,.06)}
+.ws{font-size:38px;line-height:68px;font-weight:500;letter-spacing:-.01em;padding:30px 48px 0}
+.ws p{margin:0;white-space:nowrap}
+.blank{display:inline-block;position:relative;min-width:150px;padding:0 20px;margin:0 6px 0 34px;border-bottom:4px solid currentColor;line-height:54px;text-align:center;vertical-align:baseline}
+.blank .no{position:absolute;left:-30px;top:-10px;width:36px;height:36px;border-radius:18px;background:var(--blue-l);color:#fff;font-size:24px;line-height:36px;font-weight:700;font-style:normal;text-align:center}
+.dark .blank .no,.black .blank .no{background:var(--blue-d)}
+.blank .ans{display:inline-block;color:var(--blue-l);font-weight:700;visibility:hidden;opacity:0;transform:scale(.5);transition:none}
+.dark .blank .ans,.black .blank .ans{color:var(--blue-d)}
+.blank.on .ans{visibility:visible;opacity:1;transform:none;transition:transform .45s cubic-bezier(.2,1.5,.4,1),opacity .2s ease}
+
+/* 1 표지 */
+#s1 .q{position:absolute;left:120px;top:236px;font-size:46px;line-height:60px;font-weight:500;margin:0}
+#s1 .big{top:112px;font-size:84px;line-height:104px}
+#s1 .l3{position:absolute;left:120px;top:318px;font-size:36px;line-height:48px;color:#a1a1a6;margin:0}
+#s1 .l4{position:absolute;left:120px;top:380px;font-size:44px;line-height:58px;font-weight:600;color:var(--blue-d);margin:0}
+#s1 .guide{position:absolute;left:0;right:0;top:984px;text-align:center;font-size:26px;line-height:34px;color:#a1a1a6}
+.bob{transform-box:fill-box;transform-origin:center;animation:bob 3.8s ease-in-out infinite}
+.bob.b2{animation-duration:3.1s;animation-delay:-1.2s}
+@keyframes bob{0%,100%{transform:translateY(-4px) rotate(-.6deg)}50%{transform:translateY(5px) rotate(.7deg)}}
+.drop{opacity:0;visibility:hidden;transition:none}
+.drop.on{opacity:1;visibility:visible;transform:none !important;transition:transform 1.1s cubic-bezier(.4,0,.45,1),opacity .15s linear}
+
+/* 2 탐구 */
+#fig2{position:absolute;left:120px;top:215px;width:900px;height:440px;border-radius:18px;background:#f5f5f7}
+#fig2 svg{width:900px;height:440px;display:block}
+.onscale{transform:translateY(-44px);transition:transform .5s cubic-bezier(.5,0,.6,1),opacity .3s ease}
+.onscale.on{transform:none}
+.onscale.gone{opacity:0}
+.incyl{opacity:0;transform:translateY(-300px);transition:none}
+.incyl.on{opacity:1;transform:none;transition:transform 1s cubic-bezier(.4,0,.3,1) .15s,opacity .2s linear .1s}
+.lvl{transition:transform .7s ease .55s}
+#tbl{position:absolute;left:1050px;top:215px;width:750px;border-collapse:collapse;font-size:30px;table-layout:fixed}
+#tbl th{height:92px;background:#f5f5f7;font-weight:600;line-height:36px;font-size:28px}
+#tbl th small{display:block;font-size:24px;font-weight:400;color:#6e6e73}
+#tbl td{height:86px;text-align:center;border-bottom:2px solid #d2d2d7}
+#tbl td:first-child,#tbl th:first-child{font-weight:500}
+#tbl .v{color:var(--blue-l);font-weight:600;font-size:32px}
+#tbl .v b{font-weight:800}
+.cm{color:var(--mass-l)} .cv{color:var(--vol-l)} .cd{color:var(--den-l)}
+.dark .cm,.black .cm{color:var(--mass-d)} .dark .cv,.black .cv{color:var(--vol-d)} .dark .cd,.black .cd{color:var(--den-d)}
+#note2{position:absolute;left:1050px;top:494px;width:750px;text-align:center;font-size:26px;line-height:34px;color:#6e6e73}
+#formula{position:absolute;left:1050px;top:544px;width:750px;height:112px;display:flex;align-items:center;justify-content:center;gap:22px;font-size:52px;font-weight:700}
+#formula .fr{display:inline-flex;flex-direction:column;align-items:center;line-height:50px;font-size:44px}
+#formula .fr span:first-child{border-bottom:4px solid #1d1d1f;padding:0 16px 2px}
+#formula small{font-size:28px;font-weight:400;color:#6e6e73;margin-left:6px}
+
+/* 3 시뮬레이터 */
+#tank{position:absolute;left:120px;top:205px;width:800px;height:420px;border-radius:18px;background:rgba(255,255,255,.06)}
+#tank svg{width:800px;height:420px;display:block}
+#blk{transition:transform .8s cubic-bezier(.3,.1,.2,1)}
+#blkLabel{transition:transform .8s cubic-bezier(.3,.1,.2,1)}
+#waterG{transition:transform .8s cubic-bezier(.3,.1,.2,1)}
+#panel{position:absolute;left:960px;top:205px;width:840px;height:420px;border-radius:18px;background:rgba(255,255,255,.06);padding:22px 34px 0}
+#panel .row{display:flex;align-items:center;height:70px}
+#panel .lab{width:110px;font-size:32px;font-weight:600;flex:none}
+#panel .val{width:200px;text-align:right;font-size:36px;font-weight:700;flex:none;font-variant-numeric:tabular-nums}
+#mats{gap:14px;margin-bottom:8px}
+#mats button{flex:1;height:62px;border:0;border-radius:14px;background:rgba(255,255,255,.1);color:#f5f5f7;font:inherit;font-size:30px;font-weight:600;cursor:pointer}
+#mats button.sel{background:#f5f5f7;color:#1d1d1f}
+#mats button small{font-size:24px;font-weight:400}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:60px;background:transparent;margin:0 10px;cursor:pointer;touch-action:none}
+input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:rgba(255,255,255,.2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:42px;height:42px;border-radius:21px;background:var(--c);margin-top:-16px;border:0}
+input[type=range]::-moz-range-track{height:10px;border-radius:5px;background:rgba(255,255,255,.2)}
+input[type=range]::-moz-range-thumb{width:42px;height:42px;border-radius:21px;background:var(--c);border:0}
+input[type=range]:focus{outline:none}
+#dLine{height:76px;font-size:34px;font-weight:500;border-top:2px solid rgba(255,255,255,.12);margin-top:8px;white-space:nowrap}
+#dLine b{font-weight:800;font-size:40px;margin-left:10px}
+#cmp{height:64px;font-size:34px;font-weight:500;white-space:nowrap}
+#cmp .sign{display:inline-block;width:64px;text-align:center;font-size:44px;font-weight:700}
+#cmp b{font-size:40px;font-weight:800;margin-left:14px}
+#s3 .ws{line-height:66px;padding-top:16px}
+#ans3{position:absolute;left:120px;top:896px;width:1680px;font-size:40px;line-height:56px;font-weight:600}
+#ans3 small{font-size:28px;font-weight:500;color:#a1a1a6;margin-right:22px}
+
+/* 판서 */
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:40}
+#toolbox{position:absolute;right:26px;bottom:26px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+#tbBtn{width:60px;height:60px;border-radius:30px;border:0;background:rgba(120,120,128,.35);cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+#tbBtn svg{width:28px;height:28px}
+#tbPanel{display:none;flex-direction:column;gap:8px;background:rgba(40,40,42,.92);border-radius:18px;padding:12px}
+#toolbox.open #tbPanel{display:flex}
+#tbPanel button{height:54px;min-width:230px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:#f5f5f7;font:inherit;font-size:24px;font-weight:500;cursor:pointer;text-align:left;padding:0 18px}
+#tbPanel button.sel{background:var(--blue-d);color:#fff}
+
+/* 조작 막대 · 대본 · 전체 보기 · 도움말 · 가림 */
+#bar{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:55;display:flex;align-items:center;gap:6px;background:rgba(40,40,42,.9);border-radius:30px;padding:6px 10px;opacity:0;pointer-events:none;transition:opacity .3s}
+#bar.show{opacity:1;pointer-events:auto}
+#bar button{height:48px;min-width:56px;border:0;border-radius:24px;background:transparent;color:#f5f5f7;font:inherit;font-size:24px;cursor:pointer;padding:0 14px}
+#bar button:hover{background:rgba(255,255,255,.12)}
+#bar #pg{font-size:24px;color:#f5f5f7;min-width:150px;text-align:center;font-variant-numeric:tabular-nums}
+#notes{display:none;position:absolute;left:0;right:0;bottom:0;z-index:50;background:rgba(20,20,22,.94);color:#f5f5f7;padding:26px 120px 30px;max-height:380px;overflow:auto}
+#notes.open{display:block}
+#notes .nh{font-size:24px;color:#a1a1a6;margin-bottom:10px}
+#notes .nb{font-size:30px;line-height:46px}
+#over,#help{display:none;position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.92);color:#f5f5f7;padding:110px 120px}
+#over.open,#help.open{display:block}
+#over h2,#help h2{font-size:44px;margin:0 0 40px;font-weight:600}
+#over .grid{display:flex;gap:30px}
+#over .th{flex:1;height:300px;border-radius:18px;background:rgba(255,255,255,.08);padding:30px;cursor:pointer;font-size:34px;line-height:46px;font-weight:600}
+#over .th.now{background:var(--blue-d)}
+#over .th small{display:block;font-size:26px;font-weight:400;color:#d2d2d7;margin-bottom:14px}
+#help table{font-size:28px;line-height:50px;border-collapse:collapse}
+#help td:first-child{color:var(--blue-d);font-weight:600;padding-right:40px;white-space:nowrap}
+#blind{display:none;position:absolute;inset:0;z-index:80}
+#blind.k{display:block;background:#000}
+#blind.w{display:block;background:#fff}
+body.student .teacher{display:none !important}
+@media (prefers-reduced-motion:reduce){
+  .bob{animation:none}
+  #stage *{transition-duration:.01s !important;transition-delay:0s !important;animation-duration:.01s !important;animation-delay:0s !important}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ───────── 1 표지 ───────── -->
+<section class="scene black" id="s1" data-title="물질이 뜨고 가라앉는 성질" data-steps="4">
+  <svg class="full" viewBox="0 0 1920 1080" aria-hidden="true">
+    <rect x="0" y="940" width="1920" height="20" fill="#2c2c2e"/>
+    <!-- 나무 도막: 큰 것도 작은 것도 같은 비율(절반)만 잠기게 그린다(같은 물질 = 같은 밀도) -->
+    <g class="bob">
+      <rect x="300" y="540" width="440" height="160" rx="24" fill="#C68B4E"/>
+      <path d="M340 580H640M380 620H700M340 662H600" stroke="#A5713A" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </g>
+    <g class="bob b2">
+      <rect x="895" y="596" width="130" height="48" rx="9" fill="#C68B4E"/>
+      <path d="M912 620H1004" stroke="#A5713A" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <!-- 철 조각: 작은 것도 큰 것도 바닥까지 가라앉는다 -->
+    <g class="drop" data-at="1" style="transform:translateY(-470px)">
+      <rect x="1270" y="894" width="46" height="46" rx="4" fill="#9AA3AD"/>
+      <path d="M1276 900H1310" stroke="#C3CAD2" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g class="drop" data-at="2" style="transform:translateY(-420px)">
+      <rect x="1560" y="820" width="120" height="120" rx="6" fill="#9AA3AD"/>
+      <path d="M1572 832H1668" stroke="#C3CAD2" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <!-- 물 -->
+    <rect x="0" y="620" width="1920" height="320" fill="#64D2FF" opacity=".2"/>
+    <line x1="0" y1="620" x2="1920" y2="620" stroke="#64D2FF" stroke-width="3"/>
+    <text x="520" y="508" text-anchor="middle" font-size="30" fill="#f5f5f7">큰 나무 도막</text>
+    <text x="960" y="566" text-anchor="middle" font-size="30" fill="#f5f5f7">작은 나무 도막</text>
+    <text class="fd late" data-at="1" x="1293" y="874" text-anchor="middle" font-size="30" fill="#f5f5f7">작은 철 조각</text>
+    <text class="fd late" data-at="2" x="1620" y="800" text-anchor="middle" font-size="30" fill="#f5f5f7">큰 철 조각</text>
+    <text x="60" y="668" font-size="28" fill="#64D2FF">물</text>
+  </svg>
+  <div class="tag enter">중학교 2학년 과학</div>
+  <h1 class="title big enter e2">물질이 뜨고 가라앉는 성질</h1>
+  <p class="q enter e3">크기가 다른 나무 도막은 왜 모두 물에 뜰까?</p>
+  <p class="l3 rv" data-at="3">철 조각은 작아도 가라앉는다 — 크기나 무게만으로는 설명할 수 없다</p>
+  <p class="l4 rv" data-at="4">뜨고 가라앉는 것은 무엇으로 정해질까?</p>
+  <div class="guide">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.<span class="stuOnly" style="display:none"> · 화면을 누르거나 → 키로 넘겨요.</span></div>
+</section>
+
+<!-- ───────── 2 단위 부피당 질량 ───────── -->
+<section class="scene white" id="s2" data-title="같은 철, 크기가 다른 두 조각" data-steps="7">
+  <div class="tag enter">탐구 · 질량과 부피 재기</div>
+  <h1 class="title enter e2">같은 철, 크기가 다른 두 조각</h1>
+  <div id="fig2" class="enter e3">
+    <svg viewBox="0 0 900 440" aria-hidden="true">
+      <defs>
+        <clipPath id="cy0"><rect x="270" y="50" width="73" height="312"/></clipPath>
+        <clipPath id="cy1"><rect x="720" y="50" width="73" height="312"/></clipPath>
+      </defs>
+      <text x="26" y="40" font-size="24" fill="#6e6e73">측정값은 (예)</text>
+      <!-- 눈금: 100 mL = 298 px (1 mL = 2.98 px). 철 조각은 밑면이 같고 높이만 2배(10 cm³, 20 cm³) -->
+      <g id="st0"></g>
+      <g id="st1"></g>
+    </svg>
+  </div>
+  <table id="tbl" class="enter e3">
+    <colgroup><col style="width:180px"><col style="width:130px"><col style="width:140px"><col style="width:300px"></colgroup>
+    <tr><th>구분</th><th><span class="cm">질량</span><small>(g)</small></th><th><span class="cv">부피</span><small>(cm³)</small></th><th>단위 부피당 질량<small>(g/cm³)</small></th></tr>
+    <tr><td>작은 철 조각</td><td><span class="v rv" data-at="1">79</span></td><td><span class="v rv" data-at="2">10</span></td><td><span class="v rv" data-at="3">79 ÷ 10 = <b>7.9</b></span></td></tr>
+    <tr><td>큰 철 조각</td><td><span class="v rv" data-at="1">158</span></td><td><span class="v rv" data-at="2">20</span></td><td><span class="v rv" data-at="3">158 ÷ 20 = <b>7.9</b></span></td></tr>
+  </table>
+  <div id="note2" class="rv" data-at="2">부피 = 늘어난 물의 부피 · 1 mL = 1 cm³</div>
+  <div id="formula" class="rv" data-at="6">
+    <span class="cd">밀도</span><span>=</span>
+    <span class="fr"><span class="cm">질량</span><span class="cv">부피</span></span>
+    <small>(단위: g/cm³, g/mL)</small>
+  </div>
+  <div class="card ws" style="left:120px;top:680px;width:1680px;height:272px">
+    <p>같은 물질은 양이 달라도 질량을 부피로 나눈 값이 항상 <span class="blank" data-at="4"><i class="no">1</i><b class="ans">일정</b></span>하다.</p>
+    <p>물질의 단위 부피당 질량을 <span class="blank" data-at="5"><i class="no">2</i><b class="ans">밀도</b></span>(이)라고 한다.</p>
+    <p>이 값은 물질의 양에 따라 달라지지 않으므로 물질의 <span class="blank" data-at="7"><i class="no">3</i><b class="ans">특성</b></span>이다.</p>
+  </div>
+</section>
+
+<!-- ───────── 3 밀도 비교 시뮬레이터 ───────── -->
+<section class="scene dark" id="s3" data-title="물에 넣으면 뜰까, 가라앉을까?" data-steps="8">
+  <div class="tag enter">밀도 비교 · 값을 바꿔 보는 실험</div>
+  <h1 class="title enter e2">물에 넣으면 뜰까, 가라앉을까?</h1>
+  <div id="tank" class="enter e3">
+    <svg viewBox="0 0 800 420" aria-hidden="true">
+      <defs><clipPath id="tankClip"><rect x="150" y="0" width="500" height="390"/></clipPath></defs>
+      <g clip-path="url(#tankClip)">
+        <g id="blk"><rect id="blkRect" x="0" y="0" width="100" height="100" rx="4" fill="#9AA3AD"/></g>
+        <g id="waterG">
+          <rect x="150" y="0" width="500" height="600" fill="#64D2FF" opacity=".24"/>
+          <line x1="150" y1="0" x2="650" y2="0" stroke="#64D2FF" stroke-width="3"/>
+        </g>
+      </g>
+      <path d="M150 44V390H650V44" fill="none" stroke="#a1a1a6" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <g id="blkLabel"><text id="blkName" x="0" y="0" font-size="28" font-weight="600" fill="#f5f5f7">철</text></g>
+      <text x="24" y="300" font-size="30" font-weight="600" fill="#64D2FF">물</text>
+      <text x="24" y="336" font-size="24" fill="#64D2FF">1.0 g/cm³</text>
+    </svg>
+  </div>
+  <div id="panel" class="noadvance enter e3">
+    <div class="row" id="mats">
+      <button data-m="fe">철</button><button data-m="al">알루미늄</button><button data-m="wd">나무 <small>(예)</small></button>
+    </div>
+    <div class="row"><span class="lab cv">부피</span><input id="rV" type="range" min="10" max="100" step="10" value="10" style="--c:var(--vol-d)" aria-label="부피"><span class="val cv" id="vVal">10 cm³</span></div>
+    <div class="row"><span class="lab cm">질량</span><input id="rM" type="range" min="1" max="800" step="1" value="79" style="--c:var(--mass-d)" aria-label="질량"><span class="val cm" id="mVal">79 g</span></div>
+    <div class="row" id="dLine"></div>
+    <div class="row" id="cmp"></div>
+  </div>
+  <div class="card ws" style="left:120px;top:648px;width:1680px;height:230px">
+    <p>밀도는 물질의 <span class="blank" data-at="3"><i class="no">4</i><b class="ans">종류</b></span>에 따라 다르다. 그래서 밀도로 물질을 구분할 수 있다.</p>
+    <p>물보다 밀도가 <span class="blank" data-at="4"><i class="no">5</i><b class="ans">큰</b></span> 물질은 물에 가라앉는다.</p>
+    <p>물보다 밀도가 <span class="blank" data-at="6"><i class="no">6</i><b class="ans">작은</b></span> 물질은 물 위에 뜬다.</p>
+  </div>
+  <div id="ans3" class="rv" data-at="8"><small>처음 질문의 답</small>나무 도막은 크든 작든 밀도가 물보다 작아서 모두 물에 뜬다.</div>
+</section>
+
+<canvas id="ink" width="1920" height="1080"></canvas>
+
+<div id="notes" class="noadvance teacher"><div class="nh" id="nh"></div><div class="nb" id="nb"></div></div>
+
+<div id="bar" class="noadvance">
+  <button id="bPrev" aria-label="이전">←</button><span id="pg">1 / 3</span><button id="bNext" aria-label="다음">→</button>
+  <button id="bSnd" aria-label="소리">소리 켬</button><button id="bFs" aria-label="전체 화면">전체 화면</button>
+</div>
+
+<div id="toolbox" class="noadvance">
+  <div id="tbPanel">
+    <button data-t="laser">레이저 (L)</button>
+    <button data-t="pen">빨간 펜 (P)</button>
+    <button data-t="undo">한 획 지우기 (Z)</button>
+    <button data-t="clear">모두 지우기 (C)</button>
+    <button data-t="finger">손가락 그리기: 자동</button>
+    <button data-t="fs">전체 화면 (F)</button>
+  </div>
+  <button id="tbBtn" aria-label="도구 상자"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1L19 8l-3-3L5 16l-1 4z"/><path d="M14 7l3 3"/></svg></button>
+</div>
+
+<div id="over" class="noadvance"><h2>전체 장면</h2><div class="grid" id="grid"></div></div>
+<div id="help" class="noadvance"><h2>조작법</h2>
+  <table>
+    <tr><td>→ · Space · Enter · 클릭</td><td>다음 단계</td></tr>
+    <tr><td>← · Backspace · 오른쪽 클릭</td><td>한 단계 전</td></tr>
+    <tr><td>F / O / R</td><td>전체 화면 / 전체 장면 / 지금 단계 다시 보기</td></tr>
+    <tr class="teacher"><td>T (N)</td><td>대본 열고 닫기</td></tr>
+    <tr><td>L / P / Z / C / Esc</td><td>레이저 / 빨간 펜 / 한 획 지우기 / 모두 지우기 / 끄기</td></tr>
+    <tr><td>M / B / W</td><td>소리 / 검은 화면 / 흰 화면</td></tr>
+    <tr><td>Home / End / H</td><td>처음 / 끝 / 이 도움말</td></tr>
+  </table>
+</div>
+<div id="blind" class="noadvance"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var stage=$('#stage'), scenes=$$('.scene');
+var student=/[?&]s=1/.test(location.search);
+if(student){document.body.classList.add('student');$$('.stuOnly').forEach(function(e){e.style.display='inline'});}
+
+/* ── 대본 ── */
+var NOTES=[
+ ['큰 나무 도막도, 작은 나무 도막도 물에 떠 있습니다. 큰 것이 더 무거운데도요. 왜 둘 다 뜰까요?',
+  '이번에는 철 조각을 넣어 볼게요. 아주 작은 철 조각입니다. 뜰까요, 가라앉을까요?',
+  '큰 철 조각도 넣어 봅니다. 작은 나무 도막보다 가벼운 작은 철 조각도, 큰 철 조각도 모두 가라앉았어요.',
+  '크기가 크다고, 무겁다고 가라앉는 것이 아니네요. 크기나 무게만으로는 설명이 안 됩니다.',
+  '그러면 뜨고 가라앉는 것은 무엇으로 정해질까요? 오늘 이 질문의 답을 찾아봅시다.'],
+ ['같은 철로 된 조각 두 개입니다. 큰 조각은 작은 조각과 밑면이 같고 높이만 두 배예요. 질량과 부피를 재서 견주어 봅시다.',
+  '전자저울에 올립니다. 작은 조각은 79 g, 큰 조각은 158 g입니다. (측정값은 예시입니다.)',
+  '실에 묶어 물 50 mL가 든 눈금실린더에 넣습니다. 물이 60 mL, 70 mL까지 올라왔어요. 늘어난 물의 부피가 철 조각의 부피입니다. 1 mL는 1 cm³와 같아요.',
+  '질량을 부피로 나누면 1 cm³당 질량이 나옵니다. 두 값을 견주어 보세요. 어떤가요?',
+  '크기는 달라도 나눈 값은 7.9로 같습니다. ①번, 「일정」입니다.',
+  '이렇게 단위 부피, 곧 1 cm³당 질량을 ②번 「밀도」라고 합니다.',
+  '식으로 쓰면 밀도는 질량을 부피로 나눈 값이고, 단위는 g/cm³ 또는 g/mL를 씁니다.',
+  '밀도는 물질의 양이 많든 적든 달라지지 않아요. 그래서 그 물질만의 성질, ③번 「특성」입니다. (교과서에서는 온도와 압력이 일정할 때라고 덧붙입니다.)'],
+ ['이제 물에 넣어 봅니다. 철 10 cm³는 79 g, 밀도 7.9입니다. 물의 밀도 1.0과 견주어 보세요. (단추와 막대는 언제든 직접 움직여도 됩니다.)',
+  '철의 부피를 50 cm³로 늘렸습니다. 질량은 395 g으로 늘었는데 밀도는 그대로 7.9입니다. 여전히 가라앉아 있어요.',
+  '같은 부피의 알루미늄으로 바꿉니다. 질량이 135 g으로 줄고 밀도는 2.7이 됩니다. 철과 값이 다르죠?',
+  '밀도는 물질의 ④번 「종류」에 따라 다릅니다. 그래서 밀도를 알면 어떤 물질인지 구분할 수 있어요.',
+  '철 7.9, 알루미늄 2.7. 둘 다 물 1.0보다 큽니다. 물보다 밀도가 ⑤번 「큰」 물질은 가라앉습니다.',
+  '나무로 바꿉니다. 같은 50 cm³인데 25 g, 밀도 0.5입니다. 물 위로 떠올랐어요. (나무의 밀도는 종류마다 달라서 0.5는 예시 값입니다.)',
+  '물보다 밀도가 ⑥번 「작은」 물질은 물 위에 뜹니다.',
+  '나무를 100 cm³로 키워 볼까요? 질량은 두 배가 되었지만 밀도는 0.5 그대로라서 여전히 떠 있습니다.',
+  '처음 질문의 답입니다. 나무 도막은 크든 작든 밀도가 물보다 작아서 모두 뜹니다. 질량 막대를 움직여 밀도가 1.0보다 커지는 순간도 확인해 보세요.']
+];
+
+/* ── 2장면 그림: 저울과 눈금실린더를 식대로 그린다 ── */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  // 눈금실린더: 0 mL = y 362, 100 mL = y 64 → 1 mL = 2.98 px. 처음 물 50 mL.
+  var Y0=362, PX=2.98;
+  function y(ml){return Y0-ml*PX}
+  [[0,60,79,10],[1,120,158,20]].forEach(function(a){
+    var i=a[0],h=a[1],mass=a[2],vol=a[3],ox=i*450,g=$('#st'+i),s='';
+    // 전자저울
+    s+='<rect x="'+(ox+15)+'" y="306" width="170" height="58" rx="10" fill="#d2d2d7"/>';
+    s+='<rect x="'+(ox+40)+'" y="317" width="120" height="36" rx="6" fill="#1d1d1f"/>';
+    s+='<rect x="'+(ox+90)+'" y="300" width="20" height="8" fill="#a1a1a6"/>';
+    s+='<rect x="'+(ox+25)+'" y="292" width="150" height="10" rx="4" fill="#a1a1a6"/>';
+    s+='<text class="fd on z0" x="'+(ox+100)+'" y="344" text-anchor="middle" font-size="24" font-weight="600" fill="#f5f5f7">0 g</text>';
+    s+='<text class="fd zv" x="'+(ox+100)+'" y="344" text-anchor="middle" font-size="24" font-weight="600" fill="#f5f5f7">'+mass+' g</text>';
+    // 저울 위 철 조각(밑면 48 px, 높이 60 또는 120 px)
+    s+='<g class="onscale"><rect x="'+(ox+76)+'" y="'+(292-h)+'" width="48" height="'+h+'" rx="3" fill="#8E98A3"/><path d="M'+(ox+82)+' '+(298-h)+'H'+(ox+118)+'" stroke="#B9C1CA" stroke-width="3" stroke-linecap="round"/></g>';
+    // 눈금실린더 안: 철 조각(실에 매단 것) → 물 → 유리
+    s+='<g clip-path="url(#cy'+i+')">';
+    s+='<g class="incyl"><line x1="'+(ox+306.5)+'" y1="-320" x2="'+(ox+306.5)+'" y2="'+(360-h)+'" stroke="#6e6e73" stroke-width="2"/><rect x="'+(ox+282.5)+'" y="'+(360-h)+'" width="48" height="'+h+'" rx="3" fill="#8E98A3"/></g>';
+    s+='<g class="lvl" data-rise="'+(vol*PX)+'"><rect x="'+(ox+270)+'" y="'+y(50)+'" width="73" height="260" fill="#0077B6" opacity=".22"/><line x1="'+(ox+270)+'" y1="'+y(50)+'" x2="'+(ox+343)+'" y2="'+y(50)+'" stroke="#0077B6" stroke-width="3"/></g>';
+    s+='</g>';
+    for(var m=10;m<=100;m+=10){var L=(m%50===0)?22:12; s+='<line x1="'+(ox+270)+'" y1="'+y(m)+'" x2="'+(ox+270+L)+'" y2="'+y(m)+'" stroke="#6e6e73" stroke-width="2"/>';}
+    s+='<path d="M'+(ox+268)+' 46V364H'+(ox+345)+'V46" fill="none" stroke="#86868b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>';
+    s+='<rect x="'+(ox+246)+'" y="366" width="121" height="12" rx="5" fill="#c7c7cc"/>';
+    s+='<text x="'+(ox+258)+'" y="'+(y(100)+9)+'" text-anchor="end" font-size="24" fill="#6e6e73">100</text>';
+    s+='<text x="'+(ox+258)+'" y="'+(y(50)+9)+'" text-anchor="end" font-size="24" fill="#6e6e73">50</text>';
+    // 물 높이 읽기(처음 50 mL → 넣은 뒤 50+부피 mL)
+    s+='<text class="fd on r0" x="'+(ox+356)+'" y="'+(y(50)+9)+'" font-size="26" font-weight="600" fill="#0077B6">50 mL</text>';
+    s+='<text class="fd rv2" x="'+(ox+356)+'" y="'+(y(50+vol)+9)+'" font-size="26" font-weight="600" fill="#0077B6">'+(50+vol)+' mL</text>';
+    s+='<text x="'+(ox+190)+'" y="418" text-anchor="middle" font-size="28" font-weight="500" fill="#1d1d1f">'+(i?'큰':'작은')+' 철 조각</text>';
+    g.innerHTML=s;
+  });
+})();
+function applyFig2(step){
+  var s2=$('#s2');
+  $$('.onscale',s2).forEach(function(e){e.classList.toggle('on',step>=1);e.classList.toggle('gone',step>=2)});
+  $$('.zv',s2).forEach(function(e){e.classList.toggle('on',step===1)});
+  $$('.z0',s2).forEach(function(e){e.classList.toggle('on',step!==1)});
+  $$('.incyl',s2).forEach(function(e){e.classList.toggle('on',step>=2)});
+  $$('.lvl',s2).forEach(function(e){e.style.transform=step>=2?'translateY(-'+e.getAttribute('data-rise')+'px)':'none'});
+  $$('.r0',s2).forEach(function(e){e.classList.toggle('on',step<2)});
+  $$('.rv2',s2).forEach(function(e){e.classList.toggle('on',step>=2);e.classList.toggle('late',true)});
+}
+
+/* ── 3장면 시뮬레이터 ──
+   쓰는 식
+   · 밀도(g/cm³) = 질량(g) ÷ 부피(cm³)
+   · 물질 단추를 고른 동안: 질량 = 그 물질의 밀도 × 부피 (같은 물질이면 밀도가 일정)
+   · 밀도 > 물의 밀도 → 바닥까지 가라앉는다 / 밀도 < 물의 밀도 → 뜬다 / 같으면 물속에 머문다
+   · 그림(화면에 글로 쓰지는 않음): 뜬 물체가 물에 잠긴 부분의 비율 = 물체의 밀도 ÷ 물의 밀도,
+     물 높이는 물체가 밀어낸 물의 부피 ÷ 수조 바닥 넓이만큼 올라간다.
+   값: 철 7.9, 물 1.0 g/cm³ = 교과서 표(비상교육 중2, 25 ℃ 1기압·물은 4 ℃). 알루미늄 2.7 g/cm³ = 일반 자료값(교과서 표에 없음).
+       나무 0.5 g/cm³ = 예시(나무는 종류에 따라 0.4~0.8쯤).
+   그림 축척: 1 cm = 40 px. 물체는 정육면체(한 변 = 부피의 세제곱근). 수조 안쪽 가로 500 px(12.5 cm), 앞뒤 185.7 px(4.64 cm). */
+var MAT={fe:{name:'철',d:7.9,fill:'#9AA3AD'},al:{name:'알루미늄',d:2.7,fill:'#D5DAE0'},wd:{name:'나무',d:0.5,fill:'#C68B4E'}};
+var WATER=1.0, PXCM=40, TANK_W=500, TANK_D=185.7, FLOOR=390, BASE=190, BX=370;
+var sim={mat:'fe',V:10,m:79};
+var rV=$('#rV'), rM=$('#rM');
+function fmt(x){var r=Math.round(x*100)/100;return r===Math.round(r*10)/10?r.toFixed(1):r.toFixed(2)}   // 7.9 · 1.0 · 1.01
+function simCalc(){
+  var d=sim.m/sim.V;                                   // 밀도 = 질량 ÷ 부피
+  var side=Math.cbrt(sim.V)*PXCM;                      // 정육면체 한 변(px)
+  var areaCm2=(TANK_W/PXCM)*(TANK_D/PXCM);             // 수조 바닥 넓이(cm²)
+  var state=Math.abs(d-WATER)<1e-9?'same':(d>WATER?'sink':'float');
+  var frac=state==='float'?d/WATER:1;                  // 잠긴 부분의 비율
+  var level=BASE-(sim.V*frac/areaCm2)*PXCM;            // 물 높이(y, px)
+  var top;
+  if(state==='sink') top=FLOOR-side;
+  else if(state==='float') top=level-side*(1-frac);
+  else top=(level+FLOOR)/2-side/2;
+  return {d:d,side:side,state:state,frac:frac,level:level,top:top};
+}
+function simRender(){
+  var c=simCalc(), M=sim.mat?MAT[sim.mat]:null, name=M?M.name:'이 물질';
+  $('#blk').style.transform='translate('+(BX-c.side/2).toFixed(1)+'px,'+c.top.toFixed(1)+'px) scale('+(c.side/100).toFixed(4)+')';
+  $('#blkRect').setAttribute('fill',M?M.fill:'#8E8E93');
+  $('#waterG').style.transform='translateY('+c.level.toFixed(1)+'px)';
+  // 이름표: 물체 옆에 두되 수면 선과 겹치지 않게(뜬 물체는 수면 위쪽, 물 밖 부분이 얕으면 수면 아래쪽)
+  var ly=c.top+c.side/2+10;
+  if(c.state==='float') ly=(c.side*(1-c.frac)>=44)?c.level-16:c.level+38;
+  $('#blkLabel').style.transform='translate('+(BX+c.side/2+14).toFixed(1)+'px,'+ly.toFixed(1)+'px)';
+  $('#blkName').textContent=name;
+  rV.value=sim.V; rM.value=sim.m;
+  $('#vVal').textContent=sim.V+' cm³';
+  $('#mVal').textContent=sim.m+' g';
+  $('#dLine').innerHTML='<span class="cd">밀도</span>&nbsp;= <span class="cm">&nbsp;'+sim.m+' g</span>&nbsp;÷ <span class="cv">&nbsp;'+sim.V+' cm³</span>&nbsp;= <b class="cd">'+fmt(c.d)+' g/cm³</b>';
+  var sign=c.state==='sink'?'&gt;':(c.state==='float'?'&lt;':'=');
+  var res=c.state==='sink'?'가라앉는다':(c.state==='float'?'뜬다':'물속에 머문다');
+  $('#cmp').innerHTML=name+'&nbsp;<span class="cd">'+fmt(c.d)+'</span><span class="sign">'+sign+'</span>물 1.0&nbsp; → <b>'+res+'</b>';
+  $$('#mats button').forEach(function(b){b.classList.toggle('sel',b.getAttribute('data-m')===sim.mat)});
+  window.__sim={mat:sim.mat,V:sim.V,m:sim.m,d:c.d,state:c.state,frac:c.frac,level:c.level,top:c.top,side:c.side};
+}
+function simSet(p){sim.mat=p.mat;sim.V=p.V;sim.m=Math.round(MAT[p.mat].d*p.V);simRender();}
+$$('#mats button').forEach(function(b){b.addEventListener('click',function(){
+  sim.mat=b.getAttribute('data-m');sim.m=Math.round(MAT[sim.mat].d*sim.V);simRender();b.blur();sfx.tok();});});
+rV.addEventListener('input',function(){sim.V=+rV.value;if(sim.mat)sim.m=Math.round(MAT[sim.mat].d*sim.V);simRender();});
+rM.addEventListener('input',function(){sim.m=+rM.value;sim.mat=null;simRender();});
+[rV,rM].forEach(function(r){['change','pointerup','touchend'].forEach(function(ev){r.addEventListener(ev,function(){r.blur()})})});
+var SIMSTEP={0:{mat:'fe',V:10},1:{mat:'fe',V:50},2:{mat:'al',V:50},5:{mat:'wd',V:50},7:{mat:'wd',V:100}};
+function applySim(step,forward){
+  if(forward){if(SIMSTEP[step])simSet(SIMSTEP[step]);}
+  else{var k=step;while(!SIMSTEP[k])k--;simSet(SIMSTEP[k]);}
+}
+
+/* ── 소리(WebAudio 합성) ── */
+var AC=null, soundOn=!student, quiet=false, dingN=0;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d,type,g,delay,f2){
+  if(!soundOn||quiet)return;var a=ac();if(!a)return;
+  var t=a.currentTime+(delay||0),o=a.createOscillator(),v=a.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g||.1,t+.01);v.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(v);v.connect(a.destination);o.start(t);o.stop(t+d+.05);
+}
+var sfx={
+  ding:function(){var b=[880,988,1047,1175][dingN++%4];tone(b,.35,'sine',.1);tone(b*1.5,.5,'sine',.07,.09)},
+  tok:function(){tone(420,.08,'triangle',.07)},
+  plop:function(){tone(520,.22,'sine',.11,.75,160)},
+  chime:function(){tone(784,.5,'sine',.08);tone(988,.5,'sine',.08,.12);tone(1175,.8,'sine',.08,.24)}
+};
+
+/* ── 장면과 단계 ── */
+var si=0, st=0;
+function nSteps(i){return +scenes[i].getAttribute('data-steps')}
+function setOn(scene,step){
+  var newly=[];
+  $$('[data-at]',scene).forEach(function(e){var on=step>=+e.getAttribute('data-at');if(on&&!e.classList.contains('on'))newly.push(e);e.classList.toggle('on',on)});
+  return newly;
+}
+function finish(){stage.classList.add('instant');void stage.offsetWidth;stage.classList.remove('instant');}
+function show(nsi,nst,anim){
+  var sceneChanged=nsi!==si||!scenes[nsi].classList.contains('active');
+  if(!anim)stage.classList.add('instant');
+  if(sceneChanged){scenes.forEach(function(s,i){s.classList.toggle('active',i===nsi)});strokes=[];redraw();}
+  si=nsi;st=nst;
+  var scene=scenes[si], newly=setOn(scene,st);
+  if(si===1)applyFig2(st);
+  if(si===2)applySim(st,anim);
+  if(!anim){void stage.offsetWidth;stage.classList.remove('instant');}
+  else{
+    if(newly.some(function(e){return e.classList.contains('blank')}))sfx.ding();
+    else if(si===0&&(st===1||st===2))sfx.plop();
+    else if(si===2&&st===8)sfx.chime();
+    else if(newly.length||st>0)sfx.tok();
+  }
+  try{history.replaceState(null,'','#'+(si+1)+'.'+st)}catch(e){location.hash=(si+1)+'.'+st}
+  $('#pg').textContent=(si+1)+' / '+scenes.length+' · '+st+'/'+nSteps(si);
+  renderNotes();
+}
+function next(){finish();if(st<nSteps(si))show(si,st+1,true);else if(si<scenes.length-1)show(si+1,0,true);}
+function prev(){if(st>0)show(si,st-1,false);else if(si>0)show(si-1,nSteps(si-1),false);}
+function replay(){if(st>0){var t=st;show(si,t-1,false);show(si,t,true);}else{show(si,0,false);scenes[si].classList.remove('active');void stage.offsetWidth;scenes[si].classList.add('active');}}
+function renderNotes(){
+  $('#nh').textContent=(si+1)+'. '+scenes[si].getAttribute('data-title')+' · 단계 '+st+'/'+nSteps(si)+(si<scenes.length-1?' · 다음: '+scenes[si+1].getAttribute('data-title'):' · 마지막 장면');
+  $('#nb').textContent=NOTES[si][st]||'';
+}
+scenes.forEach(function(s,i){
+  if(i===0)return;
+  var p=document.createElement('div');p.className='pills';
+  for(var k=1;k<scenes.length;k++){var sp=document.createElement('span');sp.textContent=k;if(k===i)sp.className='now';p.appendChild(sp);}
+  s.appendChild(p);
+});
+
+/* ── 무대 크기 ── */
+function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='translate('+((innerWidth-1920*s)/2)+'px,'+((innerHeight-1080*s)/2)+'px) scale('+s+')';stage._s=s;}
+addEventListener('resize',fit);fit();
+
+/* ── 판서: 레이저 · 빨간 펜 ── */
+var ink=$('#ink'), ctx=ink.getContext('2d'), tool=null, strokes=[], cur=null, laser=[], laserRaf=0, swallowUntil=0;
+var fingerMode='auto', penSeen=false;
+try{penSeen=localStorage.getItem('lb_penSeen')==='1';fingerMode=localStorage.getItem('lb_finger')||'auto';}catch(e){}
+function pt(e){var r=stage.getBoundingClientRect();return [(e.clientX-r.left)/r.width*1920,(e.clientY-r.top)/r.height*1080]}
+function redraw(){
+  ctx.clearRect(0,0,1920,1080);ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.strokeStyle='#ff3b30';ctx.lineWidth=6;
+  strokes.concat(cur&&tool==='pen'?[cur]:[]).forEach(function(s){if(!s.length)return;ctx.beginPath();ctx.moveTo(s[0][0],s[0][1]);for(var i=1;i<s.length;i++)ctx.lineTo(s[i][0],s[i][1]);if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke();});
+  var now=performance.now();
+  laser=laser.filter(function(p){return p[3]||now-p[2]<1000});
+  for(var i=1;i<laser.length;i++){var a=laser[i-1],b=laser[i];if(b[4])continue;var al=b[3]?1:Math.max(0,1-(now-b[2])/1000);
+    ctx.strokeStyle='rgba(255,45,85,'+al+')';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();}
+  if(laser.length){var l=laser[laser.length-1];if(l[3]){ctx.fillStyle='#ff2d55';ctx.beginPath();ctx.arc(l[0],l[1],9,0,7);ctx.fill();}}
+}
+function laserLoop(){redraw();if(laser.length)laserRaf=requestAnimationFrame(laserLoop);else laserRaf=0;}
+function setTool(t){tool=(tool===t)?null:t;document.body.classList.toggle('drawing',!!tool);
+  $$('#tbPanel button').forEach(function(b){var k=b.getAttribute('data-t');if(k==='laser'||k==='pen')b.classList.toggle('sel',k===tool)});
+  if(tool!=='laser'){laser=[];redraw();}}
+function canDraw(e){
+  if(e.pointerType==='pen'){if(!penSeen){penSeen=true;try{localStorage.setItem('lb_penSeen','1')}catch(x){}}return true;}
+  if(e.pointerType==='touch'){return fingerMode==='on'||(fingerMode==='auto'&&!penSeen);}
+  return true;
+}
+var drawingId=null;
+addEventListener('pointerdown',function(e){
+  if(!tool||e.button>0)return;
+  if(e.target.closest&&e.target.closest('#toolbox,#bar,#over,#help,#notes'))return;
+  if(!canDraw(e))return;
+  e.preventDefault();e.stopPropagation();drawingId=e.pointerId;var p=pt(e);
+  if(tool==='pen'){cur=[p];}else{laser.forEach(function(q){q[3]=0});laser.push([p[0],p[1],performance.now(),1,1]);if(!laserRaf)laserLoop();}
+  redraw();
+},true);
+addEventListener('pointermove',function(e){
+  if(drawingId!==e.pointerId)return;e.preventDefault();e.stopPropagation();var p=pt(e);
+  if(tool==='pen'&&cur){cur.push(p);redraw();}
+  else if(tool==='laser'){laser.forEach(function(q){q[3]=0});laser.push([p[0],p[1],performance.now(),1,0]);}
+},true);
+function endDraw(e){
+  if(drawingId!==e.pointerId)return;drawingId=null;swallowUntil=Date.now()+400;
+  if(cur){strokes.push(cur);cur=null;redraw();}
+  laser.forEach(function(q){q[3]=0;q[2]=performance.now()});
+}
+addEventListener('pointerup',endDraw,true);addEventListener('pointercancel',endDraw,true);
+document.addEventListener('touchmove',function(e){
+  if((document.fullscreenElement||tool)&&!(e.target.closest&&e.target.closest('#notes,#over,#help,input')))e.preventDefault();
+},{passive:false});
+
+/* 도구 상자 */
+function fingerLabel(){$('#tbPanel [data-t=finger]').textContent='손가락 그리기: '+({auto:'자동',on:'켬',off:'끔'})[fingerMode]}
+fingerLabel();
+$('#tbBtn').addEventListener('click',function(){$('#toolbox').classList.toggle('open')});
+$$('#tbPanel button').forEach(function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-t');
+  if(k==='laser'||k==='pen')setTool(k);
+  else if(k==='undo'){strokes.pop();redraw();}
+  else if(k==='clear'){strokes=[];redraw();}
+  else if(k==='finger'){fingerMode=fingerMode==='auto'?'on':(fingerMode==='on'?'off':'auto');try{localStorage.setItem('lb_finger',fingerMode)}catch(x){}fingerLabel();}
+  else if(k==='fs')fullscreen();
+  b.blur();
+});});
+function fullscreen(){var d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d);}else{var el=d.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}}
+
+/* ── 조작 막대 ── */
+var barT=0;
+addEventListener('mousemove',function(){var b=$('#bar');b.classList.add('show');clearTimeout(barT);barT=setTimeout(function(){b.classList.remove('show')},2200);});
+$('#bPrev').addEventListener('click',function(){prev()});
+$('#bNext').addEventListener('click',function(){ac();next()});
+function sndLabel(){$('#bSnd').textContent=soundOn?'소리 켬':'소리 끔'}
+sndLabel();
+$('#bSnd').addEventListener('click',function(){soundOn=!soundOn;sndLabel();});
+$('#bFs').addEventListener('click',fullscreen);
+
+/* ── 전체 장면 · 대본 · 도움말 · 가림 ── */
+function openOver(){
+  var g=$('#grid');g.innerHTML='';
+  scenes.forEach(function(s,i){var d=document.createElement('div');d.className='th'+(i===si?' now':'');
+    d.innerHTML='<small>'+(i+1)+' · 단계 '+nSteps(i)+'개</small>'+s.getAttribute('data-title');
+    d.addEventListener('click',function(){show(i,0,false);$('#over').classList.remove('open');});g.appendChild(d);});
+  $('#over').classList.add('open');
+}
+$('#over').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+$('#help').addEventListener('click',function(){this.classList.remove('open')});
+$('#blind').addEventListener('click',function(){this.className='noadvance'});
+function blind(c){var b=$('#blind');b.className='noadvance'+(b.classList.contains(c)?'':' '+c);}
+
+/* ── 넘기기 입력 ── */
+document.addEventListener('click',function(e){
+  if(Date.now()<swallowUntil)return;
+  if(e.target.closest&&e.target.closest('.noadvance'))return;
+  ac();next();
+});
+document.addEventListener('contextmenu',function(e){e.preventDefault();if(e.target.closest&&e.target.closest('.noadvance'))return;prev();});
+var tx=null,ty=0;
+document.addEventListener('touchstart',function(e){if(e.touches.length!==1||(e.target.closest&&e.target.closest('.noadvance'))||drawingId!==null){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(tx===null)return;var t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){swallowUntil=Date.now()+400;ac();if(dx<0)next();else prev();}
+},{passive:true});
+/* 키: 시뮬 조작 칸(막대·단추)에 초점이 있어도 방향키는 늘 장면 넘기기로 쓴다 */
+addEventListener('keydown',function(e){
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  var k=e.key, low=k.length===1?k.toLowerCase():k, handled=true;
+  var a=document.activeElement;
+  if(a&&a!==document.body&&a.blur&&/^(INPUT|BUTTON)$/.test(a.tagName))a.blur();
+  if($('#over').classList.contains('open')||$('#help').classList.contains('open')){
+    if(k==='Escape'||low==='o'||low==='h'){$('#over').classList.remove('open');$('#help').classList.remove('open');e.preventDefault();}
+    return;
+  }
+  if($('#blind').className!=='noadvance'&&low!=='b'&&low!=='w'){$('#blind').className='noadvance';e.preventDefault();return;}
+  if(k==='ArrowRight'||k===' '||k==='Enter'||k==='PageDown'){ac();next();}
+  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){prev();}
+  else if(k==='Home'){show(0,0,false);}
+  else if(k==='End'){show(scenes.length-1,nSteps(scenes.length-1),false);}
+  else if(low==='f'){fullscreen();}
+  else if((low==='t'||low==='n')&&!student){$('#notes').classList.toggle('open');}
+  else if(low==='o'){openOver();}
+  else if(low==='r'){replay();}
+  else if(low==='m'){soundOn=!soundOn;sndLabel();}
+  else if(low==='b'){blind('k');}
+  else if(low==='w'){blind('w');}
+  else if(low==='h'){$('#help').classList.add('open');}
+  else if(low==='l'){setTool('laser');}
+  else if(low==='p'){setTool('pen');}
+  else if(low==='z'){strokes.pop();redraw();}
+  else if(low==='c'){strokes=[];redraw();}
+  else if(k==='Escape'){if(tool)setTool(tool);$('#toolbox').classList.remove('open');}
+  else handled=false;
+  if(handled)e.preventDefault();
+},true);
+
+/* ── 시작: 주소 끝 #장면.단계 ── */
+(function(){
+  var m=/^#(\d+)\.(\d+)$/.exec(location.hash), a=0, b=0;
+  if(m){a=Math.min(scenes.length-1,Math.max(0,+m[1]-1));b=Math.min(nSteps(a),Math.max(0,+m[2]));}
+  quiet=true;
+  simSet(SIMSTEP[0]);applyFig2(0);
+  if(a===0&&b===0){scenes[0].classList.add('active');show(0,0,true);}   // 표지는 들어오는 움직임을 살린다
+  else show(a,b,false);
+  quiet=false;
+})();
+})();
+</script>
+</body>
+</html>

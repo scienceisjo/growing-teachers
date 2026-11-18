@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>광합성에 영향을 미치는 환경요인 — 칠판 강의 화면</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --paper:#fbfbf7;--grid:rgba(70,130,180,.13);--ink:#1c1c1c;--pen:#5b5b5b;--red:#d6402f;--mk:rgba(255,214,0,.55);
+  /* 그림 안의 뜻 색(교과서 그래프 색 약속): 빛=파랑, 이산화 탄소=초록, 온도=주황. 화면 강조(빈칸·번호·단추)는 빨강 하나 */
+  --cL:#2b7fb8;--cC:#3a8f4a;--cT:#e07a1f;--amber:#f2b01e;--water:rgba(70,130,180,.17);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --font:'Pretendard Variable',Pretendard,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+  --head:'Do Hyeon','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none}
+body{font-family:var(--font);color:var(--ink);word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform:scale(var(--k,1));transform-origin:center center;overflow:hidden;
+  background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:16px 16px;touch-action:manipulation}
+body.tool #stage{touch-action:none}
+#margin{position:absolute;left:100px;top:0;bottom:0;width:3px;background:var(--red);z-index:0}
+.noanim,.noanim *{transition:none!important;animation:none!important}
+.scene{position:absolute;inset:0;display:none}
+.scene.cur{display:block}
+.eyebrow{position:absolute;left:140px;top:68px;font-size:30px;font-weight:700;color:var(--red);letter-spacing:-.01em}
+.title{position:absolute;left:140px;top:108px;margin:0;font-family:var(--head);font-weight:400;font-size:70px;line-height:1.15;letter-spacing:-.01em;white-space:nowrap}
+mark{background:linear-gradient(transparent 58%,var(--mk) 58%);color:inherit;padding:0 .08em}
+.st{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
+.st.on{opacity:1;transform:none;pointer-events:auto}
+.stf{opacity:0;transition:opacity .6s var(--ease)}
+.stf.on{opacity:1}
+/* 카드·문장 */
+.card{position:absolute;left:140px;width:1650px;background:#fff;border:1px solid var(--pen);padding:14px 32px;font-size:38px;line-height:1.6}
+.hint{position:absolute;left:140px;top:806px;width:1650px;font-size:34px;line-height:1.5;color:var(--pen);border-left:6px solid var(--red);padding:6px 0 6px 24px}
+.stu{display:none}
+body.stu .stu{display:inline}
+/* 빈칸 */
+.bl.tight{margin-right:0;padding-right:5px}
+.bl{display:inline-block;position:relative;border-bottom:4px solid var(--ink);padding:0 12px 0 50px;margin:0 8px;line-height:1.3;vertical-align:baseline}
+.bn{position:absolute;left:6px;top:50%;margin-top:-19px;width:38px;height:38px;border:2.5px solid var(--red);border-radius:50%;background:#fff;color:var(--red);font:400 24px/33px var(--head);text-align:center;font-style:normal}
+.ba{visibility:hidden;color:var(--red);font-weight:800}
+.bl.open .ba{visibility:visible;animation:pop .55s var(--ease)}
+@keyframes pop{0%{transform:scale(.55);opacity:0}100%{transform:none;opacity:1}}
+/* 표지 */
+.cover-title{position:absolute;left:140px;top:112px;margin:0;font-family:var(--head);font-weight:400;font-size:92px;line-height:1.2}
+.chip{position:absolute;left:140px;width:620px;height:70px;background:#fff;border:1px solid var(--pen);font-size:40px;font-weight:700;line-height:68px;padding-left:34px}
+.chip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--c)}
+/* 시뮬 */
+.simbox{position:absolute;width:790px}
+.tank{display:block;width:790px;height:430px;overflow:visible}
+.sliders{position:absolute;left:0;top:438px;width:790px}
+.row{display:flex;align-items:center;gap:18px;height:50px}
+.row .lab{width:230px;font-size:30px;font-weight:700;display:flex;align-items:center;gap:10px}
+.row .lab i{width:12px;height:30px;display:inline-block}
+.row .val{width:90px;text-align:right;font:400 38px var(--head)}
+.row.act .lab{color:var(--red)}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:34px;background:transparent;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--pen)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;border-radius:50%;background:var(--red);border:4px solid #fff;margin-top:-14px;box-shadow:0 0 0 2px var(--red)}
+input[type=range]:focus{outline:none}
+.graphbox{position:absolute;width:790px;height:540px;background:#fff;border:1px solid var(--pen)}
+.graph{display:block;width:788px;height:538px}
+.ro{position:absolute;background:#fff;border:1px solid var(--pen);padding:8px 22px 6px;line-height:1.2}
+.ro small{display:block;font-size:26px;color:var(--pen);font-weight:600}
+.ro b{font:400 64px/1.1 var(--head);color:var(--ink)}
+.ro span{font-size:30px;font-weight:700;margin-left:6px}
+.graphbox .gro{left:0;top:0;width:100%;border:0;border-bottom:1px solid var(--pen);padding:8px 24px 6px;display:flex;align-items:baseline;gap:14px}
+.graphbox .gro em{margin-left:auto}
+.ro em{display:block;font-style:normal;font-size:24px;color:var(--pen)}
+.cmp{position:absolute;left:140px;top:230px;width:1650px;height:450px}
+.cmp .p{position:absolute;top:0;width:520px;height:450px;background:#fff;border:1px solid var(--pen);padding:12px 16px}
+.cmp .p h3{margin:0;font:400 40px/1.2 var(--head);display:flex;align-items:center;gap:12px}
+.cmp .p h3 i{width:14px;height:36px;background:var(--c);display:inline-block}
+.cmp .p svg{display:block;width:488px;height:290px}
+.cmp .p p{margin:4px 0 0;font-size:28px;line-height:1.4;color:var(--ink)}
+.cmp .p.hot{border:5px solid var(--red);padding:8px 12px}
+.cmp .draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.7s var(--ease)}
+.cmp.on .draw{stroke-dashoffset:0}
+.cmp.on .p:nth-child(2) .draw{transition-delay:.35s}
+.cmp.on .p:nth-child(3) .draw{transition-delay:.7s}
+.note{position:absolute;left:140px;top:702px;width:1650px;font-size:38px;font-weight:700;line-height:1.4}
+.copy{position:absolute;left:140px;top:1016px;font-size:24px;color:var(--pen)}
+/* 조작 막대·도구 */
+#bar{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(28,28,28,.82);color:#fff;padding:6px 10px;font:14px var(--font);opacity:0;transition:opacity .3s;z-index:50}
+body.mv #bar{opacity:1}
+#bar button,#tools button{font:inherit;color:inherit;background:transparent;border:1px solid rgba(255,255,255,.5);padding:5px 12px;cursor:pointer}
+#bar .pos{min-width:130px;text-align:center}
+#toolbtn{position:fixed;right:14px;bottom:14px;width:52px;height:52px;border-radius:50%;border:2px solid var(--red);background:rgba(255,255,255,.55);color:var(--red);font:700 15px var(--font);cursor:pointer;z-index:60;opacity:.55}
+#toolbtn:hover,body.tool #toolbtn{opacity:1}
+#tools{position:fixed;right:14px;bottom:76px;display:none;flex-direction:column;gap:6px;background:rgba(28,28,28,.9);padding:10px;color:#fff;font:15px var(--font);z-index:60}
+body.tools #tools{display:flex}
+#tools button.on{background:var(--red);border-color:var(--red)}
+#tools .g{display:flex;gap:6px}
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:20}
+#script{position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;background:rgba(28,28,28,.95);color:#f3f3f3;padding:14px 28px;font:17px/1.7 var(--font);display:none;z-index:70}
+body.scr #script{display:block}
+#script h4{margin:0 0 4px;font-size:15px;color:#ffb3a8}
+#script .cue{color:#ffd84d}
+#overview{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:80;padding:6vh 6vw;gap:24px;flex-wrap:wrap;align-content:flex-start;overflow:auto}
+body.ov #overview{display:flex}
+#overview .oc{width:28vw;min-height:20vh;background:var(--paper);border-left:6px solid var(--red);padding:18px 22px;font:700 22px/1.4 var(--font);cursor:pointer}
+#overview .oc small{display:block;font:400 16px var(--font);color:var(--pen);margin-top:6px}
+#help{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:90;color:#fff;font:20px/1.9 var(--font)}
+body.hp #help{display:flex}
+#help div{background:#1c1c1c;padding:26px 40px;border:1px solid #888}
+body.blk #cover{display:block}
+#cover{position:fixed;inset:0;display:none;z-index:85;background:#000}
+body.wht #cover{display:block;background:#fff}
+@media(prefers-reduced-motion:reduce){.st,.stf{transition-duration:.01s}}
+</style>
+</head>
+<body>
+<div id="stage">
+<div id="margin"></div>
+
+<!-- ============ 장면 1 · 표지 ============ -->
+<section class="scene" id="sc0">
+  <div class="eyebrow">V. 식물과 에너지 · 광합성</div>
+  <h1 class="cover-title">광합성은<br>어떤 <mark>조건</mark>에서<br>잘 일어날까?</h1>
+  <div class="chip st" data-in="1" style="top:520px;--c:var(--cL)">빛의 세기</div>
+  <div class="chip st" data-in="2" style="top:606px;--c:var(--cC)">이산화 탄소의 농도</div>
+  <div class="chip st" data-in="3" style="top:692px;--c:var(--cT)">온도</div>
+  <div class="simbox" id="sim0" style="left:990px;top:190px">
+    <svg class="tank" viewBox="0 0 790 430"></svg>
+    <div class="ro" style="left:0;top:446px;width:790px"><small>물속 검정말에서 1분에 나온 기포 수</small><b class="n">0</b><span>개</span></div>
+  </div>
+  <div class="hint stf" data-in="0" data-out="3">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.<span class="stu"> 화면을 누르거나 → 키로 넘겨요.</span></div>
+  <div class="card st" data-in="4" style="top:794px">광합성은 빛의 세기, 이산화 탄소의 농도, 온도 등과 같은 <span class="bl tight" data-open="5"><i class="bn">1</i><b class="ba">환경요인</b></span>의 영향을 받는다.</div>
+</section>
+
+<!-- ============ 장면 2 · 빛의 세기, 이산화 탄소의 농도 (시뮬레이터) ============ -->
+<section class="scene" id="sc1">
+  <div class="eyebrow">실험 · 물속 검정말의 기포 수</div>
+  <h2 class="title st" data-in="0" data-out="4"><mark>빛의 세기</mark>를 바꾸면 광합성량은?</h2>
+  <h2 class="title st" data-in="5"><mark>이산화 탄소의 농도</mark>를 바꾸면 광합성량은?</h2>
+  <div class="simbox" id="sim1" style="left:140px;top:230px">
+    <svg class="tank" viewBox="0 0 790 430"></svg>
+    <div class="sliders sim-ui">
+      <div class="row" data-k="L"><span class="lab"><i style="background:var(--cL)"></i>빛의 세기</span><input type="range" class="sl" data-k="L" min="0" max="10" step="1" value="2" aria-label="빛의 세기"><span class="val">2</span></div>
+      <div class="row" data-k="C"><span class="lab"><i style="background:var(--cC)"></i>이산화 탄소</span><input type="range" class="sl" data-k="C" min="0" max="10" step="1" value="10" aria-label="이산화 탄소의 농도"><span class="val">10</span></div>
+    </div>
+  </div>
+  <div class="graphbox" id="gb1" style="left:1000px;top:230px">
+    <svg class="graph" viewBox="0 0 790 540"></svg>
+    <div class="ro gro"><small>1분에 나온 기포 수</small><b class="n">0</b><span>개</span><em>화면의 6초 = 실험의 1분</em></div>
+  </div>
+  <div class="hint stf" data-in="0" data-out="0">슬라이더를 움직이면 기포 수가 바뀌고, 그래프에 값이 찍혀요. 기포가 많을수록 광합성량이 많아요.</div>
+  <div class="hint stf" data-in="1" data-out="1">빛의 세기를 0에서 10까지 올려 가며 기포 수를 세어 봐요.</div>
+  <div class="hint stf" data-in="5" data-out="5">이번에는 이산화 탄소의 농도를 0에서 10까지 올려 봐요.</div>
+  <div class="card st" data-in="2" data-out="4" style="top:790px;height:170px;line-height:1.7">
+    빛의 세기가 <span class="bl" data-open="3"><i class="bn">2</i><b class="ba">셀수록</b></span> 광합성량은 증가한다.<br>
+    빛의 세기가 어느 정도 이상 세지면 광합성량은 <span class="bl tight" data-open="4"><i class="bn">3</i><b class="ba">더 이상 증가하지 않는다</b></span>.
+  </div>
+  <div class="card st" data-in="6" style="top:790px;height:170px;line-height:1.7">
+    이산화 탄소의 농도가 <span class="bl" data-open="7"><i class="bn">4</i><b class="ba">높을수록</b></span> 광합성량은 증가하다가, 어느 정도 이상 높아지면 더 이상 증가하지 않는다.
+  </div>
+</section>
+
+<!-- ============ 장면 3 · 온도, 세 요인 한눈에 ============ -->
+<section class="scene" id="sc2">
+  <div class="eyebrow">실험 · 물속 검정말의 기포 수</div>
+  <h2 class="title st" data-in="0" data-out="4"><mark>온도</mark>를 바꾸면 광합성량은?</h2>
+  <h2 class="title st" data-in="5">세 가지 환경요인을 <mark>한눈에</mark></h2>
+  <div class="st" data-in="0" data-out="4" style="position:absolute;inset:0" id="simpart">
+    <div class="simbox" id="sim2" style="left:140px;top:230px">
+      <svg class="tank" viewBox="0 0 790 430"></svg>
+      <div class="sliders sim-ui">
+        <div class="row act" data-k="T"><span class="lab"><i style="background:var(--cT)"></i>온도(℃)</span><input type="range" class="sl" data-k="T" min="0" max="50" step="1" value="10" aria-label="온도"><span class="val">10</span></div>
+        <div style="font-size:26px;color:var(--pen);line-height:1.4;margin-top:6px">빛은 강하게, 이산화 탄소는 충분하게 두었어요.</div>
+      </div>
+    </div>
+    <div class="graphbox" id="gb2" style="left:1000px;top:230px">
+      <svg class="graph" viewBox="0 0 790 540"></svg>
+      <div class="ro gro"><small>1분에 나온 기포 수</small><b class="n">0</b><span>개</span><em>화면의 6초 = 실험의 1분</em></div>
+    </div>
+  </div>
+  <div class="cmp st" data-in="5" id="cmp">
+    <div class="p" id="p1" style="left:0;--c:var(--cL)"><h3><i></i>빛의 세기</h3><svg viewBox="0 0 520 290"></svg><p>셀수록 증가하다가 어느 정도 이상에서는 더 늘지 않아요.</p></div>
+    <div class="p" id="p2" style="left:565px;--c:var(--cC)"><h3><i></i>이산화 탄소의 농도</h3><svg viewBox="0 0 520 290"></svg><p>높을수록 증가하다가 어느 정도 이상에서는 더 늘지 않아요.</p></div>
+    <div class="p" id="p3" style="left:1130px;--c:var(--cT)"><h3><i></i>온도</h3><svg viewBox="0 0 520 290"></svg><p>높을수록 증가하다가 일정 온도 이상에서는 급격하게 줄어요.</p></div>
+  </div>
+  <div class="note st" data-in="8">흐리고 비 오는 날이 많으면 빛의 세기가 약해져 광합성량이 줄어요.</div>
+  <div class="hint stf" data-in="0" data-out="0">온도를 바꿔 가며 기포 수를 세어 봐요. 슬라이더를 직접 움직여도 돼요.</div>
+  <div class="hint stf" data-in="1" data-out="1">온도를 0 ℃에서 36 ℃까지 올려 봐요.</div>
+  <div class="hint stf" data-in="2" data-out="2">36 ℃보다 더 올리면 어떻게 될까요?</div>
+  <div class="card st" data-in="3" style="top:790px;padding:8px 32px;line-height:1.5">온도가 높을수록 광합성량은 증가하며, 일정 온도 이상에서는 <span class="bl tight" data-open="4"><i class="bn">5</i><b class="ba">급격하게 감소</b></span>한다.</div>
+  <div class="card st" data-in="6" style="top:880px;padding:8px 32px;line-height:1.5">광합성은 환경요인이 모두 <span class="bl" data-open="7"><i class="bn">6</i><b class="ba">알맞게</b></span> 유지될 때 활발하게 일어날 수 있다.</div>
+  <div class="copy">중2 과학 V. 식물과 에너지 · 비상교육 교과서(2022 개정)의 용어와 범위를 따라 새로 그리고 쓴 강의 화면</div>
+</section>
+
+<canvas id="ink"></canvas>
+</div>
+
+<div id="bar"><button id="bPrev">이전</button><span class="pos" id="pos"></span><button id="bNext">다음</button><button id="bSnd">소리</button><button id="bFs">전체 화면</button></div>
+<button id="toolbtn" aria-label="도구 상자">도구</button>
+<div id="tools">
+  <div class="g"><button data-t="laser">레이저 L</button><button data-t="pen">빨간 펜 P</button></div>
+  <div class="g"><button id="tUndo">한 획 지우기 Z</button><button id="tClear">모두 지우기 C</button></div>
+  <div class="g"><button id="tFinger">손가락 그리기: 자동</button></div>
+  <div class="g"><button id="tFs">전체 화면 F</button></div>
+</div>
+<div id="script"></div>
+<div id="overview"></div>
+<div id="help"><div>
+→ Space Enter PageDown 클릭: 다음 단계 · ← PageUp Backspace 오른쪽 클릭: 이전 단계<br>
+F 전체 화면 · T(N) 대본 · O 전체 장면 · R 지금 단계 다시 · M 소리 · B 검은 화면 · W 흰 화면<br>
+Home/End 처음/끝 · L 레이저 · P 빨간 펜 · Z 한 획 지우기 · C 모두 지우기 · Esc 끄기 · H 도움말<br>
+시뮬레이터 슬라이더는 마우스·손가락으로 직접 움직일 수 있고, 눌러도 화면은 넘어가지 않아요.
+</div></div>
+<div id="cover"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const stage = $('#stage');
+const STU = /[?&]s=1/.test(location.search);
+if (STU) document.body.classList.add('stu');
+const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const FONT = "'Pretendard Variable',Pretendard,'Malgun Gothic',sans-serif";
+
+/* ================= 광합성량 모형 =================
+   광합성량 N = 1분에 나오는 기포 수 = NMAX · fL(L) · fC(C) · fT(T)        (NMAX = 30개/분)
+   빛의 세기 L, 이산화 탄소의 농도 C 는 0~10 의 상대값, 온도 T 는 0~50 ℃.
+   포화 곡선 sat(x, xs) = 1 − (1 − x/xs)²   (0 ≤ x < xs),  = 1  (x ≥ xs)
+       → 처음에는 가파르게 늘고, x = xs 에서 기울기 0 으로 이어져 그 뒤로는 일정(더 이상 증가하지 않음).
+   fL(L) = sat(L, 6)      fC(C) = sat(C, 7)
+   온도 곡선 rawT(T) = (0.12 + 0.88·(T/35)²) / (1 + e^((T−41)/2.2))
+       분자: 온도가 오를수록 점점 가파르게 늘어남. 분모: 41 ℃ 부근에서 급격히 줄어듦(로지스틱).
+   fT(T) = min(1, rawT(T) / rawT(36))   → 36 ℃ 부근에서 최댓값 1.
+   다른 요인은 현재 슬라이더 값으로 곱해지므로 「다른 조건을 같게」 한 그래프가 된다.
+   온도·눈금 값(36 ℃ 등)은 교과서에 없어 그래프 모양만 맞춘 예시 값이다. */
+const NMAX = 30, TOPT = 36;
+const sat = (x, xs) => x >= xs ? 1 : x <= 0 ? 0 : 1 - Math.pow(1 - x / xs, 2);
+const fL = x => sat(x, 6), fC = x => sat(x, 7);
+const rawT = T => (0.12 + 0.88 * Math.pow(T / 35, 2)) / (1 + Math.exp((T - 41) / 2.2));
+const R36 = rawT(TOPT);
+const fT = T => Math.min(1, rawT(T) / R36);
+const nRaw = (L, C, T) => NMAX * fL(L) * fC(C) * fT(T);
+const nInt = (L, C, T) => Math.round(nRaw(L, C, T));
+window.__model = { nRaw, nInt, fL, fC, fT, NMAX, TOPT };
+
+const COL = { L: '#2b7fb8', C: '#3a8f4a', T: '#e07a1f' };
+const NAME = { L: '빛의 세기', C: '이산화 탄소의 농도', T: '온도(℃)' };
+const rng = (seed => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296)(20261117);
+
+/* ================= 탱크 그림 ================= */
+function tankSVG() {
+  let plant = '';
+  const stems = [[400, 196, 1], [366, 244, .8], [434, 252, .85]];
+  stems.forEach(([x, top, s]) => {
+    plant += `<path d="M${x} 372 L${x} ${top}" stroke="#2f7d3c" stroke-width="5" stroke-linecap="round" fill="none"/>`;
+    for (let y = 358; y > top + 6; y -= 24) {
+      const a = 34 * s;
+      plant += `<path d="M${x} ${y} L${x - a} ${y - 17} M${x} ${y} L${x + a} ${y - 17}" stroke="#2f7d3c" stroke-width="4.5" stroke-linecap="round" fill="none"/>`;
+    }
+  });
+  let co = '', bb = '';
+  for (let i = 0; i < 30; i++) co += `<circle class="co" r="6" fill="#6b6b6b"/>`;
+  for (let i = 0; i < 26; i++) bb += `<circle class="bb" r="8" fill="#fff" fill-opacity=".85" stroke="#1c1c1c" stroke-width="2.6" visibility="hidden"/>`;
+  let ticks = '';
+  for (let t = 0; t <= 50; t += 10) { const y = 340 - t / 50 * 230; ticks += `<path d="M678 ${y} H690" stroke="#1c1c1c" stroke-width="3"/>`; }
+  const rays = [90, 150, 214, 278, 338].map(y => `<line class="ray" x1="166" y1="214" x2="252" y2="${y}" stroke="#f2b01e" stroke-linecap="round"/>`).join('');
+  return `
+  <rect x="210" y="104" width="380" height="268" fill="rgba(70,130,180,.17)"/>
+  <path d="M210 104 H590" stroke="#2b7fb8" stroke-width="3" stroke-dasharray="14 8" opacity=".7"/>
+  ${plant}
+  <g>${co}</g>
+  <path d="M210 56 V372 H590 V56" fill="none" stroke="#1c1c1c" stroke-width="5" stroke-linejoin="round"/>
+  <g>${bb}</g>
+  <rect x="40" y="362" width="90" height="12" fill="#1c1c1c"/>
+  <path d="M85 362 V252" stroke="#1c1c1c" stroke-width="6"/>
+  <circle class="glow" cx="146" cy="214" r="30" fill="#f2b01e" opacity="0"/>
+  <path d="M78 186 L134 168 L134 260 L78 242 Z" fill="#5b5b5b" stroke="#1c1c1c" stroke-width="3"/>
+  <circle class="bulb" cx="146" cy="214" r="20" fill="#d9d9d9" stroke="#1c1c1c" stroke-width="3"/>
+  ${rays}
+  <rect x="650" y="92" width="26" height="250" rx="13" fill="#fff" stroke="#1c1c1c" stroke-width="4"/>
+  <circle cx="663" cy="354" r="24" fill="#fff" stroke="#1c1c1c" stroke-width="4"/>
+  <circle cx="663" cy="354" r="17" fill="#d6402f"/>
+  <rect class="hg" x="657" y="200" width="12" height="150" fill="#d6402f"/>
+  ${ticks}
+  <text class="tt" x="663" y="412" text-anchor="middle" font-size="30" font-weight="700" font-family="${FONT}" fill="#1c1c1c">36 ℃</text>
+  <text x="400" y="412" text-anchor="middle" font-size="28" font-weight="600" font-family="${FONT}" fill="#5b5b5b">물속 검정말</text>
+  <circle cx="226" cy="30" r="9" fill="#fff" stroke="#1c1c1c" stroke-width="2.6"/>
+  <text x="244" y="39" font-size="26" font-family="${FONT}" fill="#1c1c1c">산소 기포</text>
+  <circle cx="380" cy="30" r="6" fill="#6b6b6b"/>
+  <text x="394" y="39" font-size="26" font-family="${FONT}" fill="#1c1c1c">녹아 있는 이산화 탄소</text>
+  <ellipse class="ring" data-r="l" cx="104" cy="252" rx="86" ry="150" fill="none" stroke="#d6402f" stroke-width="5" stroke-dasharray="12 9" opacity="0"/>
+  <ellipse class="ring" data-r="c" cx="400" cy="214" rx="214" ry="162" fill="none" stroke="#d6402f" stroke-width="5" stroke-dasharray="12 9" opacity="0"/>
+  <ellipse class="ring" data-r="t" cx="663" cy="232" rx="48" ry="150" fill="none" stroke="#d6402f" stroke-width="5" stroke-dasharray="12 9" opacity="0"/>`;
+}
+
+/* ================= 시뮬레이터 ================= */
+const sims = [];
+function makeSim(root, opt = {}) {
+  const S = Object.assign({ L: 2, C: 10, T: 36 }, opt.S || {});
+  let active = opt.active || 'L', hl = null, ring = '', tw = null, running = false, raf = 0, last = 0, emit = 0, tNow = 0;
+  const vis = { L: null, C: null, T: null };
+  const tank = $('.tank', root); tank.innerHTML = tankSVG();
+  const gsvg = $('.graph', root.gbox || root);
+  const roN = $$('.ro .n', root.ro || root)[0] || $('.n', root);
+  const rays = $$('.ray', tank), glow = $('.glow', tank), bulb = $('.bulb', tank), hg = $('.hg', tank), tt = $('.tt', tank);
+  const rings = $$('.ring', tank), cos = $$('.co', tank), bbs = $$('.bb', tank);
+  const pc = cos.map(() => ({ x: 232 + rng() * 336, y: 128 + rng() * 224, ph: rng() * 6.28, sp: .5 + rng() * .6 }));
+  const bub = bbs.map(() => ({ on: false, x: 0, y: 0, vy: 0, r: 8, ph: 0 }));
+  const sl = $$('.sl', root), rows = $$('.row', root);
+  const X0 = 104, X1 = 766, Y0 = 124, Y1 = 428, YMAX = 34;
+
+  function drawGraph() {
+    if (!gsvg) return;
+    const k = active, xmax = k === 'T' ? 50 : 10, col = COL[k];
+    const X = v => X0 + v / xmax * (X1 - X0), Y = n => Y1 - n / YMAX * (Y1 - Y0);
+    const f = v => { const s = Object.assign({}, S); s[k] = v; return nRaw(s.L, s.C, s.T); };
+    let s = '';
+    if (hl) s += `<rect x="${X(hl.a)}" y="${Y0}" width="${X(hl.b) - X(hl.a)}" height="${Y1 - Y0}" fill="rgba(255,214,0,.4)"/>`;
+    for (let n = 0; n <= 30; n += 10) s += `<path d="M${X0} ${Y(n)} H${X1}" stroke="rgba(0,0,0,.1)" stroke-width="2"/><text x="${X0 - 14}" y="${Y(n) + 9}" text-anchor="end" font-size="26" font-family="${FONT}" fill="#5b5b5b">${n}</text>`;
+    const xs = k === 'T' ? [0, 10, 20, 30, 40, 50] : [0, 2, 4, 6, 8, 10];
+    xs.forEach(v => s += `<path d="M${X(v)} ${Y1} v10" stroke="#1c1c1c" stroke-width="3"/><text x="${X(v)}" y="${Y1 + 42}" text-anchor="middle" font-size="26" font-family="${FONT}" fill="#5b5b5b">${v}</text>`);
+    s += `<path d="M${X0} ${Y0 - 8} V${Y1} H${X1 + 10}" fill="none" stroke="#1c1c1c" stroke-width="4"/>`;
+    s += `<text x="${(X0 + X1) / 2}" y="${Y1 + 90}" text-anchor="middle" font-size="30" font-weight="700" font-family="${FONT}" fill="#1c1c1c">${NAME[k]}${k === 'T' ? '' : ' (상대값)'}</text>`;
+    s += `<text transform="translate(34 ${(Y0 + Y1) / 2}) rotate(-90)" text-anchor="middle" font-size="30" font-weight="700" font-family="${FONT}" fill="#1c1c1c">광합성량 (기포 수)</text>`;
+    const v = vis[k];
+    if (v) {
+      let d = '', step = k === 'T' ? .5 : .1;
+      for (let x = v[0]; x <= v[1] + 1e-9; x += step) d += (d ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(f(x)).toFixed(1);
+      d += 'L' + X(v[1]).toFixed(1) + ' ' + Y(f(v[1])).toFixed(1);
+      s += `<path d="${d}" fill="none" stroke="${col}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+      const st = k === 'T' ? 10 : 1;
+      for (let x = Math.ceil(v[0] / st - 1e-9) * st; x <= v[1] + 1e-9; x += st) s += `<circle cx="${X(x)}" cy="${Y(f(x))}" r="6" fill="#fff" stroke="${col}" stroke-width="3.5"/>`;
+    }
+    const cx = X(S[k]), cy = Y(Math.round(f(S[k])));
+    s += `<path d="M${cx} ${cy} V${Y1} M${X0} ${cy} H${cx}" stroke="#1c1c1c" stroke-width="2.5" stroke-dasharray="7 7" opacity=".55"/>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="13" fill="${col}" stroke="#1c1c1c" stroke-width="3.5"/>`;
+    gsvg.innerHTML = s;
+  }
+  function render() {
+    const op = S.L <= 0 ? 0 : .2 + .8 * S.L / 10;
+    rays.forEach(l => { l.style.opacity = op; l.setAttribute('stroke-width', (2.5 + 3.5 * S.L / 10).toFixed(2)); });
+    glow.setAttribute('r', (24 + 3 * S.L).toFixed(1)); glow.setAttribute('opacity', (.5 * S.L / 10).toFixed(2));
+    bulb.setAttribute('fill', S.L > 0 ? '#f2b01e' : '#d9d9d9');
+    const ytop = 340 - S.T / 50 * 230;
+    hg.setAttribute('y', ytop.toFixed(1)); hg.setAttribute('height', (352 - ytop).toFixed(1));
+    tt.textContent = Math.round(S.T) + ' ℃';
+    const nc = Math.round(S.C * 3); cos.forEach((c, i) => c.setAttribute('visibility', i < nc ? 'visible' : 'hidden'));
+    rings.forEach(r => r.setAttribute('opacity', r.dataset.r === ring ? 1 : 0));
+    if (roN) roN.textContent = nInt(S.L, S.C, S.T);
+    sl.forEach(el => { const k = el.dataset.k; el.value = S[k]; const vEl = el.parentNode.querySelector('.val'); if (vEl) vEl.textContent = Math.round(S[k]); });
+    rows.forEach(r => r.classList.toggle('act', r.dataset.k === active));
+    drawGraph();
+    placeParticles(tNow);
+  }
+  function placeParticles(t) {
+    pc.forEach((p, i) => { const c = cos[i]; c.setAttribute('cx', (p.x + (RM ? 0 : 12 * Math.sin(t * p.sp + p.ph))).toFixed(1)); c.setAttribute('cy', (p.y + (RM ? 0 : 12 * Math.cos(t * p.sp * .8 + p.ph * 1.3))).toFixed(1)); });
+  }
+  function ease(p) { return p < .5 ? 2 * p * p : 1 - 2 * (1 - p) * (1 - p); }
+  function applyTween(p) {
+    for (const k in tw.keys) { const [a, b] = tw.keys[k]; S[k] = a + (b - a) * ease(p); }
+    if (tw.vk) { const k = tw.vk, b0 = tw.vb; vis[k] = [Math.min(b0[0], S[k]), Math.max(b0[1], S[k])]; }
+  }
+  function finish() {
+    if (!tw) return;
+    const t = tw; applyTween(1); tw = null; if (t.vk) vis[t.vk] = [Math.min(t.vb[0], t.keys[t.vk][1]), Math.max(t.vb[1], t.keys[t.vk][1])];
+    render();
+  }
+  function startTween(keys, ms, vk, vb) {
+    finish();
+    if (RM) { for (const k in keys) S[k] = keys[k][1]; if (vk) vis[vk] = [Math.min(vb[0], keys[vk][1]), Math.max(vb[1], keys[vk][1])]; render(); return; }
+    tw = { keys, dur: ms, t0: null, vk, vb }; applyTween(0); render();
+  }
+  function frame(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(frame);
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now; tNow = now / 1000;
+    if (tw) { if (tw.t0 === null) tw.t0 = now; const p = Math.min(1, (now - tw.t0) / tw.dur); applyTween(p); if (p >= 1) { const t = tw; tw = null; if (t.vk) vis[t.vk] = [Math.min(t.vb[0], t.keys[t.vk][1]), Math.max(t.vb[1], t.keys[t.vk][1])]; } render(); }
+    else placeParticles(tNow);
+    if (RM) return;
+    const rate = nRaw(S.L, S.C, S.T) / 6;            // 화면 6초 = 실험 1분
+    emit += dt * rate;
+    while (emit >= 1) {
+      emit -= 1;
+      const b = bub.find(q => !q.on); if (!b) break;
+      const st = [[400, 196], [366, 244], [434, 252]][Math.floor(rng() * 3)];
+      Object.assign(b, { on: true, x: st[0] + (rng() - .5) * 60, y: st[1] - 4 - rng() * 20, vy: 62 + rng() * 26, r: 7 + rng() * 4, ph: rng() * 6.28 });
+    }
+    bub.forEach((b, i) => {
+      const el = bbs[i];
+      if (!b.on) { if (el.getAttribute('visibility') !== 'hidden') el.setAttribute('visibility', 'hidden'); return; }
+      b.y -= b.vy * dt; b.x += Math.sin(now / 300 + b.ph) * .5;
+      if (b.y < 112) { b.on = false; el.setAttribute('visibility', 'hidden'); return; }
+      el.setAttribute('visibility', 'visible'); el.setAttribute('cx', b.x.toFixed(1)); el.setAttribute('cy', b.y.toFixed(1)); el.setAttribute('r', b.r.toFixed(1));
+    });
+  }
+  // 직접 조작
+  sl.forEach(el => {
+    el.addEventListener('input', () => {
+      finish(); const k = el.dataset.k, v = +el.value; S[k] = v; active = k; hl = null;
+      vis[k] = vis[k] ? [Math.min(vis[k][0], v), Math.max(vis[k][1], v)] : [v, v];
+      render();
+    });
+    const un = () => setTimeout(() => el.blur(), 0);
+    el.addEventListener('pointerup', un); el.addEventListener('change', un);
+  });
+  const api = {
+    S, get active() { return active; },
+    set(o) {
+      finish();
+      if (o.S) Object.assign(S, o.S);
+      if ('active' in o) active = o.active;
+      if (o.vis) for (const k in o.vis) vis[k] = o.vis[k];
+      if ('hl' in o) hl = o.hl;
+      if ('ring' in o) ring = o.ring;
+      render();
+    },
+    tweenTo(target, ms) { const keys = {}; for (const k in target) keys[k] = [S[k], target[k]]; startTween(keys, ms); },
+    sweep(k, a, b, ms, base) { S[k] = a; startTween({ [k]: [a, b] }, ms, k, base || [a, a]); },
+    finish, render,
+    start() { if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); },
+    stop() { running = false; cancelAnimationFrame(raf); finish(); },
+    n: () => nInt(S.L, S.C, S.T),
+    vis: () => vis,
+  };
+  sims.push(api); render();
+  return api;
+}
+function wrap(simId, gbId) { const r = $(simId); if (gbId) { r.gbox = $(gbId); r.ro = $('.ro', $(gbId)); } return r; }
+
+const sim0 = makeSim(Object.assign($('#sim0'), { ro: $('#sim0 .ro') }), { S: { L: 2, C: 2, T: 20 }, active: 'L' });
+const sim1 = makeSim(wrap('#sim1', '#gb1'), { S: { L: 2, C: 10, T: TOPT }, active: 'L' });
+const sim2 = makeSim(wrap('#sim2', '#gb2'), { S: { L: 10, C: 10, T: 10 }, active: 'T' });
+window.__sims = { sim0, sim1, sim2 };
+// 표지 시뮬은 그래프가 없다
+(() => { const g = $('.graph', $('#sim0')); })();
+
+/* ================= 세 그래프 비교 ================= */
+function mini(fn, xmax, col, xl) {
+  const x0 = 70, x1 = 480, y0 = 16, y1 = 232;
+  let d = ''; for (let i = 0; i <= 80; i++) { const v = xmax * i / 80; d += (i ? 'L' : 'M') + (x0 + (x1 - x0) * i / 80).toFixed(1) + ' ' + (y1 - fn(v) / 34 * (y1 - y0)).toFixed(1); }
+  return `<path d="M${x0} ${y0 - 6} V${y1} H${x1 + 6}" fill="none" stroke="#1c1c1c" stroke-width="4"/>
+  <path class="draw" pathLength="1" d="${d}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="${x0 - 12}" y="${y1 + 28}" text-anchor="end" font-size="26" font-family="${FONT}" fill="#5b5b5b">0</text>
+  <text x="${(x0 + x1) / 2}" y="278" text-anchor="middle" font-size="28" font-weight="700" font-family="${FONT}" fill="#1c1c1c">${xl}</text>
+  <text transform="translate(26 ${(y0 + y1) / 2}) rotate(-90)" text-anchor="middle" font-size="26" font-weight="700" font-family="${FONT}" fill="#1c1c1c">광합성량</text>`;
+}
+$('#p1 svg').innerHTML = mini(v => nRaw(v, 10, TOPT), 10, COL.L, '빛의 세기');
+$('#p2 svg').innerHTML = mini(v => nRaw(10, v, TOPT), 10, COL.C, '이산화 탄소의 농도');
+$('#p3 svg').innerHTML = mini(v => nRaw(10, 10, v), 50, COL.T, '온도');
+
+/* ================= 장면 정의 ================= */
+const S1 = k => ({ S: { L: k >= 1 ? 10 : 2, C: k >= 5 ? 10 : 10, T: TOPT }, active: k >= 5 ? 'C' : 'L',
+  vis: { L: k >= 1 ? [0, 10] : null, C: k >= 5 ? [0, 10] : null, T: null }, hl: k === 3 ? { a: 0, b: 6 } : k === 4 ? { a: 6, b: 10 } : null });
+const scenes = [
+  { n: 5, title: '표지 · 광합성은 어떤 조건에서 잘 일어날까?',
+    script: '식물이 잘 자라려면 광합성이 활발하게 일어나야 해요. 그런데 광합성은 어떤 조건에서 잘 일어날까요? 물속 검정말에서 나오는 기포 수로 눈에 보이게 만들어 볼 거예요. 기포 수는 일정 시간 동안 만들어진 산소의 양을 눈으로 보려는 방법이에요. 교과서 탐구에서는 산소 센서로 산소 농도의 변화를 재요. 화면의 6초가 실험의 1분인 점이 실제와 다릅니다.',
+    cues: ['검정말에서 기포가 천천히 올라온다. 「이 기포가 많아지는 조건이 뭘까?」', '빛의 세기를 올린다 → 기포가 늘어난다.', '이산화 탄소의 농도를 올린다 → 기포가 더 늘어난다.', '온도를 알맞게 올린다 → 기포가 가장 활발하다.', '학습지 1번 문장이 나온다. 빈칸을 먼저 생각해 보게 한다.', '1번 빈칸이 열린다. 빈칸 번호를 같은 번호 칸에 적는다.'],
+    enter() { sim0.start(); },
+    leave() { sim0.stop(); },
+    apply(k, anim) {
+      const P = [{ L: 2, C: 2, T: 20 }, { L: 8, C: 2, T: 20 }, { L: 8, C: 8, T: 20 }, { L: 8, C: 8, T: TOPT }, { L: 8, C: 8, T: TOPT }, { L: 8, C: 8, T: TOPT }];
+      sim0.set({ ring: ['', 'l', 'c', 't', '', ''][k] });
+      if (anim && k >= 1 && k <= 3) { sim0.set({ S: P[k - 1] }); sim0.tweenTo({ [['', 'L', 'C', 'T'][k]]: P[k][['', 'L', 'C', 'T'][k]] }, 1400); }
+      else sim0.set({ S: P[k] });
+    } },
+  { n: 7, title: '실험 · 빛의 세기와 이산화 탄소의 농도',
+    script: '여기 검정말이 있고, 1분 동안 나온 기포 수를 세어요. 슬라이더를 움직이면 기포 수가 바뀌고 그래프에 점이 찍혀요. 먼저 빛의 세기부터 올려 볼게요. 어느 정도까지는 기포가 늘다가 그다음엔 어떻게 되는지 잘 보세요. 이번에는 이산화 탄소의 농도를 올려 봅니다. 다른 조건은 같게 하고 하나만 바꾸는 점이 중요해요. 그래프가 올라가는 구간과 평평한 구간을 나눠 짚어 주세요.',
+    cues: ['슬라이더를 직접 움직여 보게 한다(눌러도 화면은 안 넘어간다).', '빛의 세기를 0에서 10까지 올린다. 그래프에 점과 선이 그려진다.', '학습지 2, 3번 문장이 나온다. 그래프를 보고 빈칸을 생각해 보게 한다.', '그래프의 올라가는 구간을 노란색으로 짚고 2번을 연다.', '평평한 구간을 짚고 3번을 연다.', '이산화 탄소의 농도를 0에서 10까지 올린다(빛은 10 그대로).', '학습지 4번 문장이 나온다.', '4번 빈칸이 열린다.'],
+    enter() { sim1.start(); },
+    leave() { sim1.stop(); },
+    apply(k, anim) {
+      const st = S1(k); sim1.set(st);
+      if (anim && k === 1) { sim1.set({ S: { L: 0 }, vis: { L: [0, 0] } }); sim1.sweep('L', 0, 10, 3600, [0, 0]); }
+      if (anim && k === 5) { sim1.set({ S: { L: 10, C: 0 }, vis: { C: [0, 0] }, hl: null }); sim1.sweep('C', 0, 10, 3600, [0, 0]); }
+    } },
+  { n: 8, title: '실험 · 온도, 세 가지 환경요인 한눈에',
+    script: '이번에는 온도를 바꿔 볼게요. 빛은 강하고 이산화 탄소도 충분해요. 온도를 올리면 기포가 늘다가, 어느 온도를 넘으면 갑자기 줄어요. 높을수록 좋은 것이 아니라는 점을 꼭 짚어 주세요(그래프의 36 ℃ 같은 숫자는 교과서에 없는 예시 값입니다). 마지막으로 세 그래프를 나란히 놓고 비교해요. 빛과 이산화 탄소는 어느 정도 이상에서 더 늘지 않고, 온도는 일정 온도 이상에서 줄어요. 환경요인이 모두 알맞아야 광합성이 활발해요.',
+    cues: ['슬라이더를 직접 움직여 보게 한다.', '온도를 0에서 36 ℃까지 올린다. 기포가 늘어난다.', '36 ℃에서 50 ℃까지 더 올린다. 기포가 거의 사라진다.', '학습지 5번 문장이 나온다.', '줄어드는 구간을 짚고 5번을 연다.', '세 그래프를 나란히 그린다. 모양을 비교한다.', '학습지 6번 문장이 나온다.', '6번 빈칸이 열린다.', '「흐리고 비 오는 날이 많으면?」 빛의 세기 그래프를 짚는다.'],
+    enter() { sim2.start(); },
+    leave() { sim2.stop(); },
+    apply(k, anim) {
+      const top = k >= 2 ? 50 : k >= 1 ? TOPT : 10;
+      sim2.set({ S: { L: 10, C: 10, T: top }, active: 'T', vis: { T: k >= 2 ? [0, 50] : k >= 1 ? [0, TOPT] : null }, hl: k === 4 ? { a: TOPT, b: 50 } : null });
+      if (anim && k === 1) { sim2.set({ S: { T: 0 }, vis: { T: [0, 0] } }); sim2.sweep('T', 0, TOPT, 3600, [0, 0]); }
+      if (anim && k === 2) { sim2.set({ S: { T: TOPT }, vis: { T: [0, TOPT] } }); sim2.sweep('T', TOPT, 50, 2600, [0, TOPT]); }
+      $('#p1').classList.toggle('hot', k >= 8);
+    } },
+];
+scenes.forEach((s, i) => { s.el = $('#sc' + i); s.cues = s.cues || []; });
+
+/* ================= 진행 ================= */
+let cur = 0, step = 0;
+const total = scenes.reduce((a, s) => a + s.n + 1, 0);
+function quiet(fn) { stage.classList.add('noanim'); fn(); void stage.offsetWidth; stage.classList.remove('noanim'); }
+function domApply(sc, k) {
+  $$('[data-in]', sc.el).forEach(el => {
+    const a = +el.dataset.in, b = el.dataset.out === undefined ? Infinity : +el.dataset.out;
+    el.classList.toggle('on', k >= a && k <= b);
+  });
+  $$('[data-open]', sc.el).forEach(el => el.classList.toggle('open', k >= +el.dataset.open));
+}
+const openCount = sc => $$('.bl.open', sc.el).length;
+function finishAnim() { sims.forEach(s => s.finish()); }
+function go(c, k, anim) {
+  finishAnim();
+  c = Math.max(0, Math.min(scenes.length - 1, c)); const sc = scenes[c]; k = Math.max(0, Math.min(sc.n, k));
+  const changed = c !== cur;
+  if (changed) { scenes[cur].leave(); scenes[cur].el.classList.remove('cur'); cur = c; sc.el.classList.add('cur'); strokes = []; redraw(); quiet(() => { domApply(sc, 0); sc.apply(0, false); }); sc.enter(); }
+  const fwd = anim && !changed && k === step + 1;
+  const before = openCount(sc);
+  if (fwd) {
+    quiet(() => { domApply(sc, k - 1); sc.apply(k - 1, false); });
+    domApply(sc, k); sc.apply(k, true);
+    if (openCount(sc) > before) ding(); else if (k > 0) tock();
+  } else {
+    quiet(() => { domApply(sc, k); sc.apply(k, false); });
+  }
+  step = k; ui();
+}
+const next = () => { const sc = scenes[cur]; if (step < sc.n) go(cur, step + 1, true); else if (cur < scenes.length - 1) go(cur + 1, 0, true); };
+const prev = () => { if (step > 0) go(cur, step - 1, false); else if (cur > 0) go(cur - 1, scenes[cur - 1].n, false); };
+function replay() { finishAnim(); if (step === 0) { go(cur, 0, false); return; } const k = step; quiet(() => { domApply(scenes[cur], k - 1); scenes[cur].apply(k - 1, false); }); step = k - 1; go(cur, k, true); }
+function ui() {
+  const sc = scenes[cur];
+  $('#pos').textContent = `장면 ${cur + 1}/${scenes.length} · 단계 ${step + 1}/${sc.n + 1}`;
+  try { history.replaceState(null, '', '#' + (cur + 1) + '.' + step); } catch (e) {}
+  const nx = scenes[cur + 1];
+  $('#script').innerHTML = `<h4>장면 ${cur + 1} · ${sc.title} · 단계 ${step + 1}/${sc.n + 1}${nx ? ' · 다음 장면: ' + nx.title : ' · 마지막 장면'}</h4><div class="cue">이 단계: ${sc.cues[step] || ''}</div><div>${sc.script}</div>`;
+}
+
+/* ================= 소리 ================= */
+let actx = null, snd = !STU;
+function tone(f, d, type, g, delay) {
+  if (!snd) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume();
+    const t = actx.currentTime + (delay || 0), o = actx.createOscillator(), a = actx.createGain();
+    o.type = type || 'sine'; o.frequency.value = f; a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g || .12, t + .01); a.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(a); a.connect(actx.destination); o.start(t); o.stop(t + d + .02);
+  } catch (e) {}
+}
+let dn = 0; const ding = () => { const f = [880, 988, 1109, 1175][dn++ % 4]; tone(f, .35, 'sine', .13); tone(f * 1.5, .5, 'sine', .05, .05); };
+const tock = () => tone(300, .08, 'triangle', .08);
+
+/* ================= 판서 ================= */
+const ink = $('#ink'), ictx = ink.getContext('2d');
+let tool = null, strokes = [], curS = null, laser = [], penSeen = false, fingerMode = 'auto', drewJust = false, lrAf = 0;
+try { penSeen = localStorage.getItem('pc2_pen') === '1'; fingerMode = localStorage.getItem('pc2_fing') || 'auto'; } catch (e) {}
+function fitInk() { const r = stage.getBoundingClientRect(); const k = Math.max(1, r.width / 1920 * (devicePixelRatio || 1)); ink.width = Math.round(1920 * k); ink.height = Math.round(1080 * k); ictx.setTransform(k, 0, 0, k, 0, 0); redraw(); }
+function redraw() {
+  ictx.clearRect(0, 0, 1920, 1080); ictx.lineCap = 'round'; ictx.lineJoin = 'round';
+  ictx.strokeStyle = '#d6402f'; ictx.lineWidth = 7;
+  strokes.concat(curS ? [curS] : []).forEach(s => { ictx.beginPath(); s.forEach((p, i) => i ? ictx.lineTo(p[0], p[1]) : ictx.moveTo(p[0], p[1])); if (s.length === 1) ictx.lineTo(s[0][0] + .1, s[0][1]); ictx.stroke(); });
+  const now = performance.now(); laser = laser.filter(p => now - p[2] < 1000 || p[3]);
+  for (let i = 1; i < laser.length; i++) { const a = laser[i], age = Math.max(0, 1 - (now - a[2]) / 1000); if (laser[i - 1][3]) continue; ictx.strokeStyle = `rgba(255,40,30,${(.9 * age).toFixed(2)})`; ictx.lineWidth = 10 * age + 2; ictx.beginPath(); ictx.moveTo(laser[i - 1][0], laser[i - 1][1]); ictx.lineTo(a[0], a[1]); ictx.stroke(); }
+  if (laser.length && laser[laser.length - 1][4]) { const q = laser[laser.length - 1]; ictx.fillStyle = 'rgba(255,40,30,.95)'; ictx.beginPath(); ictx.arc(q[0], q[1], 14, 0, 7); ictx.fill(); }
+  if (laser.length && !lrAf) lrAf = requestAnimationFrame(() => { lrAf = 0; redraw(); });
+}
+function clearInk() { strokes = []; laser = []; curS = null; redraw(); }
+function pt(e) { const r = stage.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1920, (e.clientY - r.top) / r.height * 1080]; }
+function canDraw(e) {
+  if (e.pointerType === 'pen') { penSeen = true; try { localStorage.setItem('pc2_pen', '1'); } catch (x) {} return true; }
+  if (e.pointerType === 'touch') return fingerMode === 'on' || (fingerMode === 'auto' && !penSeen);
+  return true;
+}
+let drawing = false;
+addEventListener('pointerdown', e => {
+  if (e.pointerType === 'pen') { penSeen = true; try { localStorage.setItem('pc2_pen', '1'); } catch (x) {} }
+  if (!tool || e.target.closest('#tools,#toolbtn,#bar,.sim-ui,#script,#overview,#help')) return;
+  if (!canDraw(e)) return;
+  drawing = true; e.preventDefault(); e.stopPropagation();
+  const p = pt(e);
+  if (tool === 'pen') curS = [p]; else { laser.push([p[0], p[1], performance.now(), false, true]); }
+  redraw();
+}, true);
+addEventListener('pointermove', e => {
+  if (!drawing) return; e.preventDefault(); const p = pt(e);
+  if (tool === 'pen' && curS) curS.push(p); else if (tool === 'laser') { laser.forEach(q => q[4] = false); laser.push([p[0], p[1], performance.now(), false, true]); }
+  redraw();
+}, true);
+const endDraw = e => {
+  if (!drawing) return; drawing = false; drewJust = true; setTimeout(() => drewJust = false, 120);
+  if (tool === 'pen' && curS) { strokes.push(curS); curS = null; } else laser.forEach(q => q[4] = false);
+  redraw();
+};
+addEventListener('pointerup', endDraw, true); addEventListener('pointercancel', endDraw, true);
+function setTool(t) { tool = tool === t ? null : t; document.body.classList.toggle('tool', !!tool); $$('#tools [data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === tool)); }
+$$('#tools [data-t]').forEach(b => b.onclick = () => setTool(b.dataset.t));
+$('#tUndo').onclick = () => { strokes.pop(); redraw(); };
+$('#tClear').onclick = clearInk;
+$('#tFinger').onclick = () => { fingerMode = fingerMode === 'auto' ? 'on' : fingerMode === 'on' ? 'off' : 'auto'; try { localStorage.setItem('pc2_fing', fingerMode); } catch (e) {} $('#tFinger').textContent = '손가락 그리기: ' + { auto: '자동', on: '켬', off: '끔' }[fingerMode]; };
+$('#tFinger').textContent = '손가락 그리기: ' + { auto: '자동', on: '켬', off: '끔' }[fingerMode];
+$('#toolbtn').onclick = () => document.body.classList.toggle('tools');
+function fs() { const d = document; if (d.fullscreenElement) d.exitFullscreen(); else (d.documentElement.requestFullscreen || (() => {})).call(d.documentElement); }
+$('#tFs').onclick = fs; $('#bFs').onclick = fs;
+
+/* ================= 입력 ================= */
+function fit() { const k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.setProperty('--k', k); fitInk(); }
+addEventListener('resize', fit);
+function buildOverview() { $('#overview').innerHTML = scenes.map((s, i) => `<div class="oc" data-i="${i}">${i + 1}. ${s.title}<small>단계 ${s.n + 1}개</small></div>`).join(''); $$('#overview .oc').forEach(el => el.onclick = () => { document.body.classList.remove('ov'); go(+el.dataset.i, 0, false); }); }
+const NAV = new Set(['ArrowRight', 'ArrowLeft', ' ', 'Enter', 'PageDown', 'PageUp', 'Backspace', 'ArrowDown', 'ArrowUp']);
+addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key, B = document.body.classList;
+  if (NAV.has(k)) e.preventDefault();             // 슬라이더에 초점이 있어도 화살표는 넘기기로
+  if (k === 'ArrowRight' || k === ' ' || k === 'Enter' || k === 'PageDown' || k === 'ArrowDown') { B.remove('ov', 'hp', 'blk', 'wht'); next(); }
+  else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace' || k === 'ArrowUp') { B.remove('ov', 'hp', 'blk', 'wht'); prev(); }
+  else if (k === 'Home') go(0, 0, false); else if (k === 'End') go(scenes.length - 1, scenes[scenes.length - 1].n, false);
+  else if (/^f$/i.test(k)) fs();
+  else if ((/^[tn]$/i.test(k)) && !STU) B.toggle('scr');
+  else if (/^o$/i.test(k)) { buildOverview(); B.toggle('ov'); }
+  else if (/^r$/i.test(k)) replay();
+  else if (/^m$/i.test(k)) { snd = !snd; $('#bSnd').textContent = snd ? '소리 켬' : '소리 끔'; if (snd) ding(); }
+  else if (/^b$/i.test(k)) { B.remove('wht'); B.toggle('blk'); }
+  else if (/^w$/i.test(k)) { B.remove('blk'); B.toggle('wht'); }
+  else if (/^h$/i.test(k)) B.toggle('hp');
+  else if (/^l$/i.test(k)) setTool('laser'); else if (/^p$/i.test(k)) setTool('pen');
+  else if (/^z$/i.test(k)) { strokes.pop(); redraw(); } else if (/^c$/i.test(k)) clearInk();
+  else if (k === 'Escape') { B.remove('ov', 'hp', 'blk', 'wht', 'tools'); if (tool) setTool(tool); }
+}, true);
+addEventListener('click', e => {
+  if (drewJust) return;
+  if (e.target.closest('#tools,#toolbtn,#bar,.sim-ui,#script,#overview,#help,button,input,a')) return;
+  if (tool) return;
+  next();
+});
+addEventListener('contextmenu', e => { e.preventDefault(); prev(); });
+let tx = 0, ty = 0;
+addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
+addEventListener('touchend', e => { if (e.target.closest('.sim-ui,#tools,#bar,#script,#overview')) return; const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) { drewJust = true; setTimeout(() => drewJust = false, 400); dx < 0 ? next() : prev(); } }, { passive: true });
+document.addEventListener('touchmove', e => { if ((document.fullscreenElement || tool) && !e.target.closest('#script,#overview,#help')) e.preventDefault(); }, { passive: false });
+let mvT; addEventListener('mousemove', () => { document.body.classList.add('mv'); clearTimeout(mvT); mvT = setTimeout(() => document.body.classList.remove('mv'), 2200); });
+$('#bPrev').onclick = prev; $('#bNext').onclick = next;
+$('#bSnd').onclick = () => { snd = !snd; $('#bSnd').textContent = snd ? '소리 켬' : '소리 끔'; if (snd) ding(); };
+$('#bSnd').textContent = snd ? '소리 켬' : '소리 끔';
+
+fit();
+{ const m = /#(\d+)\.(\d+)/.exec(location.hash); const c = m ? +m[1] - 1 : 0, k = m ? +m[2] : 0;
+  cur = 0; scenes[0].el.classList.add('cur'); scenes[0].enter();
+  go(Math.min(Math.max(c, 0), scenes.length - 1), k, false); }
+window.__go = go; window.__scenes = scenes;
+})();
+</script>
+</body>
+</html>

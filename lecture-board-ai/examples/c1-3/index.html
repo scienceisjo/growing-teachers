@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>탄성력 · 원래대로 돌아가려는 힘</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#000;font-family:"Pretendard Variable",Pretendard,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;overflow:hidden}
+.scene.on-s{display:block}
+.light{background:#fff;color:#1d1d1f;--sub:#6e6e73;--blue:#0066cc;--force:#8A3FC0;--amber:#9A7400;--card:#f5f5f7;--mute:#86868b}
+.dark{background:#000;color:#f5f5f7;--sub:#a1a1a6;--blue:#2997ff;--force:#BF5AF2;--amber:#FFD60A;--card:rgba(255,255,255,.06);--mute:#636366}
+.dark.d2{background:#1d1d1f}
+.tag{position:absolute;left:120px;top:78px;font-size:28px;color:var(--sub);font-weight:500}
+.ttl{position:absolute;left:120px;top:116px;margin:0;font-size:64px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.q{position:absolute;left:120px;top:200px;margin:0;font-size:36px;font-weight:400;color:var(--sub)}
+.card{position:absolute;border-radius:18px;background:var(--card)}
+.txt{padding:48px 56px}
+.hint{position:absolute;left:120px;font-size:28px;color:var(--sub)}
+.cr{position:absolute;left:120px;top:1000px;font-size:24px;color:var(--sub)}
+.st{margin:0 0 24px;font-size:40px;line-height:1.7;font-weight:500}
+.st2{margin:0 0 30px;font-size:34px;line-height:1.9;font-weight:500}
+.note{font-size:28px;color:var(--sub);margin-bottom:28px}
+.abs-svg{position:absolute}
+.stu-only{display:none}
+.student .stu-only{display:inline}
+.student #scBtn{display:none}
+.student #tb{display:none}
+.r{opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1),visibility 0s linear .6s}
+.r.on{opacity:1;visibility:visible;transform:none;transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.h{opacity:1;transition:opacity .4s,visibility 0s linear .4s}
+.h.off{opacity:0;visibility:hidden}
+.noanim,.noanim *{transition:none!important;animation:none!important}
+.cov{position:absolute;left:120px;top:200px;margin:0;font-size:84px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#f5f5f7}
+/* 번호 배지는 빈칸 안쪽(같은 줄)에 둔다: 윗줄 글자와 겹치지 않음 */
+.bl{position:relative;display:inline-block;min-width:3.6em;padding:0 .3em;margin:0 .08em;text-align:center;border-bottom:3px solid var(--mute);line-height:1.3;white-space:nowrap}
+.bl .no{display:inline-block;vertical-align:middle;width:34px;height:34px;margin:-4px 8px 0 0;border-radius:50%;background:var(--blue);color:#fff;font-size:24px;font-weight:600;line-height:34px;text-align:center}
+.ans{display:inline-block;color:var(--blue);font-weight:700;visibility:hidden}
+.bl.on .ans{visibility:visible;animation:pop .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.ctl{position:absolute;left:40px;top:500px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.lbl{font-size:26px;color:var(--sub);margin-right:10px}
+.sbtn{font:inherit;font-size:26px;min-width:104px;height:56px;padding:0 16px;border-radius:14px;border:0;background:rgba(255,255,255,.12);color:#f5f5f7;cursor:pointer}
+.sbtn.act{background:#3a3a3c;box-shadow:inset 0 0 0 3px var(--amber)}
+.ro{position:absolute;left:40px;top:580px;font-size:28px;color:#f5f5f7}
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:40}
+#bar{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(20,20,22,.7);color:#f5f5f7;font-size:24px;opacity:0;transition:opacity .4s;z-index:70}
+#bar.show{opacity:1}
+#bar button,#tbBtn{font:inherit;font-size:24px;background:transparent;color:#f5f5f7;border:0;padding:8px 14px;border-radius:999px;cursor:pointer}
+#pg{min-width:150px;text-align:center;color:#a1a1a6}
+#tb{position:absolute;right:26px;bottom:18px;z-index:80;opacity:.5;transition:opacity .3s}
+#tb:hover,#tb.open{opacity:1}
+#tbBtn{background:rgba(255,255,255,.16);width:72px;height:72px;padding:0}
+#tbp{position:absolute;right:0;bottom:84px;width:320px;background:rgba(20,20,22,.96);border-radius:16px;padding:10px;display:none}
+#tb.open #tbp{display:block}
+#tbp button{display:block;width:100%;text-align:left;font:inherit;font-size:24px;color:#f5f5f7;background:transparent;border:0;padding:12px 14px;border-radius:10px;cursor:pointer}
+#tbp button.act{background:#3a3a3c}
+.panel{position:absolute;left:120px;right:120px;bottom:96px;background:rgba(24,24,26,.97);color:#f5f5f7;border-radius:18px;padding:28px 36px;display:none;z-index:75;font-size:30px;line-height:1.6}
+.panel.open{display:block}
+.panel.full{top:120px;bottom:120px;overflow:auto}
+.sch{font-size:24px;color:#a1a1a6;margin-bottom:10px}
+.ovb{display:block;width:100%;text-align:left;font:inherit;font-size:30px;color:#f5f5f7;background:rgba(255,255,255,.08);border:0;border-radius:12px;padding:16px 20px;margin-bottom:12px;cursor:pointer}
+#veil{position:absolute;left:0;top:0;width:1920px;height:1080px;background:#000;display:none;z-index:60}
+#veil.w{background:#fff}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ===== 장면 1 · 표지 (어두운 면) ===== -->
+<section class="scene dark" data-max="4" id="sc0">
+  <div class="tag">칠판 강의 · 힘의 작용 · 탄성력</div>
+  <h1 class="cov r" data-s="0">고무 밴드를 늘일수록<br>힘이 더 드는 까닭은 무엇일까?</h1>
+  <svg class="abs-svg" style="left:280px;top:430px" width="1680" height="420" viewBox="0 0 1680 420">
+    <rect x="60" y="120" width="30" height="180" fill="#3a3a3c"/>
+    <path id="sp0" fill="none" stroke="#f5f5f7" stroke-width="6" stroke-linejoin="round"/>
+    <rect id="hd0" x="1190" y="150" width="120" height="120" rx="18" fill="#6e6e73"/>
+    <text id="hdt0" x="1250" y="222" text-anchor="middle" font-size="32" fill="#f5f5f7">손</text>
+    <g class="r h" data-s="2" data-h="3">
+      <path id="br0" fill="none" stroke="#FFD60A" stroke-width="5"/>
+      <text id="brt0" x="890" y="70" font-size="36" fill="#FFD60A">늘어난 길이</text>
+    </g>
+  </svg>
+  <div class="st r" data-s="4" style="position:absolute;left:120px;top:880px">손을 놓으면 용수철은 원래 모양으로 돌아가려고 해요.</div>
+  <div class="hint" style="top:962px">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.<span class="stu-only"> 화면을 누르거나 → 키로 넘겨요.</span></div>
+</section>
+
+<!-- ===== 장면 2 · 개념: 탄성과 탄성력 (밝은 면) ===== -->
+<section class="scene light" data-max="8" id="sc1">
+  <div class="tag">개념 1 · 탄성과 탄성력</div>
+  <h2 class="ttl">탄성과 탄성력</h2>
+  <p class="q r" data-s="0">늘어난 용수철은 어떻게 하려고 할까?</p>
+
+  <div class="card" style="left:120px;top:300px;width:900px;height:640px">
+    <svg width="900" height="640" viewBox="0 0 900 640" class="abs-svg" style="left:0;top:0">
+      <rect x="30" y="200" width="40" height="240" fill="#a1a1a6"/>
+      <path id="sp1" fill="none" stroke="#1d1d1f" stroke-width="5" stroke-linejoin="round"/>
+      <rect id="hd1" x="670" y="280" width="90" height="80" rx="14" fill="#6e6e73"/>
+      <text id="hdt1" x="715" y="330" text-anchor="middle" font-size="28" fill="#fff">손</text>
+      <g class="r" data-s="0">
+        <path id="am1" fill="none" stroke="#9A7400" stroke-width="5"/>
+        <text id="amt1" x="530" y="214" font-size="26" fill="#9A7400">늘어난 방향</text>
+        <text x="530" y="268" text-anchor="middle" font-size="24" fill="#6e6e73">원래 길이</text>
+      </g>
+      <g class="r h" data-s="0" data-h="6">
+        <text x="50" y="100" font-size="30" fill="#6e6e73">당길 때</text>
+      </g>
+      <g class="r" data-s="6">
+        <text x="50" y="100" font-size="30" fill="#6e6e73">누를 때</text>
+      </g>
+      <g class="r" data-s="5">
+        <path id="cn1" fill="none" stroke="#a1a1a6" stroke-width="3" stroke-dasharray="6 6"/>
+        <path id="tn1" fill="none" stroke="#8A3FC0" stroke-width="6" stroke-linecap="round"/>
+        <text id="tnt1" x="455" y="402" font-size="28" fill="#8A3FC0">탄성력</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="card txt" style="left:1060px;top:300px;width:740px;height:640px">
+    <div class="note r" data-s="0">변형: 물체가 힘을 받아 모양이 변하는 것</div>
+    <p class="st r" data-s="1">변형된 물체가 원래 모양으로 돌아가려는 성질을 <span class="bl" data-s="2"><b class="no">1</b><span class="ans">탄성</span></span>이라고 한다.</p>
+    <p class="st r" data-s="3">변형된 물체가 원래 모양으로 돌아가려는 힘을 <span class="bl" data-s="4"><b class="no">2</b><span class="ans">탄성력</span></span>이라고 한다.</p>
+    <p class="st r" data-s="7">탄성력의 방향은 물체가 변형된 방향과 <span class="bl" data-s="8"><b class="no">3</b><span class="ans">반대</span></span>이다.</p>
+  </div>
+</section>
+
+<!-- ===== 장면 3 · 개념: 늘어난 길이와 탄성력 + 시뮬레이터 (어두운 면) ===== -->
+<section class="scene dark d2" data-max="8" id="sc2">
+  <div class="tag">개념 2 · 늘어난 길이와 탄성력</div>
+  <h2 class="ttl">늘어난 길이와 탄성력의 관계</h2>
+  <p class="q r" data-s="0">추의 무게를 두 배로 하면 늘어난 길이도 두 배가 될까?</p>
+
+  <!-- 시뮬레이터 (선생님 조작) -->
+  <div class="card" style="left:120px;top:300px;width:860px;height:640px">
+    <svg width="860" height="480" viewBox="0 0 860 480" class="abs-svg" style="left:0;top:0">
+      <rect x="270" y="24" width="120" height="14" fill="#6e6e73"/>
+      <path id="sp2" fill="none" stroke="#f5f5f7" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="250" y1="160" x2="700" y2="160" stroke="#a1a1a6" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="560" y="150" font-size="24" fill="#a1a1a6">원래 길이</text>
+      <g id="brg">
+        <path id="br2" fill="none" stroke="#FFD60A" stroke-width="3"/>
+        <text id="brt2a" x="40" y="150" font-size="24" fill="#FFD60A">늘어난 길이</text>
+        <text id="brt2b" x="40" y="180" font-size="24" fill="#FFD60A">0 cm</text>
+      </g>
+      <rect id="wt2" x="270" y="160" width="120" height="52" rx="8" fill="#6e6e73"/>
+      <text id="wtt2" x="330" y="194" text-anchor="middle" font-size="26" fill="#fff">추</text>
+      <path id="ta2" fill="none" stroke="#BF5AF2" stroke-width="5" stroke-linecap="round"/>
+      <text id="tat2" x="395" y="0" font-size="26" fill="#BF5AF2">탄성력</text>
+      <path id="wa2" fill="none" stroke="#BF5AF2" stroke-width="5" stroke-linecap="round"/>
+      <text id="wat2" x="395" y="0" font-size="26" fill="#BF5AF2">무게</text>
+      <rect x="700" y="160" width="14" height="200" fill="#3a3a3c"/>
+      <g id="ticks"></g>
+      <polygon id="ptr2" fill="#FFD60A"/>
+      <text x="700" y="150" font-size="24" fill="#a1a1a6">cm</text>
+    </svg>
+    <div class="ctl">
+      <span class="lbl">추의 무게</span>
+      <button class="sbtn" data-f="0">0 N</button>
+      <button class="sbtn" data-f="0.4">0.4 N</button>
+      <button class="sbtn" data-f="0.8">0.8 N</button>
+      <button class="sbtn" data-f="1.2">1.2 N</button>
+      <button class="sbtn" data-f="1.6">1.6 N</button>
+    </div>
+    <div class="ro" id="ro2"></div>
+  </div>
+
+  <!-- 그래프 -->
+  <div class="card" style="left:1020px;top:300px;width:780px;height:440px">
+    <svg width="780" height="440" viewBox="0 0 780 440" class="abs-svg" style="left:0;top:0">
+      <g stroke="rgba(255,255,255,.12)" stroke-width="2">
+        <line x1="236" y1="30" x2="236" y2="340"/><line x1="362" y1="30" x2="362" y2="340"/>
+        <line x1="488" y1="30" x2="488" y2="340"/><line x1="614" y1="30" x2="614" y2="340"/>
+        <line x1="740" y1="30" x2="740" y2="340"/>
+        <line x1="110" y1="271" x2="740" y2="271"/><line x1="110" y1="202" x2="740" y2="202"/>
+        <line x1="110" y1="133" x2="740" y2="133"/><line x1="110" y1="65" x2="740" y2="65"/>
+      </g>
+      <line x1="110" y1="340" x2="740" y2="340" stroke="#a1a1a6" stroke-width="2.5"/>
+      <line x1="110" y1="30" x2="110" y2="340" stroke="#a1a1a6" stroke-width="2.5"/>
+      <g font-size="24" fill="#a1a1a6" text-anchor="middle">
+        <text x="236" y="368">5</text><text x="362" y="368">10</text><text x="488" y="368">15</text><text x="614" y="368">20</text><text x="740" y="368">25</text>
+      </g>
+      <g font-size="24" fill="#a1a1a6" text-anchor="end">
+        <text x="98" y="348">0</text><text x="98" y="279">0.4</text><text x="98" y="210">0.8</text><text x="98" y="141">1.2</text><text x="98" y="72">1.6</text>
+      </g>
+      <text x="425" y="412" text-anchor="middle" font-size="26" fill="#FFD60A">늘어난 길이 (cm)</text>
+      <text x="110" y="22" font-size="24" fill="#BF5AF2">탄성력 (N)</text>
+      <line id="fit" x1="110" y1="340" x2="677" y2="30" stroke="#2997ff" stroke-width="5" opacity="0"/>
+      <g id="gp"></g>
+      <circle id="cur" r="15" fill="none" stroke="#FFD60A" stroke-width="3" opacity="0"/>
+    </svg>
+  </div>
+
+  <!-- 빈칸 카드 -->
+  <div class="card txt" style="left:1020px;top:760px;width:780px;height:180px;padding:24px 40px">
+    <p class="st2 r" data-s="5">탄성력의 크기는 늘어난 길이에 <span class="bl" data-s="6"><b class="no">4</b><span class="ans">비례</span></span>한다.</p>
+    <p class="st2 r" data-s="7">그래프는 원점을 지나는 <span class="bl" data-s="8"><b class="no">5</b><span class="ans">직선</span></span> 모양이다.</p>
+  </div>
+
+  <div class="cr">참고: 비상교육 중학교 과학 1, 166~169쪽(2022 개정). 그림은 새로 그렸습니다.</div>
+</section>
+
+<!-- 판서 캔버스 -->
+<canvas id="ink" width="1920" height="1080"></canvas>
+
+<!-- 조작 막대 -->
+<div id="bar">
+  <button id="bPrev">이전</button>
+  <span id="pg"></span>
+  <button id="bNext">다음</button>
+  <button id="bSound">소리</button>
+  <button id="bFull">전체 화면</button>
+  <button id="scBtn">대본</button>
+  <button id="bOv">목록</button>
+</div>
+
+<!-- 판서 도구 상자 -->
+<div id="tb">
+  <button id="tbBtn">도구</button>
+  <div id="tbp">
+    <button data-act="laser">레이저 (L)</button>
+    <button data-act="pen">빨간 펜 (P)</button>
+    <button data-act="erase">한 획 지우기 (Z)</button>
+    <button data-act="clear">모두 지우기 (C)</button>
+    <button data-act="touch" id="touchBtn">손가락 그리기: 자동</button>
+    <button data-act="full">전체 화면 (F)</button>
+  </div>
+</div>
+
+<!-- 대본 · 목록 · 도움말 -->
+<div id="script" class="panel noadv"><div class="sch" id="scH"></div><div id="scB"></div></div>
+<div id="ov" class="panel full noadv"><div class="sch">장면 목록 (누르면 그 장면으로)</div><div id="ovList"></div></div>
+<div id="help" class="panel noadv">
+  <div><b>다음</b>: → · Space · Enter · PageDown · 화면 클릭 &nbsp; <b>이전</b>: ← · PageUp · Backspace · 오른쪽 클릭</div>
+  <div><b>F</b> 전체 화면 · <b>T</b> 대본 · <b>O</b> 장면 목록 · <b>R</b> 지금 단계 다시 보기 · <b>M</b> 소리 · <b>B</b> 검은 화면 · <b>W</b> 흰 화면</div>
+  <div><b>L</b> 레이저 · <b>P</b> 빨간 펜 · <b>Z</b> 한 획 지우기 · <b>C</b> 모두 지우기 · <b>Esc</b> 닫기 · <b>Home</b>/<b>End</b> 처음·끝 · <b>H</b> 도움말</div>
+</div>
+<div id="veil"></div>
+
+</div>
+
+<script>
+(function(){
+'use strict';
+const $ = id => document.getElementById(id);
+const stage = $('stage');
+const scenes = [...document.querySelectorAll('.scene')];
+const MAXK = scenes.map(s => +s.dataset.max);
+const LAST = scenes.length - 1;
+const STUDENT = /[?&]s=1\b/.test(location.search);
+const TITLES = ['표지 · 고무 밴드의 질문', '탄성과 탄성력', '늘어난 길이와 탄성력의 관계'];
+const SCRIPT = [
+  '고무 밴드를 늘일수록 힘이 더 드는 까닭을 같이 생각해 볼 거예요. 손을 놓으면 어떻게 될까요? 번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.',
+  '용수철을 당기면 늘어나고, 손으로 누르면 줄어들죠. 두 경우 모두 원래 모양으로 돌아가려는 힘이 생겨요. 이 성질을 탄성이라고 하고, 이 힘을 탄성력이라고 해요. 탄성력의 방향은 변형된 방향과 반대예요.',
+  '추의 무게를 0.4 N씩 늘려 가며 자로 늘어난 길이를 읽어요. 점을 찍어 보면 어떤 모양이 되나요? 탄성력의 크기는 늘어난 길이에 비례하고, 그래프는 원점을 지나는 직선이 돼요.'
+];
+// 시뮬 추 무게(N), 교과서 탐구 그래프 예시 값
+const F_STEP = [0.4, 0.8, 1.2, 1.6];
+// 코드 주석: 늘어난 길이(cm) = 힘(N) / K_SPRING, 여기서 K_SPRING = 0.08 N/cm (용수철마다 정해진 값).
+// 화면에는 식을 쓰지 않는다.
+const K_SPRING = 0.08;
+
+let S = 0, K = 0, anim = null, soundOn = !STUDENT, AC = null;
+let manualPts = [], cur = [null, null, null];
+let suppressClick = false, drewNow = false, sw = null;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ---------- 화면 맞춤 ---------- */
+function fit(){
+  const w = innerWidth, h = innerHeight, sc = Math.min(w / 1920, h / 1080);
+  stage.style.transform = `translate(${(w - 1920 * sc) / 2}px,${(h - 1080 * sc) / 2}px) scale(${sc})`;
+}
+addEventListener('resize', fit);
+
+/* ---------- 소리 (WebAudio 합성) ---------- */
+function ac(){
+  if(!AC){ try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ AC = null; } }
+  if(AC && AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function tone(f, d, type, v, delay){
+  const c = ac(); if(!c || !soundOn) return;
+  const t = c.currentTime + (delay || 0);
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type || 'sine'; o.frequency.value = f;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(v || 0.12, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  o.connect(g); g.connect(c.destination);
+  o.start(t); o.stop(t + d + 0.05);
+}
+function sfx(n){
+  if(!soundOn) return;
+  if(n === 'ding'){ const f = 880 * (1 + (Math.random() - .5) * .06); tone(f, .45, 'sine', .12); tone(f * 1.5, .6, 'sine', .05, .03); }
+  else if(n === 'tok'){ tone(520, .07, 'triangle', .05); }
+  else if(n === 'chime'){ [660, 880, 990].forEach((f, i) => tone(f, .9, 'sine', .07, i * .12)); }
+}
+
+/* ---------- 그림 도우미 ---------- */
+function springPath(a, b, amp, n){
+  const dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+  const lead = Math.min(16, len * .12);
+  const p0 = [a[0] + ux * lead, a[1] + uy * lead], p1 = [b[0] - ux * lead, b[1] - uy * lead];
+  const pts = [a, p0], seg = 2 * n;
+  for(let i = 1; i < seg; i++){
+    const t = i / seg, sg = (i % 2) ? 1 : -1;
+    pts.push([p0[0] + (p1[0] - p0[0]) * t + nx * amp * sg, p0[1] + (p1[1] - p0[1]) * t + ny * amp * sg]);
+  }
+  pts.push(p1, b);
+  return 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L');
+}
+function vArrow(x, y1, y2){ // 세로 화살표(y1 → y2 가 화살촉)
+  if(Math.abs(y2 - y1) < 1) return '';
+  const d = Math.sign(y2 - y1);
+  return `M${x} ${y1} V${y2} M${x - 8} ${y2 - d * 14} L${x} ${y2} L${x + 8} ${y2 - d * 14}`;
+}
+function hArrow(y, x1, x2){ // 가로 화살표(x1 → x2 가 화살촉)
+  if(Math.abs(x2 - x1) < 1) return '';
+  const d = Math.sign(x2 - x1);
+  return `M${x1} ${y} H${x2} M${x2 - d * 14} ${y - 8} L${x2} ${y} L${x2 - d * 14} ${y + 8}`;
+}
+const setA = (id, k, v) => $(id).setAttribute(k, v);
+const spr = (id, a, b, amp, n) => setA(id, 'd', springPath(a, b, amp, n));
+
+/* ---------- 장면별 그림 (값 → 모습) ---------- */
+// st: 늘어난 정도(+1 = 당긴 상태 1, -0.5 = 누른 상태 절반)
+const VALS = [
+  k => ({ st: (k === 1 || k === 2) ? 1 : 0 }),        // 표지: 손으로 당겼다 놓기
+  k => ({ st: k >= 6 ? -0.5 : 1 }),                   // 개념 1: 당긴 상태 → 누른 상태
+  k => ({ F: k <= 0 ? 0 : F_STEP[Math.min(k, 4) - 1], line: k >= 8 ? 1 : 0, pts: F_STEP.slice(0, clamp(k, 0, 4)).concat(manualPts) })
+];
+
+function drawCover(v){
+  const xe = 890 + 300 * v.st;                       // 원래 끝 890, 당기면 +300 px
+  spr('sp0', [90, 210], [xe, 210], 30, 12);
+  setA('hd0', 'x', xe); setA('hdt0', 'x', xe + 60);
+  setA('br0', 'd', `M890 130 V150 M890 140 H${xe} M${xe} 130 V150`);
+  setA('brt0', 'x', 890);
+}
+function drawConcept(v){
+  const st = v.st, xe = 530 + 140 * st;              // 원래 끝 530, 당기면 +140, 누르면 -70
+  const ox = xe + 45, tip = ox - 260 * st;           // 탄성력 화살촉: 당길 때 왼쪽, 누를 때 오른쪽
+  spr('sp1', [70, 320], [xe, 320], 22, 10);
+  setA('hd1', 'x', xe); setA('hdt1', 'x', xe + 45);
+  setA('am1', 'd', hArrow(236, 530, xe));
+  setA('amt1', 'x', Math.min(530, xe));
+  $('amt1').textContent = st >= 0 ? '늘어난 방향' : '줄어든 방향';
+  setA('cn1', 'd', `M${ox} 360 V430`);
+  setA('tn1', 'd', hArrow(430, ox, tip));
+  setA('tnt1', 'x', Math.min(ox, tip));
+}
+function drawSim(v){
+  const F = v.F, cm = F / K_SPRING, yb = 160 + 8 * cm, L = 60 * F;   // 1 cm = 8 px, 1 N = 60 px
+  spr('sp2', [330, 40], [330, yb], 30, 10);
+  setA('wt2', 'y', yb); setA('wtt2', 'y', yb + 34);
+  // 화살표는 추의 가장자리(x=380)에 붙임: 탄성력은 윗면에서 위로, 무게는 아랫면에서 아래로
+  setA('ta2', 'd', vArrow(380, yb, yb - L));
+  setA('wa2', 'd', vArrow(380, yb + 52, yb + 52 + L));
+  setA('tat2', 'y', yb - L + 8); setA('tat2', 'opacity', L > 1 ? 1 : 0);
+  setA('wat2', 'y', yb + 52 + L + 8); setA('wat2', 'opacity', L > 1 ? 1 : 0);
+  setA('brg', 'opacity', cm > .05 ? 1 : 0);
+  setA('br2', 'd', `M250 160 V${yb} M240 160 H260 M240 ${yb} H260`);
+  setA('brt2a', 'y', (160 + yb) / 2 - 8); setA('brt2b', 'y', (160 + yb) / 2 + 26);
+  $('brt2b').textContent = Math.round(cm) + ' cm';
+  setA('ptr2', 'points', `688,${yb} 676,${yb - 9} 676,${yb + 9}`);
+  // 그래프: x = 110 + 25.2 × cm (= 110 + 315 × N), y = 340 − 172.2 × N
+  $('gp').innerHTML = v.pts.map(f => `<circle cx="${(110 + 315 * f).toFixed(1)}" cy="${(340 - 172.2 * f).toFixed(1)}" r="9" fill="#BF5AF2"/>`).join('');
+  setA('cur', 'cx', (110 + 315 * F).toFixed(1)); setA('cur', 'cy', (340 - 172.2 * F).toFixed(1));
+  setA('cur', 'opacity', F > .01 ? 1 : 0);
+  setA('fit', 'opacity', v.line);
+  $('ro2').textContent = `늘어난 길이 ${Math.round(cm)} cm · 탄성력 ${F.toFixed(1)} N`;
+  document.querySelectorAll('.sbtn').forEach(b => b.classList.toggle('act', Math.abs(+b.dataset.f - F) < .01));
+}
+const DRAW = [drawCover, drawConcept, drawSim];
+
+function buildTicks(){
+  let h = '';
+  for(let cm = 0; cm <= 25; cm++){
+    const y = 160 + 8 * cm, big = cm % 5 === 0;
+    h += `<line x1="700" y1="${y}" x2="${big ? 712 : 706}" y2="${y}" stroke="#f5f5f7" stroke-width="2"/>`;
+    if(big) h += `<text x="724" y="${y + 8}" font-size="24" fill="#f5f5f7">${cm}</text>`;
+  }
+  $('ticks').innerHTML = h;
+}
+
+/* ---------- 상태 적용 ---------- */
+function show(s){ scenes.forEach((sc, i) => sc.classList.toggle('on-s', i === s)); }
+function applyReveals(s, k, fwd){
+  scenes[s].querySelectorAll('[data-s]').forEach(el => {
+    if(!(el.classList.contains('r') || el.classList.contains('bl'))) return;
+    const on = k >= (+el.dataset.s), was = el.classList.contains('on');
+    if(on !== was){
+      el.classList.toggle('on', on);
+      if(on && fwd && el.classList.contains('bl')) sfx('ding');
+    }
+  });
+  scenes[s].querySelectorAll('[data-h]').forEach(el => el.classList.toggle('off', k >= (+el.dataset.h)));
+}
+function finishAnim(){
+  if(anim){ cancelAnimationFrame(anim.raf); DRAW[anim.s](anim.to); cur[anim.s] = anim.to; anim = null; }
+}
+function drawInstant(s, k){ const v = VALS[s](k); DRAW[s](v); cur[s] = v; }
+function drawTo(s, k, animate){
+  const to = VALS[s](k), from = cur[s];
+  if(!animate || !from){ DRAW[s](to); cur[s] = to; return; }
+  const keys = Object.keys(to).filter(q => typeof to[q] === 'number' && typeof from[q] === 'number');
+  const t0 = performance.now(), D = 900, a = { s, to, raf: 0 };
+  anim = a;
+  const frame = now => {
+    const p = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - p, 3);
+    const v = Object.assign({}, to);
+    keys.forEach(q => v[q] = from[q] + (to[q] - from[q]) * e);
+    DRAW[s](v);
+    if(p < 1){ a.raf = requestAnimationFrame(frame); }
+    else { cur[s] = to; if(anim === a) anim = null; }
+  };
+  a.raf = requestAnimationFrame(frame);
+}
+function clearPenInk(){ strokes = strokes.filter(s => s.laser); loop(); }
+
+function instantState(s, k){
+  s = clamp(s, 0, LAST); k = clamp(k, 0, MAXK[s]);
+  finishAnim();
+  S = s; K = k;
+  stage.classList.add('noanim');
+  show(s);
+  applyReveals(s, k, false);
+  if(s === 2) manualPts = [];
+  drawInstant(s, k);
+  void stage.offsetWidth;
+  stage.classList.remove('noanim');
+  updateChrome(); setHash();
+}
+function arrive(s){
+  finishAnim();
+  S = s; K = 0;
+  if(s === 2) manualPts = [];
+  clearPenInk();
+  stage.classList.add('noanim');
+  applyReveals(s, -1, false);
+  show(s);
+  drawInstant(s, 0);
+  void stage.offsetWidth;
+  stage.classList.remove('noanim');
+  applyReveals(s, 0, true);
+  updateChrome(); setHash();
+}
+function next(){
+  finishAnim();
+  if(K < MAXK[S]){
+    K++;
+    applyReveals(S, K, true);
+    drawTo(S, K, true);
+    sfx('tok');
+    updateChrome(); setHash();
+  } else if(S < LAST){
+    arrive(S + 1);
+  }
+}
+function prev(){
+  finishAnim();
+  if(K > 0){ instantState(S, K - 1); }
+  else if(S > 0){ clearPenInk(); instantState(S - 1, MAXK[S - 1]); }
+}
+function replay(){
+  if(K === 0){ arrive(S); return; }
+  const k = K;
+  instantState(S, k - 1);
+  K = k;
+  applyReveals(S, k, true);
+  drawTo(S, k, true);
+  updateChrome(); setHash();
+}
+
+/* ---------- 시뮬레이터 (선생님 조작) ---------- */
+function simPick(F){
+  if(S !== 2) return;
+  finishAnim();
+  if(F > 0 && !manualPts.includes(F)) manualPts.push(F);
+  const v = Object.assign({}, VALS[2](K), { F });
+  DRAW[2](v); cur[2] = v;
+  updateChrome();
+}
+
+/* ---------- 표시 · 위치 ---------- */
+function setHash(){ try{ history.replaceState(null, '', '#' + (S + 1) + '.' + K); }catch(e){} }
+function updateChrome(){
+  $('pg').textContent = `${S + 1}장 · ${K}/${MAXK[S]}`;
+  $('scH').textContent = `장면 ${S + 1} · ${TITLES[S]} · 단계 ${K}/${MAXK[S]}` + (S < LAST ? ` · 다음 장면: ${TITLES[S + 1]}` : ' · 마지막 장면');
+  $('scB').textContent = SCRIPT[S];
+  $('bSound').textContent = soundOn ? '소리 끄기' : '소리 켜기';
+}
+function pulse(){
+  $('bar').classList.add('show');
+  clearTimeout(pulse.t); pulse.t = setTimeout(() => $('bar').classList.remove('show'), 2500);
+}
+addEventListener('pointermove', pulse);
+
+function closeAll(){ ['script', 'ov', 'help'].forEach(i => $(i).classList.remove('open')); }
+function toggleP(id){
+  const open = !$(id).classList.contains('open');
+  closeAll();
+  if(open) $(id).classList.add('open');
+  updateChrome();
+}
+function fullscreen(){
+  if(document.fullscreenElement){ document.exitFullscreen && document.exitFullscreen(); }
+  else { const r = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if(r && r.catch) r.catch(() => {}); }
+}
+let veilMode = null;
+function setVeil(mode){
+  const v = $('veil');
+  const want = (veilMode === mode) ? null : mode;
+  veilMode = want;
+  v.style.display = want ? 'block' : 'none';
+  v.classList.toggle('w', want === 'w');
+}
+
+function buildOv(){
+  $('ovList').innerHTML = TITLES.map((t, i) => `<button class="ovb" data-i="${i}">${i + 1}. ${t}</button>`).join('');
+}
+$('ovList').addEventListener('click', e => {
+  const b = e.target.closest('[data-i]'); if(!b) return;
+  closeAll(); arrive(+b.dataset.i);
+});
+
+/* ---------- 판서 도구 ---------- */
+const ctx = $('ink').getContext('2d');
+let strokes = [], looping = false, drawing = null, tool = null, touchMode = 'auto', penSeen = false;
+try{ penSeen = localStorage.getItem('penSeen') === '1'; }catch(e){}
+function toStage(e){ const r = stage.getBoundingClientRect(), sc = r.width / 1920; return [(e.clientX - r.left) / sc, (e.clientY - r.top) / sc]; }
+function canDraw(e){
+  if(!tool) return false;
+  if(e.pointerType === 'pen' || e.pointerType === 'mouse') return true;
+  if(e.pointerType === 'touch'){
+    if(touchMode === 'on') return true;
+    if(touchMode === 'off') return false;
+    return !penSeen;
+  }
+  return false;
+}
+function setTool(t){
+  tool = (tool === t) ? null : t;
+  drawing = null;
+  $('tb').classList.toggle('open', !!tool);
+  document.querySelectorAll('#tbp [data-act]').forEach(b => b.classList.toggle('act', b.dataset.act === tool));
+}
+function loop(){ if(!looping){ looping = true; requestAnimationFrame(frame); } }
+function frame(){
+  const now = performance.now();
+  strokes = strokes.filter(s => !(s.end && now > s.end + 400));
+  ctx.clearRect(0, 0, 1920, 1080);
+  strokes.forEach(s => {
+    if(!s.pts.length) return;
+    let a = 1;
+    if(s.end && now > s.end) a = clamp((s.end + 400 - now) / 400, 0, 1);
+    ctx.globalAlpha = a; ctx.strokeStyle = s.color; ctx.lineWidth = s.w; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    s.pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+    ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
+  if(strokes.length || drawing){ requestAnimationFrame(frame); } else { looping = false; }
+}
+function onDown(e){
+  drewNow = false;
+  if(e.target.closest('#tb,#bar,.noadv')) return;
+  if(!tool || !canDraw(e)) return;
+  if(e.pointerType === 'pen' && !penSeen){ penSeen = true; try{ localStorage.setItem('penSeen', '1'); }catch(_){} }
+  drewNow = true;
+  const laser = tool === 'laser';
+  drawing = { id: e.pointerId, pts: [toStage(e)], color: laser ? '#ff3b30' : '#e5484d', w: laser ? 10 : 6, laser, end: 0 };
+  strokes.push(drawing); loop();
+}
+function onMove(e){ if(drawing && e.pointerId === drawing.id){ drawing.pts.push(toStage(e)); loop(); } }
+function onUp(e){
+  if(drawing && e.pointerId === drawing.id){
+    if(drawing.laser) drawing.end = performance.now() + 1000;
+    drawing = null; loop();
+  }
+}
+addEventListener('pointerdown', onDown, true);
+addEventListener('pointermove', onMove, true);
+addEventListener('pointerup', onUp, true);
+addEventListener('pointercancel', onUp, true);
+document.addEventListener('touchmove', e => {
+  if((document.fullscreenElement || tool) && !e.target.closest('.scroll,.panel.full')) e.preventDefault();
+}, { passive: false });
+
+$('tbBtn').addEventListener('click', e => { e.stopPropagation(); $('tb').classList.toggle('open'); });
+$('tbp').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const a = b.dataset.act;
+  if(a === 'laser' || a === 'pen') setTool(a);
+  else if(a === 'erase'){ for(let i = strokes.length - 1; i >= 0; i--){ if(!strokes[i].laser){ strokes.splice(i, 1); break; } } loop(); }
+  else if(a === 'clear'){ strokes = []; loop(); }
+  else if(a === 'touch'){
+    touchMode = touchMode === 'auto' ? 'on' : touchMode === 'on' ? 'off' : 'auto';
+    $('touchBtn').textContent = '손가락 그리기: ' + (touchMode === 'auto' ? '자동' : touchMode === 'on' ? '켬' : '끔');
+  }
+  else if(a === 'full') fullscreen();
+});
+
+/* ---------- 입력 ---------- */
+stage.addEventListener('pointerdown', e => {
+  sw = (e.pointerType === 'touch' && !e.target.closest('.noadv')) ? { x: e.clientX, y: e.clientY } : null;
+});
+stage.addEventListener('pointerup', e => {
+  if(!sw) return;
+  const dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
+  if(Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5 && !drewNow){
+    suppressClick = true;
+    dx < 0 ? next() : prev();
+  }
+});
+stage.addEventListener('click', e => {
+  if(drewNow){ drewNow = false; return; }
+  if(suppressClick){ suppressClick = false; return; }
+  if(e.target.closest('.noadv')) return;
+  next();
+});
+stage.addEventListener('contextmenu', e => { e.preventDefault(); if(!e.target.closest('.noadv')) prev(); });
+document.querySelectorAll('.sbtn').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); simPick(+b.dataset.f); }));
+document.querySelectorAll('button').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+$('bPrev').addEventListener('click', e => { e.stopPropagation(); prev(); });
+$('bNext').addEventListener('click', e => { e.stopPropagation(); next(); });
+$('bSound').addEventListener('click', e => { e.stopPropagation(); ac(); soundOn = !soundOn; updateChrome(); });
+$('bFull').addEventListener('click', e => { e.stopPropagation(); fullscreen(); });
+$('scBtn').addEventListener('click', e => { e.stopPropagation(); toggleP('script'); });
+$('bOv').addEventListener('click', e => { e.stopPropagation(); toggleP('ov'); });
+
+addEventListener('keydown', e => {
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  ac();
+  const k = e.key, kl = k.toLowerCase();
+  if(k === 'ArrowRight' || k === ' ' || k === 'Enter' || k === 'PageDown'){ e.preventDefault(); next(); return; }
+  switch(kl){
+    case 'arrowleft': case 'pageup': case 'backspace': e.preventDefault(); prev(); break;
+    case 'home': clearPenInk(); instantState(0, 0); break;
+    case 'end': clearPenInk(); instantState(LAST, MAXK[LAST]); break;
+    case 'f': fullscreen(); break;
+    case 't': case 'n': if(!STUDENT) toggleP('script'); break;
+    case 'o': toggleP('ov'); break;
+    case 'h': toggleP('help'); break;
+    case 'r': replay(); break;
+    case 'm': soundOn = !soundOn; updateChrome(); break;
+    case 'b': setVeil('b'); break;
+    case 'w': setVeil('w'); break;
+    case 'l': setTool('laser'); break;
+    case 'p': setTool('pen'); break;
+    case 'z': for(let i = strokes.length - 1; i >= 0; i--){ if(!strokes[i].laser){ strokes.splice(i, 1); break; } } loop(); break;
+    case 'c': strokes = []; loop(); break;
+    case 'escape': closeAll(); setTool(null); if(veilMode) setVeil(veilMode); break;
+  }
+});
+addEventListener('hashchange', () => {
+  const m = /^#(\d+)\.(\d+)$/.exec(location.hash);
+  if(m) instantState(clamp(+m[1] - 1, 0, LAST), +m[2]);
+});
+
+/* ---------- 시작 ---------- */
+if(STUDENT){ document.body.classList.add('student'); soundOn = false; }
+buildTicks(); buildOv(); fit();
+const m0 = /^#(\d+)\.(\d+)$/.exec(location.hash);
+instantState(m0 ? clamp(+m0[1] - 1, 0, LAST) : 0, m0 ? +m0[2] : 0);
+pulse();
+})();
+</script>
+</body>
+</html>

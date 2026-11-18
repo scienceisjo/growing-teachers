@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>칠판 강의 화면 예시 모음 · 해누리중 조승재</title>
+<meta name="description" content="중학교·통합과학 교과서 쪽만 주고 AI 모델마다 만든 칠판 강의 화면 3장 예시를 시뮬레이터와 함께 모았습니다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#86868b;
+  --line:#e0e0e0; --line2:#f0f0f0; --blue:#0066cc; --blue-t:#eaf2fb;
+  --ok:#1d8a4e; --ok-t:#e8f4ec; --warn:#9a6b00; --warn-t:#f7f1e2;
+  --r1:8px; --r2:11px; --r3:18px;
+  --sans:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.2}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 18px;color:var(--ink)}
+.byline:hover{text-decoration:none}
+.byline img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg2)}
+.byline b{display:block;font-size:.95rem;font-weight:600}
+.byline small{display:block;font-size:.8rem;color:var(--ink2)}
+.eyebrow{color:var(--blue);font-weight:600;font-size:.9rem;margin-bottom:10px}
+.hero h1{font-size:clamp(1.8rem,4vw,2.7rem);margin-bottom:12px}
+.lead{color:var(--ink2);max-width:46em;margin:0 0 10px}
+.back{display:inline-block;margin-top:8px;font-size:.92rem}
+.filters{display:grid;gap:10px;padding:22px 0 8px}
+.frow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.frow .lb{width:52px;flex:none;font-size:.85rem;color:var(--ink2);font-weight:600}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:9999px;padding:5px 13px;font:inherit;font-size:.86rem;cursor:pointer}
+.chip.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.chip:disabled{opacity:.4;cursor:default}
+.count{font-size:.86rem;color:var(--ink3);padding:6px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px;padding:16px 0 40px}
+.card{border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.card .th{display:block;aspect-ratio:16/9;background:var(--bg2);border-bottom:1px solid var(--line)}
+.card .th img{display:block;width:100%;height:100%;object-fit:cover}
+.card .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .meta{font-size:.8rem;color:var(--ink2)}
+.card h3{font-size:1.15rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.76rem;border-radius:9999px;padding:2px 9px;background:var(--bg2);color:var(--ink)}
+.tag.model{background:var(--blue-t);color:var(--blue);font-weight:600}
+.tag.fix{background:var(--warn-t);color:var(--warn)}
+.tag.ok{background:var(--ok-t);color:var(--ok)}
+.card .sim{font-size:.9rem;color:var(--ink)}
+.card .sim b{color:var(--blue);font-weight:600}
+.card .chk{font-size:.82rem;color:var(--ink2);border-left:3px solid var(--line);padding-left:10px}
+.card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9999px;padding:6px 13px;font:inherit;font-size:.84rem;cursor:pointer}
+.btn:hover{border-color:var(--ink2);text-decoration:none}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.empty{color:var(--ink3);padding:30px 0}
+dialog{border:0;border-radius:var(--r3);padding:0;max-width:min(1500px,96vw);width:96vw;max-height:94vh;background:#fff}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog .dh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+dialog .dh b{font-size:1rem}
+dialog img{display:block;width:100%;height:auto}
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+@media (max-width:720px){ .grid{grid-template-columns:1fr} .frow .lb{width:100%} }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <a class="byline" href="../../" title="조승재 포트폴리오"><img src="../../images/profile.webp" width="48" height="48" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()"><span><b>조승재</b><small>해누리중학교 과학교사</small></span></a>
+    <div class="eyebrow">AI로 칠판 강의 화면 만들기 · 예시 모음</div>
+    <h1>교과서 쪽만 주고 모델마다 만든 칠판 강의 화면</h1>
+    <p class="lead">교과서 2~5쪽을 그림으로 주고, 개념 하나를 칠판 강의 화면 3장으로 만들게 했습니다. 모든 예시에는 선생님이 조작하는 시뮬레이터가 한 장면 이상 들어 있습니다. 단계마다 찍은 화면으로 과학 내용과 글자 겹침을 확인한 뒤 올렸고, 고친 것이 있으면 고친 횟수를 함께 적었습니다.</p>
+    <p class="lead">화면을 연 뒤 한 번 누르고 → 키로 넘깁니다. 시뮬레이터는 마우스로 바로 조작할 수 있습니다.</p>
+    <a class="back" href="../">← 연수 페이지로 돌아가기</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="filters" id="filters"></div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="dlg"><div class="dh"><b id="dlgT"></b><button class="btn" id="dlgX" type="button">닫기</button></div><img id="dlgI" alt=""></dialog>
+
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-18</span></footer>
+
+<script src="data.js"></script>
+<script>
+const EX = window.EXAMPLES || [];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const GROUPS = [
+  ['grade', '학년', ['중1', '중2', '중3', '통합과학']],
+  ['subject', '영역', ['물리', '화학', '생물', '지구과학']],
+  ['model', '모델', ['Haiku', 'Sonnet', 'Opus', 'Fable']],
+  ['dtype', '디자인', ['기본', '손글씨', '디자인 서랍']]
+];
+EX.forEach(e => { e.dtype = e.design.startsWith('디자인 서랍') ? '디자인 서랍' : e.design; });
+const sel = {};
+const fbox = document.getElementById('filters');
+GROUPS.forEach(([k, lb, vals]) => {
+  const row = document.createElement('div'); row.className = 'frow';
+  const have = vals.filter(v => EX.some(e => e[k] === v));
+  row.innerHTML = `<span class="lb">${lb}</span><button class="chip on" data-k="${k}" data-v="">전체</button>` +
+    vals.map(v => `<button class="chip" data-k="${k}" data-v="${esc(v)}"${have.includes(v) ? '' : ' disabled title="아직 없음"'}>${esc(v)}</button>`).join('');
+  fbox.appendChild(row);
+});
+fbox.addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b || b.disabled) return;
+  const k = b.dataset.k; sel[k] = b.dataset.v;
+  fbox.querySelectorAll(`.chip[data-k="${k}"]`).forEach(x => x.classList.toggle('on', x === b));
+  draw();
+});
+function draw() {
+  const list = EX.filter(e => GROUPS.every(([k]) => !sel[k] || e[k] === sel[k]));
+  document.getElementById('count').textContent = `${list.length}개 / 모두 ${EX.length}개`;
+  const g = document.getElementById('grid');
+  if (!list.length) { g.innerHTML = '<p class="empty">고른 조건에 맞는 예시가 아직 없습니다.</p>'; return; }
+  g.innerHTML = list.map(e => `
+    <article class="card">
+      <a class="th" href="${e.id}/index.html" target="_blank" rel="noopener"><img src="${e.id}/thumb.webp" alt="${esc(e.topic)} 화면" loading="lazy" width="960" height="540"></a>
+      <div class="bd">
+        <div class="meta">${esc(e.grade)} · ${esc(e.subject)} · ${esc(e.book)} ${esc(e.pages)} · ${esc(e.unit)}</div>
+        <h3>${esc(e.topic)}</h3>
+        <div class="tags"><span class="tag model">${esc(e.model)}</span><span class="tag">${esc(e.design)}</span>${e.fixes ? `<span class="tag fix">고치기 ${e.fixes}번</span>` : '<span class="tag ok">처음 결과 그대로</span>'}<span class="tag">약 ${e.minutes}분</span></div>
+        <p class="sim"><b>시뮬레이터</b> ${esc(e.sim)}</p>
+        <p class="meta">${esc(e.scenes)}</p>
+        <p class="chk">${esc(e.check)}</p>
+        <div class="acts">
+          <a class="btn primary" href="${e.id}/index.html" target="_blank" rel="noopener">화면 열기 ↗</a>
+          <button class="btn" type="button" data-sheet="${e.id}" data-t="${esc(e.topic)}">단계 캡처</button>
+          <a class="btn" href="${e.id}/report.md" target="_blank" rel="noopener">만든 보고서</a>
+        </div>
+      </div>
+    </article>`).join('');
+}
+draw();
+const dlg = document.getElementById('dlg');
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-sheet]'); if (!b) return;
+  document.getElementById('dlgT').textContent = b.dataset.t + ' · 단계마다 찍은 화면';
+  document.getElementById('dlgI').src = b.dataset.sheet + '/sheet.webp';
+  dlg.showModal();
+});
+document.getElementById('dlgX').addEventListener('click', () => dlg.close());
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+</script>
+</body>
+</html>

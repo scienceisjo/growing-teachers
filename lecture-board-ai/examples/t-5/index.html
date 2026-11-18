@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>엘니뇨 — 칠판 강의 화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ───── 색 약속(뜻마다 색 하나) ─────
+   따뜻한 해수·높은 수온 = 빨강 계열 / 찬 해수·낮은 수온 = 파랑 계열 (지도·단면·범례 모두 같은 색 띠 cmap)
+   바람·공기의 오르내림(무역풍, 상승·하강 기류) = 보라
+   해수의 움직임(표층 해수의 이동, 용승) = 흰 화살표
+   물고기(어장) = 초록 / 비구름·비 = 회색
+   빈칸 정답·번호 배지 = 파랑(강조색 하나) */
+:root{
+  --blue:#0066cc; --blue-d:#2997ff;
+  --ink:#1d1d1f; --ink-d:#f5f5f7; --sub:#6e6e73; --sub-d:#a1a1a6;
+  --warm:#C4391B; --warm-d:#FF6A3D; --cold:#0077B6; --cold-d:#64D2FF;
+  --wind:#8A3FC0; --wind-d:#BF5AF2; --fish:#1E8B3E; --fish-d:#30D158;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+body.inking{touch-action:none}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+.scene{position:absolute;inset:0;display:none}
+.scene.on{display:block}
+.scene.on.enter{animation:sceneIn .55s var(--ease)}
+@keyframes sceneIn{from{opacity:0}to{opacity:1}}
+.bg-black{background:#000;color:var(--ink-d)}
+.bg-dark{background:#1d1d1f;color:var(--ink-d)}
+.bg-white{background:#fff;color:var(--ink)}
+.tag{position:absolute;left:120px;top:78px;font-size:28px;font-weight:500;color:var(--sub);letter-spacing:-.01em}
+.dark .tag{color:var(--sub-d)}
+.title{position:absolute;left:120px;top:114px;margin:0;font-size:62px;font-weight:600;letter-spacing:-.02em;line-height:1.12}
+.dots{position:absolute;right:120px;top:80px;display:flex;gap:10px}
+.dots i{font-style:normal;width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;background:#f5f5f7;color:#86868b}
+.dark .dots i{background:rgba(255,255,255,.08);color:#86868b}
+.dots i.cur{background:var(--blue);color:#fff}
+.dark .dots i.cur{background:var(--blue-d)}
+canvas.fig{position:absolute;display:block}
+.geo{position:absolute;display:flex;justify-content:space-between;align-items:center;font-size:28px;font-weight:600}
+.geo span{white-space:nowrap}
+.geo .mid{font-weight:500;font-size:26px;color:var(--sub)}
+.dark .geo .mid{color:var(--sub-d)}
+.geo em{font-style:normal;font-weight:700;margin-left:14px;opacity:0;transition:opacity .5s var(--ease)}
+.geo em.show{opacity:1}
+.legend{display:inline-flex;align-items:center;gap:12px}
+.legend b{display:inline-block;width:220px;height:16px;border-radius:8px;background:linear-gradient(90deg,#1b4f9c,#3d86d6 30%,#b9d5ea 50%,#f3c9a4 62%,#f0874f 78%,#d0301e)}
+/* 학습지 카드 */
+.card{position:absolute;border-radius:18px;background:#f5f5f7;padding:24px 40px}
+.dark .card{background:rgba(255,255,255,.06)}
+.ws p{margin:0;font-size:36px;line-height:62px;font-weight:400;white-space:nowrap}
+.dark .ws p{line-height:58px}
+.ws p.answer{font-size:30px;line-height:44px;margin-top:10px;font-weight:600;visibility:hidden;opacity:0;transition:opacity .6s var(--ease),visibility 0s .6s}
+.ws p.answer.show{visibility:visible;opacity:1;transition:opacity .6s var(--ease)}
+.ws p.answer small{font-size:26px;font-weight:500;color:var(--sub-d);margin-right:12px}
+/* 빈칸: 밑줄 + 왼쪽 위 번호 배지, 정답은 열릴 때까지 가림 */
+.bl{position:relative;display:inline-block;min-width:3.6em;padding:0 .35em;margin:0 .3em 0 .7em;border-bottom:3px solid #86868b;text-align:center;line-height:1.3}
+.bl .no{position:absolute;left:-26px;top:-14px;width:34px;height:34px;border-radius:17px;background:var(--blue);color:#fff;font-size:24px;font-weight:700;line-height:34px;text-align:center}
+.dark .bl .no{background:var(--blue-d)}
+.bl .ans{visibility:hidden;color:var(--blue);font-weight:700}
+.dark .bl .ans{color:var(--blue-d)}
+.bl.open .ans{visibility:visible}
+.bl.pop .ans{display:inline-block;animation:pop .55s var(--ease)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+/* 표지 */
+.q{position:absolute;left:120px;top:206px;font-size:42px;font-weight:500;letter-spacing:-.01em;color:#f5f5f7}
+.cap{position:absolute;left:120px;width:1680px;text-align:center;font-size:36px;font-weight:600;transition:opacity .45s var(--ease)}
+.note{position:absolute;left:120px;width:1680px;text-align:center;font-size:26px;color:var(--sub-d)}
+.credit{position:absolute;left:120px;top:1004px;width:1680px;font-size:24px;color:#86868b}
+/* 시뮬레이터 조작 칸 */
+.panel{position:absolute;border-radius:18px;background:rgba(255,255,255,.06);padding:16px 24px}
+.panel h3{margin:0;font-size:26px;font-weight:600;color:var(--sub-d)}
+.panel .row{display:flex;justify-content:space-between;align-items:baseline}
+.panel .val{font-size:34px;font-weight:700;color:var(--wind-d)}
+.panel .ends{display:flex;justify-content:space-between;font-size:26px;color:var(--sub-d)}
+.panel .btns{display:flex;gap:12px}
+.panel button{font:inherit;font-size:24px;font-weight:600;border:0;border-radius:12px;padding:6px 18px;background:rgba(255,255,255,.1);color:#f5f5f7;cursor:pointer}
+input[type=range].wind{-webkit-appearance:none;appearance:none;width:100%;height:56px;background:transparent;margin:6px 0;cursor:pointer;touch-action:none}
+input[type=range].wind::-webkit-slider-runnable-track{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--wind-d),rgba(191,90,242,.18))}
+input[type=range].wind::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px;border-radius:22px;background:#f5f5f7;margin-top:-16px}
+input[type=range].wind::-moz-range-track{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--wind-d),rgba(191,90,242,.18))}
+input[type=range].wind::-moz-range-thumb{width:44px;height:44px;border-radius:22px;background:#f5f5f7;border:0}
+/* 판서 */
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:20}
+/* 조작 막대 */
+#bar{position:fixed;left:50%;bottom:6px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:6px 10px;border-radius:16px;background:rgba(40,40,44,.82);color:#f5f5f7;font-size:16px;opacity:0;transition:opacity .4s;z-index:50;pointer-events:none}
+#bar.show{opacity:1;pointer-events:auto}
+#bar button{font:inherit;border:0;background:transparent;color:#f5f5f7;padding:6px 10px;border-radius:10px;cursor:pointer}
+#bar button:hover{background:rgba(255,255,255,.12)}
+#bar .pg{min-width:84px;text-align:center;font-variant-numeric:tabular-nums}
+/* 도구 상자 */
+#tools{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:8px}
+#tbtn{width:52px;height:52px;border-radius:26px;border:0;background:rgba(120,120,128,.35);color:#fff;font-size:22px;cursor:pointer;opacity:.55}
+#tbtn:hover,#tools.open #tbtn{opacity:1}
+#tmenu{display:none;flex-direction:column;gap:6px;padding:8px;border-radius:16px;background:rgba(40,40,44,.92)}
+#tools.open #tmenu{display:flex}
+#tmenu button{font:inherit;font-size:16px;border:0;border-radius:10px;padding:9px 14px;background:transparent;color:#f5f5f7;text-align:left;cursor:pointer;white-space:nowrap}
+#tmenu button.on{background:#2997ff}
+#tmenu button:hover{background:rgba(255,255,255,.12)}
+/* 덮개(대본·전체 보기·도움말·검은/흰 화면) */
+.over{position:fixed;inset:0;z-index:70;display:none}
+.over.show{display:block}
+#blk{background:#000}#wht{background:#fff}
+#script{position:fixed;left:0;right:0;bottom:0;max-height:42vh;overflow:auto;z-index:65;display:none;background:rgba(20,20,22,.94);color:#f5f5f7;padding:18px 28px 22px;font-size:18px;line-height:1.6;overscroll-behavior:contain}
+#script.show{display:block}
+#script h4{margin:0 0 6px;font-size:16px;color:#a1a1a6;font-weight:500}
+#script .cue{margin-top:8px;color:#64d2ff}
+#ov,#help{background:rgba(0,0,0,.86);color:#f5f5f7;overflow:auto;overscroll-behavior:contain}
+#ov .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:60px}
+#ov .it{border-radius:14px;background:rgba(255,255,255,.08);padding:22px;cursor:pointer;font-size:20px}
+#ov .it b{display:block;font-size:15px;color:#a1a1a6;margin-bottom:6px}
+#ov .it.cur{outline:3px solid #2997ff}
+#help .box{max-width:760px;margin:8vh auto;font-size:18px;line-height:1.9}
+#help kbd{display:inline-block;min-width:30px;padding:0 8px;border-radius:6px;background:rgba(255,255,255,.14);text-align:center;margin-right:8px;font-family:inherit}
+.student .tonly{display:none!important}
+.sonly{display:none}
+.student .sonly{display:block}
+/* 되돌리기·순간 재생 중에는 움직임 없음 */
+.noanim,.noanim *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){.scene.on.enter{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ───────── 장면 1 · 표지 ───────── -->
+<section class="scene bg-black dark" data-title="표지 — 바람이 약해지면">
+  <div class="tag">통합과학2 · Ⅱ. 환경과 에너지 · 생태계와 환경 변화</div>
+  <h1 class="title" style="font-size:70px;top:110px">엘니뇨</h1>
+  <div class="dots"><i class="cur">1</i><i>2</i><i>3</i></div>
+  <div class="q">태평양 적도 부근의 바람이 약해지면, 바다와 날씨는 어떻게 달라질까?</div>
+  <canvas class="fig" id="cvCover" style="left:120px;top:286px;width:1680px;height:504px"></canvas>
+  <div class="geo" style="left:120px;top:800px;width:1680px;color:#f5f5f7">
+    <span>서 · 인도네시아·오스트레일리아</span>
+    <span class="mid legend">차가움 <b></b> 따뜻함 <span style="margin-left:6px">(바다 표면의 수온)</span></span>
+    <span>남아메리카(페루) · 동</span>
+  </div>
+  <div class="cap" id="coverCap" style="top:862px;color:#f5f5f7">적도 부근 태평양을 위에서 본 모습이에요.</div>
+  <div class="note tonly" style="top:930px">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</div>
+  <div class="note sonly" style="top:930px">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요 · 화면을 누르거나 → 키로 넘겨요.</div>
+</section>
+
+<!-- ───────── 장면 2 · 평상시 ───────── -->
+<section class="scene bg-white" data-title="평상시 적도 태평양">
+  <div class="tag">1 · 평상시 적도 태평양</div>
+  <h2 class="title">평상시, 바람은 바닷물을 어디로 보낼까?</h2>
+  <div class="dots"><i>1</i><i class="cur">2</i><i>3</i></div>
+  <canvas class="fig" id="cvNormal" style="left:120px;top:206px;width:1680px;height:440px"></canvas>
+  <div class="geo" style="left:120px;top:652px;width:1680px;color:#1d1d1f">
+    <span>서 · 인도네시아</span>
+    <span class="mid">적도를 따라 태평양을 동서로 자른 단면 (모형)</span>
+    <span>남아메리카(페루) · 동</span>
+  </div>
+  <div class="card ws" style="left:120px;top:704px;width:1680px;height:256px">
+    <p>평상시 태평양 적도 부근에서는<span class="bl" data-n="1"><span class="no">1</span><span class="ans">무역풍</span></span>이 불어 따뜻한 표층 해수를 서쪽으로 이동시킨다.</p>
+    <p>동태평양은 영양분이 많은 심해의 찬 해수가 올라오는<span class="bl" data-n="2"><span class="no">2</span><span class="ans">용승</span></span>이 일어나 좋은 어장이 된다.</p>
+    <p>따뜻한 서태평양에서는<span class="bl" data-n="3"><span class="no">3</span><span class="ans">상승</span></span>기류가 발달하여 강수량이 많다.</p>
+  </div>
+</section>
+
+<!-- ───────── 장면 3 · 무역풍이 약해지면 (시뮬레이터) ───────── -->
+<section class="scene bg-dark dark" data-title="무역풍이 약해지면 — 엘니뇨">
+  <div class="tag">2 · 엘니뇨 · 무역풍 세기를 바꿔 보기</div>
+  <h2 class="title" style="font-size:58px">무역풍이 약해지면 무엇이 바뀔까?</h2>
+  <div class="dots"><i>1</i><i>2</i><i class="cur">3</i></div>
+  <canvas class="fig" id="cvSim" style="left:120px;top:206px;width:940px;height:420px"></canvas>
+  <div class="geo" style="left:120px;top:632px;width:940px;color:#f5f5f7">
+    <span>서 · 인도네시아<em id="rainW"></em></span>
+    <span><em id="rainE"></em>남아메리카(페루) · 동</span>
+  </div>
+  <div class="panel" style="left:1100px;top:206px;width:700px;height:266px">
+    <h3>위에서 본 바다 표면의 수온</h3>
+    <canvas class="fig" id="cvMap" style="left:20px;top:56px;width:660px;height:165px"></canvas>
+    <div class="legend" style="position:absolute;left:24px;top:228px;font-size:24px;color:#a1a1a6">서 · 차가움 <b style="width:300px"></b> 따뜻함 · 동</div>
+  </div>
+  <div class="panel ctl" id="simCtl" style="left:1100px;top:486px;width:700px;height:182px">
+    <div class="row"><h3>무역풍 세기</h3><span class="val" id="windVal">평상시</span></div>
+    <input type="range" class="wind" id="windRange" min="0" max="100" step="1" value="0" aria-label="무역풍 세기 (왼쪽 평상시, 오른쪽 약함)">
+    <div class="ends"><span>◀ 평상시</span><span>약함 ▶</span></div>
+  </div>
+  <div class="card ws" style="left:120px;top:688px;width:1680px;height:272px">
+    <p>엘니뇨: 무역풍이 약해져 동태평양의 표층 수온이 평년보다<span class="bl" data-n="4"><span class="no">4</span><span class="ans">높은</span></span>상태가 한동안 지속되는 현상</p>
+    <p>엘니뇨가 발생하면 동태평양에 영양분 공급이 줄어<span class="bl" data-n="5"><span class="no">5</span><span class="ans">어획량</span></span>이 감소한다.</p>
+    <p>서태평양은 강수량이 줄어<span class="bl" data-n="6"><span class="no">6</span><span class="ans">가뭄</span></span>· 산불이, 동태평양은 강수량이 늘어 홍수가 일어난다.</p>
+    <p class="answer" id="ans3"><small>처음 질문의 답</small>무역풍이 약해지면 따뜻한 해수와 비구름이 동쪽으로 옮겨 가 서쪽은 가뭄·산불, 동쪽은 홍수가 일어난다.</p>
+  </div>
+  <div class="credit">비상교육 고등학교 통합과학2 76~77쪽 내용을 다시 정리 · 지도와 단면은 원리를 보여 주는 모형(실제 비율·관측값 아님)</div>
+</section>
+
+<canvas id="ink" width="1920" height="1080"></canvas>
+</div>
+
+<div id="bar">
+  <button data-a="prev" title="이전 (←)">◀</button>
+  <span class="pg" id="pg">1 / 3</span>
+  <button data-a="next" title="다음 (→)">▶</button>
+  <button data-a="sound" id="sndBtn" title="소리 (M)">소리 켬</button>
+  <button data-a="script" class="tonly" title="대본 (T)">대본</button>
+  <button data-a="full" title="전체 화면 (F)">전체 화면</button>
+</div>
+<div id="tools">
+  <button id="tbtn" title="판서 도구" aria-label="판서 도구">✎</button>
+  <div id="tmenu">
+    <button data-t="laser">레이저 (L)</button>
+    <button data-t="pen">빨간 펜 (P)</button>
+    <button data-t="undo">한 획 지우기 (Z)</button>
+    <button data-t="clear">모두 지우기 (C)</button>
+    <button data-t="finger" id="fingerBtn">손가락 그리기: 자동</button>
+    <button data-t="full">전체 화면 (F)</button>
+  </div>
+</div>
+<div id="script" class="tonly"></div>
+<div class="over" id="ov"><div class="grid" id="ovGrid"></div></div>
+<div class="over" id="help"><div class="box">
+  <h2 style="font-weight:600">조작법</h2>
+  <div><kbd>→</kbd><kbd>Space</kbd><kbd>Enter</kbd> 다음 · 화면 클릭 · 왼쪽으로 밀기</div>
+  <div><kbd>←</kbd><kbd>Backspace</kbd> 이전 · 오른쪽 클릭 · 오른쪽으로 밀기</div>
+  <div><kbd>Home</kbd><kbd>End</kbd> 처음 / 끝 · <kbd>R</kbd> 지금 단계 다시 보기</div>
+  <div><kbd>F</kbd> 전체 화면 · <kbd>O</kbd> 전체 장면 보기 · <kbd class="tonly">T</kbd><span class="tonly">대본 · </span><kbd>M</kbd> 소리</div>
+  <div><kbd>B</kbd> 검은 화면 · <kbd>W</kbd> 흰 화면 · <kbd>H</kbd> 도움말</div>
+  <div><kbd>L</kbd> 레이저 · <kbd>P</kbd> 빨간 펜 · <kbd>Z</kbd> 한 획 지우기 · <kbd>C</kbd> 모두 지우기 · <kbd>Esc</kbd> 끄기</div>
+  <div style="margin-top:14px;color:#a1a1a6">학생 복습판: 주소 끝에 ?s=1</div>
+</div></div>
+<div class="over" id="blk"></div>
+<div class="over" id="wht"></div>
+<script>
+'use strict';
+/* ═════════════ 공통 엔진: 무대 · 단계 넘기기 · 되돌리기 · 소리 · 판서 ═════════════ */
+const $ = (q, el = document) => el.querySelector(q);
+const $$ = (q, el = document) => [...el.querySelectorAll(q)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeIO = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const QS = new URLSearchParams(location.search);
+const STUDENT = QS.get('s') === '1';
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (STUDENT) document.body.classList.add('student');
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} } };
+
+const stage = $('#stage');
+const sceneEls = $$('.scene');
+const S = [];                 // 장면 정의(아래에서 채움)
+let cur = { s: 0, k: 0 };
+let instant = false;          // 되돌리기·순간 재생 중이면 true (소리·움직임 없음)
+let scale = 1, offX = 0, offY = 0;
+
+/* ── 무대 크기 맞추기(1920×1080, 비율 유지, 남는 곳은 검은 띠) ── */
+const canvases = [];          // {el, ctx, w, h, k}
+function regCanvas(el){ const c = { el, ctx: el.getContext('2d'), w: parseFloat(el.style.width), h: parseFloat(el.style.height), k: 1 }; canvases.push(c); sizeCanvas(c); return c; }
+function sizeCanvas(c){ const k = clamp(scale * (window.devicePixelRatio || 1), 1, 2); c.k = k; c.el.width = Math.round(c.w * k); c.el.height = Math.round(c.h * k); }
+function fit(){
+  const W = innerWidth, H = innerHeight;
+  scale = Math.min(W / 1920, H / 1080); offX = (W - 1920 * scale) / 2; offY = (H - 1080 * scale) / 2;
+  stage.style.transform = `translate(${offX}px,${offY}px) scale(${scale})`;
+  canvases.forEach(sizeCanvas); sizeInk();
+}
+addEventListener('resize', fit);
+
+/* ── 트윈(움직임): 다음을 누르면 모두 끝 상태로 마침 ── */
+const tweens = [];
+function tw(o, key, to, dur = 700, delay = 0, ease = easeOut){
+  if (instant || dur <= 0){ o[key] = to; return; }
+  if (RM) dur = Math.min(dur, 200);
+  for (let i = tweens.length - 1; i >= 0; i--) if (tweens[i].o === o && tweens[i].key === key) tweens.splice(i, 1);
+  tweens.push({ o, key, from: o[key], to, t0: performance.now() + delay, dur, ease });
+}
+function cancelTween(o, key){ for (let i = tweens.length - 1; i >= 0; i--) if (tweens[i].o === o && tweens[i].key === key) tweens.splice(i, 1); }
+function finishTweens(){ for (const t of tweens) t.o[t.key] = t.to; tweens.length = 0; }
+function runTweens(now){
+  for (let i = tweens.length - 1; i >= 0; i--){
+    const t = tweens[i]; if (now < t.t0) continue;
+    const p = clamp((now - t.t0) / t.dur, 0, 1); t.o[t.key] = lerp(t.from, t.to, t.ease(p));
+    if (p >= 1) tweens.splice(i, 1);
+  }
+}
+
+/* ── 소리(WebAudio 합성, 파일 없음) ── */
+let AC = null, soundOn = !STUDENT, dingN = 0;
+function unlockAudio(){ if (AC) { if (AC.state === 'suspended') AC.resume(); return; } try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ AC = null; } }
+function tone(f, dur, type = 'sine', vol = .1, delay = 0){
+  if (!soundOn || instant || !AC) return;
+  const t = AC.currentTime + delay, o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + .05);
+}
+const SND = {
+  ding(){ const f = [880, 988, 1047, 1175, 932, 1109][dingN++ % 6]; tone(f, .22, 'sine', .11); tone(f * 1.5, .32, 'sine', .06, .08); },
+  tok(){ tone(660, .07, 'triangle', .07); },
+  chime(){ [784, 988, 1175, 1568].forEach((f, i) => tone(f, .7, 'sine', .06, i * .11)); },
+  wind(){ // 바람 «쏴» — 걸러 낸 잡음
+    if (!soundOn || instant || !AC) return;
+    const len = AC.sampleRate * 1.1, b = AC.createBuffer(1, len, AC.sampleRate), d = b.getChannelData(0);
+    let seed = 7; for (let i = 0; i < len; i++){ seed = (seed * 16807) % 2147483647; d[i] = (seed / 2147483647) * 2 - 1; }
+    const s = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(), t = AC.currentTime;
+    s.buffer = b; f.type = 'bandpass'; f.frequency.setValueAtTime(900, t); f.frequency.linearRampToValueAtTime(380, t + 1); f.Q.value = .8;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .25); g.gain.linearRampToValueAtTime(0, t + 1.05);
+    s.connect(f); f.connect(g); g.connect(AC.destination); s.start(t);
+  }
+};
+
+/* ── 빈칸 열기 ── */
+function openBlank(n){
+  const b = $(`.bl[data-n="${n}"]`); if (!b) return;
+  b.classList.add('open');
+  if (!instant && !RM){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+  SND.ding();
+}
+function resetBlanks(sceneEl){ $$('.bl', sceneEl).forEach(b => b.classList.remove('open', 'pop')); }
+
+/* ── 장면·단계 이동 ── */
+function totalSteps(){ return S.reduce((a, s) => a + s.n, 0); }
+function show(s, k, animate){
+  finishTweens();
+  const sameNext = animate && s === cur.s && k === cur.k + 1;
+  if (sameNext){
+    cur.k = k; S[s].step(k);
+  } else {
+    const changed = s !== cur.s || !sceneEls[s].classList.contains('on');
+    instant = true; stage.classList.add('noanim');
+    if (changed){ sceneEls.forEach((el, i) => el.classList.toggle('on', i === s)); clearPen(); }
+    resetBlanks(sceneEls[s]);
+    S[s].reset();
+    for (let i = 1; i <= k; i++) S[s].step(i);
+    finishTweens(); cur = { s, k };
+    void stage.offsetWidth; instant = false;
+    if (animate && changed){ // 새 장면으로 들어갈 때만 부드럽게 등장
+      stage.classList.remove('noanim'); const el = sceneEls[s]; el.classList.add('enter'); setTimeout(() => el.classList.remove('enter'), 650);
+      S[s].enter && S[s].enter();
+    } else stage.classList.remove('noanim');
+  }
+  try{ history.replaceState(null, '', '#' + (s + 1) + '.' + k); }catch(e){}
+  updateUI();
+}
+function next(){ unlockAudio(); if (cur.k < S[cur.s].n) show(cur.s, cur.k + 1, true); else if (cur.s < S.length - 1) show(cur.s + 1, 0, true); }
+function prev(){ if (cur.k > 0) show(cur.s, cur.k - 1, false); else if (cur.s > 0) show(cur.s - 1, S[cur.s - 1].n, false); }
+function replay(){ if (cur.k > 0){ show(cur.s, cur.k - 1, false); show(cur.s, cur.k + 1, true); } else show(cur.s, 0, true); }
+function parseHash(){ const m = /^#(\d+)\.(\d+)$/.exec(location.hash || ''); if (!m) return { s: 0, k: 0 }; const s = clamp(+m[1] - 1, 0, S.length - 1); return { s, k: clamp(+m[2], 0, S[s].n) }; }
+
+/* ── 조작 막대 · 대본 · 전체 보기 ── */
+const bar = $('#bar'); let barT = 0;
+function pokeBar(){ bar.classList.add('show'); clearTimeout(barT); barT = setTimeout(() => bar.classList.remove('show'), 2200); }
+addEventListener('mousemove', pokeBar);
+function updateUI(){
+  $('#pg').textContent = `${cur.s + 1}.${cur.k} / ${S.length}`;
+  $('#sndBtn').textContent = soundOn ? '소리 켬' : '소리 끔';
+  const sc = $('#script');
+  if (sc.classList.contains('show')){
+    const d = S[cur.s], nx = S[cur.s + 1];
+    sc.innerHTML = `<h4>장면 ${cur.s + 1} · ${d.title} · 단계 ${cur.k}/${d.n}${nx ? ' · 다음: ' + nx.title : ' · 마지막 장면'}</h4><div>${d.script}</div><div class="cue">지금 단계: ${d.cues[cur.k] || ''}</div>`;
+  }
+  $$('#ovGrid .it').forEach((it, i) => it.classList.toggle('cur', i === cur.s));
+}
+function toggleScript(){ if (STUDENT) return; $('#script').classList.toggle('show'); updateUI(); }
+function buildOverview(){
+  $('#ovGrid').innerHTML = S.map((d, i) => `<div class="it" data-i="${i}"><b>장면 ${i + 1} · 단계 ${d.n}개</b>${d.title}</div>`).join('');
+  $$('#ovGrid .it').forEach(it => it.addEventListener('click', e => { e.stopPropagation(); $('#ov').classList.remove('show'); show(+it.dataset.i, 0, true); }));
+}
+function toggleOver(id){ const el = $('#' + id); const on = !el.classList.contains('show'); $$('.over').forEach(o => o.classList.remove('show')); if (on) el.classList.add('show'); }
+function anyOver(){ return $$('.over').some(o => o.classList.contains('show')); }
+function full(){ const d = document; try{ if (!d.fullscreenElement) d.documentElement.requestFullscreen && d.documentElement.requestFullscreen().catch(() => {}); else d.exitFullscreen && d.exitFullscreen().catch(() => {}); }catch(e){} }
+function toggleSound(){ soundOn = !soundOn; unlockAudio(); updateUI(); }
+
+bar.addEventListener('click', e => {
+  e.stopPropagation(); const a = e.target.closest('button'); if (!a) return;
+  ({ prev, next, sound: toggleSound, script: toggleScript, full })[a.dataset.a]();
+});
+$('#ov').addEventListener('click', e => { if (e.target.id === 'ov') toggleOver('ov'); });
+$('#help').addEventListener('click', () => toggleOver('help'));
+$('#blk').addEventListener('click', () => toggleOver('blk'));
+$('#wht').addEventListener('click', () => toggleOver('wht'));
+
+/* ── 키보드: 창 전체에서 먼저(capture) 받아서, 시뮬 조작 칸에 초점이 있어도 넘기기가 망가지지 않게 ── */
+addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key, K = k.length === 1 ? k.toUpperCase() : k;
+  unlockAudio();
+  const nav = { ArrowRight: next, ' ': next, Enter: next, PageDown: next, ArrowDown: next, ArrowLeft: prev, PageUp: prev, Backspace: prev, ArrowUp: prev };
+  if (nav[k]){
+    e.preventDefault(); e.stopPropagation();
+    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+    if (anyOver() && !$('#blk').classList.contains('show') && !$('#wht').classList.contains('show')) $$('.over').forEach(o => o.classList.remove('show'));
+    nav[k](); return;
+  }
+  const map = {
+    Home: () => show(0, 0, true), End: () => { const s = S.length - 1; show(s, S[s].n, false); },
+    F: full, T: toggleScript, N: toggleScript, O: () => toggleOver('ov'), R: replay, M: toggleSound,
+    B: () => toggleOver('blk'), W: () => toggleOver('wht'), H: () => toggleOver('help'),
+    L: () => setTool(tool === 'laser' ? null : 'laser'), P: () => setTool(tool === 'pen' ? null : 'pen'),
+    Z: undoPen, C: clearPen, Escape: () => { setTool(null); $$('.over').forEach(o => o.classList.remove('show')); }
+  };
+  if (map[K]){ e.preventDefault(); e.stopPropagation(); map[K](); }
+}, true);
+addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); }, true);
+
+/* ── 누르기·밀기로 넘기기 ── */
+const UI_SEL = '.ctl, #bar, #tools, #script, .over';
+let swallowClick = false, swipe = null;
+stage.addEventListener('click', e => {
+  if (swallowClick){ swallowClick = false; return; }
+  if (e.target.closest(UI_SEL)) return;
+  next();
+});
+addEventListener('contextmenu', e => { if (e.target.closest('#script')) return; e.preventDefault(); if (!e.target.closest(UI_SEL)) prev(); });
+addEventListener('pointerdown', e => { unlockAudio(); if (e.pointerType === 'touch' && !e.target.closest(UI_SEL)) swipe = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+addEventListener('pointerup', e => {
+  if (!swipe) return; const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y; swipe = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4){ swallowClick = true; setTimeout(() => swallowClick = false, 400); dx < 0 ? next() : prev(); }
+});
+// 전체 화면·판서 중 아이패드에서 쓸어내려 전체 화면이 꺼지지 않게
+addEventListener('touchmove', e => { if ((document.fullscreenElement || tool) && !e.target.closest('#script, .over')) e.preventDefault(); }, { passive: false });
+
+/* ── 판서 도구: 레이저 · 빨간 펜 ── */
+const ink = $('#ink'), ictx = ink.getContext('2d');
+let tool = null, fingerMode = store.get('eln_finger') || 'auto', penSeen = store.get('eln_pen') === '1';
+let strokes = [], laser = [], drawing = null;
+function sizeInk(){ const k = clamp(scale * (window.devicePixelRatio || 1), 1, 2); ink.width = 1920 * k; ink.height = 1080 * k; ink._k = k; }
+function setTool(t){
+  tool = t; document.body.classList.toggle('inking', !!t);
+  $$('#tmenu button[data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+}
+function clearPen(){ strokes = []; laser = []; drawing = null; }
+function undoPen(){ strokes.pop(); }
+const FINGER_TXT = { auto: '손가락 그리기: 자동', on: '손가락 그리기: 켬', off: '손가락 그리기: 끔' };
+$('#fingerBtn').textContent = FINGER_TXT[fingerMode];
+$('#tbtn').addEventListener('click', e => { e.stopPropagation(); $('#tools').classList.toggle('open'); });
+$('#tmenu').addEventListener('click', e => {
+  e.stopPropagation(); const b = e.target.closest('button'); if (!b) return; const t = b.dataset.t;
+  if (t === 'laser' || t === 'pen') setTool(tool === t ? null : t);
+  else if (t === 'undo') undoPen(); else if (t === 'clear') clearPen(); else if (t === 'full') full();
+  else if (t === 'finger'){ fingerMode = { auto: 'on', on: 'off', off: 'auto' }[fingerMode]; store.set('eln_finger', fingerMode); b.textContent = FINGER_TXT[fingerMode]; }
+});
+$$('#tools button, #bar button, .panel button').forEach(b => { b.tabIndex = -1; b.addEventListener('mousedown', e => e.preventDefault()); });
+function toStage(e){ return { x: (e.clientX - offX) / scale, y: (e.clientY - offY) / scale, t: performance.now() }; }
+function drawsNow(e){
+  if (e.pointerType === 'pen'){ if (!penSeen){ penSeen = true; store.set('eln_pen', '1'); } return true; }
+  if (e.pointerType === 'mouse') return e.button === 0;
+  return fingerMode === 'on' || (fingerMode === 'auto' && !penSeen);
+}
+addEventListener('pointerdown', e => {
+  if (!tool || e.target.closest(UI_SEL) || !drawsNow(e)) return;
+  e.preventDefault(); e.stopPropagation(); swipe = null;
+  const p = toStage(e);
+  drawing = { id: e.pointerId, pts: [p] };
+  if (tool === 'pen') strokes.push(drawing.pts); else laser.push(drawing.pts);
+}, true);
+addEventListener('pointermove', e => { if (drawing && e.pointerId === drawing.id){ e.preventDefault(); drawing.pts.push(toStage(e)); } }, true);
+function endDraw(e){ if (drawing && e.pointerId === drawing.id){ drawing.pts.end = performance.now(); drawing = null; swallowClick = true; setTimeout(() => swallowClick = false, 350); } }
+addEventListener('pointerup', endDraw, true); addEventListener('pointercancel', endDraw, true);
+function drawInk(now){
+  const k = ink._k || 1; ictx.setTransform(1, 0, 0, 1, 0, 0); ictx.clearRect(0, 0, ink.width, ink.height); ictx.setTransform(k, 0, 0, k, 0, 0);
+  ictx.lineCap = ictx.lineJoin = 'round';
+  ictx.strokeStyle = '#ff3b30'; ictx.lineWidth = 6;
+  for (const s of strokes){ ictx.beginPath(); s.forEach((p, i) => i ? ictx.lineTo(p.x, p.y) : ictx.moveTo(p.x, p.y)); if (s.length === 1) ictx.lineTo(s[0].x + .1, s[0].y); ictx.stroke(); }
+  laser = laser.filter(s => !s.end || now - s.end < 1100);
+  for (const s of laser){
+    const a = s.end ? clamp(1 - (now - s.end - 300) / 800, 0, 1) : 1;
+    ictx.strokeStyle = `rgba(255,45,85,${.85 * a})`; ictx.lineWidth = 9; ictx.shadowColor = 'rgba(255,45,85,.9)'; ictx.shadowBlur = 14;
+    ictx.beginPath(); s.forEach((p, i) => i ? ictx.lineTo(p.x, p.y) : ictx.moveTo(p.x, p.y)); ictx.stroke(); ictx.shadowBlur = 0;
+  }
+}
+
+/* ═════════════ 엘니뇨 모형 (그림이 따르는 규칙) ═════════════
+   e  = 무역풍이 약해진 정도. 0 = 평상시, 1 = 약함.
+        시뮬레이터 슬라이더 값 v(0~100) → e = v / 100,  무역풍 세기 w = 1 − e
+   x  = 태평양 안의 동서 위치 = (경도 − 110°E) / 170°   (0 = 인도네시아 쪽 서태평양, 1 = 페루 앞바다 80°W)
+
+   ① 표층 수온 T(경도, 위도, e) : 0(가장 차가움, 파랑) ~ 1(가장 따뜻함, 빨강)의 상대값. ℃가 아니라 색만 정한다.
+      평상시 Tn = 1 − 0.75·c,  c = min(1, 적도 동쪽 찬 해수 띠 + 0.9·페루 연안 찬 해수)
+                 적도 동쪽 띠 = smoothstep(0.35, 0.95, x)·exp(−(위도/11)²)          ← 용승으로 올라온 찬 해수
+      약할 때 Te = 0.98 − 0.28·(1 − smoothstep(0.15, 0.55, x))                   ← 서쪽은 조금 식고 가운데~동쪽이 따뜻
+      T = lerp(Tn, Te, e·b) × (1 − 0.3·(위도/30)²),  b = 0.35 + 0.65·exp(−(위도/14)²)   (적도 부근이 가장 크게 바뀜)
+   ② 따뜻한 표층 해수층 두께 h(x) = D·lerp(hn, he, e)   (D = 단면에서 해수면 아래 높이)
+      hn = 0.60 − 0.48·smoothstep(0, 1, x)   평상시: 서쪽 두껍고 동쪽 얇음
+      he = 0.34 + 0.06·smoothstep(0, 0.6, x) 약할 때: 거의 고르게 퍼지고 동쪽이 깊어짐
+   ③ 용승 세기 u = 0.2 + 0.8·w   (무역풍에 비례. 약해져도 0이 되지는 않음) → 용승 화살표의 진하기·흐름 빠르기
+   ④ 무역풍 화살표: 방향은 늘 동 → 서, 길이 ∝ 0.25 + 0.75·w, 흐름 빠르기 ∝ 0.3 + 0.7·w
+   ⑤ 표층 해수의 이동 vflow = (w − 0.45) / 0.55   (+ 서쪽, − 동쪽. 바람이 약하면 서쪽에 쌓였던 따뜻한 해수가 동쪽으로 퍼짐)
+   ⑥ 비구름·상승 기류의 위치 = 적도 수온이 (최고값 − 0.1)보다 높은 곳들의 가중 평균 경도 → 늘 가장 따뜻한 바다 위
+      구름 두 덩이 간격 = 그 따뜻한 구역의 퍼짐(표준 편차)
+   ⑦ 하강 기류: 서쪽(124°E)과 동쪽(266°E) 가운데 더 차가운 쪽. 서쪽 진하기 aW = smoothstep(−0.05, 0.05, T동 − T서), 동쪽 = 1 − aW
+   ⑧ 물고기 수 = round(1 + 4·w)   (용승이 약하면 영양분이 줄어 물고기가 줄어든 모습) */
+const M = {
+  Tn(lon, lat){
+    const x = (lon - 110) / 170;
+    const tongue = sstep(.35, .95, x) * Math.exp(-((lat / 11) ** 2));
+    const coast = Math.exp(-(((lon - 279) / 14) ** 2)) * Math.exp(-(((lat + 10) / 12) ** 2)) * sstep(6, 0, lat);
+    return 1 - .75 * Math.min(1, tongue + .9 * coast);
+  },
+  Te(lon){ const x = (lon - 110) / 170; return .98 - .28 * (1 - sstep(.15, .55, x)); },
+  T(lon, lat, e){
+    const b = .35 + .65 * Math.exp(-((lat / 14) ** 2));
+    return lerp(M.Tn(lon, lat), M.Te(lon), e * b) * (1 - .3 * (lat / 30) ** 2);
+  },
+  thick(lon, e){ const x = clamp((lon - 110) / 170, 0, 1); return lerp(.60 - .48 * sstep(0, 1, x), .34 + .06 * sstep(0, .6, x), e); },
+  _cc: new Map(),
+  cloud(e){ // 따뜻한 바다 위 → {lon, sd}
+    const key = Math.round(e * 500); if (M._cc.has(key)) return M._cc.get(key);
+    let tmax = 0; const ts = [];
+    for (let lon = 118; lon <= 280; lon += 1){ const t = M.T(lon, 0, e); ts.push([lon, t]); tmax = Math.max(tmax, t); }
+    let sw = 0, sx = 0, sxx = 0;
+    for (const [lon, t] of ts){ const w = Math.max(0, t - (tmax - .1)) ** 2; sw += w; sx += w * lon; sxx += w * lon * lon; }
+    const lon = sx / sw, sd = Math.sqrt(Math.max(0, sxx / sw - lon * lon)), r = { lon, sd };
+    M._cc.set(key, r); return r;
+  },
+  sinkW(e){ return sstep(-.05, .05, M.T(266, 0, e) - M.T(124, 0, e)); }
+};
+
+/* 수온 색 띠: 파랑(차가움) → 빨강(따뜻함). 범례와 같은 색 */
+const CMAP = [[0, [27, 79, 156]], [.3, [61, 134, 214]], [.5, [185, 213, 234]], [.62, [243, 201, 164]], [.78, [240, 135, 79]], [1, [208, 48, 30]]];
+function cmap(t){
+  t = clamp(t, 0, 1);
+  for (let i = 1; i < CMAP.length; i++) if (t <= CMAP[i][0]){
+    const [a, ca] = CMAP[i - 1], [b, cb] = CMAP[i], p = (t - a) / (b - a);
+    return [0, 1, 2].map(j => Math.round(lerp(ca[j], cb[j], p)));
+  }
+  return CMAP[CMAP.length - 1][1];
+}
+const rgb = (c, a = 1) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+const FONT = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+
+/* ── 그리기 도구 ── */
+function txt(ctx, s, x, y, o = {}){
+  if ((o.alpha ?? 1) <= .01) return;
+  ctx.save(); ctx.globalAlpha = o.alpha ?? 1;
+  ctx.font = `${o.weight || 600} ${o.size || 28}px ${FONT}`; ctx.textAlign = o.align || 'center'; ctx.textBaseline = 'middle';
+  if (o.halo){ ctx.lineWidth = 6; ctx.lineJoin = 'round'; ctx.strokeStyle = o.halo; ctx.strokeText(s, x, y); }
+  ctx.fillStyle = o.color || '#fff'; ctx.fillText(s, x, y); ctx.restore();
+}
+function pill(ctx, s, x, y, o = {}){
+  if ((o.alpha ?? 1) <= .01) return;
+  ctx.save(); ctx.globalAlpha = o.alpha ?? 1; ctx.font = `600 ${o.size || 28}px ${FONT}`;
+  const w = ctx.measureText(s).width + 32, h = (o.size || 28) + 18;
+  ctx.fillStyle = o.bg || 'rgba(0,0,0,.62)'; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, h / 2); ctx.fill();
+  ctx.fillStyle = o.color || '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y + 1); ctx.restore();
+}
+function arrow(ctx, x1, y1, x2, y2, o = {}){
+  const lw = o.lw || 6, hd = o.head || lw * 3, ang = Math.atan2(y2 - y1, x2 - x1), len = Math.hypot(x2 - x1, y2 - y1);
+  if (len < 2) return;
+  ctx.save(); ctx.globalAlpha = o.alpha ?? 1; ctx.strokeStyle = ctx.fillStyle = o.color || '#fff'; ctx.lineWidth = lw; ctx.lineCap = 'round';
+  if (o.outline){ ctx.save(); ctx.strokeStyle = o.outline; ctx.lineWidth = lw + 5; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - Math.cos(ang) * hd * .6, y2 - Math.sin(ang) * hd * .6); ctx.stroke(); ctx.restore(); }
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - Math.cos(ang) * hd * .6, y2 - Math.sin(ang) * hd * .6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - Math.cos(ang - .45) * hd, y2 - Math.sin(ang - .45) * hd);
+  ctx.lineTo(x2 - Math.cos(ang + .45) * hd, y2 - Math.sin(ang + .45) * hd); ctx.closePath();
+  if (o.outline){ ctx.save(); ctx.strokeStyle = o.outline; ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.stroke(); ctx.restore(); }
+  ctx.fill(); ctx.restore();
+}
+function cloudShape(ctx, cx, cy, s, fill, alpha = 1){
+  ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = fill; ctx.beginPath();
+  [[-.62, .12, .42], [-.18, -.18, .55], [.36, -.08, .48], [.78, .16, .34], [.1, .2, .42]].forEach(([dx, dy, r]) => { ctx.moveTo(cx + dx * s + r * s, cy + dy * s); ctx.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2); });
+  ctx.fill(); ctx.restore();
+}
+function fish(ctx, x, y, s, dir, color, alpha){
+  ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color; ctx.translate(x, y); ctx.scale(dir, 1);
+  ctx.beginPath(); ctx.ellipse(0, 0, s, s * .42, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(s * .8, 0); ctx.lineTo(s * 1.45, -s * .42); ctx.lineTo(s * 1.45, s * .42); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function begin(c){ const g = c.ctx; g.setTransform(c.k, 0, 0, c.k, 0, 0); g.clearRect(0, 0, c.w, c.h); return g; }
+
+/* ═════════════ 단면 그림(적도를 따라 동서로 자른 태평양) ═════════════ */
+const SEC = { lon0: 104, lon1: 292 };
+function drawSection(c, st, now, theme){
+  const g = begin(c), W = c.w, H = c.h, X = lon => W * (lon - SEC.lon0) / (SEC.lon1 - SEC.lon0);
+  const ys = Math.round(H * .46), D = H - ys, e = st.e, w = 1 - e, a = st.a, t = now / 1000;
+  const dark = theme === 'dark';
+  const skyInk = dark ? '#f5f5f7' : '#1d1d1f', windC = dark ? '#BF5AF2' : '#8A3FC0';
+  const cloudC = dark ? '#d2d6dc' : '#b9c0c9', rainC = dark ? 'rgba(200,210,222,.75)' : 'rgba(120,132,148,.8)';
+  const landC = dark ? '#5d5647' : '#cbbfa2';
+
+  // 바다(찬 해수 → 따뜻한 표층 해수층): e가 바뀔 때만 다시 계산
+  const key = Math.round(e * 500);
+  if (!c.sea || c.sea.key !== key || c.sea.k !== c.k){
+    const off = c.sea && c.sea.k === c.k ? c.sea.cv : document.createElement('canvas');
+    off.width = Math.round(W * c.k); off.height = Math.round(H * c.k);
+    const o = off.getContext('2d'); o.setTransform(c.k, 0, 0, c.k, 0, 0); o.clearRect(0, 0, W, H);
+    const cg = o.createLinearGradient(0, ys, 0, H); cg.addColorStop(0, '#2c67b3'); cg.addColorStop(1, '#0e2a57');
+    o.fillStyle = cg; o.fillRect(0, ys, W, D);
+    const step = 3, pts = [];
+    for (let px = 0; px <= W; px += step){
+      const lon = SEC.lon0 + (SEC.lon1 - SEC.lon0) * (px + step / 2) / W, T = M.T(lon, 0, e), h = M.thick(lon, e) * D;
+      const top = cmap(T), bot = cmap(lerp(T, .42, .55));
+      const gr = o.createLinearGradient(0, ys, 0, ys + h); gr.addColorStop(0, rgb(top)); gr.addColorStop(.7, rgb(top)); gr.addColorStop(1, rgb(bot));
+      o.fillStyle = gr; o.fillRect(px, ys, step + .6, h); pts.push([px + step / 2, ys + h]);
+    }
+    o.strokeStyle = 'rgba(255,255,255,.4)'; o.lineWidth = 2; o.beginPath(); pts.forEach(([x, y], i) => i ? o.lineTo(x, y) : o.moveTo(x, y)); o.stroke();
+    c.sea = { key, k: c.k, cv: off };
+  }
+  g.drawImage(c.sea.cv, 0, 0, W, H);
+
+  // 땅: 서쪽 인도네시아 섬들, 동쪽 남아메리카(안데스)
+  g.fillStyle = landC; g.beginPath();
+  g.moveTo(0, ys - 18); g.lineTo(X(107), ys - 24); g.lineTo(X(111), ys - 14); g.lineTo(X(114.5), ys - 8); g.lineTo(X(116), ys + 2);
+  g.lineTo(X(118), ys + 30); g.lineTo(X(121), H); g.lineTo(0, H); g.closePath(); g.fill();
+  g.beginPath();
+  g.moveTo(X(278.6), ys + 2); g.lineTo(X(280.5), ys - 26); g.lineTo(X(283.5), ys - 64); g.lineTo(X(286.3), ys - 108); g.lineTo(X(288.2), ys - 86);
+  g.lineTo(X(290), ys - 66); g.lineTo(W, ys - 58); g.lineTo(W, H); g.lineTo(X(271.5), H); g.lineTo(X(276.5), ys + 70); g.lineTo(X(278.3), ys + 20); g.closePath(); g.fill();
+
+  // 용승: 깊은 곳의 찬 해수가 올라와 해수면에서 서쪽으로
+  const u = .2 + .8 * w;
+  if (a.up > .01){
+    const xa = X(275.5), x2 = X(263);
+    g.save(); g.globalAlpha = a.up * (.25 + .75 * u); g.strokeStyle = '#fff'; g.lineWidth = 7; g.lineCap = 'round';
+    g.setLineDash([16, 14]); g.lineDashOffset = -(t * 46 * u) % 30;
+    g.beginPath(); g.moveTo(xa, H - 22); g.lineTo(xa, ys + 58); g.quadraticCurveTo(xa, ys + 18, x2 + 22, ys + 18); g.stroke();
+    g.setLineDash([]); g.restore();
+    arrow(g, x2 + 26, ys + 18, x2, ys + 18, { color: '#fff', lw: 7, head: 24, alpha: a.up * (.25 + .75 * u) });
+    txt(g, u > .6 ? '용승' : '용승 약해짐', xa - 26, ys + D * .62, { align: 'right', alpha: a.upLbl, halo: 'rgba(0,0,0,.35)' });
+  }
+  // 물고기(어장)
+  if (a.fish > .01){
+    const n = Math.round(1 + 4 * w), F = [[248, 36, -1], [257, 52, 1], [240, 56, -1], [252, 70, 1], [233, 36, 1]];
+    for (let i = 0; i < 5; i++){
+      const [lon, dy, dir] = F[i], show = i < n ? 1 : 0;
+      fish(g, X(lon) + Math.sin(t * 1.6 + i) * 4, ys + dy + Math.cos(t * 1.3 + i * 2) * 2, 15, dir, dark ? '#30D158' : '#2fbf5a', a.fish * show);
+    }
+    txt(g, '좋은 어장', X(249), ys + 104, { alpha: a.fishLbl * sstep(.35, .65, w), halo: 'rgba(0,0,0,.35)', color: '#c9f7d6' });
+  }
+  // 표층 해수의 이동
+  const vf = (w - .45) / .55;
+  if (a.flow > .01 && Math.abs(vf) > .04){
+    // 흐름이 약하면 화살표를 짧고 옅게(머리만 남은 삼각형이 되지 않게)
+    const av = Math.abs(vf), sp = X(130) - X(100), L = Math.min(sp * .62, 104) * (.3 + .7 * av), dir = vf > 0 ? -1 : 1, fa = sstep(.04, .3, av), hd = Math.min(20, L * .45 + 6);
+    const ph = (t * 34 * Math.abs(vf)) % sp;
+    for (let i = -1; i < 5; i++){
+      const cx = X(160) + i * sp + dir * ph, fade = sstep(X(158), X(172), cx) * (1 - sstep(X(218), X(234), cx));
+      if (fade < .02) continue;
+      arrow(g, cx - dir * L / 2, ys + 18, cx + dir * L / 2, ys + 18, { color: '#fff', lw: 6, head: hd, alpha: a.flow * fade * fa, outline: 'rgba(0,0,0,.25)' });
+    }
+  }
+  txt(g, '표층 해수의 이동', X(198), ys + 58, { alpha: a.flowLbl * (a.flow > .01 ? 1 : 0), halo: 'rgba(0,0,0,.35)' });
+  txt(g, '따뜻한 해수', X(134), ys + Math.max(.5 * M.thick(134, e) * D, 40), { halo: 'rgba(0,0,0,.3)' });
+  txt(g, '찬 해수', X(192), H - 32, { color: '#dbe9ff' });
+
+  // 무역풍: 늘 동 → 서
+  if (a.wind > .01){
+    const sp = X(134) - X(104), L = Math.min(sp * .6, 120) * (.35 + .65 * w), hd = Math.min(24, L * .45 + 6), ph = (t * 40 * (.3 + .7 * w)) % sp;
+    for (let i = 0; i < 6; i++){
+      const cx = X(138) + i * sp - ph, fade = sstep(X(124), X(140), cx) * (1 - sstep(X(222), X(240), cx));
+      if (fade < .02) continue;
+      arrow(g, cx + L / 2, ys - 26, cx - L / 2, ys - 26, { color: windC, lw: 7, head: hd, alpha: a.wind * fade });
+    }
+    txt(g, w < .4 ? '무역풍 약화' : '무역풍', X(246) + 12, ys - 26, { align: 'left', color: windC, alpha: a.windLbl });
+  }
+
+  // 공기: 따뜻한 바다 위 상승(비구름·비), 찬 바다 위 하강
+  if (a.air > .01){
+    const cl = M.cloud(e), xc = X(cl.lon), sp = Math.min(cl.sd * .8, 24) * (W / (SEC.lon1 - SEC.lon0));
+    const cy = Math.round(ys * .23), s = 40, lblY = Math.round(ys * .5), aW = M.sinkW(e), top = 16, bot = ys - 50;
+    const box = [xc - 76, lblY - 18, xc + 76, lblY + 18];
+    // 비
+    g.save(); g.globalAlpha = a.air; g.strokeStyle = rainC; g.lineWidth = 3; g.lineCap = 'round';
+    const rph = (t * 60) % 22;
+    for (const ccx of [xc - sp, xc + sp]) for (let rx = ccx - 44; rx <= ccx + 46; rx += 15){
+      if (Math.abs(rx - xc) < 16) continue;
+      for (let ry = cy + 26 + rph; ry < ys - 70; ry += 22){
+        if (a.riseLbl > .01 && rx > box[0] && rx < box[2] && ry + 10 > box[1] && ry < box[3]) continue;
+        g.beginPath(); g.moveTo(rx, ry); g.lineTo(rx - 3, ry + 10); g.stroke();
+      }
+    }
+    g.restore();
+    // 상승 기류(구름 뒤로 지나감, 이름표 자리는 비움)
+    const ga = a.riseLbl > .01;
+    g.save(); g.globalAlpha = a.air; g.strokeStyle = windC; g.lineWidth = 7; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(xc, bot); g.lineTo(xc, ga ? lblY + 20 : top + 20); if (ga){ g.moveTo(xc, lblY - 20); g.lineTo(xc, top + 20); } g.stroke(); g.restore();
+    arrow(g, xc, top + 30, xc, top, { color: windC, lw: 7, head: 24, alpha: a.air });
+    cloudShape(g, xc - sp, cy, s, cloudC, a.air); cloudShape(g, xc + sp, cy + 4, s * .92, cloudC, a.air);
+    txt(g, '상승 기류', xc, lblY, { color: windC, alpha: a.riseLbl * a.air, size: 28 });
+    // 하강 기류 — 서쪽·동쪽 중 더 차가운 바다 위
+    for (const [lon, k] of [[124, aW], [266, 1 - aW]]){
+      const al = a.air * k; if (al < .01) continue; const x = X(lon), gl = a.sinkLbl > .01;
+      g.save(); g.globalAlpha = al; g.strokeStyle = windC; g.lineWidth = 7; g.lineCap = 'round'; g.setLineDash([2, 13]);
+      g.beginPath(); g.moveTo(x, top); g.lineTo(x, gl ? lblY - 20 : bot - 20); if (gl){ g.moveTo(x, lblY + 20); g.lineTo(x, bot - 20); } g.stroke(); g.restore();
+      arrow(g, x, bot - 24, x, bot, { color: windC, lw: 7, head: 24, alpha: al });
+      txt(g, '하강 기류', x, lblY, { color: windC, alpha: a.sinkLbl * al });
+    }
+  }
+}
+
+/* ═════════════ 지도(위에서 본 적도 부근 태평양 표층 수온) ═════════════ */
+const LANDS = [
+  // 오스트레일리아(북부)
+  [[113.4,-22],[114.2,-21.8],[116.7,-20.6],[118.8,-20.3],[121,-19.5],[122.3,-17.9],[123.5,-16.6],[125,-15.5],[126.9,-14],[128.2,-14.9],[129.6,-14.9],[129.8,-13.5],[130.6,-12.4],[132.6,-12.1],[132.6,-11.4],[134.1,-11.9],[135.9,-11.9],[136.9,-12.3],[135.9,-13.5],[135.5,-14.8],[137.1,-15.9],[139.3,-17.4],[140.8,-17.4],[141.6,-15.1],[141.6,-12.6],[142.5,-10.7],[143.2,-11.9],[143.6,-14],[145.3,-14.9],[146.1,-17.6],[146.3,-19],[148.8,-20.3],[149.5,-22.2],[150.8,-22.6],[153.1,-25.5],[153.6,-28.7],[153.2,-31.5],[153,-34],[115,-34],[115,-30.5],[114.6,-28.2],[113.8,-26.2],[113.4,-24.4]],
+  // 뉴기니
+  [[131,-1.4],[132.3,-.4],[134,-.9],[134.5,-2.9],[135.5,-3.4],[137.2,-1.5],[138.7,-1.8],[140.9,-2.6],[142.8,-3.3],[144.6,-3.9],[145.8,-5],[147.4,-6],[147.9,-6.6],[146.9,-6.9],[147.6,-8.1],[149.9,-9.9],[150.7,-10.6],[149.7,-10.4],[147.5,-10.1],[146,-8.6],[144.4,-7.6],[143.3,-8.6],[143.4,-9.1],[142.1,-9.2],[140.9,-9.1],[139.9,-8.1],[138.8,-8.2],[138.1,-7.6],[138.7,-6.8],[137.9,-5.2],[136.2,-4.6],[135,-4.4],[133.6,-3.9],[132.9,-4.1],[132,-2.8],[133.2,-2.2],[131.9,-1.6]],
+  // 보르네오
+  [[109,1.5],[109.6,-.3],[110.2,-1.7],[110.1,-2.9],[111.7,-3],[113,-3.2],[114.5,-3.5],[116,-3.9],[116.5,-2.5],[116.1,-1],[117.5,.1],[117.9,1.2],[118.9,1],[117.9,2.9],[118.1,4.4],[119.2,5.4],[117.7,6.4],[116.6,6.9],[115.6,5.6],[115.4,4.9],[114.6,4],[113.3,3.2],[111.4,2.4],[111,1.6],[109.7,2]],
+  // 수마트라
+  [[95.3,5.5],[97.5,5.2],[98.7,3.8],[100.4,2.2],[101.6,1.7],[103.1,.5],[103.8,-1.1],[105,-2.6],[106.1,-3.1],[105.9,-4.4],[105.8,-5.8],[104.6,-5.9],[102.6,-4.2],[101.4,-2.8],[100.1,-.6],[99.3,.2],[98.6,1.8],[97.7,2.5],[96.4,3.9],[95.3,5]],
+  // 자와
+  [[105.2,-6.8],[106.1,-5.9],[107.3,-5.9],[108.6,-6.8],[110.5,-6.9],[112.6,-6.9],[114.5,-7.8],[114.5,-8.7],[112.8,-8.4],[110.6,-8.2],[108.5,-7.7],[106.5,-7.4],[105.4,-6.9]],
+  // 소순다·티모르
+  [[115.1,-8.1],[116.5,-8.3],[119,-8.4],[121,-8.5],[122.8,-8.3],[122.9,-8.8],[120.5,-8.9],[118,-8.9],[116.1,-8.9],[115.1,-8.8]],
+  [[124.4,-9.2],[125.1,-8.6],[127.3,-8.4],[126.6,-8.9],[124.9,-10],[123.6,-10.3],[124,-9.6]],
+  // 술라웨시
+  [[119.4,-5.4],[119.6,-4],[119,-3.5],[118.8,-2.6],[119.2,-1.2],[119.8,.1],[120,.6],[121,1.3],[122.9,.9],[124.1,.9],[125.2,1.4],[124.4,.4],[123.6,.3],[121.5,.5],[120.2,.2],[120,-.5],[121,-1],[122,-.6],[123.3,-.6],[122.6,-1.4],[121.5,-1.9],[122.4,-3.1],[123.2,-4.7],[122,-4.5],[121.6,-4.2],[121,-2.6],[120.4,-2.8],[120.4,-5.5]],
+  // 할마헤라
+  [[127.4,1.9],[128.1,1.3],[128.7,1.1],[128.2,.4],[128.9,-.6],[127.9,-.4],[127.6,.9]],
+  // 필리핀
+  [[120.6,18.5],[122.3,18.4],[122.2,17],[122.5,16.2],[121.6,15.9],[121.6,14.3],[122.7,14.3],[124,13],[123,13],[121.9,13.9],[120.6,13.9],[120.6,14.8],[119.9,15.4],[119.8,16.4],[120.4,16.6]],
+  [[122,11.9],[123,11],[123.3,9.7],[124,10.6],[125,11.3],[125.5,12.5],[124.3,12.6],[123.3,11.7],[122.6,10.9],[121.9,11.3]],
+  [[122,6.9],[123,7.6],[123.6,7.9],[124.2,8.2],[125.4,9],[125.5,9.8],[126.5,8.1],[126.5,7.2],[126,6.3],[125.4,5.6],[124.2,6.2],[123.9,6.9],[122.8,7.5]],
+  [[117.2,8.4],[119.5,10.5],[119.6,11.4],[118.8,10.1],[117.3,8.7]],
+  // 타이완 · 하이난
+  [[120.1,23],[121,25.1],[121.9,25],[121.5,23],[120.8,21.9]],
+  [[108.6,19.2],[109.6,18.2],[110.6,18.6],[111,19.7],[110.4,20.1],[109.3,20]],
+  // 인도차이나·중국 남부
+  [[98,34],[98,13.6],[100,13.5],[100.9,12.6],[102.2,12.2],[103,11],[104.3,10.5],[104.8,8.6],[105.2,8.8],[106.6,9.9],[107.7,10.5],[109.2,11.7],[109.4,13.4],[108.8,15.4],[107.2,16.9],[105.9,18.8],[106.7,20.4],[107.9,21.5],[109.8,21.4],[110.5,20.4],[111,21.4],[113,22.2],[114.2,22.3],[116.5,22.9],[118.6,24.6],[119.6,25.9],[120.5,27.2],[121.7,28.5],[121.9,30.8],[121.3,34]],
+  // 말레이반도
+  [[98.5,13.6],[99.6,12],[99.2,10.3],[99.9,9.3],[100.4,7.4],[101,6.9],[102.1,6.2],[103.4,4.9],[103.4,3.7],[104.2,1.5],[103.5,1.3],[102.3,2.1],[101.3,2.9],[100.6,4.2],[100.1,5.5],[99.5,7],[98.4,8],[98.4,10]],
+  // 뉴칼레도니아
+  [[164,-20.2],[165.5,-21],[167,-22.3],[166.3,-22.3],[164.3,-20.7]],
+  // 아메리카(멕시코·중앙아메리카·남아메리카 서해안)
+  [[242.9,32.5],[243.8,30.4],[245.2,28],[245.9,26.7],[247.6,24.6],[249,23.7],[250.1,22.9],[250.3,23.8],[249.4,24.6],[248.4,26],[247.6,27.6],[246.7,28.9],[245.3,31],[245.2,31.8],[246.9,31.3],[247.5,30],[248.9,28],[250.6,26.6],[251.9,25.2],[253.6,23.2],[254.6,21.9],[254.6,20.6],[254.8,19.6],[255.7,19.1],[257.4,18.2],[259,17.6],[260.5,16.9],[262.3,16],[263.9,15.7],[265.4,16.1],[266.9,15.4],[268,14.5],[269.5,13.8],[271,13.4],[272.5,12.9],[273.4,11.8],[274.2,10.9],[274.2,10.1],[275.1,9.6],[276.5,8.6],[277.6,8.3],[278.3,7.4],[279.8,7.3],[280,8.4],[280.6,8.9],[281.6,8.6],[282.4,8.1],[282.6,7],[282.6,5.6],[282.7,3.9],[281.9,2.6],[281,1.4],[280,.8],[279.6,-.4],[279,-1.7],[280.1,-2.5],[279.7,-3.3],[278.7,-4.4],[278.9,-5.3],[279.3,-6.2],[279.9,-6.9],[280.8,-7.9],[281.5,-9],[282.1,-10.1],[282.9,-11.6],[283.5,-12.9],[283.8,-13.8],[284.8,-15.2],[286.6,-16.5],[288.4,-17.7],[289.7,-18.5],[289.8,-20.5],[289.8,-23.4],[289.5,-25.4],[288.6,-28],[288.4,-30],[288.3,-34],[304,-34],[304,10.2],[298.5,10.6],[296,10.6],[294,10.5],[292,10.5],[289.8,11.6],[288.4,12.4],[287.7,11.2],[286.3,11.3],[284.5,10.6],[284,9.5],[283.2,8.6],[282.6,8.7],[281,9.6],[279.6,9.2],[277.5,9.5],[276.5,10.8],[276.4,12.5],[276.6,14.5],[275.6,15.9],[274,15.9],[271.8,15.7],[271.7,17.5],[272.4,19.5],[273,21.5],[271.4,21.5],[269.6,21.1],[269.4,19.7],[268.5,18.6],[265.5,18.2],[264.2,18.8],[262.8,20.8],[262.3,22.5],[262.4,25],[262.7,27.5],[263.5,28.5],[265,29.2],[266.5,29.7],[268.5,29.5],[270.5,30.2],[272,30.6],[274,30.4],[275.5,29.9],[276.6,29.3],[276.8,34]],
+  // 플로리다 · 쿠바 · 히스파니올라 · 자메이카 · 푸에르토리코
+  [[277.3,34],[277.3,28],[278,26.5],[279,25.2],[279.8,25.6],[279.9,26.8],[279.4,28.6],[278.7,30.5],[278.8,34]],
+  [[275.1,21.9],[275.9,22.6],[277.5,23.1],[279.6,23.2],[281.6,22.6],[283.5,21.6],[285.8,20.2],[285.3,19.9],[282.8,20.6],[282,21.2],[280.2,21.8],[278.3,22.2],[276.8,21.8]],
+  [[288.1,19.9],[290.3,19.9],[291.6,19.6],[291.5,18.4],[290,18.2],[288.5,18.2],[287.6,18.5],[288.5,19]],
+  [[281.7,18.4],[283.6,18.3],[283.3,17.9],[281.8,18.2]],
+  [[292.8,18.5],[294.4,18.4],[294.3,18],[292.8,18]]
+];
+function drawMap(c, st, now, o){
+  const g = begin(c), W = c.w, H = c.h, lm = o.latMax, t = now / 1000;
+  const X = lon => W * (lon - 100) / 200, Y = lat => H * (lm - lat) / (2 * lm), ppd = W / 200;
+  // 수온 색(낮은 해상도로 계산한 뒤 부드럽게 키움). 바뀔 때만 다시 계산
+  const key = Math.round(st.seaE * 500);
+  if (!c.sst || c.sst.key !== key){
+    const cols = Math.round(W / 5), rows = Math.round(H / 5), off = (c.sst && c.sst.cv) || document.createElement('canvas');
+    off.width = cols; off.height = rows; const o2 = off.getContext('2d'), img = o2.createImageData(cols, rows);
+    for (let j = 0; j < rows; j++){ const lat = lm - (j + .5) / rows * 2 * lm;
+      for (let i = 0; i < cols; i++){ const lon = 100 + (i + .5) / cols * 200, col = cmap(M.T(lon, lat, st.seaE)), p = (j * cols + i) * 4;
+        img.data[p] = col[0]; img.data[p + 1] = col[1]; img.data[p + 2] = col[2]; img.data[p + 3] = 255; } }
+    o2.putImageData(img, 0, 0); c.sst = { key, cv: off };
+  }
+  g.save(); g.beginPath(); g.roundRect(0, 0, W, H, o.radius || 0); g.clip();
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(c.sst.cv, 0, 0, W, H);
+  // 땅
+  g.fillStyle = o.land || '#3b3a35';
+  for (const poly of LANDS){ g.beginPath(); poly.forEach(([lon, lat], i) => i ? g.lineTo(X(lon), Y(lat)) : g.moveTo(X(lon), Y(lat))); g.closePath(); g.fill(); }
+  // 적도
+  g.save(); g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 2; g.setLineDash([10, 9]); g.beginPath(); g.moveTo(0, Y(0)); g.lineTo(W, Y(0)); g.stroke(); g.restore();
+  txt(g, '적도', W - 10, Y(0) - (o.small ? 13 : 18), { align: 'right', size: o.small ? 24 : 26, color: '#f5f5f7' });
+  // 무역풍: 동 → 서(북반구는 북동쪽에서, 남반구는 남동쪽에서 적도 쪽으로 비스듬히)
+  const w = st.windW, sp = 24 * ppd, L = Math.min(sp * .62, o.small ? 56 : 120) * (o.small ? .45 + .55 * w : .35 + .65 * w), ph = (t * (o.small ? 18 : 40) * (.3 + .7 * w)) % sp;
+  const hd = Math.min(o.small ? 16 : 24, L * .45 + (o.small ? 4 : 6));
+  if ((st.windA ?? 1) > .01) for (const lat of o.windLats) for (let i = 0; i < 7; i++){
+    const cx = X(150) + i * sp - ph, fade = sstep(X(140), X(156), cx) * (1 - sstep(X(262), X(278), cx));
+    if (fade < .02) continue;
+    const dy = (lat > 0 ? 1 : -1) * L * .22, cy = Y(lat);
+    arrow(g, cx + L / 2, cy - dy / 2, cx - L / 2, cy + dy / 2, { color: '#BF5AF2', lw: o.small ? 5 : 7, head: hd, alpha: fade * (st.windA ?? 1), outline: 'rgba(0,0,0,.45)' });
+  }
+  // 비구름: 가장 따뜻한 바다 위(북위 4° 부근)
+  if ((st.cloudA ?? 1) > .01){
+    const cl = M.cloud(st.cloudE), cs = Math.min(cl.sd * .8, 24) * ppd, s = o.small ? 15 : 30;
+    for (const dx of [-cs, cs]){
+      const x = X(cl.lon) + dx, y = Y(4);
+      g.save(); g.globalAlpha = st.cloudA ?? 1; g.strokeStyle = 'rgba(210,220,232,.9)'; g.lineWidth = o.small ? 2 : 3;
+      for (let r = -1; r <= 1; r++){ g.beginPath(); g.moveTo(x + r * s * .5, y + s * .5); g.lineTo(x + r * s * .5 - 3, y + s * .5 + (o.small ? 8 : 14)); g.stroke(); }
+      g.restore();
+      cloudShape(g, x, y, s, '#e4e7eb', st.cloudA ?? 1);
+    }
+  }
+  g.restore();
+  if (o.names){
+    txt(g, '오스트레일리아', X(133.5), Y(-23.5), { size: 26, color: '#f5f5f7' });
+    pill(g, '인도네시아', X(118), Y(-12.5), { size: 24 });
+    txt(g, '남아메리카', X(291.5), Y(-9), { size: 26, color: '#f5f5f7' });
+  }
+  if (o.tempLbl){
+    pill(g, '따뜻한 바다', X(164), Y(-6), { alpha: st.tempA, bg: 'rgba(120,20,8,.78)' });
+    pill(g, st.eastWarm > .5 ? '따뜻해진 바다' : '찬 바다', X(262), Y(-5), { alpha: st.tempA, bg: st.eastWarm > .5 ? 'rgba(120,20,8,.78)' : 'rgba(10,40,90,.8)' });
+  }
+}
+
+/* ═════════════ 장면 정의 ═════════════ */
+const CV = { cover: regCanvas($('#cvCover')), normal: regCanvas($('#cvNormal')), sim: regCanvas($('#cvSim')), map: regCanvas($('#cvMap')) };
+function setCap(el, s){
+  el.textContent = s;
+  if (!instant && !RM){ el.style.transition = 'none'; el.style.opacity = 0; void el.offsetWidth; el.style.transition = ''; el.style.opacity = 1; }
+  else el.style.opacity = 1;
+}
+
+/* 장면 1 · 표지 */
+const cov = { windW: 1, seaE: 0, cloudE: 0, tempA: 0, eastWarm: 0 };
+const COVER_CAP = [
+  '적도 부근 태평양을 위에서 본 모습이에요.',
+  '서쪽 바다는 따뜻하고, 동쪽 바다는 차가워요.',
+  '어느 해, 동쪽에서 불어오던 바람이 약해지면',
+  '따뜻한 바닷물이 동쪽으로 퍼지고',
+  '비구름도 동쪽으로 옮겨 가요. 왜 이런 일이 생길까요?'
+];
+S.push({
+  title: '표지 — 바람이 약해지면', n: 4,
+  script: '적도 부근 태평양을 위에서 본 모습입니다. 색은 바다 표면의 수온이에요. 빨강일수록 따뜻하고 파랑일수록 차갑습니다. 바람이 약해지는 해가 있는데, 그러면 따뜻한 바닷물과 비구름이 동쪽으로 옮겨 갑니다. 오늘은 왜 이런 일이 생기고, 우리 생활에 어떤 영향을 주는지 알아볼게요. (지도 색은 원리를 보여 주는 모형이고 실제 관측값이 아닙니다.)',
+  cues: ['질문을 읽어 주고, 지도 색이 바다 표면의 수온이라는 것을 알려 줍니다.', '서쪽(인도네시아 쪽)은 따뜻하고 동쪽(남아메리카 쪽)은 차갑다는 것을 짚습니다.', '보라 화살표(바람)가 짧아지는 것을 보게 합니다.', '동쪽 바다 색이 빨갛게 바뀌는 것을 보게 합니다.', '비구름이 따뜻한 바다를 따라 옮겨 간 것을 보고, 왜일까 물어봅니다.'],
+  reset(){ Object.assign(cov, { windW: 1, seaE: 0, cloudE: 0, tempA: 0, eastWarm: 0 }); setCap($('#coverCap'), COVER_CAP[0]); },
+  step(k){
+    setCap($('#coverCap'), COVER_CAP[k]);
+    if (k === 1){ tw(cov, 'tempA', 1, 500); SND.tok(); }
+    if (k === 2){ tw(cov, 'windW', .15, 1000, 0, easeIO); SND.wind(); }
+    if (k === 3){ tw(cov, 'seaE', .9, 1100, 0, easeIO); tw(cov, 'eastWarm', 1, 10, 550); }
+    if (k === 4){ tw(cov, 'cloudE', .9, 1100, 0, easeIO); SND.tok(); }
+  },
+  draw(now){
+    drawMap(CV.cover, { seaE: cov.seaE, windW: cov.windW, cloudE: cov.cloudE, tempA: cov.tempA, eastWarm: cov.eastWarm }, now,
+      { latMax: 30, windLats: [12.5, -12.5], names: true, tempLbl: true, radius: 18, land: '#3a3934' });
+  }
+});
+
+/* 장면 2 · 평상시 */
+const nor = { e: 0, a: {} };
+const NOR_A0 = { wind: 0, windLbl: 0, flow: 0, flowLbl: 0, up: 0, upLbl: 0, fish: 0, fishLbl: 0, air: 0, riseLbl: 0, sinkLbl: 0 };
+S.push({
+  title: '평상시 적도 태평양', n: 7,
+  script: '적도를 따라 태평양을 동서로 자른 단면입니다. 평상시에는 동쪽에서 서쪽으로 무역풍이 붑니다. 바람이 바다 표면을 밀어 따뜻한 표층 해수가 서쪽으로 이동하고, 서쪽에 두껍게 쌓여요. 동쪽은 따뜻한 물이 빠져나간 자리로 영양분이 많은 심해의 찬 해수가 올라옵니다. 이것이 용승이고, 그래서 동태평양은 좋은 어장이 됩니다. 따뜻한 서쪽 바다 위에서는 공기가 올라가 비가 많이 오고, 찬 동쪽 바다 위에서는 공기가 내려와 비가 적어요. (단면의 높이·깊이·거리는 실제 비율이 아닙니다.)',
+  cues: ['적도를 따라 동서로 자른 단면이라고 설명합니다. 서쪽에 따뜻한 해수가 두껍게 있어요.', '동쪽에서 서쪽으로 부는 바람을 보여 줍니다. 이 바람의 이름은?', '① 무역풍', '바람이 표층 해수를 서쪽으로 밀어요. 그래서 서쪽은 따뜻한 해수층이 두껍고 동쪽은 얇아요.', '동쪽에서 찬 해수가 올라옵니다. 영양분이 많아 물고기가 많아요.', '② 용승', '따뜻한 서쪽 바다 위에서는 공기가 올라가 비가 내리고, 찬 동쪽 바다 위에서는 공기가 내려와요.', '③ 상승'],
+  reset(){ nor.e = 0; nor.a = Object.assign({}, NOR_A0); },
+  step(k){
+    const a = nor.a;
+    if (k === 1){ tw(a, 'wind', 1, 700); SND.wind(); }
+    if (k === 2){ openBlank(1); tw(a, 'windLbl', 1, 400); }
+    if (k === 3){ tw(a, 'flow', 1, 700); tw(a, 'flowLbl', 1, 500, 300); }
+    if (k === 4){ tw(a, 'up', 1, 700); tw(a, 'fish', 1, 600, 350); tw(a, 'fishLbl', 1, 500, 600); }
+    if (k === 5){ openBlank(2); tw(a, 'upLbl', 1, 400); }
+    if (k === 6){ tw(a, 'air', 1, 800); tw(a, 'sinkLbl', 1, 500, 500); SND.tok(); }
+    if (k === 7){ openBlank(3); tw(a, 'riseLbl', 1, 400); }
+  },
+  draw(now){ drawSection(CV.normal, nor, now, 'light'); }
+});
+
+/* 장면 3 · 무역풍이 약해지면(시뮬레이터) */
+const sim = { e: 0, a: { wind: 1, windLbl: 1, flow: 1, flowLbl: 1, up: 1, upLbl: 1, fish: 1, fishLbl: 1, air: 1, riseLbl: 1, sinkLbl: 1 }, rain: false, dragging: false };
+const range = $('#windRange'), windVal = $('#windVal'), rainW = $('#rainW'), rainE = $('#rainE');
+let lastVal = '', lastRain = '';
+function simUI(){
+  if (!sim.dragging) range.value = Math.round(sim.e * 100);
+  const v = sim.e < .15 ? '평상시' : sim.e < .6 ? '조금 약함' : '약함';
+  if (v !== lastVal){ windVal.textContent = v; lastVal = v; }
+  const elnino = M.sinkW(sim.e) > .5;
+  const r = (sim.rain ? '1' : '0') + (elnino ? '1' : '0');
+  if (r !== lastRain){
+    lastRain = r;
+    rainW.textContent = elnino ? '강수량 감소 ↓' : '강수량 많음';
+    rainE.textContent = elnino ? '강수량 증가 ↑' : '강수량 적음';
+    rainW.style.color = rainE.style.color = '#f5f5f7';
+    rainW.classList.toggle('show', sim.rain); rainE.classList.toggle('show', sim.rain);
+    rainE.style.marginLeft = '0'; rainE.style.marginRight = '14px';
+  }
+}
+// 슬라이더를 직접 움직이면 그 값이 곧 e (보간 식은 위 «엘니뇨 모형» 주석)
+range.addEventListener('pointerdown', e => { e.stopPropagation(); sim.dragging = true; cancelTween(sim, 'e'); unlockAudio(); });
+range.addEventListener('input', () => { cancelTween(sim, 'e'); sim.e = range.value / 100; });
+const endDrag = () => { if (!sim.dragging) return; sim.dragging = false; range.blur(); };
+range.addEventListener('pointerup', endDrag); range.addEventListener('pointercancel', endDrag); range.addEventListener('change', () => { range.blur(); });
+$('#simCtl').addEventListener('click', e => e.stopPropagation());
+S.push({
+  title: '무역풍이 약해지면 — 엘니뇨', n: 6,
+  script: '이제 무역풍 세기를 직접 바꿔 볼게요. 바람이 약해지면 서쪽에 쌓여 있던 따뜻한 해수가 동쪽으로 퍼지고, 용승도 약해집니다. 그래서 동태평양의 표층 수온이 평년보다 높은 상태가 한동안 이어지는데, 이것이 엘니뇨입니다. 찬 해수가 덜 올라오니 영양분 공급이 줄어 어획량이 줄고, 비구름이 따뜻한 바다를 따라 옮겨 가 서쪽은 가뭄과 산불, 동쪽은 홍수가 일어나요. 슬라이더를 다시 왼쪽으로 돌려 평상시와 비교해 보세요. (슬라이더는 바람 세기를 상대적으로 나타낸 모형입니다.)',
+  cues: ['슬라이더는 무역풍 세기입니다. 지금은 평상시. 학생에게 «바람이 약해지면 무엇이 바뀔까?» 묻고 예상을 들어 봅니다.', '무역풍을 약하게 합니다. 따뜻한 해수층·용승·비구름·지도 색을 차례로 보게 합니다.', '④ 높은 — 동태평양 수온이 평년보다 높은 상태가 지속됩니다. 이것이 엘니뇨.', '⑤ 어획량 — 용승이 약해져 영양분 공급이 줄었어요. 물고기 수를 보게 합니다.', '강수량이 바뀐 곳: 서쪽은 하강 기류로 강수량 감소, 동쪽은 상승 기류로 강수량 증가.', '⑥ 가뭄 — 서쪽은 가뭄·산불, 동쪽은 홍수.', '처음 질문의 답을 읽습니다. 슬라이더를 왼쪽으로 돌려 평상시와 비교해 봐도 좋아요.'],
+  reset(){ cancelTween(sim, 'e'); sim.e = 0; sim.rain = false; sim.dragging = false; $('#ans3').classList.remove('show'); lastRain = ''; simUI(); },
+  step(k){
+    if (k === 1){ tw(sim, 'e', 1, 1200, 0, easeIO); SND.wind(); }
+    if (k === 2) openBlank(4);
+    if (k === 3) openBlank(5);
+    if (k === 4){ sim.rain = true; SND.tok(); }
+    if (k === 5) openBlank(6);
+    if (k === 6){ $('#ans3').classList.add('show'); SND.chime(); }
+    simUI();
+  },
+  draw(now){
+    simUI();
+    drawSection(CV.sim, sim, now, 'dark');
+    drawMap(CV.map, { seaE: sim.e, windW: 1 - sim.e, cloudE: sim.e }, now, { latMax: 25, windLats: [11, -11], small: true, radius: 12, land: '#4a4840' });
+  }
+});
+
+/* ═════════════ 그리기 반복 · 시작 ═════════════ */
+let lastFrame = 0;
+function frame(now){
+  lastFrame = now; runTweens(now);
+  try{ S[cur.s].draw(now); }catch(err){ console.error(err); }
+  drawInk(now); requestAnimationFrame(frame);
+}
+// 화면이 잠깐 rAF를 멈추는 환경에서도 그림이 끝 상태로 그려지게
+setInterval(() => { const now = performance.now(); if (now - lastFrame > 300){ runTweens(now); try{ S[cur.s].draw(now); }catch(err){} drawInk(now); } }, 250);
+fit(); buildOverview();
+{ const h = parseHash(); show(h.s, h.k, false); }
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

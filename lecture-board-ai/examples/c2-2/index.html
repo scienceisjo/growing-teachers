@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>판의 경계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--paper:#f3ecd9;--ink:#1f2a44;--soft:rgba(31,42,68,.68);--hair:rgba(31,42,68,.28);--glow:#f6d36b;--faint:rgba(31,42,68,.12)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ink);overscroll-behavior:none}
+body{font-family:'Pretendard Variable',Pretendard,system-ui,'Malgun Gothic',sans-serif;color:var(--ink);word-break:keep-all;-webkit-font-smoothing:antialiased}
+body.drawing{touch-action:none}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:var(--paper);overflow:hidden;user-select:none;-webkit-user-select:none}
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s}
+.scene.cur{opacity:1;visibility:visible;transition:opacity .5s ease}
+.inst,.inst *{transition:none!important;animation:none!important}
+.serif,h1,h2{font-family:'Gowun Batang',serif;font-weight:400}
+.eyebrow{position:absolute;left:120px;top:70px;margin:0;font-size:28px;letter-spacing:.24em;color:var(--soft);font-weight:400}
+h2.title{position:absolute;left:120px;top:110px;margin:0;font-size:62px;line-height:1.2;letter-spacing:-.01em}
+.fade{opacity:0;transition:opacity .7s cubic-bezier(.2,.8,.2,1)}
+.fade.on{opacity:1}
+/* 빈칸 */
+.blank{position:relative;display:inline-block;min-width:190px;margin:0 12px 0 26px;padding:0 12px;border-bottom:2.5px solid var(--ink);text-align:center;line-height:1.12;vertical-align:baseline}
+.blank.w2{min-width:236px}
+.blank .no{position:absolute;left:-24px;top:-22px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--paper);font:400 25px/40px 'Gowun Batang',serif;text-align:center;font-style:normal;letter-spacing:0}
+.blank .ans{display:inline-block;font-family:'Gowun Batang',serif;font-weight:700;opacity:0;transition:opacity .2s}
+.blank.open .ans{opacity:1}
+.blank.pop .ans{animation:pop .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{0%{opacity:0;transform:scale(.55)}60%{opacity:1;transform:scale(1.16)}100%{opacity:1;transform:scale(1)}}
+/* 학습지 줄 */
+.sheet{position:absolute;left:120px;right:120px;border-top:1px solid var(--ink);border-bottom:1px solid var(--hair)}
+.sheet .row{font-size:36px;line-height:1.5;padding:13px 0 11px;border-top:1px solid var(--hair);font-weight:400;white-space:nowrap}
+.sheet .row:first-child{border-top:0}
+.sheet .row.two{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+/* 표지 */
+#s1 .glow{position:absolute;left:50%;top:560px;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:radial-gradient(circle,rgba(246,211,107,.55),rgba(246,211,107,0) 66%);pointer-events:none}
+#s1 .eyebrow{left:0;right:0;text-align:center;top:84px}
+#s1 h1{position:absolute;left:0;right:0;top:128px;margin:0;text-align:center;font-size:72px;line-height:1.3;letter-spacing:-.01em}
+#map1{position:absolute;left:400px;top:342px;width:1120px;height:429px}
+#map2{position:absolute;left:280px;top:202px;width:1360px;height:521px}
+.map svg{display:block;width:100%;height:100%;overflow:hidden}
+.legend{position:absolute;display:flex;gap:40px;font-size:28px;color:var(--ink);align-items:center;white-space:nowrap}
+.legend span{display:inline-flex;align-items:center;gap:10px}
+.legend svg{width:30px;height:30px;overflow:visible}
+.lg1{left:0;right:0;top:790px;justify-content:center}
+.cap{position:absolute;left:0;right:0;margin:0;text-align:center;font-size:34px;line-height:1.4}
+#s1 .cap{top:856px}
+.howto{position:absolute;left:0;right:0;bottom:56px;margin:0;text-align:center;font-size:26px;color:var(--soft);letter-spacing:.04em}
+/* 지도 안 */
+.land path{fill:rgba(31,42,68,.13);stroke:rgba(31,42,68,.42);stroke-width:1;vector-effect:non-scaling-stroke;transition:opacity .7s}
+.qg circle{fill:none;stroke:var(--ink);stroke-opacity:.78;stroke-width:1.3;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s}
+.qg.on circle{opacity:1}
+.vg path{fill:var(--ink);stroke:var(--paper);stroke-width:1.2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s}
+.vg.on path{opacity:1}
+.qg,.vg{transition:opacity .6s}
+.band path{fill:none;stroke:rgba(31,42,68,.13);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)}
+.band.on path{stroke-dashoffset:0}
+.bnd path{fill:none;stroke:var(--ink);stroke-width:3;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1),stroke-width .5s}
+.bnd.on path{stroke-dashoffset:0}
+.frame{fill:none;stroke:var(--hair);stroke-width:1;vector-effect:non-scaling-stroke}
+.rip circle{fill:none;stroke:var(--ink);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.kj text{font-family:'Pretendard Variable',Pretendard,sans-serif;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:22px;stroke-linejoin:round}
+.kj line,.kj circle{fill:none;stroke:var(--ink);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.map.fv .qg{opacity:.22}
+.map.fq .vg{opacity:.3}
+.map.calm .land path{opacity:.35}
+.map.calm .bnd path{stroke-width:4}
+.lg2{right:120px;top:126px;gap:34px;font-size:27px}
+.lg2 .q2{display:inline-flex;align-items:center;gap:10px}
+.lg2 .lnq{position:relative;display:inline-flex;align-items:center;gap:10px;min-width:170px}
+.lg2 .lnq b{font-weight:400;position:absolute;left:58px}
+#s2 .sheet{top:742px}
+.s2sheet .row{font-size:35px}
+/* 3장: 시뮬레이터 */
+#s3 .sheet{top:218px}
+.simwrap{position:absolute;left:120px;top:366px;width:1170px;height:480px}
+#sim{position:absolute;inset:0;width:1170px;height:480px}
+.simlab{position:absolute;inset:0;width:1170px;height:480px;overflow:visible;pointer-events:none}
+.simlab text{font-family:'Pretendard Variable',Pretendard,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:7px;stroke-linejoin:round}
+.simlab .big{font-family:'Gowun Batang',serif;font-size:36px}
+.simlab line,.simlab path{fill:none;stroke:var(--ink);stroke-width:2}
+.simcap{position:absolute;left:120px;width:1170px;top:852px;margin:0;font-size:30px;text-align:center;color:var(--ink);line-height:1.35;min-height:42px}
+.simui{position:absolute;left:1350px;width:450px;top:404px}
+.simui .ui-h{margin:0 0 6px;font-size:26px;letter-spacing:.24em;color:var(--soft)}
+.simui button{display:flex;align-items:center;gap:20px;width:100%;height:66px;margin:0;padding:0 6px;border:0;border-top:1px solid var(--hair);background:transparent;color:var(--soft);font:400 32px/1 'Gowun Batang',serif;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
+.simui button svg{width:66px;height:34px;flex:none}
+.simui button svg *{stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.simui button.act{color:var(--ink)}
+.simui button.act span{border-bottom:2.5px solid var(--ink);padding-bottom:4px}
+.simui button.reset{height:52px;font:300 26px/1 'Pretendard Variable',Pretendard,sans-serif;border-bottom:1px solid var(--hair)}
+.simui button.reset span{border-bottom:1px solid var(--hair);padding-bottom:3px}
+.obs{position:absolute;left:1350px;width:450px;top:722px;border-collapse:separate;border-spacing:0;font-size:26px}
+.obs tr.fade{opacity:1}.obs tr.fade td{opacity:0;transition:opacity .7s cubic-bezier(.2,.8,.2,1)}.obs tr.fade.on td{opacity:1}
+.obs th{font-weight:400;color:var(--soft);text-align:left;padding:6px 4px;border-bottom:1px solid var(--ink);letter-spacing:.06em}
+.obs td{padding:8px 4px;border-bottom:1px solid var(--hair);font-weight:400}
+.obs td:first-child{font-family:'Gowun Batang',serif}
+.answer{position:absolute;left:120px;width:1170px;top:912px;margin:0;text-align:center;font-family:'Gowun Batang',serif;font-size:34px;white-space:nowrap}
+.copy{position:absolute;left:0;right:0;top:1006px;margin:0;text-align:center;font-size:24px;color:var(--soft)}
+/* 판서·조작 */
+#ink{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:30}
+#bar{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:6px 14px;background:rgba(243,236,217,.94);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);opacity:0;transition:opacity .4s;z-index:40;font-size:24px}
+#bar.show{opacity:1}
+#bar button,#tools button{border:0;background:transparent;color:var(--ink);font:400 24px/1 'Pretendard Variable',Pretendard,sans-serif;padding:10px 14px;cursor:pointer}
+#bar .cnt{min-width:150px;text-align:center;font-family:'Gowun Batang',serif}
+#tools{position:absolute;right:26px;bottom:26px;z-index:45;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:8px}
+#tools .tbtn{width:64px;height:64px;border-radius:50%;background:rgba(31,42,68,.16);display:flex;align-items:center;justify-content:center;padding:0}
+#tools .tbtn svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:2}
+#tools .panel{display:none;flex-direction:column;background:var(--paper);border-top:1px solid var(--ink);border-bottom:1px solid var(--hair);min-width:260px}
+#tools.open .panel{display:flex}
+#tools .panel button{text-align:left;border-top:1px solid var(--hair);padding:14px 18px}
+#tools .panel button.on{text-decoration:underline;text-underline-offset:6px}
+#laser{position:absolute;inset:0;pointer-events:none;z-index:31}
+#script{position:absolute;left:0;right:0;bottom:0;max-height:360px;overflow:auto;background:rgba(243,236,217,.97);border-top:1px solid var(--ink);padding:22px 120px 28px;font-size:28px;line-height:1.6;display:none;z-index:42}
+#script.open{display:block}
+#script h3{margin:0 0 8px;font:400 26px 'Gowun Batang',serif;color:var(--soft);letter-spacing:.06em}
+#script p{margin:0 0 6px}
+#overview,#help{position:absolute;inset:0;background:rgba(243,236,217,.98);display:none;z-index:50;padding:110px 120px;overflow:auto}
+#overview.open,#help.open{display:block}
+#overview .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--ink)}
+#overview .it{padding:30px 26px 30px 0;border-right:1px solid var(--hair);cursor:pointer;font-size:30px}
+#overview .it+.it{padding-left:26px}
+#overview .it b{display:block;font:400 64px 'Gowun Batang',serif;margin-bottom:10px}
+#overview h3,#help h3{font:400 50px 'Gowun Batang',serif;margin:0 0 30px}
+#help dl{display:grid;grid-template-columns:260px 1fr;gap:10px 30px;font-size:28px;margin:0}
+#help dt{font-family:'Gowun Batang',serif}
+#veil{position:absolute;inset:0;z-index:60;display:none}
+#veil.b{display:block;background:#000}
+#veil.w{display:block;background:#fff}
+.student .tonly{display:none!important}
+@media (prefers-reduced-motion:reduce){.fade,.qg circle,.vg path,.band path,.bnd path{transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section class="scene" id="s1" data-steps="4" data-title="지진과 화산은 왜 특정한 지역에서?">
+  <div class="glow"></div>
+  <p class="eyebrow">중학교 과학 2 · Ⅱ. 지권의 변화</p>
+  <h1>지진과 화산은 왜<br>특정한 지역에서 자주 일어날까?</h1>
+  <div class="map" id="map1"></div>
+  <div class="legend lg1">
+    <span class="fade" data-on="1"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="6" fill="none" stroke="#1f2a44" stroke-width="2.4"/></svg>지진 발생 지점</span>
+    <span class="fade" data-on="2"><svg viewBox="0 0 30 30"><path d="M15 4 L27 25 H3 Z" fill="#1f2a44"/></svg>화산</span>
+  </div>
+  <p class="cap fade" data-on="3" data-off="4">점들이 띠 모양으로 모여 있어요 — 태평양 가장자리, 대서양 가운데, 알프스에서 히말라야까지</p>
+  <p class="cap fade" data-on="4">일본은 띠 위에 있고, 우리나라는 띠에서 조금 떨어져 있어요</p>
+  <p class="howto tonly">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</p>
+  <p class="howto sonly" style="display:none">화면을 누르거나 → 키로 넘겨요 · 번호 칸이 열리면 학습지의 같은 번호 칸에 적어요</p>
+</section>
+
+<section class="scene" id="s2" data-steps="6" data-title="지진과 화산이 모이는 곳">
+  <p class="eyebrow">2 · 지도에서 찾기</p>
+  <h2 class="title">지진과 화산이 모이는 곳</h2>
+  <div class="legend lg2">
+    <span class="q2"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="6" fill="none" stroke="#1f2a44" stroke-width="2.4"/></svg>지진 발생 지점</span>
+    <span class="q2"><svg viewBox="0 0 30 30"><path d="M15 4 L27 25 H3 Z" fill="#1f2a44"/></svg>화산</span>
+    <span class="lnq fade" data-on="3"><svg viewBox="0 0 46 30" style="width:46px"><path d="M2 15 H44" stroke="#1f2a44" stroke-width="4"/></svg><b class="fade" data-on="3" data-off="6">?</b><b class="fade" data-on="6">판의 경계</b></span>
+  </div>
+  <div class="map" id="map2" data-st="fv:1-2 fq:2-3 calm:5"></div>
+  <div class="sheet s2sheet">
+    <div class="row two">
+      <div><span class="blank" data-open="1"><i class="no">1</i><b class="ans">화산대</b></span> : 화산 활동이 자주 일어나는 지역</div>
+      <div><span class="blank" data-open="2"><i class="no">2</i><b class="ans">지진대</b></span> : 지진이 자주 일어나는 지역</div>
+    </div>
+    <div class="row"><span class="blank" data-open="4"><i class="no">3</i><b class="ans">판</b></span> : 지구의 겉 부분을 이루는 크고 작은 여러 개의 조각</div>
+    <div class="row">화산 활동과 지진이 자주 일어나는 지역은 <span class="blank w2" data-open="6"><i class="no">4</i><b class="ans">판의 경계</b></span>와 거의 일치한다.</div>
+  </div>
+</section>
+
+<section class="scene" id="s3" data-steps="6" data-title="경계에서 두 판이 움직이면">
+  <p class="eyebrow">3 · 판을 움직여 보기</p>
+  <h2 class="title">경계에서 두 판이 움직이면</h2>
+  <div class="sheet">
+    <div class="row">판은 지각과 <span class="blank" data-open="1"><i class="no">5</i><b class="ans">맨틀</b></span>의 윗부분을 포함하는 단단한 암석층이다. (두께 약 100 km)</div>
+    <div class="row">판의 경계에서는 화산 활동, 지진 같은 <span class="blank w2" data-open="5"><i class="no">6</i><b class="ans">지각 변동</b></span>이 자주 일어난다.</div>
+  </div>
+  <div class="simwrap">
+    <canvas id="sim" width="2340" height="960"></canvas>
+    <svg class="simlab" id="simlab" viewBox="0 0 1170 480"></svg>
+  </div>
+  <p class="simcap" id="simcap"></p>
+  <div class="simui" id="simui">
+    <p class="ui-h">판 움직이기</p>
+    <button type="button" tabindex="-1" data-mode="apart"><svg viewBox="0 0 66 34"><path d="M30 6 V28 M36 6 V28 M22 17 H4 M10 11 L4 17 L10 23 M44 17 H62 M56 11 L62 17 L56 23"/></svg><span>멀어지기</span></button>
+    <button type="button" tabindex="-1" data-mode="together"><svg viewBox="0 0 66 34"><path d="M33 6 V28 M4 17 H24 M18 11 L24 17 L18 23 M62 17 H42 M48 11 L42 17 L48 23"/></svg><span>가까워지기</span></button>
+    <button type="button" tabindex="-1" data-mode="past"><svg viewBox="0 0 66 34"><path d="M33 3 V31 M20 30 V6 M14 12 L20 6 L26 12 M46 4 V28 M40 22 L46 28 L52 22"/></svg><span>어긋나기</span></button>
+    <button type="button" tabindex="-1" class="reset" data-mode="rest"><span>처음 모습으로</span></button>
+  </div>
+  <table class="obs">
+    <tr><th>움직임</th><th>지진</th><th>화산 활동</th></tr>
+    <tr class="fade" data-on="2"><td>멀어질 때</td><td>일어난다</td><td>일어난다</td></tr>
+    <tr class="fade" data-on="3"><td>가까워질 때</td><td>일어난다</td><td>일어난다</td></tr>
+    <tr class="fade" data-on="4"><td>어긋날 때</td><td>일어난다</td><td>거의 없다</td></tr>
+  </table>
+  <p class="answer fade" data-on="6">그래서 화산대와 지진대는 판의 경계를 따라 띠 모양으로 나타난다.</p>
+  <p class="copy">그림은 모두 코드로 새로 그린 모식도 · 바탕: 중학교 과학 2(비상교육) 「크고 작은 여러 개의 판」</p>
+</section>
+
+<canvas id="ink" width="1920" height="1080"></canvas>
+<svg id="laser" viewBox="0 0 1920 1080"></svg>
+<div id="script" class="tonly"></div>
+<div id="overview"></div>
+<div id="help"></div>
+<div id="bar">
+  <button type="button" tabindex="-1" data-act="prev">◀ 이전</button>
+  <span class="cnt" id="cnt"></span>
+  <button type="button" tabindex="-1" data-act="next">다음 ▶</button>
+  <button type="button" tabindex="-1" data-act="sound" id="sndbtn">소리 켬</button>
+  <button type="button" tabindex="-1" data-act="full">전체 화면</button>
+</div>
+<div id="tools">
+  <button type="button" tabindex="-1" class="tbtn" id="tbtn" aria-label="판서 도구"><svg viewBox="0 0 30 30"><path d="M6 24 L8 18 L20 6 L24 10 L12 22 Z M17 9 L21 13"/></svg></button>
+  <div class="panel">
+    <button type="button" tabindex="-1" data-tool="laser">레이저 (L)</button>
+    <button type="button" tabindex="-1" data-tool="pen">빨간 펜 (P)</button>
+    <button type="button" tabindex="-1" data-tool="undo">한 획 지우기 (Z)</button>
+    <button type="button" tabindex="-1" data-tool="clear">모두 지우기 (C)</button>
+    <button type="button" tabindex="-1" data-tool="finger" id="fingerbtn">손가락: 자동</button>
+    <button type="button" tabindex="-1" data-tool="full">전체 화면 (F)</button>
+  </div>
+</div>
+<div id="veil"></div>
+</div>
+<script>
+'use strict';
+/* ===== 1. 지도 자료 (경도, 위도) — 단순화한 모식도. 실제 해안선을 따라 그린 것이 아님 ===== */
+const LAND = [
+ /* 북아메리카 */[-168,66,-163,69.5,-156,71.3,-141,69.7,-128,70,-115,68.5,-100,68,-95,71.5,-88,68.5,-82,69.5,-85,65,-93,62,-94,59,-92,57,-85,55.3,-80,56,-78,62,-73,62,-69,59,-64,60,-61,56,-56,52,-60,48,-64,49,-66,45,-70,43,-70.5,41.5,-74,40.5,-76,38,-76,35,-81,31.5,-80,26,-81,25,-82.5,27.5,-84,30,-89,30,-94,29.5,-97,27.5,-97.5,22,-96,19,-91,18.5,-90.5,21,-87,21.5,-88,16,-84,15.5,-83.5,11,-81.5,9,-79,9.5,-77.5,8.5,-78,7.3,-80.5,7.3,-83,8.3,-86,11,-88,13.3,-92,14.5,-95,16,-98,16,-101,17.5,-105.5,20,-105.5,23,-109,25.5,-111,28.5,-113,31.5,-114.5,30.5,-112,26,-110,23,-112,25,-115,29,-116.5,31.5,-117.5,33.5,-120.5,34.5,-122,37,-124,40.5,-124.3,43,-124,46.5,-124.7,48.4,-127,50.5,-130,54,-133,57.5,-136,58.5,-140,59.8,-146,61,-150,59.5,-152,58.5,-154,57,-158,56.5,-162,55,-165,54.6,-160,56.8,-158,58.7,-162,60,-165,61.8,-164,63.5,-161,64.5,-165,65],
+ /* 배핀섬 */[-90,72,-80,73.5,-71,71,-65,68,-62,66.5,-66,62,-72,63,-78,64.5,-84,67,-86,70],
+ /* 그린란드 */[-73,78,-66,80.5,-55,82,-40,83,-28,82.5,-27,76,-27,71,-30,68,-38,65.5,-43,60,-48,61,-52,64.5,-54,68,-56,72,-62,76,-70,77],
+ /* 아이슬란드 */[-24,65.5,-14,66.3,-13.6,65,-18,63.4,-22.5,63.8],
+ /* 남아메리카 */[-77.5,8.5,-75,11,-72,12,-71,10.5,-68,10.5,-62,10.5,-60,8.5,-57,6,-52,5,-50,1.5,-48,-1,-44,-2.5,-40,-3,-35,-5.5,-35,-9,-38.5,-13,-39,-17.5,-41,-22,-44.5,-23,-48.5,-26,-48.7,-28.5,-52,-32,-54,-34.5,-57,-35.5,-57,-38,-62,-39,-62.5,-41,-65,-42,-63.8,-42.5,-65.5,-45,-67.5,-46.5,-66,-48,-69,-51,-68.5,-53,-66,-55,-70,-55.5,-74,-53,-75.5,-48,-74,-44,-73.7,-37.5,-71.5,-32,-71.3,-27,-70.3,-18.5,-72,-17,-76,-14,-78,-10,-81,-6,-81,-4,-80,-2,-80,0.5,-78.8,1.5,-77.5,3.5,-77.4,7],
+ /* 쿠바 */[-84.9,21.9,-82,23.2,-77.2,22.5,-74.2,20.2,-77.7,19.9,-80.5,22,-83,21.8],
+ /* 히스파니올라 */[-74.4,18.5,-72.8,19.9,-70,19.7,-68.4,18.6,-70,18.2,-72.1,18.1],
+ /* 아프리카 */[-17,21,-16.3,19,-16.6,15,-17.2,14.7,-15,11,-13,9,-11,6.8,-7.5,4.4,-3,5,1,6,4.5,6.3,6.5,4.3,8.5,4.5,9.8,2.5,9.3,-1,11.8,-3.5,13,-6,13.6,-11,12,-17,14.5,-22.5,15.2,-27,18,-31.5,18.5,-34.3,20,-34.8,22.5,-34,26,-33.8,28.5,-32.5,31,-29.5,32.5,-26,35.5,-24,35.3,-21.5,34.8,-19.8,37,-18,40.5,-15,40.5,-10.5,39.3,-7,39.5,-4.5,41.5,-1.5,43.5,1.5,47,4.5,49.5,8,51.2,11,51.3,11.9,48,11.2,44,10.4,43.3,11.8,41.8,13.8,39.5,15.5,38.5,18,37.2,21,35.5,24,34,27,32.6,29.8,32.3,31.2,29,30.9,25,31.6,20,30.5,19.8,32,15.2,32.3,11,33.3,10,37,8,36.9,3,36.8,-1,35.7,-5.8,35.8,-6.8,34,-9.6,30.4,-9.8,29.2,-13,27.6,-14.6,26,-16,23.8],
+ /* 마다가스카르 */[43.3,-22,44,-25,47,-25,49.5,-16,50.4,-15.4,49.3,-12,47.5,-13.8,44.4,-16.3],
+ /* 유라시아 */[-9.3,43.2,-8.9,41.5,-9.5,38.8,-8.9,37,-6.3,36.8,-5.4,36,-2,36.8,-0.3,38.6,0.2,40,3.2,41.9,3.1,43.1,4.6,43.4,6.5,43.1,8.7,44.4,10.3,43.9,12.4,41.8,15.6,40,16,38,17,39,18.5,40.1,16.9,41.1,14,42.5,12.3,44.2,12.3,45.3,13.7,45.6,15.2,44.2,17.5,43,19.4,41.8,19.8,40.4,21.1,38.3,22.9,36.5,23.2,38,24,38.2,23.6,39.9,26.1,40.6,28.9,41,27.5,40.4,26.3,40.1,26.2,38.2,27.3,37,28.5,36.6,30.5,36.3,32.6,36.1,34.6,36.8,36,36.2,35.9,35,35.1,33.1,34.3,31.3,34.9,29.5,35.2,28,38.8,22,40.8,19.5,42.6,16.5,43.4,12.7,45,12.8,48.7,14,52.2,15.6,55.3,17.3,57.8,19,58.6,20.5,59.8,22.4,58.8,23.6,56.4,24.9,56.3,26.3,55.5,25.5,54.2,24.2,52,24,51.3,26.1,50.1,26.8,48.9,28,48,29.9,49.5,30.1,50.8,28.9,52.6,27.2,54.8,26.5,57.3,25.8,60.5,25.3,61.6,25.2,66.6,25.4,67.5,23.9,68.7,23.2,70.3,21,72.6,21.4,72.8,19,73.4,16,74.5,13.5,76.2,10,77.5,8,78.4,9.1,79.3,10.3,79.9,12,80.3,15.9,82.3,16.7,84.8,19.3,86.9,21.1,88.9,21.6,91.5,22.6,92.4,20.7,94.3,18.1,94.3,16.3,97.2,16.9,98.2,13.2,98.6,10.1,98.3,8,100.3,6.4,101,4.5,103.4,1.3,104.3,1.4,103.4,4.9,102.6,6,101.3,6.9,100,9.5,99.2,10.5,100,13.4,100.9,12.6,102.5,12.2,104.8,10.5,104.8,8.6,106.7,10.4,109.2,11.6,109.2,13.6,108.4,15.4,106.6,17.5,105.7,19.2,106.9,20.7,108.6,21.7,110,21.5,113,22.2,116.5,22.9,118.2,24.5,119.6,25.7,120.6,27.3,121.6,28.9,122,30.6,121.9,31.7,120.9,32.6,120.3,34.4,119.2,34.9,120.3,36.1,122.5,37.2,121,37.8,118.9,37.5,118,38.9,119.5,39.9,121.5,40.9,122.2,40.4,121.2,38.8,122.6,39.6,124.3,39.9,124.7,39.6,125.4,38.4,126.1,37.7,126.6,36.9,126.3,35.1,126.5,34.4,127.6,34.7,128.7,34.9,129.3,35.3,129.5,36.8,128.9,37.7,128.3,38.6,127.5,39.8,128.6,40.3,129.7,40.9,129.8,41.8,130.7,42.3,131.8,43.2,133.2,42.8,135.5,43.9,137.8,45.8,140.2,48.4,140.6,51.4,141.4,52.4,141.1,53.6,139.3,54.2,137.2,54.1,135.2,54.7,137.2,56.5,140.5,58.3,143.2,59.4,148.5,59.3,152.2,59,155,59.4,156.7,61.5,160,61.7,157,57.7,156.2,51.2,156.6,51,158.5,52.9,160,54.2,162,56,163.3,58.7,166,60.3,170,60,172.5,61,177.5,62.5,179.5,63.2,181.5,64.7,186,64.3,190.3,66,185,67.5,180,69,175,69.8,170,70.1,161,69.6,155,71,150,71.5,143,72.7,139,71.5,131,71,128.5,72.9,122,73,113,73.7,108,76.7,100,77.5,95,76,87,75,80,72.5,76,72.5,72,72.7,70,73,68,69,64,69.5,59,68.5,55,68.3,50,67.5,44,68.4,43.5,66,41,66.5,36,69,30,70,25,71,18,69.8,14,68,12,65,10.4,63.5,5,62,5.2,59,7,58,8.5,58.3,10.5,59.3,11.8,58,12.5,56.3,13,55.4,12.5,56,10.6,57.7,8.2,56.8,8.6,55.3,8.7,53.9,7,53.4,4.8,52.9,3.6,51.4,1.6,50.9,0.1,49.6,-1.3,49.6,-1.9,48.7,-4.7,48.5,-4.2,47.8,-2.4,47.2,-1.2,46,-1.3,44.4,-1.8,43.4,-4.5,43.4,-8,43.7],
+ /* 흑해(구멍) */[28,41.2,31.4,41.2,36,41.7,41.5,41.5,37.5,44.7,39.8,46.4,38.3,47.1,35.5,45.3,33,46,30,45.6,28.7,43.5],
+ /* 카스피해(구멍) */[47,45,47.5,42.8,49.5,40.5,49,38.5,50,37.4,53.9,37.3,53.5,40,51,42,53,45,50,46.5],
+ /* 영국 */[-5.7,50,1.5,51,1.7,52.8,0,54,-2,56,-1.8,57.6,-5,58.6,-6,56.5,-5,55,-3,53.5,-4.5,52.8,-5.2,51.7],
+ /* 아일랜드 */[-10,51.6,-6,52,-6,54,-8,55.3,-10,54],
+ /* 스리랑카 */[79.9,6.5,80.1,9.8,81.4,8.6,81.8,7,80.6,5.9],
+ /* 일본 혼슈·규슈 */[129.8,33.2,130.2,31.3,131.1,31.3,131.8,32.8,132.9,33.2,134.2,33.2,135.2,33.8,136.8,34.4,138.3,34.6,139.2,34.9,140,35.1,140.9,35.8,140.6,36.9,141,38.2,141.6,39.1,142.1,39.6,141.4,41.4,140.3,41.2,139.9,40.6,140,39.5,139.6,38.4,138.6,37.8,137.3,36.8,136.9,37.2,136.1,35.8,135.2,35.6,133.2,35.6,131.9,34.7,130.9,34],
+ /* 홋카이도 */[140,41.4,141.2,41.8,143.3,42,145.6,43.3,144.8,44.1,142.4,45.4,141.7,45.3,141.3,43.6,140.3,43.2,139.9,42.2],
+ /* 사할린 */[142,46,143.5,46.5,143,49,144.5,49,143.2,52,142.7,54.3,142,53.5,141.9,51],
+ /* 타이완 */[120.2,22.6,120.9,22,121.6,24,121.9,25,121.3,25.2,120.2,23.5],
+ /* 하이난 */[108.7,19.2,110.5,20.1,111,19.6,110,18.3,108.6,18.5],
+ /* 루손 */[119.9,16.2,120.6,18.6,122.3,18.4,122.2,16.3,121.6,15,124,13.9,124.1,12.6,122.9,13.5,121.8,13.9,120.6,13.9,120.6,14.6,120,15],
+ /* 민다나오 */[121.9,7,123.6,7.8,125.4,6,126.2,6.3,126.6,7.4,126.3,9.2,125.4,9.7,123.7,8.6,122.1,7.9],
+ /* 보르네오 */[109,1.5,109.6,2,111,1.4,113,3.2,115.5,5.2,116.6,6.9,117.7,6.1,119.2,5.1,118.1,4.4,117.9,1,118.8,1,117.5,0.1,116.5,-2.5,116.1,-4,114.6,-3.8,111.9,-3.5,110.2,-2.9,110,-1.2,109.1,0],
+ /* 수마트라 */[95.3,5.6,97.5,5.2,100.3,2.6,101.4,2.1,103.8,-1,106,-3,105.9,-5.8,104.5,-5.9,102.3,-4,100.9,-2.6,99.2,-0.1,98.7,1.7,97.2,3.8],
+ /* 자와 */[105.2,-6.8,106.2,-6,108.3,-6.3,110.5,-6.9,112.7,-6.9,114.5,-7.8,114.4,-8.7,111,-8.2,108,-7.8,106.4,-7.4],
+ /* 소순다 */[115.2,-8.4,116.7,-8.3,119.1,-8.3,122.8,-8.2,122.7,-8.8,119,-9,116.3,-9],
+ /* 티모르 */[123.6,-10.3,124.4,-9.3,125.9,-8.4,127,-8.4,125.1,-9.4],
+ /* 술라웨시 */[119.4,-5.5,120.4,-5.5,120.6,-3,121.9,-4.8,122.8,-4.2,121.3,-1.9,123.3,-0.9,121,-0.8,120.1,0.5,121.2,1.2,124.9,1.6,124.4,0.4,120,0,119.6,-0.9,118.9,-2.8],
+ /* 뉴기니 */[131,-1.1,132.3,-0.4,134.1,-0.9,135,-3.3,137.8,-1.5,141,-2.6,144.5,-3.8,145.8,-5.3,147.6,-6.1,147.5,-7.9,150.5,-10.4,149.6,-10.3,147.1,-9.5,146,-8,144.1,-7.7,143.3,-9.1,141,-9.1,139,-8.1,138,-7.5,138.9,-6.8,137.6,-5.2,135.2,-4.4,133.4,-4,132.1,-2.9,133.5,-2.3,131.9,-1.6],
+ /* 뉴브리튼 */[148.4,-5.6,150.3,-5.5,151.6,-4.2,152.2,-4.4,151.3,-5.8,149.1,-6.2],
+ /* 오스트레일리아 */[113.5,-22,114,-26.5,115,-34,118,-35,123,-34,129,-31.6,134,-32.5,138,-35,140,-38,144,-38.3,146.5,-39,150,-37.5,151,-34,153,-31,153,-25,150,-22.5,146,-19,145.5,-15,142.5,-10.7,141.5,-13,141.5,-17,140,-17.5,136,-15.5,137,-12,132,-11.3,130,-13,126,-14,122,-17.5,121,-19.5,117,-20.7],
+ /* 태즈메이니아 */[145,-41,148,-41,147,-43.5,145.5,-43],
+ /* 뉴질랜드 북섬 */[172.7,-34.5,174.5,-36.5,178.5,-37.7,177,-39.5,175,-41.5,173,-39.5,174.5,-38],
+ /* 뉴질랜드 남섬 */[172.7,-40.5,174.5,-41.5,171,-44.5,169,-46.6,166.5,-46,168.5,-44],
+ /* 하와이 */[-156.1,19.9,-155,19.6,-155.7,18.95,-156,19.3]
+];
+/* 판의 경계: 종류 s=한 판이 아래로 들어가는 곳, c=대륙끼리 부딪치는 곳, r=멀어지는 곳, t=어긋나는 곳 (지진 점의 흩어짐 정도만 다르게) */
+const BND = [
+ ['s',[-136,58,-142,59.2,-148,58.4,-152,56.8,-156,55.2,-161,53.8,-166,52.6,-171,51.6,-176,51,180,51,175,51.6,170,52.6,166,54.2,163.5,55,162,53,159.5,51,156.5,49,153.5,47,150.5,45.4,147.5,43.7,145,41.8,144,40,143.5,38,142.6,36,142,35]],
+ ['s',[142,35,142.3,32,142.6,29,143.3,25.5,144.6,22,146.6,18.5,147.6,15,147,12.5,145,11.2,142.5,11,140,10.4,138.2,8.6,136.4,6.8,135.5,4,136,1.5]],
+ ['s',[142,35,139,33.8,136.5,33,134,32.3,132.3,31.2,131,29.5,129.5,27.5,127.5,25.5,125,24.3,122.8,23.5,122.5,22,123,18,124.8,14,126.6,10,126.8,7,127.5,4.5,128.5,2,131,2.8,136,1.5]],
+ ['s',[120.8,21.8,119.5,19,119.3,16.5,119.8,14,120.2,13]],
+ ['s',[95.5,20,94.2,17,93.3,14,92.6,11,92.8,8,94,5.5,95.3,3,97,1,99,-1.8,101,-4,103,-6.2,105.3,-8,108,-9.6,111,-10.3,114,-10.6,117,-11,120,-11.2,122.5,-11,125,-10.5,127.5,-9.5,129.8,-8.4,131.6,-7,132.2,-5.3,131.5,-4.3,130.6,-3,131,-1.5,131.5,-0.3]],
+ ['s',[131.5,-0.3,134.5,-0.4,138,-1.3,141,-2.2,144,-3,146.5,-4.3,148.5,-4.5,151,-3.3,153.5,-4.5,155,-6,157,-8,159,-9.6,161.5,-11,164,-11.5,166,-12,166.3,-14,166.8,-16.5,168,-19,169.7,-21.5,171,-22.5,175,-22,179,-21,183,-20.2,186.3,-20.5]],
+ ['s',[166.5,-12.5,171,-13.5,176,-14.8,181,-15,186,-15.5,186.4,-18,186.3,-20.5,185.2,-23.5,184,-26.5,182.8,-30,181.8,-33,180.5,-36,179.2,-38.5,178,-40.5,176,-42,174,-43,171.5,-44,169,-45.5,166.5,-47,164.5,-49,162,-52,160.5,-55,158.8,-58,158,-61]],
+ ['r',[70,-25.5,72,-29,76,-33,79,-37.5,84,-41,90,-43.5,96,-46.5,101,-48.5,108,-49.8,115,-50,120,-50.5,125,-51,131,-52,138,-50.5,143,-52,148,-55,152,-58,158,-61]],
+ ['r',[70,-25.5,67.5,-21,66,-17,66.5,-12,68,-7,68,-2,66,2,62,6.5,59,10.5,57,13.5,51.5,14,47,12.5,44,12.2,42.5,14,40,17.5,38,20.5,36,24.5,34.5,27.8]],
+ ['t',[34.5,27.8,35,30.5,35.5,33,36.2,36.2]],
+ ['r',[70,-25.5,64,-28,58,-32,52,-36,45,-39,38,-42,32,-44,26,-46,18,-48,12,-51,5,-53,-1,-54.5]],
+ ['c',[95.5,20,96.5,24,96,27,94,28.5,91,27.8,88,27.5,84,28.3,80.5,29.8,77.5,32,74.5,34.6,72,35.5,70.5,33,69,30.5,67,27.5,66,25.3,61,24.8,57.5,25.8,55,27.5,52,29.5,49,31.5,46.5,33.8,44.5,36.3,42,37.3,39.5,37.8,37,37.6,36.2,36.2,33.5,35,30,34.5,27,34.7,24,34.8,21.5,36.2,20,38,18.5,39.2,16,39,15.3,38.2,12.5,37.5,10,37.6,6,37.2,2,36.8,-2,36.3,-5.5,35.9,-9,36,-13,36.6,-17,37.2,-21,37.5,-25,38,-29,38.8]],
+ ['t',[66,25.3,62,18,59,14,57,13.5]],
+ ['r',[8,78,4,75,-2,73,-7,72.5,-12,71,-16,69,-17.5,67.5,-18.5,66,-21,64,-24,62.5,-28,59.5,-30.5,56,-31,52.5,-30,48,-28.5,44,-29,39,-32.5,36,-36.5,33.5,-40,30,-43.5,26,-45.5,22,-46,18,-45.5,14.5,-44.5,12,-40,10,-36,8.5,-33,6,-29,3.5,-24,1,-18,-0.5,-14.5,-3.5,-13.5,-8,-14,-12,-14,-16,-13,-21,-12.5,-26,-13,-32,-14.5,-37,-16.5,-43,-15.5,-48,-11,-52,-1,-54.5]],
+ ['t',[125,77,127,73,130,70,134,67,140,64,146,61.5,151,59,148,56,145,52.5,143,49,141.5,46.5,140,43.5,139,40.5,138.8,37.5,139.5,36.2,142,35]],
+ ['t',[-136,58,-133.5,55,-131,52,-129.8,50.5]],
+ ['s',[-129.8,50.5,-128,47.5,-126.5,44,-125.8,41.5,-124.8,40.4]],
+ ['t',[-124.8,40.4,-123.3,38.4,-122,36.5,-120.2,35,-117.5,34.1,-115.6,32.5,-114.3,31,-112.5,28.5,-110.5,26,-108.5,23.5,-107,21.5]],
+ ['r',[-107,21.5,-108.5,18,-104.5,13,-104,9,-103.5,5,-102.5,2,-103,-2,-105,-6,-107,-10,-110,-14,-112.5,-20,-112,-26,-112.5,-30,-112,-34,-114,-38,-116,-42,-116.5,-46,-114,-50,-116,-54,-118,-56,-125,-56,-130,-56,-138,-57,-146,-59,-152,-61,-160,-63]],
+ ['s',[-105.5,19.5,-101,16.5,-97,15,-93,14,-90,12.6,-87.5,11.2,-86,10,-84.5,8.5,-83,7.2,-80,6.5,-79,5,-78.8,2.5,-80.6,0,-81.8,-3,-81.5,-7,-79.5,-10,-77.5,-13,-75,-15.5,-72.5,-17.5,-71.3,-19.5,-71,-22,-71.2,-25,-71.8,-28,-72.2,-31,-73,-34,-74,-37,-74.8,-40,-75.6,-43,-76,-46.5,-75.6,-50,-74,-53.5,-70,-56,-65,-57,-60,-57.5]],
+ ['t',[-60,-57.5,-50,-55.8,-40,-54.8,-32,-55.5,-26.5,-57.5,-27,-60]],
+ ['r',[-102.5,2,-98,2,-94,2,-90,1.8,-85.5,1.5,-83,4,-82,7.2]],
+ ['r',[-112,-34,-110,-36,-100,-38,-92,-41,-84,-43.5,-76,-46.5]],
+ ['s',[-91.5,15,-87.5,15.5,-84,16,-80,18.5,-76,19.6,-72,19.8,-68,19.7,-64.5,19,-61.8,17,-60.4,15,-60.4,12.5,-61.5,11,-64,11.2,-68,11.6,-72,12.5,-75,10.5,-77,9,-78,7.6]]
+];
+/* 화산 (경도, 위도) */
+const VOL = [-152.8,60,-153.4,59.4,-155,58.3,-158.2,56.9,-161.9,55.4,-165.8,54.1,-169.9,52.8,-175.5,51.9,177.6,51.9,160.6,56.6,159.4,54,158,53.2,155.5,50.3,152.2,47.6,148.8,45.4,144.4,43.4,142.7,43.4,140.7,42.5,140.8,40.6,140.3,38.6,139.5,36.7,138.7,35.4,139.4,34.7,131.1,32.9,130.6,31.6,140.3,30.5,140.9,27.2,141.3,24.8,144.9,19.5,145.7,16.3,145.8,14.6,129.7,29.6,128.3,27.9,121.6,25.2,120.4,15.1,123.7,13.3,124.1,12.8,123.1,10.4,125.4,7,95.6,4.9,98.4,2.8,100.5,-0.4,101.3,-1.7,103.6,-4,105.4,-6.1,107.7,-7.2,110.4,-7.5,112.9,-7.9,114.2,-8.1,116.5,-8.4,118,-8.3,121,-8.5,123.7,-8.4,126.6,-7.5,129.6,-6.3,128.2,-3.6,127.3,1.5,125.4,2.8,145.1,-5,147.1,-5.4,151.3,-4.2,155.2,-6.1,159.8,-9.1,167.8,-16.3,168.4,-16.8,169.4,-19.5,184.6,-18.5,184.7,-20.5,183.5,-25.9,182.1,-29.3,175.6,-39.2,176.5,-38.2,177.2,-37.5,-121.8,48.8,-121.7,46.9,-122.2,46.2,-121.8,44.1,-122.2,41.4,-103.6,19.5,-98.6,19,-97.3,19,-92.2,15,-90.9,14.5,-89.6,13.8,-88.3,13.4,-86.7,12.4,-85.3,10.5,-84,10,-77.4,1.2,-78.4,-0.7,-78.4,-1.5,-71.4,-16.3,-70.6,-16.8,-69.1,-18.2,-68,-21.5,-67.7,-23.4,-68.5,-27.1,-70,-33.4,-70.9,-36.2,-71.6,-38.7,-72.4,-41.3,-72.8,-45.9,-73.5,-49.1,-61.2,13.3,-61.1,14.8,-61.7,16,-62.2,16.7,-19,63.9,-17.3,64.6,-21.3,64,-28,38.6,-14.4,-7.9,-12.3,-37.1,15,37.7,14.4,40.8,15.2,38.8,25.4,36.4,44.3,39.7,42.5,43.3,37.4,-3.1,29.2,-1.5,40.6,13.6,-155.3,19.4,-155.6,19.8,-91.1,-0.8];
+
+/* ===== 2. 지도 그리기 ===== */
+const MW = 3600, MH = 1380;                       /* 경도 −26°부터 360°, 위도 78°~−60° (1° = 10) */
+const LX = lon => ((lon + 26) % 360 + 360) % 360; /* 태평양이 가운데 오게 */
+const MX = lon => LX(lon) * 10, MY = lat => (78 - lat) * 10;
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function polyD(a){ let d = ''; for(let i = 0; i < a.length; i += 2) d += (i ? 'L' : 'M') + MX(a[i]).toFixed(0) + ' ' + MY(a[i+1]).toFixed(0); return d + 'Z'; }
+function lineD(a){
+  let d = '', px = null, py = null;
+  for(let i = 0; i < a.length; i += 2){
+    const x = MX(a[i]), y = MY(a[i+1]);
+    if(px !== null && Math.abs(x - px) > 1800){
+      const xu = x - px > 0 ? x - MW : x + MW, edge = xu < px ? 0 : MW, f = (edge - px) / (xu - px), ey = py + (y - py) * f;
+      d += 'L' + edge + ' ' + ey.toFixed(0) + 'M' + (MW - edge) + ' ' + ey.toFixed(0) + 'L' + x.toFixed(0) + ' ' + y.toFixed(0);
+    } else d += (px === null ? 'M' : 'L') + x.toFixed(0) + ' ' + y.toFixed(0);
+    px = x; py = y;
+  }
+  return d;
+}
+/* 지진 점: 경계를 따라 씨앗이 정해진 난수로 흩뿌림(다시 와도 같은 모습) */
+const QUAKES = (function(){
+  const R = rng(20261117), out = [];
+  const gauss = () => { let u = 0, v = 0; while(!u) u = R(); v = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const SPEC = { s:[0.95, 1.25], c:[0.8, 2.0], r:[0.42, 0.35], t:[0.55, 0.5] };
+  BND.forEach(([k, a]) => {
+    const [dens, sig] = SPEC[k];
+    for(let i = 0; i + 3 < a.length; i += 2){
+      let x0 = LX(a[i]), y0 = a[i+1], x1 = LX(a[i+2]), y1 = a[i+3];
+      if(x1 - x0 > 180) x1 -= 360; else if(x0 - x1 > 180) x1 += 360;
+      const dx = x1 - x0, dy = y1 - y0, len = Math.hypot(dx, dy); if(!len) continue;
+      const n = Math.max(1, Math.round(len * dens)), nx = -dy / len, ny = dx / len;
+      for(let j = 0; j < n; j++){
+        const t = R(), g = gauss() * sig;
+        let x = x0 + dx * t + nx * g, y = y0 + dy * t + ny * g;
+        x = (x % 360 + 360) % 360;
+        out.push([x * 10, (78 - y) * 10, R()]);
+      }
+    }
+  });
+  return out;
+})();
+function buildMap(host, opt){
+  const NS = 'http://www.w3.org/2000/svg';
+  let s = '<svg xmlns="' + NS + '" viewBox="0 0 ' + MW + ' ' + MH + '" preserveAspectRatio="none">';
+  s += '<rect class="frame" x="0" y="0" width="' + MW + '" height="' + MH + '"/>';
+  let land = '', holes = '';
+  LAND.forEach((a, i) => { land += polyD(a); });
+  s += '<g class="land"><path fill-rule="evenodd" d="' + land + '"/></g>';
+  if(opt.band){ s += '<g class="band"' + opt.band + '>'; BND.forEach(([k, a]) => { s += '<path pathLength="1" stroke-width="150" d="' + lineD(a) + '"/>'; }); s += '</g>'; }
+  if(opt.bnd){ s += '<g class="bnd"' + opt.bnd + '>'; BND.forEach(([k, a]) => { s += '<path pathLength="1" d="' + lineD(a) + '"/>'; }); s += '</g>'; }
+  s += '<g class="qg"' + (opt.q || '') + '>';
+  QUAKES.forEach(([x, y, r]) => { s += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + opt.qr + '"' + (opt.stagger ? ' style="transition-delay:' + Math.round(r * 750) + 'ms"' : '') + '/>'; });
+  s += '</g><g class="vg"' + (opt.v || '') + '>';
+  const h = opt.vh, w = h * 0.62;
+  for(let i = 0; i < VOL.length; i += 2){ const x = MX(VOL[i]), y = MY(VOL[i+1]); s += '<path d="M' + x.toFixed(0) + ' ' + (y - h * .62).toFixed(0) + 'l' + w.toFixed(0) + ' ' + h.toFixed(0) + 'h' + (-2 * w).toFixed(0) + 'z"' + (opt.stagger ? ' style="transition-delay:' + Math.round((i * 37 % 100) * 6) + 'ms"' : '') + '/>'; }
+  s += '</g>';
+  if(opt.extra) s += opt.extra;
+  s += '<g class="rip"></g></svg>';
+  host.innerHTML = s;
+}
+/* ===== 3. 무대·넘기기 ===== */
+const QS = new URLSearchParams(location.search), STUDENT = QS.get('s') === '1';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage = document.getElementById('stage');
+if(STUDENT){ document.body.classList.add('student'); document.querySelectorAll('.sonly').forEach(e => e.style.display = ''); }
+function fit(){ const k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = 'translate(' + ((innerWidth - 1920 * k) / 2) + 'px,' + ((innerHeight - 1080 * k) / 2) + 'px) scale(' + k + ')'; stage._k = k; }
+addEventListener('resize', fit); fit();
+const S = [...document.querySelectorAll('.scene')].map(el => ({ el, n: +el.dataset.steps, title: el.dataset.title }));
+const cur = { s: -1, t: 0 };
+const HOOK = [];
+/* 짧은 움직임(JS) — 다음을 누르면 끝 상태로 마침 */
+const tweens = new Set();
+function tween(dur, fn, done){
+  const t0 = performance.now(), tw = { end(){ if(!tweens.has(tw)) return; tweens.delete(tw); fn(1); done && done(); } };
+  tweens.add(tw); fn(0);
+  if(RM){ tw.end(); return tw; }
+  const step = now => { if(!tweens.has(tw)) return; const k = Math.min(1, (now - t0) / dur); fn(k); if(k < 1) requestAnimationFrame(step); else tw.end(); };
+  requestAnimationFrame(step);
+  setTimeout(() => tw.end(), dur + 250); /* 화면이 가려져 rAF가 멈춰도 끝 상태로 */
+  return tw;
+}
+function finishAll(){
+  [...tweens].forEach(t => t.end());
+  S.forEach(sc => sc.el.classList.add('inst')); void stage.offsetWidth; S.forEach(sc => sc.el.classList.remove('inst'));
+}
+function applyState(sc, st, anim){
+  const opened = [];
+  sc.el.querySelectorAll('[data-on]').forEach(e => { const a = +e.dataset.on, b = e.dataset.off == null ? 1e9 : +e.dataset.off; e.classList.toggle('on', st >= a && st < b); });
+  sc.el.querySelectorAll('[data-st]').forEach(e => e.dataset.st.split(' ').forEach(tok => { const [c, r] = tok.split(':'), [a, b] = r.split('-'); e.classList.toggle(c, st >= +a && st < (b ? +b : 1e9)); }));
+  sc.el.querySelectorAll('[data-open]').forEach(e => { const was = e.classList.contains('open'), now = st >= +e.dataset.open; e.classList.toggle('open', now); if(!now) e.classList.remove('pop'); if(now && !was && anim){ e.classList.remove('pop'); void e.offsetWidth; e.classList.add('pop'); opened.push(e); } });
+  return opened;
+}
+function render(si, st, anim){
+  const sc = S[si];
+  if(si !== cur.s){
+    const old = S[cur.s];
+    if(old){ if(!anim) old.el.classList.add('inst'); old.el.classList.remove('cur'); HOOK[cur.s] && HOOK[cur.s].leave && HOOK[cur.s].leave(); clearInk(); }
+    if(!anim) sc.el.classList.add('inst');
+    sc.el.classList.add('cur');
+    if(old) setTimeout(() => old.el.classList.remove('inst'), 30);
+    cur.s = si; cur.t = -1;
+    HOOK[si] && HOOK[si].enter && HOOK[si].enter();
+  }
+  sc.el.classList.add('inst');
+  applyState(sc, anim ? st - 1 : st, false);
+  HOOK[si] && HOOK[si].sync && HOOK[si].sync(anim ? st - 1 : st, false);
+  void sc.el.offsetWidth;
+  sc.el.classList.remove('inst');
+  if(anim){
+    const opened = applyState(sc, st, true);
+    HOOK[si] && HOOK[si].sync && HOOK[si].sync(st, true);
+    if(opened.length) sfx.ding(); else if(st > 0) sfx.tok();
+  }
+  cur.t = st;
+  try{ history.replaceState(null, '', '#' + (si + 1) + '.' + st); }catch(e){}
+  updateUI();
+}
+function next(){ finishAll(); if(cur.t < S[cur.s].n) render(cur.s, cur.t + 1, true); else if(cur.s < S.length - 1) render(cur.s + 1, 0, true); }
+function prev(){ finishAll(); if(cur.t > 0) render(cur.s, cur.t - 1, false); else if(cur.s > 0) render(cur.s - 1, S[cur.s - 1].n, false); }
+function go(si, st){ finishAll(); render(si, st, false); }
+function replay(){ finishAll(); const st = cur.t; if(st > 0){ render(cur.s, st - 1, false); render(cur.s, st, true); } else { const si = cur.s; cur.s = -1; S[si].el.classList.remove('cur'); render(si, 0, true); } }
+
+/* ===== 4. 소리 (WebAudio 합성) ===== */
+const sfx = (function(){
+  let ac = null, on = !STUDENT, pitch = 0;
+  const ctx = () => { if(!ac){ try{ ac = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} } if(ac && ac.state === 'suspended') ac.resume(); return ac; };
+  addEventListener('pointerdown', () => ctx(), { once: true, capture: true });
+  addEventListener('keydown', () => ctx(), { once: true, capture: true });
+  function tone(f, t0, dur, vol, type){ const a = ac; const o = a.createOscillator(), g = a.createGain(); o.type = type || 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .01); g.gain.exponentialRampToValueAtTime(.0001, t0 + dur); o.connect(g).connect(a.destination); o.start(t0); o.stop(t0 + dur + .05); }
+  function noise(t0, dur, vol, freq){ const a = ac, n = a.sampleRate * dur, b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0); const R = rng(7); for(let i = 0; i < n; i++) d[i] = (R() * 2 - 1) * (1 - i / n); const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(); f.type = 'lowpass'; f.frequency.value = freq; g.gain.value = vol; s.buffer = b; s.connect(f).connect(g).connect(a.destination); s.start(t0); }
+  const ok = () => on && ctx() && ac.state === 'running';
+  return {
+    get on(){ return on; }, set on(v){ on = v; },
+    ding(){ if(!ok()) return; const t = ac.currentTime, f = 880 * Math.pow(2, [0, 2, 4, 7, 9][pitch++ % 5] / 12); tone(f, t, .5, .16); tone(f * 2, t + .07, .4, .06); },
+    tok(){ if(!ok()) return; tone(520, ac.currentTime, .09, .08, 'triangle'); },
+    chime(){ if(!ok()) return; const t = ac.currentTime; [784, 988, 1175].forEach((f, i) => tone(f, t + i * .12, .7, .1)); },
+    quake(){ if(!ok()) return; const t = ac.currentTime; noise(t, .45, .5, 160); tone(52, t, .45, .18, 'sine'); },
+    lava(){ if(!ok()) return; const t = ac.currentTime; noise(t, .6, .25, 420); tone(90, t, .5, .08, 'triangle'); }
+  };
+})();
+
+/* ===== 5. 1장 표지 · 2장 지도 ===== */
+const KJ = (function(){
+  const kx = MX(127.8), ky = MY(36.4), jx = MX(137.6), jy = MY(36.6), fs = 90;
+  return '<g class="kj fade" data-on="4">' +
+    '<circle cx="' + kx + '" cy="' + ky + '" r="30"/><line x1="' + (kx - 14) + '" y1="' + (ky - 30) + '" x2="' + (kx - 48) + '" y2="' + (ky - 92) + '"/>' +
+    '<text x="' + (kx - 52) + '" y="' + (ky - 102) + '" font-size="' + fs + '" text-anchor="end">우리나라</text>' +
+    '<circle cx="' + jx + '" cy="' + jy + '" r="46"/><line x1="' + (jx + 42) + '" y1="' + (jy + 20) + '" x2="' + (jx + 118) + '" y2="' + (jy + 58) + '"/>' +
+    '<text x="' + (jx + 126) + '" y="' + (jy + 92) + '" font-size="' + fs + '">일본</text></g>';
+})();
+buildMap(document.getElementById('map1'), { band: ' data-on="3"', q: ' data-on="1"', v: ' data-on="2"', qr: 12, vh: 40, stagger: true, extra: KJ });
+buildMap(document.getElementById('map2'), { bnd: ' data-on="3"', qr: 11, vh: 36 });
+document.querySelectorAll('#map2 .qg, #map2 .vg').forEach(g => g.classList.add('on'));
+/* 표지의 움직이는 그림: 경계 어딘가에서 지진이 일어날 때마다 물결이 퍼짐 */
+const ripple = (function(){
+  const g = document.querySelector('#map1 .rip'); let timer = null, raf = null, R = rng(5), live = [];
+  function spawn(){ const q = QUAKES[Math.floor(R() * QUAKES.length)]; const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', q[0]); c.setAttribute('cy', q[1]); g.appendChild(c); live.push({ c, t0: performance.now() }); }
+  function loop(now){ live = live.filter(o => { const k = (now - o.t0) / 1500; if(k >= 1){ o.c.remove(); return false; } o.c.setAttribute('r', (14 + 96 * k).toFixed(1)); o.c.style.opacity = (1 - k).toFixed(3); o.c.style.strokeWidth = (3 - 1.6 * k).toFixed(2); return true; }); raf = requestAnimationFrame(loop); }
+  return {
+    start(){ if(RM || timer) return; R = rng(5); spawn(); spawn(); timer = setInterval(spawn, 330); raf = requestAnimationFrame(loop); },
+    stop(){ clearInterval(timer); timer = null; cancelAnimationFrame(raf); live.forEach(o => o.c.remove()); live = []; }
+  };
+})();
+HOOK[0] = { enter(){ ripple.start(); }, leave(){ ripple.stop(); } };
+HOOK[1] = {};
+/* ===== 6. 3장 시뮬레이터 — 판의 단면 블록 모식도 =====
+   규칙: 멀어지기 → 경계로 마그마가 올라와 지진·화산 활동(빈 틈은 생기지 않음)
+         가까워지기 → 한 판이 다른 판 아래로 들어가며 지진(얕은 곳~깊은 곳)·화산 활동
+         어긋나기 → 옆으로 미끄러지며 지진, 화산 활동은 거의 없음 */
+const sim = (function(){
+  const cv = document.getElementById('sim'), g = cv.getContext('2d');
+  g.setTransform(2, 0, 0, 2, 0, 0);
+  const INK = '#1f2a44', PAPER = '#f3ecd9', ia = a => 'rgba(31,42,68,' + a + ')';
+  const C = { OX: 200, OY: 220, KX: .55, KY: .34, D: 200, W: 820, B: 410, T: 110, CO: 16, CT: 62, CB: -60, SEA: 46, MB: -246, XC: 520, TH: 32 * Math.PI / 180 };
+  const P = (x, y, z) => [C.OX + x + C.KX * y, C.OY - z - C.KY * y];
+  function path(pts){ g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.closePath(); }
+  function fillP(pts, f, s, lw){ path(pts); if(f){ g.fillStyle = f; g.fill(); } if(s){ g.strokeStyle = s; g.lineWidth = lw || 1; g.stroke(); } }
+  const front = (x0, x1, z0, z1) => [P(x0, 0, z0), P(x1, 0, z0), P(x1, 0, z1), P(x0, 0, z1)];
+  const top = (x0, x1, z) => [P(x0, 0, z), P(x1, 0, z), P(x1, C.D, z), P(x0, C.D, z)];
+  const side = (x, z0, z1) => [P(x, 0, z0), P(x, C.D, z0), P(x, C.D, z1), P(x, 0, z1)];
+  /* 무늬: 판 아랫부분(맨틀의 윗부분)은 빗금 — 판과 함께 움직임 / 그 아래 맨틀은 점 */
+  function mk(w, h, fn){ const c = document.createElement('canvas'); c.width = w; c.height = h; fn(c.getContext('2d')); return g.createPattern(c, 'repeat'); }
+  const HATCH = mk(18, 18, c => { c.strokeStyle = ia(.30); c.lineWidth = 1.4; c.beginPath(); c.moveTo(0, 18); c.lineTo(18, 0); c.moveTo(-4, 4); c.lineTo(4, -4); c.moveTo(14, 22); c.lineTo(22, 14); c.stroke(); });
+  const DOTS = mk(22, 22, c => { c.fillStyle = ia(.22); c.beginPath(); c.arc(5, 6, 1.4, 0, 7); c.arc(16, 17, 1.4, 0, 7); c.fill(); });
+  const F = { crustO: ia(.62), crustC: ia(.50), low: ia(.10), topO: ia(.20), topC: ia(.26), sideC: ia(.58), sideL: ia(.20), mantle: ia(.05), magma: ia(.86) };
+  function hatch(pts, dx){ path(pts); g.fillStyle = F.low; g.fill(); if(HATCH.setTransform) HATCH.setTransform(new DOMMatrix().translate(dx, 0)); g.fillStyle = HATCH; g.fill(); }
+  const st = { mode: 'rest', t: 1, e: 1 };
+  const ease = k => 1 - Math.pow(1 - k, 3);
+  const clamp = k => Math.max(0, Math.min(1, k));
+  function geo(){
+    const e = st.e, m = st.mode, o = { Bl: C.B, Br: C.B, xc: C.XC, sxL: 0, sxR: 0, syL: 0, syR: 0, ridge: 0, sub: 0 };
+    if(m === 'apart'){ const u = 70 * e; o.sxL = -u; o.sxR = u; o.xc = C.XC + u; o.ridge = e; }
+    if(m === 'together'){ const v = 40 * e; o.Br = o.Bl = C.B - v; o.sxL = 220 * e; o.sxR = -v; o.xc = C.XC - v; o.sub = 260 * e; }
+    if(m === 'past'){ o.syL = 48 * e; o.syR = -48 * e; }
+    return o;
+  }
+  const ridgeH = (x, o) => 16 * o.ridge * Math.exp(-Math.pow((x - C.B) / 62, 2));
+  /* 겉면 표시선(점선): 판이 움직인 만큼 함께 움직임 */
+  function marks(x0, x1, z, sx, sy){
+    if(x1 - x0 < 4) return;
+    g.save(); g.strokeStyle = INK; g.lineWidth = 3.4; g.setLineDash([18, 12]); g.lineDashOffset = -sx;
+    const y = 100 + sy, a = P(x0, y, z), b = P(x1, y, z); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+    g.restore();
+  }
+  function arrow(a, b, w){
+    const A = P(...a), Bp = P(...b), ang = Math.atan2(Bp[1] - A[1], Bp[0] - A[0]), hl = 24;
+    const tip = Bp, bx = tip[0] - Math.cos(ang) * hl, by = tip[1] - Math.sin(ang) * hl;
+    for(const pass of [0, 1]){
+      g.strokeStyle = pass ? INK : PAPER; g.fillStyle = pass ? INK : PAPER; g.lineWidth = pass ? w : w + 6; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(bx, by); g.stroke();
+      g.beginPath(); g.moveTo(tip[0], tip[1]); g.lineTo(bx + Math.cos(ang + 1.57) * 13, by + Math.sin(ang + 1.57) * 13); g.lineTo(bx - Math.cos(ang + 1.57) * 13, by - Math.sin(ang + 1.57) * 13); g.closePath();
+      if(!pass){ g.lineWidth = 6; g.stroke(); } g.fill();
+    }
+  }
+  function quake(p, k){ /* ○ 지진 + 물결 고리 */
+    if(k <= 0) return; const [x, y] = P(...p);
+    g.save(); g.globalAlpha = Math.min(1, k * 3);
+    g.strokeStyle = PAPER; g.fillStyle = PAPER; g.lineWidth = 7; g.beginPath(); g.arc(x, y, 9, 0, 7); g.stroke(); g.fill();
+    g.strokeStyle = INK; g.lineWidth = 3; g.beginPath(); g.arc(x, y, 9, 0, 7); g.stroke();
+    const r1 = 9 + 7 * Math.min(1, k * 2.5), r2 = 9 + 13 * Math.min(1, k * 1.6);
+    g.lineWidth = 1.8; g.strokeStyle = ia(.75); g.beginPath(); g.arc(x, y, r1, 0, 7); g.stroke();
+    g.strokeStyle = ia(.4); g.beginPath(); g.arc(x, y, r2, 0, 7); g.stroke();
+    g.restore();
+  }
+  function cone(x, y, z, hw, h, k){ /* ▲ 화산 */
+    if(k <= 0) return; const b = P(x, y, z), s = Math.min(1, k * 2.2);
+    g.save(); g.fillStyle = INK; g.strokeStyle = PAPER; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(b[0] - hw, b[1]); g.lineTo(b[0], b[1] - h * s); g.lineTo(b[0] + hw, b[1]); g.closePath(); g.stroke(); g.fill();
+    g.restore();
+  }
+  function chev(x, y){ g.beginPath(); g.moveTo(x - 6, y + 4); g.lineTo(x, y - 3); g.lineTo(x + 6, y + 4); g.stroke(); }
+  function draw(){
+    const o = geo(), m = st.mode, t = st.t, W = C.W, T = C.T;
+    g.clearRect(0, 0, 1170, 480);
+    /* 맨틀 */
+    fillP(front(0, W, C.MB, -T + 1), F.mantle); path(front(0, W, C.MB, -T + 1)); g.fillStyle = DOTS; g.fill();
+    fillP(side(W, C.MB, -T), ia(.12));
+    if(m === 'apart' && o.ridge > 0){ /* 맨틀 속에서 솟아오르는 흐름 */
+      g.save(); g.globalAlpha = o.ridge; g.strokeStyle = ia(.55); g.lineWidth = 3; g.lineCap = 'round';
+      [-1, 1].forEach(s => { const a = P(C.B + s * 40, 0, -232), b = P(C.B + s * 40, 0, -150), c = P(C.B + s * 175, 0, -132);
+        g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(b[0], b[1], c[0], c[1]); g.stroke();
+        g.beginPath(); g.moveTo(c[0], c[1]); g.lineTo(c[0] - s * 14, c[1] - 9); g.moveTo(c[0], c[1]); g.lineTo(c[0] - s * 12, c[1] + 10); g.stroke(); });
+      g.restore();
+    }
+    /* 겉면(바다 밑) */
+    if(m !== 'together'){
+      fillP(top(0, o.xc, 0), F.topO);
+      if(o.ridge > 0){ const fr = [], bk = []; for(let x = C.B - 150; x <= C.B + 150; x += 10){ fr.push(P(x, 0, ridgeH(x, o))); bk.unshift(P(x, C.D, ridgeH(x, o))); } fillP(fr.concat(bk), ia(.30)); }
+      marks(0, C.B, 0, o.sxL, o.syL); marks(C.B, o.xc, 0, o.sxR, o.syR);
+    } else {
+      fillP(top(0, o.xc, 0), F.topO);
+      marks(0, o.Bl, 0, o.sxL, 0); marks(o.Br, o.xc, 0, o.sxR, 0);
+    }
+    if(m === 'apart') cone(C.B, 140, ridgeH(C.B, o), 30, 26, clamp((t - .72) / .2));
+    /* 바닷물 윗면 */
+    fillP(top(0, o.xc, C.SEA), ia(.05));
+    /* 대륙 (오른쪽 판 위) */
+    fillP(top(o.xc, W, C.CT), F.topC);
+    marks(o.xc + 4, W, C.CT, m === 'apart' ? o.sxR : o.sxR, o.syR);
+    fillP(side(W, C.CB, C.CT), F.sideC); path(side(W, -T, C.CB)); g.fillStyle = F.sideL; g.fill();
+    /* 앞면: 오른쪽 판 */
+    const rx0 = o.Br;
+    fillP(front(rx0, o.xc, -C.CO, 0), F.crustO); hatch(front(rx0, o.xc, -T, -C.CO), o.sxR);
+    fillP(front(o.xc, W, C.CB, C.CT), F.crustC); hatch(front(o.xc, W, -T, C.CB), o.sxR);
+    /* 앞면: 왼쪽 판 */
+    if(m !== 'together'){
+      fillP(front(0, C.B, -C.CO, 0), F.crustO); hatch(front(0, C.B, -T, -C.CO), o.sxL);
+      if(o.ridge > 0){ const fr = [P(C.B - 150, 0, 0)]; for(let x = C.B - 150; x <= C.B + 150; x += 10) fr.push(P(x, 0, ridgeH(x, o))); fr.push(P(C.B + 150, 0, 0)); fillP(fr, F.crustO); }
+    } else {
+      const th = C.TH, cs = Math.cos(th), sn = Math.sin(th), L = o.sub, Bx = o.Bl;
+      const off = d => { const k = Math.tan(th / 2) * d; return [[0, -d], [Bx - d * sn + k * cs, -d], [Bx + L * cs - d * sn, -L * sn - d * cs]]; };
+      const topL = [[0, 0], [Bx, 0], [Bx + L * cs, -L * sn]];
+      const band = (a, b) => a.concat(b.slice().reverse()).map(p => P(p[0], 0, p[1]));
+      g.save(); path(front(0, W, C.MB, 0)); g.clip();
+      path(band(topL, off(T))); g.fillStyle = F.low; g.fill(); g.fillStyle = HATCH; g.fill();
+      fillP(band(topL, off(C.CO)), F.crustO);
+      /* 판이 들어가는 흐름을 보여 주는 점선 */
+      const mid = off(78).map(p => P(p[0], 0, p[1]));
+      g.strokeStyle = ia(.6); g.lineWidth = 2.4; g.setLineDash([14, 11]); g.lineDashOffset = -o.sxL;
+      g.beginPath(); mid.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); g.setLineDash([]);
+      g.restore();
+      /* 마그마가 올라가는 길 → 대륙 위 화산 */
+      const xv = Bx + T / Math.tan(th) + 6, kv = clamp((t - .74) / .2);
+      if(kv > 0){
+        g.save(); g.globalAlpha = Math.min(1, kv * 2);
+        const pb = P(xv - 4, 0, -T + 6), pt = P(xv, 0, C.CT);
+        g.fillStyle = F.magma; g.beginPath(); g.moveTo(pb[0] - 16, pb[1]); g.quadraticCurveTo(pb[0] - 8, (pb[1] + pt[1]) / 2, pt[0] - 5, pt[1]); g.lineTo(pt[0] + 5, pt[1]); g.quadraticCurveTo(pb[0] + 10, (pb[1] + pt[1]) / 2, pb[0] + 16, pb[1]); g.closePath(); g.fill();
+        g.strokeStyle = PAPER; g.lineWidth = 2; [0.25, 0.55, 0.82].forEach(f => chev(pb[0] + (pt[0] - pb[0]) * f, pb[1] + (pt[1] - pb[1]) * f));
+        g.restore();
+      }
+      st._xv = xv;
+    }
+    /* 멀어지는 경계 아래 마그마 */
+    if(m === 'apart' && o.ridge > 0){
+      g.save(); g.globalAlpha = o.ridge;
+      const a = P(C.B - 70, 0, -T - 30), b = P(C.B + 70, 0, -T - 30), c = P(C.B + 6, 0, ridgeH(C.B, o) - 2), d = P(C.B - 6, 0, ridgeH(C.B, o) - 2);
+      g.fillStyle = F.magma; g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(C.OX + C.B - 14, C.OY + T - 10, d[0], d[1]); g.lineTo(c[0], c[1]); g.quadraticCurveTo(C.OX + C.B + 14, C.OY + T - 10, b[0], b[1]); g.closePath(); g.fill();
+      g.strokeStyle = PAPER; g.lineWidth = 2; [[-22, 118], [22, 118], [0, 78], [0, 38]].forEach(([dx, dz]) => chev(C.OX + C.B + dx, C.OY + dz));
+      g.restore();
+    }
+    /* 판 바닥(약 100 km) 점선 */
+    g.save(); g.strokeStyle = ia(.7); g.lineWidth = 2; g.setLineDash([8, 7]);
+    let pa = P(0, 0, -T), pb2 = P(m === 'together' ? o.Bl - T * Math.sin(C.TH) + Math.tan(C.TH / 2) * T * Math.cos(C.TH) : W, 0, -T);
+    g.beginPath(); g.moveTo(pa[0], pa[1]); g.lineTo(pb2[0], pb2[1]); if(m === 'together'){ const q1 = P(o.Bl + T / Math.tan(C.TH), 0, -T), q2 = P(W, 0, -T); g.moveTo(q1[0], q1[1]); g.lineTo(q2[0], q2[1]); } g.stroke(); g.restore();
+    /* 바닷물 앞면 */
+    const wf = front(0, o.xc, 0, C.SEA); fillP(wf, ia(.07));
+    g.save(); g.strokeStyle = ia(.45); g.lineWidth = 1.6; g.beginPath(); for(let x = 0; x <= o.xc; x += 4){ const p = P(x, 0, C.SEA + 2 * Math.sin(x / 14)); x ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); } g.stroke(); g.restore();
+    g.save(); g.font = '400 24px "Pretendard Variable",Pretendard,sans-serif'; g.fillStyle = ia(.7); const sp = P(30, 186, C.SEA); g.fillText('바다', sp[0], sp[1] + 2); g.restore();
+    /* 화산(대륙 위) */
+    if(m === 'together') cone(st._xv, 12, C.CT, 40, 50, clamp((t - .8) / .18));
+    /* 테두리 */
+    g.save(); g.strokeStyle = ia(.55); g.lineWidth = 1.4;
+    g.beginPath(); [P(0, 0, C.MB), P(W, 0, C.MB), P(W, C.D, C.MB), P(W, C.D, C.CT), P(o.xc, C.D, C.CT)].forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); g.restore();
+    /* 경계선 강조(어긋나기) */
+    if(m === 'past'){ const a = P(C.B, 0, 0), b = P(C.B, C.D, 0), c = P(C.B, 0, -T); g.save(); g.strokeStyle = INK; g.lineWidth = 3.5; g.beginPath(); g.moveTo(b[0], b[1]); g.lineTo(a[0], a[1]); g.lineTo(c[0], c[1]); g.stroke(); g.restore(); }
+    /* 대륙 지각 이름 */
+    g.save(); g.font = '400 26px "Pretendard Variable",Pretendard,sans-serif'; g.textAlign = 'center'; g.fillStyle = PAPER;
+    const cxm = (Math.max(o.xc, m === 'together' ? (st._xv || 0) + 30 : 0) + W) / 2; const lp = P(cxm, 0, 4); g.fillText('대륙 지각', lp[0], lp[1] + 9); g.restore();
+    /* 판의 경계 이름표 */
+    const bx = m === 'together' ? o.Bl : C.B, bp = P(bx, C.D, m === 'apart' ? ridgeH(C.B, o) : 0), lx = bp[0] - 60, ly = 46;
+    g.save(); g.strokeStyle = INK; g.lineWidth = 2; g.beginPath(); g.moveTo(lx + 40, ly + 10); g.lineTo(bp[0], bp[1] - 4); g.stroke();
+    g.font = '400 27px "Pretendard Variable",Pretendard,sans-serif'; g.textAlign = 'right'; g.lineWidth = 7; g.strokeStyle = PAPER; g.lineJoin = 'round'; g.strokeText('판의 경계', lx + 34, ly + 4); g.fillStyle = INK; g.fillText('판의 경계', lx + 34, ly + 4); g.restore();
+    /* 움직이는 방향 화살표 */
+    if(m === 'apart'){ arrow([190, 176, 0], [80, 176, 0], 7); arrow([630, 176, C.CT], [745, 176, C.CT], 7); }
+    if(m === 'together'){ arrow([70, 176, 0], [190, 176, 0], 7); arrow([780, 176, C.CT], [670, 176, C.CT], 7); }
+    if(m === 'past'){ arrow([220, 30, 0], [220, 176, 0], 7); arrow([690, 176, C.CT], [690, 30, C.CT], 7); }
+    /* 지진 */
+    const Q = [];
+    if(m === 'apart') Q.push([[C.B - 28, 0, -34], .45], [[C.B + 30, 0, -62], .55], [[C.B, 56, ridgeH(C.B, o)], .65]);
+    if(m === 'together'){ const cs = Math.cos(C.TH), sn = Math.sin(C.TH); [26, 80, 134, 188, 238].forEach((s, i) => { if(s > o.sub - 6) return; Q.push([[o.Bl + s * cs - 16 * sn, 0, -s * sn - 16 * cs], .3 + i * .12]); }); Q.push([[o.Bl + 40, 60, 0], .4]); }
+    if(m === 'past') Q.push([[C.B, 0, -34], .4], [[C.B, 0, -78], .5], [[C.B, 100, 0], .62]);
+    Q.forEach(([p, t0]) => quake(p, clamp((t - t0) / .25)));
+  }
+  const CAP = {
+    rest: '단추를 눌러 두 판을 움직여 보세요.',
+    apart: '멀어질 때 — 경계로 마그마가 올라온다 → 지진, 화산 활동',
+    together: '가까워질 때 — 한 판이 다른 판 아래로 들어간다 → 지진, 화산 활동',
+    past: '어긋날 때 — 두 판이 옆으로 미끄러진다 → 지진 (화산 활동은 거의 없다)'
+  };
+  const capEl = document.getElementById('simcap'), btns = [...document.querySelectorAll('#simui button')];
+  function ui(){ capEl.textContent = CAP[st.mode]; btns.forEach(b => b.classList.toggle('act', b.dataset.mode === st.mode && st.mode !== 'rest')); }
+  let run = null;
+  function set(mode){ if(run){ const r = run; run = null; tweens.delete(r); } st.mode = mode; st.t = 1; st.e = 1; ui(); draw(); }
+  function play(mode){
+    if(run){ tweens.delete(run); run = null; }
+    if(mode === 'rest'){ set('rest'); return; }
+    st.mode = mode; ui();
+    const sounds = mode === 'apart' ? [[.45, 'quake'], [.74, 'lava']] : mode === 'together' ? [[.3, 'quake'], [.55, 'quake'], [.8, 'lava']] : [[.4, 'quake'], [.62, 'quake']];
+    let last = 0;
+    run = tween(RM ? 0 : 1500, k => { st.t = k; st.e = ease(Math.min(1, k / .8)); sounds.forEach(([at, s]) => { if(last < at && k >= at && k < 1) sfx[s](); }); last = k; draw(); }, () => { run = null; });
+  }
+  btns.forEach(b => {
+    b.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); });
+    b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); b.blur(); play(b.dataset.mode); });
+  });
+  document.getElementById('simui').addEventListener('click', e => e.stopPropagation());
+  set('rest');
+  return { set, play, draw, get mode(){ return st.mode; }, C, P };
+})();
+/* 그림 이름표(고정): 판·약 100 km·해양 지각·맨틀(빈칸 5)·맨틀의 윗부분 */
+(function(){
+  const { C, P } = sim, s = document.getElementById('simlab');
+  const t0 = P(0, 0, 0), t1 = P(0, 0, -C.T), bx = t0[0] - 22, crust = P(34, 0, -8), m = P(96, 0, -186), up = P(26, 0, -54);
+  s.innerHTML =
+    '<path d="M' + (bx + 10) + ' ' + t0[1] + ' H' + bx + ' V' + t1[1] + ' H' + (bx + 10) + '"/>' +
+    '<text class="big" x="' + (bx - 14) + '" y="' + ((t0[1] + t1[1]) / 2 + 2) + '" text-anchor="end">판</text>' +
+    '<text x="' + (bx - 14) + '" y="' + ((t0[1] + t1[1]) / 2 + 36) + '" text-anchor="end" font-size="24">약 100 km</text>' +
+    '<line x1="' + (bx - 2) + '" y1="' + (t0[1] - 44) + '" x2="' + crust[0] + '" y2="' + crust[1] + '"/>' +
+    '<text x="' + (bx - 8) + '" y="' + (t0[1] - 50) + '" text-anchor="end" font-size="26">해양 지각</text>' +
+    '<g class="fade" data-on="0" data-off="1"><text x="' + m[0] + '" y="' + m[1] + '" font-size="26" fill-opacity=".9">이 층은?</text><line x1="' + m[0] + '" y1="' + (m[1] + 12) + '" x2="' + (m[0] + 150) + '" y2="' + (m[1] + 12) + '"/>' +
+    '<circle cx="' + (m[0] + 178) + '" cy="' + (m[1] - 8) + '" r="19" fill="#1f2a44" stroke="none"/><text x="' + (m[0] + 178) + '" y="' + (m[1] + 1) + '" font-size="24" text-anchor="middle" style="fill:#f3ecd9;stroke:none;font-family:\'Gowun Batang\',serif">5</text></g>' +
+    '<g class="fade" data-on="1"><text class="big" x="' + m[0] + '" y="' + m[1] + '">맨틀</text>' +
+    '<text x="' + up[0] + '" y="' + up[1] + '" font-size="24">맨틀의 윗부분</text></g>';
+})();
+HOOK[2] = {
+  enter(){ sim.draw(); },
+  sync(step, anim){
+    const M = ['rest', 'rest', 'apart', 'together', 'past', 'past', 'past'], m = M[Math.max(0, step)], pm = M[Math.max(0, step - 1)];
+    if(anim && m !== pm) sim.play(m); else sim.set(m);
+    if(anim && step === 6) sfx.chime();
+  }
+};
+/* ===== 7. 대본 ===== */
+const SCRIPT = [
+  ['지난 시간에 대륙이 오랜 시간에 걸쳐 움직여 왔다는 것을 배웠어요. 오늘은 지진과 화산이 어디에서 일어나는지 지도에 찍어 볼게요.',
+   '[1] 지진이 일어난 곳을 찍어 볼까요? 아무 데나 흩어져 있나요? [2] 화산도 찍어 봅니다. [3] 점들이 띠 모양으로 모여 있죠. [4] 일본과 우리나라를 비교해 보세요. 어느 쪽에서 지진이 더 자주 일어날까요?',
+   '이 지도는 대륙 모양을 단순하게 줄인 모식도이고, 점은 분포를 보여 주려고 다시 찍은 것이에요.'],
+  ['[1] 화산 활동이 자주 일어나는 지역을 화산대, [2] 지진이 자주 일어나는 지역을 지진대라고 해요.',
+   '[3] 이제 지구의 겉을 나누는 선을 그어 볼게요. 선으로 나뉜 조각이 보이나요? [4] 이 조각 하나하나가 판입니다.',
+   '[5] 점과 선을 겹쳐 보면 어떤가요? [6] 화산대와 지진대는 판의 경계와 거의 일치해요. 하와이처럼 판 한가운데에 있는 화산도 있어서 「거의」라고 말합니다.'],
+  ['판은 지각만이 아니라 맨틀의 윗부분까지 포함하는 단단한 암석층이에요. [1] 두께가 약 100 km인데, 그림에서는 잘 보이도록 두께를 실제보다 크게 그렸어요.',
+   '[2] 멀어지기: 두 판이 멀어져도 빈 틈이 생기지 않아요. 아래에서 마그마가 올라와 채워요. [3] 가까워지기: 한 판이 다른 판 아래로 들어가면서 얕은 곳부터 깊은 곳까지 지진이 일어나고 화산이 생겨요. 대륙끼리 부딪치는 히말라야는 화산이 거의 없고 높은 산맥이 생긴다는 것도 덧붙여 주세요. [4] 어긋나기: 지진은 일어나지만 화산 활동은 거의 없어요.',
+   '[5] 판의 경계에서는 판이 계속 움직이니까 화산 활동이나 지진 같은 지각 변동이 자주 일어나요. [6] 그래서 처음에 본 띠가 판의 경계를 따라 나타나는 거예요. 우리나라는 판의 경계에서 조금 떨어져 있어서 일본보다 지진이 덜 일어나요.']
+];
+/* ===== 8. 조작 막대 · 대본 · 전체 보기 · 도움말 ===== */
+const $ = id => document.getElementById(id);
+const bar = $('bar'), cnt = $('cnt'), scriptEl = $('script'), ov = $('overview'), help = $('help'), veil = $('veil');
+function updateUI(){
+  cnt.textContent = (cur.s + 1) + ' / ' + S.length + ' · ' + cur.t + '/' + S[cur.s].n;
+  $('sndbtn').textContent = sfx.on ? '소리 켬' : '소리 끔';
+  if(scriptEl.classList.contains('open')) fillScript();
+}
+function fillScript(){
+  const s = cur.s, nx = S[s + 1];
+  scriptEl.innerHTML = '<h3>' + (s + 1) + '. ' + S[s].title + ' · 단계 ' + cur.t + '/' + S[s].n + (nx ? ' · 다음: ' + nx.title : ' · 마지막 장면') + '</h3>' + SCRIPT[s].map(p => '<p>' + p + '</p>').join('');
+}
+let barTimer = null;
+addEventListener('pointermove', () => { bar.classList.add('show'); clearTimeout(barTimer); barTimer = setTimeout(() => bar.classList.remove('show'), 2200); });
+bar.addEventListener('click', e => { e.stopPropagation(); const a = e.target.closest('button'); if(!a) return; a.blur();
+  const act = a.dataset.act; if(act === 'prev') prev(); if(act === 'next') next(); if(act === 'sound'){ sfx.on = !sfx.on; updateUI(); } if(act === 'full') full(); });
+bar.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); });
+function full(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(e){} }
+ov.innerHTML = '<h3>전체 장면</h3><div class="grid">' + S.map((s, i) => '<div class="it" data-i="' + i + '"><b>' + (i + 1) + '</b>' + s.title + '</div>').join('') + '</div>';
+ov.addEventListener('click', e => { e.stopPropagation(); const it = e.target.closest('.it'); ov.classList.remove('open'); if(it) go(+it.dataset.i, 0); });
+help.innerHTML = '<h3>도움말</h3><dl>' + [['→ · Space · Enter', '다음'], ['← · Backspace', '이전 (한 단계 전 모습)'], ['F', '전체 화면'], ['T 또는 N', '대본 열고 닫기'], ['O', '전체 장면 보기'], ['R', '지금 단계 다시 보기'], ['M', '소리 켜고 끄기'], ['B · W', '검은 화면 · 흰 화면'], ['Home · End', '처음 · 끝'], ['L · P', '레이저 · 빨간 펜'], ['Z · C · Esc', '한 획 지우기 · 모두 지우기 · 끄기'], ['3장 단추', '멀어지기 · 가까워지기 · 어긋나기 (눌러도 넘어가지 않음)']].filter(r => !(STUDENT && r[0].startsWith('T'))).map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl>';
+help.addEventListener('click', e => { e.stopPropagation(); help.classList.remove('open'); });
+veil.addEventListener('click', e => { e.stopPropagation(); veil.className = ''; });
+scriptEl.addEventListener('click', e => e.stopPropagation());
+
+/* ===== 9. 판서 도구 (레이저 · 빨간 펜) ===== */
+const ink = $('ink'), ic = ink.getContext('2d'), laserSvg = $('laser'), tools = $('tools');
+let tool = null, strokes = [], curStroke = null, laserPts = [], swallow = false, drawingId = null;
+let usedPen = false, fingerMode = 'auto';
+try{ usedPen = localStorage.getItem('lb_usedPen') === '1'; fingerMode = localStorage.getItem('lb_finger') || 'auto'; }catch(e){}
+const FM = { auto: '손가락: 자동', on: '손가락: 켬', off: '손가락: 끔' };
+function toolUI(){ tools.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === tool)); $('fingerbtn').textContent = FM[fingerMode]; document.body.classList.toggle('drawing', !!tool); }
+function setTool(t){ tool = tool === t ? null : t; toolUI(); }
+function toStage(e){ const r = stage.getBoundingClientRect(), k = stage._k || 1; return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+function redraw(){ ic.clearRect(0, 0, 1920, 1080); ic.lineCap = 'round'; ic.lineJoin = 'round'; ic.strokeStyle = '#c4391b'; ic.lineWidth = 6;
+  strokes.forEach(s => { ic.beginPath(); s.forEach((p, i) => i ? ic.lineTo(p[0], p[1]) : ic.moveTo(p[0], p[1])); ic.stroke(); }); }
+function clearInk(){ strokes = []; redraw(); }
+function shouldDraw(e){ if(!tool) return false; if(e.pointerType === 'pen'){ if(!usedPen){ usedPen = true; try{ localStorage.setItem('lb_usedPen', '1'); }catch(x){} } return true; }
+  if(e.pointerType === 'touch') return fingerMode === 'on' || (fingerMode === 'auto' && !usedPen); return true; }
+function laserDraw(){ const now = performance.now(); laserPts = laserPts.filter(p => now - p[2] < 1000 || drawingId !== null && p[3]);
+  laserSvg.innerHTML = laserPts.length ? '<polyline points="' + laserPts.map(p => p[0].toFixed(0) + ',' + p[1].toFixed(0)).join(' ') + '" fill="none" stroke="#c4391b" stroke-opacity=".55" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="' + laserPts[laserPts.length - 1][0] + '" cy="' + laserPts[laserPts.length - 1][1] + '" r="12" fill="#c4391b"/>' : '';
+  if(laserPts.length) requestAnimationFrame(laserDraw); }
+addEventListener('pointerdown', e => {
+  if(e.target.closest('#tools') || e.target.closest('#bar')) return;
+  if(!shouldDraw(e)) return;
+  e.preventDefault(); e.stopPropagation(); swallow = true; drawingId = e.pointerId; if(e.pointerType === 'touch') touchDrew = true;
+  const p = toStage(e);
+  if(tool === 'pen'){ curStroke = [p]; strokes.push(curStroke); redraw(); }
+  else { laserPts = [[p[0], p[1], performance.now(), true]]; laserDraw(); }
+}, { capture: true });
+addEventListener('pointermove', e => { if(drawingId !== e.pointerId) return; e.preventDefault(); const p = toStage(e);
+  if(tool === 'pen' && curStroke){ curStroke.push(p); redraw(); } else if(tool === 'laser'){ laserPts.push([p[0], p[1], performance.now(), true]); } }, { capture: true });
+const endDraw = e => { if(drawingId !== e.pointerId) return; drawingId = null; curStroke = null; laserPts.forEach(p => p[3] = false); };
+addEventListener('pointerup', endDraw, { capture: true }); addEventListener('pointercancel', endDraw, { capture: true });
+addEventListener('click', e => { if(swallow){ swallow = false; e.stopPropagation(); e.preventDefault(); } }, { capture: true });
+$('tbtn').addEventListener('click', e => { e.stopPropagation(); tools.classList.toggle('open'); });
+tools.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); });
+tools.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-tool]'); if(!b) return; const t = b.dataset.tool;
+  if(t === 'laser' || t === 'pen') setTool(t); else if(t === 'undo'){ strokes.pop(); redraw(); } else if(t === 'clear') clearInk(); else if(t === 'full') full();
+  else if(t === 'finger'){ fingerMode = fingerMode === 'auto' ? 'on' : fingerMode === 'on' ? 'off' : 'auto'; try{ localStorage.setItem('lb_finger', fingerMode); }catch(x){} toolUI(); } });
+toolUI();
+/* 전체 화면·판서 중 쓸어내려도 꺼지지 않게 */
+addEventListener('touchmove', e => { if((document.fullscreenElement || tool) && !e.target.closest('#script,#overview,#help')) e.preventDefault(); }, { passive: false });
+
+/* ===== 10. 넘기기 입력: 키 · 클릭 · 밀기 ===== */
+addEventListener('keydown', e => {
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key, K = k.length === 1 ? k.toLowerCase() : k;
+  const NAV_N = ['ArrowRight', ' ', 'Enter', 'PageDown'], NAV_P = ['ArrowLeft', 'PageUp', 'Backspace'];
+  if(veil.className && !['b', 'w'].includes(K)){ veil.className = ''; e.preventDefault(); return; }
+  if(NAV_N.includes(k)){ e.preventDefault(); if(document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); next(); return; }
+  if(NAV_P.includes(k)){ e.preventDefault(); prev(); return; }
+  if(k === 'Home'){ e.preventDefault(); go(0, 0); return; }
+  if(k === 'End'){ e.preventDefault(); go(S.length - 1, S[S.length - 1].n); return; }
+  if(k === 'Escape'){ tool = null; toolUI(); ov.classList.remove('open'); help.classList.remove('open'); tools.classList.remove('open'); return; }
+  const map = {
+    f: full, m: () => { sfx.on = !sfx.on; updateUI(); }, r: replay,
+    o: () => ov.classList.toggle('open'), h: () => help.classList.toggle('open'),
+    b: () => veil.className = veil.className === 'b' ? '' : 'b', w: () => veil.className = veil.className === 'w' ? '' : 'w',
+    l: () => setTool('laser'), p: () => setTool('pen'), z: () => { strokes.pop(); redraw(); }, c: clearInk
+  };
+  if(!STUDENT){ map.t = map.n = () => { scriptEl.classList.toggle('open'); fillScript(); }; }
+  if(map[K]){ e.preventDefault(); map[K](); }
+}, { capture: true });
+stage.addEventListener('click', e => { if(e.target.closest('button,#simui,#tools,#bar,#script,#overview,#help')) return; next(); });
+stage.addEventListener('contextmenu', e => { e.preventDefault(); prev(); });
+let sx0 = null, sy0 = null, st0 = 0, touchDrew = false;
+addEventListener('touchstart', () => { touchDrew = false; }, { capture: true, passive: true });
+stage.addEventListener('touchstart', e => { if(e.touches.length === 1 && !e.target.closest('button,#simui,#tools,#bar,#script,#overview,#help')){ sx0 = e.touches[0].clientX; sy0 = e.touches[0].clientY; st0 = performance.now(); } else sx0 = null; }, { passive: true });
+stage.addEventListener('touchend', e => { if(sx0 === null || touchDrew) { sx0 = null; return; } const t = e.changedTouches[0], dx = t.clientX - sx0, dy = t.clientY - sy0; sx0 = null;
+  const eat = () => { swallow = true; setTimeout(() => swallow = false, 450); };
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4){ eat(); if(dx < 0) next(); else prev(); }
+  else if(Math.abs(dx) < 12 && Math.abs(dy) < 12 && performance.now() - st0 < 450){ eat(); next(); } }, { passive: true });
+
+/* ===== 11. 시작: 주소 끝 #장면.단계 에서 다시 열기 ===== */
+(function(){
+  const m = /^#(\d+)\.(\d+)$/.exec(location.hash); let si = 0, st = 0;
+  if(m){ si = Math.min(S.length - 1, Math.max(0, +m[1] - 1)); st = Math.min(S[si].n, Math.max(0, +m[2])); }
+  render(si, st, false);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => sim.draw());
+})();
+</script>
+</body>
+</html>

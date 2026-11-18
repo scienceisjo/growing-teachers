@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>눈의 구조와 물체를 보는 과정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300;400&family=Gowun+Dodum&display=swap">
+<style>
+/* 색은 clay-celadon DESIGN.md 의 표를 그대로 쓴다. 면 구획: 짙은 흙빛(kiln) · 점토(clay) 번갈아. */
+:root{--kiln:#3b2a20;--clay:#efe4d4;--cel:#4f8a7a;--cel2:#9fd0bf;--ok:#f1e8da;--oc:#2e231c;--ld:rgba(241,232,218,.24);--ll:rgba(46,35,28,.2)}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;overscroll-behavior:none}
+body{font-family:'Gowun Dodum','Malgun Gothic','Apple SD Gothic Neo',sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;overflow:hidden;background:var(--clay);color:var(--oc);transform-origin:50% 50%}
+.scene{position:absolute;inset:0;display:none}
+.scene.active{display:block}
+.scene.dark{background:var(--kiln);color:var(--ok);--fg:var(--ok);--acc:var(--cel2);--ln:var(--ld);--mut:rgba(241,232,218,.62);--bgf:var(--kiln)}
+.scene.light{background:var(--clay);color:var(--oc);--fg:var(--oc);--acc:var(--cel);--ln:var(--ll);--mut:rgba(46,35,28,.62);--bgf:var(--clay)}
+.tag{position:absolute;left:120px;top:78px;font-size:28px;color:var(--mut)}
+.ttl{position:absolute;left:120px;top:122px;margin:0;font-family:'Hahmlet',serif;font-weight:300;font-size:64px;letter-spacing:-.02em;line-height:1.2;color:var(--fg)}
+svg text{fill:var(--fg);font-size:32px;font-family:inherit}
+svg .ray{stroke:var(--fg);stroke-width:4;fill:none;stroke-opacity:.9}
+svg .ldr{stroke:var(--fg);stroke-width:2;fill:none;stroke-opacity:.7}
+/* 상태 표시: 보이는 단계(on)와 숨김 */
+[data-s]{transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1),visibility .6s}
+[data-s]:not(.on){opacity:0;visibility:hidden}
+.ans:not(.on){transform:scale(.7)}
+.scene.active [data-s="0"].on{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.flow{stroke-dasharray:12 14;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-52}}
+.instant,.instant *{transition:none!important;animation:none!important}
+/* 빈칸 */
+.blank{position:relative;display:inline-block;min-width:150px;margin:0 6px;padding:0 10px;border-bottom:3px solid var(--acc);text-align:center;line-height:1.5;vertical-align:baseline}
+.nb{position:absolute;left:-16px;top:-30px;width:42px;height:42px;border-radius:50%;background:var(--acc);color:var(--bgf);font-family:'Hahmlet',serif;font-style:normal;font-size:26px;display:flex;align-items:center;justify-content:center}
+.ans{display:inline-block;color:var(--acc)}
+/* 장면 2 */
+.card{position:absolute;left:1100px;top:262px;width:700px;border:1px solid var(--ln);border-radius:18px;padding:34px 44px 30px}
+.card h2{font-family:'Hahmlet',serif;font-weight:300;font-size:44px;margin:0 0 18px;color:var(--acc)}
+.card p{font-size:34px;line-height:1.75;margin:0 0 18px}
+.chain{position:absolute;left:120px;top:206px;width:1680px;margin:0;font-size:30px;line-height:1.5;color:var(--acc)}
+.eye{position:absolute;left:100px;top:250px}
+/* 장면 3 */
+.panel{position:absolute;top:236px;width:810px;height:712px;border:1px solid var(--ln);border-radius:18px;padding:22px 28px}
+.panel.l{left:120px}.panel.r{left:990px}
+.ph{height:44px;font-size:30px;color:var(--acc);display:flex;justify-content:space-between;align-items:baseline}
+.ph small{font-size:24px;color:var(--mut)}
+.panel svg{display:block}
+.srow{display:flex;align-items:center;gap:16px;font-size:24px;color:var(--mut);margin-top:6px}
+.srow input{flex:1;accent-color:var(--acc);margin:0}
+.cap{font-size:36px;line-height:1.6;margin:12px 0 0}
+.sum{color:var(--acc);font-size:30px;margin-top:10px;padding-bottom:6px}
+.big{font-size:112px;top:150px}
+/* 판서 · 조작 */
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:50;overflow:visible}
+#ink path.laser{filter:drop-shadow(0 0 6px rgba(255,106,61,.8));transition:opacity 1s}
+#ink path.fade{opacity:0}
+#tools{position:absolute;right:36px;bottom:30px;z-index:60}
+#tbtn{width:72px;height:72px;border-radius:50%;border:1px solid var(--ld);background:rgba(59,42,32,.55);color:var(--ok);font-size:24px;cursor:pointer;opacity:.6}
+#tbtn.on{opacity:1;border-color:var(--cel2)}
+#tpanel{position:absolute;right:0;bottom:90px;width:320px;background:var(--clay);color:var(--oc);border:1px solid var(--ll);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px}
+button{font-family:inherit;font-size:24px;cursor:pointer;color:inherit;background:transparent;border:1px solid var(--ll);border-radius:2px;padding:10px 16px;text-align:left}
+#tpanel button.on{border-color:var(--cel);color:var(--cel);font-weight:400}
+#bar{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(59,42,32,.85);padding:10px 14px;border-radius:999px;opacity:0;transition:opacity .4s;z-index:60}
+#stage.show #bar{opacity:1}
+#bar button{background:transparent;color:var(--ok);border:0;padding:8px 14px}
+#pg{font-size:24px;color:var(--ok);min-width:300px;text-align:center}
+#script{position:absolute;left:120px;right:120px;bottom:24px;height:300px;z-index:55;background:var(--clay);color:var(--oc);border:1px solid var(--ll);border-radius:18px;padding:24px 34px;overflow:auto}
+#script .sh{font-size:26px;opacity:.7;margin-bottom:10px}
+#script p{font-size:32px;line-height:1.7;margin:0}
+#over{position:absolute;inset:0;z-index:70;background:var(--kiln);color:var(--ok);padding:120px}
+#over h3,#help h3{font-family:'Hahmlet',serif;font-weight:300;font-size:56px;margin:0 0 40px}
+.ogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.ogrid button{text-align:left;padding:48px 36px;border:1px solid var(--ld);color:var(--ok);font-size:36px;border-radius:18px;min-height:240px}
+.ogrid b{display:block;font-family:'Hahmlet',serif;font-weight:300;font-size:60px;color:var(--cel2)}
+#help{position:absolute;inset:0;z-index:75;background:rgba(59,42,32,.96);color:var(--ok);padding:110px 160px;font-size:32px;line-height:1.9}
+#help b{color:var(--cel2);display:inline-block;width:280px;font-weight:400}
+#blk{position:absolute;inset:0;z-index:80;background:#000}
+#blk.w{background:#fff}
+body.student .tch{display:none!important}
+body:not(.student) .stu{display:none}
+@media (prefers-reduced-motion:reduce){.flow{animation:none!important}[data-s]{transition:none!important}.scene.active [data-s="0"].on{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 장면 1: 표지 (질문 하나 + 움직이는 그림) -->
+  <section class="scene dark" data-scene="1">
+    <div class="tag">중3 과학 · 시각을 담당하는 감각 기관</div>
+    <h1 class="ttl big">물체는 어떻게 보일까?</h1>
+    <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;left:0;top:0">
+      <!-- 물체: 화살표 모양 -->
+      <path d="M420,740 L420,520" stroke="var(--fg)" stroke-width="14" stroke-linecap="round"/>
+      <path d="M384,558 L420,512 L456,558" fill="none" stroke="var(--fg)" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+      <text x="420" y="806" text-anchor="middle">물체</text>
+      <!-- 눈 (그림) -->
+      <circle cx="1480" cy="630" r="170" fill="var(--fg)" fill-opacity=".06" stroke="var(--fg)" stroke-width="4" stroke-opacity=".6"/>
+      <circle cx="1480" cy="630" r="92" fill="var(--acc)" fill-opacity=".45"/>
+      <circle cx="1480" cy="630" r="36" fill="#000"/>
+      <circle data-s="2" cx="1480" cy="630" r="170" fill="none" stroke="var(--acc)" stroke-width="8"/>
+      <!-- 1단계: 물체에서 빛이 나온다 -->
+      <g data-s="1"><path class="ray flow" d="M440,630 L1000,585 M440,630 L1000,611 M440,630 L1000,630 M440,630 L1000,649 M440,630 L1000,676"/></g>
+      <!-- 2단계: 빛이 눈으로 들어간다 -->
+      <g data-s="2"><path class="ray flow" d="M1000,585 L1310,560 M1000,611 L1310,600 M1000,630 L1310,630 M1000,649 L1310,660 M1000,676 L1310,700"/></g>
+      <!-- 3단계: 안내 -->
+      <text data-s="3" x="960" y="880" text-anchor="middle">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</text>
+      <text class="stu" data-s="3" x="960" y="940" text-anchor="middle">화면을 누르거나 → 키로 넘겨요.</text>
+    </svg>
+  </section>
+
+  <!-- 장면 2: 빛이 지나는 길 (눈의 구조 + 보는 과정) -->
+  <section class="scene light" data-scene="2">
+    <div class="tag">1차시 · 눈의 구조와 물체를 보는 과정</div>
+    <h1 class="ttl">빛은 눈 속을 어떻게 지나갈까?</h1>
+    <svg class="eye" width="960" height="700" viewBox="0 0 960 700">
+      <!-- 눈 바깥 (공막) -->
+      <circle cx="470" cy="350" r="260" fill="var(--fg)" fill-opacity=".05" stroke="var(--fg)" stroke-width="3" stroke-opacity=".6"/>
+      <!-- 유리체 강조 (3단계) -->
+      <circle data-s="3" cx="470" cy="350" r="236" fill="var(--acc)" fill-opacity=".16"/>
+      <!-- 각막 (바깥 투명한 막) · 홍채 띠 -->
+      <path d="M240,220 Q196,350 240,480" fill="none" stroke="var(--acc)" stroke-width="6"/>
+      <ellipse cx="262" cy="350" rx="14" ry="92" fill="var(--acc)" fill-opacity=".55"/>
+      <!-- 수정체 -->
+      <path d="M345,245 Q395,350 345,455 Q295,350 345,245Z" fill="var(--acc)" fill-opacity=".3" stroke="var(--fg)" stroke-width="2.5"/>
+      <!-- 망막 -->
+      <path d="M513,104 A250,250 0 0 1 513,596" fill="none" stroke="var(--acc)" stroke-width="7"/>
+      <!-- 시각 세포 (4단계, JS로 그림) -->
+      <g id="cells" data-s="4"></g>
+      <!-- 시각 신경과 대뇌 -->
+      <path d="M675,493 C730,500 780,470 830,440" fill="none" stroke="var(--fg)" stroke-width="9" stroke-opacity=".45"/>
+      <path class="flow" data-s="5" d="M675,493 C730,500 780,470 830,440" fill="none" stroke="var(--acc)" stroke-width="6"/>
+      <ellipse cx="880" cy="440" rx="78" ry="72" fill="var(--fg)" fill-opacity=".1" stroke="var(--fg)" stroke-width="2.5"/>
+      <!-- 황반 · 맹점 -->
+      <circle data-s="6" cx="712" cy="350" r="11" fill="var(--acc)"/>
+      <circle data-s="6" cx="675" cy="493" r="10" fill="none" stroke="var(--fg)" stroke-width="3" stroke-dasharray="4 4"/>
+      <!-- 빛의 길: 1 각막 쪽 · 2 굴절 · -->
+      <text data-s="0" x="30" y="262">빛</text>
+      <g data-s="1"><path class="ray flow" d="M30,282 L222,282 M30,350 L222,350 M30,418 L222,418"/></g>
+      <g data-s="2"><path class="ray flow" d="M222,282 L345,282 L712,350 M222,418 L345,418 L712,350 M222,350 L712,350"/></g>
+      <!-- 이름표 (지시선) -->
+      <g data-s="1"><path class="ldr" d="M126,166 L232,236"/><text x="56" y="172">각막</text></g>
+      <g data-s="2"><path class="ldr" d="M292,58 L342,240"/><text x="200" y="64">수정체</text></g>
+      <g data-s="3"><path class="ldr" d="M520,668 L520,420"/><text x="440" y="690">유리체</text></g>
+      <g data-s="4"><path class="ldr" d="M758,118 L650,176"/><text x="762" y="112">망막</text></g>
+      <g data-s="4"><path class="ldr" d="M758,202 L688,214"/><text x="762" y="212">시각 세포</text></g>
+      <g data-s="5"><path class="ldr" d="M752,624 L764,494"/><text x="700" y="650">시각 신경</text></g>
+      <text data-s="5" x="846" y="346">대뇌</text>
+      <g data-s="6"><path class="ldr" d="M746,330 L725,352"/><text x="750" y="318">황반</text></g>
+      <g data-s="6"><path class="ldr" d="M748,574 L684,502"/><text x="752" y="590">맹점</text></g>
+    </svg>
+    <div class="card">
+      <h2>빛이 지나는 길</h2>
+      <p>빛은 각막과 <span class="blank"><i class="nb">1</i><span class="ans" data-s="2">수정체</span></span>를 지나면서 굴절된다.</p>
+      <p>망막의 <span class="blank"><i class="nb">2</i><span class="ans" data-s="4">시각 세포</span></span>가 빛 자극을 받아들인다.</p>
+      <p>이 자극은 <span class="blank"><i class="nb">3</i><span class="ans" data-s="5">시각 신경</span></span>을 통해 뇌로 전달된다.</p>
+      <p>상이 <span class="blank"><i class="nb">4</i><span class="ans" data-s="6">황반</span></span>에 맺히면 물체가 선명하게 보인다.</p>
+    </div>
+    <p class="chain" data-s="7">빛 → 각막 → 수정체 → 유리체 → 망막 → 시각 신경 → 대뇌</p>
+  </section>
+
+  <!-- 장면 3: 밝기와 거리에 따른 조절 (시뮬레이터 두 개) -->
+  <section class="scene dark" data-scene="3">
+    <div class="tag">2차시 · 눈의 조절 작용</div>
+    <h1 class="ttl">밝기와 거리에 따라 눈은 어떻게 조절할까?</h1>
+
+    <div class="panel l noadv">
+      <div class="ph"><span>① 주변 밝기 · 홍채와 동공</span><small>슬라이더를 움직여 보세요</small></div>
+      <svg id="simL" width="810" height="400" viewBox="0 0 810 400">
+        <circle cx="405" cy="190" r="150" fill="var(--acc)" fill-opacity=".5"/>
+        <path id="stripes" d="" fill="none" stroke="var(--ok)" stroke-opacity=".3" stroke-width="2"/>
+        <circle id="pupil" cx="405" cy="190" r="54" fill="#000"/>
+        <g data-s="1"><path class="ldr" d="M128,66 L272,116"/><text x="60" y="76">홍채</text></g>
+        <g data-s="2"><path id="pupilLead" class="ldr" d="M632,82 L443,152"/><text x="640" y="72">동공</text></g>
+        <text x="20" y="381" style="font-size:24px">들어오는 빛의 양</text>
+        <rect x="260" y="362" width="510" height="18" fill="none" stroke="var(--fg)" stroke-opacity=".4"/>
+        <rect id="meter" x="260" y="362" width="510" height="18" fill="var(--acc)"/>
+      </svg>
+      <div class="srow"><span>어두움</span><input id="sl-b" type="range" min="0" max="100" value="50" tabindex="-1"><span>밝음</span></div>
+      <p class="cap">주변이 밝으면 홍채가 확장되어 <span class="blank"><i class="nb">5</i><span class="ans" data-s="2">동공</span></span>이 작아진다.</p>
+    </div>
+
+    <div class="panel r noadv">
+      <div class="ph"><span>② 물체 거리 · 섬모체와 수정체</span><small>슬라이더를 움직여 보세요</small></div>
+      <svg id="simR" width="810" height="400" viewBox="0 0 810 400">
+        <!-- 안구 단면(옆에서 본 모습 하나). 공막 원의 앞쪽을 빼고, 반지름 80.4 의 더 굽은 각막 볼록면을 잇는다 -->
+        <path d="M287.4,125 A170,170 0 1 1 287.4,275 A80.4,80.4 0 0 1 287.4,125Z" fill="var(--fg)" fill-opacity=".05" stroke="var(--fg)" stroke-width="3" stroke-opacity=".6"/>
+        <path d="M287.4,125 A80.4,80.4 0 0 0 287.4,275" fill="none" stroke="var(--acc)" stroke-width="6"/>
+        <!-- 뒷벽 망막 -->
+        <path d="M494.7,49.6 A160,160 0 0 1 494.7,350.4" fill="none" stroke="var(--acc)" stroke-width="7"/>
+        <!-- 수정체 (두께는 JS가 바꿈) -->
+        <path id="lens" fill="var(--acc)" fill-opacity=".3" stroke="var(--fg)" stroke-width="2.5"/>
+        <!-- 섬모체 덩어리: 안구 벽 안쪽에 붙고, 가는 선(섬모소대)으로 수정체 가장자리와 잇는다. 이름표 없음 -->
+        <path id="zon" fill="none" stroke="var(--fg)" stroke-opacity=".55" stroke-width="1.5"/>
+        <rect id="cilT" fill="var(--acc)" fill-opacity=".85" rx="4"/>
+        <rect id="cilB" fill="var(--acc)" fill-opacity=".85" rx="4"/>
+        <!-- 물체 · 광선 · 거꾸로 맺힌 상 -->
+        <path id="obj" fill="none" stroke="var(--fg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <text id="objLab" x="130" y="234">물체</text>
+        <g data-s="3"><path id="ray1" class="ray flow"/><path id="ray2" class="ray flow"/></g>
+        <g data-s="3"><path class="ldr" d="M106,64 L263,140"/><text x="40" y="70">각막</text></g>
+        <g data-s="3"><path class="ldr" d="M300,360 L322,250"/><text x="200" y="370">수정체</text></g>
+        <g data-s="3"><path class="ldr" d="M636,56 L580,118"/><text x="640" y="60">망막</text></g>
+        <g data-s="4"><path id="cilLead" class="ldr" d="M294,52 L337,68"/><text x="196" y="58">섬모체</text></g>
+        <g data-s="5"><path id="imgLead" class="ldr" d="M575,334 L593,245"/><path id="img" fill="none" stroke="var(--acc)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><text x="560" y="350">거꾸로 맺힌 상</text></g>
+      </svg>
+      <div class="srow"><span>가까움</span><input id="sl-d" type="range" min="0" max="100" value="50" tabindex="-1"><span>멀음</span></div>
+      <p class="cap">가까운 물체를 볼 때 <span class="blank"><i class="nb">6</i><span class="ans" data-s="4">섬모체</span></span>가 수축해 수정체가 두꺼워진다.</p>
+      <p class="cap sum" data-s="6">밝기는 동공 크기, 거리는 수정체 두께로 조절한다.</p>
+    </div>
+  </section>
+
+  <!-- 판서 레이어 -->
+  <svg id="ink" viewBox="0 0 1920 1080"></svg>
+
+  <!-- 도구 상자 -->
+  <div id="tools" class="noadv">
+    <div id="tpanel" hidden>
+      <button data-t="laser">레이저 (L)</button>
+      <button data-t="pen">빨간 펜 (P)</button>
+      <button data-t="erase">한 획 지우기 (Z)</button>
+      <button data-t="clear">모두 지우기 (C)</button>
+      <button data-t="finger" id="fbtn">손가락 그리기: 자동</button>
+      <button data-t="full">전체 화면 (F)</button>
+    </div>
+    <button id="tbtn" aria-label="도구 상자">도구</button>
+  </div>
+
+  <!-- 아래 조작 막대 -->
+  <nav id="bar" class="noadv">
+    <button data-a="prev">이전</button>
+    <span id="pg"></span>
+    <button data-a="next">다음</button>
+    <button data-a="sound" id="bsound">소리 켬</button>
+    <button data-a="full">전체 화면</button>
+    <button data-a="script" class="tch">대본</button>
+  </nav>
+
+  <!-- 대본 패널 (T) -->
+  <aside id="script" class="noadv" hidden>
+    <div class="sh" id="sh"></div>
+    <p id="sp"></p>
+  </aside>
+
+  <!-- 전체 장면 보기 (O) -->
+  <div id="over" hidden>
+    <h3>장면 고르기</h3>
+    <div class="ogrid"></div>
+  </div>
+
+  <!-- 도움말 (H) -->
+  <div id="help" hidden>
+    <h3>키 안내</h3>
+    <div><b>→ · Space · Enter</b>다음 (화면 누르기도 됨)</div>
+    <div><b>← · Backspace</b>이전 한 단계</div>
+    <div><b>O</b>장면 고르기</div>
+    <div class="tch"><b>T · N</b>대본 열기 · 닫기</div>
+    <div><b>R</b>지금 단계 다시 보기</div>
+    <div><b>M</b>소리 켜기 · 끄기</div>
+    <div><b>B · W</b>검은 화면 · 흰 화면</div>
+    <div><b>L · P · Z · C</b>레이저 · 빨간 펜 · 한 획 지우기 · 모두 지우기</div>
+    <div><b>F</b>전체 화면</div>
+    <div><b>Home · End</b>처음 · 끝</div>
+    <div><b>Esc</b>도구 끄기 · 닫기</div>
+  </div>
+
+  <!-- 검은 · 흰 화면 -->
+  <div id="blk" hidden></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const STUDENT=/[?&]s=1\b/.test(location.search);
+document.body.classList.toggle('student',STUDENT);
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const stage=$('#stage');
+const SC=$$('.scene');
+const TITLES=['표지 · 물체는 어떻게 보일까?','빛이 지나는 길','밝기와 거리에 따른 조절'];
+const SCRIPTS=[
+  '눈은 어떻게 물체를 볼까요? 오늘은 그 과정을 차례로 따라가 봅니다. 물체에서 나온 빛이 눈으로 들어옵니다. 번호 칸이 열리면 학습지의 같은 번호 칸에 적어 봅시다.',
+  '빛이 눈 속을 지나는 순서를 바깥부터 따라가 볼게요. 빛은 각막과 수정체를 지나며 굴절되어 유리체를 지나 망막에 닿습니다. 망막의 시각 세포가 빛 자극을 받고, 그 자극이 시각 신경을 통해 뇌로 전달됩니다. 상이 황반에 맺히면 물체가 선명하게 보여요.',
+  '밝기 쪽부터 볼까요? 슬라이더를 밝게 옮기면 홍채가 확장되어 동공이 작아지고, 들어오는 빛의 양이 줄어요. 오른쪽은 거리입니다. 가까운 물체를 볼 때는 섬모체가 수축해 수정체가 두꺼워지고, 먼 물체를 볼 때는 수정체가 얇아집니다. 망막에 맺힌 상은 거꾸로예요.'
+];
+// 각 장면의 마지막 단계 번호 (data-s 중 최댓값)
+const N=SC.map(s=>Math.max(0,...Array.from(s.querySelectorAll('[data-s]'),e=>+e.dataset.s)));
+const UI='#tools,#tpanel,#bar,#script,#over,#help,#blk,.noadv,button,input,label';
+
+let cur=0, st=0, drawing=null, swallow=false, sw=null, tool=null, fingerMode='auto', fs=false, soundOn=!STUDENT, penSeen=false, strokes=[];
+try{ penSeen=localStorage.getItem('penSeen')==='1'; fingerMode=localStorage.getItem('fingerMode')||'auto'; }catch(_){}
+
+/* ---------- 소리 (WebAudio 합성) ---------- */
+let AC=null;
+const sfx={
+  init(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(_){ AC=null; } } if(AC&&AC.state==='suspended'){ AC.resume().catch(()=>{}); } },
+  tone(f,d,type,v,t0){ if(!soundOn||!AC) return; try{ const t=AC.currentTime+(t0||0); const o=AC.createOscillator(), g=AC.createGain(); o.type=type; o.frequency.value=f; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(0.0001,t+d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+d+0.05); }catch(_){} },
+  tink(){ const f=[1318,1480,1760][Math.floor(Math.random()*3)]; this.tone(f,.45,'triangle',.06); this.tone(f*2,.25,'sine',.02); },
+  pop(){ this.tone(880,.1,'sine',.04); },
+  chime(){ [523,659,784].forEach((f,i)=>this.tone(f,1.1,'sine',.04,i*.12)); }
+};
+addEventListener('pointerdown',()=>sfx.init(),true);
+
+/* ---------- 장면·단계 이동 ---------- */
+// anim=false 이면 애니메이션 없이 그 단계 모습을 바로 만든다(되돌리기·건너뛰기).
+function go(i,target,anim,snd){
+  const changed=(i!==cur)||!SC[i].classList.contains('active');
+  if(changed){ strokes.forEach(s=>s.remove()); strokes=[]; clearLasers(); }
+  cur=i; st=target;
+  SC.forEach((s,j)=>s.classList.toggle('active',j===i));
+  const items=SC[i].querySelectorAll('[data-s]');
+  if(!anim){
+    stage.classList.add('instant');
+    items.forEach(e=>e.classList.toggle('on',+e.dataset.s<=target));
+    void stage.offsetWidth; stage.classList.remove('instant');
+    return;
+  }
+  if(changed){
+    stage.classList.add('instant'); items.forEach(e=>e.classList.remove('on')); void stage.offsetWidth; stage.classList.remove('instant');
+  }
+  items.forEach(e=>{
+    const want=+e.dataset.s<=target;
+    if(want!==e.classList.contains('on')){
+      e.classList.toggle('on',want);
+      if(want&&snd){ if(e.classList.contains('ans')) sfx.tink(); else if(e.classList.contains('ldr')||e.tagName==='text') sfx.pop(); }
+    }
+  });
+  if(snd&&i===2&&target===N[2]) sfx.chime();
+}
+function next(){
+  if(st<N[cur]) go(cur,st+1,true,true);
+  else if(cur<SC.length-1) go(cur+1,0,true,true);
+  else return;
+  after();
+}
+function prev(){
+  if(st>0) go(cur,st-1,false);
+  else if(cur>0) go(cur-1,N[cur-1],false);
+  else return;
+  after();
+}
+function replay(){
+  const t=st;
+  if(t===0){
+    stage.classList.add('instant');
+    SC[cur].querySelectorAll('[data-s]').forEach(e=>e.classList.remove('on'));
+    void stage.offsetWidth; stage.classList.remove('instant');
+    go(cur,0,true,true);
+  } else { go(cur,t-1,false); go(cur,t,true,true); }
+  after();
+}
+function after(){
+  $('#pg').textContent=`장면 ${cur+1}/${SC.length} · 단계 ${st}/${N[cur]}`;
+  try{ history.replaceState(null,'','#'+(cur+1)+'.'+st); }catch(_){}
+  if(!$('#script').hidden) renderScript();
+}
+function loadHash(){
+  const m=location.hash.match(/^#(\d+)(?:\.(\d+))?$/);
+  if(!m) return [0,0];
+  const i=+m[1]-1; if(i<0||i>=SC.length) return [0,0];
+  return [i,Math.min(+(m[2]||0),N[i])];
+}
+
+/* ---------- 대본 · 장면 고르기 · 도움말 · 검은/흰 화면 ---------- */
+function renderScript(){
+  $('#sh').textContent=`장면 ${cur+1} · ${TITLES[cur]} · 단계 ${st}/${N[cur]}`+(cur<SC.length-1?`   →   다음 장면: ${TITLES[cur+1]}`:'');
+  $('#sp').textContent=SCRIPTS[cur];
+}
+function toggleScript(){ if(STUDENT) return; const s=$('#script'); s.hidden=!s.hidden; if(!s.hidden) renderScript(); }
+function toggleOver(){
+  const o=$('#over');
+  if(!o.hidden){ o.hidden=true; return; }
+  o.querySelector('.ogrid').innerHTML=TITLES.map((t,i)=>`<button data-i="${i}"><b>${i+1}</b>${t}</button>`).join('');
+  o.hidden=false;
+}
+$('#over').addEventListener('click',e=>{
+  const b=e.target.closest('[data-i]');
+  if(b){ $('#over').hidden=true; go(+b.dataset.i,0,true,true); after(); }
+  else if(e.target.id==='over') $('#over').hidden=true;
+});
+function toggleHelp(){ $('#help').hidden=!$('#help').hidden; }
+function blackout(c){ const b=$('#blk'); if(!b.hidden&&b.className===c){ b.hidden=true; } else { b.className=c; b.hidden=false; } }
+
+/* ---------- 소리 · 전체 화면 ---------- */
+function toggleSound(){ soundOn=!soundOn; sfx.init(); $('#bsound').textContent=soundOn?'소리 켬':'소리 끔'; }
+function toggleFull(){
+  try{
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+    else document.exitFullscreen().catch(()=>{});
+  }catch(_){}
+}
+document.addEventListener('fullscreenchange',()=>{ fs=!!document.fullscreenElement; });
+if(STUDENT) soundOn=false;
+$('#bsound').textContent=soundOn?'소리 켬':'소리 끔';
+
+/* ---------- 판서 도구 ---------- */
+const INK=$('#ink');
+function pt(e){ const r=stage.getBoundingClientRect(); return [(e.clientX-r.left)*1920/r.width,(e.clientY-r.top)*1080/r.height]; }
+function canDraw(type){ if(type!=='touch') return true; return fingerMode==='on'||(fingerMode==='auto'&&!penSeen); }
+function mk(d,cls,color,w){
+  const p=document.createElementNS(NS,'path');
+  p.setAttribute('d',d); p.setAttribute('fill','none'); p.setAttribute('stroke',color); p.setAttribute('stroke-width',w);
+  p.setAttribute('stroke-linecap','round'); p.setAttribute('stroke-linejoin','round');
+  if(cls) p.setAttribute('class',cls);
+  INK.appendChild(p); return p;
+}
+function penColor(){ return SC[cur].classList.contains('dark')?'#FF6A3D':'#C4391B'; }
+function clearLasers(){ $$('#ink path.laser').forEach(p=>p.remove()); }
+function clearAll(){ strokes.forEach(s=>s.remove()); strokes=[]; clearLasers(); }
+function undoStroke(){ const s=strokes.pop(); if(s) s.remove(); }
+function setTool(t){
+  tool=(tool===t)?null:t;
+  if(!tool) clearLasers();
+  stage.style.touchAction=tool?'none':'';
+  $('#tbtn').classList.toggle('on',!!tool);
+  $$('#tpanel [data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===tool));
+  document.body.classList.toggle('drawing',!!tool);
+}
+function cycleFinger(){
+  fingerMode={auto:'on',on:'off',off:'auto'}[fingerMode];
+  try{ localStorage.setItem('fingerMode',fingerMode); }catch(_){}
+  $('#fbtn').textContent='손가락 그리기: '+({auto:'자동',on:'켬',off:'끔'}[fingerMode]);
+}
+$('#fbtn').textContent='손가락 그리기: '+({auto:'자동',on:'켬',off:'끔'}[fingerMode]);
+
+addEventListener('pointerdown',e=>{
+  swallow=false;
+  if(e.pointerType==='pen'&&!penSeen){ penSeen=true; try{ localStorage.setItem('penSeen','1'); }catch(_){} }
+  if(e.target.closest&&e.target.closest(UI)) return;
+  if(e.button!==0) return;
+  if(!tool||!canDraw(e.pointerType)){ sw={x:e.clientX,y:e.clientY}; return; }
+  const [x,y]=pt(e);
+  const laser=tool==='laser';
+  drawing={laser,d:`M${x.toFixed(1)},${y.toFixed(1)}`,el:mk(`M${x.toFixed(1)},${y.toFixed(1)}`,laser?'laser':'',laser?'#FF6A3D':penColor(),laser?10:7)};
+  sw=null;
+},true);
+addEventListener('pointermove',e=>{
+  if(!drawing) return;
+  const [x,y]=pt(e);
+  drawing.d+=` L${x.toFixed(1)},${y.toFixed(1)}`;
+  drawing.el.setAttribute('d',drawing.d);
+},true);
+addEventListener('pointerup',e=>{
+  if(drawing){
+    const dr=drawing; drawing=null; swallow=true;
+    if(dr.laser){ setTimeout(()=>{ dr.el.classList.add('fade'); }, 600); setTimeout(()=>dr.el.remove(),1800); }
+    else strokes.push(dr.el);
+    return;
+  }
+  if(sw){
+    const dx=e.clientX-sw.x, dy=e.clientY-sw.y; sw=null;
+    if(Math.abs(dx)>80&&Math.abs(dy)<60&&!(e.target.closest&&e.target.closest(UI))){ swallow=true; if(dx<0) next(); else prev(); }
+  }
+},true);
+addEventListener('touchmove',e=>{
+  if((fs||tool)&&!(e.target.closest&&e.target.closest('#script,#over,#help,.scroll'))) e.preventDefault();
+},{passive:false});
+
+stage.addEventListener('click',e=>{
+  if(swallow){ swallow=false; return; }
+  if(e.target.closest&&e.target.closest(UI)) return;
+  next();
+});
+stage.addEventListener('contextmenu',e=>{
+  e.preventDefault();
+  if(e.target.closest&&e.target.closest(UI)) return;
+  prev();
+});
+
+/* 아래 조작 막대: 마우스를 움직일 때만 잠깐 보인다 */
+let hideT=null;
+function showBar(){ stage.classList.add('show'); clearTimeout(hideT); hideT=setTimeout(()=>stage.classList.remove('show'),2500); }
+addEventListener('pointermove',showBar,true);
+$('#bar').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const a=b.dataset.a;
+  if(a==='prev') prev(); else if(a==='next') next(); else if(a==='sound') toggleSound();
+  else if(a==='full') toggleFull(); else if(a==='script') toggleScript();
+  e.stopPropagation();
+});
+$('#tbtn').addEventListener('click',e=>{ $('#tpanel').hidden=!$('#tpanel').hidden; e.stopPropagation(); });
+$('#tpanel').addEventListener('click',e=>{
+  const b=e.target.closest('[data-t]'); if(!b) return;
+  const t=b.dataset.t;
+  if(t==='laser'||t==='pen') setTool(t);
+  else if(t==='erase') undoStroke();
+  else if(t==='clear') clearAll();
+  else if(t==='finger') cycleFinger();
+  else if(t==='full') toggleFull();
+  e.stopPropagation();
+});
+
+/* ---------- 키 ---------- */
+addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const t=e.target;
+  if(t&&(t.tagName==='INPUT'||t.tagName==='BUTTON')) t.blur();
+  const k=e.key, K=k.length===1?k.toLowerCase():k;
+  const nav={ArrowRight:1,' ':1,Enter:1,PageDown:1,ArrowLeft:-1,PageUp:-1,Backspace:-1};
+  if(nav[k]!==undefined){ e.preventDefault(); if(nav[k]>0) next(); else prev(); return; }
+  switch(K){
+    case 'Home': go(0,0,false); after(); break;
+    case 'End': go(SC.length-1,N[SC.length-1],false); after(); break;
+    case 'f': toggleFull(); break;
+    case 't': case 'n': toggleScript(); break;
+    case 'o': toggleOver(); break;
+    case 'r': replay(); break;
+    case 'm': toggleSound(); break;
+    case 'b': blackout('b'); break;
+    case 'w': blackout('w'); break;
+    case 'h': toggleHelp(); break;
+    case 'l': setTool('laser'); break;
+    case 'p': setTool('pen'); break;
+    case 'z': undoStroke(); break;
+    case 'c': clearAll(); break;
+    case 'Escape':
+      if(!$('#over').hidden) $('#over').hidden=true;
+      else if(!$('#help').hidden) $('#help').hidden=true;
+      else if(!$('#blk').hidden) $('#blk').hidden=true;
+      else if(tool) setTool(tool);
+      else if(!$('#tpanel').hidden) $('#tpanel').hidden=true;
+      else if(!$('#script').hidden) toggleScript();
+      break;
+  }
+});
+
+/* ---------- 시뮬레이터 ---------- */
+// 왼쪽(밝기): 슬라이더 값 b(0 어두움 → 100 밝음). 동공 반지름 r = 110 - 80*b.
+//   밝을수록 r 이 작아져 동공이 줄고, 어두울수록 커진다. 빛의 양 막대 = (r/110)^2 (동공 면적 비).
+// 오른쪽(거리): 슬라이더 v(0 가까움 → 100 멂). 옆에서 본 안구 한 장.
+//   물체 화살표 x = 150 - 130·v (각막에서 항상 80px 이상 떨어져 안구 바깥). 물체~수정체 dO = 200 + 130·v.
+//   망막까지 D = 250 고정, 얇은 렌즈식 1/f = 1/dO + 1/D. 렌즈 세기를 0~1 로 정규화한 p(가까울수록 1).
+//   수정체 두께 rx = 12 + 34p. 섬모체 덩어리 폭 w = 18 + 10p, 아랫변 y = 96 + 16p (가까울수록 수정체 쪽, 두꺼움).
+//   상 높이 = 36·D/dO, 축 아래로 그려져 거꾸로. 광선 두 줄은 상의 끝 한 점에 모인다.
+function drawSims(){
+  const b=(+$('#sl-b').value)/100, r=110-80*b, cx=405, cy=190, R=150;
+  $('#pupil').setAttribute('r',r.toFixed(1));
+  let d='';
+  for(let i=0;i<36;i++){
+    const a=i*Math.PI/18;
+    d+=`M${(cx+(r+3)*Math.cos(a)).toFixed(1)},${(cy+(r+3)*Math.sin(a)).toFixed(1)}L${(cx+(R-4)*Math.cos(a)).toFixed(1)},${(cy+(R-4)*Math.sin(a)).toFixed(1)}`;
+  }
+  $('#stripes').setAttribute('d',d);
+  const a45=-Math.PI/4;
+  $('#pupilLead').setAttribute('d',`M632,82 L${(cx+r*Math.cos(a45)).toFixed(1)},${(cy+r*Math.sin(a45)).toFixed(1)}`);
+  $('#meter').setAttribute('width',(510*Math.pow(r/110,2)).toFixed(1));
+
+  const v=(+$('#sl-d').value)/100;
+  // 좌표는 패널 SVG(810×400). 각막 꼭대기 x=236, 공막 원 중심 (440,200) 반지름 170, 뒷벽 망막 원호 반지름 160(뒷벽 x=600).
+  // 수정체 중심 LX=350. 망막까지 D = 600 - 350 = 250 (고정). 축 높이 AX=200.
+  // 물체 화살표 x 좌표: objX = 150 - 130·v  (v=0 가까움: 각막 꼭대기에서 86px 떨어짐 / v=1 멂: x≈20, 패널 왼쪽 끝 쪽).
+  // 물체~수정체 거리: dO = LX - objX = 200 + 130·v  (화면 1px ≈ 광학 거리 1 단위로 본다).
+  const LX=350, AX=200, h=36, D=250, RX=LX+D;
+  const objX=150-130*v, dO=LX-objX, himg=h*D/dO;      // 상 높이 = h·D/dO (거꾸로, 축 아래)
+  const xt=440+Math.sqrt(160*160-himg*himg);           // 상의 끝은 뒷벽 망막 원호 위에 놓는다
+  // 렌즈 세기 P = 1/dO + 1/D, 0(멂)~1(가까움)로 정규화한 p
+  const P=1/dO+1/D, Pn=1/200+1/D, Pf=1/330+1/D;
+  const p=Math.min(1,Math.max(0,(P-Pf)/(Pn-Pf)));
+  const rx=12+34*p;                                    // 수정체 두께: 가까울수록 두꺼움
+  $('#lens').setAttribute('d',`M${LX},${AX-80} Q${(LX+2*rx).toFixed(1)},${AX} ${LX},${AX+80} Q${(LX-2*rx).toFixed(1)},${AX} ${LX},${AX-80}Z`);
+  // 섬모체 덩어리: 위·아래 벽(y=60, y=340)에 붙어 있고, 가까울수록 수정체 쪽으로 내려와 두꺼워진다(수축).
+  const w=18+10*p, yb=96+16*p;
+  const setR=(id,x,y,ww,hh)=>{ const e=$('#'+id); e.setAttribute('x',x.toFixed(1)); e.setAttribute('y',y.toFixed(1)); e.setAttribute('width',ww.toFixed(1)); e.setAttribute('height',hh.toFixed(1)); };
+  setR('cilT',LX-w/2,60,w,yb-60);
+  setR('cilB',LX-w/2,400-yb,w,yb-60);
+  // 가는 선(섬모소대): 덩어리 아랫변 양 끝에서 수정체 가장자리(위 y=160, 아래 y=240 근처)로 잇는다
+  const fx=0.75*rx;
+  $('#zon').setAttribute('d',`M${(LX-w/2).toFixed(1)},${yb.toFixed(1)} L${(LX-fx).toFixed(1)},160 M${(LX+w/2).toFixed(1)},${yb.toFixed(1)} L${(LX+fx).toFixed(1)},160 M${(LX-w/2).toFixed(1)},${(400-yb).toFixed(1)} L${(LX-fx).toFixed(1)},240 M${(LX+w/2).toFixed(1)},${(400-yb).toFixed(1)} L${(LX+fx).toFixed(1)},240`);
+  $('#cilLead').setAttribute('d',`M294,52 L${(LX-w/2).toFixed(1)},68`);
+  $('#obj').setAttribute('d',`M${objX.toFixed(1)},${AX} L${objX.toFixed(1)},${AX-h} M${(objX-9).toFixed(1)},${AX-h+16} L${objX.toFixed(1)},${AX-h} L${(objX+9).toFixed(1)},${AX-h+16}`);
+  $('#objLab').setAttribute('x',Math.max(4,objX-20).toFixed(1));
+  // 광선 두 줄: (1) 물체 끝 → 수정체 중심 → 상, (2) 각막(244,164)을 지나 수정체에서 굴절 → 상. 둘 다 망막 위 한 점에 모인다.
+  $('#ray1').setAttribute('d',`M${objX.toFixed(1)},${AX-h} L${xt.toFixed(1)},${(AX+himg).toFixed(1)}`);
+  $('#ray2').setAttribute('d',`M${objX.toFixed(1)},${AX-h} L244,${AX-h} L${LX},${AX-h} L${xt.toFixed(1)},${(AX+himg).toFixed(1)}`);
+  $('#img').setAttribute('d',`M${RX},${AX} L${xt.toFixed(1)},${(AX+himg).toFixed(1)} M${(xt-9).toFixed(1)},${(AX+himg-16).toFixed(1)} L${xt.toFixed(1)},${(AX+himg).toFixed(1)} L${(xt+9).toFixed(1)},${(AX+himg-16).toFixed(1)}`);
+  $('#imgLead').setAttribute('d',`M575,334 L${xt.toFixed(1)},${(AX+himg-2).toFixed(1)}`);
+}
+$('#sl-b').addEventListener('input',drawSims);
+$('#sl-d').addEventListener('input',drawSims);
+
+/* 장면 2: 세포 줄 (망막 안쪽, 반지름 236~262, 각도 -70°~70°) */
+(function(){
+  let d='';
+  for(let a=-70;a<=70;a+=5){
+    const q=Math.PI*a/180;
+    d+=`M${(470+236*Math.cos(q)).toFixed(1)},${(350+236*Math.sin(q)).toFixed(1)}L${(470+262*Math.cos(q)).toFixed(1)},${(350+262*Math.sin(q)).toFixed(1)}`;
+  }
+  $('#cells').innerHTML=`<path d="${d}" fill="none" stroke="var(--acc)" stroke-width="3"/>`;
+})();
+
+/* ---------- 시작 ---------- */
+function fit(){ const s=Math.min(innerWidth/1920,innerHeight/1080); stage.style.transform=`scale(${s})`; }
+addEventListener('resize',fit);
+fit();
+drawSims();
+const start=loadHash();
+go(start[0],start[1],false);
+after();
+})();
+</script>
+</body>
+</html>

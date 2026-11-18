@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두 공은 언제 바닥에 닿을까</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.39.3/dist/galmuri.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--night:#101533;--grid:rgba(62,230,230,.08);--text:#e6e9ff;--cy:#3ee6e6;--pk:#ff5ca8;--ye:#ffe14d;--panel:#1b2150}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#05070f}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background-color:var(--night);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;color:var(--text);font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif;font-size:36px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;touch-action:manipulation}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 3px,rgba(0,0,0,.14) 3px 4px);z-index:60}
+#stage.still *{transition:none!important;animation:none!important}
+.scene{position:absolute;inset:0;display:none}
+.scene.on{display:block}
+[data-st]{opacity:0;transform:translateY(16px);transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+[data-st].on{opacity:1;transform:none}
+canvas{position:absolute}
+.tag{position:absolute;left:120px;top:72px;margin:0;font:700 28px/1.2 Galmuri11,monospace;color:var(--ye)}
+.ttl{position:absolute;left:120px;top:120px;margin:0;font:700 64px/1.3 Galmuri11,monospace;color:#fff;text-shadow:0 0 12px rgba(62,230,230,.7),4px 4px 0 var(--pk);white-space:nowrap}
+.lead{position:absolute;left:120px;width:760px;margin:0;font-size:36px;line-height:1.7}
+.lead.note{font-size:28px;color:#b7bcf0;width:1000px}
+.card{position:absolute;left:120px;top:240px;width:700px;padding:36px 44px 28px;background:var(--panel);border:4px solid var(--cy);box-shadow:4px 4px 0 #000,8px 8px 0 rgba(0,0,0,.5)}
+.ln{margin:0 0 22px;font-size:36px;line-height:2.2}
+.bl{position:relative;display:inline-block;min-width:150px;margin:0 6px 0 50px;padding:0 10px;border-bottom:4px solid var(--cy);text-align:center;color:var(--cy);font-weight:700;line-height:1.3;vertical-align:baseline}
+.bl .n{position:absolute;left:-44px;top:50%;margin-top:-18px;width:36px;height:36px;border-radius:50%;background:var(--pk);color:#fff;font:700 24px/36px Galmuri11,monospace;text-align:center;font-style:normal}
+.bl.pop .ans{animation:pop .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+.ans{display:inline-block}
+.ctl{position:absolute;display:flex;align-items:center;gap:20px;font-size:26px;white-space:nowrap}
+.ctl input{width:300px;accent-color:var(--ye)}
+.ctl output{min-width:190px;font-weight:700;color:#fff}
+.btn{font:700 26px/1 Galmuri11,monospace;color:#fff;background:var(--pk);border:4px solid #fff;padding:12px 26px;box-shadow:4px 4px 0 #000;cursor:pointer}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.cr{position:absolute;left:120px;top:1018px;margin:0;font-size:20px;color:#a1a6d6;line-height:1.2}
+#bar{position:absolute;left:1000px;bottom:14px;display:flex;gap:10px;opacity:0;transition:opacity .4s;z-index:66}
+#bar.show{opacity:1}
+.bb{font:700 24px/1 Pretendard,system-ui,sans-serif;color:#fff;background:rgba(27,33,80,.94);border:3px solid var(--cy);padding:10px 16px;cursor:pointer}
+#pg{font:700 24px/1 Pretendard,system-ui,sans-serif;color:#fff;padding:10px 14px;background:rgba(27,33,80,.94);border:3px solid var(--cy);pointer-events:none;white-space:nowrap}
+#script{position:absolute;left:0;right:0;bottom:0;height:300px;padding:28px 120px;background:rgba(16,21,51,.97);border-top:4px solid var(--cy);display:none;z-index:65;font-size:30px;line-height:1.6}
+#script.on{display:block}
+#scr-t{margin:0 0 10px;font-size:26px;color:var(--ye)}
+#scr-b{margin:0}
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:45}
+#tbx{position:absolute;right:40px;bottom:14px;width:72px;height:72px;border:4px solid var(--cy);background:rgba(27,33,80,.7);color:#fff;font:700 24px/1 Galmuri11,monospace;cursor:pointer;opacity:.75;z-index:70}
+#tbm{position:absolute;right:40px;bottom:100px;width:380px;padding:16px;background:var(--panel);border:4px solid var(--cy);display:none;flex-direction:column;gap:10px;z-index:70}
+#tbm.on{display:flex}
+.tb{font:700 24px/1.2 Pretendard,system-ui,sans-serif;color:#fff;background:rgba(16,21,51,.9);border:3px solid #2c347a;padding:10px 14px;text-align:left;cursor:pointer}
+.tb.on{border-color:var(--ye);color:var(--ye)}
+#ovl,#helpbox{position:absolute;inset:0;background:rgba(16,21,51,.97);display:none;z-index:68;padding:120px;flex-direction:column;gap:14px;font-size:30px}
+#ovl.on,#helpbox.on{display:flex}
+.ob{font:700 30px/1.2 Pretendard,system-ui,sans-serif;color:#fff;background:var(--panel);border:4px solid var(--cy);padding:18px 24px;text-align:left;cursor:pointer;box-shadow:4px 4px 0 #000}
+#helpbox h2{margin:0;font:700 48px/1.3 Galmuri11,monospace;color:var(--ye)}
+#scr{position:absolute;inset:0;display:none;z-index:67}
+#scr.on{display:block}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 장면 1: 표지 -->
+  <section class="scene" data-i="0">
+    <p class="tag" data-st="0">▶ 1 · 질문</p>
+    <h1 class="ttl" data-st="0">두 공은 언제 바닥에 닿을까?</h1>
+    <canvas id="cover" width="800" height="640" style="left:1000px;top:260px;width:800px;height:640px" data-st="0"></canvas>
+    <p class="lead" style="top:360px" data-st="1">공 A는 가만히 놓고, 공 B는 옆으로 던집니다. 두 공은 같은 높이에서 출발합니다.</p>
+    <p class="lead" style="top:600px" data-st="2">예상을 골라 볼까요?<br>A가 먼저 · B가 먼저 · 같이</p>
+    <p class="lead note" style="top:830px" data-st="3">번호가 붙은 칸이 열리면, 학습지의 같은 번호 칸에 적으세요.</p>
+  </section>
+
+  <!-- 장면 2: 개념 ① -->
+  <section class="scene" data-i="1">
+    <p class="tag" data-st="0">▶ 2 · 개념 ①</p>
+    <h1 class="ttl" data-st="0">두 방향으로 나누어 봅시다</h1>
+    <div class="card" data-st="0">
+      <p class="ln">연직 방향(아래)으로는 중력을 받아 <span class="bl" data-n="1" data-bs="1" data-a="자유 낙하"><i class="n">1</i><span class="ans"></span></span> 운동을 한다.</p>
+      <p class="ln">수평 방향으로는 힘이 작용하지 않아 <span class="bl" data-n="2" data-bs="2" data-a="등속 운동"><i class="n">2</i><span class="ans"></span></span>을 한다.</p>
+      <p class="ln">같은 높이에서 떨어뜨린 두 물체는 <span class="bl" data-n="3" data-bs="4" data-a="동시에"><i class="n">3</i><span class="ans"></span></span> 바닥에 닿는다.</p>
+    </div>
+    <p class="lead note" style="left:120px;top:860px;width:700px" data-st="5">직접 해 볼까요? 수평 속력을 바꾸고 「놓기」를 눌러 보세요.</p>
+    <canvas id="sim1" width="940" height="680" style="left:860px;top:220px;width:940px;height:680px" data-st="0"></canvas>
+    <div class="ctl" style="left:860px;top:918px" data-st="0">
+      <label for="v1">수평 속력</label>
+      <input id="v1" type="range" min="1" max="2.5" step="0.1" value="2">
+      <output id="v1o">2.0 m/s</output>
+      <button class="btn" id="drop" type="button">놓기</button>
+    </div>
+  </section>
+
+  <!-- 장면 3: 개념 ② -->
+  <section class="scene" data-i="2">
+    <p class="tag" data-st="0">▶ 3 · 개념 ②</p>
+    <h1 class="ttl" data-st="0">던지는 속력을 키워 봅시다</h1>
+    <div class="card" data-st="0">
+      <p class="ln">수평으로 던지는 속력이 빠를수록 물체는 바닥에 <span class="bl" data-n="4" data-bs="2" data-a="더 멀리"><i class="n">4</i><span class="ans"></span></span> 떨어진다.</p>
+      <p class="ln">던지는 속력이 충분히 크면 땅에 닿지 않고 지구 주위를 <span class="bl" data-n="5" data-bs="4" data-a="원운동"><i class="n">5</i><span class="ans"></span></span>하게 된다.</p>
+      <p class="ln">지구 주위를 도는 물체는 중력 때문에 지구 중심 방향으로 <span class="bl" data-n="6" data-bs="5" data-a="가속도"><i class="n">6</i><span class="ans"></span></span> 운동을 한다.</p>
+    </div>
+    <canvas id="sim2" width="940" height="700" style="left:860px;top:200px;width:940px;height:700px" data-st="0"></canvas>
+    <div class="ctl" style="left:860px;top:918px" data-st="0">
+      <label for="v2">던지는 속력</label>
+      <input id="v2" type="range" min="1" max="8.5" step="0.5" value="4">
+      <output id="v2o">4.0 km/s</output>
+      <button class="btn" id="throw" type="button">던지기</button>
+    </div>
+    <p class="cr">출처: 고등학교 통합과학1(비상교육, 2022 개정) 「중력을 받는 물체의 운동」 · 그림은 새로 그렸습니다</p>
+  </section>
+
+  <canvas id="ink" width="1920" height="1080"></canvas>
+
+  <div id="bar">
+    <button class="bb" id="bprev" type="button">◀</button>
+    <span id="pg"></span>
+    <button class="bb" id="bnext" type="button">▶</button>
+    <button class="bb" id="bscript" type="button">대본</button>
+    <button class="bb" id="bsnd" type="button">소리</button>
+    <button class="bb" id="bfs" type="button">전체 화면</button>
+  </div>
+
+  <div id="script"><p id="scr-t"></p><p id="scr-b"></p></div>
+  <div id="ovl"></div>
+  <div id="helpbox"><h2>키 안내</h2>
+    <p>다음 → · Space · Enter · PageDown · 화면 클릭 · 왼쪽으로 밀기 / 이전 ← · PageUp · Backspace · 오른쪽 클릭</p>
+    <p>R 지금 단계 다시 보기 · Home/End 처음/끝 · O 장면 목록 · T 대본 · M 소리 · F 전체 화면 · B/W 검은·흰 화면</p>
+    <p>L 레이저 · P 빨간 펜 · Z 한 획 지우기 · C 모두 지우기 · Esc 끄기 · H 도움말</p>
+  </div>
+  <div id="scr"></div>
+
+  <button id="tbx" type="button">도구</button>
+  <div id="tbm">
+    <button class="tb" data-act="laser" type="button">레이저 (L)</button>
+    <button class="tb" data-act="pen" type="button">빨간 펜 (P)</button>
+    <button class="tb" data-act="undo" type="button">한 획 지우기 (Z)</button>
+    <button class="tb" data-act="clear" type="button">모두 지우기 (C)</button>
+    <button class="tb" data-act="touch" type="button">손가락 그리기: 자동</button>
+    <button class="tb" data-act="fs" type="button">전체 화면 (F)</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- 기본 설정 ---------- */
+const ANIM = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+const STUDENT = /(^|[?&])s=1(&|$)/.test(location.search);
+const st = document.getElementById('stage');
+const SC = Array.from(document.querySelectorAll('.scene'));
+const NS = SC.length;
+const STEPS = [3, 5, 5];                       // 장면마다 넘기기 횟수(단계 수)
+const TITLES = ['두 공은 언제 바닥에 닿을까?', '두 방향으로 나누어 봅시다', '던지는 속력을 키워 봅시다'];
+const SCRIPT = [
+  '두 공을 같은 높이에서 출발시킵니다. 한 공은 가만히 놓고, 한 공은 옆으로 던집니다. 어느 쪽이 먼저 닿을지 손으로 골라 보세요. 번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적으세요.',
+  '두 공의 움직임을 아래 방향과 옆 방향으로 나눠 생각합니다. 공기 저항은 무시합니다. 「놓기」를 누르면 0.1 초마다 공의 위치를 찍어 보여 줍니다. 가로 점선은 같은 순간 두 공의 높이를 보여 줍니다. 수평 속력을 바꿔 보세요.',
+  '옆으로 던지는 속력을 키워 봅시다. 던지는 속력이 빠를수록 더 멀리 떨어집니다. 속력이 충분히 크면 땅에 닿지 않고 지구 주위를 돕니다. 그림에서 던지는 곳은 지구 반지름의 1/4 높이로 과장해 그렸습니다.'
+];
+const IGN = '#tbx,#tbm,.ctl,#bar,#script,#ovl,#helpbox,#scr';
+let cur = { i: 0, k: 0 };
+let soundOn = !STUDENT;
+let swallow = false;
+
+/* ---------- 화면 맞춤 ---------- */
+function fit(){
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  st.style.transform = 'translate(' + ((innerWidth - 1920 * s) / 2) + 'px,' + ((innerHeight - 1080 * s) / 2) + 'px) scale(' + s + ')';
+}
+addEventListener('resize', fit); fit();
+function toStage(e){ const r = st.getBoundingClientRect(); const s = r.width / 1920; return { x: (e.clientX - r.left) / s, y: (e.clientY - r.top) / s }; }
+
+/* ---------- 예약된 움직임(끝내기·취소 가능) ---------- */
+let pend = [];
+function unpend(it){ const j = pend.indexOf(it); if (j >= 0) pend.splice(j, 1); }
+function addAnim(dur, frame, done){
+  if (!ANIM || dur <= 0){ frame(1); if (done) done(); return null; }
+  const it = {}; let start = null, raf = 0;
+  it.cancel = () => cancelAnimationFrame(raf);
+  it.finish = () => { it.cancel(); unpend(it); frame(1); if (done) done(); };
+  pend.push(it);
+  const tick = ts => {
+    if (start === null) start = ts;
+    const p = Math.min(1, (ts - start) / dur);
+    frame(p);
+    if (p < 1) raf = requestAnimationFrame(tick);
+    else { unpend(it); if (done) done(); }
+  };
+  raf = requestAnimationFrame(tick);
+  return it;
+}
+function settle(){ let guard = 0; while (pend.length && guard++ < 500) pend[0].finish(); }
+function clearPend(){ pend.forEach(p => p.cancel()); pend = []; }
+
+/* ---------- 소리 (WebAudio 합성) ---------- */
+let ac = null;
+function unlockAudio(){ try { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); } catch (e) {} }
+function beep(){
+  if (!soundOn || !ac) return;
+  try {
+    const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime;
+    o.type = 'sine'; o.frequency.value = 960 + Math.random() * 160;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.36);
+  } catch (e) {}
+}
+
+/* ---------- 공 그리기 공통 ---------- */
+function ball(c, x, y, r, col, txt){
+  c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fillStyle = col; c.fill();
+  if (txt){ c.fillStyle = '#101533'; c.font = '700 24px Galmuri11, monospace'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, x, y + 1); }
+}
+function dot(c, x, y, col, r){ c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fillStyle = col; c.fill(); }
+
+/* ---------- 장면 1: 표지 움직이는 그림 ---------- */
+const cv = document.getElementById('cover'), xc = cv.getContext('2d');
+let coverRaf = 0, coverT0 = null;
+function drawCover(p){
+  xc.clearRect(0, 0, 800, 640);
+  xc.fillStyle = '#e6e9ff'; xc.fillRect(0, 600, 800, 6);
+  for (let q = 0; q <= 20; q++){  // 옅은 점: 공 A 는 세로로, 공 B 는 포물선으로 떨어질 자리
+    const u = q / 20;
+    dot(xc, 600, 60 + 516 * u * u, 'rgba(62,230,230,.35)', 5);
+    dot(xc, 40 + 520 * u, 60 + 516 * u * u, 'rgba(255,92,168,.35)', 5);
+  }
+  const yy = 60 + 516 * p * p;      // 낙하: 떨어진 거리는 시간의 제곱에 비례
+  const xa = 600, xb = 40 + 520 * p; // 수평: 일정한 속도
+  ball(xc, xa, yy, 24, '#3ee6e6', 'A');
+  ball(xc, xb, yy, 24, '#ff5ca8', 'B');
+}
+function coverLoop(ts){
+  if (coverT0 === null) coverT0 = ts;
+  const T = (ts - coverT0) % 3000;
+  drawCover(Math.min(1, T / 2000));
+  coverRaf = requestAnimationFrame(coverLoop);
+}
+function startCover(){ stopCover(); coverT0 = null; if (ANIM) coverRaf = requestAnimationFrame(coverLoop); else drawCover(1); }
+function stopCover(){ cancelAnimationFrame(coverRaf); coverRaf = 0; }
+
+/* ---------- 장면 2: 두 공 시뮬레이터 ---------- */
+const c1 = document.getElementById('sim1'), x1 = c1.getContext('2d');
+// 가로·세로 같은 축척: 1 m = 500 px. 모눈 한 칸 = 10 cm = 50 px.
+const W1 = 940, H1 = 680, G1 = 650, S1 = 500, XA1 = 110, HDROP = 1.225, GRAV = 9.8, OFF1 = 18;
+let t1 = 0;
+const X1 = m => XA1 + m * S1;                 // m 단위 가로 거리 -> px
+const Y1 = h => G1 - OFF1 - h * S1;           // 바닥에서 높이 h(m) 인 공 중심 -> px
+function ringBall(c, x, y, col, alpha){ c.save(); c.globalAlpha = alpha; c.beginPath(); c.arc(x, y, OFF1, 0, Math.PI * 2); c.fillStyle = col; c.fill(); c.restore(); }
+function drawSim1(t){
+  x1.clearRect(0, 0, W1, H1);
+  // 모눈 (10 cm 간격, 옅은 선)
+  x1.lineWidth = 1; x1.strokeStyle = 'rgba(230,233,255,.09)';
+  for (let x = XA1 % 50; x < W1; x += 50){ x1.beginPath(); x1.moveTo(x, 0); x1.lineTo(x, H1); x1.stroke(); }
+  for (let y = G1 % 50; y < H1; y += 50){ x1.beginPath(); x1.moveTo(0, y); x1.lineTo(W1, y); x1.stroke(); }
+  x1.fillStyle = '#e6e9ff'; x1.fillRect(0, G1, W1, 6);
+  const v = +document.getElementById('v1').value;
+  const n = Math.floor(t / 0.1 + 1e-9);
+  x1.font = '24px Pretendard Variable, Pretendard, sans-serif'; x1.textAlign = 'right'; x1.textBaseline = 'middle';
+  for (let k = 0; k <= n; k++){     // 지난 위치는 옅게, 같은 순간을 잇는 가로 점선
+    const tk = k * 0.1, ya = Y1(HDROP - 0.5 * GRAV * tk * tk), xb = X1(v * tk);
+    x1.setLineDash([10, 8]); x1.strokeStyle = 'rgba(255,225,77,.85)'; x1.lineWidth = 3;
+    x1.beginPath(); x1.moveTo(XA1, ya); x1.lineTo(xb, ya); x1.stroke(); x1.setLineDash([]);
+    if (k < n || t - tk > 1e-9){ ringBall(x1, XA1, ya, '#3ee6e6', 0.35); ringBall(x1, xb, ya, '#ff5ca8', 0.35); }
+    if (k > 0){ x1.fillStyle = 'rgba(230,233,255,.8)'; x1.fillText(tk.toFixed(1) + ' s', XA1 - OFF1 - 14, ya); }
+  }
+  // 지금 위치는 진하게 (공 크기 그대로)
+  const h = HDROP - 0.5 * GRAV * t * t, ya = Y1(h), xbc = X1(v * t);
+  ball(x1, XA1, ya, OFF1, '#3ee6e6', 'A');
+  ball(x1, xbc, ya, OFF1, '#ff5ca8', 'B');
+  x1.fillStyle = '#e6e9ff'; x1.font = '28px Pretendard Variable, Pretendard, sans-serif'; x1.textAlign = 'right'; x1.textBaseline = 'alphabetic';
+  x1.fillText('t = ' + t.toFixed(1) + ' s', W1 - 20, 44);
+}
+function playSim1(){ addAnim(2600, p => { t1 = p * 0.5; drawSim1(t1); }); }
+document.getElementById('v1').addEventListener('input', e => {
+  document.getElementById('v1o').textContent = (+e.target.value).toFixed(1) + ' m/s';
+  drawSim1(t1);
+});
+document.getElementById('drop').addEventListener('click', e => { e.stopPropagation(); settle(); t1 = 0; playSim1(); });
+
+/* ---------- 장면 3: 던지기 시뮬레이터 (지구 둘레 궤도) ---------- */
+// 단위 km, s. 지표 g = 9.8 m/s^2 가 되도록 GM = g * RE^2.
+// 던지는 곳은 지구 반지름의 1/4 높이(그림용 과장). 공기 저항 무시.
+const RE = 6400, GM = 9.8e-3 * RE * RE, HOLD = RE / 4;
+function accel(x, y){ const r2 = x * x + y * y, r = Math.sqrt(r2), f = -GM / (r2 * r); return [f * x, f * y]; }
+function rhs(s){ const a = accel(s[0], s[1]); return [s[2], s[3], a[0], a[1]]; }
+function rk4(s, dt){
+  const add = (a, b, h) => a.map((v, i) => v + b[i] * h);
+  const k1 = rhs(s), k2 = rhs(add(s, k1, dt / 2)), k3 = rhs(add(s, k2, dt / 2)), k4 = rhs(add(s, k3, dt));
+  return s.map((v, i) => v + dt / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+}
+function orbit(v){
+  const dt = 2; let s = [0, RE + HOLD, v, 0];
+  const pts = [[0, RE + HOLD]];
+  let t = 0, hit = false, total = 0, prev = Math.atan2(s[1], s[0]);
+  while (t < 35000){
+    s = rk4(s, dt); t += dt; pts.push([s[0], s[1]]);
+    if (Math.hypot(s[0], s[1]) <= RE){ hit = true; break; }
+    const a = Math.atan2(s[1], s[0]); let d = a - prev;
+    if (d > Math.PI) d -= 2 * Math.PI; if (d < -Math.PI) d += 2 * Math.PI;
+    total += d; prev = a;
+    if (Math.abs(total) >= 2 * Math.PI) break;   // 한 바퀴 돌면 멈춤
+  }
+  return { pts, hit };
+}
+const c2 = document.getElementById('sim2'), x2 = c2.getContext('2d');
+const W2 = 940, H2 = 700, CX = 470, CY = 340, RP = 240, KS = RP / RE;
+let trails = [], userTrails = [];
+function makeTrail(v, color){ const o = orbit(v); return { pts: o.pts, hit: o.hit, color: color, v: v, p: 0 }; }
+function drawTrail(tr){
+  const n = tr.pts.length - 1;
+  const m = Math.max(1, Math.round(n * tr.p));
+  x2.beginPath();
+  for (let q = 0; q <= m; q++){
+    const px = CX + tr.pts[q][0] * KS, py = CY - tr.pts[q][1] * KS;
+    if (q === 0) x2.moveTo(px, py); else x2.lineTo(px, py);
+  }
+  x2.strokeStyle = tr.color; x2.lineWidth = 5; x2.setLineDash([]); x2.stroke();
+  const e = tr.pts[m], ex = CX + e[0] * KS, ey = CY - e[1] * KS;
+  dot(x2, ex, ey, tr.color, 10);
+  if (tr.p >= 1 && tr.hit){ x2.strokeStyle = tr.color; x2.lineWidth = 4; x2.beginPath(); x2.moveTo(ex - 12, ey - 12); x2.lineTo(ex + 12, ey + 12); x2.moveTo(ex + 12, ey - 12); x2.lineTo(ex - 12, ey + 12); x2.stroke(); }
+}
+function drawSim2(){
+  x2.clearRect(0, 0, W2, H2);
+  x2.beginPath(); x2.arc(CX, CY, RP, 0, Math.PI * 2); x2.fillStyle = '#1b2a66'; x2.fill();
+  x2.lineWidth = 4; x2.strokeStyle = '#3ee6e6'; x2.stroke();
+  const topY = CY - RP * 1.25;
+  x2.beginPath(); x2.moveTo(CX - 44, CY - RP + 2); x2.lineTo(CX, topY); x2.lineTo(CX + 44, CY - RP + 2); x2.closePath();
+  x2.fillStyle = '#2c3a8a'; x2.fill(); x2.strokeStyle = '#ffe14d'; x2.lineWidth = 4; x2.stroke();
+  const all = trails.concat(userTrails);
+  all.forEach(drawTrail);
+  // 범례: 끝난 던지기만 왼쪽 위에 속력을 적는다
+  x2.textAlign = 'left';
+  all.filter(tr => tr.p >= 1).forEach((tr, n) => {
+    const y = 44 + n * 36;
+    x2.fillStyle = tr.color; x2.fillRect(24, y - 20, 22, 22);
+    x2.font = '26px Pretendard Variable, Pretendard, sans-serif';
+    x2.fillText(tr.v.toFixed(1) + ' km/s', 56, y);
+  });
+  x2.font = '24px Pretendard Variable, Pretendard, sans-serif';
+  x2.fillStyle = '#a1a6d6';
+  x2.fillText('그림용: 던지는 높이를 지구 반지름의 1/4로 과장', 20, 668);
+  x2.fillText('속력 숫자는 예시. 지표 g = 9.8 m/s², 공기 저항 무시', 20, 698);
+}
+function addTrail(v, color, anim, done){
+  const tr = makeTrail(v, color); trails.push(tr);
+  addAnim(anim ? 3200 : 0, p => { tr.p = p; drawSim2(); }, () => { tr.p = 1; drawSim2(); if (done) done(); });
+  return tr;
+}
+document.getElementById('v2').addEventListener('input', e => {
+  document.getElementById('v2o').textContent = (+e.target.value).toFixed(1) + ' km/s';
+});
+document.getElementById('throw').addEventListener('click', e => {
+  e.stopPropagation(); settle();
+  const v = +document.getElementById('v2').value;
+  const tr = makeTrail(v, '#e6e9ff');
+  userTrails.push(tr); if (userTrails.length > 4) userTrails.shift();
+  addAnim(3200, p => { tr.p = p; drawSim2(); }, () => { tr.p = 1; drawSim2(); });
+});
+
+/* ---------- 단계별 효과 (장면 번호, 단계 번호 기준) ---------- */
+const HOOK = {
+  0: { 0: () => startCover(), reset: () => stopCover(), leave: () => stopCover() },
+  1: {
+    0: () => { t1 = 0; drawSim1(0); },
+    reset: () => { t1 = 0; drawSim1(0); },
+    3: anim => { if (anim){ t1 = 0; playSim1(); } else { t1 = 0.5; drawSim1(0.5); } }
+  },
+  2: {
+    0: () => { trails = []; userTrails = []; drawSim2(); },
+    reset: () => { trails = []; userTrails = []; },
+    1: anim => { addTrail(2.0, '#3ee6e6', anim, () => addTrail(5.0, '#ffe14d', anim)); },
+    3: anim => { addTrail(7.1, '#ff5ca8', anim); }
+  }
+};
+
+/* ---------- 빈칸·문장 보이기 ---------- */
+function applyStep(i, j, anim){
+  const el = SC[i];
+  el.querySelectorAll('[data-st="' + j + '"]').forEach(e => e.classList.add('on'));
+  el.querySelectorAll('.bl[data-bs="' + j + '"]').forEach(b => {
+    b.querySelector('.ans').textContent = b.dataset.a;
+    if (anim){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); beep(); }
+  });
+  const h = HOOK[i] && HOOK[i][j];
+  if (h) h(anim);
+}
+function resetScene(i){
+  const el = SC[i];
+  el.querySelectorAll('.on').forEach(e => e.classList.remove('on'));
+  el.querySelectorAll('.bl').forEach(b => { b.classList.remove('pop'); b.querySelector('.ans').textContent = ''; });
+  const r = HOOK[i] && HOOK[i].reset; if (r) r();
+}
+
+/* ---------- 이동 ---------- */
+function renderTo(i, k, anim){
+  clearPend();
+  if (cur.i !== i){
+    const lv = HOOK[cur.i] && HOOK[cur.i].leave; if (lv) lv();
+    strokes = []; laser = [];
+  }
+  cur = { i: i, k: 0 };
+  SC.forEach((s, n) => s.classList.toggle('on', n === i));
+  resetScene(i);
+  if (anim) void st.offsetWidth; else st.classList.add('still');
+  for (let j = 0; j <= k; j++){ cur.k = j; applyStep(i, j, anim && j === k); }
+  cur.k = k;
+  if (!anim) requestAnimationFrame(() => requestAnimationFrame(() => st.classList.remove('still')));
+  updateUI();
+}
+function next(){
+  settle();
+  st.classList.remove('still');
+  if (cur.k < STEPS[cur.i]){ cur.k++; applyStep(cur.i, cur.k, true); updateUI(); }
+  else if (cur.i < NS - 1){ renderTo(cur.i + 1, 0, true); }
+}
+function prev(){
+  settle();
+  if (cur.k > 0) renderTo(cur.i, cur.k - 1, false);
+  else if (cur.i > 0) renderTo(cur.i - 1, STEPS[cur.i - 1], false);
+}
+function replay(){
+  settle(); st.classList.remove('still');
+  const k = cur.k;
+  if (k > 0){ renderTo(cur.i, k - 1, false); st.classList.remove('still'); cur.k = k; applyStep(cur.i, k, true); updateUI(); }
+  else renderTo(cur.i, 0, true);
+}
+function updateUI(){
+  const n = STEPS[cur.i];
+  document.getElementById('pg').textContent = (cur.i + 1) + ' / ' + NS + ' · ' + cur.k + '/' + n;
+  document.getElementById('scr-t').textContent = (cur.i + 1) + '장면 · ' + TITLES[cur.i] + ' · 단계 ' + cur.k + '/' + n + (cur.i < NS - 1 ? '   다음 장면: ' + TITLES[cur.i + 1] : '');
+  document.getElementById('scr-b').textContent = SCRIPT[cur.i];
+  document.getElementById('bsnd').textContent = soundOn ? '소리 끄기' : '소리 켜기';
+  try { history.replaceState(null, '', '#' + (cur.i + 1) + '.' + cur.k); } catch (e) {}
+}
+
+/* ---------- 패널·오버레이 ---------- */
+function toggleScript(){ if (STUDENT) return; document.getElementById('script').classList.toggle('on'); }
+function toggleSound(){ unlockAudio(); soundOn = !soundOn; updateUI(); }
+function toggleFs(){
+  if (!document.fullscreenElement){ const r = document.documentElement.requestFullscreen; if (r) r.call(document.documentElement).catch(() => {}); }
+  else if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+}
+function buildOvl(){
+  const o = document.getElementById('ovl'); o.innerHTML = '';
+  TITLES.forEach((t, i) => {
+    const b = document.createElement('button'); b.className = 'ob'; b.type = 'button'; b.textContent = (i + 1) + '. ' + t;
+    b.addEventListener('click', e => { e.stopPropagation(); renderTo(i, 0, false); o.classList.remove('on'); });
+    o.appendChild(b);
+  });
+}
+buildOvl();
+function toggleOvl(){ document.getElementById('ovl').classList.toggle('on'); }
+function toggleHelp(){ document.getElementById('helpbox').classList.toggle('on'); }
+function toggleScr(color){
+  const s = document.getElementById('scr');
+  if (s.classList.contains('on') && s.dataset.c === color){ s.classList.remove('on'); return; }
+  s.style.background = color; s.dataset.c = color; s.classList.add('on');
+}
+function closeAll(){
+  ['ovl','helpbox','script'].forEach(id => document.getElementById(id).classList.remove('on'));
+  document.getElementById('scr').classList.remove('on');
+}
+
+/* ---------- 판서 도구 (레이저·빨간 펜) ---------- */
+const ink = document.getElementById('ink'), ix = ink.getContext('2d');
+let tool = null, drawing = false, curStroke = null, laser = [], strokes = [];
+let penMode = 'auto', penSeen = false, tStart = null;
+try { penSeen = localStorage.getItem('penSeen') === '1'; penMode = localStorage.getItem('penMode') || 'auto'; } catch (e) {}
+function touchDraws(){ return penMode === 'on' || (penMode === 'auto' && !penSeen); }
+function setTool(t){
+  tool = (tool === t) ? null : t;
+  document.body.style.touchAction = tool ? 'none' : '';
+  document.querySelectorAll('#tbm .tb').forEach(b => b.classList.toggle('on', b.dataset.act === tool));
+}
+function refreshTouchLabel(){
+  const lab = penMode === 'auto' ? '자동' : (penMode === 'on' ? '켬' : '끔');
+  const b = document.querySelector('#tbm [data-act="touch"]'); if (b) b.textContent = '손가락 그리기: ' + lab;
+}
+refreshTouchLabel();
+function inkFrame(now){
+  ix.clearRect(0, 0, 1920, 1080);
+  ix.lineCap = 'round'; ix.lineJoin = 'round';
+  strokes.forEach(s => {
+    if (s.scene !== cur.i || s.pts.length < 1) return;
+    ix.beginPath(); s.pts.forEach((p, n) => n ? ix.lineTo(p.x, p.y) : ix.moveTo(p.x, p.y));
+    ix.strokeStyle = '#ff3b5c'; ix.lineWidth = 8; ix.stroke();
+  });
+  laser = laser.filter(p => now - p.t < 1100);
+  for (let n = 1; n < laser.length; n++){
+    const a = laser[n - 1], b = laser[n];
+    ix.globalAlpha = Math.max(0, 1 - (now - b.t) / 1100);
+    ix.beginPath(); ix.moveTo(a.x, a.y); ix.lineTo(b.x, b.y);
+    ix.strokeStyle = '#ffe14d'; ix.lineWidth = 10; ix.stroke();
+  }
+  ix.globalAlpha = 1;
+  if (drawing && tool === 'laser' && laser.length){ const h = laser[laser.length - 1]; dot(ix, h.x, h.y, '#ffe14d', 12); }
+  requestAnimationFrame(inkFrame);
+}
+requestAnimationFrame(inkFrame);
+
+/* ---------- 입력 ---------- */
+window.addEventListener('pointerdown', e => {
+  unlockAudio();
+  swallow = false;
+  if (e.target.closest(IGN)) return;
+  if (e.pointerType === 'touch') tStart = { x: e.clientX, y: e.clientY, t: Date.now() };
+  if (!tool) return;
+  if (e.pointerType === 'touch' && !touchDraws()) return;
+  if (e.pointerType === 'pen'){ penSeen = true; try { localStorage.setItem('penSeen', '1'); } catch (x) {} }
+  drawing = true; swallow = true;
+  const p = toStage(e);
+  if (tool === 'pen'){ curStroke = { scene: cur.i, pts: [p] }; strokes.push(curStroke); }
+  else laser.push({ x: p.x, y: p.y, t: performance.now() });
+}, true);
+window.addEventListener('pointermove', e => {
+  if (!drawing) return;
+  const p = toStage(e);
+  if (tool === 'pen' && curStroke) curStroke.pts.push(p);
+  else if (tool === 'laser') laser.push({ x: p.x, y: p.y, t: performance.now() });
+}, true);
+window.addEventListener('pointerup', e => {
+  if (e.pointerType === 'touch' && tStart && !drawing){
+    const dx = e.clientX - tStart.x, dy = e.clientY - tStart.y;
+    if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - tStart.t < 800){
+      swallow = true; if (dx < 0) next(); else prev();
+    }
+  }
+  tStart = null; drawing = false; curStroke = null;
+}, true);
+window.addEventListener('touchmove', e => {
+  if ((document.fullscreenElement || tool) && !e.target.closest('#script,#ovl,#helpbox')) e.preventDefault();
+}, { passive: false });
+st.addEventListener('click', e => {
+  if (swallow){ swallow = false; return; }
+  if (e.target.closest(IGN)) return;
+  next();
+});
+st.addEventListener('contextmenu', e => { e.preventDefault(); if (!e.target.closest(IGN)) prev(); });
+document.addEventListener('mousemove', () => {
+  const b = document.getElementById('bar'); b.classList.add('show');
+  clearTimeout(document._bt); document._bt = setTimeout(() => b.classList.remove('show'), 2500);
+});
+document.getElementById('bprev').addEventListener('click', e => { e.stopPropagation(); prev(); });
+document.getElementById('bnext').addEventListener('click', e => { e.stopPropagation(); next(); });
+document.getElementById('bscript').addEventListener('click', e => { e.stopPropagation(); toggleScript(); });
+document.getElementById('bsnd').addEventListener('click', e => { e.stopPropagation(); toggleSound(); });
+document.getElementById('bfs').addEventListener('click', e => { e.stopPropagation(); toggleFs(); });
+document.getElementById('tbx').addEventListener('click', e => { e.stopPropagation(); document.getElementById('tbm').classList.toggle('on'); });
+document.querySelectorAll('#tbm .tb').forEach(b => b.addEventListener('click', e => {
+  e.stopPropagation();
+  const a = b.dataset.act;
+  if (a === 'laser' || a === 'pen') setTool(a);
+  else if (a === 'undo'){ for (let n = strokes.length - 1; n >= 0; n--){ if (strokes[n].scene === cur.i){ strokes.splice(n, 1); break; } } }
+  else if (a === 'clear') strokes = [];
+  else if (a === 'touch'){ penMode = penMode === 'auto' ? 'on' : (penMode === 'on' ? 'off' : 'auto'); try { localStorage.setItem('penMode', penMode); } catch (x) {} refreshTouchLabel(); }
+  else if (a === 'fs') toggleFs();
+}));
+document.getElementById('ovl').addEventListener('click', e => { if (e.target.id === 'ovl') toggleOvl(); });
+document.getElementById('helpbox').addEventListener('click', e => { if (e.target.id === 'helpbox') toggleHelp(); });
+document.getElementById('scr').addEventListener('click', () => document.getElementById('scr').classList.remove('on'));
+
+document.addEventListener('keydown', e => {
+  unlockAudio();
+  const k = e.key, tgt = e.target;
+  if (tgt && tgt.tagName === 'INPUT' && /^Arrow/.test(k)) return;      // 슬라이더 조절 키
+  if (tgt && tgt.tagName === 'BUTTON' && (k === 'Enter' || k === ' ')) return;
+  if (['ArrowRight', ' ', 'Enter', 'PageDown'].includes(k)){ e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)){ e.preventDefault(); prev(); }
+  else if (k === 'Home') renderTo(0, 0, false);
+  else if (k === 'End') renderTo(NS - 1, STEPS[NS - 1], false);
+  else if (k === 'f' || k === 'F') toggleFs();
+  else if (k === 't' || k === 'T' || k === 'n' || k === 'N') toggleScript();
+  else if (k === 'o' || k === 'O') toggleOvl();
+  else if (k === 'r' || k === 'R') replay();
+  else if (k === 'm' || k === 'M') toggleSound();
+  else if (k === 'b' || k === 'B') toggleScr('#000');
+  else if (k === 'w' || k === 'W') toggleScr('#fff');
+  else if (k === 'h' || k === 'H') toggleHelp();
+  else if (k === 'l' || k === 'L') setTool('laser');
+  else if (k === 'p' || k === 'P') setTool('pen');
+  else if (k === 'z' || k === 'Z') document.querySelector('#tbm [data-act="undo"]').click();
+  else if (k === 'c' || k === 'C') strokes = [];
+  else if (k === 'Escape'){ closeAll(); setTool(null); }
+});
+
+/* ---------- 시작: 주소의 #장면.단계 ---------- */
+(function start(){
+  let i = 0, k = 0;
+  const m = /^#(\d+)\.(\d+)$/.exec(location.hash);
+  if (m){ i = Math.min(NS, Math.max(1, +m[1])) - 1; k = Math.min(STEPS[i], Math.max(0, +m[2])); }
+  renderTo(i, k, false);
+  if (STUDENT) document.getElementById('bscript').style.display = 'none';
+})();
+})();
+</script>
+</body>
+</html>

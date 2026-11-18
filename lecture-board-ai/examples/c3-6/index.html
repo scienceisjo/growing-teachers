@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>멘델의 완두 교배 — 칠판 강의 화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* 뜻 색 약속: 노란색 완두·Y·노란색 표현형 = --yel / 초록색 완두·y·초록색 표현형 = --grn / 강조(빈칸·번호) = 파랑 하나 */
+:root{--ease:cubic-bezier(.2,.8,.2,1);--yel:#F5C400;--yel-line:#A47E00;--grn:#6CC24A;--grn-line:#3A7F23;--blue:#0066cc;--blue-d:#2997ff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;
+  font-family:'Pretendard Variable',Pretendard,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;word-break:keep-all;
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+button{font-family:inherit}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+.scene{position:absolute;inset:0;display:none}
+.scene.act{display:block}
+.s1{background:#000;color:#f5f5f7}.s2{background:#fff;color:#1d1d1f}.s3{background:#1d1d1f;color:#f5f5f7}
+.tag{position:absolute;left:120px;top:56px;font-size:28px;line-height:1.3;color:#6e6e73;letter-spacing:-.01em}
+.s1 .tag,.s3 .tag{color:#a1a1a6}
+h1,h2{position:absolute;left:120px;margin:0;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+h1{top:100px;font-size:80px}
+h2{top:96px;font-size:64px}
+.copy{position:absolute;left:120px;top:1016px;font-size:24px;color:#86868b;white-space:nowrap}
+svg.fig{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none}
+svg text{font-family:inherit}
+.t30{font-size:30px}.t28{font-size:28px}
+/* 단계에 따라 나타나는 것 */
+[data-s]{opacity:0;transition:opacity .6s var(--ease) var(--d,0s),transform .7s var(--ease) var(--d,0s)}
+[data-s].on{opacity:1}
+.pop{transform:scale(.55);transform-box:fill-box;transform-origin:center}
+.pop.on{transform:none}
+.rise{transform:translateY(26px)}
+.rise.on{transform:none}
+[data-s].draw{opacity:1;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s var(--ease) var(--d,0s)}
+[data-s].draw.on{stroke-dashoffset:0}
+.nofx,.nofx *{transition:none!important}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.bob{animation:bob 3.6s ease-in-out infinite}
+.bob.b2{animation-delay:-1.8s}
+/* 빈칸 */
+.bl{display:inline-block;position:relative;min-width:var(--w,150px);border-bottom:4px solid #86868b;text-align:center;margin:0 6px;line-height:1.15;padding:0 8px}
+.bl .no{position:absolute;left:-12px;top:-30px;width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;font-size:24px;font-weight:600;line-height:34px;text-align:center}
+.s3 .bl .no{background:var(--blue-d);color:#000}
+.s3 .bl{border-bottom-color:#6e6e73}
+.bl b{display:inline-block;font-weight:600;color:var(--blue);opacity:0;transform:scale(.7);transition:opacity .45s var(--ease),transform .5s cubic-bezier(.3,1.6,.4,1)}
+.s3 .bl b{color:var(--blue-d)}
+.bl.open b{opacity:1;transform:none}
+.card{position:absolute;background:#f5f5f7;border-radius:18px;font-size:36px;line-height:1.75;letter-spacing:-.01em}
+.s3 .card{background:rgba(255,255,255,.06)}
+.cap{position:absolute;left:0;width:1920px;text-align:center;font-size:44px;font-weight:600;letter-spacing:-.02em;top:872px;line-height:1.3}
+.acc{color:var(--blue-d)}.s2 .acc{color:var(--blue)}
+/* 시뮬레이터 */
+#sim{position:absolute;left:780px;top:200px;width:1020px;height:760px}
+#sim .abs{position:absolute}
+.gt{width:96px;height:52px;border-radius:26px;border:0;background:rgba(255,255,255,.1);color:#f5f5f7;font-size:30px;font-weight:600;cursor:pointer;letter-spacing:.02em}
+.gt.sel{background:#f5f5f7;color:#1d1d1f}
+.pair{height:64px;border-radius:32px;background:rgba(255,255,255,.08)}
+.tok{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#1d1d1f}
+.tok.Y{background:var(--yel)}.tok.y{background:var(--grn)}
+.gam{position:absolute;width:76px;height:76px;border-radius:50%;border:3px dashed rgba(255,255,255,.45);transition:opacity .6s var(--ease),transform .9s var(--ease)}
+.gam[data-s]{transform:translate(var(--dx),var(--dy)) scale(.5)}
+.gam[data-s].on{transform:none}
+.gam .tok{left:12px;top:12px;width:48px;height:48px;font-size:30px}
+.cell{position:absolute;width:170px;height:96px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:600;color:#1d1d1f}
+.cell.Y{background:var(--yel)}.cell.G{background:var(--grn)}
+.hd{position:absolute;width:44px;height:44px;font-size:28px}
+.hint{font-size:26px;color:#a1a1a6}
+.bar{position:absolute;height:48px;border-radius:10px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
+.bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:24px;font-weight:600;color:#1d1d1f;overflow:hidden;white-space:nowrap;transition:width .7s var(--ease)}
+.bar i.Y{background:var(--yel)}.bar i.G{background:var(--grn)}
+.dots{position:absolute;left:0;top:604px;width:580px;height:150px;display:grid;grid-template-columns:repeat(20,22px);grid-auto-rows:22px;gap:6px}
+.dots i{border-radius:50%;background:transparent;border:2px solid rgba(255,255,255,.2);transition:background .3s var(--ease),border-color .3s var(--ease);transition-delay:var(--dd,0s)}
+.dots i.Y{background:var(--yel);border-color:var(--yel)}.dots i.G{background:var(--grn);border-color:var(--grn)}
+.btn{position:absolute;height:64px;border-radius:32px;border:0;font-size:28px;font-weight:600;cursor:pointer;letter-spacing:-.01em}
+.btn.pri{background:var(--blue-d);color:#000}
+.btn.sec{background:rgba(255,255,255,.12);color:#f5f5f7}
+@keyframes flash{0%{transform:scale(.6);opacity:.2}100%{transform:none;opacity:1}}
+.flash{animation:flash .5s var(--ease)}
+@keyframes hintpulse{0%,100%{box-shadow:0 0 0 0 rgba(41,151,255,.0)}50%{box-shadow:0 0 0 10px rgba(41,151,255,.35)}}
+.pulse{animation:hintpulse 1.6s ease-in-out infinite}
+/* 조작 막대·도구 */
+#nav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:6px 10px;border-radius:30px;background:rgba(40,40,44,.82);color:#f5f5f7;font-size:16px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:40}
+#nav.show{opacity:1;pointer-events:auto}
+#nav button,#tools button{border:0;background:rgba(255,255,255,.14);color:#f5f5f7;border-radius:18px;height:36px;min-width:36px;padding:0 12px;font-size:16px;cursor:pointer}
+#nav span{padding:0 8px;white-space:nowrap}
+#tbtn{position:fixed;right:18px;bottom:18px;width:52px;height:52px;border-radius:50%;border:0;background:rgba(60,60,66,.55);color:#fff;font-size:24px;z-index:60;cursor:pointer;opacity:.55}
+#tbtn:hover,#tbtn.open{opacity:1}
+#tools{position:fixed;right:18px;bottom:80px;display:none;flex-direction:column;gap:6px;padding:10px;border-radius:18px;background:rgba(40,40,44,.92);z-index:60}
+#tools.open{display:flex}
+#tools button{height:42px;text-align:left;font-size:18px}
+#tools button.on{background:#2997ff;color:#000}
+#ink{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:30}
+#script{position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;background:rgba(0,0,0,.9);color:#f5f5f7;padding:14px 28px 18px;font-size:clamp(18px,1.5vw,28px);line-height:1.6;z-index:50;display:none}
+#script.open{display:block}
+#script small{display:block;color:#a1a1a6;font-size:.7em;margin-bottom:4px}
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.92);color:#f5f5f7;z-index:70;display:none;padding:6vh 6vw;overflow:auto}
+.ovl.open{display:block}
+.ovl h3{margin:0 0 20px;font-size:28px;font-weight:600}
+.ovl .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ovl .grid button{padding:22px;border:0;border-radius:18px;background:#2a2a2d;color:#f5f5f7;font-size:22px;text-align:left;cursor:pointer;line-height:1.5}
+.ovl .grid button small{display:block;color:#a1a1a6;font-size:16px}
+.ovl dl{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;font-size:20px}
+.ovl dt{color:#2997ff;font-weight:600}
+#black,#white{position:fixed;inset:0;z-index:65;display:none}
+#black{background:#000}#white{background:#fff}
+.stu .teach{display:none!important}
+@media (prefers-reduced-motion:reduce){[data-s],.bl b,.gam{transition-duration:.01s!important}.bob{animation:none}.pulse{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- 완두씨: 반지름 50 기준. 노란색·초록색 두 종류만 -->
+    <g id="pea-y"><circle r="50" fill="#F5C400" stroke="#A47E00" stroke-width="4"/><ellipse cx="-17" cy="-19" rx="15" ry="8" transform="rotate(-35 -17 -19)" fill="#fff" opacity=".5"/></g>
+    <g id="pea-g"><circle r="50" fill="#6CC24A" stroke="#3A7F23" stroke-width="4"/><ellipse cx="-17" cy="-19" rx="15" ry="8" transform="rotate(-35 -17 -19)" fill="#fff" opacity=".45"/></g>
+  </defs>
+</svg>
+
+<div id="stage">
+
+<!-- ① 표지 -->
+<section class="scene s1" data-steps="5" data-title="표지 · 노란색과 초록색을 교배하면">
+  <div class="tag">V. 생식과 유전  ·  멘델이 밝힌 유전 원리 ⑴</div>
+  <h1>멘델의 완두 교배</h1>
+  <div style="position:absolute;left:120px;top:228px;font-size:44px;font-weight:400;letter-spacing:-.02em;color:#f5f5f7">노란색 완두와 초록색 완두를 교배하면, 자손은 무슨 색일까?</div>
+  <svg class="fig" id="fig1" viewBox="0 0 1920 1080"></svg>
+  <div class="cap" data-s="2" data-e="3" style="color:#f5f5f7">자손 1대는 모두 노란색이다</div>
+  <div class="cap" data-s="3" data-e="4" style="color:#f5f5f7">그렇다면 초록색은 사라진 걸까? 자가 수분해 보자</div>
+  <div class="cap" data-s="4" data-e="5" style="color:#f5f5f7">자손 2대에서 초록색 완두가 다시 나타났다</div>
+  <div class="cap" data-s="5">노란색 : 초록색 ≈ <span class="acc">3 : 1</span></div>
+  <div style="position:absolute;left:120px;top:960px;font-size:28px;color:#a1a1a6">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요<span class="stuonly"></span></div>
+  <div class="copy">출처: 중학교 과학 3 (비상교육) 「멘델이 밝힌 유전 원리 ⑴」을 바탕으로 직접 새로 그리고 구성했습니다.</div>
+</section>
+
+<!-- ② 개념 ① 우열의 원리 -->
+<section class="scene s2" data-steps="6" data-title="개념 ① · 우열의 원리">
+  <div class="tag">V. 생식과 유전  ·  개념 ①</div>
+  <h2>한 가지 형질에 대한 교배 실험</h2>
+  <div class="card" style="left:120px;top:190px;width:1680px;padding:34px 44px 28px;line-height:2.0">
+    <div>씨의 색깔이 노란색이거나 초록색인 것처럼 한 가지 형질에서 구분되는 형질을 <span class="bl" data-open="1" style="--w:230px"><i class="no">1</i><b>대립 형질</b></span>이라고 한다.</div>
+    <div>서로 다른 대립 형질을 가진 순종끼리 교배했을 때 자손 1대에서 나타나는 형질을 <span class="bl" data-open="3" style="--w:130px"><i class="no">2</i><b>우성</b></span>,<br>나타나지 않는 형질을 <span class="bl" data-open="4" style="--w:130px"><i class="no">3</i><b>열성</b></span>이라고 한다.</div>
+    <div>자손 1대에서 한 가지 대립 형질만 나타나는 유전 원리를 <span class="bl" data-open="5" style="--w:240px"><i class="no">4</i><b>우열의 원리</b></span>라고 한다.</div>
+  </div>
+  <svg class="fig" id="fig2" viewBox="0 0 1920 1080"></svg>
+  <div data-s="5" data-e="6" class="rise" style="position:absolute;left:120px;top:880px;width:1680px;text-align:center;font-size:38px;font-weight:600;color:#0066cc;letter-spacing:-.02em">자손 1대에는 부모의 대립 형질 중 한 가지만 나타난다</div>
+  <div data-s="6" class="rise" style="position:absolute;left:120px;top:868px;width:1680px;height:92px;border-radius:18px;background:#f5f5f7;text-align:center;font-size:36px;line-height:92px;letter-spacing:-.02em">우성은 「우수한 형질」이 아니에요. 자손 1대에서 나타나는 형질일 뿐입니다.</div>
+  <div class="copy">출처: 중학교 과학 3 (비상교육) 「멘델이 밝힌 유전 원리 ⑴」을 바탕으로 직접 새로 그리고 구성했습니다.</div>
+</section>
+
+<!-- ③ 개념 ② 분리의 법칙 + 시뮬레이터 -->
+<section class="scene s3" data-steps="7" data-title="개념 ② · 분리의 법칙 (교배 시뮬레이터)">
+  <div class="tag">V. 생식과 유전  ·  개념 ②</div>
+  <h2>생식세포로 나뉘는 유전자</h2>
+  <div class="card" style="left:120px;top:200px;width:620px;padding:24px 36px 28px;line-height:2.0">
+    <div style="display:flex;gap:26px;align-items:center;font-size:28px;line-height:1.3;margin-bottom:10px;color:#d2d2d7">
+      <span style="display:flex;align-items:center;gap:10px"><span class="tok Y" style="position:static;width:44px;height:44px;font-size:28px">Y</span>노란색 유전자</span>
+      <span style="display:flex;align-items:center;gap:10px"><span class="tok y" style="position:static;width:44px;height:44px;font-size:28px">y</span>초록색 유전자</span>
+    </div>
+    <div>대립 형질을 결정하는 유전자를 <span class="bl" data-open="1" style="--w:250px"><i class="no">5</i><b>대립유전자</b></span>라고 한다.</div>
+    <div data-s="2" class="rise" style="margin-top:6px">쌍을 이루던 대립유전자가 생식세포를 만들 때 분리되어 서로 다른 생식세포로 들어가는 유전 원리를 <span class="bl" data-open="5" style="--w:260px"><i class="no">6</i><b>분리의 법칙</b></span>이라고 한다.</div>
+  </div>
+  <div data-s="7" class="rise" style="position:absolute;left:120px;top:858px;width:620px;height:100px;border-radius:18px;background:rgba(41,151,255,.16);padding:12px 28px;font-size:30px;line-height:1.45;letter-spacing:-.01em">나뉘는 것은 대립유전자이고, 3 : 1 은 그 결과로 나타나는 비입니다.</div>
+
+  <div id="sim" class="simbox"></div>
+  <div class="copy">출처: 중학교 과학 3 (비상교육) 「멘델이 밝힌 유전 원리 ⑴」을 바탕으로 직접 새로 그리고 구성했습니다.</div>
+</section>
+
+<canvas id="ink" width="1920" height="1080"></canvas>
+</div>
+
+<div id="nav">
+  <button id="bPrev" title="이전">◀</button><span id="pos"></span><button id="bNext" title="다음">▶</button>
+  <button id="bSnd" class="teach-snd" title="소리 (M)">소리</button><button id="bFs" title="전체 화면 (F)">전체</button>
+</div>
+<div id="script"></div>
+<button id="tbtn" title="판서 도구">✎</button>
+<div id="tools">
+  <button data-t="laser">레이저 (L)</button>
+  <button data-t="pen">빨간 펜 (P)</button>
+  <button data-t="undo">한 획 지우기 (Z)</button>
+  <button data-t="clear">모두 지우기 (C)</button>
+  <button data-t="finger">손가락 그리기: 자동</button>
+  <button data-t="fs">전체 화면 (F)</button>
+</div>
+<div id="black"></div><div id="white"></div>
+<div class="ovl" id="ov"><h3>전체 장면</h3><div class="grid" id="ovgrid"></div></div>
+<div class="ovl" id="help"><h3>키 안내</h3><dl>
+  <dt>→ Space Enter</dt><dd>다음 단계</dd><dt>← Backspace</dt><dd>이전 단계</dd>
+  <dt>F</dt><dd>전체 화면</dd><dt>T / N</dt><dd>대본 열고 닫기</dd><dt>O</dt><dd>전체 장면</dd>
+  <dt>R</dt><dd>지금 단계 다시 보기</dd><dt>M</dt><dd>소리 켜고 끄기</dd><dt>B / W</dt><dd>검은 화면 / 흰 화면</dd>
+  <dt>Home / End</dt><dd>처음 / 끝</dd><dt>L / P / Z / C / Esc</dt><dd>레이저 / 빨간 펜 / 한 획 지우기 / 모두 지우기 / 끄기</dd></dl></div>
+
+<script>
+/* ============ 시뮬레이터 계산 (그림 규칙은 이 블록 하나에만 있다) ============
+   - 유전자형 g 는 'YY' 'Yy' 'yy' 중 하나. Y = 노란색(우성) 유전자, y = 초록색(열성) 유전자.
+   - 생식세포: 쌍을 이룬 대립유전자가 분리되어 서로 다른 생식세포로 하나씩 들어간다.
+     g[0] 이 든 생식세포 하나, g[1] 이 든 생식세포 하나 → 생식세포마다 대립유전자는 하나.
+   - 퍼넷 사각형: 한쪽 부모의 생식세포 2개 × 다른 쪽 부모의 생식세포 2개 = 칸 4개(수정 조합), 칸마다 확률 1/4.
+   - 표현형: 유전자형에 Y 가 하나라도 있으면 노란색, yy 이면 초록색.
+   - 기댓값: 칸 4개를 유전자형·표현형별로 센 값을 최대공약수로 줄여 비로 쓰고, 4로 나눠 %로 쓴다.
+   - 자손 100개: 씨앗값을 고정한 난수(mulberry32)로 자손마다 한쪽 부모의 생식세포 둘 중 하나, 다른 쪽 부모의 생식세포
+     둘 중 하나를 같은 확률로 고른다. 씨앗 = 부모 조합 글자의 해시 + 몇 번째 묶음인지 → 같은 조작이면 늘 같은 결과.
+*/
+/*SIMCORE*/
+const GENO=['YY','Yy','yy'];
+function gametes(g){ return [g[0], g[1]]; }
+function norm(a,b){ return a===b ? a+b : (a==='Y' ? a+b : b+a); }
+function pheno(g){ return g.indexOf('Y')>=0 ? 'Y' : 'G'; }
+function punnett(A,B){ const ga=gametes(A), gb=gametes(B); return gb.map(b=>ga.map(a=>norm(a,b))); }
+function tallyGeno(cells){ const c={YY:0,Yy:0,yy:0}; cells.forEach(g=>{c[g]++;}); return c; }
+function tallyPheno(cells){ const c={Y:0,G:0}; cells.forEach(g=>{c[pheno(g)]++;}); return c; }
+function gcd(a,b){ return b?gcd(b,a%b):a; }
+function reduceRatio(arr){ const g=arr.reduce((p,c)=>gcd(p,c),0)||1; return arr.map(x=>x/g); }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function hashStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+const SEED_BASE=20261120;
+function offspring(A,B,batch,n){
+  n=n||100; const rng=mulberry32((hashStr(A+'x'+B)+SEED_BASE+Math.imul(batch,2654435761))>>>0);
+  const ga=gametes(A), gb=gametes(B), out=[];
+  for(let i=0;i<n;i++){ const a=ga[rng()<0.5?0:1], b=gb[rng()<0.5?0:1]; out.push(norm(a,b)); }
+  return out;
+}
+/*ENDSIMCORE*/
+
+/* ============ 화면 틀 ============ */
+const $=(s,r)=> (r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const STU=/[?&]s=1/.test(location.search);
+if(STU){ document.body.classList.add('stu'); const h=$('#bSnd'); }
+const stage=$('#stage'), scenes=$$('.scene');
+let cur=0, st=0, lastPos={x:0,y:0,s:1};
+
+function fit(){
+  const W=innerWidth,H=innerHeight,s=Math.min(W/1920,H/1080);
+  const x=(W-1920*s)/2,y=(H-1080*s)/2; lastPos={x,y,s};
+  stage.style.transform=`translate(${x}px,${y}px) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+/* --- 그림 도우미 --- */
+const pea=(t,x,y,r,s,d)=>`<g transform="translate(${x},${y})"><g class="pop" data-s="${s}" style="--d:${d||0}s"><use href="#pea-${t}" transform="scale(${r/50})"/></g></g>`;
+const bobPea=(t,x,y,r,cls)=>`<g transform="translate(${x},${y})"><g class="bob ${cls||''}"><use href="#pea-${t}" transform="scale(${r/50})"/></g></g>`;
+const pod=(x,y,W,s,stroke,fill)=>`<g transform="translate(${x},${y-60})"><path data-s="${s}" d="M0,60 C0,22 34,0 84,0 L${W-30},0 C${W+20},0 ${W+36},40 ${W+56},60 C${W+36},80 ${W+20},120 ${W-30},120 L84,120 C34,120 0,98 0,60 Z" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/></g>`;
+const line=(d,s,col,w,dl)=>`<path class="draw" data-s="${s}" pathLength="1" d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" style="--d:${dl||0}s"/>`;
+const head=(x,y,s,col,dl)=>`<polygon data-s="${s}" points="${x-26},${y-20} ${x},${y} ${x-26},${y+20}" fill="${col}" style="--d:${dl||0}s" transform="translate(0,0)"/>`;
+const txt=(x,y,t,s,fill,size,w)=>`<text data-s="${s}" x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-size="${size||30}" font-weight="${w||400}">${t}</text>`;
+const pill=(cx,cy,w,t,s,bg,fg,dl)=>`<g data-s="${s}" style="--d:${dl||0}s"><rect x="${cx-w/2}" y="${cy-25}" width="${w}" height="50" rx="25" fill="${bg}"/><text x="${cx}" y="${cy+10}" text-anchor="middle" fill="${fg}" font-size="30" font-weight="600">${t}</text></g>`;
+
+/* 장면 1: 표지 그림 */
+$('#fig1').innerHTML=[
+  bobPea('y',250,450,65), bobPea('g',250,700,65,'b2'),
+  txt(250,562,'순종 노란색 완두',0,'#f5f5f7'), txt(250,812,'순종 초록색 완두',0,'#f5f5f7'),
+  line('M335,455 C430,455 450,575 520,575',1,'#a1a1a6',6), line('M335,695 C430,695 450,575 520,575',1,'#a1a1a6',6),
+  line('M520,575 L690,575',1,'#a1a1a6',6,.5), head(722,575,1,'#a1a1a6',.9),
+  pill(625,648,120,'교배',1,'rgba(255,255,255,.14)','#f5f5f7',.9),
+  pod(770,575,360,2,'#86a07a','rgba(134,160,122,.18)'),
+  pea('y',850,575,36,2,.2),pea('y',928,575,36,2,.4),pea('y',1006,575,36,2,.6),pea('y',1084,575,36,2,.8),
+  txt(970,700,'자손 1대',2,'#f5f5f7'),
+  line('M1215,575 L1295,575',3,'#a1a1a6',6), head(1325,575,3,'#a1a1a6',.6),
+  pill(1270,648,190,'자가 수분',3,'rgba(255,255,255,.14)','#f5f5f7',.5),
+  pod(1350,575,320,4,'#86a07a','rgba(134,160,122,.18)'),
+  pea('y',1415,575,32,4,.2),pea('y',1485,575,32,4,.4),pea('g',1555,575,32,4,.6),pea('y',1625,575,32,4,.8),
+  txt(1510,700,'자손 2대',4,'#f5f5f7'),
+  `<g transform="translate(1555,575)"><circle class="draw" data-s="5" pathLength="1" r="48" fill="none" stroke="#2997ff" stroke-width="6" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90)"/></g>`
+].join('');
+
+/* 장면 2: 우열의 원리 그림 */
+$('#fig2').innerHTML=[
+  bobPea('y',280,690,56), bobPea('g',580,690,56,'b2'),
+  `<text x="430" y="708" text-anchor="middle" fill="#6e6e73" font-size="56">×</text>`,
+  txt(280,795,'순종 노란색 완두',0,'#1d1d1f'), txt(580,795,'순종 초록색 완두',0,'#1d1d1f'),
+  line('M190,832 L190,850 L670,850 L670,832',1,'#0066cc',5),
+  line('M700,690 L810,690',2,'#6e6e73',6), head(842,690,2,'#6e6e73',.5),
+  pill(770,632,110,'교배',2,'#e8e8ed','#1d1d1f',.4),
+  pod(900,690,400,2,'#7d9a6a','#e6efdf'),
+  pea('y',975,690,42,2,.5),pea('y',1065,690,42,2,.65),pea('y',1155,690,42,2,.8),pea('y',1245,690,42,2,.95),
+  txt(1100,812,'자손 1대',2,'#1d1d1f'),
+  pill(1100,590,330,'노란색 형질이 나타남',3,'#0066cc','#fff'),
+  `<g data-s="4"><circle cx="1570" cy="690" r="54" fill="none" stroke="#3A7F23" stroke-width="5" stroke-dasharray="12 9"/></g>`,
+  txt(1570,795,'초록색 형질은',4,'#1d1d1f',28), txt(1570,832,'나타나지 않음',4,'#1d1d1f',28)
+].join('');
+
+/* ============ 시뮬레이터 화면 ============ */
+const S={A:'YY',B:'yy',k:0,batch:null};
+const simEl=$('#sim');
+const CX={A:250,B:790};
+function tokHTML(a,cls,style){ return `<span class="tok ${a} ${cls||''}" style="${style}">${a}</span>`; }
+(function buildSim(){
+  let h='';
+  ['A','B'].forEach(p=>{
+    const cx=CX[p];
+    h+=`<div class="abs" data-s="0" style="left:${cx-154}px;top:0;width:308px;height:52px;display:flex;gap:10px">`+
+       GENO.map(g=>`<button class="gt" data-p="${p}" data-g="${g}">${g}</button>`).join('')+`</div>`;
+    h+=`<div class="abs pair" data-s="0" style="left:${cx-84}px;top:66px;width:168px"></div>`;
+    h+=`<div class="abs tok" id="pt${p}0" data-s="0" style="left:${cx-62}px;top:72px;width:52px;height:52px;font-size:32px"></div>`;
+    h+=`<div class="abs tok" id="pt${p}1" data-s="0" style="left:${cx+10}px;top:72px;width:52px;height:52px;font-size:32px"></div>`;
+    h+=`<div class="abs" id="ph${p}" data-s="0" style="left:${cx+98}px;top:76px;width:130px;text-align:left;font-size:30px;font-weight:600;line-height:1.2"></div>`;
+  });
+  h+=`<div class="abs" data-s="0" style="left:490px;top:58px;width:60px;text-align:center;font-size:56px;color:#a1a1a6;line-height:1">×</div>`;
+  /* 생식세포: 부모 대립유전자 위치에서 아래로 나뉘어 들어간다 */
+  h+=`<svg class="abs" width="1020" height="300" style="left:0;top:0;pointer-events:none" id="conn">`+
+     ['A','B'].map(p=>[0,1].map(i=>`<path id="cn${p}${i}" data-s="2" class="draw" pathLength="1" d="M${CX[p]+(i?36:-36)},124 L${CX[p]+(i?70:-70)},192" stroke="#a1a1a6" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')).join('')+`</svg>`;
+  ['A','B'].forEach(p=>[0,1].forEach(i=>{
+    const gx=CX[p]+(i?70:-70)-38, dx=(CX[p]+(i?36:-36))-(CX[p]+(i?70:-70)), dy=-100;
+    h+=`<div class="gam" id="g${p}${i}" data-s="2" style="left:${gx}px;top:194px;--dx:${dx}px;--dy:${dy}px"><div class="tok" id="gt${p}${i}"></div></div>`;
+  }));
+  h+=`<div class="abs hint" data-s="2" style="left:420px;top:218px;width:200px;text-align:center">생식세포</div>`;
+  /* 퍼넷 사각형 */
+  h+=`<div class="abs" id="pnlabel" data-s="3" style="left:0;top:300px;width:150px;text-align:center;font-size:28px;font-weight:600;color:#d2d2d7;line-height:44px"></div>`;
+  [0,1].forEach(c=>h+=`<div class="abs tok hd" id="ph${c}" data-s="3" style="left:${160+c*180+63}px;top:300px"></div>`);
+  [0,1].forEach(r=>h+=`<div class="abs tok hd" id="pl${r}" data-s="3" style="left:53px;top:${350+r*106+26}px"></div>`);
+  [0,1].forEach(r=>[0,1].forEach(c=>h+=`<div class="cell" id="c${r}${c}" data-s="3" style="left:${160+c*180}px;top:${350+r*106}px"></div>`));
+  /* 기댓값 */
+  h+=`<div class="abs hint" data-s="3" style="left:560px;top:296px">유전자형의 비 (기댓값)</div>`;
+  h+=`<div class="abs" id="rg" data-s="3" style="left:560px;top:328px;font-size:34px;font-weight:600;white-space:nowrap"></div>`;
+  h+=`<div class="bar" id="bg" data-s="3" style="left:560px;top:384px;width:460px"></div>`;
+  h+=`<div class="abs hint" data-s="3" style="left:560px;top:448px">표현형의 비 (기댓값)</div>`;
+  h+=`<div class="abs" id="rp" data-s="3" style="left:560px;top:480px;font-size:34px;font-weight:600;white-space:nowrap"></div>`;
+  h+=`<div class="bar" id="bp" data-s="3" style="left:560px;top:536px;width:460px"></div>`;
+  /* 자손 100개 */
+  h+=`<div class="dots" id="dots" data-s="6">`+Array.from({length:100},(_,i)=>`<i style="--dd:${(i*0.008).toFixed(3)}s"></i>`).join('')+`</div>`;
+  h+=`<button class="btn pri" id="bGo" data-s="6" style="left:620px;top:600px;width:270px">자손 100개 만들기</button>`;
+  h+=`<button class="btn sec" id="bClr" data-s="6" style="left:900px;top:600px;width:120px">지우기</button>`;
+  h+=`<div class="abs" id="cnt1" data-s="6" style="left:620px;top:680px;font-size:28px;font-weight:600;white-space:nowrap;line-height:1.3"></div>`;
+  h+=`<div class="abs" id="cnt2" data-s="6" style="left:620px;top:718px;font-size:26px;color:#d2d2d7;white-space:nowrap;line-height:1.3"></div>`;
+  simEl.innerHTML=h;
+})();
+
+const sid=id=>document.getElementById(id);
+function setTok(el,a){ el.textContent=a; el.className=el.className.replace(/\b(Y|y)\b/g,'').trim()+' '+a; }
+function phenoName(p){ return p==='Y'?'노란색':'초록색'; }
+function renderSim(flashAll){
+  const {A,B}=S;
+  ['A','B'].forEach(p=>{
+    const g=S[p]; const ga=gametes(g);
+    setTok(sid('pt'+p+'0'),g[0]); setTok(sid('pt'+p+'1'),g[1]);
+    const ph=sid('ph'+p); ph.textContent=phenoName(pheno(g)); ph.style.color=pheno(g)==='Y'?'#F5C400':'#6CC24A';
+    ga.forEach((a,i)=>{ setTok(sid('gt'+p+i),a); });
+    $$('.gt[data-p="'+p+'"]').forEach(b=>b.classList.toggle('sel',b.dataset.g===g));
+  });
+  const grid=punnett(A,B), ga=gametes(A), gb=gametes(B);
+  [0,1].forEach(c=>setTok(sid('ph'+c),ga[c])); [0,1].forEach(r=>setTok(sid('pl'+r),gb[r]));
+  [0,1].forEach(r=>[0,1].forEach(c=>{ const g=grid[r][c], el=sid('c'+r+c); el.textContent=g; el.className='cell '+pheno(g)+' '; el.dataset.s=el.dataset.s; }));
+  /* 칸 클래스를 갈아 끼우면 data-s 의 on 이 사라지므로 다시 맞춘다 */
+  syncOn(scenes[2]);
+  const cells=grid.flat(), tg=tallyGeno(cells), tp=tallyPheno(cells);
+  const rg=reduceRatio([tg.YY,tg.Yy,tg.yy]), rp=reduceRatio([tp.Y,tp.G]);
+  sid('rg').innerHTML=`YY : Yy : yy = ${rg.join(' : ')}`;
+  sid('rp').innerHTML=`<span style="color:#F5C400">노란색</span> : <span style="color:#6CC24A">초록색</span> = ${rp.join(' : ')}`;
+  sid('bg').innerHTML=[['YY',tg.YY],['Yy',tg.Yy],['yy',tg.yy]].map(([g,n])=>`<i class="${pheno(g)}" style="width:${n*25}%">${n?g+' '+(n*25)+'%':''}</i>`).join('');
+  sid('bp').innerHTML=[['Y',tp.Y],['G',tp.G]].map(([g,n])=>`<i class="${g}" style="width:${n*25}%">${n?(n*25)+'%':''}</i>`).join('');
+  sid('pnlabel').textContent = (A==='YY'&&B==='yy'||A==='yy'&&B==='YY') ? '자손 1대' : (A==='Yy'&&B==='Yy' ? '자손 2대' : '자손');
+  renderBatch();
+  if(flashAll) $$('#sim .tok').forEach(t=>{ t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash'); });
+}
+function renderBatch(){
+  const dots=$$('#dots i');
+  if(!S.batch){
+    dots.forEach(d=>{ d.className=''; });
+    sid('cnt1').innerHTML='<span style="color:#a1a1a6;font-weight:400;font-size:26px">단추를 누르면 100개가 만들어져요</span>';
+    sid('cnt2').textContent='';
+    return;
+  }
+  const tp=tallyPheno(S.batch), tg=tallyGeno(S.batch);
+  dots.forEach((d,i)=>{ d.className=pheno(S.batch[i]); });
+  sid('cnt1').innerHTML=`<span style="color:#F5C400">노란색 ${tp.Y}</span> · <span style="color:#6CC24A">초록색 ${tp.G}</span>`+(tp.G? ` <span style="color:#a1a1a6;font-weight:400;font-size:26px">(${(tp.Y/tp.G).toFixed(1)} : 1)</span>`:'');
+  sid('cnt2').textContent=`유전자형 YY ${tg.YY} · Yy ${tg.Yy} · yy ${tg.yy}`;
+}
+function setParents(a,b,silent){
+  if(S.A===a&&S.B===b) return;
+  S.A=a; S.B=b; S.k=0; S.batch=null; renderSim(!silent);
+}
+simEl.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  e.stopPropagation(); b.blur();
+  if(b.classList.contains('gt')){ const was=S[b.dataset.p]; if(was!==b.dataset.g){ S[b.dataset.p]=b.dataset.g; S.k=0; S.batch=null; renderSim(true); sndPop(); } }
+  else if(b.id==='bGo'){ S.k++; S.batch=offspring(S.A,S.B,S.k,100); renderBatch(); b.classList.remove('pulse'); sndPop(); }
+  else if(b.id==='bClr'){ S.k=0; S.batch=null; renderBatch(); }
+});
+simEl.addEventListener('mousedown',e=>{ if(e.target.closest('button')) e.preventDefault(); });
+
+/* ============ 장면 진행 ============ */
+const SCRIPT=[
+ ['표지 · 질문 하나','여러분, 순종인 노란색 완두와 순종인 초록색 완두를 교배하면 자손은 무슨 색일까요? 멘델이 완두로 이 질문을 실험했어요. 두 어버이를 교배해 자손 1대를 얻고, 그 자손 1대를 자가 수분해 자손 2대를 얻는 순서로 따라가 봅시다. 초록색이 어디로 갔는지 끝까지 지켜보세요. 번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적습니다.'],
+ ['개념 ① 우열의 원리','씨의 색깔이 노란색이냐 초록색이냐처럼 한 가지 형질에서 구분되는 것이 대립 형질이에요. 순종끼리 교배했더니 자손 1대는 모두 노란색이었죠. 이때 나타난 형질이 우성, 나타나지 않은 형질이 열성입니다. 우성은 우수하다는 뜻이 아니라 자손 1대에서 나타난다는 뜻이라는 점, 꼭 짚고 넘어가요. 초록색이 사라진 것이 아니라 가려졌을 뿐인지는 다음 장면에서 확인합니다.'],
+ ['개념 ② 분리의 법칙 · 시뮬레이터','이제 눈에 보이지 않는 유전자를 기호로 나타내요. 노란색 유전자는 Y, 초록색 유전자는 y입니다. 어버이의 유전자형을 바꿔 가며 생식세포로 대립유전자가 하나씩 나뉘어 들어가는 모습을 보여 주세요. 자손 1대 Yy끼리 자가 수분하면 유전자형 비는 1 : 2 : 1, 표현형 비는 3 : 1 입니다. 자손 100개 만들기는 누를 때마다 값이 조금씩 흔들리지만 약 3 : 1 근처에 모인다는 점을 이야기해 주세요. 분리되는 것은 대립유전자이고, 3 : 1 은 그 결과라는 것이 핵심입니다.']
+];
+function syncOn(sc){ const st0=st; $$('[data-s]',sc).forEach(el=>{ const s=+el.dataset.s, e=el.dataset.e?+el.dataset.e:1e9; el.classList.toggle('on',s<=st0&&st0<e); }); }
+
+function render(i,s,instant,prevSt){
+  const sceneChanged=i!==cur;
+  cur=i; st=s;
+  if(instant) stage.classList.add('nofx');
+  scenes.forEach((sc,k)=>sc.classList.toggle('act',k===i));
+  const sc=scenes[i];
+  syncOn(sc);
+  $$('.bl',sc).forEach(b=>{ const o=+b.dataset.open, was=b.classList.contains('open'), now=s>=o; b.classList.toggle('open',now); if(now&&!was&&!instant) sndDing(); });
+  if(i===2) hook3(s,instant,prevSt);
+  if(instant){ void stage.offsetWidth; stage.classList.remove('nofx'); }
+  if(sceneChanged){ strokes=strokes.filter(x=>x.type==='laser'); redrawInk(); }
+  updateUI();
+  try{ history.replaceState(null,'','#'+(i+1)+'.'+s+(STU?'':'')); }catch(e){}
+}
+function hook3(s,instant,prev){
+  if(instant||s===0){ if(s<4) setParents('YY','yy',true); else setParents('Yy','Yy',true); }
+  else if(s===4&&prev===3) setParents('Yy','Yy',false);
+  if(s<6 && S.batch){ S.batch=null; S.k=0; renderBatch(); }
+  renderSim(false);
+  const go=sid('bGo'); if(go) go.classList.toggle('pulse',s===6&&!S.batch);
+}
+function maxStep(i){ return +scenes[i].dataset.steps; }
+function go(i,s,instant){ const prev=(i===cur)?st:-1; render(i,s,instant,prev); }
+function next(){
+  if(st<maxStep(cur)){ const prev=st; render(cur,st+1,false,prev); if(cur!==2) sndTok(); }
+  else if(cur<scenes.length-1){ render(cur+1,0,false,-1); }
+}
+function prev(){
+  if(st>0) render(cur,st-1,true,st);
+  else if(cur>0) render(cur-1,maxStep(cur-1),true,-1);
+}
+function updateUI(){
+  $('#pos').textContent=`${cur+1} / ${scenes.length}  ·  단계 ${st} / ${maxStep(cur)}`;
+  const sp=SCRIPT[cur];
+  $('#script').innerHTML=`<small>장면 ${cur+1} · ${sp[0]} · 단계 ${st}/${maxStep(cur)}${cur<scenes.length-1?'  —  다음: '+SCRIPT[cur+1][0]:'  —  마지막 장면'}</small>${sp[1]}`;
+}
+function replay(){ if(st===0){ render(cur,0,true,-1); return; } render(cur,st-1,true,st); setTimeout(()=>render(cur,st+1,false,st),90); }
+
+/* ============ 소리 (WebAudio 합성, 첫 클릭 뒤부터) ============ */
+let AC=null, muted=STU, dingN=0;
+function ctx(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(AC&&AC.state==='suspended') AC.resume(); return AC; }
+function tone(f,t,type,v,delay){ if(muted) return; const c=ctx(); if(!c) return; const o=c.createOscillator(), g=c.createGain(), t0=c.currentTime+(delay||0);
+  o.type=type||'sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(v||.07,t0+.01); g.gain.exponentialRampToValueAtTime(.0001,t0+t); o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0+t+.02); }
+function sndDing(){ const f=[880,988,1047,1175][dingN++%4]; tone(f,.5,'sine',.07); tone(f*1.5,.4,'sine',.03,.08); }
+function sndTok(){ tone(300,.09,'triangle',.05); }
+function sndPop(){ tone(520,.08,'triangle',.05); }
+function setMute(m){ muted=m; $('#bSnd').textContent=m?'소리 꺼짐':'소리 켜짐'; }
+setMute(muted);
+
+/* ============ 판서: 레이저 · 빨간 펜 ============ */
+const ink=$('#ink'), ictx=ink.getContext('2d');
+let strokes=[], tool=null, fingerMode='auto', penSeen=false, drawing=null, drew=false, laserLoop=false;
+try{ penSeen=localStorage.getItem('lb_pen')==='1'; fingerMode=localStorage.getItem('lb_finger')||'auto'; }catch(e){}
+const FM={auto:'자동',on:'켬',off:'끔'};
+function fingerOK(){ return fingerMode==='on'||(fingerMode==='auto'&&!penSeen); }
+function toStage(e){ return [(e.clientX-lastPos.x)/lastPos.s,(e.clientY-lastPos.y)/lastPos.s]; }
+function redrawInk(){
+  ictx.clearRect(0,0,1920,1080); const now=performance.now(); let alive=false;
+  strokes=strokes.filter(s=>s.type!=='laser'||!s.end||now-s.end<1400);
+  strokes.forEach(s=>{
+    let a=1; if(s.type==='laser'){ alive=true; if(s.end) a=Math.max(0,1-Math.max(0,now-s.end-900)/500); }
+    if(s.pts.length<1) return;
+    ictx.globalAlpha=a; ictx.lineCap='round'; ictx.lineJoin='round';
+    ictx.strokeStyle=s.type==='pen'?'#ff3b30':'#ff453a'; ictx.lineWidth=s.type==='pen'?7:10;
+    if(s.type==='laser'){ ictx.shadowColor='#ff453a'; ictx.shadowBlur=24; } else ictx.shadowBlur=0;
+    ictx.beginPath(); s.pts.forEach((p,i)=>i?ictx.lineTo(p[0],p[1]):ictx.moveTo(p[0],p[1])); if(s.pts.length===1) ictx.lineTo(s.pts[0][0]+.1,s.pts[0][1]); ictx.stroke();
+  });
+  ictx.globalAlpha=1; ictx.shadowBlur=0;
+  if(alive&&!laserLoop){ laserLoop=true; const tick=()=>{ redrawInk(); laserLoop=false; }; requestAnimationFrame(tick); }
+}
+function setTool(t){
+  tool=(tool===t)?null:t; $$('#tools button[data-t="laser"],#tools button[data-t="pen"]').forEach(b=>b.classList.toggle('on',b.dataset.t===tool));
+  document.body.style.touchAction=tool?'none':'manipulation';
+}
+function inUI(t){ return t.closest&&t.closest('#tools,#tbtn,#nav,#script,.ovl,#sim button'); }
+addEventListener('pointerdown',e=>{
+  if(e.pointerType==='pen'&&!penSeen){ penSeen=true; try{localStorage.setItem('lb_pen','1');}catch(x){} }
+  drew=false; if(inUI(e.target)||!tool) return;
+  if(e.pointerType==='touch'&&!fingerOK()) return;
+  drawing={type:tool,pts:[toStage(e)],id:e.pointerId}; strokes.push(drawing); drew=true; e.preventDefault(); redrawInk();
+},true);
+addEventListener('pointermove',e=>{ if(drawing&&e.pointerId===drawing.id){ drawing.pts.push(toStage(e)); redrawInk(); } },true);
+addEventListener('pointerup',e=>{ if(drawing&&e.pointerId===drawing.id){ drawing.end=performance.now(); drawing=null; redrawInk(); } },true);
+addEventListener('click',e=>{ if(drew){ e.stopPropagation(); e.preventDefault(); drew=false; } },true);
+addEventListener('touchmove',e=>{ if((document.fullscreenElement||tool)&&!e.target.closest('#script,.ovl')) e.preventDefault(); },{passive:false});
+
+/* ============ 넘기기: 클릭·밀기·키 ============ */
+let down=null;
+addEventListener('pointerdown',e=>{ if(inUI(e.target)||drew||e.button===2){ down=null; return; } down={x:e.clientX,y:e.clientY,t:e.target}; });
+addEventListener('pointerup',e=>{
+  if(!down) return; const d=down; down=null; if(drew||tool&&(e.pointerType!=='touch'||fingerOK())) return;
+  const dx=e.clientX-d.x, dy=e.clientY-d.y;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){ dx<0?next():prev(); }
+  else if(Math.abs(dx)<12&&Math.abs(dy)<12){ next(); }
+});
+addEventListener('contextmenu',e=>{ if(inUI(e.target)) return; e.preventDefault(); prev(); });
+function toggleFs(){ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{}); }
+function closeOv(){ $$('.ovl').forEach(o=>o.classList.remove('open')); }
+addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const k=e.key;
+  const act=document.activeElement; if(act&&act.tagName==='BUTTON'&&(k===' '||k==='Enter')){ act.blur(); }
+  if(k==='ArrowRight'||k===' '||k==='Enter'||k==='PageDown'){ e.preventDefault(); next(); }
+  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){ e.preventDefault(); prev(); }
+  else if(k==='Home'){ go(0,0,true); } else if(k==='End'){ go(scenes.length-1,maxStep(scenes.length-1),true); }
+  else if(/^f$/i.test(k)) toggleFs();
+  else if((/^[tn]$/i.test(k))&&!STU) $('#script').classList.toggle('open');
+  else if(/^o$/i.test(k)){ $('#ov').classList.toggle('open'); }
+  else if(/^h$/i.test(k)){ $('#help').classList.toggle('open'); }
+  else if(/^r$/i.test(k)) replay();
+  else if(/^m$/i.test(k)) setMute(!muted);
+  else if(/^b$/i.test(k)){ $('#white').style.display='none'; const b=$('#black'); b.style.display=b.style.display==='block'?'none':'block'; }
+  else if(/^w$/i.test(k)){ $('#black').style.display='none'; const b=$('#white'); b.style.display=b.style.display==='block'?'none':'block'; }
+  else if(/^l$/i.test(k)) setTool('laser'); else if(/^p$/i.test(k)) setTool('pen');
+  else if(/^z$/i.test(k)){ for(let i=strokes.length-1;i>=0;i--) if(strokes[i].type==='pen'){ strokes.splice(i,1); break; } redrawInk(); }
+  else if(/^c$/i.test(k)){ strokes=strokes.filter(s=>s.type==='laser'); redrawInk(); }
+  else if(k==='Escape'){ if(tool) setTool(tool); closeOv(); $('#black').style.display='none'; $('#white').style.display='none'; }
+});
+/* 조작 막대·도구 상자 */
+let navT=null;
+addEventListener('mousemove',()=>{ const n=$('#nav'); n.classList.add('show'); clearTimeout(navT); navT=setTimeout(()=>n.classList.remove('show'),2200); });
+$('#bPrev').onclick=e=>{ e.stopPropagation(); prev(); }; $('#bNext').onclick=e=>{ e.stopPropagation(); next(); };
+$('#bSnd').onclick=e=>{ e.stopPropagation(); setMute(!muted); e.currentTarget.blur(); };
+$('#bFs').onclick=e=>{ e.stopPropagation(); toggleFs(); e.currentTarget.blur(); };
+$('#tbtn').onclick=e=>{ e.stopPropagation(); $('#tools').classList.toggle('open'); $('#tbtn').classList.toggle('open'); e.currentTarget.blur(); };
+$('#tools').onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return; e.stopPropagation(); b.blur(); const t=b.dataset.t;
+  if(t==='laser'||t==='pen') setTool(t);
+  else if(t==='undo'){ for(let i=strokes.length-1;i>=0;i--) if(strokes[i].type==='pen'){ strokes.splice(i,1); break; } redrawInk(); }
+  else if(t==='clear'){ strokes=strokes.filter(s=>s.type==='laser'); redrawInk(); }
+  else if(t==='finger'){ fingerMode={auto:'on',on:'off',off:'auto'}[fingerMode]; try{localStorage.setItem('lb_finger',fingerMode);}catch(x){} b.textContent='손가락 그리기: '+FM[fingerMode]; }
+  else if(t==='fs') toggleFs();
+};
+$('#tools [data-t="finger"]').textContent='손가락 그리기: '+FM[fingerMode];
+$('#ovgrid').innerHTML=scenes.map((s,i)=>`<button data-i="${i}">${i+1}. ${s.dataset.title}<small>단계 ${maxStep(i)}개</small></button>`).join('');
+$('#ovgrid').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; closeOv(); go(+b.dataset.i,0,true); };
+$('#ov').onclick=e=>{ if(e.target.id==='ov') closeOv(); }; $('#help').onclick=closeOv;
+if(STU){ $$('.stuonly').forEach(x=>{ x.textContent='  ·  화면을 누르거나 → 키로 넘겨요'; }); }
+
+/* 시작: 주소 끝 #장면.단계 로 복원 */
+(function start(){
+  let i=0,s=0; const m=/^#(\d+)\.(\d+)$/.exec(location.hash);
+  if(m){ i=Math.min(scenes.length,Math.max(1,+m[1]))-1; s=Math.min(maxStep(i),+m[2]); }
+  setParents('YY','yy',true); renderSim(false);
+  render(i,s,true,-1);
+})();
+</script>
+</body>
+</html>

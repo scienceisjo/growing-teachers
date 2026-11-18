@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>지구 온난화의 메커니즘 · 칠판 강의 화면</title>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--ease:cubic-bezier(.2,.8,.2,1);--Y:#FFD60A;--R:#FF6A3D;--G:#64D2FF;--blue:#0066cc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;
+  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+body.tooling{touch-action:none}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;overflow:hidden;
+  user-select:none;-webkit-user-select:none;cursor:default}
+.scene{position:absolute;inset:0;display:none}
+.scene.cur{display:block}
+.scene.black{background:#000;color:#f5f5f7}
+.scene.white{background:#fff;color:#1d1d1f}
+.scene.dark{background:#1d1d1f;color:#f5f5f7;--blue:#2997ff}
+.tag{position:absolute;left:120px;top:78px;font-size:28px;color:#6e6e73;font-weight:500}
+.dark .tag,.black .tag{color:#a1a1a6}
+.ttl{position:absolute;left:120px;top:114px;font-size:64px;font-weight:600;letter-spacing:-.02em;line-height:1.2;margin:0}
+.foot{position:absolute;left:120px;top:1004px;font-size:24px;color:#6e6e73}
+.dark .foot{color:#a1a1a6}
+
+/* 단계마다 나타나는 것 */
+.st{opacity:0;transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.st.up{transform:translateY(14px)}
+.st.on{opacity:1;transform:none}
+.off{opacity:0!important;transition:opacity .3s}
+.scene .draw{opacity:0;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s var(--ease),opacity .05s}
+.scene .draw.on{opacity:1;stroke-dashoffset:0}
+.instant *,.instant *::before,.instant *::after{transition:none!important}
+
+/* 빈칸 문장 카드 */
+.card{position:absolute;left:120px;width:1680px;border-radius:18px;background:#f5f5f7;padding:22px 36px;
+  font-size:36px;line-height:62px;font-weight:400;letter-spacing:-.01em}
+.dark .card{background:rgba(255,255,255,.06)}
+.card p{margin:0;white-space:nowrap}
+.blank{display:inline-block;position:relative;margin:0 6px 0 26px;padding:0 18px;border-bottom:3px solid currentColor;line-height:50px;vertical-align:baseline}
+.blank .num{position:absolute;left:-22px;top:-12px;width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:24px;font-weight:700;line-height:34px;text-align:center;font-style:normal;letter-spacing:0}
+.blank .ans{display:inline-block;color:var(--blue);font-weight:700;opacity:0;transform:scale(.55);transition:opacity .25s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.blank.on .ans{opacity:1;transform:none}
+.blank.late .ans{transition-delay:.2s}
+
+/* 장면 1 */
+#s1 .tag{top:236px;font-size:30px}
+#s1 h1{position:absolute;left:120px;top:278px;margin:0;font-size:88px;font-weight:600;letter-spacing:-.025em;line-height:1.15}
+#s1 .q{position:absolute;left:120px;top:462px;font-size:46px;line-height:1.45;font-weight:500;letter-spacing:-.015em}
+#s1 .q2{position:absolute;left:120px;top:660px;font-size:46px;font-weight:600;color:#2997ff;letter-spacing:-.015em}
+#s1 .note{position:absolute;left:120px;top:786px;font-size:28px;color:#a1a1a6}
+#s1 .stu{position:absolute;left:120px;top:846px;font-size:28px;color:#a1a1a6;display:none}
+body.stu #s1 .stu{display:block}
+#s1 svg,#s3 svg.simv{position:absolute;left:0;top:0}
+@keyframes run{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+.scene.cur .runner{animation:run 1.5s linear infinite}
+@keyframes flowdn{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.scene.cur .flow{animation:flowdn .9s linear infinite}
+
+/* 장면 2 */
+#s2 .card{top:212px}
+#s2 .panel{position:absolute;left:120px;top:458px;width:1680px;height:502px;border-radius:18px;overflow:hidden;background:#101014}
+svg text{font-family:inherit}
+
+/* 장면 3 */
+#s3 .card{top:212px}
+#s3 .simbox{position:absolute;left:120px;top:400px;width:1180px;height:500px;border-radius:18px;overflow:hidden;background:#101014}
+#s3 .ctl{position:absolute;left:1330px;top:400px;width:470px;height:500px}
+#s3 .ctl .lab{position:absolute;left:180px;font-size:24px;color:#a1a1a6;white-space:nowrap}
+#s3 .temp{position:absolute;left:176px;top:40px;font-size:92px;font-weight:600;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+#s3 .temp small{font-size:52px;font-weight:500;margin-left:8px;letter-spacing:0}
+#s3 .chip{position:absolute;left:180px;top:150px;font-size:24px;padding:5px 14px;border-radius:10px;background:rgba(255,255,255,.1);color:#d2d2d7}
+#s3 .pct{position:absolute;left:178px;top:258px;font-size:56px;font-weight:600;line-height:1;color:var(--R);white-space:nowrap}
+#s3 .pct small{font-size:34px;font-weight:500;margin-left:6px}
+#s3 .sl{position:absolute;left:0;top:364px;width:470px;height:136px}
+#s3 .sl .name{font-size:28px;font-weight:600}
+#s3 .sl .hint{font-size:24px;color:#2997ff;margin-left:14px}
+#s3 .track{position:absolute;left:22px;right:22px;top:44px;height:60px;cursor:pointer;touch-action:none}
+#s3 .track::before{content:"";position:absolute;left:0;right:0;top:23px;height:14px;border-radius:7px;background:rgba(255,255,255,.16)}
+#s3 .fill{position:absolute;left:0;top:23px;height:14px;border-radius:7px;background:#2997ff;width:0}
+#s3 .knob{position:absolute;top:8px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:#f5f5f7}
+#s3 .tick{position:absolute;top:104px;font-size:24px;color:#a1a1a6;transform:translateX(-50%);white-space:nowrap}
+#s3 .wrap{position:absolute;left:120px;top:912px;width:1680px;font-size:36px;font-weight:600;letter-spacing:-.015em;white-space:nowrap}
+#s3 .wrap b{color:#2997ff;font-weight:700}
+
+/* 판서·가리개·조작 */
+#ink{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:50}
+#cover{position:absolute;inset:0;z-index:60;display:none}
+#ui{position:fixed;inset:0;pointer-events:none;z-index:100;font-size:16px;color:#f5f5f7}
+#ui>*{pointer-events:auto}
+#bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;
+  background:rgba(40,40,44,.82);opacity:0;transition:opacity .3s}
+#bar.show{opacity:1}
+#ui button{font:inherit;color:inherit;background:rgba(255,255,255,.1);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+#ui button.act{background:#2997ff}
+#pos{padding:0 10px;min-width:92px;text-align:center}
+#tb{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#tbtn{width:44px;height:44px;padding:0!important;border-radius:50%!important;opacity:.45;font-size:20px!important;background:rgba(110,110,115,.7)!important}
+#tbox{display:none;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:rgba(40,40,44,.92)}
+#tb.open #tbox{display:flex}
+#tb.open #tbtn{opacity:.9}
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:38%;overflow:auto;background:rgba(20,20,22,.94);padding:18px 28px 24px;display:none;font-size:20px;line-height:1.6}
+#notes.show{display:block}
+#notes h4{margin:0 0 8px;font-size:16px;color:#a1a1a6;font-weight:500}
+#notes p{margin:0 0 6px}
+#notes p.now{color:#fff}#notes p.dim{color:#8e8e93}
+#over,#help{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;padding:40px}
+#over.show,#help.show{display:flex}
+#over .th{width:300px;height:170px;border-radius:14px;padding:18px;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;font-size:20px;font-weight:600}
+#help pre{font:inherit;font-size:18px;line-height:1.8;margin:0;white-space:pre-wrap}
+body.stu .tonly{display:none!important}
+@media (prefers-reduced-motion:reduce){
+  .st,.scene .draw,.blank .ans{transition-duration:.01s!important;transition-delay:0s!important}
+  .scene.cur .runner,.scene.cur .flow{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ───────── 장면 1 · 표지 ───────── -->
+  <section class="scene black" id="s1" data-title="지구 온난화의 메커니즘">
+    <svg id="cv" width="1920" height="1080" viewBox="0 0 1920 1080"></svg>
+    <div class="tag">통합과학2 · Ⅱ. 환경과 에너지</div>
+    <h1>지구 온난화의 메커니즘</h1>
+    <div class="q">지구는 태양 에너지를 쉬지 않고 받는다.<br>그런데 왜 끝없이 뜨거워지지 않을까?</div>
+    <div class="q2" data-s="3">온실 기체가 늘어나면 무엇이 달라질까?</div>
+    <div class="note" data-s="4">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</div>
+    <div class="stu">화면을 누르거나 → 키로 넘겨요.</div>
+  </section>
+
+  <!-- ───────── 장면 2 · 들어온 만큼 내보낸다 ───────── -->
+  <section class="scene white" id="s2" data-title="들어온 만큼 내보낸다">
+    <div class="tag">1 · 지구의 에너지 출입</div>
+    <h2 class="ttl">들어온 만큼 내보낸다</h2>
+    <div class="card">
+      <p>태양 복사 에너지 100 중 30은 반사·산란되고, <span class="blank" data-s="3"><i class="num">1</i><b class="ans">70</b></span>은 지표와 대기에 흡수된다.</p>
+      <p>지구는 흡수한 것과 같은 양의 에너지를 우주로 방출한다. 이를 <span class="blank" data-s="5"><i class="num">2</i><b class="ans">복사 평형</b></span>이라고 한다.</p>
+      <p>이때 지표, 대기, 우주 사이의 열 출입 관계를 <span class="blank late" data-s="8"><i class="num">3</i><b class="ans">지구 열수지</b></span>라고 한다.</p>
+    </div>
+    <div class="panel"><svg id="hb" width="1680" height="502" viewBox="0 0 1680 502"></svg></div>
+    <div class="foot">열수지 숫자: 교과서 그림 「지구 열수지」(출처: 미국해양대기청(NOAA), 2023)</div>
+  </section>
+
+  <!-- ───────── 장면 3 · 온실 기체가 늘어나면 ───────── -->
+  <section class="scene dark" id="s3" data-title="온실 기체가 늘어나면">
+    <div class="tag">2 · 대기와 온실 기체</div>
+    <h2 class="ttl">온실 기체가 늘어나면</h2>
+    <div class="card">
+      <p>온실 기체가 지구 복사 에너지를 흡수했다가 지표로 재복사하는 현상을 <span class="blank" data-s="3"><i class="num">4</i><b class="ans">온실 효과</b></span>라고 한다.</p>
+      <p>온실 기체의 양이 늘어나면 이 효과가 강화되어, 더 <span class="blank" data-s="6"><i class="num">5</i><b class="ans">높은</b></span> 온도에서 복사 평형이 이루어진다.</p>
+    </div>
+    <div class="simbox"><svg class="simv" id="sim" width="1180" height="500" viewBox="0 0 1180 500"></svg></div>
+    <div class="ctl noadv">
+      <svg id="thermo" width="170" height="370" viewBox="0 0 170 370" style="position:absolute;left:0;top:0"></svg>
+      <div class="lab" style="top:4px">지표 평균 온도</div>
+      <div class="temp"><span id="tval">−18</span><small>℃</small></div>
+      <div class="chip">단순 모형</div>
+      <div class="lab" style="top:218px">대기의 흡수 비율</div>
+      <div class="pct"><span id="pval">0</span><small>%</small></div>
+      <div class="sl">
+        <span class="name">온실 기체의 양</span><span class="hint st" data-s="4">직접 움직여 보기</span>
+        <div class="track" id="track"><div class="fill" id="fill"></div><div class="knob" id="knob"></div></div>
+        <span class="tick" style="left:22px">없음</span><span class="tick" id="tnow">지금</span><span class="tick" style="left:448px">많음</span>
+      </div>
+    </div>
+    <div class="wrap" data-s="7">받은 만큼 내보내지만, 온실 기체가 늘면 평형을 이루는 온도가 올라간다 → <b>지구 온난화</b></div>
+    <div class="foot">온도와 흡수 비율은 대기를 한 층으로 본 단순 모형으로 계산한 값입니다. 위 장면의 열수지 숫자와는 다른 눈금입니다.</div>
+  </section>
+
+  <canvas id="ink" width="1920" height="1080"></canvas>
+  <div id="cover"></div>
+</div>
+
+<div id="ui">
+  <div id="bar" class="noadv">
+    <button id="bPrev" title="이전">◀</button><span id="pos"></span><button id="bNext" title="다음">▶</button>
+    <button id="bSnd" title="소리 (M)">소리</button><button id="bNote" class="tonly" title="대본 (T)">대본</button><button id="bFull" title="전체 화면 (F)">전체 화면</button>
+  </div>
+  <div id="tb" class="noadv">
+    <div id="tbox">
+      <button data-t="laser">레이저 (L)</button><button data-t="pen">빨간 펜 (P)</button>
+      <button data-t="undo">한 획 지우기 (Z)</button><button data-t="clear">모두 지우기 (C)</button>
+      <button data-t="finger">손가락 그리기: 자동</button><button data-t="full">전체 화면 (F)</button>
+    </div>
+    <button id="tbtn" title="판서 도구">✎</button>
+  </div>
+  <div id="notes" class="noadv"></div>
+  <div id="over" class="noadv"></div>
+  <div id="help" class="noadv"><pre>→ · Space · Enter · 클릭 : 다음      ← · Backspace · 오른쪽 클릭 : 이전
+F 전체 화면   T 대본   O 전체 장면   R 지금 단계 다시 보기   M 소리
+B 검은 화면   W 흰 화면   Home 처음   End 끝   H 도움말
+L 레이저   P 빨간 펜   Z 한 획 지우기   C 모두 지우기   Esc 끄기
+장면 3의 「온실 기체의 양」 막대는 언제든 직접 끌 수 있습니다.</pre></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const $=s=>document.querySelector(s);
+const STU=/[?&]s=1/.test(location.search);
+if(STU)document.body.classList.add('stu');
+const REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+const Y='#FFD60A',R='#FF6A3D',G='#64D2FF',TXT='#f5f5f7',SUB='#a1a1a6';
+function S(tag,at,par){const e=document.createElementNS(NS,tag);for(const k in at)if(at[k]!=null)e.setAttribute(k,at[k]);if(par)par.appendChild(e);return e;}
+function T(par,x,y,str,o){o=o||{};const t=S('text',{x:x,y:y,'font-size':o.size||24,fill:o.fill||'#d2d2d7','text-anchor':o.anchor||'start','font-weight':o.weight||500,'data-s':o.s,'class':o.cls},par);
+  t.textContent=str;if(o.delay)t.style.transitionDelay=o.delay+'s';return t;}
+// 이름(24px) + 숫자(굵게, 뜻 색)를 한 줄로
+function TL(par,x,y,name,num,col,o){o=o||{};const t=S('text',{x:x,y:y,'font-size':24,fill:'#d2d2d7','text-anchor':o.anchor||'start','font-weight':500,'data-s':o.s},par);
+  const a=S('tspan',{},t);a.textContent=name+' ';const b=S('tspan',{'font-size':32,'font-weight':700,fill:col},t);b.textContent=num;t.style.transitionDelay=(o.delay==null?.5:o.delay)+'s';return t;}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+/* ══════════ 장면 1 그림: 태양 복사(노랑, 촘촘한 물결) · 지구 복사(빨강, 느슨한 물결) ══════════ */
+(function(){
+  const sv=$('#cv');const CX=1480,CY=1640,RE=820,RA=960;
+  const atm=S('g',{'data-s':2},sv);
+  S('circle',{cx:CX,cy:CY,r:RA,fill:'rgba(100,210,255,.13)'},atm);
+  S('circle',{cx:CX,cy:CY,r:RE,fill:'#1b3a57'},sv);
+  S('circle',{cx:1700,cy:170,r:90,fill:Y},sv);
+  const surf=deg=>{const p=deg*Math.PI/180;return[CX+RE*Math.sin(p),CY-RE*Math.cos(p)];};
+  function wave(par,x1,y1,x2,y2,amp,lam,col,at){
+    const L=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/L,uy=(y2-y1)/L,nx=-uy,ny=ux;let d='';
+    const Lb=L-16;
+    for(let s=0;s<=Lb;s+=3){const k=Math.max(0,Math.min(1,s/24,(Lb-s)/24));const o=amp*k*Math.sin(2*Math.PI*s/lam);
+      d+=(s?'L':'M')+(x1+ux*s+nx*o).toFixed(1)+' '+(y1+uy*s+ny*o).toFixed(1);}
+    const g=S('g',at||{},par);
+    S('path',{d:d,fill:'none',stroke:col,'stroke-width':5,'stroke-linecap':'round',opacity:.3},g);
+    S('path',{d:d,fill:'none',stroke:col,'stroke-width':5,'stroke-linecap':'round','stroke-dasharray':'150 50','class':'runner'},g);
+    const bx=x1+ux*Lb,by=y1+uy*Lb;
+    S('polygon',{points:[[bx+nx*11,by+ny*11],[x2,y2],[bx-nx*11,by-ny*11]].map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '),fill:col},g);
+    return g;
+  }
+  // 태양 복사: 평행하게 지표까지
+  const sd=[-0.159,0.987];
+  [2,8,14].forEach(a=>{const e=surf(a);wave(sv,e[0]-sd[0]*500,e[1]-sd[1]*500,e[0],e[1],9,36,Y);});
+  T(sv,1552,402,'태양 복사 에너지',{size:28,fill:Y,anchor:'end',weight:600});
+  // 지구 복사: 지표에서 우주로 (같은 빠르기, 더 긴 물결)
+  const rd=[-0.17,-0.985];
+  const p1=surf(-10),p2=surf(-17),p3=surf(-24);
+  wave(sv,p1[0],p1[1],p1[0]+rd[0]*520,p1[1]+rd[1]*520,14,90,R,{'data-s':1});
+  wave(sv,p3[0],p3[1],p3[0]+rd[0]*520,p3[1]+rd[1]*520,14,90,R,{'data-s':1});
+  const mid=wave(sv,p2[0],p2[1],p2[0]+rd[0]*520,p2[1]+rd[1]*520,14,90,R,{'data-s':1,'data-until':2});
+  T(sv,1150,286,'지구 복사 에너지',{size:28,fill:R,anchor:'middle',weight:600,s:1,delay:.4});
+  // 대기가 생기면: 가운데 물결은 대기에서 흡수 → 지표로 다시
+  const ax=p2[0]+rd[0]*118,ay=p2[1]+rd[1]*118;
+  wave(sv,p2[0],p2[1],ax,ay,10,60,R,{'data-s':2});
+  const back=surf(-22);
+  wave(sv,ax-34,ay+8,back[0],back[1],10,60,R,{'data-s':2});
+  // 온실 기체 알갱이 (씨앗 고정)
+  const rnd=mulberry(7),dots=S('g',{'data-s':2},sv);
+  [[ax-2,ay-16],[ax-22,ay-12],[ax-40,ay-2],[ax+14,ay-6]].forEach(p=>S('circle',{cx:p[0],cy:p[1],r:7,fill:G},dots));
+  for(let i=0;i<22;i++){const ph=(-38+rnd()*66)*Math.PI/180,r=RE+22+rnd()*(RA-RE-40);const x=CX+r*Math.sin(ph),y=CY-r*Math.cos(ph);
+    if(Math.hypot(x-ax+15,y-ay)<70)continue;S('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:6,fill:G,opacity:.75},dots);}
+  T(sv,1716,792,'대기',{size:28,fill:G,weight:600,s:2,delay:.3});
+})();
+
+/* ══════════ 장면 2 그림: 지구 열수지 (교과서 그림의 숫자 그대로) ══════════
+   태양 복사 100 = 반사·산란 30(대기 23 + 지표면 7) + 대기 흡수 23 + 지표면 흡수 47
+   지표면 방출 116 = 대기 흡수 104 + 우주로 손실 12 · 물의 증발 24 · 대류와 전도 5
+   대기의 복사 58(우주로) · 대기의 재복사 98(지표로) · 우주로 나가는 지구 복사 70 = 58 + 12
+   화살표 굵기 = 값 × 0.7 px (대류와 전도 5만 최소 4 px) */
+const HB={solar:100,refAtm:23,refSurf:7,absAtm:23,absSurf:47,surfEmit:116,atmAbsIR:104,lost:12,evap:24,conv:5,atmUp:58,atmDown:98};
+HB.check=function(){const b=this;return{
+  surface:[b.absSurf+b.atmDown, b.surfEmit+b.evap+b.conv],
+  atmosphere:[b.absAtm+b.atmAbsIR+b.evap+b.conv, b.atmUp+b.atmDown],
+  earth:[b.solar, b.refAtm+b.refSurf+b.atmUp+b.lost],
+  absorbed:[b.absAtm+b.absSurf, b.atmUp+b.lost]};};
+(function(){
+  const sv=$('#hb'),K=0.7,W=v=>Math.max(4,v*K),GY=396;
+  S('rect',{x:0,y:0,width:1680,height:120,fill:'#101014'},sv);
+  S('rect',{x:0,y:120,width:1680,height:GY-120,fill:'#1c2a3a'},sv);
+  S('rect',{x:0,y:GY,width:1680,height:502-GY,fill:'#2b3327'},sv);
+  S('circle',{cx:260,cy:-38,r:90,fill:Y},sv);
+  const hd=w=>({hl:Math.max(18,Math.min(44,w*.6)),hw:w/2+Math.max(8,Math.min(20,w*.3))});
+  function head(tip,dir,w,col,s,delay,until){const h=hd(w),bx=tip[0]-dir[0]*h.hl,by=tip[1]-dir[1]*h.hl,px=-dir[1],py=dir[0];
+    const p=S('polygon',{points:[[bx+px*h.hw,by+py*h.hw],tip,[bx-px*h.hw,by-py*h.hw]].map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' '),fill:col,'data-s':s,'data-until':until},sv);
+    p.style.transitionDelay=delay+'s';return[bx,by];}
+  // pre: 마지막 점 앞까지의 경로. tip 이 있으면 화살촉 밑변까지 잇고 화살촉을 붙인다.
+  function arrow(o){let d=o.pre,dl=o.delay||0;
+    if(o.tip){const h=hd(o.w),bx=o.tip[0]-o.dir[0]*h.hl,by=o.tip[1]-o.dir[1]*h.hl;d+=' L'+bx.toFixed(1)+' '+by.toFixed(1);}
+    const p=S('path',{d:d,fill:'none',stroke:o.c,'stroke-width':o.w,pathLength:1,'class':'draw','data-s':o.s},sv);p.style.transitionDelay=dl+'s';
+    if(o.tip)head(o.tip,o.dir,o.w,o.c,o.s,dl+.55);}
+  const UP=[0,-1],DN=[0,1];
+  /* 0단계: 태양 복사 100 */
+  S('path',{d:'M260 0 L260 150',stroke:Y,'stroke-width':W(100),fill:'none'},sv);
+  head([260,192],DN,W(100),Y,0,0,1);
+  TL(sv,208,96,'태양 복사','100',Y,{anchor:'end',s:0,delay:0});
+  /* 1단계: 반사·산란 30 = 대기 23 + 지표면 7 */
+  arrow({pre:'M286.95 150 L286.95 196 C286.95 240,368.05 240,368.05 196 L368.05 48',w:W(23),c:Y,s:1});
+  arrow({pre:'M276.45 150 L276.45 372 C276.45 398,378.55 398,378.55 372 L378.55 48',w:W(7),c:Y,s:1,delay:.25});
+  head([370.5,30],UP,W(30),Y,1,.9);
+  T(sv,402,200,'대기의 반사 및 산란',{s:1,delay:.5});T(sv,402,236,'23',{s:1,delay:.5,size:32,weight:700,fill:Y});
+  TL(sv,402,368,'지표면 반사','7',Y,{s:1,delay:.8});
+  TL(sv,402,66,'반사 및 산란','30',Y,{s:1,delay:1.1});
+  /* 2단계: 흡수 — 대기 23, 지표면 47 */
+  arrow({pre:'M233.05 150',tip:[233.05,296],dir:DN,w:W(23),c:Y,s:2});
+  arrow({pre:'M257.55 150',tip:[257.55,GY],dir:DN,w:W(47),c:Y,s:2,delay:.2});
+  TL(sv,208,292,'대기의 흡수','23',Y,{anchor:'end',s:2});
+  T(sv,257,436,'지표면 흡수',{anchor:'middle',s:2,delay:.7});T(sv,257,474,'47',{anchor:'middle',s:2,delay:.7,size:32,weight:700,fill:Y});
+  /* 6단계(먼저 그려 두어야 70 화살표 아래에 깔린다): 지표면 방출 116 → 우주로 손실 12 + 대기의 흡수 104, 물의 증발 24, 대류와 전도 5 */
+  arrow({pre:'M624.2 '+GY+' L624.2 150',w:W(12),c:R,s:6});
+  arrow({pre:'M664.8 '+GY,tip:[664.8,278],dir:UP,w:W(104),c:R,s:6});
+  arrow({pre:'M925 '+GY,tip:[925,322],dir:UP,w:W(24),c:R,s:6,delay:.3});
+  arrow({pre:'M1050 '+GY,tip:[1050,330],dir:UP,w:W(5),c:R,s:6,delay:.45});
+  T(sv,660,436,'지표면 방출',{anchor:'middle',s:6,delay:.3});T(sv,660,474,'116',{anchor:'middle',s:6,delay:.3,size:32,weight:700,fill:R});
+  TL(sv,608,300,'우주로 손실','12',R,{anchor:'end',s:6,delay:.7});
+  TL(sv,732,306,'대기의 흡수','104',R,{s:6,delay:.7});
+  T(sv,925,436,'물의 증발',{anchor:'middle',s:6,delay:.8});T(sv,925,474,'24',{anchor:'middle',s:6,delay:.8,size:32,weight:700,fill:R});
+  T(sv,1050,436,'대류와 전도',{anchor:'middle',s:6,delay:.95});T(sv,1050,474,'5',{anchor:'middle',s:6,delay:.95,size:32,weight:700,fill:R});
+  /* 7단계: 대기의 복사 58(우주로), 대기의 재복사 98(지표로) */
+  arrow({pre:'M780 262 C780 185,648.7 225,648.7 150',w:W(58),c:R,s:7});
+  arrow({pre:'M1200 215',tip:[1200,GY],dir:DN,w:W(98),c:R,s:7,delay:.3});
+  TL(sv,814,244,'대기의 복사','58',R,{s:7,delay:.5});
+  T(sv,1200,436,'대기의 재복사',{anchor:'middle',s:7,delay:.8});T(sv,1200,474,'98',{anchor:'middle',s:7,delay:.8,size:32,weight:700,fill:R});
+  /* 4단계: 우주로 방출 70 */
+  arrow({pre:'M644.5 150',tip:[644.5,26],dir:UP,w:W(70),c:R,s:4});
+  TL(sv,696,66,'우주로 방출','70',R,{s:4,delay:.6});
+  /* 오른쪽: 구역 이름과 들어옴 = 나감 */
+  const X=1318;
+  function sum(y,zone,txt,s,delay){const t=S('text',{x:X,y:y,'font-size':26,fill:SUB,'font-weight':600},sv);
+    const a=S('tspan',{},t);a.textContent=zone;
+    const b=S('tspan',{dx:18,fill:TXT,'font-weight':600,'data-s':s},t);b.textContent=txt;b.style.transitionDelay=delay+'s';}
+  T(sv,X,44,'우주',{size:26,fill:SUB,weight:600});
+  T(sv,X,90,'지구 전체   흡수 70 = 방출 70',{size:26,fill:TXT,weight:600,s:4,delay:1.0});
+  sum(168,'대기','들어옴 156 = 나감 156',7,1.2);
+  T(sv,X,204,'23 + 104 + 24 + 5  =  58 + 98',{fill:SUB,s:7,delay:1.2});
+  sum(436,'지표','들어옴 145 = 나감 145',7,1.5);
+  T(sv,X,474,'47 + 98  =  116 + 24 + 5',{fill:SUB,s:7,delay:1.5});
+})();
+
+/* ══════════ 장면 3 시뮬레이터: 대기를 한 층으로 본 단순 모형 ══════════
+   가정: 태양 복사는 대기를 그대로 지나 지표에서 흡수된다. 대기(한 층)는 지표가 낸 지구 복사 중 ε 만큼을 흡수하고,
+        흡수한 만큼을 위(우주)·아래(지표)로 반씩 복사한다. 대류·증발은 넣지 않는다.
+   지표:  σTs⁴ = S + ε·σTa⁴        대기:  ε·σTs⁴ = 2·ε·σTa⁴
+   →  σTs⁴ = S · 2/(2 − ε)   →   Ts = Te · (2/(2 − ε))^(1/4),   Te = 255 K (온실 기체가 없을 때 평형 온도)
+   ε = 0 → 255 K(−18 ℃) · ε = 0.78 → 288.5 K(약 15 ℃) · ε = 0.95 → 299.6 K(약 26 ℃)
+   화살표 굵기는 흡수한 태양 복사를 1로 둔 비: 지표면 방출 U = 2/(2−ε), 대기의 흡수 εU, 우주로 손실 (1−ε)U,
+   대기의 복사 = 대기의 재복사 = εU/2. 우주로 나가는 합 (1−ε)U + εU/2 = 1 (들어온 양과 같다). */
+const SIM={TE:255,EPS_NOW:0.78,EPS_MORE:0.90,EPS_MAX:0.95,UNIT:60,eps:0,raf:0,target:0,
+  U:e=>2/(2-e),
+  Ts:e=>255*Math.pow(2/(2-e),0.25),
+  Tc:e=>255*Math.pow(2/(2-e),0.25)-273.15};
+(function(){
+  const sv=$('#sim'),GY=384,X0=440;
+  S('rect',{x:0,y:0,width:1180,height:90,fill:'#101014'},sv);
+  S('rect',{x:0,y:90,width:1180,height:GY-90,fill:'#1c2a3a'},sv);
+  S('rect',{x:0,y:GY,width:1180,height:500-GY,fill:'#2b3327'},sv);
+  T(sv,22,42,'우주',{size:26,fill:SUB,weight:600});T(sv,22,132,'대기',{size:26,fill:SUB,weight:600});T(sv,22,478,'지표',{size:26,fill:SUB,weight:600});
+  // 온실 기체 알갱이: 씨앗 고정, 글자 자리는 피한다. 보이는 개수 = round(50 × ε)
+  const rnd=mulberry(20261117),dots=[],ex=[[560,250,850,300],[862,160,1020,204],[8,96,96,146]];
+  const gd=S('g',{},sv);
+  while(dots.length<50){const x=24+rnd()*1132,y=106+rnd()*(GY-124);
+    if(ex.some(r=>x>r[0]&&x<r[2]&&y>r[1]&&y<r[3]))continue;
+    if(dots.some(d=>Math.hypot(d.x-x,d.y-y)<30))continue;
+    dots.push({x:x,y:y,el:S('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:6,fill:G,opacity:0},gd)});}
+  const pSolar=S('polygon',{fill:Y},sv),pDirect=S('polygon',{fill:R},sv),pAbs=S('polygon',{fill:R},sv);
+  const gAtm=S('g',{},sv),pUp=S('polygon',{fill:R},gAtm),pDown=S('polygon',{fill:R},gAtm);
+  const flow=S('path',{fill:'none',stroke:'#fff','stroke-opacity':.6,'stroke-linecap':'round','stroke-dasharray':'14 18','class':'flow','data-s':2},gAtm);
+  T(sv,150,430,'태양 복사 에너지',{anchor:'middle'});
+  T(sv,497,430,'지표면 방출',{anchor:'middle'});
+  const lLost=T(sv,408,58,'우주로 손실',{anchor:'end'});
+  const lAbs=S('text',{x:588,y:286,'font-size':24,fill:'#d2d2d7','font-weight':500},sv);
+  S('tspan',{},lAbs).textContent='대기의 흡수 ';const lAbsN=S('tspan',{'font-size':32,'font-weight':700,fill:R},lAbs);
+  const lUp=T(gAtm,880,192,'대기의 복사');
+  const lDown=T(gAtm,1040,430,'대기의 재복사',{anchor:'middle'});
+  T(sv,1166,474,'지표가 에너지를 한 번 더 받는다',{anchor:'end',fill:'#2997ff',weight:600,s:2,delay:.3});
+  // 5단계: 들어옴 = 나감 막대 (길이는 계산값)
+  const gb=S('g',{'data-s':5},sv);
+  T(gb,905,38,'들어옴');T(gb,905,74,'나감');
+  S('rect',{x:990,y:20,width:176,height:20,rx:4,fill:Y},gb);
+  const bDir=S('rect',{x:990,y:56,height:20,rx:4,fill:R},gb),bAtm=S('rect',{y:56,height:20,rx:4,fill:R,opacity:.6},gb);
+  function vArrow(xc,y0,yTip,w){if(w<1.2)return'';const dir=yTip<y0?-1:1,hl=Math.max(14,Math.min(34,w*.6)),hw=w/2+Math.max(7,Math.min(16,w*.3)),yb=yTip-dir*hl;
+    return[[xc-w/2,y0],[xc+w/2,y0],[xc+w/2,yb],[xc+hw,yb],[xc,yTip],[xc-hw,yb],[xc-w/2,yb]].map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');}
+  pSolar.setAttribute('points',vArrow(150,0,GY,SIM.UNIT));
+  // 온도계: −30 ~ 40 ℃
+  const th=$('#thermo'),ty=t=>320-(t+30)*(300/70);
+  S('rect',{x:70,y:14,width:26,height:330,rx:13,fill:'rgba(255,255,255,.14)'},th);
+  S('circle',{cx:83,cy:340,r:24,fill:'rgba(255,255,255,.14)'},th);
+  for(let t=-30;t<=40;t+=10){S('line',{x1:t%20?60:54,x2:68,y1:ty(t),y2:ty(t),stroke:SUB,'stroke-width':2},th);
+    if(t%20===0)T(th,48,ty(t)+8,(t<0?'−':'')+Math.abs(t),{anchor:'end',fill:SUB});}
+  S('circle',{cx:83,cy:340,r:17,fill:TXT},th);
+  const liq=S('rect',{x:76,width:14,rx:7,fill:TXT},th);
+  const mk=S('g',{'data-s':4},th);
+  S('line',{x1:100,x2:160,y1:ty(SIM.Tc(SIM.EPS_NOW)),y2:ty(SIM.Tc(SIM.EPS_NOW)),stroke:'#2997ff','stroke-width':3,'stroke-dasharray':'7 6'},mk);
+  T(mk,104,ty(SIM.Tc(SIM.EPS_NOW))-10,'지금',{fill:'#2997ff',weight:600});
+  $('#tnow').style.left=(22+426*SIM.EPS_NOW/SIM.EPS_MAX)+'px';
+
+  SIM.set=function(e){e=Math.max(0,Math.min(SIM.EPS_MAX,e));SIM.eps=e;
+    const U=SIM.U(e),u=SIM.UNIT,d=(1-e)*U*u,a=e*U*u,em=e*U/2*u,tc=SIM.Tc(e);
+    pDirect.setAttribute('points',vArrow(X0+d/2,GY,8,d));
+    pAbs.setAttribute('points',vArrow(X0+d+a/2,GY,232,a));
+    pUp.setAttribute('points',vArrow(830,212,8,em));
+    pDown.setAttribute('points',vArrow(1040,212,GY,em));
+    flow.setAttribute('d','M1040 216 L1040 '+(GY-Math.max(14,Math.min(34,em*.6))-2));flow.setAttribute('stroke-width',em>10?4:2);
+    const vis=Math.max(0,Math.min(1,e/0.05));gAtm.setAttribute('opacity',vis.toFixed(2));lAbs.setAttribute('opacity',vis.toFixed(2));
+    lAbsN.textContent=Math.round(e*100)+' %';
+    const n=Math.round(50*e);dots.forEach((o,i)=>o.el.setAttribute('opacity',i<n?.85:0));
+    bDir.setAttribute('width',Math.max(0,d/u*176).toFixed(1));bAtm.setAttribute('x',(990+d/u*176).toFixed(1));bAtm.setAttribute('width',Math.max(0,em/u*176).toFixed(1));
+    const y=ty(tc);liq.setAttribute('y',y.toFixed(1));liq.setAttribute('height',(336-y).toFixed(1));
+    const r=Math.round(tc);$('#tval').textContent=(r<0?'−':'')+Math.abs(r);$('#pval').textContent=Math.round(e*100);
+    const f=e/SIM.EPS_MAX*100;$('#fill').style.width=f+'%';$('#knob').style.left=f+'%';
+  };
+  SIM.stop=function(){if(SIM.raf){cancelAnimationFrame(SIM.raf);SIM.raf=0;SIM.set(SIM.target);}};
+  SIM.tween=function(to,ms){SIM.stop();const from=SIM.eps,t0=performance.now();SIM.target=to;
+    const tick=now=>{let k=Math.min(1,(now-t0)/ms);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;SIM.set(from+(to-from)*k);
+      if(k<1)SIM.raf=requestAnimationFrame(tick);else{SIM.raf=0;SIM.set(to);}};
+    SIM.raf=requestAnimationFrame(tick);};
+  SIM.def=step=>step>=4?SIM.EPS_MORE:step>=1?SIM.EPS_NOW:0;
+  // 단계가 바뀔 때: 되돌리기·건너뛰기는 그 단계의 기본값으로, 앞으로 갈 때는 값이 달라지는 단계(1, 4)만 움직인다.
+  SIM.hook=function(step,instant,fwd){SIM.stop();const to=SIM.def(step);
+    if(instant||!fwd||REDUCE){SIM.set(to);return;}
+    if(step===1||step===4){SIM.set(SIM.def(step-1));SIM.tween(to,1200);}
+    else if(step===0)SIM.set(0);};
+  // 막대 끌기 — 누름은 장면 넘기기로 가지 않는다(.noadv), 키보드 초점도 받지 않는다.
+  const tr=$('#track');let drag=false;
+  function fromEv(ev){const r=tr.getBoundingClientRect();let e=(ev.clientX-r.left)/r.width*SIM.EPS_MAX;
+    if(Math.abs(e-SIM.EPS_NOW)<0.012)e=SIM.EPS_NOW;SIM.stop();SIM.set(Math.round(e*100)/100);}
+  tr.addEventListener('pointerdown',ev=>{drag=true;try{tr.setPointerCapture(ev.pointerId);}catch(_){ }fromEv(ev);ev.preventDefault();});
+  tr.addEventListener('pointermove',ev=>{if(drag)fromEv(ev);});
+  ['pointerup','pointercancel'].forEach(n=>tr.addEventListener(n,()=>{drag=false;}));
+  SIM.set(0);
+})();
+window.__HB=HB;window.__SIM=SIM;
+
+/* ══════════ 대본 ══════════ */
+const NOTES=[
+ ['지구는 태양 복사 에너지를 하루도 쉬지 않고 받아요. 받기만 하면 계속 뜨거워져야 할 텐데, 왜 그렇지 않을까요?',
+  '지구도 에너지를 내보냅니다. 빨간 물결이 지구 복사 에너지예요. 노란 물결보다 물결 간격이 넓게 그려져 있죠.',
+  '대기가 있으면 지구 복사 에너지의 일부는 대기에 붙잡혔다가 지표로 되돌아옵니다. (그림의 대기 두께와 지구·태양 크기는 실제 비율이 아닙니다.)',
+  '오늘 끝에 답할 질문은 두 개예요. 왜 끝없이 뜨거워지지 않는지, 온실 기체가 늘면 무엇이 달라지는지.',
+  '번호 칸이 열리면 학습지의 같은 번호에 적습니다.'],
+ ['지구에 들어오는 태양 복사 에너지를 100이라고 할게요.',
+  '100 중에서 대기에서 23, 지표면에서 7이 반사·산란되어 그대로 우주로 돌아갑니다. 합쳐서 30.',
+  '나머지는 흡수돼요. 대기가 23, 지표면이 47. 둘을 더하면 얼마죠?',
+  '① 70. 지구가 실제로 받은 에너지는 70입니다.',
+  '그럼 지구가 우주로 내보내는 지구 복사 에너지는 얼마일까요? 70입니다. 흡수 70, 방출 70.',
+  '② 복사 평형. 받은 만큼 내보내니까 끝없이 뜨거워지지 않는 거예요.',
+  '이제 안쪽을 들여다봅시다. 지표면은 116을 방출해요. 100보다 크죠? 이상하지 않나요? 그중 104는 대기가 흡수하고 12만 우주로 빠져나갑니다. 증발로 24, 대류와 전도로 5도 대기로 갑니다.',
+  '대기는 받은 것을 다시 내보내요. 우주로 58, 지표로 98. 지표가 116이나 낼 수 있는 까닭이 이 98입니다. 대기, 지표 각각 들어온 양과 나간 양을 더해 보세요.',
+  '③ 지구 열수지. 지표, 대기, 우주 어디에서 세어도 들어온 양과 나간 양이 같습니다.'],
+ ['대기에 온실 기체가 하나도 없다고 해 볼게요. 지표가 낸 지구 복사 에너지는 그대로 우주로 나갑니다. 이 단순 모형에서는 지표가 영하 18 ℃쯤이에요.',
+  '온실 기체를 지금 수준으로 넣어 봅니다. 대기가 지구 복사 에너지를 흡수하고, 온도계가 올라가죠.',
+  '대기는 흡수한 에너지를 위아래로 다시 복사해요. 아래로 오는 화살표를 보세요. 지표는 태양에서 한 번, 대기에서 한 번 더 받습니다.',
+  '④ 온실 효과. 온실 효과 덕분에 지구는 생명체가 살기에 알맞은 온도를 유지해 왔어요.',
+  '온실 기체가 더 늘어나면 어떻게 될까요? 막대를 직접 움직여 봅시다. (이 모형은 대기를 한 층으로 본 것이라 온도 숫자는 실제 예측값이 아닙니다. 방향만 봅니다.)',
+  '우주 쪽 막대를 보세요. 들어오는 양과 나가는 양은 여전히 같아요. 평형은 그대로인데 지표의 온도만 달라졌습니다.',
+  '⑤ 높은. 온실 효과가 강화되면 더 높은 온도에서 복사 평형이 이루어집니다.',
+  '처음 질문의 답입니다. 받은 만큼 내보내서 끝없이 뜨거워지지는 않지만, 온실 기체가 늘면 평형 온도가 올라가요. 이것이 지구 온난화입니다.']
+];
+
+/* ══════════ 넘기기 엔진 ══════════ */
+const stage=$('#stage');
+const scenes=[...document.querySelectorAll('.scene')].map((el,i)=>{
+  let max=0;el.querySelectorAll('[data-s]').forEach(n=>{max=Math.max(max,+n.dataset.s);if(!n.classList.contains('blank')&&!n.classList.contains('draw'))n.classList.add('st');});
+  return{el:el,max:max,title:el.dataset.title,hook:i===2?SIM.hook:null};});
+let cur=0,step=0,gesture=false;
+function fit(){const k=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+k+')';}
+addEventListener('resize',fit);fit();
+function paint(s){const el=scenes[cur].el;
+  el.querySelectorAll('[data-s]').forEach(n=>n.classList.toggle('on',s>=+n.dataset.s));
+  el.querySelectorAll('[data-until]').forEach(n=>n.classList.toggle('off',s>=+n.dataset.until));}
+function show(ci,st,instant,fwd){
+  const changed=ci!==cur;
+  stage.classList.add('instant');void stage.offsetWidth;            // 돌던 움직임은 끝 상태로
+  if(changed){cur=ci;strokes.length=0;redraw();}
+  scenes.forEach((sc,i)=>sc.el.classList.toggle('cur',i===cur));
+  step=st;
+  if(instant||REDUCE){paint(step);void stage.offsetWidth;stage.classList.remove('instant');}
+  else{paint(changed&&step===0?-1:step-1);void stage.offsetWidth;stage.classList.remove('instant');void stage.offsetWidth;paint(step);}
+  if(scenes[cur].hook)scenes[cur].hook(step,instant,fwd);
+  try{history.replaceState(null,'','#'+(cur+1)+'.'+step);}catch(_){try{location.hash=(cur+1)+'.'+step;}catch(__){}}
+  $('#pos').textContent=(cur+1)+' / '+scenes.length+' · '+step+'/'+scenes[cur].max;
+  renderNotes();
+  if(!instant&&fwd){const b=scenes[cur].el.querySelector('.blank[data-s="'+step+'"]');if(b)ding(b.classList.contains('late')?.25:0);else if(step>0||changed)tok();}
+}
+function next(){if(step<scenes[cur].max)show(cur,step+1,false,true);else if(cur<scenes.length-1)show(cur+1,0,false,true);}
+function prev(){if(step>0)show(cur,step-1,true,false);else if(cur>0)show(cur-1,scenes[cur-1].max,true,false);}
+function jump(ci,st){show(Math.max(0,Math.min(scenes.length-1,ci)),st||0,true,false);}
+
+/* 소리 (WebAudio 합성) */
+let AC=null,sound=!STU,dn=0;
+function actx(){if(!gesture||!sound)return null;try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(_){AC=null;}return AC;}
+function tone(f,at,dur,vol,type){const a=actx();if(!a)return;try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+at;o.type=type||'sine';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+.05);}catch(_){}}
+function ding(at){const f=[880,988,1047,1175,1319][dn++%5];tone(f,at,.5,.14);tone(f*1.5,at+.07,.6,.09);}
+function tok(){tone(320,0,.09,.07,'triangle');}
+function setSound(v){sound=v;$('#bSnd').classList.toggle('act',sound);}
+
+/* 대본 · 전체 보기 · 도움말 · 가리개 */
+function renderNotes(){const n=$('#notes');if(!n.classList.contains('show'))return;const sc=scenes[cur];
+  let h='<h4>'+(cur+1)+'. '+sc.title+' · 단계 '+step+'/'+sc.max+(cur<scenes.length-1?' · 다음 장면: '+scenes[cur+1].title:' · 마지막 장면')+'</h4>';
+  NOTES[cur].forEach((t,i)=>{h+='<p class="'+(i===step?'now':'dim')+'">'+i+'. '+t+'</p>';});n.innerHTML=h;}
+function toggleNotes(){if(STU)return;$('#notes').classList.toggle('show');renderNotes();}
+function buildOver(){const o=$('#over');o.innerHTML='';const bg=['#000','#fff','#1d1d1f'],fg=['#f5f5f7','#1d1d1f','#f5f5f7'];
+  scenes.forEach((sc,i)=>{const d=document.createElement('div');d.className='th';d.style.background=bg[i];d.style.color=fg[i];d.style.outline=i===cur?'4px solid #2997ff':'1px solid #48484a';
+    d.textContent=(i+1)+'. '+sc.title;d.onclick=ev=>{ev.stopPropagation();o.classList.remove('show');jump(i,0);};o.appendChild(d);});}
+function toggleOver(){const o=$('#over');if(o.classList.toggle('show'))buildOver();}
+$('#over').addEventListener('click',()=>$('#over').classList.remove('show'));
+$('#help').addEventListener('click',()=>$('#help').classList.remove('show'));
+function coverTo(c){const el=$('#cover');if(el.style.display==='block'&&el.dataset.c===c){el.style.display='none';return;}el.dataset.c=c;el.style.background=c;el.style.display='block';}
+function full(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen();}catch(_){}}
+
+/* ══════════ 판서: 레이저 · 빨간 펜 ══════════ */
+const ink=$('#ink'),ctx=ink.getContext('2d');
+const strokes=[];let tool=null,drawing=null,laser=[],swallow=false,finger='auto',penSeen=false,laserRaf=0;
+try{penSeen=localStorage.getItem('lb_penSeen')==='1';}catch(_){}
+function toStage(ev){const r=stage.getBoundingClientRect();return[(ev.clientX-r.left)/r.width*1920,(ev.clientY-r.top)/r.height*1080];}
+function line(pts,col,w,alpha){if(pts.length<1)return;ctx.globalAlpha=alpha;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+  for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);if(pts.length===1)ctx.lineTo(pts[0][0]+.1,pts[0][1]);ctx.stroke();ctx.globalAlpha=1;}
+function redraw(){ctx.clearRect(0,0,1920,1080);strokes.forEach(s=>line(s,'#ff3b30',6,1));
+  const now=performance.now();laser=laser.filter(s=>s.live||now-s.end<1000);
+  laser.forEach(s=>{const a=s.live?1:1-(now-s.end)/1000;line(s.pts,'#ff453a',9,.85*a);line(s.pts,'#fff',3,.9*a);});
+  if(laser.length&&!laserRaf)laserRaf=requestAnimationFrame(()=>{laserRaf=0;redraw();});}
+function setTool(t){tool=tool===t?null:t;document.body.classList.toggle('tooling',!!tool);
+  document.querySelectorAll('#tbox button').forEach(b=>b.classList.toggle('act',b.dataset.t===tool));stage.style.cursor=tool?'crosshair':'default';}
+function canDraw(ev){if(!tool)return false;if(ev.target.closest&&ev.target.closest('#ui'))return false;
+  if(ev.pointerType==='pen'){if(!penSeen){penSeen=true;try{localStorage.setItem('lb_penSeen','1');}catch(_){}}return true;}
+  if(ev.pointerType==='touch')return finger==='on'||(finger==='auto'&&!penSeen);return true;}
+addEventListener('pointerdown',ev=>{gesture=true;if(!canDraw(ev))return;ev.preventDefault();ev.stopPropagation();swallow=true;
+  const p=toStage(ev);if(tool==='pen'){drawing=[p];strokes.push(drawing);}else{drawing={pts:[p],live:true,end:0};laser.push(drawing);}redraw();},true);
+addEventListener('pointermove',ev=>{if(!drawing)return;const p=toStage(ev);(drawing.pts||drawing).push(p);redraw();},true);
+['pointerup','pointercancel'].forEach(n=>addEventListener(n,()=>{if(!drawing)return;if(drawing.pts){drawing.live=false;drawing.end=performance.now();}drawing=null;redraw();setTimeout(()=>{swallow=false;},350);},true));
+addEventListener('click',ev=>{if(swallow){swallow=false;ev.stopPropagation();ev.preventDefault();}},true);
+addEventListener('touchmove',ev=>{if((document.fullscreenElement||tool)&&!(ev.target.closest&&ev.target.closest('#notes,#over')))ev.preventDefault();},{passive:false});
+$('#tbtn').addEventListener('click',()=>$('#tb').classList.toggle('open'));
+$('#tbox').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;const t=b.dataset.t;
+  if(t==='laser'||t==='pen')setTool(t);else if(t==='undo'){strokes.pop();redraw();}else if(t==='clear'){strokes.length=0;redraw();}
+  else if(t==='finger'){finger=finger==='auto'?'on':finger==='on'?'off':'auto';b.textContent='손가락 그리기: '+({auto:'자동',on:'켬',off:'끔'})[finger];}
+  else if(t==='full')full();});
+
+/* ══════════ 입력 ══════════ */
+addEventListener('keydown',ev=>{gesture=true;if(ev.ctrlKey||ev.metaKey||ev.altKey)return;const k=ev.key;
+  if(k==='ArrowRight'||k===' '||k==='Enter'||k==='PageDown'){ev.preventDefault();next();}
+  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){ev.preventDefault();prev();}
+  else if(k==='Home')jump(0,0);else if(k==='End')jump(scenes.length-1,scenes[scenes.length-1].max);
+  else if(/^[fF]$/.test(k))full();else if(/^[tTnN]$/.test(k))toggleNotes();else if(/^[oO]$/.test(k))toggleOver();
+  else if(/^[rR]$/.test(k)){const s=step;if(s>0){show(cur,s-1,true,false);show(cur,s,false,true);}else{show(cur,0,true,false);}}
+  else if(/^[mM]$/.test(k))setSound(!sound);else if(/^[bB]$/.test(k))coverTo('#000');else if(/^[wW]$/.test(k))coverTo('#fff');
+  else if(/^[hH]$/.test(k))$('#help').classList.toggle('show');
+  else if(/^[lL]$/.test(k))setTool('laser');else if(/^[pP]$/.test(k))setTool('pen');
+  else if(/^[zZ]$/.test(k)){strokes.pop();redraw();}else if(/^[cC]$/.test(k)){strokes.length=0;redraw();}
+  else if(k==='Escape'){if(tool)setTool(tool);$('#help').classList.remove('show');$('#over').classList.remove('show');$('#cover').style.display='none';}
+});
+stage.addEventListener('click',ev=>{if(ev.target.closest('.noadv'))return;if($('#cover').style.display==='block'){$('#cover').style.display='none';return;}next();});
+addEventListener('contextmenu',ev=>{ev.preventDefault();if(!(ev.target.closest&&ev.target.closest('.noadv')))prev();});
+let tx=null,ty0=0;
+addEventListener('touchstart',ev=>{if(ev.touches.length===1&&!(ev.target.closest&&ev.target.closest('.noadv'))){tx=ev.touches[0].clientX;ty0=ev.touches[0].clientY;}else tx=null;},{passive:true});
+addEventListener('touchend',ev=>{if(tx==null||drawing)return;const t=ev.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty0;tx=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){swallow=true;setTimeout(()=>{swallow=false;},350);if(dx<0)next();else prev();}},{passive:true});
+let barT=0;addEventListener('mousemove',()=>{$('#bar').classList.add('show');clearTimeout(barT);barT=setTimeout(()=>$('#bar').classList.remove('show'),1800);});
+$('#bPrev').onclick=prev;$('#bNext').onclick=next;$('#bSnd').onclick=()=>setSound(!sound);$('#bNote').onclick=toggleNotes;$('#bFull').onclick=full;
+setSound(sound);
+
+/* 시작 위치: #장면.단계 */
+(function(){const m=/^#(\d+)\.(\d+)$/.exec(location.hash||'');let c=0,s=0;
+  if(m){c=Math.max(0,Math.min(scenes.length-1,+m[1]-1));s=Math.max(0,Math.min(scenes[c].max,+m[2]));}
+  cur=-1;show(c,s,true,false);})();
+})();
+</script>
+</body>
+</html>

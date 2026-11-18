@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>전하를 띠는 이온 · 칠판 강의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;word-break:keep-all}
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+
+/* 1920x1080 무대. 밝은 면/어두운 면의 색은 변수로 한 곳에서 관리 */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;transform-origin:50% 50%;background:#000;color:#1d1d1f;
+  --pos:#C4391B;--neg:#0077B6;--posT:#fff;--negT:#fff;--acc:#0066cc;--ink:#1d1d1f;--sub:#6e6e73;--card:#f5f5f7;transition:background-color .6s}
+#stage.black,#stage.dark{--pos:#FF6A3D;--neg:#64D2FF;--posT:#1d1d1f;--negT:#1d1d1f;--acc:#2997ff;--ink:#f5f5f7;--sub:#a1a1a6;--card:rgba(255,255,255,.06);color:#f5f5f7}
+#stage.black{background:#000}
+#stage.dark{background:#1d1d1f}
+#stage.light{background:#fff}
+#stage.instant *{transition:none !important}
+
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none}
+.scene.on{display:block;animation:fi .5s ease both}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+.tag{position:absolute;left:120px;top:78px;font-size:28px;color:var(--sub)}
+.ttl{position:absolute;left:120px;top:118px;margin:0;font-size:64px;font-weight:600;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;color:var(--ink)}
+.ttl.big{top:150px;font-size:96px}
+.foot{position:absolute;left:120px;top:1016px;font-size:24px;color:var(--sub)}
+.q{position:absolute;left:120px;top:470px;width:720px;font-size:52px;font-weight:600;line-height:1.35;color:var(--ink)}
+.caption{position:absolute;left:120px;top:680px;width:720px;font-size:40px;line-height:1.5;color:var(--ink);opacity:0;transition:opacity .6s}
+.cap .caption{opacity:1}
+.hint{position:absolute;left:120px;top:860px;font-size:28px;color:var(--sub)}
+
+/* 입자 */
+.p{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1;z-index:2;
+  transition:left .9s cubic-bezier(.2,.8,.2,1),top .9s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.nuc{width:100px;height:100px;margin:-50px 0 0 -50px;background:var(--pos);color:var(--posT);font-size:30px}
+.e{width:30px;height:30px;margin:-15px 0 0 -15px;background:var(--neg);color:var(--negT);font-size:24px}
+.e.gone{opacity:0}
+.ion{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:30px}
+.ion.pos{background:var(--pos);color:var(--posT)}
+.ion.neg{background:var(--neg);color:var(--negT)}
+
+/* 그림 위 글자·전극 */
+.fig-svg{position:absolute;left:0;top:0;pointer-events:none}
+.wL,.wR{fill:none;stroke:#48484a;stroke-width:7;transition:stroke .6s}
+.elN,.elP{fill:#48484a;transition:fill .6s}
+.pw .wL{stroke:var(--neg)}
+.pw .wR{stroke:var(--pos)}
+.pw .elN{fill:var(--neg)}
+.pw .elP{fill:var(--pos)}
+.bat{fill:#2c2c2e}
+.lbl{fill:var(--ink);font-size:32px;font-weight:600;opacity:0;transition:opacity .6s}
+.lab .lbl{opacity:1}
+.hide .lbl{opacity:0}
+.fig{transition:opacity .5s}
+.hide .fig{opacity:0}
+
+/* 카드와 학습지 */
+.card{position:absolute;background:var(--card);border-radius:18px}
+.cl{position:absolute;font-size:32px;font-weight:600;color:var(--ink);white-space:nowrap}
+.sym{position:absolute;width:140px;text-align:right;font-size:56px;font-weight:700;color:var(--ink)}
+.cnt{position:absolute;font-size:28px;color:var(--sub);white-space:nowrap}
+.sheet{position:absolute;font-size:24px;color:var(--sub)}
+.line{position:absolute;font-size:36px;line-height:52px;color:var(--ink)}
+.line3{position:absolute;left:1080px;width:680px;font-size:36px;line-height:52px;color:var(--ink);white-space:nowrap}
+
+/* 빈칸: 밑줄 + 번호 배지, 정답은 열릴 때만 */
+.bl{display:inline-block;position:relative;min-width:150px;height:52px;line-height:52px;text-align:center;border-bottom:3px solid var(--acc);font-weight:700;vertical-align:top;margin:0 2px}
+.bl .no{position:absolute;left:-18px;top:-26px;width:36px;height:36px;border-radius:50%;background:var(--acc);color:#fff;font-size:22px;line-height:36px;text-align:center;font-weight:700}
+.bl .ans{display:inline-block;color:var(--acc);visibility:hidden;opacity:0;transform:scale(.6);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s .45s}
+.bl.on .ans{visibility:visible;opacity:1;transform:scale(1);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s}
+
+/* 시뮬레이터 */
+.sim{position:absolute;left:120px;top:260px;width:880px;height:660px;display:none}
+.sim .nuc{width:130px;height:130px;margin:-65px 0 0 -65px;font-size:38px}
+.sim .e{width:40px;height:40px;margin:-20px 0 0 -20px;font-size:30px}
+.sim.on{display:block;animation:fi .6s ease both}
+.sb{position:absolute;top:0;width:136px;height:76px;border:0;border-radius:14px;background:rgba(255,255,255,.08);color:#f5f5f7;font-family:inherit;font-size:34px;font-weight:700;line-height:1.15;cursor:pointer;padding:6px 0 0}
+.sb small{display:block;font-size:24px;font-weight:500;line-height:1.2;margin-top:2px;color:#a1a1a6}
+.sb.sel{background:var(--acc);color:#fff}
+.sb.sel small{color:#fff}
+.cb{position:absolute;top:520px;width:190px;height:64px;border:0;border-radius:14px;background:rgba(255,255,255,.12);color:#f5f5f7;font-family:inherit;font-size:28px;font-weight:600;cursor:pointer}
+.cb:disabled{opacity:.35;cursor:default}
+.ro{position:absolute;left:500px;top:120px;width:380px;font-size:28px;line-height:1.7;color:#f5f5f7}
+.calc{color:#a1a1a6}
+.fx{font-size:96px;font-weight:700;margin-top:18px;height:120px}
+.fx sup{font-size:48px;position:relative;top:-10px}
+
+/* 바 · 판서 · 대본 · 도움말 */
+#cv{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:40}
+#bar{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);display:flex;gap:10px;align-items:center;opacity:0;transition:opacity .4s;z-index:60}
+#bar.show{opacity:1}
+#bar button,#tbp button{font-family:inherit;font-size:24px;color:#f5f5f7;background:rgba(0,0,0,.6);border:0;border-radius:12px;padding:8px 16px;cursor:pointer}
+#pg{font-size:24px;color:#f5f5f7;background:rgba(0,0,0,.6);padding:8px 16px;border-radius:12px}
+#tb{position:absolute;right:24px;bottom:24px;width:60px;height:60px;border-radius:50%;border:0;background:rgba(128,128,128,.35);color:#fff;font-size:26px;z-index:60;cursor:pointer}
+#tbp{position:absolute;right:24px;bottom:96px;display:none;flex-direction:column;gap:8px;z-index:60;background:rgba(0,0,0,.75);padding:12px;border-radius:16px}
+#tbp.on{display:flex}
+#tbp button.sel{background:var(--acc)}
+#scr{position:absolute;left:0;right:0;bottom:0;height:250px;background:rgba(0,0,0,.92);color:#f5f5f7;padding:28px 120px;font-size:32px;line-height:1.6;display:none;z-index:50}
+#scr.on{display:block}
+#scr .sub{font-size:24px;color:#a1a1a6;margin-bottom:10px}
+#ov{position:absolute;inset:0;background:rgba(0,0,0,.94);color:#f5f5f7;display:none;z-index:70;padding:120px 160px;font-size:32px;line-height:1.7}
+#ov.on{display:block}
+#ov button{display:block;margin:12px 0;font-family:inherit;font-size:32px;color:#f5f5f7;background:rgba(255,255,255,.1);border:0;border-radius:14px;padding:14px 24px;cursor:pointer}
+#blk{position:absolute;inset:0;background:#000;display:none;z-index:80}
+#blk.on{display:block}
+#blk.w{background:#fff}
+#stage.student #tb,#stage.student #scr{display:none}
+</style>
+</head>
+<body>
+<div id="stage" class="black">
+
+  <!-- 장면 1: 표지 (어두운 면) -->
+  <section class="scene" id="s0">
+    <div class="tag">IV. 물질의 구성 · 2. 전하를 띠는 이온</div>
+    <h1 class="ttl big">전하를 띠는 이온</h1>
+    <div class="q">전원을 연결하면 이온은 어디로 움직일까?</div>
+    <div class="caption">이온이 전하를 띠고 있어서예요. 어떻게 전하를 띠게 되는지 알아볼까요?</div>
+    <div class="hint">번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적어요.</div>
+    <svg class="fig-svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <rect x="1000" y="420" width="760" height="440" rx="24" fill="rgba(100,210,255,.08)" stroke="#48484a" stroke-width="3"/>
+      <rect class="bat" x="1240" y="270" width="280" height="70" rx="12"/>
+      <rect x="1214" y="290" width="26" height="30" rx="4" fill="#8e8e93"/>
+      <rect x="1520" y="290" width="26" height="30" rx="4" fill="#8e8e93"/>
+      <text x="1227" y="268" text-anchor="middle" fill="#64D2FF" font-size="40" font-weight="700">−</text>
+      <text x="1533" y="268" text-anchor="middle" fill="#FF6A3D" font-size="40" font-weight="700">+</text>
+      <text x="1380" y="318" text-anchor="middle" fill="#f5f5f7" font-size="30">전원 장치</text>
+      <path class="wL" d="M1214 305 H1124 V480"/>
+      <path class="wR" d="M1546 305 H1650 V480"/>
+      <rect class="elN" x="1110" y="480" width="28" height="260" rx="10"/>
+      <rect class="elP" x="1636" y="480" width="28" height="260" rx="10"/>
+      <text class="lbl" x="1124" y="790" text-anchor="middle">(−)극</text>
+      <text class="lbl" x="1650" y="790" text-anchor="middle">(+)극</text>
+    </svg>
+    <div class="p ion pos" id="c1">+</div>
+    <div class="p ion pos" id="c2">+</div>
+    <div class="p ion pos" id="c3">+</div>
+    <div class="p ion pos" id="c4">+</div>
+    <div class="p ion neg" id="c5">−</div>
+    <div class="p ion neg" id="c6">−</div>
+    <div class="p ion neg" id="c7">−</div>
+    <div class="p ion neg" id="c8">−</div>
+    <div class="foot">참고: 비상교육 중학교 과학 2 (2022 개정) 152~156쪽을 바탕으로 새로 그린 자료</div>
+  </section>
+
+  <!-- 장면 2: 원자가 이온이 되는 과정 (밝은 면) -->
+  <section class="scene" id="s1">
+    <div class="tag">1. 이온의 형성</div>
+    <h2 class="ttl">원자가 이온이 되는 과정</h2>
+    <div class="card" style="left:120px;top:240px;width:780px;height:430px"></div>
+    <div class="card" style="left:1020px;top:240px;width:780px;height:430px"></div>
+    <div class="cl" id="cl1" style="left:160px;top:270px">나트륨 원자</div>
+    <div class="cl" id="cl2" style="left:1060px;top:270px">염소 원자</div>
+    <div class="sym" id="sym1" style="left:740px;top:262px">Na</div>
+    <div class="sym" id="sym2" style="left:1620px;top:262px">Cl</div>
+    <div class="cnt" id="cnt1" style="left:160px;top:612px"></div>
+    <div class="cnt" id="cnt2" style="left:1060px;top:612px"></div>
+    <div class="p nuc" id="nNa" style="left:510px;top:430px">+11</div>
+    <div class="p nuc" id="nCl" style="left:1410px;top:430px">+17</div>
+
+    <div class="card" style="left:120px;top:700px;width:1680px;height:270px"></div>
+    <div class="sheet" style="left:160px;top:716px">학습지</div>
+    <div class="line" style="left:160px;top:760px">원자는 (+)전하 수와 (−)전하 수가 같아 전기적으로 <span class="bl" id="b1" data-n="1"><i class="no">1</i><span class="ans">중성</span></span>이다.</div>
+    <div class="line" style="left:160px;top:836px">전자를 잃어 (+)전하를 띠는 입자를 <span class="bl" id="b2" data-n="2"><i class="no">2</i><span class="ans">양이온</span></span>이라고 한다.</div>
+    <div class="line" style="left:160px;top:912px">전자를 얻어 (−)전하를 띠는 입자를 <span class="bl" id="b3" data-n="3"><i class="no">3</i><span class="ans">음이온</span></span>이라고 한다.</div>
+    <div class="foot">참고: 비상교육 중학교 과학 2 (2022 개정) 152~156쪽을 바탕으로 새로 그린 자료</div>
+  </section>
+
+  <!-- 장면 3: 이온의 이동과 이온식 (어두운 면) -->
+  <section class="scene" id="s2">
+    <div class="tag">2. 이온의 이동과 이온식</div>
+    <h2 class="ttl">전하를 띤 이온은 전기력을 받아 움직인다</h2>
+    <svg class="fig-svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <rect class="fig" x="160" y="300" width="800" height="400" rx="24" fill="rgba(100,210,255,.08)"/>
+      <rect class="elN fig" x="220" y="330" width="14" height="340" rx="6"/>
+      <rect class="elP fig" x="886" y="330" width="14" height="340" rx="6"/>
+      <text class="lbl" x="227" y="740" text-anchor="middle">(−)극</text>
+      <text class="lbl" x="893" y="740" text-anchor="middle">(+)극</text>
+    </svg>
+    <div class="p ion pos fig" id="r1">+</div>
+    <div class="p ion pos fig" id="r2">+</div>
+    <div class="p ion pos fig" id="r3">+</div>
+    <div class="p ion pos fig" id="r4">+</div>
+    <div class="p ion neg fig" id="u1">−</div>
+    <div class="p ion neg fig" id="u2">−</div>
+    <div class="p ion neg fig" id="u3">−</div>
+    <div class="p ion neg fig" id="u4">−</div>
+
+    <div class="card" style="left:1040px;top:260px;width:760px;height:660px"></div>
+    <div class="sheet" style="left:1080px;top:290px">학습지</div>
+    <div class="line3" style="top:370px">(+)전하를 띤 양이온은</div>
+    <div class="line3" style="top:460px"><span class="bl" id="b4" data-n="4"><i class="no">4</i><span class="ans">(−)</span></span>극으로 이동한다.</div>
+    <div class="line3" style="top:560px">(−)전하를 띤 음이온은</div>
+    <div class="line3" style="top:650px"><span class="bl" id="b5" data-n="5"><i class="no">5</i><span class="ans">(+)</span></span>극으로 이동한다.</div>
+    <div class="line3" style="top:750px">이온식에서 전하의 수가 1이면</div>
+    <div class="line3" style="top:840px">숫자 1은 <span class="bl" id="b6" data-n="6"><i class="no">6</i><span class="ans">생략</span></span>한다.</div>
+
+    <!-- 선생님 조작 시뮬레이터 (6단계부터) -->
+    <div class="sim" id="sim">
+      <div id="sbrow"></div>
+      <div class="p nuc" id="simNuc" style="left:250px;top:370px"></div>
+      <div class="ro">
+        <div>원자핵 (+)전하 <b id="rZ"></b></div>
+        <div>전자 (−) 수 <b id="rE"></b></div>
+        <div class="calc" id="rCalc"></div>
+        <div class="fx" id="rF"></div>
+      </div>
+      <button class="cb" id="bL" style="left:500px">전자 잃기</button>
+      <button class="cb" id="bG" style="left:700px">전자 얻기</button>
+    </div>
+    <div class="foot">참고: 비상교육 중학교 과학 2 (2022 개정) 152~156쪽을 바탕으로 새로 그린 자료</div>
+  </section>
+
+  <canvas id="cv" width="1920" height="1080"></canvas>
+  <div id="scr"><div class="sub" id="scrSub"></div><div id="scrTxt"></div></div>
+  <div id="ov"></div>
+  <div id="blk"></div>
+  <div id="tbp">
+    <button class="tl" data-t="laser">L 레이저</button>
+    <button class="tl" data-t="pen">P 빨간 펜</button>
+    <button data-act="undo">Z 한 획 지우기</button>
+    <button data-act="clear">C 모두 지우기</button>
+    <button data-act="fs">F 전체 화면</button>
+  </div>
+  <button id="tb" title="도구 상자">✎</button>
+  <div id="bar">
+    <button id="bp">‹ 이전</button><span id="pg"></span><button id="bn">다음 ›</button>
+    <button id="bs">소리</button><button id="bf">전체 화면</button>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const stage = $('#stage');
+const STU = new URLSearchParams(location.search).get('s') === '1';
+let soundOn = !STU;
+if (STU) stage.classList.add('student');
+
+function fit(){ const k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `translate(-50%,-50%) scale(${k})`; }
+addEventListener('resize', fit); fit();
+
+const place = (el, x, y) => { el.style.left = x + 'px'; el.style.top = y + 'px'; };
+
+/* 소리: 파일 없이 WebAudio. 되돌리기·순간 재생에서는 내지 않는다 */
+let AC = null;
+function beep(f, d){
+  if (!soundOn) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.15, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + 0.02);
+  }catch(e){}
+}
+function blank(id, on, a){
+  const el = $(id);
+  if (on && a && !el.classList.contains('on')) beep(1046 + (+el.dataset.n) * 70, 0.2); // 띠링
+  el.classList.toggle('on', on);
+}
+
+/* ---------- 장면 1: 표지 ---------- */
+const COVER = [
+  ['#c1', [1200,560], [1200,520]], ['#c2', [1290,650], [1200,610]], ['#c3', [1400,600], [1200,700]], ['#c4', [1500,720], [1200,790]],
+  ['#c5', [1260,740], [1560,520]], ['#c6', [1360,520], [1560,610]], ['#c7', [1460,800], [1560,700]], ['#c8', [1560,540], [1560,790]]
+];
+function showS0(k){
+  const S = $('#s0');
+  S.classList.toggle('pw', k >= 1);   // 1: 전원 켜짐
+  S.classList.toggle('lab', k >= 2);  // 2: 극 이름
+  S.classList.toggle('cap', k >= 4);  // 4: 질문 설명
+  COVER.forEach(([id, s, t]) => { const p = k >= 3 ? t : s; place($(id), p[0], p[1]); }); // 3: 이온 이동
+}
+
+/* ---------- 장면 2: 원자 → 이온 ---------- */
+const NA = { box: $('#s1'), x: 510, y: 430, R: 130, out: [960, 430], list: [] };
+const CL = { box: $('#s1'), x: 1410, y: 430, R: 130, out: [960, 430], list: [] };
+function ringXY(i, E, g){ const a = -Math.PI / 2 + i * 2 * Math.PI / E; return [g.x + g.R * Math.cos(a), g.y + g.R * Math.sin(a)]; }
+function setE(g, E, a){
+  while (g.list.length > E){
+    const el = g.list.pop();
+    if (a){ el.classList.add('gone'); place(el, g.out[0], g.out[1]); setTimeout(() => el.remove(), 950); }
+    else el.remove();
+  }
+  while (g.list.length < E){
+    const el = document.createElement('div');
+    el.className = 'p e'; el.textContent = '−';
+    g.box.appendChild(el); g.list.push(el);
+    if (a){ place(el, g.out[0], g.out[1]); void el.offsetWidth; } // 바깥에서 들어오게
+  }
+  g.list.forEach((el, i) => { const p = ringXY(i, E, g); place(el, p[0], p[1]); });
+}
+const fmtQ = n => n > 0 ? '+' + n : n < 0 ? '−' + (-n) : '0';
+const cntText = (Z, E) => `원자핵 (+)${Z} · 전자 (−)${E} → 전체 ${fmtQ(Z - E)}`;
+function showS1(k, a){
+  setE(NA, k >= 2 ? 10 : 11, a);   // 2: 나트륨 전자 하나가 빠진다
+  setE(CL, k >= 4 ? 18 : 17, a);   // 4: 염소에 전자 하나가 들어온다
+  $('#cnt1').textContent = cntText(11, k >= 2 ? 10 : 11);
+  $('#cnt2').textContent = cntText(17, k >= 4 ? 18 : 17);
+  $('#sym1').innerHTML = 'Na' + (k >= 3 ? '<sup>+</sup>' : '');
+  $('#sym2').innerHTML = 'Cl' + (k >= 5 ? '<sup>−</sup>' : '');
+  $('#cl1').textContent = k >= 3 ? '나트륨 이온' : '나트륨 원자';
+  $('#cl2').textContent = k >= 5 ? '염소 이온' : '염소 원자';
+  blank('#b1', k >= 1, a);
+  blank('#b2', k >= 3, a);
+  blank('#b3', k >= 5, a);
+}
+
+/* ---------- 장면 3: 이온의 이동 · 시뮬레이터 ---------- */
+const RED = [
+  { el: $('#r1'), s: [520,420], t: [300,400] }, { el: $('#r2'), s: [600,500], t: [300,480] },
+  { el: $('#r3'), s: [540,580], t: [300,560] }, { el: $('#r4'), s: [640,640], t: [300,640] }
+];
+const BLUE = [
+  { el: $('#u1'), s: [760,420], t: [830,400] }, { el: $('#u2'), s: [830,500], t: [830,480] },
+  { el: $('#u3'), s: [740,580], t: [830,560] }, { el: $('#u4'), s: [820,650], t: [830,640] }
+];
+// 원소별 값: Z = 원자핵의 (+)전하 수(= 원자 번호), 허용 이온 전하 범위(중2 범위)
+const ELS = {
+  Li: { Z: 3,  n: '리튬',     qmin: 0,  qmax: 1 },
+  O:  { Z: 8,  n: '산소',     qmin: -2, qmax: 0 },
+  Na: { Z: 11, n: '나트륨',   qmin: 0,  qmax: 1 },
+  Mg: { Z: 12, n: '마그네슘', qmin: 0,  qmax: 2 },
+  F:  { Z: 9,  n: '플루오린', qmin: -1, qmax: 0 },
+  Cl: { Z: 17, n: '염소',     qmin: -1, qmax: 0 }
+};
+const SIMC = { x: 250, y: 370, R: 169 };
+let sim = { sym: 'Na', E: 11 }; // 처음에는 전기적으로 중성인 나트륨 원자
+let simEl = [];
+const simBox = $('#sim');
+function supq(q){ if (!q) return ''; const a = Math.abs(q); return '<sup>' + (a > 1 ? a : '') + (q > 0 ? '+' : '−') + '</sup>'; }
+function simRender(){
+  const d = ELS[sim.sym], Z = d.Z, E = sim.E;
+  const q = Z - E;                                  // 이온의 전하 = (+)전하 수 − 전자 수
+  simEl.forEach(e => e.remove()); simEl = [];
+  for (let i = 0; i < E; i++){
+    const el = document.createElement('div'); el.className = 'p e'; el.textContent = '−';
+    simBox.appendChild(el); simEl.push(el);
+    const a = -Math.PI / 2 + i * 2 * Math.PI / E;
+    place(el, SIMC.x + SIMC.R * Math.cos(a), SIMC.y + SIMC.R * Math.sin(a));
+  }
+  $('#simNuc').textContent = '+' + Z;
+  $('#rZ').textContent = '+' + Z;
+  $('#rE').textContent = E + '개';
+  $('#rCalc').textContent = `(+)${Z} − (−)${E} = ${fmtQ(q)}`;
+  $('#rF').innerHTML = sim.sym + supq(q);
+  $$('.sb').forEach(b => b.classList.toggle('sel', b.dataset.el === sim.sym));
+  $('#bL').disabled = q >= d.qmax;   // 잃기: 허용 범위 안에서만
+  $('#bG').disabled = q <= d.qmin;   // 얻기
+}
+Object.entries(ELS).forEach(([s, d], i) => {
+  const b = document.createElement('button');
+  b.className = 'sb'; b.dataset.el = s; b.style.left = (i * 148) + 'px';
+  b.innerHTML = `${s}<small>${d.n}</small>`;
+  b.onclick = () => { sim = { sym: s, E: d.Z }; simRender(); };   // 원소를 고르면 중성 원자로 시작
+  simBox.appendChild(b);
+});
+$('#bL').onclick = () => { const d = ELS[sim.sym]; if (d.Z - sim.E < d.qmax){ sim.E--; simRender(); } };
+$('#bG').onclick = () => { const d = ELS[sim.sym]; if (d.Z - sim.E > d.qmin){ sim.E++; simRender(); } };
+place($('#simNuc'), SIMC.x, SIMC.y);
+
+function showS2(k, a){
+  const S = $('#s2');
+  S.classList.toggle('pw', k >= 1);
+  S.classList.toggle('lab', k >= 1);
+  S.classList.toggle('hide', k >= 6);
+  RED.forEach(o => { const p = k >= 2 ? o.t : o.s; place(o.el, p[0], p[1]); });  // 2: 양이온 이동
+  BLUE.forEach(o => { const p = k >= 4 ? o.t : o.s; place(o.el, p[0], p[1]); }); // 4: 음이온 이동
+  blank('#b4', k >= 3, a);
+  blank('#b5', k >= 5, a);
+  blank('#b6', k >= 7, a);
+  simBox.classList.toggle('on', k >= 6);
+  if (k === 0) { sim = { sym: 'Na', E: 11 }; simRender(); }
+}
+
+/* ---------- 장면 목록과 넘기기 ---------- */
+const SCN = [
+  { id: '#s0', n: 4, show: showS0, bg: 'black', title: '표지' },
+  { id: '#s1', n: 5, show: showS1, bg: 'light', title: '원자가 이온이 되는 과정' },
+  { id: '#s2', n: 7, show: showS2, bg: 'dark',  title: '이온의 이동과 이온식' }
+];
+const flat = [];
+SCN.forEach((s, si) => { for (let k = 0; k <= s.n; k++) flat.push([si, k]); });
+const NOTES = [
+  ['오늘은 전원을 연결하면 이온이 어디로 움직이는지 물어볼게요.',
+   '전원을 켰습니다. 두 극에 전기가 걸렸어요.',
+   '(−)극과 (+)극을 확인해요.',
+   '이온이 한쪽으로 끌려갑니다. 양이온과 음이온은 반대쪽으로 가요.',
+   '이온이 전하를 띠고 있어서예요. 어떻게 전하를 띠게 되는지 알아볼까요?'],
+  ['나트륨 원자 속 (+)전하와 (−)전하의 수를 세어 봅시다. 원자핵 (+)11, 전자 (−)11이에요.',
+   '두 수가 같으면 전체 전하는 0이 됩니다. 1번 칸에 들어갈 말을 같이 찾아볼까요?',
+   '나트륨 원자에서 전자 하나가 빠져나갑니다.',
+   '전자가 하나 빠져 (+)가 한 개 많아졌어요. 이 입자를 무엇이라고 부를까요? 2번 칸.',
+   '이번에는 염소 원자에 전자 하나가 들어옵니다.',
+   '전자가 하나 많아져 (−)가 한 개 많아졌어요. 이 입자를 무엇이라고 부를까요? 3번 칸.'],
+  ['이 이온들이 왜 움직이는지 알아봅시다. 전원을 켜서 두 극에 전기를 걸었어요.',
+   '(+)전하를 띤 양이온이 움직입니다. 어느 극 쪽일까요?',
+   '양이온은 어느 극으로 갈까요? 4번 칸.',
+   '(−)전하를 띤 음이온이 움직입니다.',
+   '음이온은 어느 극으로 갈까요? 5번 칸.',
+   '선생님이 직접 해 봅니다. 원소를 고르고 전자를 잃기·얻기를 눌러 보세요. 원자핵 (+)전하에서 전자 수를 빼면 이온의 전하가 나와요.',
+   '이온식에서 전하가 1이면 숫자 1은 어떻게 할까요? 6번 칸.']
+];
+function setHash(si, k){ try{ history.replaceState(null, '', `#${si + 1}.${k}`); }catch(e){} }
+function updateUI(){
+  const [si, k] = flat[cur];
+  $('#pg').textContent = `${si + 1}장 · ${k}/${SCN[si].n}`;
+  $('#scrSub').textContent = `${si + 1}장 ${SCN[si].title} · ${k}/${SCN[si].n}`;
+  $('#scrTxt').textContent = NOTES[si][k] || '';
+  setHash(si + 1, k);
+}
+let cur = -1;
+function go(i, a){
+  i = Math.max(0, Math.min(flat.length - 1, i));
+  const [si, k] = flat[i];
+  const prevSi = cur >= 0 ? flat[cur][0] : -1;
+  stage.classList.toggle('instant', !a);     // 되돌리기·처음 열 때는 애니메이션 없이 그 모습으로
+  if (si !== prevSi){
+    SCN.forEach((s, j) => $(s.id).classList.toggle('on', j === si));
+    stage.classList.remove('black', 'light', 'dark'); stage.classList.add(SCN[si].bg);
+    strokes = []; lasers = []; kick();
+    SCN[si].show(k, false);
+  } else {
+    SCN[si].show(k, a);
+  }
+  void stage.offsetWidth;
+  stage.classList.remove('instant');
+  cur = i;
+  updateUI();
+  drawAll();
+}
+function next(){ if (cur < flat.length - 1) go(cur + 1, true); }
+function prev(){ if (cur > 0) go(cur - 1, false); }
+function replay(){ const [, k] = flat[cur]; if (k > 0){ go(cur - 1, false); go(cur, true); } else go(cur, false); }
+function startIndex(){
+  const m = location.hash.match(/#(\d+)\.(\d+)/);
+  if (!m) return 0;
+  const idx = flat.findIndex(([si, k]) => si === +m[1] - 1 && k === +m[2]);
+  return idx < 0 ? 0 : idx;
+}
+
+/* ---------- 판서: 레이저(L) · 빨간 펜(P) ---------- */
+const cv = $('#cv'), cx = cv.getContext('2d');
+let tool = null, strokes = [], lasers = [], drawing = false, moved = false, ignoreClick = false, raf = 0;
+function sp(e){ const r = stage.getBoundingClientRect(); return [(e.clientX - r.left) * 1920 / r.width, (e.clientY - r.top) * 1080 / r.height]; }
+function setTool(t){
+  tool = (tool === t) ? null : t;
+  $$('#tbp .tl').forEach(b => b.classList.toggle('sel', b.dataset.t === tool));
+  if (tool !== 'laser') lasers = [];
+  drawAll();
+}
+function drawAll(){
+  cx.clearRect(0, 0, 1920, 1080);
+  cx.lineCap = 'round'; cx.lineJoin = 'round';
+  cx.strokeStyle = '#FF3B30'; cx.lineWidth = 8;
+  strokes.forEach(s => { if (s.pts.length < 2) return; cx.beginPath(); s.pts.forEach((p, i) => i ? cx.lineTo(p[0], p[1]) : cx.moveTo(p[0], p[1])); cx.stroke(); });
+  const now = performance.now();
+  lasers = lasers.filter(s => !s.up || now - s.up < 1000);
+  lasers.forEach(s => {
+    const alpha = s.up ? Math.max(0, 1 - (now - s.up) / 1000) : 1;
+    cx.globalAlpha = alpha; cx.strokeStyle = '#FF3B30'; cx.lineWidth = 10;
+    if (s.pts.length < 2){ cx.fillStyle = '#FF3B30'; cx.beginPath(); cx.arc(s.pts[0][0], s.pts[0][1], 9, 0, 7); cx.fill(); }
+    else { cx.beginPath(); s.pts.forEach((p, i) => i ? cx.lineTo(p[0], p[1]) : cx.moveTo(p[0], p[1])); cx.stroke(); }
+  });
+  cx.globalAlpha = 1;
+}
+function kick(){
+  if (!raf) raf = requestAnimationFrame(function loop(){
+    drawAll();
+    if (lasers.some(s => !s.up) || lasers.length || drawing) raf = requestAnimationFrame(loop); else raf = 0;
+  });
+}
+addEventListener('pointerdown', e => {
+  if (!tool || e.pointerType === 'touch') return;
+  if (e.target.closest && e.target.closest('#tb,#tbp,#bar,#scr,#ov,#blk,.sim,button')) return;
+  drawing = true; moved = false;
+  const p = sp(e);
+  if (tool === 'pen') strokes.push({ pts: [p] }); else lasers.push({ pts: [p], up: null });
+  kick();
+}, true);
+addEventListener('pointermove', e => {
+  if (!drawing) return;
+  const p = sp(e); moved = true;
+  if (tool === 'pen') strokes[strokes.length - 1].pts.push(p);
+  else lasers[lasers.length - 1].pts.push(p);
+  kick();
+}, true);
+addEventListener('pointerup', () => {
+  if (!drawing) return;
+  drawing = false;
+  if (tool === 'laser') lasers[lasers.length - 1].up = performance.now();
+  if (moved) ignoreClick = true;
+  kick();
+}, true);
+
+/* ---------- 입력 ---------- */
+function toggleFS(){ if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {}); else document.exitFullscreen?.().catch(() => {}); }
+function toggleScript(){ if (STU) return; $('#scr').classList.toggle('on'); }
+function toggleSound(){ soundOn = !soundOn; $('#bs').textContent = soundOn ? '소리 끔' : '소리 켬'; }
+function showOverview(on){
+  const ov = $('#ov');
+  ov.innerHTML = '';
+  if (on){
+    SCN.forEach((s, si) => {
+      const b = document.createElement('button');
+      b.textContent = `${si + 1}장 · ${s.title}`;
+      b.onclick = () => { showOverview(false); go(flat.findIndex(([x]) => x === si), false); };
+      ov.appendChild(b);
+    });
+  }
+  ov.classList.toggle('on', on);
+}
+function showHelp(){
+  const ov = $('#ov');
+  ov.innerHTML = '<p>→ · Space · Enter 다음 / ← · Backspace 이전 / Home·End 처음·끝 / R 지금 단계 다시 보기</p>' +
+    '<p>T 대본 · O 장면 목록 · B 검은 화면 · W 흰 화면 · F 전체 화면 · M 소리 · L 레이저 · P 빨간 펜 · Z 한 획 지우기 · C 모두 지우기 · Esc 끄기 · H 도움말</p>';
+  ov.classList.toggle('on');
+}
+
+addEventListener('keydown', e => {
+  const k = e.key;
+  if (e.target.tagName === 'BUTTON' && (k === ' ' || k === 'Enter')) return;  // 버튼 누름과 넘기기가 겹치지 않게
+  if (['ArrowRight', ' ', 'Enter', 'PageDown'].includes(k)){ e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)){ e.preventDefault(); prev(); }
+  else if (k === 'Home') go(0, false);
+  else if (k === 'End') go(flat.length - 1, false);
+  else if (k === 'f' || k === 'F') toggleFS();
+  else if (k === 't' || k === 'T' || k === 'n' || k === 'N') toggleScript();
+  else if (k === 'o' || k === 'O') showOverview(!$('#ov').classList.contains('on'));
+  else if (k === 'r' || k === 'R') replay();
+  else if (k === 'm' || k === 'M') toggleSound();
+  else if (k === 'b' || k === 'B') { $('#blk').className = 'on'; }
+  else if (k === 'w' || k === 'W') { $('#blk').className = 'on w'; }
+  else if (k === 'h' || k === 'H') showHelp();
+  else if (k === 'l' || k === 'L') setTool('laser');
+  else if (k === 'p' || k === 'P') setTool('pen');
+  else if (k === 'z' || k === 'Z') { strokes.pop(); drawAll(); }
+  else if (k === 'c' || k === 'C') { strokes = []; lasers = []; drawAll(); }
+  else if (k === 'Escape'){
+    if ($('#blk').classList.contains('on')) $('#blk').className = '';
+    else if ($('#ov').classList.contains('on')) showOverview(false);
+    else if ($('#scr').classList.contains('on')) toggleScript();
+    else setTool(null);
+  }
+});
+stage.addEventListener('click', e => {
+  if (ignoreClick){ ignoreClick = false; return; }
+  if (e.target.closest && e.target.closest('#tb,#tbp,#bar,#scr,#ov,#blk,.sim,button')) return;
+  next();
+});
+stage.addEventListener('contextmenu', e => { e.preventDefault(); prev(); });
+let tx = 0;
+addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 60) dx < 0 ? next() : prev(); }, { passive: true });
+addEventListener('mousemove', () => { const b = $('#bar'); b.classList.add('show'); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove('show'), 2000); });
+$('#bp').onclick = e => { e.stopPropagation(); prev(); };
+$('#bn').onclick = e => { e.stopPropagation(); next(); };
+$('#bs').onclick = e => { e.stopPropagation(); toggleSound(); };
+$('#bf').onclick = e => { e.stopPropagation(); toggleFS(); };
+$('#tb').onclick = e => { e.stopPropagation(); $('#tbp').classList.toggle('on'); };
+$$('#tbp .tl').forEach(b => b.onclick = e => { e.stopPropagation(); setTool(b.dataset.t); });
+$('#tbp [data-act="undo"]').onclick = e => { e.stopPropagation(); strokes.pop(); drawAll(); };
+$('#tbp [data-act="clear"]').onclick = e => { e.stopPropagation(); strokes = []; lasers = []; drawAll(); };
+$('#tbp [data-act="fs"]').onclick = e => { e.stopPropagation(); toggleFS(); };
+$('#bs').textContent = soundOn ? '소리 끔' : '소리 켬';
+if (STU){ $('#bs').textContent = '소리 켬'; }
+
+/* 시작: 주소 끝 #장면.단계 가 있으면 그 자리에서 */
+go(startIndex(), false);
+</script>
+</body>
+</html>
