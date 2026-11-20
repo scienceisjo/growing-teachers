@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI로 칠판 강의 화면 만들기 · 해누리중 조승재</title>
-<meta name="description" content="학습지 문장이나 교과서 몇 쪽을 주고, 전자칠판에 띄워 설명하며 넘기는 칠판 강의 화면을 1~3장부터 AI로 만들고 한 차시 전체로 넓히는 방법. 프롬프트, 고치기, 한 차시 프롬프트, 디자인, 계산해서 그리는 과학 그림, 시뮬레이터, 나만의 스킬까지.">
+<title>AI로 라이브 슬라이드 만들기 · 해누리중 조승재</title>
+<meta name="description" content="학습지 문장이나 교과서 몇 쪽을 주고, 전자칠판에 띄워 설명하며 넘기는 라이브 슬라이드를 1~3장부터 AI로 만들고 한 차시 전체로 넓히는 방법. 프롬프트, 고치기, 한 차시 프롬프트, 디자인, 계산해서 그리는 과학 그림, 시뮬레이터, 나만의 스킬까지.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
@@ -297,7 +297,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 <aside class="toc" id="toc" aria-label="목차"></aside>
 
 <article>
-  <h1>AI로 칠판 강의 화면 만들기</h1>
+  <h1>AI로 라이브 슬라이드 만들기</h1>
   <p class="sub">학습지 문장이나 교과서 몇 쪽을 주고, 전자칠판에 띄워 설명하며 넘기는 화면을 1~3장부터 만들어 보고 한 차시 전체로 넓히는 방법입니다. 프롬프트 하나로 시작해서 고치는 법, 한 차시로 만드는 법, 디자인 바꾸기, 과학 그림을 계산해서 그리게 하는 법, 나만의 스킬로 묶어 두는 법까지 차례로 적었습니다.</p>
   <div class="meta">
     <img src="../../images/profile.webp" width="44" height="44" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()">
@@ -305,13 +305,13 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
   <details class="mtoc"><summary>목차</summary><ol id="mtocList"></ol></details>
 
-  <p>칠판 강의 화면은 제가 전자칠판에 띄워 두고 설명하며 넘기는 HTML 한 파일입니다. → 키를 누를 때마다 그림이 하나씩 움직이거나 빈칸 하나가 열리고, 학생은 종이 학습지의 같은 번호 칸에 받아 적습니다. PPT와 달리 그림이 실제로 움직여서, 기체 입자가 벽에 부딪히는 모습이나 전류가 도는 모습을 애니메이션 설정 없이 보여 줄 수 있습니다.</p>
+  <p>라이브 슬라이드는 제가 전자칠판에 띄워 두고 설명하며 넘기는 HTML 한 파일입니다. → 키를 누를 때마다 그림이 하나씩 움직이거나 빈칸 하나가 열리고, 학생은 종이 학습지의 같은 번호 칸에 받아 적습니다. PPT와 달리 그림이 실제로 움직여서, 기체 입자가 벽에 부딪히는 모습이나 전류가 도는 모습을 애니메이션 설정 없이 보여 줄 수 있습니다. 프롬프트와 스킬 안에서는 AI가 무엇을 만들지 알아듣게 「칠판 강의 화면」이라고 적었습니다.</p>
   <p>제가 수업에 쓰는 한 차시 화면은 20장 안팎입니다. 이 글에서는 먼저 개념 하나를 1~3장으로 만듭니다. 3장이면 AI가 한 번에 끝까지 쓰고, 남은 시간에 두세 번 고쳐 볼 수 있기 때문입니다. 익숙해지면 <a href="#lesson">6절</a>처럼 한 차시 전체로 넓힙니다.</p>
 
   <!-- ═══ 1 ═══ -->
   <h2 id="see"><span class="n">1</span>결과부터 보기</h2>
   <p>아래는 제가 수업에 쓰는 중1 「기체의 압력」 화면입니다. 화면을 한 번 누른 뒤 → 키로 넘기고, ← 키로 되돌아갑니다.</p>
-  <div class="frame16"><iframe src="https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html" title="기체의 압력 칠판 강의 화면" loading="lazy" allow="fullscreen"></iframe></div>
+  <div class="frame16"><iframe src="https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html" title="기체의 압력 라이브 슬라이드" loading="lazy" allow="fullscreen"></iframe></div>
   <p class="cap"><a href="https://scienceisjo.github.io/gas-properties/share/02-gas-pressure-lecture.html" target="_blank" rel="noopener">새 창에서 크게 열기 ↗</a></p>
   <p>같은 방법으로 중1·중2·중3·통합과학 교과서 쪽만 주고 만든 화면 24개를 <a href="../examples/">예시 모음</a>에 모아 두었습니다. 모두 선생님이 슬라이더나 단추로 값을 바꾸는 시뮬레이터가 한 장면 이상 들어 있습니다.</p>
   <div class="excards">
@@ -337,7 +337,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <p><b>시간.</b> 처음 3장은 30분에서 1시간을 잡습니다. 만든 뒤 한 장씩 넘기며 과학 내용이 틀린 곳, 글자가 겹친 곳, 관찰하기 전에 정답이 보이는 곳을 찾고, 고칠 점을 한 문장씩 적어 다시 보냅니다.</p>
   <p>이 글에서 쓰는 프롬프트와 스킬은 아래 꾸러미에 모두 들어 있습니다. 프롬프트는 이 글에서 바로 복사하셔도 됩니다.</p>
   <div class="dl">
-    <a class="dlb main" href="../files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>3장판 프롬프트 세 가지 · 자료만 넣는 판 세 가지 · 한 차시 프롬프트 · SVG 그림 프롬프트 · 점검표 · 재료 목록 · 칠판 강의 스킬 (zip)</span></a>
+    <a class="dlb main" href="../files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>3장판 프롬프트 세 가지 · 자료만 넣는 판 세 가지 · 한 차시 프롬프트 · SVG 그림 프롬프트 · 점검표 · 재료 목록 · 라이브 슬라이드 스킬 (zip)</span></a>
   </div>
 
   <!-- ═══ 3 ═══ -->
@@ -538,7 +538,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <h2 id="figure"><span class="n">8</span>과학 그림과 시뮬레이터</h2>
 
   <h3>그림은 SVG로, 계산해서 그리게 하기</h3>
-  <p>SVG는 선의 시작점과 끝점, 호의 각도를 숫자로 적는 그림입니다. 그래서 AI가 식으로 계산한 값을 그대로 좌표에 넣을 수 있고, 칠판 강의 화면을 만들며 써 보니 과학 그림은 SVG로 그리게 할 때 가장 정확했습니다. 아래 세 그림도 슬라이더를 움직일 때마다 굴절, 렌즈, 남중 고도의 식으로 다시 계산해서 그립니다.</p>
+  <p>SVG는 선의 시작점과 끝점, 호의 각도를 숫자로 적는 그림입니다. 그래서 AI가 식으로 계산한 값을 그대로 좌표에 넣을 수 있고, 라이브 슬라이드를 만들며 써 보니 과학 그림은 SVG로 그리게 할 때 가장 정확했습니다. 아래 세 그림도 슬라이더를 움직일 때마다 굴절, 렌즈, 남중 고도의 식으로 다시 계산해서 그립니다.</p>
   <div class="svgdemo" id="svgdemo">
     <div class="tabs" role="tablist">
       <button type="button" class="on" data-m="refr">물리 · 빛의 반사와 굴절</button>
@@ -585,9 +585,9 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
   <!-- ═══ 9 ═══ -->
   <h2 id="answers"><span class="n">9</span>학생 답 모으기</h2>
-  <p>칠판 강의 화면에 한 줄을 더하면, 학생이 휴대폰으로 예측과 답을 보내고 선생님은 칠판에서 반 전체의 답을 모아 봅니다. 학생 휴대폰 위쪽에는 선생님 화면이 작게 같이 떠서 넘기는 대로 따라오고, 선생님은 지금 몇 명이 보고 있는지와 나간 학생을 봅니다. 학생은 로그인하지 않고, 이름도 받지 않습니다.</p>
+  <p>라이브 슬라이드에 한 줄을 더하면, 학생이 휴대폰으로 예측과 답을 보내고 선생님은 칠판에서 반 전체의 답을 모아 봅니다. 학생 휴대폰 위쪽에는 선생님 화면이 작게 같이 떠서 넘기는 대로 따라오고, 선생님은 지금 몇 명이 보고 있는지와 나간 학생을 봅니다. 학생은 로그인하지 않고, 이름도 받지 않습니다.</p>
   <div class="figs ans">
-    <figure><a href="../img/ans-board.webp" target="_blank"><img src="../img/ans-board.webp" width="1440" height="810" alt="칠판 강의 화면 오른쪽에 학생 답 패널이 열리고, 보는 중 3명과 고르기 답 막대가 보이는 모습" loading="lazy"></a><figcaption><b>칠판</b>질문 단계에 오면 알약이 뜨고, 누르면 오른쪽에 답이 모입니다. 위쪽에 보는 학생 수가 나옵니다.</figcaption></figure>
+    <figure><a href="../img/ans-board.webp" target="_blank"><img src="../img/ans-board.webp" width="1440" height="810" alt="라이브 슬라이드 오른쪽에 학생 답 패널이 열리고, 보는 중 3명과 고르기 답 막대가 보이는 모습" loading="lazy"></a><figcaption><b>칠판</b>질문 단계에 오면 알약이 뜨고, 누르면 오른쪽에 답이 모입니다. 위쪽에 보는 학생 수가 나옵니다.</figcaption></figure>
     <figure><a href="../img/ans-phone.webp" target="_blank"><img src="../img/ans-phone.webp" width="390" height="720" alt="학생 휴대폰 위쪽에 선생님 강의 화면이 작게 뜨고, 아래에 예측 질문과 숫자 입력 칸이 있는 모습" loading="lazy" style="max-height:480px;object-fit:contain;background:#f5f5f7"></a><figcaption><b>학생 휴대폰</b>위에는 선생님 화면, 아래에는 지금 단계의 질문이 뜹니다.</figcaption></figure>
   </div>
   <ol class="howto">
@@ -611,7 +611,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       <tr><td><b>질문 보내기</b></td><td>수업 내내 열려 있음</td><td>질문함 카드</td></tr>
     </tbody>
   </table></div>
-  <p>빈칸 미리 맞히기와 시뮬레이터 예측은 이 칠판 강의 화면의 「그림으로 먼저 보여 준 뒤 빈칸을 연다」 흐름에 학생 예측을 끼운 것입니다. 반 전체가 쓴 낱말이나 예측값을 함께 본 다음 정답을 열거나 시뮬레이터를 움직입니다.</p>
+  <p>빈칸 미리 맞히기와 시뮬레이터 예측은 이 라이브 슬라이드의 「그림으로 먼저 보여 준 뒤 빈칸을 연다」 흐름에 학생 예측을 끼운 것입니다. 반 전체가 쓴 낱말이나 예측값을 함께 본 다음 정답을 열거나 시뮬레이터를 움직입니다.</p>
   <p>그래프 예측은 빈칸이 없는 설명 화면에도 붙입니다. 반 학생들이 그린 선이 한 그래프에 겹쳐 나오므로, 「온도를 올려도 부피는 그대로」처럼 다르게 생각한 학생이 몇 명인지 바로 보입니다. 모아보기에는 학생마다 그린 그래프가 작은 그림으로 남고, CSV에는 원래 단위의 값 41개가 들어갑니다.</p>
   <div class="figs ans">
     <figure><a href="../img/ans-sketch.webp" target="_blank"><img src="../img/ans-sketch.webp" width="800" height="630" alt="칠판 패널에 학생 세 명이 그린 부피-온도 그래프가 파란 선으로 겹치고, 실제 그래프가 빨간 점선으로 얹힌 모습" loading="lazy"></a><figcaption><b>칠판</b>학생 선이 겹쳐 그려지고, 「실제 그래프와 견주기」로 실제 그래프를 얹습니다.</figcaption></figure>
@@ -700,11 +700,11 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 
   <h3>스킬로 묶기</h3>
   <p>스킬은 SKILL.md 파일이 든 폴더 하나입니다. 맨 위에 이름과 설명을 적고, 그 아래에 일하는 순서와 꼭 지킬 것을 적습니다.</p>
-  <div class="tree" aria-label="칠판 강의 화면 스킬 폴더의 짜임">
+  <div class="tree" aria-label="라이브 슬라이드 스킬 폴더의 짜임">
     <div class="tr"><code>lecture-board/</code><span>폴더 이름은 스킬 이름(name)과 같게, 영어 소문자와 하이픈으로</span></div>
     <div class="tr d1"><code>SKILL.md</code><span>맨 위 name · description, 그 아래 일하는 순서와 꼭 지킬 것</span></div>
     <div class="tr d1"><code>references/</code><span>길어서 따로 둔 규칙 (있을 때만)</span></div>
-    <div class="tr d2"><code>lecture-spec.md</code><span>칠판 강의 화면 설계서</span></div>
+    <div class="tr d2"><code>lecture-spec.md</code><span>라이브 슬라이드 설계서</span></div>
     <div class="tr d2"><code>subject-chemistry.md</code><span>화학 그림·정확성 규칙</span></div>
   </div>
   <p>제 스킬은 대부분 Claude와 대화하며 규칙을 정한 뒤, 그 규칙을 스킬로 묶어 달라고 해서 시작했습니다. 4~8에서 화면을 만들고 고친 대화에 아래 글을 이어서 보내면 됩니다.</p>
@@ -757,8 +757,8 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
   <p>대본을 같이 주는 까닭은 11월 8일 시험에서 대본 없이 학습지만 주었더니, 제가 수업에서 쓰는 비유와 문제 장면이 빠졌기 때문입니다. 학습지에 없는 정답을 AI가 짐작해서 채운 곳은 화면에도 (추측)이라고 표시하게 제 스킬에 적어 두었습니다.</p>
     <p>제가 쓰는 스킬을 받아 그대로 올려 쓰셔도 됩니다. 스킬 기능이 없는 AI용 프롬프트도 함께 두었습니다.</p>
   <div class="dl">
-    <a class="dlb" href="../files/lecture-board.zip" download><b>칠판 강의 화면 스킬</b><span>lecture-board.zip · 설계서, 과목별 규칙, 실험실·영상·3D 넣기 규칙</span></a>
-    <a class="dlb" href="../files/칠판강의_웹채팅판_프롬프트.txt" download><b>칠판 강의 웹채팅판 프롬프트</b><span>txt · 스킬 기능이 없는 AI용</span></a>
+    <a class="dlb" href="../files/lecture-board.zip" download><b>라이브 슬라이드 스킬</b><span>lecture-board.zip · 설계서, 과목별 규칙, 실험실·영상·3D 넣기 규칙</span></a>
+    <a class="dlb" href="../files/칠판강의_웹채팅판_프롬프트.txt" download><b>라이브 슬라이드 웹채팅판 프롬프트</b><span>txt · 스킬 기능이 없는 AI용</span></a>
     <a class="dlb" href="../files/handwritten-note-lecture.zip" download><b>손글씨 노트 강의 스킬</b><span>zip · 엔진, 예시, 글꼴 포함</span></a>
     <a class="dlb" href="../files/handwritten-note-request.zip" download><b>손글씨 노트 요청서판</b><span>zip · 스킬 기능이 없는 AI용</span></a>
   </div>
@@ -771,7 +771,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
       <tr><td><a href="https://github.com/anthropics/skills" target="_blank" rel="noopener">anthropics/skills</a></td><td>Anthropic이 올린 예시 스킬(Word·PDF·PPT·Excel 문서 만들기 등)과 새 스킬을 만들 때 쓰는 틀(template)</td></tr>
       <tr><td><a href="https://github.com/epoko77-ai/im-not-ai" target="_blank" rel="noopener">epoko77-ai/im-not-ai</a></td><td>AI가 쓴 한국어 글의 번역투·AI 말투를 고치는 스킬(MIT)</td></tr>
       <tr><td><a href="https://github.com/dotoridot/korean-humanizer" target="_blank" rel="noopener">dotoridot/korean-humanizer</a></td><td>한국어 AI 문장을 뜻은 그대로 두고 다듬는 스킬(MIT)</td></tr>
-      <tr><td><a href="https://github.com/scienceisjo/growing-teachers/tree/main/lecture-board-ai/files" target="_blank" rel="noopener">scienceisjo/growing-teachers</a></td><td>이 글에서 받는 칠판 강의 화면 스킬과 손글씨 노트 강의 스킬</td></tr>
+      <tr><td><a href="https://github.com/scienceisjo/growing-teachers/tree/main/lecture-board-ai/files" target="_blank" rel="noopener">scienceisjo/growing-teachers</a></td><td>이 글에서 받는 라이브 슬라이드 스킬과 손글씨 노트 강의 스킬</td></tr>
     </tbody>
   </table></div>
   <ol class="howto">
@@ -816,7 +816,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
   <!-- ═══ 14 ═══ -->
   <h2 id="dl"><span class="n">14</span>내려받기 모음</h2>
   <div class="dl">
-    <a class="dlb main" href="../files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>아래 프롬프트·점검표·재료 목록과 칠판 강의 스킬 (zip)</span></a>
+    <a class="dlb main" href="../files/칠판강의_3장판_꾸러미.zip" download><b>꾸러미 한 번에 받기</b><span>아래 프롬프트·점검표·재료 목록과 라이브 슬라이드 스킬 (zip)</span></a>
     <a class="dlb" href="../files/한차시_프롬프트_묻고만들기.txt" download><b>한 차시 프롬프트 · AI가 묻고 만드는 판</b><span>txt</span></a>
     <a class="dlb" href="../files/3장판_프롬프트_자료만_기본.txt" download><b>자료만 넣는 판 · 기본</b><span>txt</span></a>
     <a class="dlb" href="../files/3장판_프롬프트_자료만_손글씨.txt" download><b>자료만 넣는 판 · 손글씨</b><span>txt</span></a>
@@ -827,15 +827,15 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
     <a class="dlb" href="../files/SVG_과학그림_프롬프트.txt" download><b>과학 그림 SVG 프롬프트</b><span>txt</span></a>
     <a class="dlb" href="../files/비교_점검표.md" download><b>비교 점검표</b><span>md · 종이로 쓰실 때</span></a>
     <a class="dlb" href="../files/가져다쓸_재료_목록.md" download><b>가져다 쓸 재료 목록</b><span>md · PhET·GeoGebra·3D 주소</span></a>
-    <a class="dlb" href="../files/lecture-board.zip" download><b>칠판 강의 화면 스킬</b><span>zip</span></a>
+    <a class="dlb" href="../files/lecture-board.zip" download><b>라이브 슬라이드 스킬</b><span>zip</span></a>
     <a class="dlb" href="../files/handwritten-note-lecture.zip" download><b>손글씨 노트 강의 스킬</b><span>zip</span></a>
   </div>
 
   <h3>함께 보면 좋은 곳</h3>
   <div class="grid2">
-    <div class="box"><b><a href="../examples/">예시 모음</a></b><p>교과서 쪽으로 만든 칠판 강의 화면 24개를 학년·영역·모델·디자인으로 골라 봅니다.</p></div>
+    <div class="box"><b><a href="../examples/">예시 모음</a></b><p>교과서 쪽으로 만든 라이브 슬라이드 24개를 학년·영역·모델·디자인으로 골라 봅니다.</p></div>
     <div class="box"><b><a href="../../answers/demo.html">학생 답 모으기 시연</a></b><p>기체의 온도와 부피 화면에 질문 네 개를 넣은 시연입니다. 「학생 답」을 눌러 휴대폰으로 들어와 봅니다.</p></div>
-    <div class="box"><b><a href="../../boards/">칠판 강의 모음</a></b><p>제가 수업에 쓰는 칠판 강의 화면과 손글씨 노트 강의를 단원별로 모았습니다.</p></div>
+    <div class="box"><b><a href="../../boards/">칠판 강의 모음</a></b><p>제가 수업에 쓰는 라이브 슬라이드와 손글씨 노트 강의를 단원별로 모았습니다.</p></div>
     <div class="box"><b><a href="../../vibecoding/design.html">디자인 서랍</a></b><p>디자인 서랍판에 첨부할 DESIGN.md를 고르는 곳입니다.</p></div>
   </div>
 </article>
