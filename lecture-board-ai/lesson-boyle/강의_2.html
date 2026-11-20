@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기체의 압력과 부피 사이의 관계 · 강의 2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden}
+body{font-family:"Pretendard Variable",Pretendard,sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden}
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;background:var(--bg);color:var(--ink)}
+.scene.act{display:block}
+
+/* 글자 크기: 기본 디자인 */
+.tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}
+.tag{color:var(--ink2);font-weight:500;margin-bottom:10px}
+.title{font-weight:600;letter-spacing:-0.02em}
+.note{color:var(--ink2)}
+
+/* 면 색 */
+.s-black{--bg:#000000;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#1d1d1f;--chamber:#1d1d1f;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+.s-white{--bg:#ffffff;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#f5f5f7;--chamber:#f5f5f7;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-gray{--bg:#f5f5f7;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#ffffff;--chamber:#ffffff;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-dark{--bg:#1d1d1f;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#000000;--chamber:#000000;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+
+.hd{position:absolute;left:110px;top:70px;width:1700px}
+.lc{position:absolute;left:110px;top:340px;width:770px}
+.fig{position:absolute;left:920px;top:340px;width:920px;height:auto;overflow:visible}
+.cd{background:var(--card);border-radius:18px;padding:28px 36px}
+.cd .sent{margin-bottom:6px}
+.pg{position:absolute;left:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.nx{position:absolute;right:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.legend{position:absolute;left:110px;top:900px;font-size:26px;color:var(--ink2)}
+.cap{position:absolute;left:920px;font-size:26px;color:var(--ink2)}
+
+/* 단계별 나타나기 */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+.rv.on{opacity:1;transform:none}
+.svgrv{opacity:0;transition:opacity .4s ease}
+.svgrv.on{opacity:1}
+
+/* 빈칸 */
+.bk{display:inline-block;min-width:150px;border-bottom:4px solid var(--ink);margin:0 6px;padding:0 8px;line-height:1.3;white-space:nowrap;text-align:center}
+.bk b{display:inline-block;width:40px;height:40px;line-height:40px;border-radius:50%;background:var(--acc);color:#fff;font-size:24px;font-weight:700;text-align:center;vertical-align:middle;margin-right:8px}
+.bk .a{color:var(--acc);font-weight:600;vertical-align:middle;opacity:0;transition:opacity .4s ease}
+.bk .a.on{opacity:1}
+
+/* 표 */
+.tb{position:absolute;left:920px;top:340px;width:900px;background:var(--card);border-radius:18px;padding:20px 32px}
+.tr{display:grid;align-items:center;min-height:84px;border-bottom:2px solid var(--bg)}
+.tr:last-child{border-bottom:0}
+.tr.hr{min-height:56px}
+.tr.hr span{color:var(--ink2)}
+.t7{grid-template-columns:120px 150px 190px 1fr}
+.t8{grid-template-columns:200px 220px 1fr}
+.bar{height:28px;border-radius:6px;background:var(--piston)}
+.wide{position:absolute;left:110px;width:1700px}
+.t9{display:grid;grid-template-columns:300px repeat(4,1fr);align-items:center;min-height:100px;border-bottom:2px solid var(--bg)}
+.t9:last-child{border-bottom:0}
+.t9 .label{color:var(--ink2)}
+.btns{position:absolute;left:920px;top:830px;display:flex;gap:16px}
+.btns button{font-family:inherit;font-size:26px;padding:14px 30px;border:0;border-radius:18px;background:var(--card);color:var(--ink);cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 장면 6 · 추를 올리고 내리면 -->
+<section class="scene s-dark" data-n="4">
+  <div class="hd">
+    <div class="tag">실험</div>
+    <h1 class="title">추를 올리고 내리면</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent rv" data-s="1">추를 하나 올리면 피스톤이 내려갑니다.</p>
+      <p class="sent rv" data-s="2">하나 더 올리면 더 내려갑니다.</p>
+      <p class="sent rv" data-s="3">추를 내리면 다시 올라옵니다. 위아래의 힘이 같아지면 피스톤은 멈춥니다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f6" viewBox="0 -20 880 440"></svg>
+  <div class="btns"><button data-w="0">추 0개</button><button data-w="1">추 1개</button><button data-w="2">추 2개</button></div>
+  <div class="pg">6 / 16</div>
+</section>
+
+<!-- 장면 7 · 압력이 2배, 3배가 되면 -->
+<section class="scene s-white" data-n="6">
+  <div class="hd">
+    <div class="tag">실험 결과</div>
+    <h1 class="title">압력이 2배, 3배가 되면</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="3">
+      <p class="sent">일정한 양의 기체에 가하는 압력을 크게 하면 부피는 <span class="bk"><b>8</b><span class="a" data-s="4">작아진다</span></span>.</p>
+      <p class="sent">반대로 압력을 작게 하면 부피는 <span class="bk"><b>9</b><span class="a" data-s="5">커진다</span></span>.</p>
+    </div>
+  </div>
+  <div class="tb">
+    <div class="tr t7 hr"><span class="label">추</span><span class="label">압력</span><span class="label">부피</span><span></span></div>
+    <div class="tr t7 rv" data-s="0"><span class="sent">0개</span><span class="sent">1배</span><span class="sent">60 mL</span><span><div class="bar" style="width:360px"></div></span></div>
+    <div class="tr t7 rv" data-s="1"><span class="sent">1개</span><span class="sent">2배</span><span class="sent">30 mL</span><span><div class="bar" style="width:180px"></div></span></div>
+    <div class="tr t7 rv" data-s="2"><span class="sent">2개</span><span class="sent">3배</span><span class="sent">20 mL</span><span><div class="bar" style="width:120px"></div></span></div>
+  </div>
+  <div class="pg">7 / 16</div>
+</section>
+
+<!-- 장면 8 · 압력과 부피를 곱해 보면 -->
+<section class="scene s-gray" data-n="6">
+  <div class="hd">
+    <div class="tag">실험 결과</div>
+    <h1 class="title">압력과 부피를 곱해 보면</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="2">
+      <p class="sent">온도가 일정할 때 일정한 양의 기체의 압력과 부피를 <span class="bk"><b>10</b><span class="a" data-s="3">곱한</span></span> 값은 <span class="bk"><b>11</b><span class="a" data-s="4">일정하다</span></span>.</p>
+      <p class="sent rv" data-s="5">이 관계를 보일 법칙이라고 한다.</p>
+      <p class="sent rv" data-s="5" style="font-weight:600">압력 × 부피 = 일정</p>
+    </div>
+  </div>
+  <div class="tb">
+    <div class="tr t8 hr"><span class="label">압력 (배)</span><span class="label">부피 (mL)</span><span class="label rv" data-s="1">압력 × 부피</span></div>
+    <div class="tr t8"><span class="sent">1</span><span class="sent">60</span><span class="sent rv" data-s="1">60</span></div>
+    <div class="tr t8"><span class="sent">2</span><span class="sent">30</span><span class="sent rv" data-s="1">60</span></div>
+    <div class="tr t8"><span class="sent">3</span><span class="sent">20</span><span class="sent rv" data-s="1">60</span></div>
+  </div>
+  <div class="pg">8 / 16</div>
+</section>
+
+<!-- 장면 9 · 주사기 실험 결과 표 -->
+<section class="scene s-white" data-n="5">
+  <div class="hd">
+    <div class="tag">실험으로 확인하기</div>
+    <h1 class="title">주사기 실험 결과 표</h1>
+  </div>
+  <p class="sent wide" style="top:330px">끝을 막은 주사기에 공기 40 mL를 넣고 피스톤을 누르면서 압력과 부피를 측정했습니다(예시 결과).</p>
+  <div class="wide cd" style="top:520px;padding:16px 32px">
+    <div class="t9"><span class="label">압력 (기압)</span><span class="sent">1</span><span class="sent">2</span><span class="sent">4</span><span class="sent">5</span></div>
+    <div class="t9"><span class="label">부피 (mL)</span><span class="sent">40</span><span class="sent">20</span><span class="sent">10</span><span class="sent">8</span></div>
+    <div class="t9 rv" data-s="1"><span class="label">압력 × 부피</span><span class="sent">40</span>
+      <span class="sent"><span class="bk"><b>12</b><span class="a" data-s="2">40</span></span></span>
+      <span class="sent"><span class="bk"><b>13</b><span class="a" data-s="3">40</span></span></span>
+      <span class="sent"><span class="bk"><b>14</b><span class="a" data-s="4">40</span></span></span>
+    </div>
+  </div>
+  <div class="pg">9 / 16</div>
+</section>
+
+<!-- 장면 10 · 표에서 알아낸 것 -->
+<section class="scene s-dark" data-n="7">
+  <div class="hd">
+    <div class="tag">실험으로 확인하기</div>
+    <h1 class="title">표에서 알아낸 것</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="3">
+      <p class="sent">압력이 2배가 되면 부피는 <span class="bk"><b>15</b><span class="a" data-s="4">절반</span></span>이 되고,</p>
+      <p class="sent">압력이 4배가 되면 부피는 <span class="bk"><b>16</b><span class="a" data-s="5">4분의 1</span></span>이 된다.</p>
+      <p class="sent">압력과 부피를 곱한 값은 <span class="bk"><b>17</b><span class="a" data-s="6">일정</span></span>하다(보일 법칙).</p>
+    </div>
+  </div>
+  <svg class="fig" id="f10" viewBox="0 0 880 400"></svg>
+  <div class="pg">10 / 16</div>
+  <div class="nx">다음 파일: 강의_3.html</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function rng(seed){var s=seed;return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+function arrow(p,x1,y1,x2,y2,col,w,hs){
+  hs=hs||18;
+  var dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy),ux=dx/l,uy=dy/l;
+  var bx=x2-ux*hs,by=y2-uy*hs;
+  var g=E('g',{},p);
+  E('line',{x1:x1,y1:y1,x2:bx,y2:by,'stroke-width':w,style:'stroke:'+col},g);
+  E('polygon',{points:x2+','+y2+' '+(bx-uy*hs*0.55)+','+(by+ux*hs*0.55)+' '+(bx+uy*hs*0.55)+','+(by-ux*hs*0.55),style:'fill:'+col},g);
+  return g;
+}
+/* 길이를 바꿀 수 있는 화살표 */
+function mkArrow(p,col,w){
+  var g=E('g',{},p);
+  var ln=E('line',{'stroke-width':w,style:'stroke:'+col},g);
+  var hd=E('polygon',{style:'fill:'+col},g);
+  return {set:function(x1,y1,x2,y2){
+    var hs=16,dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy),ux=dx/len,uy=dy/len;
+    var bx=x2-ux*hs,by=y2-uy*hs;
+    ln.setAttribute('x1',x1);ln.setAttribute('y1',y1);ln.setAttribute('x2',bx);ln.setAttribute('y2',by);
+    hd.setAttribute('points',x2+','+y2+' '+(bx-uy*hs*0.55)+','+(by+ux*hs*0.55)+' '+(bx+uy*hs*0.55)+','+(by-ux*hs*0.55));
+  }};
+}
+
+/* 입자 시뮬레이션(가로 주사기): 입자 빠르기는 늘 같고, 벽에 닿으면 방향만 바뀐다 */
+function Sim(svg,o){
+  var m={svg:svg,o:o,parts:[],fl:[]};
+  var rnd=rng(o.seed||7), r=9, V=150, L=o.L, T=o.T, B=o.B;
+  m.px=o.px?o.px[0]:(o.auto?o.auto.mid:0);
+  m.tgt=m.px; m.t=0;
+  var syr=(o.mode!=='box');
+  var Rr0=o.fixedR||m.px;
+  m.chamber=E('rect',{x:L,y:T,width:Rr0-L,height:B-T,style:'fill:var(--chamber)'},svg);
+  if(syr){
+    E('rect',{x:100,y:90,width:540,height:220,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:62,y:180,width:38,height:40,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:38,y:170,width:24,height:60,rx:4,style:'fill:var(--piston)'},svg);
+  }else{
+    E('rect',{x:100,y:60,width:520,height:270,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+  }
+  m.pl=E('g',{},svg);
+  m.fg=E('g',{},svg);
+  for(var i=0;i<o.n;i++){
+    var ang=(20+rnd()*50)*Math.PI/180, sx=rnd()<0.5?-1:1, sy=rnd()<0.5?-1:1;
+    var p={x:L+r+rnd()*(Rr0-L-2*r),y:T+r+rnd()*(B-T-2*r),vx:sx*V*Math.cos(ang),vy:sy*V*Math.sin(ang)};
+    p.c=E('circle',{r:r,style:'fill:var(--part)'},m.pl);
+    if(o.arrows)p.a=E('path',{fill:'none','stroke-width':2.5,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--ink2)'},m.pl);
+    m.parts.push(p);
+  }
+  if(syr){
+    m.pg=E('g',{},svg);
+    E('rect',{x:0,y:96,width:28,height:208,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:28,y:185,width:150,height:30,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:178,y:130,width:20,height:140,rx:6,style:'fill:var(--piston)'},m.pg);
+  }
+  function flash(x,y){
+    if(!o.flash||m.fl.length>40)return;
+    var c=E('circle',{cx:x,cy:y,r:5,fill:'none','stroke-width':4,style:'stroke:var(--force)'},m.fg);
+    m.fl.push({c:c,b:performance.now()});
+  }
+  m.tick=function(dt){
+    if(o.auto){m.t+=dt;m.px=o.auto.mid+o.auto.amp*Math.sin(m.t*2*Math.PI/o.auto.period);}
+    else if(o.px){m.px+=(m.tgt-m.px)*(1-Math.exp(-dt*5));}
+    var R=o.fixedR||m.px;
+    m.chamber.setAttribute('width',R-L);
+    if(m.pg)m.pg.setAttribute('transform','translate('+m.px+' 0)');
+    for(var i=0;i<m.parts.length;i++){
+      var p=m.parts[i];
+      p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.x<L+r){p.x=L+r;p.vx=Math.abs(p.vx);flash(L,p.y);}
+      if(p.x>R-r){p.x=R-r;p.vx=-Math.abs(p.vx);flash(R,p.y);}
+      if(p.y<T+r){p.y=T+r;p.vy=Math.abs(p.vy);flash(p.x,T);}
+      if(p.y>B-r){p.y=B-r;p.vy=-Math.abs(p.vy);flash(p.x,B);}
+      p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);
+      if(p.a){
+        var ux=p.vx/V,uy=p.vy/V,s0=r+4,s1=r+34;
+        var ax=p.x+ux*s0,ay=p.y+uy*s0,tx=p.x+ux*s1,ty=p.y+uy*s1;
+        var bx=tx-ux*9,by=ty-uy*9;
+        p.a.setAttribute('d','M'+ax+' '+ay+' L'+tx+' '+ty+' M'+(bx-uy*5.5)+' '+(by+ux*5.5)+' L'+tx+' '+ty+' L'+(bx+uy*5.5)+' '+(by-ux*5.5));
+      }
+    }
+    var now=performance.now();
+    for(var j=m.fl.length-1;j>=0;j--){
+      var f=m.fl[j],age=(now-f.b)/420;
+      if(age>=1){m.fg.removeChild(f.c);m.fl.splice(j,1);}
+      else{f.c.setAttribute('r',5+16*age);f.c.setAttribute('opacity',1-age);}
+    }
+  };
+  m.setStep=function(st,snap){
+    if(o.px){m.tgt=o.px[Math.min(st,o.px.length-1)];if(snap)m.px=m.tgt;}
+  };
+  m.tick(0);
+  return m;
+}
+
+/* 세로 실린더 + 추 시뮬레이터
+   누르는 힘 = 바깥 공기 1 + 추 개수, 기체가 미는 힘 = 60 / 부피 (부피 60 mL일 때 1).
+   두 힘의 차이로 피스톤이 움직이고, 같아지면 멈춘다. */
+function VSim(svg,o){
+  var m={parts:[],fl:[],wt:0,wo:[0,0],lastV:-1};
+  var rnd=rng(o.seed||9), r=9, V=150, L=258, R=562, B=397, S=5, U=30;
+  m.vol=60;
+  m.prevT=B-300;
+  m.chamber=E('rect',{x:L,y:B-300,width:R-L,height:300,style:'fill:var(--chamber)'},svg);
+  E('path',{d:'M255 70 L255 400 L565 400 L565 70','stroke-width':6,fill:'none',style:'stroke:var(--ink)'},svg);
+  m.pl=E('g',{},svg);
+  m.fg=E('g',{},svg);
+  for(var i=0;i<o.n;i++){
+    var ang=(20+rnd()*50)*Math.PI/180, sx=rnd()<0.5?-1:1, sy=rnd()<0.5?-1:1;
+    var p={x:L+r+rnd()*(R-L-2*r),y:B-300+r+rnd()*(300-2*r),vx:sx*V*Math.cos(ang),vy:sy*V*Math.sin(ang)};
+    p.c=E('circle',{r:r,style:'fill:var(--part)'},m.pl);
+    m.parts.push(p);
+  }
+  m.pg=E('g',{},svg);
+  E('rect',{x:L,y:-20,width:R-L,height:20,style:'fill:var(--piston)'},m.pg);
+  m.wg=[];
+  for(var k=0;k<2;k++){
+    var g=E('g',{},m.pg);
+    E('rect',{x:360,y:-20-36*(k+1),width:100,height:36,rx:4,style:'fill:var(--ink2)'},g);
+    var tx=E('text',{x:410,y:-20-36*k-9,'text-anchor':'middle',class:'label',style:'fill:var(--bg);font-weight:600'},g);
+    tx.textContent='추';
+    g.style.opacity=0;
+    m.wg.push(g);
+  }
+  var AX=[290,530];
+  m.ad=[mkArrow(m.pg,'var(--force)',9),mkArrow(m.pg,'var(--force)',9)];
+  m.au=[mkArrow(m.pg,'var(--force)',9),mkArrow(m.pg,'var(--force)',9)];
+  var t1=E('text',{x:244,y:-58,'text-anchor':'end',class:'label',style:'fill:var(--force);font-weight:600'},m.pg);t1.textContent='누르는 힘';
+  var t2=E('text',{x:244,y:-28,'text-anchor':'end',class:'label',style:'fill:var(--force);font-weight:600'},m.pg);t2.textContent='(바깥 공기 + 추)';
+  var t3=E('text',{x:244,y:52,'text-anchor':'end',class:'label',style:'fill:var(--force);font-weight:600'},m.pg);t3.textContent='기체가 미는 힘';
+  m.rd1=E('text',{x:590,y:175,class:'sent',style:'fill:var(--ink)'},svg);
+  m.rd2=E('text',{x:590,y:235,class:'sent',style:'fill:var(--ink)'},svg);
+  function flash(x,y){
+    if(m.fl.length>40)return;
+    var c=E('circle',{cx:x,cy:y,r:5,fill:'none','stroke-width':4,style:'stroke:var(--force)'},m.fg);
+    m.fl.push({c:c,b:performance.now()});
+  }
+  m.setW=function(k,snap){
+    m.wt=k;
+    if(snap){m.vol=60/(1+k);m.wo[0]=k>0?1:0;m.wo[1]=k>1?1:0;}
+    m.rd1.textContent='압력 '+(1+k)+'배';
+  };
+  m.setStep=function(st,snap){m.setW(o.w[Math.min(st,o.w.length-1)],snap);};
+  m.tick=function(dt){
+    var P=1+m.wt,h=dt/5,s;
+    for(s=0;s<5&&dt>0;s++){
+      var d=60/m.vol-P;
+      if(Math.abs(d)<0.004)m.vol=60/P;else m.vol+=70*d*h;
+      m.vol=Math.max(12,Math.min(75,m.vol));
+    }
+    var T=B-m.vol*S,Hold=B-m.prevT,Hnew=B-T,i;
+    /* 부피가 바뀔 때 입자의 세로 위치를 같은 비율로 옮겨 고르게 퍼진 모양을 지킨다 */
+    if(Math.abs(Hnew-Hold)>1e-6){
+      for(i=0;i<m.parts.length;i++){
+        var q=m.parts[i],u=(q.y-m.prevT-r)/(Hold-2*r);
+        q.y=T+r+u*(Hnew-2*r);
+      }
+    }
+    m.prevT=T;
+    m.chamber.setAttribute('y',T);m.chamber.setAttribute('height',B-T);
+    m.pg.setAttribute('transform','translate(0 '+T+')');
+    for(var k=0;k<2;k++){
+      var tg=(P-1>k)?1:0;
+      m.wo[k]+=(tg-m.wo[k])*(1-Math.exp(-dt*12));
+      m.wg[k].style.opacity=m.wo[k];
+    }
+    var lenD=U*P,lenU=U*(60/m.vol);
+    for(k=0;k<2;k++){
+      m.ad[k].set(AX[k],-26-lenD,AX[k],-26);
+      m.au[k].set(AX[k],8+lenU,AX[k],8);
+    }
+    var vi=Math.round(m.vol);
+    if(vi!==m.lastV){m.lastV=vi;m.rd2.textContent='부피 '+vi+' mL';}
+    for(i=0;i<m.parts.length;i++){
+      var p=m.parts[i];
+      p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.x<L+r){p.x=L+r;p.vx=Math.abs(p.vx);flash(L,p.y);}
+      if(p.x>R-r){p.x=R-r;p.vx=-Math.abs(p.vx);flash(R,p.y);}
+      if(p.y<T+r){p.y=T+r;p.vy=Math.abs(p.vy);flash(p.x,T);}
+      if(p.y>B-r){p.y=B-r;p.vy=-Math.abs(p.vy);flash(p.x,B);}
+      p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);
+    }
+    var now=performance.now();
+    for(var j=m.fl.length-1;j>=0;j--){
+      var f=m.fl[j],age=(now-f.b)/420;
+      if(age>=1){m.fg.removeChild(f.c);m.fl.splice(j,1);}
+      else{f.c.setAttribute('r',5+16*age);f.c.setAttribute('opacity',1-age);}
+    }
+  };
+  m.setW(o.w[0],true);
+  m.tick(0);
+  return m;
+}
+
+var scenes=[].slice.call(document.querySelectorAll('.scene'));
+var N=scenes.map(function(s){return +s.getAttribute('data-n');});
+var si=0,st=0;
+
+/* 장면 6: 추 시뮬레이터 (추 0개 60 mL, 1개 30 mL, 2개 20 mL) */
+var m6=VSim(document.getElementById('f6'),{n:8,seed:13,w:[0,1,2,0]});
+scenes[0]._sims=[m6];
+[].forEach.call(document.querySelectorAll('.btns button'),function(b){
+  b.setAttribute('tabindex','-1');
+  b.addEventListener('click',function(e){
+    e.stopPropagation();
+    m6.setW(+b.getAttribute('data-w'),false);
+    b.blur();
+  });
+});
+
+/* 장면 7~9: 표만 있는 장면 */
+scenes[1]._sims=[];
+scenes[2]._sims=[];
+scenes[3]._sims=[];
+
+/* 장면 10: 압력 1, 2, 4기압일 때 피스톤 위치 (40, 20, 10 mL) */
+var f10=document.getElementById('f10');
+var m10=Sim(f10,{n:8,seed:57,L:106,T:96,B:304,px:[546,326,216,216]});
+(function(){
+  var a=E('text',{x:440,y:50,'text-anchor':'middle',class:'label svgrv','data-s':'0','data-e':'1',style:'fill:var(--ink);font-weight:600'},f10);a.textContent='1기압 · 40 mL';
+  var b=E('text',{x:440,y:50,'text-anchor':'middle',class:'label svgrv','data-s':'1','data-e':'2',style:'fill:var(--ink);font-weight:600'},f10);b.textContent='2기압 · 20 mL';
+  var c=E('text',{x:440,y:50,'text-anchor':'middle',class:'label svgrv','data-s':'2',style:'fill:var(--ink);font-weight:600'},f10);c.textContent='4기압 · 10 mL';
+})();
+scenes[4]._sims=[m10];
+
+var stage=document.getElementById('stage');
+function fit(){var k=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform='translate(-50%,-50%) scale('+k+')';}
+window.addEventListener('resize',fit);fit();
+
+function apply(snap){
+  var sc=scenes[si];
+  var els=sc.querySelectorAll('[data-s]');
+  for(var i=0;i<els.length;i++){
+    var e=els[i],s=+e.getAttribute('data-s'),en=e.hasAttribute('data-e')?+e.getAttribute('data-e'):1e9;
+    var on=(st>=s&&st<en);
+    if(on)e.classList.add('on');else e.classList.remove('on');
+  }
+  sc._sims.forEach(function(m){m.setStep(st,snap);});
+}
+function show(){
+  scenes.forEach(function(s,i){s.classList.toggle('act',i===si);});
+  apply(true);
+}
+function next(){
+  if(st<N[si]-1){st++;apply(false);}
+  else if(si<scenes.length-1){si++;st=0;show();}
+  else{location.href='강의_3.html';}
+}
+function prev(){
+  if(st>0){st--;apply(false);}
+  else if(si>0){si--;st=N[si]-1;show();}
+  else{location.href='강의_1.html#end';}
+}
+document.addEventListener('click',next);
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+});
+
+if(location.hash==='#end'){si=scenes.length-1;st=N[si]-1;}
+show();
+
+var last=performance.now();
+function loop(now){
+  var dt=Math.min(0.05,(now-last)/1000);last=now;
+  scenes[si]._sims.forEach(function(m){m.tick(dt);});
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

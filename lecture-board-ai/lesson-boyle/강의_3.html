@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기체의 압력과 부피 사이의 관계 · 강의 3</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden}
+body{font-family:"Pretendard Variable",Pretendard,sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden}
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;background:var(--bg);color:var(--ink)}
+.scene.act{display:block}
+
+/* 글자 크기: 기본 디자인 */
+.tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}
+.tag{color:var(--ink2);font-weight:500;margin-bottom:10px}
+.title{font-weight:600;letter-spacing:-0.02em}
+.note{color:var(--ink2)}
+
+/* 면 색 */
+.s-black{--bg:#000000;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#1d1d1f;--chamber:#1d1d1f;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+.s-white{--bg:#ffffff;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#f5f5f7;--chamber:#f5f5f7;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-gray{--bg:#f5f5f7;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#ffffff;--chamber:#ffffff;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-dark{--bg:#1d1d1f;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#000000;--chamber:#000000;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+
+.hd{position:absolute;left:110px;top:70px;width:1700px}
+.lc{position:absolute;left:110px;top:340px;width:770px}
+.fig{position:absolute;left:920px;top:340px;width:920px;height:auto;overflow:visible}
+.cd{background:var(--card);border-radius:18px;padding:28px 36px}
+.cd .sent{margin-bottom:6px}
+.pg{position:absolute;left:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.nx{position:absolute;right:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.legend{position:absolute;left:110px;top:900px;font-size:26px;color:var(--ink2)}
+.cap{position:absolute;left:920px;font-size:26px;color:var(--ink2)}
+
+/* 단계별 나타나기 */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+.rv.on{opacity:1;transform:none}
+.svgrv{opacity:0;transition:opacity .4s ease}
+.svgrv.on{opacity:1}
+
+/* 빈칸 */
+.bk{display:inline-block;min-width:150px;border-bottom:4px solid var(--ink);margin:0 6px;padding:0 8px;line-height:1.3;white-space:nowrap;text-align:center}
+.bk b{display:inline-block;width:40px;height:40px;line-height:40px;border-radius:50%;background:var(--acc);color:#fff;font-size:24px;font-weight:700;text-align:center;vertical-align:middle;margin-right:8px}
+.bk .a{color:var(--acc);font-weight:600;vertical-align:middle;opacity:0;transition:opacity .4s ease}
+.bk .a.on{opacity:1}
+
+/* 그래프와 장면 그림 */
+.draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.4s ease}
+.draw.on{stroke-dashoffset:0}
+.bagw{transform:translate(150px,360px);transition:transform 1.4s ease}
+.bagz{transition:transform 1.4s ease}
+.clim.on .bagw{transform:translate(470px,110px)}
+.clim.on .bagz{transform:scale(1.45)}
+.dvw{transform:translate(440px,150px);transition:transform 1.4s ease}
+.dvz{transition:transform 1.4s ease}
+.dive.on .dvw{transform:translate(440px,320px)}
+.dive.on .dvz{transform:scale(0.65)}
+.blw{transform:translate(200px,300px);transition:transform 1.6s ease}
+.blz{transition:transform 1.6s ease}
+.fly.on .blw{transform:translate(640px,130px)}
+.fly.on .blz{transform:scale(1.5)}
+
+/* 정답 모아 보기 */
+.ov{position:absolute;left:0;top:300px;width:1920px;height:700px;background:var(--bg);padding:20px 110px}
+.ov .gd{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.gi{background:var(--card);border-radius:18px;padding:14px 20px;display:flex;gap:14px;color:var(--ink2)}
+.gi .ac{color:var(--acc);font-weight:600}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 장면 11 · 그래프로 그리면 -->
+<section class="scene s-white" data-n="6">
+  <div class="hd">
+    <div class="tag">실험으로 확인하기</div>
+    <h1 class="title">그래프로 그리면</h1>
+  </div>
+  <div class="lc">
+    <p class="note" style="margin-bottom:18px">가로축은 한 칸에 1기압, 세로축은 한 칸에 5 mL</p>
+    <div class="cd rv" data-s="3">
+      <p class="sent">그래프는 직선이 아니라 오른쪽 아래로 휘어지는 <span class="bk"><b>18</b><span class="a" data-s="4">곡선</span></span>이다.</p>
+      <p class="sent">부피는 0이 되지 않으므로 곡선은 가로축에 <span class="bk"><b>19</b><span class="a" data-s="5">닿지 않는다</span></span>.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f11" viewBox="0 0 880 440"></svg>
+  <div class="pg">11 / 16</div>
+</section>
+
+<!-- 장면 12 · 높은 산에 올라간 과자 봉지 -->
+<section class="scene s-gray" data-n="5">
+  <div class="hd">
+    <div class="tag">생활 속 압력과 부피의 관계</div>
+    <h1 class="title">높은 산에 올라간 과자 봉지</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="2">
+      <p class="sent">높은 산에 올라가면 봉지에 작용하는 압력은 <span class="bk"><b>20</b><span class="a" data-s="3">낮아진다</span></span>, 봉지 속 기체의 부피는 <span class="bk"><b>21</b><span class="a" data-s="4">커진다</span></span>.</p>
+      <p class="note">기체의 온도는 변하지 않는다고 봅니다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f12" viewBox="0 0 880 440">
+    <g id="sk12"></g>
+    <polygon points="300,400 640,90 880,400" style="fill:var(--piston)"/>
+    <line x1="0" y1="400" x2="880" y2="400" stroke-width="4" style="stroke:var(--ink)"/>
+    <g class="clim" data-s="1"><g class="bagw"><g class="bagz">
+      <path d="M-60,-10 Q-60,-40 -30,-40 L30,-40 Q60,-40 60,-10 L60,10 Q60,40 30,40 L-30,40 Q-60,40 -60,10 Z" stroke-width="4" style="fill:var(--card);stroke:var(--ink)"/>
+      <circle cx="-30" cy="-10" r="6" style="fill:var(--part)"/><circle cx="0" cy="12" r="6" style="fill:var(--part)"/><circle cx="25" cy="-14" r="6" style="fill:var(--part)"/><circle cx="-15" cy="18" r="6" style="fill:var(--part)"/><circle cx="30" cy="10" r="6" style="fill:var(--part)"/>
+    </g></g></g>
+  </svg>
+  <div class="legend"><span style="color:var(--part)">●</span> 초록 점 : 공기 입자</div>
+  <div class="pg">12 / 16</div>
+</section>
+
+<!-- 장면 13 · 물속 깊이 내려간 공기 방울 -->
+<section class="scene s-dark" data-n="5">
+  <div class="hd">
+    <div class="tag">생활 속 압력과 부피의 관계</div>
+    <h1 class="title">물속 깊이 내려간 공기 방울</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="2">
+      <p class="sent">물속 깊이 내려가면 공기 방울에 작용하는 압력은 <span class="bk"><b>22</b><span class="a" data-s="3">높아진다</span></span>, 방울의 부피는 <span class="bk"><b>23</b><span class="a" data-s="4">작아진다</span></span>.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f13" viewBox="0 0 880 440">
+    <rect x="0" y="70" width="880" height="370" style="fill:var(--card)"/>
+    <path d="M0 70 Q55 55 110 70 T220 70 T330 70 T440 70 T550 70 T660 70 T770 70 T880 70" fill="none" stroke-width="4" style="stroke:var(--ink2)"/>
+    <text x="24" y="52" class="label" style="fill:var(--ink2)">수면</text>
+    <line x1="830" y1="100" x2="830" y2="408" stroke-width="4" style="stroke:var(--ink2)"/>
+    <polygon points="830,428 818,404 842,404" style="fill:var(--ink2)"/>
+    <text x="806" y="116" text-anchor="end" class="label" style="fill:var(--ink2)">깊이</text>
+    <g class="dive" data-s="1"><g class="dvw" id="dvw"><g class="dvz">
+      <circle r="60" stroke-width="4" style="fill:var(--bg);stroke:var(--ink)"/>
+      <circle cx="-25" cy="-15" r="6" style="fill:var(--part)"/><circle cx="10" cy="-25" r="6" style="fill:var(--part)"/><circle cx="25" cy="10" r="6" style="fill:var(--part)"/><circle cx="-8" cy="22" r="6" style="fill:var(--part)"/><circle cx="-30" cy="20" r="6" style="fill:var(--part)"/>
+    </g></g></g>
+  </svg>
+  <div class="pg">13 / 16</div>
+</section>
+
+<!-- 장면 14 · 끝을 막고 피스톤을 누른 주사기 -->
+<section class="scene s-white" data-n="5">
+  <div class="hd">
+    <div class="tag">생활 속 압력과 부피의 관계</div>
+    <h1 class="title">끝을 막고 피스톤을 누른 주사기</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="2">
+      <p class="sent">끝을 막고 피스톤을 누르면 주사기 속 기체에 작용하는 압력은 <span class="bk"><b>24</b><span class="a" data-s="3">높아진다</span></span>, 기체의 부피는 <span class="bk"><b>25</b><span class="a" data-s="4">작아진다</span></span>.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f14" viewBox="0 0 880 400"></svg>
+  <div class="pg">14 / 16</div>
+</section>
+
+<!-- 장면 15 · 하늘 높이 올라간 풍선 -->
+<section class="scene s-black" data-n="5">
+  <div class="hd">
+    <div class="tag">생활 속 압력과 부피의 관계</div>
+    <h1 class="title">하늘 높이 올라간 풍선</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="2">
+      <p class="sent">하늘 높이 올라가면 풍선에 작용하는 압력은 <span class="bk"><b>26</b><span class="a" data-s="3">낮아진다</span></span>, 풍선의 부피는 <span class="bk"><b>27</b><span class="a" data-s="4">커진다</span></span>.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f15" viewBox="0 0 880 440">
+    <g id="sk15"></g>
+    <line x1="0" y1="400" x2="880" y2="400" stroke-width="4" style="stroke:var(--ink2)"/>
+    <g class="fly" data-s="1"><g class="blw"><g class="blz">
+      <path d="M0 70 C-8 90 8 110 0 130" fill="none" stroke-width="3" style="stroke:var(--ink2)"/>
+      <polygon points="-8,68 8,68 0,56" style="fill:var(--ink)"/>
+      <ellipse cx="0" cy="0" rx="48" ry="60" stroke-width="4" style="fill:var(--card);stroke:var(--ink)"/>
+      <circle cx="-20" cy="-18" r="6" style="fill:var(--part)"/><circle cx="12" cy="-28" r="6" style="fill:var(--part)"/><circle cx="22" cy="8" r="6" style="fill:var(--part)"/><circle cx="-6" cy="22" r="6" style="fill:var(--part)"/><circle cx="-22" cy="20" r="6" style="fill:var(--part)"/>
+    </g></g></g>
+  </svg>
+  <div class="legend"><span style="color:var(--part)">●</span> 초록 점 : 공기 입자</div>
+  <div class="pg">15 / 16</div>
+</section>
+
+<!-- 장면 16 · 정리 -->
+<section class="scene s-gray" data-n="5">
+  <div class="hd">
+    <div class="tag">정리</div>
+    <h1 class="title">피스톤을 누르면 왜 압력이 커질까?</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent rv" data-s="1">온도가 일정할 때 주사기의 피스톤을 누르면 기체의 압력은 커진다.</p>
+      <p class="sent rv" data-s="2">왜냐하면 부피가 줄어 입자 사이의 거리가 가까워지고,</p>
+      <p class="sent rv" data-s="3">입자가 벽에 부딪히는 횟수가 늘어나기 때문이다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f16" viewBox="0 0 880 400"></svg>
+  <div class="ov rv" data-s="4">
+    <div class="tag">빈칸 정답 모아 보기</div>
+    <div class="gd">
+      <div class="gi label"><span>①</span><span class="ac">충돌</span></div>
+      <div class="gi label"><span>②</span><span class="ac">횟수</span></div>
+      <div class="gi label"><span>③</span><span class="ac">방향</span></div>
+      <div class="gi label"><span>④</span><span class="ac">수</span></div>
+      <div class="gi label"><span>⑤</span><span class="ac">크기</span></div>
+      <div class="gi label"><span>⑥</span><span class="ac">빠르기</span></div>
+      <div class="gi label"><span>⑦</span><span class="ac">온도</span></div>
+      <div class="gi label"><span>⑧</span><span class="ac">작아진다</span></div>
+      <div class="gi label"><span>⑨</span><span class="ac">커진다</span></div>
+      <div class="gi label"><span>⑩</span><span class="ac">곱한</span></div>
+      <div class="gi label"><span>⑪</span><span class="ac">일정하다</span></div>
+      <div class="gi label"><span>⑫</span><span class="ac">40</span></div>
+      <div class="gi label"><span>⑬</span><span class="ac">40</span></div>
+      <div class="gi label"><span>⑭</span><span class="ac">40</span></div>
+      <div class="gi label"><span>⑮</span><span class="ac">절반</span></div>
+      <div class="gi label"><span>⑯</span><span class="ac">4분의 1</span></div>
+      <div class="gi label"><span>⑰</span><span class="ac">일정</span></div>
+      <div class="gi label"><span>⑱</span><span class="ac">곡선</span></div>
+      <div class="gi label"><span>⑲</span><span class="ac">닿지 않는다</span></div>
+      <div class="gi label"><span>⑳</span><span class="ac">낮아진다</span></div>
+      <div class="gi label"><span>㉑</span><span class="ac">커진다</span></div>
+      <div class="gi label"><span>㉒</span><span class="ac">높아진다</span></div>
+      <div class="gi label"><span>㉓</span><span class="ac">작아진다</span></div>
+      <div class="gi label"><span>㉔</span><span class="ac">높아진다</span></div>
+      <div class="gi label"><span>㉕</span><span class="ac">작아진다</span></div>
+      <div class="gi label"><span>㉖</span><span class="ac">낮아진다</span></div>
+      <div class="gi label"><span>㉗</span><span class="ac">커진다</span></div>
+    </div>
+  </div>
+  <div class="pg">16 / 16</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function rng(seed){var s=seed;return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+function arrow(p,x1,y1,x2,y2,col,w,hs){
+  hs=hs||18;
+  var dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy),ux=dx/l,uy=dy/l;
+  var bx=x2-ux*hs,by=y2-uy*hs;
+  var g=E('g',{},p);
+  E('line',{x1:x1,y1:y1,x2:bx,y2:by,'stroke-width':w,style:'stroke:'+col},g);
+  E('polygon',{points:x2+','+y2+' '+(bx-uy*hs*0.55)+','+(by+ux*hs*0.55)+' '+(bx+uy*hs*0.55)+','+(by-ux*hs*0.55),style:'fill:'+col},g);
+  return g;
+}
+
+/* 입자 시뮬레이션(가로 주사기): 입자 빠르기는 늘 같고, 벽에 닿으면 방향만 바뀐다 */
+function Sim(svg,o){
+  var m={svg:svg,o:o,parts:[],fl:[]};
+  var rnd=rng(o.seed||7), r=9, V=150, L=o.L, T=o.T, B=o.B;
+  m.px=o.px?o.px[0]:(o.auto?o.auto.mid:0);
+  m.tgt=m.px; m.t=0;
+  var syr=(o.mode!=='box');
+  var Rr0=o.fixedR||m.px;
+  m.chamber=E('rect',{x:L,y:T,width:Rr0-L,height:B-T,style:'fill:var(--chamber)'},svg);
+  if(syr){
+    E('rect',{x:100,y:90,width:540,height:220,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:62,y:180,width:38,height:40,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:38,y:170,width:24,height:60,rx:4,style:'fill:var(--piston)'},svg);
+  }else{
+    E('rect',{x:100,y:60,width:520,height:270,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+  }
+  m.pl=E('g',{},svg);
+  m.fg=E('g',{},svg);
+  for(var i=0;i<o.n;i++){
+    var ang=(20+rnd()*50)*Math.PI/180, sx=rnd()<0.5?-1:1, sy=rnd()<0.5?-1:1;
+    var p={x:L+r+rnd()*(Rr0-L-2*r),y:T+r+rnd()*(B-T-2*r),vx:sx*V*Math.cos(ang),vy:sy*V*Math.sin(ang)};
+    p.c=E('circle',{r:r,style:'fill:var(--part)'},m.pl);
+    if(o.arrows)p.a=E('path',{fill:'none','stroke-width':2.5,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--ink2)'},m.pl);
+    m.parts.push(p);
+  }
+  if(syr){
+    m.pg=E('g',{},svg);
+    E('rect',{x:0,y:96,width:28,height:208,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:28,y:185,width:150,height:30,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:178,y:130,width:20,height:140,rx:6,style:'fill:var(--piston)'},m.pg);
+  }
+  function flash(x,y){
+    if(!o.flash||m.fl.length>40)return;
+    var c=E('circle',{cx:x,cy:y,r:5,fill:'none','stroke-width':4,style:'stroke:var(--force)'},m.fg);
+    m.fl.push({c:c,b:performance.now()});
+  }
+  m.tick=function(dt){
+    if(o.auto){m.t+=dt;m.px=o.auto.mid+o.auto.amp*Math.sin(m.t*2*Math.PI/o.auto.period);}
+    else if(o.px){m.px+=(m.tgt-m.px)*(1-Math.exp(-dt*5));}
+    var R=o.fixedR||m.px;
+    m.chamber.setAttribute('width',R-L);
+    if(m.pg)m.pg.setAttribute('transform','translate('+m.px+' 0)');
+    for(var i=0;i<m.parts.length;i++){
+      var p=m.parts[i];
+      p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.x<L+r){p.x=L+r;p.vx=Math.abs(p.vx);flash(L,p.y);}
+      if(p.x>R-r){p.x=R-r;p.vx=-Math.abs(p.vx);flash(R,p.y);}
+      if(p.y<T+r){p.y=T+r;p.vy=Math.abs(p.vy);flash(p.x,T);}
+      if(p.y>B-r){p.y=B-r;p.vy=-Math.abs(p.vy);flash(p.x,B);}
+      p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);
+      if(p.a){
+        var ux=p.vx/V,uy=p.vy/V,s0=r+4,s1=r+34;
+        var ax=p.x+ux*s0,ay=p.y+uy*s0,tx=p.x+ux*s1,ty=p.y+uy*s1;
+        var bx=tx-ux*9,by=ty-uy*9;
+        p.a.setAttribute('d','M'+ax+' '+ay+' L'+tx+' '+ty+' M'+(bx-uy*5.5)+' '+(by+ux*5.5)+' L'+tx+' '+ty+' L'+(bx+uy*5.5)+' '+(by-ux*5.5));
+      }
+    }
+    var now=performance.now();
+    for(var j=m.fl.length-1;j>=0;j--){
+      var f=m.fl[j],age=(now-f.b)/420;
+      if(age>=1){m.fg.removeChild(f.c);m.fl.splice(j,1);}
+      else{f.c.setAttribute('r',5+16*age);f.c.setAttribute('opacity',1-age);}
+    }
+  };
+  m.setStep=function(st,snap){
+    if(o.px){m.tgt=o.px[Math.min(st,o.px.length-1)];if(snap)m.px=m.tgt;}
+  };
+  m.tick(0);
+  return m;
+}
+
+/* 공기 입자 점: 위로 갈수록 드물게 */
+function sky(g,seed,topFn){
+  var R=rng(seed),n=0,tries=0;
+  while(n<90&&tries<5000){
+    tries++;
+    var x=20+R()*840,y=14+R()*372;
+    var pr=Math.pow((y-10)/376,1.7);
+    if(R()>pr)continue;
+    if(topFn&&y>topFn(x)-14)continue;
+    E('circle',{cx:x,cy:y,r:4.5,style:'fill:var(--part);opacity:.75'},g);
+    n++;
+  }
+}
+
+var scenes=[].slice.call(document.querySelectorAll('.scene'));
+var N=scenes.map(function(s){return +s.getAttribute('data-n');});
+var si=0,st=0;
+
+/* 장면 11: 압력-부피 그래프 */
+(function(){
+  var g=document.getElementById('f11'),ox=90,oy=370,sx=110,sy=7.5,p,v;
+  function X(q){return ox+sx*q;}
+  function Y(w){return oy-sy*w;}
+  for(p=1;p<=6;p++)E('line',{x1:X(p),y1:Y(45),x2:X(p),y2:oy,'stroke-width':1.5,style:'stroke:var(--piston);opacity:.5'},g);
+  for(v=5;v<=45;v+=5)E('line',{x1:ox,y1:Y(v),x2:X(6),y2:Y(v),'stroke-width':1.5,style:'stroke:var(--piston);opacity:.5'},g);
+  E('line',{x1:ox,y1:Y(47),x2:ox,y2:oy,'stroke-width':3,style:'stroke:var(--ink)'},g);
+  E('line',{x1:ox,y1:oy,x2:X(6)+10,y2:oy,'stroke-width':3,style:'stroke:var(--ink)'},g);
+  for(p=1;p<=6;p++){var tx=E('text',{x:X(p),y:402,'text-anchor':'middle',class:'label',style:'fill:var(--ink2)'},g);tx.textContent=p;}
+  for(v=5;v<=45;v+=5){var ty=E('text',{x:ox-12,y:Y(v)+9,'text-anchor':'end',class:'label',style:'fill:var(--ink2)'},g);ty.textContent=v;}
+  var ax=E('text',{x:870,y:434,'text-anchor':'end',class:'label',style:'fill:var(--ink)'},g);ax.textContent='압력 (기압)';
+  var ay=E('text',{x:20,y:20,class:'label',style:'fill:var(--ink)'},g);ay.textContent='부피 (mL)';
+  var d='';
+  for(var i=0;i<=60;i++){var q=1+i*5/60;d+=(i?'L':'M')+X(q)+' '+Y(40/q)+' ';}
+  E('path',{d:d,pathLength:1,class:'draw','data-s':'2',fill:'none','stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--ink)'},g);
+  var pts=E('g',{class:'svgrv','data-s':'1'},g);
+  [[1,40],[2,20],[4,10],[5,8]].forEach(function(a){E('circle',{cx:X(a[0]),cy:Y(a[1]),r:9,style:'fill:var(--ink)'},pts);});
+  var gap=E('g',{class:'svgrv','data-s':'5'},g);
+  E('line',{x1:X(6),y1:Y(40/6)+8,x2:X(6),y2:oy-4,'stroke-width':3,'stroke-dasharray':'6 6',style:'stroke:var(--ink2)'},gap);
+  E('line',{x1:X(6)-10,y1:Y(40/6)+8,x2:X(6)+10,y2:Y(40/6)+8,'stroke-width':3,style:'stroke:var(--ink2)'},gap);
+  E('line',{x1:X(6)-10,y1:oy-4,x2:X(6)+10,y2:oy-4,'stroke-width':3,style:'stroke:var(--ink2)'},gap);
+})();
+scenes[0]._sims=[];
+
+/* 장면 12: 높은 산 */
+sky(document.getElementById('sk12'),21,function(x){
+  if(x<=300)return 400;
+  if(x<=640)return 400-(x-300)*(310/340);
+  return Math.min(400,90+(x-640)*(310/240));
+});
+scenes[1]._sims=[];
+
+/* 장면 13: 물속 공기 방울, 짧은 화살표에서 긴 화살표로 */
+(function(){
+  var w=document.getElementById('dvw'),a=E('g',{class:'svgrv','data-s':'0','data-e':'1'},w),b=E('g',{class:'svgrv','data-s':'1'},w);
+  for(var k=0;k<8;k++){
+    var c=Math.cos(k*Math.PI/4),s=Math.sin(k*Math.PI/4);
+    arrow(a,96*c,96*s,66*c,66*s,'var(--force)',6,14);
+    arrow(b,101*c,101*s,46*c,46*s,'var(--force)',6,14);
+  }
+})();
+scenes[2]._sims=[];
+
+/* 장면 14: 피스톤을 누른 주사기 */
+var f14=document.getElementById('f14');
+var m14=Sim(f14,{n:8,seed:67,flash:true,L:106,T:96,B:304,px:[520,300,300,300,300]});
+(function(){
+  var g1=arrow(m14.pg,262,200,202,200,'var(--force)',9);g1.setAttribute('class','svgrv');g1.setAttribute('data-s','1');
+  var t1=E('text',{x:250,y:160,'text-anchor':'middle',class:'label svgrv','data-s':'1',style:'fill:var(--force);font-weight:600'},m14.pg);t1.textContent='누르는 힘';
+})();
+scenes[3]._sims=[m14];
+
+/* 장면 15: 하늘 높이 올라간 풍선 */
+sky(document.getElementById('sk15'),33,null);
+scenes[4]._sims=[];
+
+/* 장면 16: 정리 */
+scenes[5]._sims=[Sim(document.getElementById('f16'),{n:8,seed:71,flash:true,L:106,T:96,B:304,px:[520,300,300,300,300]})];
+
+var stage=document.getElementById('stage');
+function fit(){var k=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform='translate(-50%,-50%) scale('+k+')';}
+window.addEventListener('resize',fit);fit();
+
+function apply(snap){
+  var sc=scenes[si];
+  var els=sc.querySelectorAll('[data-s]');
+  for(var i=0;i<els.length;i++){
+    var e=els[i],s=+e.getAttribute('data-s'),en=e.hasAttribute('data-e')?+e.getAttribute('data-e'):1e9;
+    var on=(st>=s&&st<en);
+    if(on)e.classList.add('on');else e.classList.remove('on');
+  }
+  sc._sims.forEach(function(m){m.setStep(st,snap);});
+}
+function show(){
+  scenes.forEach(function(s,i){s.classList.toggle('act',i===si);});
+  apply(true);
+}
+function next(){
+  if(st<N[si]-1){st++;apply(false);}
+  else if(si<scenes.length-1){si++;st=0;show();}
+}
+function prev(){
+  if(st>0){st--;apply(false);}
+  else if(si>0){si--;st=N[si]-1;show();}
+  else{location.href='강의_2.html#end';}
+}
+document.addEventListener('click',next);
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+});
+
+if(location.hash==='#end'){si=scenes.length-1;st=N[si]-1;}
+show();
+
+var last=performance.now();
+function loop(now){
+  var dt=Math.min(0.05,(now-last)/1000);last=now;
+  scenes[si]._sims.forEach(function(m){m.tick(dt);});
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기체의 압력과 부피 사이의 관계 · 강의 1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden}
+body{font-family:"Pretendard Variable",Pretendard,sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden}
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;background:var(--bg);color:var(--ink)}
+.scene.act{display:block}
+
+/* 글자 크기: 기본 디자인 */
+.tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}
+.tag{color:var(--ink2);font-weight:500;margin-bottom:10px}
+.title{font-weight:600;letter-spacing:-0.02em}
+.note{color:var(--ink2)}
+
+/* 면 색 */
+.s-black{--bg:#000000;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#1d1d1f;--chamber:#1d1d1f;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+.s-white{--bg:#ffffff;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#f5f5f7;--chamber:#f5f5f7;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-gray{--bg:#f5f5f7;--ink:#1d1d1f;--ink2:#6e6e73;--acc:#0066cc;--card:#ffffff;--chamber:#ffffff;--part:#2e9e5b;--force:#8e4ec6;--piston:#a1a1a6}
+.s-dark{--bg:#1d1d1f;--ink:#f5f5f7;--ink2:#a1a1a6;--acc:#2997ff;--card:#000000;--chamber:#000000;--part:#3ecf74;--force:#b26cf2;--piston:#6e6e73}
+
+.hd{position:absolute;left:110px;top:70px;width:1700px}
+.lc{position:absolute;left:110px;top:340px;width:770px}
+.fig{position:absolute;left:920px;top:340px;width:920px;height:auto;overflow:visible}
+.cd{background:var(--card);border-radius:18px;padding:28px 36px}
+.cd .sent{margin-bottom:6px}
+.pg{position:absolute;left:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.nx{position:absolute;right:110px;bottom:34px;font-size:24px;color:var(--ink2)}
+.legend{position:absolute;left:110px;top:900px;font-size:26px;color:var(--ink2)}
+.cap{position:absolute;left:920px;font-size:26px;color:var(--ink2)}
+
+/* 단계별 나타나기 */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+.rv.on{opacity:1;transform:none}
+.svgrv{opacity:0;transition:opacity .4s ease}
+.svgrv.on{opacity:1}
+
+/* 빈칸 */
+.bk{display:inline-block;min-width:150px;border-bottom:4px solid var(--ink);margin:0 6px;padding:0 8px;line-height:1.3;white-space:nowrap;text-align:center}
+.bk b{display:inline-block;width:40px;height:40px;line-height:40px;border-radius:50%;background:var(--acc);color:#fff;font-size:24px;font-weight:700;text-align:center;vertical-align:middle;margin-right:8px}
+.bk .a{color:var(--acc);font-weight:600;vertical-align:middle;opacity:0;transition:opacity .4s ease}
+.bk .a.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 장면 1 · 표지 -->
+<section class="scene s-black" data-n="4">
+  <div class="hd">
+    <div class="tag">VI. 기체의 성질 · 03. 기체의 압력과 부피 사이의 관계</div>
+    <h1 class="title">끝을 막은 주사기, 누를수록<br>왜 점점 힘들어질까?</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent rv" data-s="1">주사기 끝을 막고 피스톤을 눌러 본 적이 있나요?</p>
+      <p class="sent rv" data-s="2">누를수록 점점 힘들어집니다.</p>
+      <p class="sent rv" data-s="3">오늘은 주사기 속 기체를 입자로 그려서 그 까닭을 찾아봅니다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f1" viewBox="0 0 880 400"></svg>
+  <div class="pg">1 / 16</div>
+</section>
+
+<!-- 장면 2 · 피스톤을 눌러 보면 -->
+<section class="scene s-white" data-n="4">
+  <div class="hd">
+    <div class="tag">도입</div>
+    <h1 class="title">피스톤을 눌러 보면</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent rv" data-s="1">끝을 막은 주사기의 피스톤을 누릅니다.</p>
+      <p class="sent rv" data-s="2">더 눌러 볼수록 점점 힘이 많이 듭니다.</p>
+      <p class="sent rv" data-s="3">손에 느껴지는 것은 속에 든 기체가 되밀어 내는 힘입니다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f2" viewBox="0 0 880 400"></svg>
+  <div class="pg">2 / 16</div>
+</section>
+
+<!-- 장면 3 · 기체의 압력, 먼저 떠올리기 -->
+<section class="scene s-gray" data-n="5">
+  <div class="hd">
+    <div class="tag">복습</div>
+    <h1 class="title">기체의 압력, 먼저 떠올리기</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent">기체의 압력은 기체 입자가 일정한 면적의 벽에 <span class="bk"><b>1</b><span class="a" data-s="2">충돌</span></span>하면서 가하는 힘이다.</p>
+      <p class="sent">같은 시간 동안 일정한 면적의 벽에 부딪히는 <span class="bk"><b>2</b><span class="a" data-s="3">횟수</span></span>가 많을수록 압력은 커진다.</p>
+      <p class="sent">기체의 압력은 위, 아래, 옆 등 모든 <span class="bk"><b>3</b><span class="a" data-s="4">방향</span></span>으로 작용한다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f3" viewBox="0 0 880 400"></svg>
+  <div class="pg">3 / 16</div>
+</section>
+
+<!-- 장면 4 · 피스톤을 누를 때, 당길 때 -->
+<section class="scene s-dark" data-n="4">
+  <div class="hd">
+    <div class="tag">입자 모형</div>
+    <h1 class="title">피스톤을 누를 때, 당길 때<br>입자는 어떻게 될까?</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent rv" data-s="1">누르면 입자가 움직일 공간이 줄어듭니다.</p>
+      <p class="sent rv" data-s="2">당기면 입자가 움직일 공간이 늘어납니다.</p>
+      <p class="sent rv" data-s="3">공간이 달라지면 입자 사이의 거리도 달라집니다.</p>
+    </div>
+  </div>
+  <svg class="fig" id="f4" viewBox="0 0 880 400"></svg>
+  <div class="legend">화살표 : 입자가 움직이는 방향</div>
+  <div class="pg">4 / 16</div>
+</section>
+
+<!-- 장면 5 · 부피가 변해도 그대로인 것 -->
+<section class="scene s-white" data-n="7">
+  <div class="hd">
+    <div class="tag">입자 모형</div>
+    <h1 class="title">부피가 변해도 그대로인 것</h1>
+  </div>
+  <div class="lc">
+    <div class="cd rv" data-s="1">
+      <p class="sent">기체 입자의 <span class="bk"><b>4</b><span class="a" data-s="2">수</span></span>와 <span class="bk"><b>5</b><span class="a" data-s="3">크기</span></span>는 변하지 않는다.</p>
+      <p class="sent">입자의 평균 <span class="bk"><b>6</b><span class="a" data-s="4">빠르기</span></span>도 변하지 않는다.</p>
+      <p class="sent rv" data-s="5">입자의 빠르기는 <span class="bk"><b>7</b><span class="a" data-s="6">온도</span></span>가 변할 때 달라진다.</p>
+    </div>
+  </div>
+  <div class="cap" style="top:330px">누르기 전</div>
+  <svg class="fig" id="f5a" viewBox="0 70 880 260" style="top:370px"></svg>
+  <div class="cap" style="top:660px">누른 후</div>
+  <svg class="fig" id="f5b" viewBox="0 70 880 260" style="top:700px"></svg>
+  <div class="legend">화살표 : 입자가 움직이는 방향</div>
+  <div class="pg">5 / 16</div>
+  <div class="nx">다음 파일: 강의_2.html</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function rng(seed){var s=seed;return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+function arrow(p,x1,y1,x2,y2,col,w,hs){
+  hs=hs||18;
+  var dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy),ux=dx/l,uy=dy/l;
+  var bx=x2-ux*hs,by=y2-uy*hs;
+  var g=E('g',{},p);
+  E('line',{x1:x1,y1:y1,x2:bx,y2:by,'stroke-width':w,style:'stroke:'+col},g);
+  E('polygon',{points:x2+','+y2+' '+(bx-uy*hs*0.55)+','+(by+ux*hs*0.55)+' '+(bx+uy*hs*0.55)+','+(by-ux*hs*0.55),style:'fill:'+col},g);
+  return g;
+}
+
+/* 입자 시뮬레이션: 입자 빠르기는 늘 같고, 벽에 닿으면 방향만 바뀐다 */
+function Sim(svg,o){
+  var m={svg:svg,o:o,parts:[],fl:[]};
+  var rnd=rng(o.seed||7), r=9, V=150, L=o.L, T=o.T, B=o.B;
+  m.px=o.px?o.px[0]:(o.auto?o.auto.mid:0);
+  m.tgt=m.px; m.t=0;
+  var syr=(o.mode!=='box');
+  var Rr0=o.fixedR||m.px;
+  m.chamber=E('rect',{x:L,y:T,width:Rr0-L,height:B-T,style:'fill:var(--chamber)'},svg);
+  if(syr){
+    E('rect',{x:100,y:90,width:540,height:220,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:62,y:180,width:38,height:40,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+    E('rect',{x:38,y:170,width:24,height:60,rx:4,style:'fill:var(--piston)'},svg);
+  }else{
+    E('rect',{x:100,y:60,width:520,height:270,'stroke-width':6,style:'fill:none;stroke:var(--ink)'},svg);
+  }
+  m.pl=E('g',{},svg);
+  m.fg=E('g',{},svg);
+  for(var i=0;i<o.n;i++){
+    var ang=(20+rnd()*50)*Math.PI/180, sx=rnd()<0.5?-1:1, sy=rnd()<0.5?-1:1;
+    var p={x:L+r+rnd()*(Rr0-L-2*r),y:T+r+rnd()*(B-T-2*r),vx:sx*V*Math.cos(ang),vy:sy*V*Math.sin(ang)};
+    p.c=E('circle',{r:r,style:'fill:var(--part)'},m.pl);
+    if(o.arrows)p.a=E('path',{fill:'none','stroke-width':2.5,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--ink2)'},m.pl);
+    m.parts.push(p);
+  }
+  if(syr){
+    m.pg=E('g',{},svg);
+    E('rect',{x:0,y:96,width:28,height:208,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:28,y:185,width:150,height:30,style:'fill:var(--piston)'},m.pg);
+    E('rect',{x:178,y:130,width:20,height:140,rx:6,style:'fill:var(--piston)'},m.pg);
+  }
+  function flash(x,y){
+    if(!o.flash||m.fl.length>40)return;
+    var c=E('circle',{cx:x,cy:y,r:5,fill:'none','stroke-width':4,style:'stroke:var(--force)'},m.fg);
+    m.fl.push({c:c,b:performance.now()});
+  }
+  m.tick=function(dt){
+    if(o.auto){m.t+=dt;m.px=o.auto.mid+o.auto.amp*Math.sin(m.t*2*Math.PI/o.auto.period);}
+    else if(o.px){m.px+=(m.tgt-m.px)*(1-Math.exp(-dt*5));}
+    var R=o.fixedR||m.px;
+    m.chamber.setAttribute('width',R-L);
+    if(m.pg)m.pg.setAttribute('transform','translate('+m.px+' 0)');
+    for(var i=0;i<m.parts.length;i++){
+      var p=m.parts[i];
+      p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.x<L+r){p.x=L+r;p.vx=Math.abs(p.vx);flash(L,p.y);}
+      if(p.x>R-r){p.x=R-r;p.vx=-Math.abs(p.vx);flash(R,p.y);}
+      if(p.y<T+r){p.y=T+r;p.vy=Math.abs(p.vy);flash(p.x,T);}
+      if(p.y>B-r){p.y=B-r;p.vy=-Math.abs(p.vy);flash(p.x,B);}
+      p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);
+      if(p.a){
+        var ux=p.vx/V,uy=p.vy/V,s0=r+4,s1=r+34;
+        var ax=p.x+ux*s0,ay=p.y+uy*s0,tx=p.x+ux*s1,ty=p.y+uy*s1;
+        var bx=tx-ux*9,by=ty-uy*9;
+        p.a.setAttribute('d','M'+ax+' '+ay+' L'+tx+' '+ty+' M'+(bx-uy*5.5)+' '+(by+ux*5.5)+' L'+tx+' '+ty+' L'+(bx+uy*5.5)+' '+(by-ux*5.5));
+      }
+    }
+    var now=performance.now();
+    for(var j=m.fl.length-1;j>=0;j--){
+      var f=m.fl[j],age=(now-f.b)/420;
+      if(age>=1){m.fg.removeChild(f.c);m.fl.splice(j,1);}
+      else{f.c.setAttribute('r',5+16*age);f.c.setAttribute('opacity',1-age);}
+    }
+  };
+  m.setStep=function(st,snap){
+    if(o.px){m.tgt=o.px[Math.min(st,o.px.length-1)];if(snap)m.px=m.tgt;}
+  };
+  m.tick(0);
+  return m;
+}
+
+var scenes=[].slice.call(document.querySelectorAll('.scene'));
+var N=scenes.map(function(s){return +s.getAttribute('data-n');});
+var si=0,st=0;
+
+/* 장면 1: 표지 */
+scenes[0]._sims=[Sim(document.getElementById('f1'),{n:8,seed:11,L:106,T:96,B:304,auto:{mid:400,amp:130,period:6}})];
+
+/* 장면 2: 피스톤을 눌러 보기 */
+var m2=Sim(document.getElementById('f2'),{n:8,seed:23,L:106,T:96,B:304,px:[520,430,340,340]});
+(function(){
+  var g1=arrow(m2.pg,262,200,202,200,'var(--force)',9);g1.setAttribute('class','svgrv');g1.setAttribute('data-s','1');g1.setAttribute('data-e','2');
+  var g2=arrow(m2.pg,336,200,202,200,'var(--force)',9);g2.setAttribute('class','svgrv');g2.setAttribute('data-s','2');
+  var t1=E('text',{x:250,y:160,'text-anchor':'middle',class:'label svgrv','data-s':'1',style:'fill:var(--force);font-weight:600'},m2.pg);t1.textContent='누르는 힘';
+  var g3=arrow(m2.pg,-86,200,-6,200,'var(--force)',9);g3.setAttribute('class','svgrv');g3.setAttribute('data-s','3');
+  var t3=E('text',{x:-60,y:352,'text-anchor':'middle',class:'label svgrv','data-s':'3',style:'fill:var(--force);font-weight:600'},m2.pg);t3.textContent='기체가 미는 힘';
+})();
+scenes[1]._sims=[m2];
+
+/* 장면 3: 벽에 부딪히는 입자 */
+var f3=document.getElementById('f3');
+var m3=Sim(f3,{mode:'box',n:9,seed:5,L:103,T:63,B:327,fixedR:617,flash:true});
+(function(){
+  [[360,56,360,16],[360,334,360,384],[96,195,48,195],[624,195,672,195]].forEach(function(a){
+    var g=arrow(f3,a[0],a[1],a[2],a[3],'var(--force)',8,16);g.setAttribute('class','svgrv');g.setAttribute('data-s','4');
+  });
+  var tf=E('text',{x:684,y:204,class:'label svgrv','data-s':'4',style:'fill:var(--force);font-weight:600'},f3);tf.textContent='벽을 미는 힘';
+  E('line',{x1:624,y1:110,x2:664,y2:110,'stroke-width':3,style:'stroke:var(--ink2)'},f3);
+  var tw=E('text',{x:674,y:118,class:'label',style:'fill:var(--ink)'},f3);tw.textContent='벽';
+  E('circle',{cx:690,cy:300,r:9,style:'fill:var(--part)'},f3);
+  var tp=E('text',{x:708,y:308,class:'label',style:'fill:var(--ink)'},f3);tp.textContent='기체 입자';
+})();
+scenes[2]._sims=[m3];
+
+/* 장면 4: 누를 때와 당길 때 */
+var f4=document.getElementById('f4');
+var m4=Sim(f4,{n:8,seed:31,arrows:true,L:106,T:96,B:304,px:[400,250,540,540]});
+(function(){
+  var a=E('text',{x:440,y:50,'text-anchor':'middle',class:'label svgrv','data-s':'1','data-e':'2',style:'fill:var(--ink);font-weight:600'},f4);a.textContent='피스톤을 누를 때';
+  var b=E('text',{x:440,y:50,'text-anchor':'middle',class:'label svgrv','data-s':'2',style:'fill:var(--ink);font-weight:600'},f4);b.textContent='피스톤을 당길 때';
+})();
+scenes[3]._sims=[m4];
+
+/* 장면 5: 누르기 전과 후 */
+scenes[4]._sims=[
+  Sim(document.getElementById('f5a'),{n:8,seed:41,arrows:true,L:106,T:96,B:304,px:[520]}),
+  Sim(document.getElementById('f5b'),{n:8,seed:41,arrows:true,L:106,T:96,B:304,px:[270]})
+];
+
+var stage=document.getElementById('stage');
+function fit(){var k=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform='translate(-50%,-50%) scale('+k+')';}
+window.addEventListener('resize',fit);fit();
+
+function apply(snap){
+  var sc=scenes[si];
+  var els=sc.querySelectorAll('[data-s]');
+  for(var i=0;i<els.length;i++){
+    var e=els[i],s=+e.getAttribute('data-s'),en=e.hasAttribute('data-e')?+e.getAttribute('data-e'):1e9;
+    var on=(st>=s&&st<en);
+    if(on)e.classList.add('on');else e.classList.remove('on');
+  }
+  sc._sims.forEach(function(m){m.setStep(st,snap);});
+}
+function show(){
+  scenes.forEach(function(s,i){s.classList.toggle('act',i===si);});
+  apply(true);
+}
+function next(){
+  if(st<N[si]-1){st++;apply(false);}
+  else if(si<scenes.length-1){si++;st=0;show();}
+  else{location.href='강의_2.html';}
+}
+function prev(){
+  if(st>0){st--;apply(false);}
+  else if(si>0){si--;st=N[si]-1;show();}
+}
+document.addEventListener('click',next);
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+});
+
+if(location.hash==='#end'){si=scenes.length-1;st=N[si]-1;}
+show();
+
+var last=performance.now();
+function loop(now){
+  var dt=Math.min(0.05,(now-last)/1000);last=now;
+  scenes[si]._sims.forEach(function(m){m.tick(dt);});
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
