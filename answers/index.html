@@ -39,6 +39,13 @@ details.ask[open] summary::before{content:"▾ "}
 details.ask .in{padding:0 0 18px}
 .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .top .rc{font-size:.85rem;color:var(--ink2)}
+.view{padding:12px}
+.vhd{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 2px 8px}
+.vhd b{font-size:.95rem}
+.mini{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+.vwrap{position:relative;overflow:hidden;border-radius:10px;background:#111;aspect-ratio:16/9}
+.vwrap iframe{position:absolute;left:0;top:0;width:1280px;height:720px;border:0;transform-origin:0 0;pointer-events:none;background:#fff}
+.view .muted{margin:8px 2px 0}
 [hidden]{display:none!important}
 footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
 </style>
@@ -69,6 +76,11 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   <!-- 수업 -->
   <section id="room" hidden>
     <div class="top"><h1 id="title"></h1><span class="rc" id="rc"></span></div>
+    <div class="card view" id="viewBox" hidden>
+      <div class="vhd"><b>선생님 화면</b><button class="mini" id="viewTog" type="button">접기</button></div>
+      <div class="vwrap" id="vwrap"><iframe id="vframe" title="선생님 화면" tabindex="-1" loading="eager"></iframe></div>
+      <p class="muted" id="viewNote">선생님이 넘기는 대로 따라가요. 판서와 시뮬레이터 움직임은 칠판에서 봐요.</p>
+    </div>
     <div class="card" id="qbox"></div>
     <details class="ask" id="askBox">
       <summary>선생님께 질문 보내기</summary>
@@ -98,11 +110,13 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
   var device = ls('answers:device');
   if (!device || device.length < 12) { device = 'd' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); ls('answers:device', device); }
-  if (A.FAKE && new URLSearchParams(location.search).get('dev')) device = 'test-' + new URLSearchParams(location.search).get('dev');   // 가짜 서버 시험에서만: 한 브라우저로 여러 학생 흉내
+  if (A.FAKE && new URLSearchParams(location.search).get('dev')) device = 'test-dev-' + new URLSearchParams(location.search).get('dev');   // 가짜 서버 시험에서만: 한 브라우저로 여러 학생 흉내
 
-  var code = null, info = null, num = null, curKey = 'none', timer = null, misses = 0;
+  var code = null, info = null, num = null, qKey = 'none', timer = null, misses = 0, inRoom = false;
+  var pingOK = true;       // 서버에 answers_v2.sql 이 없으면 false 가 되고, 예전처럼 방 정보만 묻는다
   var mine = {};           // qid -> 내가 보낸 답
-  var drafts = {};         // qid -> 쓰던 글
+  var drafts = {};         // qid -> 쓰던 글(질문이 바뀌었다 돌아와도 남는다)
+  var viewUrl = null, viewOpen = ls('answers:view') !== 'off';
 
   function join(c) {
     c = String(c || '').trim().toUpperCase();
@@ -119,17 +133,26 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     }).catch(function () { $('go').disabled = false; $('joinErr').textContent = '연결이 잠깐 끊겼어요. 다시 눌러 봐요.'; $('joinErr').hidden = false; show('join'); });
   }
   function enter() {
+    inRoom = true;
     $('title').textContent = info.title || '수업';
     $('rc').textContent = '코드 ' + code + (num ? ' · ' + num + '번' : '');
     show('room'); render(info.cur, true);
+    refresh();
     clearInterval(timer); timer = setInterval(refresh, 2000);
   }
+  // 2초마다: 방 정보를 받으면서 「보는 중」 신호를 남긴다. 다른 앱으로 넘어간 동안은 묻지 않는다.
   function refresh() {
-    api.room(code).then(function (r) {
-      if (!r) { misses++; if (misses >= 2) { clearInterval(timer); show('end'); } return; }
+    if (!inRoom || document.hidden) return;
+    var p = pingOK ? api.ping(code, device, num, 'here') : api.room(code);
+    p.then(function (r) {
+      if (!r) { misses++; if (misses >= 2) { inRoom = false; clearInterval(timer); setView(null); show('end'); } return; }
       misses = 0; info = r; render(r.cur, false);
-    }).catch(function () {});
+    }).catch(function (e) { if (pingOK && e && e.status === 404) { pingOK = false; refresh(); } });
   }
+  function away() { if (inRoom && pingOK) api.ping(code, device, num, 'away', true).catch(function () {}); }
+  document.addEventListener('visibilitychange', function () { if (document.hidden) away(); else refresh(); });
+  window.addEventListener('pagehide', away);
+
   function saveMine() { ls('answers:mine:' + code, JSON.stringify(mine)); }
   function send(q, body, done) {
     body = String(body || '').trim();
@@ -139,30 +162,53 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       else done(false);
     }).catch(function () { done(false); });
   }
+  // cur = {q: 지금 질문 또는 null, view: {url, pos} 또는 null}. 예전 모듈은 질문을 그대로 cur 에 넣었다.
   function render(cur, force) {
-    var key = cur ? JSON.stringify(cur) : 'none';
-    if (key === curKey && !force) return;
-    var box = $('qbox'), active = document.activeElement;
-    if (curKey !== 'none' && active && box.contains(active) && active.id === 'qin') { var oq = JSON.parse(curKey); drafts[oq.qid] = active.value; }
-    curKey = key;
-    if (!cur) { box.innerHTML = '<div class="wait"><b>선생님 화면을 봐요.</b>질문이 나오면 여기에 떠요.</div>'; return; }
-    var h = '<span class="kind">' + esc(KINDS[cur.kind] || '') + '</span><p class="q">' + esc(cur.prompt) + '</p>';
-    var prev = mine[cur.qid];
-    if (cur.kind === 'choice') {
-      h += '<div class="choices">' + (cur.choices || []).map(function (c, i) { return '<button type="button" data-i="' + i + '" class="' + (prev === c ? 'on' : '') + '">' + esc(c) + '</button>'; }).join('') + '</div>';
-    } else if (cur.kind === 'predict') {
-      h += '<div class="row" style="margin-top:12px"><input id="qin" type="text" inputmode="decimal" placeholder="숫자" value="' + esc(drafts[cur.qid] != null ? drafts[cur.qid] : (prev || '')) + '"><span class="unit">' + esc(cur.unit || '') + '</span></div>';
+    var q = cur ? (cur.q !== undefined ? cur.q : (cur.qid ? cur : null)) : null;
+    setView(cur && cur.view ? cur.view : null);
+    renderQ(q, force);
+  }
+
+  /* 선생님 화면: 같은 강의 화면을 학생용(?s=1)으로 띄우고, 단계만 알려 준다 */
+  function viewSrc(v) { return v.url + (v.url.indexOf('?') < 0 ? '?' : '&') + 's=1&ansview=' + encodeURIComponent(code) + (A.FAKE ? '&ansfake=1' : '') + (v.pos || ''); }
+  function setView(v) {
+    var ok = !!(v && typeof v.url === 'string' && /^https?:\/\//.test(v.url));
+    $('viewBox').hidden = !ok;
+    $('viewTog').textContent = viewOpen ? '접기' : '보기';
+    $('vwrap').hidden = $('viewNote').hidden = !viewOpen;
+    if (!ok || !viewOpen) { if (viewUrl) { $('vframe').src = 'about:blank'; viewUrl = null; } return; }
+    if (viewUrl !== v.url) { viewUrl = v.url; $('vframe').src = viewSrc(v); fit(); return; }
+    try { $('vframe').contentWindow.postMessage({ ans: 'pos', pos: v.pos || '' }, new URL(v.url).origin); } catch (e) {}
+  }
+  function fit() { var w = $('vwrap').clientWidth; if (w) $('vframe').style.transform = 'scale(' + (w / 1280) + ')'; }
+  window.addEventListener('resize', fit);
+  $('viewTog').addEventListener('click', function () {
+    viewOpen = !viewOpen; ls('answers:view', viewOpen ? null : 'off');
+    setView(info && info.cur ? info.cur.view : null); fit();
+  });
+
+  function renderQ(q, force) {
+    var key = q ? JSON.stringify(q) : 'none';
+    if (key === qKey && !force) return;
+    qKey = key;
+    var box = $('qbox');
+    if (!q) { box.innerHTML = '<div class="wait"><b>선생님 화면을 봐요.</b>질문이 나오면 여기에 떠요.</div>'; return; }
+    var h = '<span class="kind">' + esc(KINDS[q.kind] || '') + '</span><p class="q">' + esc(q.prompt) + '</p>';
+    var prev = mine[q.qid], draft = drafts[q.qid] != null ? drafts[q.qid] : (prev || '');
+    if (q.kind === 'choice') {
+      h += '<div class="choices">' + (q.choices || []).map(function (c, i) { return '<button type="button" data-i="' + i + '" class="' + (prev === c ? 'on' : '') + '">' + esc(c) + '</button>'; }).join('') + '</div>';
+    } else if (q.kind === 'predict') {
+      h += '<div class="row" style="margin-top:12px"><input id="qin" type="text" inputmode="decimal" placeholder="숫자" value="' + esc(draft) + '"><span class="unit">' + esc(q.unit || '') + '</span></div>';
       h += '<button class="btn" id="qgo" type="button">보내기</button>';
-    } else if (cur.kind === 'blank') {
-      h += '<input id="qin" type="text" maxlength="40" style="margin-top:12px" placeholder="들어갈 말" value="' + esc(drafts[cur.qid] != null ? drafts[cur.qid] : (prev || '')) + '">';
+    } else if (q.kind === 'blank') {
+      h += '<input id="qin" type="text" maxlength="40" style="margin-top:12px" placeholder="들어갈 말" value="' + esc(draft) + '">';
       h += '<button class="btn" id="qgo" type="button">보내기</button>';
     } else {
-      h += '<textarea id="qin" maxlength="300" style="margin-top:12px" placeholder="내 생각을 적어요">' + esc(drafts[cur.qid] != null ? drafts[cur.qid] : (prev || '')) + '</textarea>';
+      h += '<textarea id="qin" maxlength="300" style="margin-top:12px" placeholder="내 생각을 적어요">' + esc(draft) + '</textarea>';
       h += '<button class="btn" id="qgo" type="button">보내기</button>';
     }
     h += '<p class="sent" id="qsent"' + (prev ? '' : ' hidden') + '>' + (prev ? '보냈어요. 바꾸려면 다시 보내면 돼요.' : '') + '</p><p class="err" id="qerr" hidden></p>';
     box.innerHTML = h;
-    var q = cur;
     box.querySelectorAll('.choices button').forEach(function (b) {
       b.addEventListener('click', function () {
         var c = q.choices[+b.dataset.i];
@@ -170,12 +216,14 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
         send(q, c, result);
       });
     });
+    var qin = $('qin');
+    if (qin) qin.addEventListener('input', function () { drafts[q.qid] = qin.value; });
     var go = $('qgo');
     if (go) go.addEventListener('click', function () {
-      var v = $('qin').value;
+      var v = qin.value;
       if (q.kind === 'predict' && !/-?\d/.test(v)) { $('qerr').textContent = '숫자로 적어요.'; $('qerr').hidden = false; return; }
       go.disabled = true;
-      send(q, v, function (ok) { go.disabled = false; drafts[q.qid] = null; result(ok); });
+      send(q, v, function (ok) { go.disabled = false; if (ok) drafts[q.qid] = null; result(ok); });
     });
   }
   function result(ok) {
