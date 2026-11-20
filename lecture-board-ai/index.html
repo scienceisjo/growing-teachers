@@ -25,7 +25,7 @@ html[data-mode="present"]{ --fs:22px; --lh:1.5; --kw:1.75rem; --h2:2.3rem; --wra
 *{box-sizing:border-box}
 [hidden]{display:none!important}   /* .btn 같은 flex 요소에도 hidden 이 먹게 */
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
 h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.18}
 p{margin:0 0 .8em}
 a{color:var(--blue);text-decoration:none}
@@ -467,7 +467,7 @@ html[data-mode="present"] .keys{display:block}
       </div>
       <div class="detail">
         <p>글자 크기는 처음에 숫자로만 적었습니다. 그랬더니 같은 프롬프트인데도 결과마다 제목이 60px, 64px, 68px, 72px로 달랐습니다. 그래서 그대로 넣을 CSS 한 줄을 주었고, 그다음 시험에서는 네 결과 모두 그 줄을 글자 그대로 넣었습니다.</p>
-        <p>「주의할 점」에는 입자 모형에서 학생이 잘못 알기 쉬운 것을 적었습니다. 부피를 줄여도 입자 수와 크기, 빠르기는 그대로이고, 압력은 아래로만이 아니라 모든 벽에 작용합니다. 이 칸을 적어 두었더니 가벼운 모델도 이 규칙을 지켰습니다. 「그림으로 먼저 보여 준 뒤 빈칸을 연다」는 줄은 가벼운 모델이 피스톤을 누르기 전에 정답부터 연 것을 보고 더했습니다.</p>
+        <p>「주의할 점」에는 입자 모형에서 학생이 잘못 알기 쉬운 것을 적었습니다. 부피를 줄여도 입자 수와 크기, 빠르기는 그대로이고, 압력은 아래로만이 아니라 모든 벽에 작용합니다. 이 칸을 적어 두었더니 Haiku도 이 규칙을 지켰습니다. 「그림으로 먼저 보여 준 뒤 빈칸을 연다」는 줄은 Haiku가 피스톤을 누르기 전에 정답부터 연 것을 보고 더했습니다.</p>
       </div>
     </div>
 
@@ -506,7 +506,7 @@ html[data-mode="present"] .keys{display:block}
 
     <div class="blk">
       <p class="kw">제가 미리 돌려 본 네 모델</p>
-      <p class="brief">넷 모두 넘기기·빈칸·입자 규칙은 지켰고, 차이는 수업 순서와 보여 주는 방식에서 났습니다.</p>
+      <p class="brief">넷 모두 넘기기·빈칸·입자 규칙은 지켰고, 빈칸을 여는 때와 더한 그림이 달랐습니다.</p>
       <div class="figs">
         <figure><a href="img/m-haiku.webp" target="_blank"><img src="img/m-haiku.webp" width="1920" height="1080" alt="Haiku 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Haiku · 2분 50초</b>피스톤을 누르기 전에 정답이 먼저 열렸고, 글자가 프롬프트보다 작았습니다.</figcaption></figure>
         <figure><a href="img/m-sonnet.webp" target="_blank"><img src="img/m-sonnet.webp" width="1920" height="1080" alt="Sonnet 결과를 단계마다 찍어 이어 붙인 그림" loading="lazy"></a><figcaption><b>Sonnet · 2분</b>가장 빨랐고, 글자 크기와 순서 모두 프롬프트대로였습니다.</figcaption></figure>
@@ -515,8 +515,8 @@ html[data-mode="present"] .keys{display:block}
       </div>
       <div class="detail">
         <p>11월 13일에 Claude의 네 모델에 오늘과 같은 프롬프트를 넣고, 스킬 없이 한 번에 쓰게 했습니다. 위 그림은 결과 화면을 단계마다 찍어 이어 붙인 것입니다. 넷 모두 빈칸 ①~⑤의 번호와 정답을 지켰고, 부피를 줄여도 입자 수와 빠르기가 그대로였습니다.</p>
-        <p>차이는 규칙이 아니라 수업을 짜는 쪽에서 났습니다. 가벼운 모델은 관찰보다 정답을 먼저 열었고, 상위 모델은 운동 방향 화살표나 충돌 기록 띠처럼 개념을 눈으로 보이게 하는 장치를 스스로 더했습니다.</p>
-        <p>그 전에 학습지 한 장(빈칸 24개)으로 시험했을 때는, 스킬 없이 시킨 중간 모델이 학습지에 없는 정답을 지어냈고 스킬을 준 가벼운 모델은 빈칸 번호와 정답을 다 지켰습니다. 그래서 저는 모델을 고르기 전에 학습지 문장과 정답, 주의할 점부터 챙깁니다.</p>
+        <p>Haiku는 피스톤을 누르기도 전에 빈칸 정답을 열어서, 학생이 부피가 줄어드는 모습을 보기 전에 답이 나왔습니다. Opus는 입자마다 움직이는 방향을 화살표로 그렸고, Fable은 입자가 벽에 부딪힌 횟수를 세는 띠를 넣었습니다. 이 화살표와 띠는 프롬프트에 없던 그림입니다.</p>
+        <p>그 전에 학습지 한 장(빈칸 24개)으로 시험했을 때는, 스킬 없이 시킨 Sonnet은 학습지에 없는 정답을 지어냈고, 스킬을 준 Haiku는 빈칸 번호와 정답을 다 지켰습니다. 그래서 저는 모델을 고르기 전에 학습지 문장과 정답, 주의할 점부터 챙깁니다.</p>
         <p class="note">무료 요금제에서 어떤 모델이 답하는지는 서비스마다 달라서, 위 결과는 무료·유료로 나누지 않고 모델 이름으로 적었습니다.</p>
       </div>
       <div class="box" style="margin-top:14px"><b><a href="examples/" target="_blank">예시 모음 24개 보기 ↗</a></b><p>중1·중2·중3·통합과학 교과서 쪽만 주고 네 모델에게 만들게 한 칠판 강의 화면을 모아 두었습니다. 학년·영역·모델·디자인으로 골라 보실 수 있고, 모두 시뮬레이터가 들어 있습니다.</p></div>
@@ -838,6 +838,33 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
       </div>
     </div>
 
+    <div class="blk" id="kit">
+      <p class="kw">연수 뒤 혼자 만드실 때 무엇을 준비하면 될까요?</p>
+      <p class="brief">AI 계정 하나, 컴퓨터, 수업 재료, 오늘 받은 파일이면 시작할 수 있습니다. 나머지는 쓰임에 따라 더합니다.</p>
+      <p style="margin:14px 0 0"><b>꼭 있어야 하는 것</b></p>
+      <ol class="steps" data-key="kit1">
+        <li><input type="checkbox"><div><span class="what">AI 계정 하나</span><span class="how">ChatGPT, Gemini, Claude 가운데 하나면 됩니다. 재료가 분명한 1~3장은 무료 요금제로도 만들어졌습니다. 시뮬레이터나 비유가 중요한 화면, 한 차시 20장 안팎은 유료 상위 모델이 낫습니다. 6단계 스킬 파일을 올려 쓰시려면 Claude 설정에서 코드 실행을 켭니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">컴퓨터와 크롬(또는 엣지)</span><span class="how">AI가 준 HTML 파일을 내려받아 더블클릭으로 열고, 넘겨 보며 점검합니다. 태블릿만으로는 파일을 저장하고 여는 일이 번거롭습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">수업 재료</span><span class="how">학습지(빈칸 번호와 정답), 교과서 해당 쪽 캡처, 대본이나 수업 흐름 메모를 준비합니다. 교과서 쪽은 PDF에서 잘라 내거나 휴대폰으로 찍어도 됩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">오늘 받은 파일을 한 폴더에</span><span class="how">3장판 프롬프트 세 가지와 스킬 zip을 한 폴더에 모아 둡니다. 1단계 꾸러미에 모두 들어 있습니다.</span></div></li>
+      </ol>
+      <p style="margin:14px 0 0"><b>있으면 좋은 것</b></p>
+      <ol class="steps" data-key="kit2">
+        <li><input type="checkbox"><div><span class="what">내 틀</span><span class="how">마음에 든 디자인 서랍 DESIGN.md와 내 규칙 메모(과목 용어, 색 약속, 쓰지 않을 말)입니다. 6단계처럼 스킬로 묶어 두면 다음부터는 재료만 넣어도 됩니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">보여 줄 기기</span><span class="how">전자칠판이나 TV에 연결한 노트북입니다. 넘기기 리모컨(프레젠터)이 있으면 편합니다. 화면 위에 판서하시려면 아이패드와 펜슬, 또는 전자칠판 손가락으로 씁니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">GitHub 계정(필요할 때만)</span><span class="how">학생에게 링크로 나눠 주실 때, 유튜브를 칸 안에서 트실 때, 내 컴퓨터의 3D 파일을 쓰실 때만 필요합니다. 수업 컴퓨터 한 대에서 쓰실 때는 위 표처럼 파일로 열면 됩니다.</span></div></li>
+      </ol>
+      <p style="margin:14px 0 0"><b>시간</b></p>
+      <ol class="steps" data-key="kit3">
+        <li><input type="checkbox"><div><span class="what">처음 3장은 30분에서 1시간</span><span class="how">만든 뒤 한 장씩 넘기며 과학 내용이 틀린 곳, 글자가 겹친 곳, 관찰하기 전에 정답이 보이는 곳을 찾습니다. 고칠 점은 한 문장씩 적어 다시 보냅니다.</span></div></li>
+      </ol>
+      <div class="detail">
+        <p>학습지 문장과 정답, 학생들이 자주 헷갈리는 점을 적어 주었더니 Haiku도 빈칸 번호와 정답을 지켰습니다.</p>
+        <p>예시 모음 24개를 만들 때도 모델과 상관없이 고치기를 한두 번 거친 화면이 있었습니다. 저는 처음 결과를 바로 수업에 쓰지 않고, 수업 전날 한 번 넘겨 보며 점검합니다.</p>
+        <p class="note">메뉴 이름과 요금제별로 열려 있는 기능은 자주 바뀝니다. 2026년 11월에 확인한 내용입니다.</p>
+      </div>
+    </div>
+
     <div class="blk">
       <p class="kw">다시 보실 곳</p>
       <div class="grid2">
@@ -864,7 +891,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
 
 </main>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-14</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-20</span></footer>
 
 <div class="follow-bar" id="followBar" hidden><span id="followMsg"></span><button id="followGo">그리로 가기</button></div>
 
