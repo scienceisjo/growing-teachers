@@ -46,6 +46,8 @@ details.ask .in{padding:0 0 18px}
 .vwrap{position:relative;overflow:hidden;border-radius:10px;background:#111;aspect-ratio:16/9}
 .vwrap iframe{position:absolute;left:0;top:0;width:1280px;height:720px;border:0;transform-origin:0 0;pointer-events:none;background:#fff}
 .view .muted{margin:8px 2px 0}
+.sk svg{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid var(--line);border-radius:12px;background:#fff}
+.skbtns{display:flex;gap:8px;margin-top:10px}.skbtns .btn{margin-top:0;flex:1}.skbtns .btn.sub{flex:0 0 34%}
 [hidden]{display:none!important}
 footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
 </style>
@@ -105,7 +107,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 (function () {
   var A = window.Answers, api = A.api, esc = A.esc;
   var $ = function (id) { return document.getElementById(id); };
-  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술' };
+  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', sketch: '그래프 예측' };
   function show(id) { ['join', 'numBox', 'room', 'end'].forEach(function (s) { $(s).hidden = s !== id; }); }
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
   var device = ls('answers:device');
@@ -203,6 +205,9 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     } else if (q.kind === 'blank') {
       h += '<input id="qin" type="text" maxlength="40" style="margin-top:12px" placeholder="들어갈 말" value="' + esc(draft) + '">';
       h += '<button class="btn" id="qgo" type="button">보내기</button>';
+    } else if (q.kind === 'sketch') {
+      h += '<p class="muted" style="margin:4px 0 8px">손가락으로 그래프를 그려요. 손을 뗐다가 이어 그려도 돼요.</p><div class="sk" id="sk"></div>';
+      h += '<div class="skbtns"><button class="btn sub" id="skClear" type="button">지우기</button><button class="btn" id="qgo" type="button">보내기</button></div>';
     } else {
       h += '<textarea id="qin" maxlength="300" style="margin-top:12px" placeholder="내 생각을 적어요">' + esc(draft) + '</textarea>';
       h += '<button class="btn" id="qgo" type="button">보내기</button>';
@@ -218,6 +223,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     });
     var qin = $('qin');
     if (qin) qin.addEventListener('input', function () { drafts[q.qid] = qin.value; });
+    if (q.kind === 'sketch') { sketchPad(q); return; }
     var go = $('qgo');
     if (go) go.addEventListener('click', function () {
       var v = qin.value;
@@ -225,6 +231,40 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       go.disabled = true;
       send(q, v, function (ok) { go.disabled = false; if (ok) drafts[q.qid] = null; result(ok); });
     });
+  }
+  /* 그래프 예측: 축 위에 손가락으로 선을 긋는다. 보내면 41칸으로 다시 재서 보낸다. */
+  function sketchPad(q) {
+    var S = A.sketch, ax = S.axes(q), G = S.geom('phone'), NS = 'http://www.w3.org/2000/svg';
+    $('sk').innerHTML = S.svg(ax, [], { size: 'phone', label: q.prompt });
+    var svg = $('sk').querySelector('svg');
+    function pathEl() { var p = document.createElementNS(NS, 'path'); p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#0066cc'); p.setAttribute('stroke-width', '4'); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('stroke-linejoin', 'round'); svg.appendChild(p); return p; }
+    var sent = pathEl(), ink = pathEl();
+    var strokes = drafts[q.qid] || (drafts[q.qid] = []), prev = S.parse(mine[q.qid]), cur = null;
+    function draw() {
+      ink.setAttribute('d', strokes.map(function (st) { return st.map(function (p, i) { return (i ? 'L' : 'M') + S.x(G, p[0]) + ' ' + S.y(G, p[1]); }).join('') + (st.length === 1 ? 'l0.5 0' : ''); }).join(''));
+      sent.setAttribute('d', !strokes.length && prev ? S.path(G, prev.vals) : '');   // 다시 그리기 전까지는 보낸 선을 보여 준다
+    }
+    function pt(e) {
+      var r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * G.W, vy = (e.clientY - r.top) / r.height * G.H;
+      var u = (vx - G.L) / G.pw, v = 1 - (vy - G.T) / G.ph;
+      return [Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v))];
+    }
+    svg.addEventListener('pointerdown', function (e) { e.preventDefault(); try { svg.setPointerCapture(e.pointerId); } catch (x) {} cur = [pt(e)]; strokes.push(cur); $('qerr').hidden = true; draw(); });
+    svg.addEventListener('pointermove', function (e) {
+      if (!cur) return; e.preventDefault();
+      var p = pt(e), l = cur[cur.length - 1]; if (Math.abs(p[0] - l[0]) + Math.abs(p[1] - l[1]) < 0.004) return;
+      cur.push(p); draw();
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { svg.addEventListener(t, function () { cur = null; }); });
+    $('skClear').addEventListener('click', function () { strokes.length = 0; prev = null; draw(); });
+    var go = $('qgo');
+    go.addEventListener('click', function () {
+      var vals = S.resample(strokes);
+      if (vals.filter(function (v) { return v != null; }).length < 5) { $('qerr').textContent = strokes.length ? '가로로 조금 더 길게 그려요.' : '먼저 그래프를 그려요.'; $('qerr').hidden = false; return; }
+      go.disabled = true;
+      send(q, S.encode(ax, vals), function (ok) { go.disabled = false; if (ok) { prev = S.parse(mine[q.qid]); strokes.length = 0; draw(); } result(ok); });
+    });
+    draw();
   }
   function result(ok) {
     if (ok) { $('qsent').textContent = '보냈어요. 바꾸려면 다시 보내면 돼요.'; $('qsent').hidden = false; $('qerr').hidden = true; }

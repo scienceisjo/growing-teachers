@@ -7,6 +7,9 @@
  *   <div class="ask" data-ask="predict" data-qid="p1" data-q="60 ℃가 되면 부피는 몇 mL일까요?" data-unit="mL" data-actual="56.8"></div>
  *   <div class="ask" data-ask="blank"   data-qid="b2" data-q="빈칸 ②에 들어갈 말은?" data-answer="늘어나고"></div>
  *   <div class="ask" data-ask="text"    data-qid="t1" data-q="입자 수는 그대로인데 왜 부피가 커질까요?"></div>
+ *   <div class="ask" data-ask="sketch"  data-qid="g1" data-q="온도를 올리면 부피는 어떻게 변할까요? 그래프로 그려요."
+ *        data-x="온도(℃)" data-xmin="0" data-xmax="100" data-y="부피(mL)" data-ymin="40" data-ymax="70" data-actual="0:46.6|100:63.7"></div>
+ *     (그래프 예측: 학생이 손가락으로 그린 선을 칠판에 겹쳐 보이고, 「실제 그래프와 견주기」로 data-actual 의 점들을 이은 선을 얹는다)
  * 「질문 보내기」는 요소 없이 수업 내내 열려 있다.
  * 선생님이 「학생 답」 단추로 방을 열기 전에는 .ask 요소가 비어 있어 화면에 아무것도 보이지 않는다.
  *
@@ -120,7 +123,98 @@
     return { here: here, away: away, total: (rows || []).length };
   }
   function agoText(s) { return s < 60 ? '방금' : Math.floor(s / 60) + '분 전'; }
-  window.Answers = { api: api, CFG: CFG, FAKE: FAKE, studentUrl: studentUrl, reviewUrl: reviewUrl, esc: esc, splitPeople: splitPeople, agoText: agoText };
+
+  /* ── 그래프 예측(sketch) ─────────────────────────────
+   * 학생이 그린 선을 가로 41칸으로 다시 재서 0~1000 으로 담는다.
+   * 답 = 'sk:x최소,x최대,y최소,y최대:v0,v1,…,v40' (빈칸은 그 x 에 선이 없음). 답만 보고도 축을 알 수 있다. */
+  var SKN = 41;
+  function numOr(v, d) { var n = parseFloat(v); return isFinite(n) ? n : d; }
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function skAxes(q) {
+    var a = { x: q.x || '', y: q.y || '', xmin: numOr(q.xmin, 0), xmax: numOr(q.xmax, 10), ymin: numOr(q.ymin, 0), ymax: numOr(q.ymax, 10) };
+    if (a.xmax <= a.xmin) a.xmax = a.xmin + 1; if (a.ymax <= a.ymin) a.ymax = a.ymin + 1;
+    return a;
+  }
+  // 선 여러 개(손가락을 뗐다 다시 그린 것) → 칸마다 y. 같은 x 를 두 번 지나면 나중에 그은 쪽.
+  function skResample(strokes) {
+    var out = []; for (var i = 0; i < SKN; i++) out.push(null);
+    (strokes || []).forEach(function (s) {
+      if (s.length === 1) { out[Math.round(s[0][0] * (SKN - 1))] = s[0][1]; return; }
+      for (var k = 1; k < s.length; k++) {
+        var a = s[k - 1], b = s[k], x0 = a[0] * (SKN - 1), x1 = b[0] * (SKN - 1);
+        for (var j = Math.ceil(Math.min(x0, x1)); j <= Math.floor(Math.max(x0, x1)); j++) {
+          out[j] = x1 === x0 ? b[1] : a[1] + (b[1] - a[1]) * (j - x0) / (x1 - x0);
+        }
+      }
+    });
+    return out;
+  }
+  function skEncode(ax, vals) {
+    return 'sk:' + [ax.xmin, ax.xmax, ax.ymin, ax.ymax].join(',') + ':' + vals.map(function (v) { return v == null ? '' : Math.round(clamp01(v) * 1000); }).join(',');
+  }
+  function skParse(body) {
+    var m = /^sk:([^:]*):(.*)$/.exec(String(body || '')); if (!m) return null;
+    var r = m[1].split(',').map(Number), vals = m[2].split(',').map(function (s) { return s === '' || isNaN(+s) ? null : clamp01(+s / 1000); });
+    if (vals.length !== SKN || r.length !== 4 || r.some(function (n) { return !isFinite(n); })) return null;
+    return { xmin: r[0], xmax: r[1], ymin: r[2], ymax: r[3], vals: vals };
+  }
+  // data-actual="0:46.6|100:63.7" → [[x,y],…]
+  function skActual(s) {
+    return String(s || '').split('|').map(function (p) { return p.split(':').map(Number); })
+      .filter(function (p) { return p.length === 2 && isFinite(p[0]) && isFinite(p[1]); }).sort(function (a, b) { return a[0] - b[0]; });
+  }
+  function skText(p) {   // CSV 용: y 값을 원래 단위로
+    return 'x ' + p.xmin + '~' + p.xmax + ' 사이 ' + SKN + '점, y: ' + p.vals.map(function (v) { return v == null ? '-' : +(p.ymin + v * (p.ymax - p.ymin)).toFixed(2); }).join(' ');
+  }
+  var SKG = {   // 화면 크기별 그림 틀(뷰박스 단위). 휴대폰은 작은 틀이라 글자가 실제 크기에 가깝다.
+    phone: { W: 360, H: 270, L: 50, R: 16, T: 30, B: 48, fs: 13, sw: 4 },
+    board: { W: 640, H: 420, L: 80, R: 26, T: 42, B: 66, fs: 19, sw: 3.5 },
+    mini: { W: 200, H: 120, L: 4, R: 4, T: 4, B: 4, fs: 0, sw: 2.5 }
+  };
+  function skGeom(size) { var g = Object.assign({}, SKG[size] || SKG.board); g.pw = g.W - g.L - g.R; g.ph = g.H - g.T - g.B; return g; }
+  function skX(g, u) { return +(g.L + u * g.pw).toFixed(1); }
+  function skY(g, v) { return +(g.T + (1 - v) * g.ph).toFixed(1); }
+  function skPath(g, vals) {
+    var d = '', pen = false;
+    vals.forEach(function (v, i) { if (v == null) { pen = false; return; } d += (pen ? 'L' : 'M') + skX(g, i / (SKN - 1)) + ' ' + skY(g, v); pen = true; });
+    return d;
+  }
+  function skFmt(n) { return String(+(+n).toFixed(2)); }
+  var skId = 0;
+  // 축 + 학생 선들(curves) + 반의 가운데 선(median) + 실제 그래프(actual, 원래 단위 점들)
+  function skSVG(ax, curves, o) {
+    o = o || {}; var g = skGeom(o.size), id = 'ansclip' + (++skId);
+    var h = '<svg class="ans-sk" viewBox="0 0 ' + g.W + ' ' + g.H + '" role="img" aria-label="' + esc(o.label || '그래프') + '">' +
+      '<defs><clipPath id="' + id + '"><rect x="' + g.L + '" y="' + g.T + '" width="' + g.pw + '" height="' + g.ph + '"/></clipPath></defs>' +
+      '<rect x="' + g.L + '" y="' + g.T + '" width="' + g.pw + '" height="' + g.ph + '" fill="#fff"/>';
+    for (var k = 1; k < 4; k++) h += '<line x1="' + skX(g, k / 4) + '" y1="' + g.T + '" x2="' + skX(g, k / 4) + '" y2="' + (g.T + g.ph) + '" stroke="#e5e5ea"/><line x1="' + g.L + '" y1="' + skY(g, k / 4) + '" x2="' + (g.L + g.pw) + '" y2="' + skY(g, k / 4) + '" stroke="#e5e5ea"/>';
+    h += '<path d="M' + g.L + ' ' + g.T + 'V' + (g.T + g.ph) + 'H' + (g.L + g.pw) + '" fill="none" stroke="#1d1d1f" stroke-width="' + (o.size === 'mini' ? 1.2 : 2) + '"/>';
+    if (g.fs) {
+      var ty = g.T + g.ph + g.fs + 6, t = function (x, y, s, anc) { return '<text x="' + x + '" y="' + y + '" font-size="' + g.fs + '" fill="#6e6e73" text-anchor="' + anc + '">' + esc(s) + '</text>'; };
+      h += t(g.L, ty, skFmt(ax.xmin), 'middle') + t(skX(g, .5), ty, skFmt((ax.xmin + ax.xmax) / 2), 'middle') + t(g.L + g.pw, ty, skFmt(ax.xmax), 'end');
+      h += t(g.L - 6, skY(g, 0) + g.fs * .35, skFmt(ax.ymin), 'end') + t(g.L - 6, skY(g, .5) + g.fs * .35, skFmt((ax.ymin + ax.ymax) / 2), 'end') + t(g.L - 6, g.T + g.fs * .35, skFmt(ax.ymax), 'end');
+      h += '<text x="' + (g.L + g.pw / 2) + '" y="' + (g.H - 6) + '" font-size="' + g.fs + '" fill="#1d1d1f" font-weight="600" text-anchor="middle">' + esc(ax.x) + '</text>';
+      h += '<text x="4" y="' + (g.T - 12) + '" font-size="' + g.fs + '" fill="#1d1d1f" font-weight="600" text-anchor="start">' + esc(ax.y) + '</text>';
+    }
+    h += '<g clip-path="url(#' + id + ')" fill="none" stroke-linecap="round" stroke-linejoin="round">';
+    var op = o.size === 'mini' ? 1 : Math.max(.2, Math.min(.75, 3 / Math.max(1, curves.length)));
+    curves.forEach(function (c) { var d = skPath(g, c); if (d) h += '<path d="' + d + '" stroke="#0a84ff" stroke-width="' + g.sw + '" stroke-opacity="' + op + '"/>'; });
+    if (o.median && curves.length >= 5) {   // 다섯 명은 넘어야 가운데 선이 한 사람 선을 따라 꺾이지 않는다
+      var med = [];
+      for (var i = 0; i < SKN; i++) {
+        var col = curves.map(function (c) { return c[i]; }).filter(function (v) { return v != null; }).sort(function (a, b) { return a - b; });
+        med.push(col.length >= Math.max(2, Math.ceil(curves.length / 2)) ? (col.length % 2 ? col[(col.length - 1) / 2] : (col[col.length / 2 - 1] + col[col.length / 2]) / 2) : null);
+      }
+      var dm = skPath(g, med); if (dm) h += '<path d="' + dm + '" stroke="#1d1d1f" stroke-width="' + (g.sw * 1.8) + '"/>';
+    }
+    if (o.actual && o.actual.length >= 2) {
+      h += '<path d="' + o.actual.map(function (p, j) { return (j ? 'L' : 'M') + skX(g, (p[0] - ax.xmin) / (ax.xmax - ax.xmin)) + ' ' + skY(g, (p[1] - ax.ymin) / (ax.ymax - ax.ymin)); }).join('') +
+        '" stroke="#ff3b30" stroke-width="' + (g.sw * 1.5) + '" stroke-dasharray="' + (g.sw * 3.5) + ' ' + (g.sw * 2.2) + '"/>';
+    }
+    return h + '</g></svg>';
+  }
+  var sketch = { N: SKN, axes: skAxes, resample: skResample, encode: skEncode, parse: skParse, actual: skActual, text: skText, geom: skGeom, x: skX, y: skY, path: skPath, svg: skSVG };
+  window.Answers = { api: api, CFG: CFG, FAKE: FAKE, studentUrl: studentUrl, reviewUrl: reviewUrl, esc: esc, splitPeople: splitPeople, agoText: agoText, sketch: sketch };
   if (MODE !== 'teacher') return;
   if (QS.get('ansview')) { viewMode(QS.get('ansview')); return; }
 
@@ -174,7 +268,7 @@
   }
 
   /* ── 선생님 화면 ──────────────────────────────────── */
-  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', ask: '질문함' };
+  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', sketch: '그래프 예측', ask: '질문함' };
   var css = '' +
     '.ans-root,.ans-panel,.ans-ov{font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Malgun Gothic",sans-serif;letter-spacing:-.01em;word-break:keep-all}' +
     '.ans-root{position:fixed;left:14px;bottom:14px;z-index:2147483000}' +
@@ -205,6 +299,8 @@
     '.ans-dots{position:relative;height:120px;margin:24px 10px 8px;border-bottom:2px solid #1d1d1f}' +
     '.ans-dots i{position:absolute;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:#0a84ff;opacity:.8}' +
     '.ans-dots .ans-act{position:absolute;bottom:-6px;top:-14px;border-left:3px dashed #ff3b30}.ans-dots .ans-act span{position:absolute;top:-24px;left:6px;color:#ff3b30;font-size:19px;font-weight:700;white-space:nowrap}' +
+    '.ans-skbox svg{display:block;width:100%;height:auto;max-height:56vh}.ans-skkey{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:18px;color:#3a3a3c;margin:0 0 10px}.ans-skkey .ans-b{margin-left:auto}' +
+    '.ans-skkey i{display:inline-block;width:28px;height:0;border-top:4px solid #0a84ff;vertical-align:middle;margin-right:8px}.ans-skkey i.ans-l1{opacity:.6}.ans-skkey i.ans-l2{border-top:7px solid #1d1d1f}.ans-skkey i.ans-l3{border-top:5px dashed #ff3b30}' +
     '.ans-axis{display:flex;justify-content:space-between;color:#6e6e73;font-size:17px;margin:4px 10px 14px}' +
     '.ans-empty{color:#8e8e93;font-size:20px;padding:30px 0}' +
     '.ans-ov{position:fixed;inset:0;z-index:2147483002;background:rgba(0,0,0,.86);color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:20px}' +
@@ -246,7 +342,8 @@
     return {
       qid: d.qid || ('q' + asks().indexOf(el)), kind: kind, prompt: d.q || '',
       choices: d.choices ? d.choices.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : null,
-      unit: d.unit || '', answer: d.answer || '', actual: d.actual || '', actualFrom: d.actualFrom || ''
+      unit: d.unit || '', answer: d.answer || '', actual: d.actual || '', actualFrom: d.actualFrom || '',
+      x: d.x || '', y: d.y || '', xmin: d.xmin, xmax: d.xmax, ymin: d.ymin, ymax: d.ymax
     };
   }
   function visible(el) {
@@ -287,7 +384,10 @@
     if (!room) return;
     paintPills();
     var vis = asks().filter(visible), el = vis[vis.length - 1], q = null;
-    if (el) { var i = qInfo(el); q = { qid: i.qid, kind: i.kind, prompt: i.prompt, choices: i.choices, unit: i.unit }; }
+    if (el) {
+      var i = qInfo(el); q = { qid: i.qid, kind: i.kind, prompt: i.prompt, choices: i.choices, unit: i.unit };
+      if (i.kind === 'sketch') { var ax = skAxes(i); q.x = ax.x; q.y = ax.y; q.xmin = ax.xmin; q.xmax = ax.xmax; q.ymin = ax.ymin; q.ymax = ax.ymax; }
+    }
     var j = JSON.stringify({ q: q, view: viewInfo() });
     if (j !== curJson) {
       curJson = j;
@@ -449,6 +549,13 @@
           '<p style="font-size:24px">가운데 값 <b>' + (+med.toFixed(2)) + ' ' + esc(q.unit) + '</b> · 가장 작은 값 ' + srt[0] + ' · 가장 큰 값 ' + srt[srt.length - 1] + '</p>';
       }
       if (q.actual || q.actualFrom) h += '<p><button class="ans-b' + (showAnswer[q.qid] ? ' ans-on' : '') + '" data-a="ok" type="button">' + (showAnswer[q.qid] ? '실제 값 숨기기' : '실제 값과 견주기') + '</button></p>';
+    } else if (q.kind === 'sketch') {
+      var parsed = list.map(function (a) { return skParse(a.body); }).filter(Boolean), first = parsed[0] || {};
+      var sax = q.xmin !== undefined ? skAxes(q) : skAxes({ x: '', y: '', xmin: first.xmin, xmax: first.xmax, ymin: first.ymin, ymax: first.ymax });
+      var curves = parsed.map(function (p) { return p.vals; }), sact = showAnswer[q.qid] ? skActual(q.actual) : null;
+      h += '<div class="ans-skkey"><span><i class="ans-l1"></i>학생 ' + curves.length + '명</span>' + (curves.length >= 5 ? '<span><i class="ans-l2"></i>반의 가운데 선</span>' : '') + (sact && sact.length >= 2 ? '<span><i class="ans-l3"></i>실제</span>' : '') +
+        (q.actual ? '<button class="ans-b' + (showAnswer[q.qid] ? ' ans-on' : '') + '" data-a="ok" type="button">' + (showAnswer[q.qid] ? '실제 그래프 숨기기' : '실제 그래프와 견주기') + '</button>' : '') + '</div>';
+      h += '<div class="ans-skbox">' + skSVG(sax, curves, { size: 'board', median: true, actual: sact, label: q.prompt }) + '</div>';
     } else {
       h += '<div class="ans-cards">' + list.slice().reverse().map(function (a) {
         return '<div class="ans-card' + (hiddenCards[a.id] ? ' ans-hid' : '') + '" data-card="' + a.id + '">' + esc(a.body) + '<button class="ans-x" type="button" data-hide="' + a.id + '">' + (hiddenCards[a.id] ? '보이기' : '가리기') + '</button></div>';

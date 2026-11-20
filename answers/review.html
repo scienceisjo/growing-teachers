@@ -27,6 +27,7 @@ th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertic
 th{background:var(--bg2);font-weight:600}
 td.n{width:64px;color:var(--ink2)}td.t{width:80px;color:var(--ink2);font-variant-numeric:tabular-nums}
 .empty{color:var(--ink2);padding:30px 0}
+.sk1{max-width:640px;margin:0 0 12px}.sk1 svg{display:block;width:100%;height:auto}td.g svg{display:block;width:200px;max-width:100%;height:auto}
 .pres{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:0 0 22px}
 .pres h2{font-size:1rem;margin:0 0 6px}
 .pres .sum span.away{background:#fff4e5;color:#7a4b00}
@@ -53,7 +54,8 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 (function () {
   var A = window.Answers, api = A.api, esc = A.esc;
   var h = new URLSearchParams(location.hash.slice(1)), code = (h.get('c') || '').toUpperCase(), key = h.get('k') || '';
-  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', ask: '학생이 보낸 질문' };
+  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', sketch: '그래프 예측', ask: '학생이 보낸 질문' };
+  var S = A.sketch;
   var rows = [];
   var $ = function (id) { return document.getElementById(id); };
   function hm(s) { var d = new Date(s); return isNaN(d) ? '' : String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
@@ -67,14 +69,18 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
       rows.forEach(function (a) { if (!g[a.qid]) { g[a.qid] = { qid: a.qid, kind: a.kind, prompt: a.prompt, list: [] }; order.push(a.qid); } g[a.qid].list.push(a); });
       order.sort(function (a, b) { return (a === 'ask') - (b === 'ask'); });
       $('out').innerHTML = order.map(function (k) {
-        var q = g[k], sum = '';
-        if (q.kind === 'choice' || q.kind === 'blank') {
+        var q = g[k], sum = '', sk = q.kind === 'sketch';
+        if (sk) {   // 그래프 예측: 반 전체 선을 겹친 그림 하나, 표에는 학생마다 작은 그림
+          var ps = q.list.map(function (a) { return S.parse(a.body); }), f = ps.filter(Boolean)[0];
+          if (f) { q.ax = S.axes({ xmin: f.xmin, xmax: f.xmax, ymin: f.ymin, ymax: f.ymax }); sum = '<div class="sk1">' + S.svg(q.ax, ps.filter(Boolean).map(function (p) { return p.vals; }), { size: 'board', median: true, label: q.prompt }) + '</div>'; }
+          q.list.forEach(function (a, i) { a._sk = ps[i]; });
+        } else if (q.kind === 'choice' || q.kind === 'blank') {
           var c = {}; q.list.forEach(function (a) { c[a.body] = (c[a.body] || 0) + 1; });
           sum = '<div class="sum">' + Object.keys(c).sort(function (x, y) { return c[y] - c[x]; }).map(function (b) { return '<span>' + esc(b) + ' · ' + c[b] + '</span>'; }).join('') + '</div>';
         }
         return '<section class="q"><h2>' + esc(q.prompt || q.qid) + '</h2><p class="meta">' + esc(KINDS[q.kind] || q.kind) + ' · ' + q.list.length + '개</p>' + sum +
           '<table><thead><tr><th>번호</th><th>답</th><th>시각</th></tr></thead><tbody>' +
-          q.list.map(function (a) { return '<tr><td class="n">' + esc(a.num || '') + '</td><td>' + esc(a.body) + '</td><td class="t">' + hm(a.created_at) + '</td></tr>'; }).join('') +
+          q.list.map(function (a) { return '<tr><td class="n">' + esc(a.num || '') + '</td>' + (sk && a._sk && q.ax ? '<td class="g">' + S.svg(q.ax, [a._sk.vals], { size: 'mini' }) + '</td>' : '<td>' + esc(a.body) + '</td>') + '<td class="t">' + hm(a.created_at) + '</td></tr>'; }).join('') +
           '</tbody></table></section>';
       }).join('');
     }).catch(function () { $('out').innerHTML = '<p class="empty">서버에 연결하지 못했습니다. 잠시 뒤 「새로 불러오기」를 누르세요.</p>'; });
@@ -96,7 +102,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   $('re').addEventListener('click', load);
   $('csv').addEventListener('click', function () {
     var q = function (s) { return '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"'; };
-    var lines = ['질문,종류,번호,답,시각'].concat(rows.map(function (a) { return [q(a.prompt || a.qid), q(KINDS[a.kind] || a.kind), q(a.num), q(a.body), q(a.created_at)].join(','); }));
+    var lines = ['질문,종류,번호,답,시각'].concat(rows.map(function (a) { return [q(a.prompt || a.qid), q(KINDS[a.kind] || a.kind), q(a.num), q(a.kind === 'sketch' && S.parse(a.body) ? S.text(S.parse(a.body)) : a.body), q(a.created_at)].join(','); }));
     var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '학생답_' + code + '.csv'; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   });
