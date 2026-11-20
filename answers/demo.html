@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>(학생 답 시연) 기체의 온도와 부피 관계 — 칠판 강의 화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --ink:#1d1d1f; --gray:#6e6e73; --gray-d:#a1a1a6; --blue-l:#0066cc; --blue-d:#2997ff;
+  --temp:#FF5C8A; --vol:#FFD60A; --gas:#30D158; --force:#BF5AF2; --dir:#64D2FF;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --font:'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none}
+body{font-family:var(--font);color:var(--ink);word-break:keep-all;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+.sc{position:absolute;inset:0;display:none}
+.sc.on{display:block}
+.fig{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible}
+.fig text{font-family:var(--font)}
+.ab{position:absolute}
+.band{position:absolute;left:0;right:0;top:0;background:#fff}
+.panel{position:absolute;left:0;right:0;bottom:0;background:#1d1d1f}
+.kick{position:absolute;left:120px;font-size:28px;line-height:1.3;color:var(--gray);letter-spacing:0}
+.dark .kick,.kick.k-d{color:var(--gray-d)}
+h1,h2{position:absolute;left:120px;margin:0;font-weight:600;letter-spacing:-.02em}
+h2{top:74px;font-size:58px;line-height:1.2;color:var(--ink)}
+.card{position:absolute;left:120px;right:120px;background:#f5f5f7;border-radius:18px;padding:16px 40px;font-size:36px;line-height:1.85;color:var(--ink)}
+.card p{margin:0}
+/* 단계마다 나타남 */
+.sh{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.sh.on{opacity:1;transform:none}
+.fd{opacity:0;transition:opacity .7s var(--ease)}
+.fd.on{opacity:1}
+.inst, .inst *{transition:none!important}
+/* 빈칸 */
+.bl{display:inline-block;position:relative;min-width:var(--w,150px);border-bottom:3px solid #86868b;text-align:center;margin:0 8px 0 14px;line-height:1.2;vertical-align:baseline}
+.bl i{position:absolute;left:-12px;top:-26px;width:34px;height:34px;border-radius:50%;background:var(--blue-l);color:#fff;font-style:normal;font-weight:600;font-size:24px;line-height:34px;text-align:center}
+.bl b{display:inline-block;color:var(--blue-l);font-weight:600;opacity:0;transform:scale(.6);transition:opacity .35s var(--ease),transform .5s cubic-bezier(.3,1.6,.5,1)}
+.bl.on b{opacity:1;transform:scale(1)}
+/* 표지 글 */
+.cvt{top:380px;font-size:64px;line-height:1.28;color:#fff;width:820px}
+.chip{position:absolute;left:120px;background:rgba(255,255,255,.06);border-radius:18px;padding:20px 32px;font-size:40px;line-height:1.4;color:#f5f5f7;width:800px}
+.chip b{color:var(--gas);font-weight:600}
+.note{position:absolute;font-size:28px;line-height:1.4;color:var(--gray-d)}
+.only-s{display:none}
+body.student .only-s{display:block}
+/* 읽기 값 */
+.lab{position:absolute;font-size:28px;line-height:1.3;color:var(--gray-d)}
+.big{position:absolute;font-weight:600;letter-spacing:-.02em;line-height:1.05;white-space:nowrap}
+.col{position:absolute;color:#f5f5f7}
+/* 슬라이더 */
+#sl{position:absolute;left:120px;top:752px;width:520px;height:90px;touch-action:none;cursor:pointer}
+#sl .trk{position:absolute;left:40px;top:40px;width:440px;height:10px;border-radius:5px;background:rgba(255,255,255,.2)}
+#sl .fill{position:absolute;left:40px;top:40px;height:10px;border-radius:5px;background:var(--temp);width:0}
+#sl .knob{position:absolute;top:19px;width:52px;height:52px;margin-left:-26px;border-radius:50%;background:#fff;left:40px}
+#sl .tk{position:absolute;top:76px;width:60px;margin-left:-30px;text-align:center;font-size:24px;color:var(--gray-d)}
+.btns{position:absolute;left:120px;top:872px;display:flex;gap:20px}
+.btns button{font:600 28px var(--font);color:#f5f5f7;background:rgba(255,255,255,.1);border:0;border-radius:100px;padding:10px 34px;cursor:pointer}
+/* 조작 막대·도구 */
+#bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(40,40,42,.88);border-radius:100px;padding:6px 10px;opacity:0;transition:opacity .4s;z-index:50;color:#f5f5f7;font-size:24px}
+#bar.show{opacity:1}
+#bar button,#tools button{font:500 24px var(--font);color:#f5f5f7;background:transparent;border:0;border-radius:100px;padding:6px 16px;cursor:pointer}
+#bar button:hover,#tools button:hover{background:rgba(255,255,255,.15)}
+#bar span{padding:0 10px;min-width:120px;text-align:center}
+#tools{position:fixed;right:14px;bottom:14px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:6px;touch-action:none}
+#tb{background:rgba(60,60,62,.45)!important}
+#tp{display:none;flex-direction:column;gap:4px;background:rgba(40,40,42,.92);border-radius:18px;padding:8px;min-width:220px}
+#tools.open #tp{display:flex}
+#tp button{text-align:left;border-radius:12px}
+#tp button.act{background:var(--blue-d);color:#fff}
+#pen{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:20}
+#script{position:fixed;left:0;right:0;bottom:0;max-height:44vh;overflow:auto;background:rgba(20,20,22,.96);color:#f5f5f7;padding:18px 40px 24px;z-index:70;display:none;font-size:24px;line-height:1.6}
+#script.open{display:block}
+#script h4{margin:0 0 6px;font-size:24px;font-weight:600;color:var(--gray-d)}
+#overview,#help{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:80;display:none;color:#f5f5f7;padding:60px;overflow:auto}
+#overview.open,#help.open{display:block}
+#overview .g{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+#overview .c{background:rgba(255,255,255,.08);border-radius:18px;padding:24px;cursor:pointer;font-size:28px}
+#overview .c small{display:block;color:var(--gray-d);font-size:24px;margin-bottom:8px}
+#help div{font-size:28px;line-height:1.9}
+#cover{position:fixed;inset:0;z-index:90;display:none}
+body.hideTool #tools{display:none}
+body.student #bt,body.student #script{display:none!important}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ===== 장면 1 표지 ===== -->
+<section class="sc dark" id="sc1">
+  <svg class="fig" id="f1" viewBox="0 0 1920 1080">
+    <!-- 탁자 -->
+    <line x1="940" y1="862" x2="1320" y2="862" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+    <text x="1130" y="912" text-anchor="middle" font-size="30" fill="#a1a1a6">여름철 실내</text>
+    <!-- 냉장고 -->
+    <g class="fd" data-s="1">
+      <polygon points="1380,222 1290,262 1290,820 1380,860" fill="#3a3a3c"/>
+      <rect x="1370" y="222" width="420" height="640" rx="26" fill="#2c2c2e"/>
+      <rect x="1392" y="244" width="376" height="596" rx="12" fill="#0f2a44"/>
+      <rect x="1392" y="762" width="376" height="10" fill="rgba(255,255,255,.35)"/>
+      <rect x="1306" y="470" width="10" height="90" rx="5" fill="#8e8e93"/>
+      <text x="1580" y="194" text-anchor="middle" font-size="30" fill="#a1a1a6">냉장고 안</text>
+    </g>
+    <g class="fd" data-s="3">
+      <text x="1580" y="912" text-anchor="middle" font-size="30" fill="var(--temp)">온도가 낮아진다</text>
+    </g>
+  </svg>
+  <div class="kick k-d" style="top:330px">VI. 기체의 성질 · 기체의 온도와 부피 관계</div>
+  <h1 class="cvt">냉장고에 넣어 둔 생수병은<br>왜 찌그러졌을까?</h1>
+  <div class="chip sh" data-s="4" style="top:612px">공기 입자 수&nbsp; 처음 <b id="c1a">12</b>개 → 지금 <b id="c1b">12</b>개</div>
+  <div class="ab sh" data-s="5" style="left:120px;top:752px;width:800px;font-size:44px;font-weight:600;line-height:1.35;color:#fff">속 공기의 부피는 어떻게 되었을까?</div>
+  <div class="note sh" data-s="5" style="left:120px;top:850px;width:800px">번호가 붙은 칸이 열리면, 학습지의 같은 번호 칸에 적어요.</div>
+  <div class="note only-s" style="left:120px;top:930px">화면을 누르거나 → 키로 넘겨요.</div>
+  <div class="note fd" data-s="3" style="left:120px;top:960px;font-size:24px">찌그러진 정도는 알아보기 쉽게 과장해서 그렸어요.</div>
+  <div class="ab sh ask" data-s="5" data-ask="choice" data-qid="c1" data-q="냉장고 속에서 생수병 안 공기의 부피는 어떻게 되었을까?" data-choices="커졌다|작아졌다|그대로다" data-answer="작아졌다" style="left:120px;top:60px"></div>
+</section>
+
+<!-- ===== 장면 2 개념: 시뮬레이터 ===== -->
+<section class="sc" id="sc2">
+  <div class="band" style="height:380px"></div>
+  <div class="panel" style="top:380px"></div>
+  <div class="kick" style="top:38px">개념 1 · 압력이 일정할 때</div>
+  <h2>온도가 바뀌면 기체의 부피는?</h2>
+  <div class="card" style="top:158px">
+    <p><span class="bl" data-s="1" style="--w:110px"><i>1</i><b>압력</b></span>이 일정할 때 일정한 양의 기체는</p>
+    <p>온도가 높아지면 부피가 <span class="bl" data-s="3" style="--w:170px"><i>2</i><b>늘어나고</b></span>, 온도가 낮아지면 부피가 <span class="bl" data-s="5" style="--w:170px"><i>3</i><b>줄어든다</b></span>.</p>
+  </div>
+  <svg class="fig" id="f2" viewBox="0 0 1920 1080"></svg>
+  <div class="lab" style="left:120px;top:424px">온도</div>
+  <div class="big" id="r2t" style="left:120px;top:452px;font-size:96px;color:var(--temp)">20 ℃</div>
+  <div class="lab" style="left:120px;top:580px">부피 (예)</div>
+  <div class="big" id="r2v" style="left:120px;top:608px;font-size:96px;color:var(--vol)">50.0 mL</div>
+  <div class="lab" style="left:120px;top:726px">온도 조절 (선생님)</div>
+  <div id="sl" class="nonav"><div class="trk"></div><div class="fill"></div><div class="knob"></div></div>
+  <div class="btns nonav"><button id="bm">− 10 ℃</button><button id="bp">+ 10 ℃</button></div>
+  <div class="ab sh" data-s="1" style="left:690px;top:400px;width:560px;text-align:center;font-size:28px;line-height:1.4;color:var(--force);font-weight:600">피스톤 위의 추가 누르는 힘은 늘 그대로</div>
+  <div class="ab sh ask" data-s="1" data-e="2" data-ask="predict" data-qid="p1" data-q="온도를 20 ℃에서 60 ℃로 올리면 부피는 몇 mL가 될까? (지금 50.0 mL)" data-unit="mL" data-actual-from="#r2v" style="right:60px;top:40px"></div>
+  <div class="ab sh ask" data-s="2" data-e="3" data-ask="blank" data-qid="b2" data-q="빈칸 ②에 들어갈 말은? 온도가 높아지면 부피가 ( ② )" data-answer="늘어나고" style="right:60px;top:40px"></div>
+</section>
+
+<!-- ===== 장면 3 개념: 입자 모형 ===== -->
+<section class="sc" id="sc3">
+  <div class="band" style="height:400px"></div>
+  <div class="panel" style="top:400px;background:#000"></div>
+  <div class="kick" style="top:38px">개념 2 · 입자 모형으로 설명하기</div>
+  <h2>입자로 보면 왜 부피가 바뀔까?</h2>
+  <div class="card" style="top:158px">
+    <p>온도가 변해도 입자의 수와 크기는 <span class="bl" data-s="2" style="--w:280px"><i>4</i><b>변하지 않는다</b></span>.</p>
+    <p>온도가 높아지면 입자 운동이 <span class="bl" data-s="4" style="--w:110px"><i>5</i><b>활발</b></span>해져</p>
+    <p>입자 사이의 거리가 <span class="bl" data-s="6" style="--w:150px"><i>6</i><b>멀어져</b></span> 부피가 늘어난다.</p>
+  </div>
+  <svg class="fig" id="f3" viewBox="0 0 1920 1080"></svg>
+  <!-- 왼쪽 열: 낮을 때 -->
+  <div class="col" style="left:120px;top:440px;width:410px">
+    <div style="font-size:36px;font-weight:600">온도가 낮을 때</div>
+    <div class="big" style="position:static;font-size:84px;color:var(--temp);margin-top:8px">0 ℃<span style="font-size:28px;color:var(--gray-d);font-weight:400"> (예)</span></div>
+    <div style="font-size:40px;font-weight:600;color:var(--vol);margin-top:4px">부피 <span id="v3a"></span> mL</div>
+  </div>
+  <div class="col sh" data-s="1" style="left:120px;top:688px;font-size:40px;font-weight:600;color:var(--gas)">입자 수 <span id="n3a">0</span>개</div>
+  <div class="col sh" data-s="7" style="left:120px;top:800px;width:410px;font-size:32px;line-height:1.3;font-weight:600">입자 운동이 둔해져서<br>부피가 줄어든다.</div>
+  <!-- 오른쪽 열: 높을 때 -->
+  <div class="col" style="left:1412px;top:440px;width:388px">
+    <div style="font-size:36px;font-weight:600">온도가 높을 때</div>
+    <div class="big" style="position:static;font-size:84px;color:var(--temp);margin-top:8px">80 ℃<span style="font-size:28px;color:var(--gray-d);font-weight:400"> (예)</span></div>
+    <div style="font-size:40px;font-weight:600;color:var(--vol);margin-top:4px">부피 <span id="v3b"></span> mL</div>
+  </div>
+  <div class="col sh" data-s="1" style="left:1412px;top:688px;font-size:40px;font-weight:600;color:var(--gas)">입자 수 <span id="n3b">0</span>개</div>
+  <div class="col sh" data-s="7" style="left:1412px;top:800px;width:388px;font-size:32px;line-height:1.3;font-weight:600">입자 운동이 활발해져서<br>부피가 늘어난다.</div>
+  <div class="note fd" data-s="2" style="left:120px;top:734px;font-size:28px;width:410px">입자 크기도 같다.</div>
+  <div class="note fd" data-s="2" style="left:1412px;top:734px;font-size:28px;width:388px">입자 크기도 같다.</div>
+  <div class="ab sh ask" data-s="3" data-e="4" data-ask="text" data-qid="t1" data-q="입자의 수와 크기는 그대로인데, 온도가 높아지면 왜 부피가 커질까?" style="right:60px;top:40px"></div>
+</section>
+
+<canvas id="pen" width="1920" height="1080"></canvas>
+</div>
+
+<div id="bar" class="nonav"><button id="bp0">이전</button><span id="bpos">1 / 3</span><button id="bn0">다음</button><button id="bsn">소리</button><button id="bt">대본</button><button id="bfs">전체 화면</button></div>
+<div id="tools" class="nonav"><div id="tp">
+  <button data-t="laser">레이저 (L)</button><button data-t="pen">빨간 펜 (P)</button><button data-t="undo">한 획 지우기 (Z)</button><button data-t="clear">모두 지우기 (C)</button><button data-t="finger">손가락 그리기: 자동</button><button data-t="fs">전체 화면 (F)</button></div>
+  <button id="tb">도구</button></div>
+<div id="script" class="nonav"></div>
+<div id="overview" class="nonav"></div>
+<div id="help" class="nonav"><div>→ · Space · Enter · 클릭 : 다음 &nbsp; ← · Backspace : 이전<br>F 전체 화면 · T 대본 · O 전체 장면 · R 이 단계 다시 · M 소리 · B 검은 화면 · W 흰 화면<br>L 레이저 · P 빨간 펜 · Z 한 획 지우기 · C 모두 지우기 · Esc 끄기 · Home/End 처음/끝 · H 도움말<br>시뮬레이터(장면 2)의 슬라이더와 단추는 눌러도 장면이 넘어가지 않습니다.</div></div>
+<div id="cover"></div>
+
+<script>
+'use strict';
+/* ============ 기본 도구 ============ */
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const params=new URLSearchParams(location.search);
+const STUDENT=params.get('s')==='1';
+if(STUDENT)document.body.classList.add('student');
+const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
+
+/* ============ 과학 값 ============
+   부피      V = V0·(273 + t)/(273 + t0)   (V0 = 50 mL, t0 = 20 ℃ : 예시 값)
+   입자 속력 v ∝ √(273 + t)               (0 ℃ 에서 140 px/초)
+   압력은 피스톤 위의 추가 일정하게 누르므로 고정. 입자 수·크기는 장면 안에서 고정.
+   입자는 모두 같은 속력으로 그려(충돌 뒤 방향만 바뀜) 온도에 따른 빠르기를 비교하기 쉽게 한다. */
+const V0=50,T0=20,PPM=6,WALL=440;
+const Vof=t=>V0*(273+t)/(273+T0);
+const speedOf=t=>140*Math.sqrt((273+t)/273);
+const NPART=18, RPART=10;
+
+/* ============ 입자 기체 ============ */
+class Gas{
+  constructor(n,r,bounds){this.n=n;this.r=r;this.bounds=bounds;this.v=140;this.p=[]}
+  init(seed){
+    const R=rng(seed),b=this.bounds(),r=this.r;this.p=[];let g=0;
+    while(this.p.length<this.n&&g++<9000){
+      const x=b.x0+R()*(b.x1-b.x0),y=b.y0+R()*(b.y1-b.y0);
+      if(this.p.every(q=>Math.hypot(q.x-x,q.y-y)>3.2*r)){const a=R()*6.2832;this.p.push({x,y,ux:Math.cos(a),uy:Math.sin(a)})}
+    }
+    for(let i=0;i<90;i++)this.step(1/60);
+  }
+  step(dt){
+    const b=this.bounds(),r=this.r,d=this.v*dt,P=this.p;
+    for(const q of P){
+      q.x+=q.ux*d;q.y+=q.uy*d;
+      if(q.x<b.x0){q.x=b.x0+(b.x0-q.x);q.ux=Math.abs(q.ux)}else if(q.x>b.x1){q.x=b.x1-(q.x-b.x1);q.ux=-Math.abs(q.ux)}
+      if(q.y<b.y0){q.y=b.y0+(b.y0-q.y);q.uy=Math.abs(q.uy)}else if(q.y>b.y1){q.y=b.y1-(q.y-b.y1);q.uy=-Math.abs(q.uy)}
+      q.x=Math.min(Math.max(q.x,b.x0),b.x1);q.y=Math.min(Math.max(q.y,b.y0),b.y1);
+    }
+    for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){
+      const a=P[i],c=P[j];let dx=c.x-a.x,dy=c.y-a.y;const dist=Math.hypot(dx,dy);
+      if(dist<2*r&&dist>1e-6){
+        dx/=dist;dy/=dist;
+        const ua=a.ux*dx+a.uy*dy,uc=c.ux*dx+c.uy*dy;
+        if(ua>uc){ // 서로 다가갈 때만: 법선 성분을 맞바꾸고 크기는 그대로
+          a.ux+=(uc-ua)*dx;a.uy+=(uc-ua)*dy;c.ux+=(ua-uc)*dx;c.uy+=(ua-uc)*dy;
+          let m=Math.hypot(a.ux,a.uy)||1;a.ux/=m;a.uy/=m;m=Math.hypot(c.ux,c.uy)||1;c.ux/=m;c.uy/=m;
+        }
+        const o=(2*r-dist)/2;a.x-=dx*o;a.y-=dy*o;c.x+=dx*o;c.y+=dy*o;
+      }
+    }
+    for(const q of P){q.x=Math.min(Math.max(q.x,b.x0),b.x1);q.y=Math.min(Math.max(q.y,b.y0),b.y1)}
+  }
+}
+
+/* ============ 실린더(피스톤) ============ */
+class Cyl{
+  constructor(parent,x,y,o){
+    this.o=o;const W=this.W=300,r=RPART;this.T=o.T??T0;this.h=Vof(this.T)*PPM;
+    const g=this.g=el('g',{transform:`translate(${x},${y})`},parent);
+    this.heater=el('rect',{x:-24,y:0,width:W+48,height:30,rx:6,fill:'#FF5C8A'},g);
+    this.tint=el('rect',{x:0,width:W,fill:'#FFD60A','fill-opacity':.11},g);
+    const id='cl'+(Cyl.n=(Cyl.n||0)+1);
+    const cp=el('clipPath',{id},g);this.clipR=el('rect',{x:0,width:W},cp);
+    this.pg=el('g',{'clip-path':`url(#${id})`},g);
+    this.gas=new Gas(o.N||NPART,r,()=>({x0:r+4,x1:W-r-4,y0:-this.h+r+4,y1:-r-4}));
+    this.circ=[];for(let i=0;i<this.gas.n;i++)this.circ.push(el('circle',{r,fill:'#30D158',stroke:'rgba(0,0,0,.35)','stroke-width':1.5},this.pg));
+    el('path',{d:`M0 ${-WALL} V0 H${W} V${-WALL}`,fill:'none',stroke:'rgba(255,255,255,.55)','stroke-width':6,'stroke-linejoin':'round'},g);
+    this.pis=el('g',{},g);
+    el('rect',{x:3,y:-22,width:W-6,height:22,fill:'#c7c7cc'},this.pis);
+    this.wt=el('g',{},this.pis);
+    el('rect',{x:W/2-20,y:-22-64-14,width:40,height:16,rx:4,fill:'#8A3FC0'},this.wt);
+    el('rect',{x:W/2-80,y:-22-64,width:160,height:64,rx:10,fill:'#BF5AF2'},this.wt);
+    const tx=el('text',{x:W/2,y:-22-20,'text-anchor':'middle','font-size':32,'font-weight':700,fill:'#000'},this.wt);tx.textContent='추';
+    this.wglow=el('rect',{x:W/2-86,y:-22-70,width:172,height:76,rx:14,fill:'none',stroke:'#BF5AF2','stroke-width':5,opacity:0},this.pis);
+    if(o.scale){
+      for(let m=10;m<=70;m+=10){
+        el('line',{x1:W,x2:W+14,y1:-m*PPM,y2:-m*PPM,stroke:'rgba(255,255,255,.5)','stroke-width':3},g);
+        const t=el('text',{x:W+22,y:-m*PPM+8,'font-size':24,fill:'#a1a1a6'},g);t.textContent=m;
+      }
+      this.mark=el('polygon',{points:'0,0 26,-13 26,13',fill:'#FFD60A'},g);
+    }
+    if(o.thermo){
+      const tx0=-118;
+      el('rect',{x:tx0-13,y:-80*3.6-6,width:26,height:80*3.6+12,rx:13,fill:'rgba(255,255,255,.12)'},g);
+      this.liq=el('rect',{x:tx0-8,width:16,fill:'#FF5C8A'},g);
+      el('circle',{cx:tx0,cy:14,r:24,fill:'#FF5C8A'},g);
+      for(let t=0;t<=80;t+=20){
+        el('line',{x1:tx0+16,x2:tx0+28,y1:-t*3.6,y2:-t*3.6,stroke:'rgba(255,255,255,.5)','stroke-width':3},g);
+        const s=el('text',{x:tx0-36,y:-t*3.6+8,'text-anchor':'end','font-size':24,fill:'#a1a1a6'},g);s.textContent=t;
+      }
+    }
+    this.draw(this.T);
+  }
+  reset(seed){this.gas.v=speedOf(this.T);this.gas.init(seed);this.draw(this.T)}
+  draw(T){
+    this.T=T;const V=Vof(T);this.h=V*PPM;const h=this.h;
+    this.clipR.setAttribute('y',-h);this.clipR.setAttribute('height',h);
+    this.tint.setAttribute('y',-h);this.tint.setAttribute('height',h);
+    this.pis.setAttribute('transform',`translate(0,${-h})`);
+    this.heater.setAttribute('fill-opacity',(.16+.74*Math.max(0,Math.min(1,T/80))).toFixed(3));
+    if(this.mark)this.mark.setAttribute('transform',`translate(${this.W+70},${-h})`);
+    if(this.liq){this.liq.setAttribute('y',-T*3.6);this.liq.setAttribute('height',T*3.6+14)}
+    this.gas.v=speedOf(T);
+    const P=this.gas.p;for(let i=0;i<this.circ.length;i++){const q=P[i];if(q){this.circ[i].setAttribute('cx',q.x.toFixed(1));this.circ[i].setAttribute('cy',q.y.toFixed(1))}}
+  }
+  tick(dt){const n=RM?2:1;for(let i=0;i<n;i++)this.gas.step(dt*(RM?.5:1)/n);this.draw(this.T)}
+}
+
+/* ============ 애니메이션 보조 ============ */
+const tw={};
+function animTo(key,obj,prop,to,ms,inst){
+  if(inst||ms<=0||RM){obj[prop]=to;delete tw[key];return}
+  tw[key]={obj,prop,from:obj[prop],to,t0:performance.now(),ms};
+}
+function stepTw(now){
+  for(const k in tw){const a=tw[k];let u=(now-a.t0)/a.ms;
+    if(u>=1){a.obj[a.prop]=a.to;delete tw[k]}else a.obj[a.prop]=a.from+(a.to-a.from)*ease(Math.max(0,u))}
+}
+let ac=null,soundOn=!STUDENT;
+function audio(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}return ac}
+function tone(f,d,type,vol,delay){
+  if(!soundOn)return;const a=audio();if(!a)return;
+  const t=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.12,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.05);
+}
+let dingN=0;
+const sfx={ding(){const f=[1046,1175,1318][dingN++%3];tone(f,.5,'sine',.13);tone(f*2,.35,'sine',.05,.02)},pop(){tone(520,.12,'triangle',.08)},chime(){tone(880,.5,'sine',.1);tone(1320,.6,'sine',.08,.12)}};
+
+/* 단계 표시: data-s(시작) ~ data-e(끝 전) */
+function showSteps(root,st,inst){
+  let newly=false;
+  $$('[data-s]',root).forEach(e=>{
+    const s=+e.dataset.s,en=e.dataset.e!=null?+e.dataset.e:1e9,on=st>=s&&st<en;
+    if(on&&!e.classList.contains('on')&&e.classList.contains('bl'))newly=true;
+    e.classList.toggle('on',on);
+  });
+  if(newly&&!inst)sfx.ding();
+}
+
+/* ============ 장면 1 : 표지 (생수병) ============ */
+const f1=$('#f1');
+const B={x:1130,y:862,k:0,t:30};
+const bottle={};
+(function(){
+  const defs=el('defs',{},f1);
+  bottle.clip=el('path',{d:''},el('clipPath',{id:'bclip'},defs));
+  bottle.g=el('g',{},f1);
+  bottle.water=el('rect',{x:-80,y:-80,width:160,height:80,fill:'#4F9DDE','fill-opacity':.5,'clip-path':'url(#bclip)'},bottle.g);
+  bottle.body=el('path',{d:'',fill:'rgba(255,255,255,.07)',stroke:'rgba(255,255,255,.75)','stroke-width':4,'stroke-linejoin':'round'},bottle.g);
+  el('rect',{x:-27,y:-348,width:54,height:28,rx:7,fill:'#e5e5ea'},bottle.g);
+  bottle.pg=el('g',{},bottle.g);
+  bottle.gas=new Gas(12,8,()=>({x0:-(66-B.k)+8,x1:(66-B.k)-8,y0:-222+8,y1:-88-8}));
+  bottle.circ=[];for(let i=0;i<12;i++)bottle.circ.push(el('circle',{r:8,fill:'#30D158',stroke:'rgba(0,0,0,.35)','stroke-width':1.5},bottle.pg));
+})();
+function bodyPath(k){
+  const a=70-1.3*k;
+  return `M 70 0 C ${a} -80 ${a} -150 70 -230 C 70 -252 24 -250 24 -274 L 24 -322 L -24 -322 L -24 -274 C -24 -250 -70 -252 -70 -230 C ${-a} -150 ${-a} -80 -70 0 Z`;
+}
+function drawBottle(){
+  const d=bodyPath(B.k);bottle.body.setAttribute('d',d);bottle.clip.setAttribute('d',d);
+  bottle.g.setAttribute('transform',`translate(${B.x.toFixed(1)},${B.y.toFixed(1)}) scale(1.35)`);
+  bottle.gas.v=speedOf(B.t);
+  const P=bottle.gas.p;bottle.circ.forEach((c,i)=>{const q=P[i];if(q){c.setAttribute('cx',q.x.toFixed(1));c.setAttribute('cy',q.y.toFixed(1))}});
+}
+let n1a=12;
+const pos1={r:0}; // 0=실내, 1=냉장고
+function place1(){B.x=1130+(1580-1130)*pos1.r;B.y=862+(762-862)*pos1.r}
+
+/* ============ 장면 2 : 시뮬레이터 ============ */
+const f2=$('#f2');
+let cyl2,graph={};
+const S2={T:20,lo:20,hi:20,show:0};
+(function(){
+  cyl2=new Cyl(f2,820,905,{scale:true,thermo:true,seed:21,T:20});
+  // 그래프
+  const gx0=1370,gy0=850,gw=400,gh=370; // 눈금: 온도 0~80 ℃, 부피 0~70 mL
+  graph={gx0,gy0,gw,gh,X:t=>gx0+t/80*gw,Y:v=>gy0-v/70*gh};
+  const g=el('g',{},f2);
+  el('rect',{x:1290,y:424,width:510,height:512,rx:18,fill:'rgba(255,255,255,.06)'},g);
+  for(let v=0;v<=70;v+=10){
+    el('line',{x1:gx0,x2:gx0+gw,y1:graph.Y(v),y2:graph.Y(v),stroke:'rgba(255,255,255,'+(v?'.12':'.55')+')','stroke-width':v?2:3},g);
+    const t=el('text',{x:gx0-12,y:graph.Y(v)+8,'text-anchor':'end','font-size':24,fill:'#a1a1a6'},g);t.textContent=v;
+  }
+  el('line',{x1:gx0,x2:gx0,y1:graph.Y(70),y2:gy0,stroke:'rgba(255,255,255,.55)','stroke-width':3},g);
+  for(let t=0;t<=80;t+=20){
+    el('line',{x1:graph.X(t),x2:graph.X(t),y1:gy0,y2:gy0+10,stroke:'rgba(255,255,255,.55)','stroke-width':3},g);
+    const s=el('text',{x:graph.X(t),y:gy0+38,'text-anchor':'middle','font-size':24,fill:'#a1a1a6'},g);s.textContent=t;
+  }
+  const xl=el('text',{x:gx0+gw,y:gy0+78,'text-anchor':'end','font-size':26,fill:'#FF5C8A'},g);xl.textContent='온도 (℃)';
+  const yl=el('text',{x:1310,y:462,'font-size':26,fill:'#FFD60A'},g);yl.textContent='부피 (mL)';
+  graph.trail=el('line',{stroke:'#FFD60A','stroke-width':6,'stroke-linecap':'round'},g);
+  graph.vg=el('line',{stroke:'#FF5C8A','stroke-width':3,'stroke-dasharray':'8 8'},g);
+  graph.hg=el('line',{stroke:'#FFD60A','stroke-width':3,'stroke-dasharray':'8 8'},g);
+  graph.dot=el('circle',{r:12,fill:'#FFD60A',stroke:'#1d1d1f','stroke-width':3},g);
+  // 0 ℃ 설명
+  graph.note=el('g',{class:'fd','data-s':6},g);
+  el('line',{x1:graph.X(6),y1:graph.Y(Vof(0))+14,x2:graph.X(0)+8,y2:graph.Y(Vof(0))+8,stroke:'#fff','stroke-width':3},graph.note);
+  const l1=el('text',{x:gx0+20,y:graph.Y(Vof(0))+80,'font-size':28,fill:'#f5f5f7','font-weight':600},graph.note);l1.textContent='0 ℃에서도';
+  const l2=el('text',{x:gx0+20,y:graph.Y(Vof(0))+116,'font-size':28,fill:'#f5f5f7','font-weight':600},graph.note);l2.textContent='부피는 0이 아니다';
+  graph.notePt=el('circle',{cx:graph.X(0),cy:graph.Y(Vof(0)),r:8,fill:'none',stroke:'#fff','stroke-width':3},graph.note);
+})();
+function draw2(){
+  const T=S2.T;cyl2.draw(T);
+  $('#r2t').textContent=Math.round(T)+' ℃';
+  $('#r2v').textContent=Vof(T).toFixed(1)+' mL';
+  const gx=graph.X(T),gy=graph.Y(Vof(T));
+  const lo=Math.min(S2.lo,T),hi=Math.max(S2.hi,T);
+  graph.trail.setAttribute('x1',graph.X(lo));graph.trail.setAttribute('y1',graph.Y(Vof(lo)));
+  graph.trail.setAttribute('x2',graph.X(hi));graph.trail.setAttribute('y2',graph.Y(Vof(hi)));
+  graph.trail.setAttribute('opacity',hi-lo<0.5?0:1);
+  graph.dot.setAttribute('cx',gx);graph.dot.setAttribute('cy',gy);
+  graph.vg.setAttribute('x1',gx);graph.vg.setAttribute('x2',gx);graph.vg.setAttribute('y1',gy);graph.vg.setAttribute('y2',graph.gy0);
+  graph.hg.setAttribute('x1',graph.gx0);graph.hg.setAttribute('x2',gx);graph.hg.setAttribute('y1',gy);graph.hg.setAttribute('y2',gy);
+  const kn=$('#sl .knob'),fl=$('#sl .fill');const px=40+T/80*440;kn.style.left=px+'px';fl.style.width=(T/80*440)+'px';
+}
+// 슬라이더
+(function(){
+  const sl=$('#sl');
+  for(let t=0;t<=80;t+=20){const d=document.createElement('div');d.className='tk';d.style.left=(40+t/80*440)+'px';d.textContent=t;sl.appendChild(d)}
+  let drag=false;
+  function setFrom(e){
+    const st=$('#stage').getBoundingClientRect(),sc=st.width/1920;
+    const x=(e.clientX-st.left)/sc-120; // 슬라이더 왼쪽 120px
+    let T=Math.round((x-40)/440*80);T=Math.max(0,Math.min(80,T));
+    delete tw.T2;S2.T=T;
+  }
+  sl.addEventListener('pointerdown',e=>{drag=true;sl.setPointerCapture(e.pointerId);setFrom(e);e.stopPropagation()});
+  sl.addEventListener('pointermove',e=>{if(drag)setFrom(e)});
+  sl.addEventListener('pointerup',e=>{drag=false;e.stopPropagation()});
+  sl.addEventListener('pointercancel',()=>{drag=false});
+  $('#bm').addEventListener('click',()=>{animTo('T2',S2,'T',Math.max(0,Math.round(S2.T)-10),350)});
+  $('#bp').addEventListener('click',()=>{animTo('T2',S2,'T',Math.min(80,Math.round(S2.T)+10),350)});
+})();
+
+/* ============ 장면 3 : 입자 모형 ============ */
+const f3=$('#f3');
+let cylA,cylB;const C3={n:0};
+(function(){
+  cylA=new Cyl(f3,560,905,{seed:31,T:0});
+  cylB=new Cyl(f3,1060,905,{seed:32,T:80});
+  const g=el('g',{class:'fd','data-s':5},f3);
+  const yA=905-Vof(0)*PPM,yB=905-Vof(80)*PPM;
+  el('line',{x1:560+300,x2:1060+300,y1:yA,y2:yA,stroke:'#FFD60A','stroke-width':3,'stroke-dasharray':'10 8'},g);
+  el('line',{x1:960,x2:960,y1:yA,y2:yB,stroke:'#FFD60A','stroke-width':4},g);
+  el('polygon',{points:`960,${yB-2} 950,${yB+16} 970,${yB+16}`,fill:'#FFD60A'},g);
+  const t1=el('text',{x:960,y:yB-48,'text-anchor':'middle','font-size':28,fill:'#FFD60A','font-weight':600},g);t1.textContent='부피 차이';
+  const t2=el('text',{x:960,y:yB-14,'text-anchor':'middle','font-size':28,fill:'#FFD60A','font-weight':600},g);t2.textContent=(+Vof(80).toFixed(1)-+Vof(0).toFixed(1)).toFixed(1)+' mL';
+  // 입자 빠르기 화살표(범례)
+  const lg=el('g',{class:'fd','data-s':3,'data-e':7},f3);
+  function leg(x,T){
+    const L=speedOf(T)*1.0;
+    const y=868;
+    el('circle',{cx:x+10,cy:y,r:RPART,fill:'#30D158'},lg);
+    el('line',{x1:x+10+RPART+4,y1:y,x2:x+10+RPART+4+L,y2:y,stroke:'#64D2FF','stroke-width':5,'stroke-linecap':'round'},lg);
+    el('polyline',{points:`${x+10+RPART+4+L-16},${y-12} ${x+10+RPART+4+L},${y} ${x+10+RPART+4+L-16},${y+12}`,fill:'none',stroke:'#64D2FF','stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round'},lg);
+  }
+  leg(120,0);leg(1412,80);
+  const a=el('text',{x:120,y:822,'font-size':26,fill:'#a1a1a6'},lg);a.textContent='입자 하나의 빠르기 (화살표 길이)';
+  const b=el('text',{x:1412,y:822,'font-size':26,fill:'#a1a1a6'},lg);b.textContent='입자 하나의 빠르기 (화살표 길이)';
+  const c=el('text',{x:120,y:924,'font-size':30,fill:'#64D2FF','font-weight':600},lg);c.textContent='느리게 움직인다';
+  const d=el('text',{x:1412,y:924,'font-size':30,fill:'#64D2FF','font-weight':600},lg);d.textContent='빠르게 움직인다';
+  $('#v3a').textContent=Vof(0).toFixed(1);$('#v3b').textContent=Vof(80).toFixed(1);
+})();
+
+/* ============ 장면 정의 ============ */
+const S=[
+{id:'sc1',steps:5,title:'표지 · 냉장고에 넣어 둔 생수병',
+ script:'여름에 물이 조금 든 생수병을 냉장고에 넣어 둔 적 있나요? 한참 뒤에 꺼내 보면 병이 찌그러져 있어요. 병 속 공기 입자의 수는 그대로인데, 무슨 일이 생긴 걸까요? 오늘은 기체의 온도와 부피 사이의 관계를 알아봅니다. 번호가 붙은 칸이 열리면 학습지의 같은 번호 칸에 적습니다.',
+ enter(){bottle.gas.init(11);B.k=0;B.t=30;pos1.r=0;place1();n1a=bottle.gas.p.length;$('#c1a').textContent=n1a;$('#c1b').textContent=bottle.gas.p.length;drawBottle()},
+ apply(st,inst){
+   animTo('b1p',pos1,'r',st>=2?1:0,1500,inst);
+   animTo('b1k',B,'k',st>=3?20:0,2200,inst);
+   animTo('b1t',B,'t',st>=3?5:30,2200,inst);
+ },
+ tick(dt){bottle.gas.step(dt*(RM?.5:1));place1();drawBottle();$('#c1b').textContent=bottle.gas.p.length}},
+{id:'sc2',steps:6,title:'개념 1 · 압력이 일정할 때 온도와 부피',
+ script:'추를 올려 둔 피스톤입니다. 추는 그대로라서 기체를 누르는 힘, 압력은 처음부터 끝까지 같아요. 온도를 높여 볼게요. 피스톤이 어떻게 움직이는지 보세요. 이번에는 온도를 낮춰 봅니다. 그래프의 점도 함께 움직여요. 슬라이더를 직접 끌어 점이 한 줄 위에 놓이는지 확인해 볼까요? 0 ℃에서도 부피는 0이 아닙니다.',
+ enter(){S2.T=20;S2.lo=20;S2.hi=20;cyl2.reset(21);draw2()},
+ apply(st,inst){
+   const TT=[20,20,60,60,0,0,40][st],base=[[20,20],[20,20],[20,60],[20,60],[0,60],[0,60],[0,80]][st];
+   const ms=Math.min(1500,Math.abs(TT-S2.T)*28);
+   animTo('T2',S2,'T',TT,ms,inst);
+   animTo('lo',S2,'lo',base[0],ms,inst);animTo('hi',S2,'hi',base[1],Math.max(ms,500),inst);
+   cyl2.wglow.setAttribute('opacity',st===1?1:0);
+ },
+ tick(dt){cyl2.gas.step(dt*(RM?.5:1));draw2()}},
+{id:'sc3',steps:7,title:'개념 2 · 입자 모형으로 설명하기',
+ script:'같은 실린더 두 개를 놓고 온도만 다르게 해 봅니다. 먼저 입자를 세어 볼까요? 왼쪽도 오른쪽도 같은 개수이고 크기도 같아요. 입자가 움직이는 모습을 봅니다. 온도가 높은 쪽 입자가 더 빠르게 움직입니다. 같은 수의 입자가 더 넓은 곳에서 움직이니 입자 사이의 거리가 멀어지고, 그래서 부피가 늘어납니다. 반대로 온도가 낮아지면 운동이 둔해져 부피가 줄어요. 입자의 수와 크기는 변하지 않습니다.',
+ enter(){C3.n=0;cylA.reset(31);cylB.reset(32);$('#n3a').textContent=0;$('#n3b').textContent=0},
+ apply(st,inst){
+   animTo('c3',C3,'n',st>=1?cylA.gas.p.length:0,900,inst);
+ },
+ tick(dt){cylA.gas.step(dt*(RM?.5:1));cylA.draw(cylA.T);cylB.gas.step(dt*(RM?.5:1));cylB.draw(cylB.T);
+   const a=Math.round(C3.n);$('#n3a').textContent=a;$('#n3b').textContent=a}}
+];
+/* 입자 수는 실제 배열 길이를 센 값: 장면 3 열림 때 count-up 목표값 */
+S[2].apply=function(st,inst){animTo('c3',C3,'n',st>=1?Math.min(cylA.gas.p.length,cylB.gas.p.length):0,900,inst)};
+
+/* ============ 이동 ============ */
+let si=-1,st=0;
+const stage=$('#stage');
+function render(){
+  $('#bpos').textContent=(si+1)+' / '+S.length+' · '+st+'/'+S[si].steps;
+  const nx=S[si+1];
+  $('#script').innerHTML='<h4>장면 '+(si+1)+' · '+S[si].title+' · 단계 '+st+'/'+S[si].steps+(nx?' · 다음: '+nx.title:'')+'</h4>'+S[si].script;
+  try{history.replaceState(null,'','#'+(si+1)+'.'+st+location.search.replace(/^$/,''))}catch(e){}
+}
+function setState(nsi,nst,o){
+  o=o||{};const inst=!!o.instant;
+  if(inst){stage.classList.add('inst');}
+  if(nsi!==si){
+    if(si>=0){$('#'+S[si].id).classList.remove('on')}
+    clearPen();
+    si=nsi;$('#'+S[si].id).classList.add('on');S[si].enter();
+    for(const k in tw)delete tw[k];
+  }
+  st=nst;
+  showSteps($('#'+S[si].id),st,inst);
+  S[si].apply(st,inst);
+  render();
+  if(inst)requestAnimationFrame(()=>requestAnimationFrame(()=>stage.classList.remove('inst')));
+}
+function next(){
+  if(st<S[si].steps){setState(si,st+1);if(!soundOn){}}
+  else if(si<S.length-1){sfx.pop();setState(si+1,0);}
+}
+function prev(){
+  if(st>0)setState(si,st-1,{instant:true});
+  else if(si>0)setState(si-1,S[si-1].steps,{instant:true});
+}
+function goto(a,b,inst){setState(a,b,{instant:inst})}
+function replay(){if(st>0){setState(si,st-1,{instant:true});setTimeout(()=>setState(si,st+1),60)}}
+
+/* ============ 화면 크기 ============ */
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(${-960*s}px,${-540*s}px) scale(${s})`}
+addEventListener('resize',fit);fit();
+
+/* ============ 판서 ============ */
+const pc=$('#pen'),px=pc.getContext('2d');
+let tool=null,strokes=[],lasers=[],curStroke=null,penSeen=false,finger='auto',drawing=false,lastDrawUp=0;
+try{penSeen=localStorage.getItem('lb_pen')==='1';finger=localStorage.getItem('lb_finger')||'auto'}catch(e){}
+function clearPen(){strokes=[];lasers=[];}
+function setTool(t){tool=(tool===t)?null:t;$$('#tp button').forEach(b=>b.classList.toggle('act',b.dataset.t===tool));document.body.style.touchAction=tool?'none':''}
+function fingerLabel(){$('#tp [data-t=finger]').textContent='손가락 그리기: '+({auto:'자동',on:'켬',off:'끔'})[finger]}
+function sPos(e){const r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*1920,y:(e.clientY-r.top)/r.height*1080}}
+function canDraw(e){
+  if(!tool)return false;
+  if(e.pointerType==='pen'){penSeen=true;try{localStorage.setItem('lb_pen','1')}catch(_){}return true}
+  if(e.pointerType==='touch')return finger==='on'||(finger==='auto'&&!penSeen);
+  return true;
+}
+addEventListener('pointerdown',e=>{
+  if(e.target.closest&&e.target.closest('#tools'))return;
+  if(!canDraw(e))return;
+  e.preventDefault();e.stopPropagation();drawing=true;
+  const p=sPos(e);
+  if(tool==='pen'){curStroke=[p];strokes.push(curStroke)}else{curStroke={pts:[{x:p.x,y:p.y,t:performance.now()}],up:0};lasers.push(curStroke)}
+},true);
+addEventListener('pointermove',e=>{
+  if(!drawing)return;e.preventDefault();const p=sPos(e);
+  if(tool==='pen'&&Array.isArray(curStroke))curStroke.push(p);else if(curStroke&&curStroke.pts)curStroke.pts.push({x:p.x,y:p.y,t:performance.now()});
+},true);
+addEventListener('pointerup',e=>{if(!drawing)return;drawing=false;lastDrawUp=performance.now();if(curStroke&&curStroke.pts)curStroke.up=performance.now();curStroke=null;e.stopPropagation()},true);
+addEventListener('click',e=>{if(performance.now()-lastDrawUp<500){e.stopPropagation();e.preventDefault()}},true);
+addEventListener('touchmove',e=>{if((document.fullscreenElement||tool)&&!e.target.closest('#script,#overview,#help'))e.preventDefault()},{passive:false});
+function drawPen(now){
+  px.clearRect(0,0,1920,1080);
+  px.lineCap='round';px.lineJoin='round';
+  px.strokeStyle='#ff3b30';px.lineWidth=7;
+  for(const s of strokes){if(s.length<1)continue;px.beginPath();px.moveTo(s[0].x,s[0].y);for(const p of s)px.lineTo(p.x,p.y);if(s.length===1)px.lineTo(s[0].x+.1,s[0].y);px.stroke()}
+  lasers=lasers.filter(l=>!l.up||now-l.up<1100);
+  for(const l of lasers){
+    const age=l.up?(now-l.up)/1100:0;
+    for(let i=1;i<l.pts.length;i++){
+      const a=l.pts[i],b=l.pts[i-1],fade=Math.max(0,1-(now-a.t)/1500-age);
+      if(fade<=0)continue;px.strokeStyle=`rgba(255,59,48,${fade*.9})`;px.lineWidth=10*fade+2;px.beginPath();px.moveTo(b.x,b.y);px.lineTo(a.x,a.y);px.stroke();
+    }
+    if(!l.up){const p=l.pts[l.pts.length-1];px.fillStyle='rgba(255,59,48,.95)';px.beginPath();px.arc(p.x,p.y,13,0,6.3);px.fill()}
+  }
+}
+$('#tb').addEventListener('click',e=>{e.stopPropagation();$('#tools').classList.toggle('open')});
+$('#tp').addEventListener('click',e=>{
+  e.stopPropagation();const b=e.target.closest('button');if(!b)return;const t=b.dataset.t;
+  if(t==='laser'||t==='pen')setTool(t);
+  else if(t==='undo')strokes.pop();
+  else if(t==='clear')clearPen();
+  else if(t==='finger'){finger={auto:'on',on:'off',off:'auto'}[finger];try{localStorage.setItem('lb_finger',finger)}catch(_){}fingerLabel()}
+  else if(t==='fs')toggleFS();
+});
+fingerLabel();
+
+/* ============ 조작 ============ */
+function toggleFS(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen()}catch(e){}}
+function overlay(id,open){$('#'+id).classList.toggle('open',open)}
+function buildOverview(){
+  const ov=$('#overview');ov.innerHTML='<div class="g"></div>';
+  S.forEach((s,i)=>{const c=document.createElement('div');c.className='c';c.innerHTML='<small>장면 '+(i+1)+' · 단계 '+s.steps+'개</small>'+s.title;c.onclick=()=>{overlay('overview',false);goto(i,0,true)};ov.firstChild.appendChild(c)});
+}
+buildOverview();
+let cover=null;
+function setCover(c){const d=$('#cover');if(cover===c){cover=null;d.style.display='none';return}cover=c;d.style.display='block';d.style.background=c}
+addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.altKey||e.metaKey)return;
+  const k=e.key;let h=true;
+  if(k==='ArrowRight'||k===' '||k==='Enter'||k==='PageDown')next();
+  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace')prev();
+  else if(k==='Home')goto(0,0,true);
+  else if(k==='End')goto(S.length-1,S[S.length-1].steps,true);
+  else if(k==='f'||k==='F')toggleFS();
+  else if((k==='t'||k==='T'||k==='n'||k==='N')&&!STUDENT)$('#script').classList.toggle('open');
+  else if(k==='o'||k==='O')overlay('overview',!$('#overview').classList.contains('open'));
+  else if(k==='r'||k==='R')replay();
+  else if(k==='m'||k==='M'){soundOn=!soundOn;$('#bsn').textContent=soundOn?'소리':'소리 끔'}
+  else if(k==='b'||k==='B')setCover('#000');
+  else if(k==='w'||k==='W')setCover('#fff');
+  else if(k==='h'||k==='H')overlay('help',!$('#help').classList.contains('open'));
+  else if(k==='l'||k==='L')setTool('laser');
+  else if(k==='p'||k==='P')setTool('pen');
+  else if(k==='z'||k==='Z')strokes.pop();
+  else if(k==='c'||k==='C')clearPen();
+  else if(k==='Escape'){setTool(tool);if(tool)setTool(tool);overlay('help',false);overlay('overview',false);$('#tools').classList.remove('open')}
+  else h=false;
+  if(h)e.preventDefault();
+  audio();
+});
+const NONAV='.nonav,#bar,#tools,#script,#overview,#help';
+stage.addEventListener('click',e=>{if(e.target.closest(NONAV))return;next();audio()});
+document.body.addEventListener('click',e=>{if(e.target===document.body||e.target.id==='cover'){next()}});
+addEventListener('contextmenu',e=>{if(e.target.closest(NONAV))return;e.preventDefault();prev()});
+let sw=null;
+addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!e.target.closest(NONAV))sw={x:e.clientX,y:e.clientY}});
+addEventListener('pointerup',e=>{if(sw&&e.pointerType==='touch'){const dx=e.clientX-sw.x,dy=e.clientY-sw.y;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?next():prev();lastDrawUp=performance.now()}}sw=null});
+$('#bn0').onclick=e=>{e.stopPropagation();next()};$('#bp0').onclick=e=>{e.stopPropagation();prev()};
+$('#bsn').onclick=e=>{e.stopPropagation();soundOn=!soundOn;$('#bsn').textContent=soundOn?'소리':'소리 끔';audio()};
+$('#bt').onclick=e=>{e.stopPropagation();$('#script').classList.toggle('open')};
+$('#bfs').onclick=e=>{e.stopPropagation();toggleFS()};
+$('#help').onclick=()=>overlay('help',false);
+let idle=null;addEventListener('mousemove',()=>{const b=$('#bar');b.classList.add('show');clearTimeout(idle);idle=setTimeout(()=>b.classList.remove('show'),2400)});
+if(STUDENT)$('#bsn').textContent='소리 끔';
+
+/* ============ 시작 ============ */
+let last=performance.now();
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;stepTw(now);
+  const s=S[si];if(s&&s.tick)s.tick(dt);
+  drawPen(now);requestAnimationFrame(loop);
+}
+(function init(){
+  let a=0,b=0;const m=location.hash.match(/^#(\d+)\.(\d+)/);
+  if(m){a=Math.max(0,Math.min(S.length-1,+m[1]-1));b=Math.max(0,Math.min(S[a].steps,+m[2]))}
+  setState(a,b,{instant:true});
+  requestAnimationFrame(loop);
+})();
+</script>
+<script src="answers.js"></script>
+</body>
+</html>

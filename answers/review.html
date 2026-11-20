@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>학생 답 모아보기</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--ink:#1d1d1f;--ink2:#6e6e73;--line:#e0e0e0;--bg2:#f5f5f7;--blue:#0066cc;--ok:#1d8a4e}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Malgun Gothic',sans-serif;font-size:16px;line-height:1.55;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:980px;margin:0 auto;padding:28px 20px 40px}
+h1{font-size:1.6rem;margin:0 0 6px}
+.sub{color:var(--ink2);margin:0 0 18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 15px;font:inherit;font-size:.92rem;cursor:pointer}
+.btn:hover{border-color:var(--ink2)}.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}.btn.del{color:#b3261e}
+.warn{background:#f7f1e2;border-radius:10px;padding:10px 14px;font-size:.92rem;margin:0 0 20px}
+section.q{border-top:1px solid var(--line);padding:18px 0}
+section.q h2{font-size:1.15rem;margin:0 0 4px}
+.meta{color:var(--ink2);font-size:.88rem;margin:0 0 10px}
+.sum{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.sum span{background:var(--bg2);border-radius:999px;padding:3px 11px;font-size:.88rem}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg2);font-weight:600}
+td.n{width:64px;color:var(--ink2)}td.t{width:80px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.empty{color:var(--ink2);padding:30px 0}
+footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:12.5px;line-height:1.6;color:#8a8f98;border-top:1px solid rgba(128,128,128,.25)}
+</style>
+</head>
+<body>
+<main>
+  <h1>학생 답 모아보기</h1>
+  <p class="sub" id="sub"></p>
+  <p class="warn">이 페이지 주소에는 방을 연 선생님의 열쇠가 들어 있습니다. 학생 화면에 띄우거나 주소를 나누지 마세요.</p>
+  <div class="bar">
+    <button class="btn pri" id="csv" type="button">CSV 내려받기</button>
+    <button class="btn" id="re" type="button">새로 불러오기</button>
+    <button class="btn del" id="del" type="button">이 방 지우기</button>
+  </div>
+  <div id="out"><p class="empty">불러오는 중…</p></div>
+</main>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-20</span></footer>
+<script>window.ANSWERS_MODE = 'review';</script>
+<script src="answers.js"></script>
+<script>
+(function () {
+  var A = window.Answers, api = A.api, esc = A.esc;
+  var h = new URLSearchParams(location.hash.slice(1)), code = (h.get('c') || '').toUpperCase(), key = h.get('k') || '';
+  var KINDS = { choice: '고르기', predict: '예측', blank: '빈칸 미리 맞히기', text: '짧은 서술', ask: '학생이 보낸 질문' };
+  var rows = [];
+  var $ = function (id) { return document.getElementById(id); };
+  function hm(s) { var d = new Date(s); return isNaN(d) ? '' : String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  function load() {
+    if (!code || !key) { $('out').innerHTML = '<p class="empty">주소에 방 코드와 열쇠가 없습니다. 칠판 화면의 「학생 답」 → 「모아보기」로 다시 여세요.</p>'; return; }
+    api.list(code, key, 0).then(function (r) {
+      rows = r || [];
+      $('sub').textContent = '방 코드 ' + code + ' · 답 ' + rows.length + '개';
+      if (!rows.length) { $('out').innerHTML = '<p class="empty">아직 들어온 답이 없거나, 방이 이미 지워졌습니다.</p>'; return; }
+      var order = [], g = {};
+      rows.forEach(function (a) { if (!g[a.qid]) { g[a.qid] = { qid: a.qid, kind: a.kind, prompt: a.prompt, list: [] }; order.push(a.qid); } g[a.qid].list.push(a); });
+      order.sort(function (a, b) { return (a === 'ask') - (b === 'ask'); });
+      $('out').innerHTML = order.map(function (k) {
+        var q = g[k], sum = '';
+        if (q.kind === 'choice' || q.kind === 'blank') {
+          var c = {}; q.list.forEach(function (a) { c[a.body] = (c[a.body] || 0) + 1; });
+          sum = '<div class="sum">' + Object.keys(c).sort(function (x, y) { return c[y] - c[x]; }).map(function (b) { return '<span>' + esc(b) + ' · ' + c[b] + '</span>'; }).join('') + '</div>';
+        }
+        return '<section class="q"><h2>' + esc(q.prompt || q.qid) + '</h2><p class="meta">' + esc(KINDS[q.kind] || q.kind) + ' · ' + q.list.length + '개</p>' + sum +
+          '<table><thead><tr><th>번호</th><th>답</th><th>시각</th></tr></thead><tbody>' +
+          q.list.map(function (a) { return '<tr><td class="n">' + esc(a.num || '') + '</td><td>' + esc(a.body) + '</td><td class="t">' + hm(a.created_at) + '</td></tr>'; }).join('') +
+          '</tbody></table></section>';
+      }).join('');
+    }).catch(function () { $('out').innerHTML = '<p class="empty">서버에 연결하지 못했습니다. 잠시 뒤 「새로 불러오기」를 누르세요.</p>'; });
+  }
+  $('re').addEventListener('click', load);
+  $('csv').addEventListener('click', function () {
+    var q = function (s) { return '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"'; };
+    var lines = ['질문,종류,번호,답,시각'].concat(rows.map(function (a) { return [q(a.prompt || a.qid), q(KINDS[a.kind] || a.kind), q(a.num), q(a.body), q(a.created_at)].join(','); }));
+    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '학생답_' + code + '.csv'; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+  $('del').addEventListener('click', function () {
+    if (!confirm('이 방과 받은 답을 모두 지웁니다. 되돌릴 수 없습니다. 지울까요?')) return;
+    api.close(code, key).then(function () { rows = []; $('out').innerHTML = '<p class="empty">지웠습니다.</p>'; $('sub').textContent = ''; });
+  });
+  load();
+})();
+</script>
+</body>
+</html>
