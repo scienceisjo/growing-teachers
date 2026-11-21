@@ -359,17 +359,16 @@ html[data-mode="present"] .keys{display:block}
     <div class="eyebrow" id="eyebrow">과학 선생님 연수 · 라이브 슬라이드</div>
     <h1>AI로 라이브 슬라이드 1~3장 만들기</h1>
     <p class="lead">같은 프롬프트를 무료 모델과 유료 모델에 넣어 결과를 견주고, 내 수업 개념 하나로 라이브 슬라이드를 만들어보겠습니다!</p>
-    <div class="pipe" aria-label="오늘의 흐름"><span class="n">프롬프트 하나</span><span class="a">→</span><span class="n">무료·유료 두 모델</span><span class="a">→</span><span class="n">점검표</span><span class="a">→</span><span class="n">디자인 바꾸기</span><span class="a">→</span><span class="n hi">내 개념 1~3장</span></div>
+    <div class="pipe" aria-label="오늘의 흐름"><span class="n">프롬프트 하나</span><span class="a">→</span><span class="n">무료·유료 두 모델</span><span class="a">→</span><span class="n">디자인 바꾸기</span><span class="a">→</span><span class="n hi">내 개념 1~3장</span></div>
     <p class="lead">연수가 끝난 뒤에도 다시 과정을 살펴보며 따라하실 수 있도록 이 페이지에 순서대로 정리해두었습니다^^</p>
     <div class="meta">
-      <span>⏱ <b>145분</b> (오프닝 10분 · 쉬는 시간 10분 포함)</span>
+      <span>⏱ <b>135분</b> (쉬는 시간 10분 포함)</span>
       <span>👩‍🏫 <b>중·고등학교 과학 선생님</b></span>
       <span>💻 <b>노트북 · 크롬 · AI 계정(무료 하나, 유료 하나)</b></span>
     </div>
     <div class="flow" id="flow"><!-- 단계 목록은 스크립트가 .step 에서 만듭니다 --></div>
     <div class="actions">
       <a class="btn big primary" href="#s1">시작하기 ↓</a>
-      <a class="btn big" id="openingLink" href="../opening/" target="_blank">🙋 오프닝 페이지 (인사 · 아이스브레이킹) ↗</a>
       <a class="btn big only-detail" href="?mode=present">🎤 발표 모드로 열기</a>
     </div>
     <p class="small" style="margin-top:18px">📖 상세 모드는 연수에 못 오신 선생님도 처음부터 따라오실 수 있게 적어 둔 판입니다. 🎤 발표 모드는 연수장에서 앞 화면에 띄우는 판으로, 키워드와 짧은 설명만 보입니다.</p>
@@ -394,7 +393,7 @@ html[data-mode="present"] .keys{display:block}
         <p>제가 PPT 대신 이 화면을 쓰는 까닭은 그림이 실제로 움직이기 때문입니다. 기체 입자가 벽에 부딪히는 모습이나 전류가 도는 모습을 애니메이션 설정 없이 그대로 보여 줄 수 있습니다. 설명하면서 빨간 펜과 레이저로 화면 위에 표시하고, 주소 뒤에 <code>?s=1</code>을 붙이면 학생이 혼자 넘겨 보는 복습판이 됩니다.</p>
         <p>지금까지 만든 화면은 <a href="../boards/" target="_blank">칠판 강의 모음</a>에 단원별로 모아 두었습니다. 한 차시 화면은 20장 안팎이라, 오늘 실습에서는 개념 하나만 골라 1~3장으로 줄였습니다. 3장이면 AI가 2~6분 안에 끝까지 쓰기 때문입니다.</p>
       </div>
-      <div class="cue">오프닝 10분 뒤 시작 · 화면 하나 넘겨 보이기(빈칸 열기 · 펜 · ?s=1) 3분</div>
+      <div class="cue">화면 하나 넘겨 보이기(빈칸 열기 · 펜 · ?s=1) 3분</div>
     </div>
 
     <div class="blk">
@@ -426,7 +425,7 @@ html[data-mode="present"] .keys{display:block}
 <section class="step" id="s2" data-title="두 모델 비교" data-min="25">
   <div class="wrap">
     <div class="step-h"><span class="num">2</span><h2>같은 프롬프트를 두 모델에</h2><span class="min"><b>25</b>분</span></div>
-    <p class="goal">같은 프롬프트를 무료 모델과 유료 모델에 동시에 보내고 나온 화면을 점검표로 견주어보겠습니다!</p>
+    <p class="goal">같은 프롬프트를 무료 모델과 유료 모델에 동시에 보내고 나온 화면을 끝까지 넘겨보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">프롬프트 하나를 두 탭에 붙여 넣기</p>
@@ -441,7 +440,7 @@ html[data-mode="present"] .keys{display:block}
       </ol>
       <details class="stuck"><summary>막혔을 때</summary>
         <div class="body">
-          <p><b>코드가 중간에 끊겼습니다.</b> 무료 모델은 한 번에 쓰는 길이가 짧아 끊길 수 있습니다. 같은 대화에 「이어서 써 줘」를 보내 끊긴 곳부터 쓰게 합니다. 그래도 이어지지 않으면 점검표의 첫 줄에 ×를 적고 다른 쪽 결과로 넘어갑니다.</p>
+          <p><b>코드가 중간에 끊겼습니다.</b> 무료 모델은 한 번에 쓰는 길이가 짧아 끊길 수 있습니다. 같은 대화에 「이어서 써 줘」를 보내 끊긴 곳부터 쓰게 합니다. 그래도 이어지지 않으면 다른 쪽 결과로 넘어갑니다.</p>
           <p><b>→ 키를 눌러도 넘어가지 않습니다.</b> 커서가 채팅 입력칸에 있으면 키가 화면으로 가지 않습니다. 화면을 한 번 누른 뒤 → 키를 누릅니다.</p>
           <p><b>메모장으로 저장한 파일이 글자로만 보입니다.</b> 이름이 강의.html.txt 로 저장된 경우입니다. 저장할 때 파일 형식을 「모든 파일」로 바꾸고 이름을 강의.html 로 적습니다.</p>
         </div>
@@ -471,39 +470,14 @@ html[data-mode="present"] .keys{display:block}
         <p>「주의할 점」에는 입자 모형에서 학생이 잘못 알기 쉬운 것을 적었습니다. 부피를 줄여도 입자 수와 크기, 빠르기는 그대로이고, 압력은 아래로만이 아니라 모든 벽에 작용합니다. 이 칸을 적어 두었더니 Haiku도 이 규칙을 지켰습니다. 「그림으로 먼저 보여 준 뒤 빈칸을 연다」는 줄은 Haiku가 피스톤을 누르기 전에 정답부터 연 것을 보고 더했습니다.</p>
       </div>
     </div>
-
-    <div class="blk">
-      <p class="kw">점검표로 두 결과 견주기</p>
-      <p class="brief">칸을 누를 때마다 ○ △ × 가 바뀌고, 이 기기에 저장됩니다.</p>
-      <div class="chk" id="chk"></div>
-      <div class="detail">
-        <p>저는 끝까지 넘긴 뒤 ← 로 처음까지 돌아와 보고, 빠르게 연타해 봅니다. 입자는 부피를 줄이기 전과 후에 개수를 세어 봅니다. 종이로 쓰실 분을 위해 같은 표를 <a href="files/비교_점검표.md" download>비교 점검표</a>로 넣어 두었습니다.</p>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ═══════════ 3 결과 나눔 ═══════════ -->
-<section class="step" id="s3" data-title="결과 나눔" data-min="10">
+<!-- ═══════════ 3 결과 견주기 ═══════════ -->
+<section class="step" id="s3" data-title="결과 견주기" data-min="10">
   <div class="wrap">
     <div class="step-h"><span class="num">3</span><h2>두 결과에서 달랐던 점</h2><span class="min"><b>10</b>분</span></div>
-    <p class="goal">두 결과에서 달랐던 점을 한 줄씩 올리고, 제가 미리 돌려 본 네 모델 결과와 나란히 놓아보겠습니다!</p>
-
-    <div class="blk">
-      <p class="kw">무료 모델과 유료 모델의 결과에서 가장 달랐던 점은 무엇이었나요?</p>
-      <div class="live" data-kind="share1" data-max="300">
-        <div class="q">무료 모델과 유료 모델의 결과에서 가장 달랐던 점을 한두 문장으로 적어 주세요. 어느 AI였는지도 함께 적어 주시면 좋습니다.</div>
-        <form>
-          <input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off">
-          <textarea name="body" placeholder="예) 무료(Gemini)는 정답이 먼저 열렸고, 유료(ChatGPT)는 입자 화살표를 그렸습니다" maxlength="300"></textarea>
-          <button class="btn primary" type="submit">올리기</button>
-        </form>
-        <div class="st"></div>
-        <div class="wall"></div>
-      </div>
-      <div class="qrrow only-present"><div class="qr" data-url=""></div><span>폰으로 찍으면 이 페이지가 열립니다. 3단계에서 글을 올려 주세요.</span></div>
-      <div class="detail"><p>규칙을 지켰는지는 점검표로 보이지만, 어느 화면으로 수업하고 싶은지는 선생님마다 다릅니다. 그래서 점수보다 「달랐던 점」을 묻습니다. 글이 올라오면 두어 분께 그 화면을 앞에 띄워 주시길 부탁드리려고 합니다.</p></div>
-    </div>
+    <p class="goal">두 결과에서 달랐던 점을 제가 미리 돌려 본 네 모델 결과와 나란히 놓아보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">제가 미리 돌려 본 네 모델</p>
@@ -816,7 +790,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
 <section class="step" id="s7" data-title="정리" data-min="10">
   <div class="wrap">
     <div class="step-h"><span class="num">7</span><h2>배포와 다시 보실 곳</h2><span class="min"><b>10</b>분</span></div>
-    <p class="goal">배포하지 않고 파일로 열어도 어디까지 되는지 보고, 다시 보실 곳과 만족도 조사로 마무리해보겠습니다!</p>
+    <p class="goal">배포하지 않고 파일로 열어도 어디까지 되는지 보고, 다시 보실 곳을 정리해보겠습니다!</p>
 
     <div class="blk">
       <p class="kw">배포하지 않고 파일로 열어도 될까요?</p>
@@ -887,16 +861,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
         <div class="box"><b><a href="examples/" target="_blank">예시 모음</a></b><p>교과서 쪽으로 만든 라이브 슬라이드 24개를 시뮬레이터와 함께 모아 두었습니다.</p></div>
       </div>
       <div class="detail">
-        <p>오늘 쓴 프롬프트와 점검표는 2단계에, 스킬 파일은 6단계에 두었습니다. 다시 열어 보실 때 바로 내 수업 화면으로 이어지도록, 5단계 재료 칸에 적으신 내용은 이 기기에 저장해두었습니다.</p>
-      </div>
-    </div>
-
-    <div class="blk">
-      <p class="kw">만족도 조사 — 다음 연수를 위해 3분만 부탁드립니다</p>
-      <div class="submit">
-        <div class="txt"><b>별점 하나와 한 줄이면 충분합니다</b><span>오프닝 페이지의 마지막 탭에서 받습니다. 이름은 적지 않으셔도 됩니다.</span></div>
-        <a class="btn big primary" id="closingLink" href="../opening/#close" target="_blank">⭐ 만족도 조사 열기</a>
-        <div class="qr" id="closingQr" data-url=""></div>
+        <p>오늘 쓴 프롬프트는 2단계에, 스킬 파일은 6단계에 두었습니다. 다시 열어 보실 때 바로 내 수업 화면으로 이어지도록, 5단계 재료 칸에 적으신 내용은 이 기기에 저장해두었습니다.</p>
       </div>
     </div>
   </div>
@@ -939,8 +904,8 @@ if(params.get('s')) CONFIG.code = params.get('s').slice(0,60);   // 벽·따라�
 (function(){
   const q={ s:CONFIG.code, t:CONFIG.title }; if(CONFIG.reflect) q.reflect=CONFIG.reflect;
   const base='../opening/?'+new URLSearchParams({...q, to:'./'}).toString();
-  document.getElementById('openingLink').href=base;
-  document.getElementById('closingLink').href='../opening/?'+new URLSearchParams(q).toString()+'#close';
+  const ol=document.getElementById('openingLink'); if(ol) ol.href=base;
+  const cl=document.getElementById('closingLink'); if(cl) cl.href='../opening/?'+new URLSearchParams(q).toString()+'#close';
 })();
 
 /* ── 모드: 📖 detail / 🎤 present ── */
@@ -976,7 +941,7 @@ steps.forEach((s,i)=>{
   }
 });
 const total = steps.reduce((a,s)=>a+(+s.dataset.min||0),0);
-if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분 (오프닝 제외)'; flow.appendChild(f); }
+if(flow && total){ const f=document.createElement('div'); f.className='small'; f.style.alignSelf='center'; f.textContent='합계 '+total+'분'; flow.appendChild(f); }
 
 /* ── 현재 단계 추적 (칩 하이라이트 · 타이머 대상) ── */
 let current = 0;
