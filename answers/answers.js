@@ -41,6 +41,8 @@
     if (u && k && /^[a-z0-9]{15,40}$/.test(u) && /^[A-Za-z0-9._\-]{20,400}$/.test(k)) { CFG.url = 'https://' + u + '.supabase.co'; CFG.key = k; }
   })();
   CFG.url = String(CFG.url || '').replace(/\/+$/, '');
+  // 주소나 키가 비었거나 「(내 Supabase 주소)」처럼 채우지 않은 글자면 기본 서버로 쓴다
+  if (!/^https:\/\/[a-z0-9.-]+$/i.test(CFG.url) || !/^[A-Za-z0-9._-]{20,400}$/.test(String(CFG.key || ''))) { CFG.url = DEFAULT_URL; CFG.key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidnRubW5vZGVvb2NiYmphdWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTQ0OTYsImV4cCI6MjA5NTA3MDQ5Nn0.dvuRrt3qw2Tya_QwGbcXrmGPdfDgI4xmgyH8UjU73Nc'; }
   // 기본 서버가 아니면 학생 주소에 붙일 꼬리
   var OWN = (function () {
     var m = /^https:\/\/([a-z0-9]{15,40})\.supabase\.co$/.exec(CFG.url);
@@ -53,7 +55,7 @@
   function rpc(fn, args, keep) {
     return fetch(CFG.url + '/rest/v1/rpc/' + fn, {
       method: 'POST', keepalive: !!keep,
-      headers: { apikey: CFG.key, Authorization: 'Bearer ' + CFG.key, 'Content-Type': 'application/json' },
+      headers: /^eyJ/.test(CFG.key) ? { apikey: CFG.key, Authorization: 'Bearer ' + CFG.key, 'Content-Type': 'application/json' } : { apikey: CFG.key, 'Content-Type': 'application/json' },   // sb_publishable_ 키는 apikey 로만
       body: JSON.stringify(args)
     }).then(function (r) {
       if (!r.ok) { var e = new Error('서버 ' + r.status); e.status = r.status; throw e; }
