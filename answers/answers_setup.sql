@@ -1,10 +1,8 @@
 -- 학생 답 모으기 · 설치 SQL (한 번에)
 -- 내 Supabase 프로젝트의 SQL Editor 에 이 글을 통째로 붙여 넣고 Run 을 누릅니다. 여러 번 돌려도 됩니다.
 -- 맨 아래 결과에 「설치 끝」 한 줄이 나오면 됩니다.
--- (answers.sql + answers_v2.sql + answers_v3.sql 을 이어 붙인 것 — make_setup_sql.py 가 만듦)
 
--- 학생 답 모으기 (Supabase A · vbvtnmnodeoocbbjauap)
--- Supabase 대시보드 → SQL Editor 에 통째로 붙여 넣고 Run.
+-- 1. 방과 답
 --
 -- 표 두 개(방 · 답)는 아무도 직접 읽거나 쓸 수 없게 막고, 아래 함수 여섯 개로만 다룬다.
 --   선생님: ans_open(방 열기) · ans_set_cur(지금 질문 바꾸기) · ans_list(답 모아보기) · ans_close(방 지우기)
@@ -137,8 +135,7 @@ grant execute on function public.ans_list(text, text, bigint)                   
 grant execute on function public.ans_close(text, text)                                to anon, authenticated;
 
 
--- 학생 답 모으기 · 2판 더하기 (Supabase A · vbvtnmnodeoocbbjauap)
--- answers.sql 을 이미 돌린 뒤에 이 파일을 SQL Editor 에 붙여 넣고 Run. 여러 번 돌려도 됩니다.
+-- 2. 실시간 참여 학생 확인
 --
 -- 더하는 것: 지금 보고 있는 학생 수와 나간 학생(번호)을 선생님이 볼 수 있게
 --   ans_people       : 방마다 기기 한 줄(번호 · 보는 중/나감 · 마지막 신호 시각 · 나간 횟수). 직접 접근은 막는다.
@@ -202,8 +199,7 @@ notify pgrst, 'reload schema';
 select proname from pg_proc where proname in ('ans_room_ping', 'ans_people_list') order by 1;
 
 
--- 학생 답 모으기 · 3판 더하기 (Supabase A · vbvtnmnodeoocbbjauap)
--- answers.sql, answers_v2.sql 을 돌린 뒤에 이 파일을 SQL Editor 에 붙여 넣고 Run. 여러 번 돌려도 됩니다.
+-- 3. 답 종류 넓히기(그래프 예측)
 --
 -- 바꾸는 것: 답 종류 이름을 다섯 가지로 묶어 두던 것을 「영어 소문자 2~12자」로 넓힌다.
 --   그래프 예측(sketch)부터 받고, 앞으로 새 종류를 더해도 SQL 을 다시 돌리지 않게 한다.
