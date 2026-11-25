@@ -123,6 +123,9 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
 .fbtn.on{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
 html.host body{font-size:20px}
 html.host article{max-width:860px}
+.promo{margin:0 0 22px}
+.promo video{display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--r2);border:1px solid var(--line)}
+.promo figcaption{font-size:.85rem;color:var(--ink2);margin-top:6px}
 /* ── 이 연수에서 더한 부품 ── */
 /* 맨 위 특징 네 줄 */
 .feat{list-style:none;margin:20px 0 22px;padding:0;border-top:1px solid var(--line);max-width:44em}
@@ -315,6 +318,10 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     <img src="../../images/profile.webp" width="44" height="44" alt="흰 가운을 입고 엄지를 든 조승재 캐리커처" onerror="this.remove()">
     <div><b>조승재</b><small>해누리중학교 과학교사 · 2026년 11월 18일 · 읽는 데 약 20분</small></div>
   </div>
+  <figure class="promo">
+    <video controls preload="none" playsinline poster="promo.jpg" src="promo.mp4" aria-label="라이브 슬라이드 소개 영상"></video>
+    <figcaption>라이브 슬라이드 소개 영상입니다. 1분 6초이고 소리가 있습니다.</figcaption>
+  </figure>
   <details class="mtoc"><summary>목차</summary><ol id="mtocList"></ol></details>
 
   <ul class="feat" aria-label="라이브 슬라이드의 특징">
@@ -860,7 +867,7 @@ description: (언제 쓰는 스킬인지 200자 안으로) 중학교 과학 칠�
 </article>
 </div>
 
-<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-21</span></footer>
+<footer id="app-credit">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11px;opacity:.85;">최종 업데이트: 2026-11-25</span></footer>
 
 <div class="follow-bar" id="followBar" hidden><span id="followMsg"></span><button id="followGo" type="button">그리로 가기</button></div>
 
