@@ -354,7 +354,7 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     <ol>
       <li><a href="#see">결과부터 보기</a><span>10분. 기체의 압력 화면과 <a href="https://scienceisjo.github.io/starandspace/share/lecture-story-brightness.html" target="_blank" rel="noopener">광도와 조도 화면</a>을 넘겨 봅니다.</span></li>
       <li><a href="#answers">라이브 슬라이드-쌍방향 수업</a><span>10분. 휴대폰으로 답을 보내고, 칠판에 모이는 것을 봅니다.</span></li>
-      <li><a href="#skill">스킬을 넣어 강의 자료 만들기</a><span>30분. 스킬 파일을 올리고, 학습지나 교과서 쪽을 첨부해 3장을 만듭니다.</span></li>
+      <li><a href="#skill">스킬을 넣어 강의 자료 만들기</a><span>30분. 스킬 파일과 학습지를 함께 첨부해 3장을 만듭니다. 받을 파일과 보낼 글은 이 순서 바로 아래에 있습니다.</span></li>
       <li><a href="#design">디자인 바꿔 보기</a><span>15분. 같은 내용을 손글씨 노트판이나 디자인 서랍판으로 다시 만듭니다.</span></li>
       <li><a href="#mine">설명 글을 넣어 만들기</a><span>20분. 내가 설명하는 순서를 글로 적어 넣고 화면을 만듭니다.</span></li>
       <li><a href="#bonus">BONUS</a><span>AI가 화면을 만드는 동안 함께 봅니다. 끝에는 <a href="#dl">내려받기 모음</a>을 안내합니다.</span></li>
@@ -363,10 +363,14 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
   </div>
   <div class="dl" id="kit">
     <a class="dlb main" href="../files/연수_실습_꾸러미.zip" download><b>오늘 실습 꾸러미 한 번에 받기</b><span>라이브 슬라이드 스킬(zip), 실습에 쓸 학습지와 설명 메모, 결과 예시</span></a>
-    <a class="dlb" href="../files/lecture-board.zip" download><b>스킬만 받기</b><span>lecture-board.zip · 풀지 않고 그대로 올립니다</span></a>
+    <a class="dlb" href="../files/lecture-board.zip" download><b>스킬만 받기</b><span>lecture-board.zip · 풀지 않고 그대로 첨부합니다</span></a>
     <a class="dlb" href="../../vibecoding/design.html" target="_blank"><b>디자인 서랍 열기</b><span>디자인 바꿔 보기에 쓸 DESIGN.md를 고릅니다</span></a>
   </div>
-  <p class="note">꾸러미를 풀면 lecture-board.zip이 들어 있습니다. 이 파일은 다시 풀지 않고 그대로 Claude에 올립니다. 올리는 자리는 [Settings] → [Capabilities]에서 Code execution and file creation을 켠 뒤, [Customize] → [Skills] → ＋ → [Create skill] → [Upload a skill]입니다.</p>
+  <p>꾸러미를 풀면 lecture-board.zip이 들어 있습니다. 이 파일은 다시 풀지 않습니다. AI 채팅에서 새 대화를 열고, lecture-board.zip과 학습지를 함께 첨부한 뒤 아래 글을 보냅니다.</p>
+  <div class="pr"><span class="pl">스킬과 학습지를 첨부하고 보내는 글</span><button class="btn cp" type="button">복사</button><div class="txt">첨부한 lecture-board 스킬을 읽고, 함께 첨부한 학습지에서 빈칸 ①~⑦까지만 써서 라이브 슬라이드를 3장 만들어 주세요.
+장면마다 움직이는 그림을 하나씩 넣어 주세요.
+만들기 전에 장면 계획과 빈칸 표를 먼저 보여 주세요.</div></div>
+  <p class="note">AI가 zip을 열지 못하면 lecture-board.zip을 풀어, 그 안의 SKILL.md와 references 폴더의 「강의화면_프롬프트.txt」를 첨부합니다. Claude를 자주 쓰실 분은 스킬을 한 번 등록해 두면 다음부터 학습지만 첨부해도 됩니다. [Settings] → [Capabilities]에서 Code execution and file creation을 켜고, [Customize] → [Skills]에서 「+」, 「Create skill」, 「Upload a skill」을 차례로 눌러 lecture-board.zip을 올립니다. 무료 요금제에서도 됩니다.</p>
 
   <figure class="promo">
     <video controls preload="none" playsinline poster="../guide/promo.jpg" src="../guide/promo.mp4" aria-label="라이브 슬라이드 소개 영상"></video>
