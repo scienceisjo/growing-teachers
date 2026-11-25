@@ -85,7 +85,8 @@ footer#app-credit{width:100%;margin:2.5rem 0 0;padding:14px 12px;text-align:cent
     </ul>
     <p class="lead">교과서 2~5쪽을 그림으로 주고, 개념 하나를 라이브 슬라이드 3장으로 만들게 했습니다. 모든 예시에는 선생님이 조작하는 시뮬레이터가 한 장면 이상 들어 있습니다. 단계마다 찍은 화면으로 과학 내용과 글자 겹침을 확인한 뒤 올렸고, 고친 것이 있으면 고친 횟수를 함께 적었습니다.</p>
     <p class="lead">화면을 연 뒤 한 번 누르고 → 키로 넘깁니다. 시뮬레이터는 마우스로 바로 조작할 수 있습니다.</p>
-    <p class="lead">「프롬프트 받기」를 누르면 그 예시를 만들 때 AI에 보낸 프롬프트, 디자인 서랍판이면 DESIGN.md, 보고서, 완성 화면을 한 묶음(zip)으로 받습니다.</p>
+    <p class="lead">「프롬프트 받기」를 누르면 그 예시를 만들 때 AI에 보낸 프롬프트, 디자인 서랍판이면 DESIGN.md, 보고서, 완성 화면, 스킬 파일을 한 묶음(zip)으로 받습니다. 스킬을 올릴 수 없는 AI를 쓰시면 묶음 안 lecture-board 폴더의 SKILL.md와 references 안의 파일을 대화에 첨부합니다.</p>
+    <p class="lead">「칠판 강의 스킬 받기」 「손글씨 노트 스킬 받기」 「DESIGN.md 받기」는 그 예시에 쓴 스킬과 디자인 파일만 따로 받는 단추입니다. 프롬프트에 적힌 「깃허브에서 받아 와」를 AI가 하지 못하면 이 파일을 직접 대화에 올려 주세요.</p>
     <a class="back" href="../">← 연수 페이지로 돌아가기</a>
   </div>
 </header>
@@ -126,6 +127,18 @@ fbox.addEventListener('click', e => {
   fbox.querySelectorAll(`.chip[data-k="${k}"]`).forEach(x => x.classList.toggle('on', x === b));
   draw();
 });
+/* 디자인별 스킬·DESIGN.md 받기 — 프롬프트의 「깃허브에서 받아 와」 단계를 못 하는 AI에는 이 파일을 직접 올립니다 */
+const DRAWER = { '햇살 게시판':'sunny-board', '색종이 콜라주':'paper-collage', '양피지와 먹':'parchment-ink', '양피지 잉크':'parchment-ink', '모눈 노트':'graph-note',
+  '보랏빛 밤':'violet-night', '흙과 청자':'clay-celadon', '오락실 교무실':'arcade', '코르크 보드':'corkboard' };
+function skillBtns(e) {
+  const hand = e.dtype === '손글씨';
+  let s = hand
+    ? `<a class="btn" href="../files/handwritten-note-lecture.zip" download="손글씨노트_스킬_handwritten-note-lecture.zip" title="손글씨 노트 강의 스킬 꾸러미(약 3.8MB)">손글씨 노트 스킬 받기</a>`
+    : `<a class="btn" href="../files/lecture-board.zip" download="칠판강의_스킬_lecture-board.zip" title="칠판 강의 화면 스킬 꾸러미">칠판 강의 스킬 받기</a>`;
+  const slug = DRAWER[e.design.replace(/^디자인 서랍\s*·\s*/, '')];
+  if (slug) s += `<a class="btn" href="design/${slug}.md" download="DESIGN_${slug}.md" title="${esc(e.design)} 디자인 설계서">DESIGN.md 받기</a>`;
+  return s;
+}
 function draw() {
   const list = EX.filter(e => GROUPS.every(([k]) => !sel[k] || e[k] === sel[k]));
   document.getElementById('count').textContent = `${list.length}개 / 모두 ${EX.length}개`;
@@ -145,7 +158,8 @@ function draw() {
           <a class="btn primary" href="${e.id}/index.html" target="_blank" rel="noopener">화면 열기 ↗</a>
           <button class="btn" type="button" data-sheet="${e.id}" data-t="${esc(e.topic)}">단계 캡처</button>
           <a class="btn" href="${e.id}/report.md" target="_blank" rel="noopener">만든 보고서</a>
-          <a class="btn" href="${e.id}/download.zip" download="라이브슬라이드_${e.id}_${esc(e.topic).replace(/[\\/:*?"<>|]/g, '')}.zip" title="프롬프트.md · ${e.design.startsWith('디자인 서랍') ? 'DESIGN.md · ' : ''}보고서 · 완성 화면">프롬프트${e.design.startsWith('디자인 서랍') ? '·DESIGN.md' : ''} 받기</a>
+          <a class="btn" href="${e.id}/download.zip" download="라이브슬라이드_${e.id}_${esc(e.topic).replace(/[\\/:*?"<>|]/g, '')}.zip" title="프롬프트.md · ${e.design.startsWith('디자인 서랍') ? 'DESIGN.md · ' : ''}보고서 · 완성 화면 · 스킬 파일">프롬프트${e.design.startsWith('디자인 서랍') ? '·DESIGN.md' : ''} 받기</a>
+          ${skillBtns(e)}
         </div>
       </div>
     </article>`).join('');
