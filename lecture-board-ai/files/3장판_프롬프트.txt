@@ -56,7 +56,9 @@
 - 모형 칸은 화면 클릭 넘기기에서 빼고, 칸 밖에 「다음」 단추를 둔다. 칸 아래에 출처 한 줄.
 
 ■ (선택) 학생 참여: 안 넣음 (휴대폰으로 학생 답을 모으려면 「안 넣음」을 「넣음」으로 바꾼다. 「안 넣음」이면 이 칸은 건너뛴다)
-- </body> 바로 앞에 이 줄을 넣는다: <script src="https://scienceisjo.github.io/growing-teachers/answers/answers.js"></script>
+- </body> 바로 앞에 아래 두 줄을 이 순서로 넣는다. 첫 줄의 주소와 키는 내가 준 내 Supabase 것으로 채운다. 내가 주지 않았으면 (  ) 그대로 두고, 다 쓴 뒤 「주소와 키를 채워야 학생 답이 모입니다」라고 알려 준다.
+  <script>window.ANSWERS_CONFIG={url:'(내 Supabase 주소)',key:'(내 공개 키)'};</script>
+  <script src="https://scienceisjo.github.io/growing-teachers/answers/answers.js"></script>
 - 학생에게 물을 단계마다, 그 단계에서만 보이는 빈 요소를 하나 둔다. 다른 요소처럼 그 단계에서 나타나고 다음 단계에서 사라지게 한다. 자리는 장면 오른쪽 위처럼 글·그림과 겹치지 않는 곳에 가로 620px, 세로 80px 쯤 비워 둔다.
   <div class="ask" data-ask="종류" data-qid="짧은 영문 이름" data-q="학생 휴대폰에 보일 질문"></div>
 - 종류마다 더하는 속성

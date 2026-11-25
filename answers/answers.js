@@ -18,6 +18,10 @@
  *   (손으로 그은 판서·시뮬레이터 값은 따라가지 않는다)
  * 보는 학생 수·나간 학생: 서버에 answers_v2.sql 이 있어야 한다. 없으면 그 칸만 숨는다.
  * 주소 끝에 ?ansfake=1 을 붙이면 서버 대신 이 브라우저 안의 가짜 서버를 쓴다(시험용).
+ *
+ * 내 Supabase 로 쓰기(2026-11-25): answers_setup.sql 을 내 프로젝트에 돌린 뒤, 강의 화면에서 이 파일보다 먼저
+ *   <script>window.ANSWERS_CONFIG={url:'https://(프로젝트).supabase.co',key:'(공개 키)'};</script>
+ * 를 넣는다. 그러면 QR·모아보기 주소에 sbu(프로젝트 이름)·sbk(공개 키)가 붙어, 학생 페이지도 그 서버로 간다.
  */
 (function () {
   'use strict';
@@ -30,6 +34,18 @@
     student: BASE
   }, window.ANSWERS_CONFIG || {});
   var QS = new URLSearchParams(location.search);
+  var DEFAULT_URL = 'https://vbvtnmnodeoocbbjauap.supabase.co';
+  // 학생·모아보기 페이지: 주소의 sbu·sbk 로 선생님 서버를 받는다(*.supabase.co 만)
+  (function () {
+    var u = QS.get('sbu'), k = QS.get('sbk');
+    if (u && k && /^[a-z0-9]{15,40}$/.test(u) && /^[A-Za-z0-9._\-]{20,400}$/.test(k)) { CFG.url = 'https://' + u + '.supabase.co'; CFG.key = k; }
+  })();
+  CFG.url = String(CFG.url || '').replace(/\/+$/, '');
+  // 기본 서버가 아니면 학생 주소에 붙일 꼬리
+  var OWN = (function () {
+    var m = /^https:\/\/([a-z0-9]{15,40})\.supabase\.co$/.exec(CFG.url);
+    return m && CFG.url !== DEFAULT_URL ? 'sbu=' + m[1] + '&sbk=' + encodeURIComponent(CFG.key) : '';
+  })();
   var FAKE = QS.get('ansfake') === '1' || CFG.fake === true;
   var MODE = window.ANSWERS_MODE || 'teacher';
 
@@ -112,8 +128,8 @@
     };
   })();
   var api = FAKE ? fake : real;
-  function studentUrl(code) { return CFG.student + '?c=' + code + (FAKE ? '&ansfake=1' : ''); }
-  function reviewUrl(code, key) { return CFG.student + 'review.html' + (FAKE ? '?ansfake=1' : '') + '#c=' + code + '&k=' + key; }
+  function studentUrl(code) { return CFG.student + '?c=' + code + (OWN ? '&' + OWN : '') + (FAKE ? '&ansfake=1' : ''); }
+  function reviewUrl(code, key) { var q = [OWN, FAKE ? 'ansfake=1' : ''].filter(Boolean).join('&'); return CFG.student + 'review.html' + (q ? '?' + q : '') + '#c=' + code + '&k=' + key; }
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   // 기기 목록 → 보는 중 / 나감. 15초 넘게 신호가 없으면 창을 닫은 것으로 본다(와이파이가 잠깐 끊기는 것은 넘긴다).
   function splitPeople(rows) {
@@ -214,7 +230,7 @@
     return h + '</g></svg>';
   }
   var sketch = { N: SKN, axes: skAxes, resample: skResample, encode: skEncode, parse: skParse, actual: skActual, text: skText, geom: skGeom, x: skX, y: skY, path: skPath, svg: skSVG };
-  window.Answers = { api: api, CFG: CFG, FAKE: FAKE, studentUrl: studentUrl, reviewUrl: reviewUrl, esc: esc, splitPeople: splitPeople, agoText: agoText, sketch: sketch };
+  window.Answers = { api: api, CFG: CFG, FAKE: FAKE, OWN: OWN, studentUrl: studentUrl, reviewUrl: reviewUrl, esc: esc, splitPeople: splitPeople, agoText: agoText, sketch: sketch };
   if (MODE !== 'teacher') return;
   if (QS.get('ansview')) { viewMode(QS.get('ansview')); return; }
 
@@ -455,8 +471,8 @@
   }
   function showQR() {
     var url = studentUrl(room.code);
-    var ov = overlay('<div class="ans-qr" id="ansQR"></div><div class="ans-big">' + esc(room.code) + '</div><div class="ans-url">' + esc(url) + '</div>' +
-      '<div class="ans-say" style="font-size:min(3vw,28px);font-weight:500">휴대폰 카메라로 찍거나, 주소에 들어가 코드를 넣어요.</div><button class="ans-b" data-close type="button">닫기</button>');
+    var ov = overlay('<div class="ans-qr" id="ansQR"></div><div class="ans-big">' + esc(room.code) + '</div>' + (OWN ? '' : '<div class="ans-url">' + esc(url) + '</div>') +
+      '<div class="ans-say" style="font-size:min(3vw,28px);font-weight:500">' + (OWN ? '휴대폰 카메라로 QR을 찍어요.' : '휴대폰 카메라로 찍거나, 주소에 들어가 코드를 넣어요.') + '</div><button class="ans-b" data-close type="button">닫기</button>');
     needQR().then(function (qr) { var q = qr(0, 'M'); q.addData(url); q.make(); ov.querySelector('#ansQR').innerHTML = q.createImgTag(8, 0); }).catch(function () { ov.querySelector('#ansQR').remove(); });
   }
   function closeRoom() {
