@@ -493,6 +493,11 @@ html[data-mode="present"] .yt{max-width:calc(62vh * 16 / 9)}
 /* 대회 그림 */
 .csrc{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin:14px 0}
 .csrc img{width:min(100%,520px);border:1px solid var(--line);border-radius:var(--r3);display:block;cursor:zoom-in;background:var(--bg2)}
+.csrc img{height:auto}
+.reverse-example{margin:0}
+.reverse-example figcaption{margin:0 0 12px;line-height:1.5}
+.reverse-example .pv-img{max-height:calc(100vh - 10rem);max-height:calc(100dvh - 10rem);object-fit:contain}
+#reverseRevealControls:not(:empty){margin:16px 0}
 .csrc-side{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .csrc-side p{margin:0}
 .csrc.none img{display:none}
@@ -790,9 +795,9 @@ table.ext td:last-child{color:var(--ink2)}
       <p class="kw">이 그림과 가장 비슷한 그림을 만들어 주세요</p>
       <p class="brief">방법은 정해 두지 않았습니다. Copilot에서 그림을 만들고, 그림과 그 그림을 만든 프롬프트를 아래 칸에 올려보겠습니다!</p>
       <div class="csrc" id="csrc">
-        <img id="cImg" src="img/contest.jpg" alt="대회 그림">
+        <img id="cImg" src="img/contest-example.png" alt="부산의 바다와 다리, 다섯 음식에 빨간 핀이 꽂힌 대회 예시 그림" width="1536" height="1024">
         <div class="csrc-side">
-          <a class="btn big primary" id="cDl" href="img/contest.jpg" download="대회그림.jpg"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 이미지 파일 내려받기</a>
+          <a class="btn big primary" id="cDl" href="img/contest-example.png" download="부산_맛집_프롬프팅대회.png"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 이미지 파일 내려받기</a>
           <p class="small" id="cNote">그림을 크게 보시려면 그림을 눌러 주세요.</p>
         </div>
       </div>
@@ -859,7 +864,7 @@ table.ext td:last-child{color:var(--ink2)}
     </div>
 
     <div class="blk sealed-blk" hidden>
-      <p class="kw">Reverse Prompting의 두 갈래</p>
+      <p class="kw" id="reverse-prompting" data-practice-link>Reverse Prompting의 두 갈래</p>
       <p class="brief">프롬프트를 내가 쓰지 않고 AI가 쓰게 하는 방법을 오늘은 두 이름으로 나눠 부르겠습니다!</p>
       <div class="dg" role="img" aria-label="Interview. AI가 묻고 내가 답하면 요구사항 파일이 나오는 흐름">
         <span class="dg-t">Interview</span>
@@ -881,6 +886,7 @@ table.ext td:last-child{color:var(--ink2)}
           <div class="dg-node ok"><svg class="ic"><use href="#i-paper"/></svg><b>프롬프트, 명세서, 스킬</b></div>
         </div>
       </div>
+      <div id="reverseRevealControls"></div>
       <div class="detail">
         <p>대회에서 그림을 Copilot에게 보여 주고 「이 그림을 만들 프롬프트를 써 줘」라고 하신 분이 계셨다면, 그 방법이 Decode입니다. 다음 단계에서는 Interview로 작은 프로그램을 만듭니다.</p>
         <p>두 이름은 오늘 연수에서 부르기 쉽게 붙인 것입니다. 더 찾아보실 때 쓰는 검색어는 Interview가 Flipped Interaction Pattern이고, Decode가 Reverse Prompt Engineering입니다.</p>
@@ -1840,6 +1846,12 @@ description: 가정통신문 초안을 쓸 때 사용. 「가정통신문 써 �
 
 </main>
 
+<template id="tplReverseResult">
+  <figure class="reverse-example">
+    <figcaption><strong>리버스 프롬프팅으로 만든 그림</strong><br>대회 그림을 AI에게 보여 주고, 비슷한 그림을 만들 프롬프트를 써 달라고 했습니다. 그 프롬프트로 만든 결과입니다.</figcaption>
+    <img class="pv-img" src="img/reverse-result.png" alt="대회 그림을 바탕으로 다시 만든 부산 음식 지도. 다리 위쪽에 커다란 음식 그림과 빨간 핀이 놓여 있습니다." width="1536" height="1024">
+  </figure>
+</template>
 <template id="tplTrend"><img class="pv-img" src="img/gh-trending.jpg" alt="GitHub의 Trending 화면"></template>
 <template id="tplCommit"><img class="pv-img" src="img/gh-commit.jpg" alt="GitHub에서 커밋 하나를 연 화면"></template>
 <template id="tplBranch"><img class="pv-img" src="img/gh-branch.jpg" alt="GitHub의 Branches 화면"></template>
@@ -2201,6 +2213,16 @@ document.querySelectorAll('figure.toon').forEach(wireToon);
 
 /* ── 눌러서 보기 창 ── */
 const pv=document.getElementById('pv'), pvBody=pv.querySelector('.pv-body');
+if (IS_HOST) {
+  const reveal = document.createElement('button');
+  reveal.type = 'button';
+  reveal.className = 'btn big primary';
+  reveal.dataset.show = 'tplReverseResult';
+  reveal.setAttribute('aria-haspopup', 'dialog');
+  reveal.setAttribute('aria-controls', 'pv');
+  reveal.textContent = '리버스 프롬프팅 결과 보기';
+  document.getElementById('reverseRevealControls').append(reveal);
+}
 function openPv(id){
   const t=document.getElementById(id); if(!t) return;
   pvBody.innerHTML=''; pvBody.appendChild(t.content.cloneNode(true));
