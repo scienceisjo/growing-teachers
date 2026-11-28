@@ -2517,6 +2517,19 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
 .pz-panel,.pz-check{position:fixed;right:16px;bottom:84px;z-index:45;box-sizing:border-box;width:min(400px,calc(100vw - 32px));max-height:min(72vh,600px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r3);padding:16px}
 .pz-panel[hidden],.pz-check[hidden]{display:none}
 .pz-check{border:2px solid var(--blue);z-index:46}
+.pz-link-form{margin:12px 0;padding:10px 0;border-block:1px solid var(--line)}
+.pz-link-form summary{cursor:pointer;font-weight:600;color:var(--blue)}
+.pz-link-form form{display:grid;gap:10px;margin:12px 0 2px}
+.pz-link-form label{display:grid;gap:6px;font-size:.94rem}
+.pz-link-form [hidden],.pz-link-card[hidden]{display:none}
+.pz-link-form input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;font:inherit}
+.pz-link-form input[type=url]{border:1px solid var(--line);border-radius:var(--r2);padding:10px 12px;color:var(--ink);background:#fff}
+.pz-link-form .pz-sub{margin:0}
+.pz-link-form .btn{justify-self:start}
+.pz-link-card{position:fixed;z-index:70;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(430px,calc(100% - 28px));box-sizing:border-box;border:2px solid var(--blue);border-radius:var(--r3);padding:16px 18px;background:#fff;color:var(--ink)}
+.pz-link-address{max-height:4.8em;overflow:auto;overflow-wrap:anywhere;text-align:left;font-size:.96rem;line-height:1.5;margin:8px 0 14px;unicode-bidi:plaintext}
+.pz-link-reader{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.pz-link-card,.pz-link-reader{display:none!important}}
 .pz-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
 .pz-head h3{margin:0;font-size:1.08rem;letter-spacing:-.01em}
 .pz-x{border:1px solid var(--line);background:#fff;border-radius:9999px;width:36px;height:36px;font-size:1rem;cursor:pointer;color:var(--ink);flex:none}
@@ -2555,6 +2568,8 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
 @media (max-width:760px){ html.slide .pz-fab{bottom:76px} html.slide .pz-panel,html.slide .pz-check{bottom:144px} }
 @media print{ .pz-fab,.pz-panel,.pz-check,.pz-done{display:none!important} }
 </style>
+<script src="link-signing.js"></script>
+<script src="training-links.js"></script>
 <script id="pulse-js">
 (function(){
   const PULSE_ON = true;   // 손들기 · 중간점검 · 다 했어요를 끄려면 false
@@ -2587,6 +2602,9 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
       const hk = CONFIG.key+':pz-here:'+CODE;
       if(!ls.get(hk, false)) post(K.here, DEV, '').then(()=>ls.set(hk, true)).catch(()=>{});
 
+      if (window.trainingLinks && window.trainingLinkAuth) {
+        window.trainingLinks.receiver({room:CODE, endpoint:base, headers:sbHeaders, store:ls, prefix:CONFIG.key});
+      }
       // 강사에게 말하기
       const fab = el('div', 'pz-fab');
       const btn = el('button', 'pz-btn', ICO('hand')+' 강사에게 말하기'); btn.type='button'; btn.setAttribute('aria-expanded','false');
@@ -2770,6 +2788,9 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
       else { panel.hidden = true; const top = S.say.length ? S.say[S.say.length-1].id : 0; if(top > seenId){ seenId = top; ls.set(seenKey, seenId); } }
       hand.setAttribute('aria-expanded', String(open)); render();
     };
+    if (IS_HOST && window.trainingLinks && window.trainingLinkAuth) {
+      window.trainingLinks.sender({panel, fabRow, openPanel:()=>toggle(true), room:CODE, endpoint:base, headers:sbHeaders});
+    }
     hand.addEventListener('click', ()=>toggle(panel.hidden));
     panel.querySelector('.pz-x').addEventListener('click', ()=>toggle(false));
     document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !panel.hidden) toggle(false); });
