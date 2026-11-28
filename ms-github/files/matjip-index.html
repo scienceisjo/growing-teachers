@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>맛집 지도</title>
+<meta name="description" content="연수에서 함께 채우는 부산 맛집 지도입니다. 지도를 눌러 가게 이름과 한 줄 추천을 올립니다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600&family=Noto+Serif+KR:wght@600&display=swap">
+<style>
+/* 참고: Design Diversity 「키아로스쿠로 모터스포츠 에디토리얼」 팩(순흑·순백 분할, 경계에서 반전되는 세리프, 빨강 한 점, 120ms 스냅).
+   색·글꼴·간격 값만 참고했고, 팩의 문구·이름·그림은 가져오지 않았습니다. */
+:root{
+  --black:#0A0A0A; --white:#FFFFFF; --ink:#1A1A1A; --meta:#C4C4C4; --meta-w:#6A6A6A; --red:#D40000; --rule-b:#3A3A3A;
+  --split:62%;                                   /* 흰 면 : 검은 면 */
+  --gut:clamp(20px,4vw,56px);
+  --display:"Newsreader","Noto Serif KR",Georgia,"Times New Roman",serif;
+  --body:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --snap:120ms linear;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--black);color:var(--white);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;word-break:keep-all;display:flex;flex-direction:column}
+p{margin:0}
+.label{font-size:.75rem;font-weight:700;letter-spacing:.1em;line-height:1.5}
+
+/* 머리: 흰 면과 검은 면이 갈리고, 제목이 경계를 넘으며 색이 뒤집힌다 */
+.mast{position:relative;background:linear-gradient(90deg,var(--white) 0 var(--split),var(--black) var(--split) 100%);padding:clamp(16px,2.4vw,28px) var(--gut) clamp(14px,2vw,24px);border-bottom:1px solid var(--ink);overflow:hidden}
+.mast .label{color:var(--meta-w)}
+.mast h1{margin:.12em 0 0;font-family:var(--display);font-weight:600;font-size:clamp(2.4rem,8.4vw,7.6rem);letter-spacing:-.035em;line-height:.92;white-space:nowrap;color:var(--white);mix-blend-mode:difference}
+.mast .ask{position:absolute;right:var(--gut);top:clamp(16px,2.4vw,28px);font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,2.2vw,2rem);letter-spacing:-.015em;line-height:1.14;color:var(--white)}
+
+.main{flex:1;display:grid;grid-template-columns:var(--split) 1fr;min-height:0}
+#map{min-height:340px;background:var(--white);color:var(--ink)}
+.side{background:var(--black);display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--ink)}
+
+/* 큰 숫자 */
+.count{display:flex;align-items:flex-end;gap:10px;padding:20px var(--gut) 16px;border-bottom:1px solid var(--rule-b)}
+.count .label{color:var(--meta);padding-bottom:.5em}
+.count b{font-family:var(--display);font-weight:600;font-size:clamp(3.4rem,6.4vw,5.6rem);letter-spacing:-.03em;line-height:.82;font-variant-numeric:tabular-nums lining-nums}
+.count .unit{font-family:var(--display);font-weight:600;font-size:1.5rem;line-height:1;padding-bottom:.18em}
+.count .grow{flex:1}
+
+.panel{padding:18px var(--gut) 16px;border-bottom:1px solid var(--rule-b)}
+.panel .h{font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;line-height:1.35;margin-bottom:6px}
+.panel .hint{color:var(--meta);font-size:.9375rem}
+.panel form{display:grid;gap:10px}
+.panel input,.panel textarea{font:inherit;font-size:1rem;border:0;border-bottom:1px solid var(--white);border-radius:0;padding:9px 0;background:transparent;color:var(--white);width:100%}
+.panel textarea{min-height:4.4em;resize:vertical}
+.panel input::placeholder,.panel textarea::placeholder{color:var(--meta)}
+.panel input:focus,.panel textarea:focus{outline:2px solid var(--white);outline-offset:4px}
+.row{display:flex;gap:8px;margin-top:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--white);border-radius:0;background:transparent;color:var(--white);padding:10px 16px;font:inherit;font-size:.875rem;font-weight:700;letter-spacing:.02em;cursor:pointer;white-space:nowrap;transition:background-color var(--snap),color var(--snap)}
+.btn:hover{background:var(--white);color:var(--black)}
+.btn.primary{background:var(--white);color:var(--black);flex:1}
+.btn.primary:hover{background:var(--black);color:var(--white)}
+.btn:focus-visible{outline:2px solid var(--white);outline-offset:3px}
+.st{font-size:.8125rem;color:var(--meta);min-height:1.5em;margin-top:8px}
+
+.list{flex:1;overflow:auto;padding:0 var(--gut) 20px}
+.list .it{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--rule-b);background:none;padding:14px 0 12px;font:inherit;color:var(--white);cursor:pointer;transition:padding-left var(--snap)}
+.list .it:hover{padding-left:8px}
+.list .it:focus-visible{outline:2px solid var(--white);outline-offset:-2px}
+.list .it b{display:block;font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;line-height:1.35}
+.list .it span{display:block;color:var(--white);font-size:.9375rem;line-height:1.6;overflow-wrap:anywhere}
+.list .it small{display:block;margin-top:4px;color:var(--meta);font-size:.75rem;font-weight:700;letter-spacing:.1em}
+.list .empty{color:var(--meta);font-size:.9375rem;padding:16px 0}
+
+/* 지도: 흑백으로 두고, 빨강은 지금 찍은 자리 한 점뿐 */
+.leaflet-container{font-family:var(--body);background:var(--white)}
+.leaflet-tile-pane{filter:grayscale(1) contrast(1.08) brightness(1.03)}
+.leaflet-bar,.leaflet-bar a{border-radius:0!important}
+.leaflet-bar{border:1px solid var(--ink)!important;box-shadow:none!important}
+.leaflet-bar a{color:var(--ink)}
+.leaflet-popup-content-wrapper{border-radius:0;box-shadow:none;border:1px solid var(--ink);color:var(--ink)}
+.leaflet-popup-tip{box-shadow:none;border:1px solid var(--ink)}
+.leaflet-popup-content{margin:12px 14px;font-size:.9375rem;line-height:1.5}
+.leaflet-popup-content b{display:block;font-family:var(--display);font-weight:600;font-size:1.2rem;line-height:1.3;margin-bottom:2px}
+.leaflet-popup-content small{color:var(--meta-w);font-size:.75rem;font-weight:700;letter-spacing:.1em}
+
+footer#app-credit{width:100%;margin:0;padding:10px 12px;text-align:center;font-size:12px;line-height:1.6;color:var(--meta);background:var(--black);border-top:1px solid var(--rule-b)}
+@media (max-width:820px){
+  :root{--split:58%}
+  .mast .ask{position:static;margin-top:8px;mix-blend-mode:difference}
+  .main{grid-template-columns:1fr;grid-template-rows:minmax(300px,50vh) auto}
+  .side{border-left:0;border-top:1px solid var(--ink)}
+  .list{max-height:42vh}
+}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <p class="label" id="place">우리 동네 맛집 지도</p>
+  <h1 id="title">여가 완전 찐이네.</h1>
+  <p class="ask" id="askLine">밥 뭇나?</p>
+</header>
+
+<div class="main">
+  <div id="map" role="application" aria-label="부산 지도. 가게가 있는 자리를 누르면 올리는 칸이 열립니다."></div>
+  <aside class="side">
+    <div class="count"><span class="label">지금까지</span><b id="cnt">0</b><span class="unit">곳</span><span class="grow"></span><button class="btn" id="csv" type="button">CSV 내려받기</button></div>
+    <div class="panel">
+      <div id="ask">
+        <div class="h">가게 올리기</div>
+        <p class="hint">지도를 끌어 옮기고 키워서, 가게가 있는 자리를 눌러 주세요.</p>
+      </div>
+      <form id="form" hidden>
+        <div class="h">이 자리의 가게</div>
+        <input name="shop" placeholder="가게 이름" maxlength="40" autocomplete="off" required>
+        <textarea name="memo" placeholder="한 줄 추천. 무엇이 맛있는지 적어 주세요" maxlength="150"></textarea>
+        <input name="name" placeholder="이름 또는 별명" maxlength="30" autocomplete="off">
+        <div class="row"><button class="btn primary" type="submit">올리기</button><button class="btn" type="button" id="cancel">다른 자리 고르기</button></div>
+      </form>
+      <div class="st" id="st"></div>
+    </div>
+    <div class="list" id="list"><div class="empty">아직 올라온 가게가 없습니다. 첫 가게를 올려 주세요.</div></div>
+  </aside>
+</div>
+
+<footer id="app-credit">지도 © OpenStreetMap 기여자 · 틀 조승재(과학이조선생)</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ═══════════ 고칠 곳은 여기 하나입니다 ═══════════ */
+const CONFIG = {
+  supabase: { url: '여기에_Project_URL', key: '여기에_Publishable_key' },
+  title: '여가 완전 찐이네.',       // 큰 제목
+  ask:   '밥 뭇나?',                // 제목 옆 한마디
+  place: '우리 동네 맛집 지도',     // 제목 위 작은 글
+  center: [35.1580, 129.0600],      // 지도를 처음 열 때 보이는 자리 (위도, 경도)
+  zoom: 12,                         // 숫자가 클수록 가까이
+  pollMs: 5000                      // 새 핀을 확인하는 간격 (1000 = 1초)
+};
+/* ═══════════ 아래는 건드리지 않아도 됩니다 ═══════════ */
+const SB = CONFIG.supabase, TABLE = 'matjip';
+const ready = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(SB.url) && SB.key.length > 20 && SB.key.indexOf('여기에') < 0;
+const sbHeaders = ()=>({ 'apikey':SB.key, 'Authorization':'Bearer '+SB.key, 'Content-Type':'application/json' });
+const base = SB.url.replace(/\/$/,'') + '/rest/v1/' + TABLE;
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = id=>document.getElementById(id);
+$('title').textContent=CONFIG.title; $('askLine').textContent=CONFIG.ask; $('place').textContent=CONFIG.place; document.title=CONFIG.place;
+const form=$('form'), ask=$('ask'), st=$('st'), list=$('list');
+let mine=new Set(); try{ mine=new Set(JSON.parse(localStorage.getItem('matjip:mine')||'[]')); }catch(e){}
+let myName=''; try{ myName=localStorage.getItem('matjip:name')||''; }catch(e){}
+form.elements.name.value=myName;
+
+let map=null, pick=null, picked=null;
+const pins=new Map(), data=[];
+if(window.L){
+  map=L.map('map',{zoomControl:true}).setView(CONFIG.center, CONFIG.zoom);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 기여자'}).addTo(map);
+  map.on('click', e=>{
+    picked=e.latlng;
+    if(pick) pick.setLatLng(picked); else pick=L.circleMarker(picked,{radius:11,color:'#FFFFFF',weight:3,fillColor:'#D40000',fillOpacity:1}).addTo(map);
+    ask.hidden=true; form.hidden=false; st.textContent=''; form.elements.shop.focus();
+  });
+} else {
+  $('map').textContent='지도를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로 고쳐 주세요.';
+  $('map').style.cssText='display:flex;align-items:center;justify-content:center;color:#6A6A6A;padding:20px;text-align:center';
+}
+function clearPick(){ if(pick&&map){ map.removeLayer(pick); pick=null; } picked=null; form.hidden=true; ask.hidden=false; }
+$('cancel').addEventListener('click', clearPick);
+
+function addPin(r){
+  if(pins.has(r.id) || typeof r.lat!=='number' || typeof r.lng!=='number' || !r.shop) return;
+  const isMine=mine.has(r.id), who=r.who||'익명';
+  let mk=null;
+  if(map){
+    mk=L.circleMarker([r.lat,r.lng],{radius:8,color:isMine?'#0A0A0A':'#FFFFFF',weight:2,fillColor:isMine?'#FFFFFF':'#0A0A0A',fillOpacity:1}).addTo(map);
+    mk.bindPopup(`<b>${esc(r.shop)}</b>${r.memo?esc(r.memo)+'<br>':''}<small>${esc(who)}</small>`);
+  }
+  pins.set(r.id,mk);
+  data.push({shop:r.shop, memo:r.memo||'', who, lat:r.lat, lng:r.lng});
+  const em=list.querySelector('.empty'); if(em) em.remove();
+  const b=document.createElement('button'); b.type='button'; b.className='it';
+  b.innerHTML=`<b>${esc(r.shop)}</b>${r.memo?`<span>${esc(r.memo)}</span>`:''}<small>${esc(who)}</small>`;
+  b.addEventListener('click', ()=>{ if(map&&mk){ map.setView([r.lat,r.lng], Math.max(map.getZoom(),15)); mk.openPopup(); } });
+  list.prepend(b);
+  $('cnt').textContent=pins.size;
+}
+async function load(){
+  if(document.hidden) return;
+  try{
+    const res=await fetch(`${base}?select=id,shop,memo,who,lat,lng&order=id.asc&limit=1000`,{headers:sbHeaders()});
+    if(!res.ok) throw new Error(res.status);
+    (await res.json()).forEach(addPin);
+  }catch(e){ st.textContent='서버에 닿지 않습니다 ('+e.message+').'; }
+}
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  if(!ready){ st.textContent='Supabase 주소와 키를 먼저 넣어 주세요.'; return; }
+  if(!picked){ st.textContent='지도에서 가게 자리를 먼저 눌러 주세요.'; return; }
+  const shop=form.elements.shop.value.trim(), memo=form.elements.memo.value.trim(), who=form.elements.name.value.trim();
+  if(!shop){ form.elements.shop.focus(); return; }
+  try{ localStorage.setItem('matjip:name', who); }catch(e){}
+  st.textContent='올리는 중입니다…';
+  try{
+    const res=await fetch(base,{method:'POST',headers:{...sbHeaders(),'Prefer':'return=representation'},
+      body:JSON.stringify({shop, memo, who, lat:+picked.lat.toFixed(5), lng:+picked.lng.toFixed(5)})});
+    if(!res.ok) throw new Error(res.status);
+    const [row]=await res.json();
+    if(row){ mine.add(row.id); try{ localStorage.setItem('matjip:mine', JSON.stringify([...mine])); }catch(e){} addPin(row); }
+    form.elements.shop.value=''; form.elements.memo.value=''; clearPick(); st.textContent='올렸습니다. 고맙습니다.';
+  }catch(e){ st.textContent='올리지 못했습니다 ('+e.message+'). 다시 눌러 주세요.'; }
+});
+/* CSV 내려받기: 엑셀에서 한글이 깨지지 않게 맨 앞에 BOM 을 붙입니다 */
+$('csv').addEventListener('click', ()=>{
+  if(!data.length){ st.textContent='아직 올라온 가게가 없습니다.'; return; }
+  const q=v=>'"'+String(v).replace(/"/g,'""').replace(/\r?\n/g,' ')+'"';
+  const lines=[['가게','한줄추천','올린사람','위도','경도'].join(',')].concat(data.map(r=>[q(r.shop),q(r.memo),q(r.who),r.lat,r.lng].join(',')));
+  const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='맛집지도.csv';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  st.textContent=`${data.length}곳을 CSV로 내려받았습니다.`;
+});
+if(ready){ load(); setInterval(load, CONFIG.pollMs); }
+else st.textContent='Supabase 주소와 키를 넣으면 지도에 핀이 쌓입니다. 이 파일 맨 아래 CONFIG 칸을 고쳐 주세요.';
+</script>
+</body>
+</html>
