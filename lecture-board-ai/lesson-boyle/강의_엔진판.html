@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기체의 압력과 부피 사이의 관계</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+.tag{font-size:28px} .title{font-size:64px;line-height:1.2} .sent{font-size:38px;line-height:1.75} .note{font-size:28px;line-height:1.5} .label{font-size:26px}
+.ls-slide{font-family:"Pretendard Variable",Pretendard,sans-serif;word-break:keep-all;letter-spacing:-.01em}
+.w{background:#fff;color:#1d1d1f;--ac:#0066cc;--sub:#6e6e73;--ln:#d2d2d7}
+.g{background:#f5f5f7;color:#1d1d1f;--ac:#0066cc;--sub:#6e6e73;--ln:#d2d2d7}
+.k{background:#000;color:#f5f5f7;--ac:#2997ff;--sub:#a1a1a6;--ln:#3a3a3c}
+.d{background:#1d1d1f;color:#f5f5f7;--ac:#2997ff;--sub:#a1a1a6;--ln:#3a3a3c}
+.tag,.label,.note{color:var(--sub)}
+.tag{font-weight:500}
+.title{font-weight:600;letter-spacing:-.02em;margin:6px 0 0}
+.hd{position:absolute;left:96px;top:60px;right:96px}
+.card{position:absolute;border-radius:18px;padding:32px 44px}
+.w .card{background:#f5f5f7}.g .card{background:#fff}.k .card{background:#1d1d1f}.d .card{background:#000}
+.st,.a{opacity:0;transition:opacity .4s}
+.st.ls-on,.a.ls-on{opacity:1}
+.bl{display:inline-block;min-width:150px;border-bottom:3px solid var(--sub);text-align:center;padding:0 6px;margin:0 4px;line-height:1.3}
+.n{display:inline-flex;width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;font-size:24px;font-weight:600;font-style:normal;align-items:center;justify-content:center;vertical-align:middle;margin-right:6px}
+.a{color:var(--ac);font-weight:600}
+.tb{border-collapse:collapse}
+.tb th,.tb td{padding:12px 10px;line-height:1.4;text-align:center;border-bottom:1px solid var(--ln)}
+.tb th{text-align:left;white-space:nowrap;font-weight:600}
+.hl{background:rgba(255,255,255,.12)}
+.mv{transition:transform 1.4s ease,opacity .6s}
+svg text{fill:currentColor}
+.bt{font:inherit;font-size:28px;padding:16px 34px;border-radius:18px;border:0;background:#f5f5f7;color:#1d1d1f;cursor:pointer}
+.it{display:inline-block;margin-right:34px}
+.it b{color:var(--ac);font-weight:600}
+</style>
+</head>
+<body>
+<div class="ls-deck">
+
+<!-- 1 표지 -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">기체의 압력과 부피 사이의 관계</div><div class="title">주사기 끝을 막고 누르면<br>왜 점점 힘들어질까?</div></div>
+<canvas id="c1" style="position:absolute;left:96px;top:330px"></canvas>
+<div style="position:absolute;left:1150px;top:350px;width:680px">
+<div class="sent st" data-step="1">주사기 끝을 손가락으로 막는다.</div>
+<div class="sent st" data-step="2" style="margin-top:20px">피스톤을 누르면 점점 힘들어진다.</div>
+<div class="sent st" data-step="3" style="margin-top:20px">눌린 공기 안에서는 무슨 일이 일어날까?</div>
+<div class="note st" data-step="4" style="margin-top:30px">오늘은 기체의 압력과 부피 사이의 관계를 알아본다.</div>
+</div>
+</section>
+
+<!-- 2 복습 ①②③ -->
+<section class="ls-slide d">
+<div class="hd"><div class="tag">복습</div><div class="title">기체의 압력</div></div>
+<canvas id="c2" style="position:absolute;left:96px;top:250px"></canvas>
+<div class="card" style="left:990px;top:250px;width:834px">
+<div class="sent">기체의 압력은 기체 입자가 일정한 면적의 벽에 <span class="bl"><i class="n">①</i><b class="a" data-step="1">충돌</b></span>하면서 가하는 힘이다.</div>
+<div class="sent" style="margin-top:14px">같은 시간 동안 일정한 면적의 벽에 부딪히는 <span class="bl"><i class="n">②</i><b class="a" data-step="2">횟수</b></span>가 많을수록 압력은 커진다.</div>
+<div class="sent" style="margin-top:14px">기체의 압력은 위, 아래, 옆 등 모든 <span class="bl"><i class="n">③</i><b class="a" data-step="4">방향</b></span>으로 작용한다.</div>
+</div>
+</section>
+
+<!-- 3 입자 모형 -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">입자 모형</div><div class="title">피스톤을 누를 때와 당길 때</div></div>
+<canvas id="c3" style="position:absolute;left:96px;top:240px"></canvas>
+<input id="rg3" type="range" min="30" max="100" value="70" style="position:absolute;left:150px;top:672px;width:700px;accent-color:#a1a1a6">
+<div class="label" style="position:absolute;left:96px;top:702px">누르기</div>
+<div class="label" style="position:absolute;left:800px;top:702px">당기기</div>
+<div class="label" style="position:absolute;left:96px;top:780px">2초 동안 벽에 부딪힌 횟수</div>
+<div class="title" id="cn3" style="position:absolute;left:96px;top:818px">0</div>
+<div class="card" style="left:1040px;top:250px;width:784px;min-height:640px">
+<div class="note">주사기 속 기체 입자의 움직임을 본다.</div>
+<div class="sent st" data-step="1" style="margin-top:20px">누르면: 입자가 움직일 수 있는 공간이 줄어든다.</div>
+<div class="sent st" data-step="2" style="margin-top:14px">당기면: 공간이 넓어진다.</div>
+<div class="note st" data-step="3" style="margin-top:20px">피스톤을 직접 움직여 보며 부딪히는 횟수를 비교해 보자.</div>
+<div class="sent st" data-step="4" style="margin-top:26px"><b>누를수록</b> 같은 시간 동안 벽에 부딪히는 횟수가 늘어 압력이 커진다.</div>
+</div>
+</section>
+
+<!-- 4 ④⑤ -->
+<section class="ls-slide w">
+<div class="hd"><div class="tag">입자 모형</div><div class="title">부피가 변해도 변하지 않는 것</div></div>
+<canvas id="c4a" style="position:absolute;left:96px;top:240px"></canvas>
+<canvas id="c4b" style="position:absolute;left:984px;top:240px"></canvas>
+<div class="label" style="position:absolute;left:96px;top:590px">누르기 전</div>
+<div class="label" style="position:absolute;left:984px;top:590px">누른 뒤</div>
+<div class="card" style="left:96px;top:670px;width:1728px">
+<div class="sent">기체 입자의 <span class="bl"><i class="n">④</i><b class="a" data-step="2">수</b></span>와 <span class="bl"><i class="n">⑤</i><b class="a" data-step="3">크기</b></span>는 변하지 않는다.</div>
+<div class="note st" data-step="4" style="margin-top:6px">입자 모형으로 나타낼 때도 입자의 크기와 수를 똑같이 그린다.</div>
+</div>
+</section>
+
+<!-- 5 ⑥⑦ -->
+<section class="ls-slide g">
+<div class="hd"><div class="tag">입자 모형: 화살표 길이를 비교해 보자</div><div class="title">누를 때 입자의 움직임은?</div></div>
+<canvas id="c5a" style="position:absolute;left:96px;top:240px"></canvas>
+<canvas id="c5b" style="position:absolute;left:984px;top:240px"></canvas>
+<div class="label" style="position:absolute;left:96px;top:590px">누르기 전</div>
+<div class="label" style="position:absolute;left:984px;top:590px">누른 뒤</div>
+<div class="card" style="left:96px;top:660px;width:1728px">
+<div class="sent">입자의 평균 <span class="bl"><i class="n">⑥</i><b class="a" data-step="2">빠르기</b></span>도 변하지 않는다.</div>
+<div class="sent st" data-step="3">입자의 빠르기는 <span class="bl"><i class="n">⑦</i><b class="a" data-step="4">온도</b></span>가 변할 때 달라진다.</div>
+<div class="note st" data-step="5" style="margin-top:6px">압력이 커지는 까닭은 입자가 빨라져서가 아니라, 벽에 부딪히는 횟수가 늘기 때문이다.</div>
+</div>
+</section>
+
+<!-- 6 추 시뮬레이터 ⑧⑨ -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">추 시뮬레이터</div><div class="title">추를 올리고 내리면</div></div>
+<canvas id="c6" style="position:absolute;left:96px;top:270px"></canvas>
+<div class="card" style="left:640px;top:270px;width:540px;padding:22px 40px"><div class="label">올려 놓은 추</div><div class="title" id="st6w">추 없음</div></div>
+<div class="card" style="left:1230px;top:270px;width:594px;padding:22px 40px"><div class="label">기체의 부피</div><div class="title" id="st6v">60 mL</div></div>
+<div class="card" style="left:640px;top:490px;width:1184px">
+<div class="sent">일정한 양의 기체에 가하는 압력을 크게 하면 부피는 <span class="bl"><i class="n">⑧</i><b class="a" data-step="3">작아진다</b></span>.</div>
+<div class="sent" style="margin-top:10px">반대로 압력을 작게 하면 부피는 <span class="bl"><i class="n">⑨</i><b class="a" data-step="5">커진다</b></span>.</div>
+</div>
+<div class="note st" data-step="1" style="position:absolute;left:640px;top:810px;width:1184px">피스톤은 위에서 누르는 힘과 기체가 미는 힘이 같아질 때까지 움직인다.</div>
+<button class="bt" id="bu6" style="position:absolute;left:640px;top:930px">추 올리기</button>
+<button class="bt" id="bd6" style="position:absolute;left:860px;top:930px">추 내리기</button>
+</section>
+
+<!-- 7 숫자로 보기 -->
+<section class="ls-slide w">
+<div class="hd"><div class="tag">추의 개수에 따른 변화</div><div class="title">압력과 부피를 숫자로 보면</div></div>
+<div class="note" style="position:absolute;left:96px;top:250px;width:1728px">압력 1배는 바깥 공기가 누르는 힘이다. 추 1개는 이와 같은 크기의 힘이다.</div>
+<div class="card st" data-step="1" style="left:96px;top:340px;width:540px;height:420px"><div class="label">추 없음</div><div class="title">압력 1배</div><div class="label" style="margin-top:20px">기체의 부피</div><div class="title">60 mL</div><div style="margin-top:24px;height:28px;width:420px;background:#86868b;border-radius:8px"></div></div>
+<div class="card st" data-step="2" style="left:690px;top:340px;width:540px;height:420px"><div class="label">추 1개</div><div class="title">압력 2배</div><div class="label" style="margin-top:20px">기체의 부피</div><div class="title">30 mL</div><div style="margin-top:24px;height:28px;width:210px;background:#86868b;border-radius:8px"></div></div>
+<div class="card st" data-step="3" style="left:1284px;top:340px;width:540px;height:420px"><div class="label">추 2개</div><div class="title">압력 3배</div><div class="label" style="margin-top:20px">기체의 부피</div><div class="title">20 mL</div><div style="margin-top:24px;height:28px;width:140px;background:#86868b;border-radius:8px"></div></div>
+<div class="sent st" data-step="4" style="position:absolute;left:96px;top:830px">압력과 부피를 곱하면 얼마일까?</div>
+</section>
+
+<!-- 8 보일 법칙 ⑩⑪ -->
+<section class="ls-slide g">
+<div class="hd"><div class="tag">보일 법칙</div><div class="title">압력과 부피를 곱하면?</div></div>
+<div class="card" style="left:96px;top:250px;width:1728px">
+<div class="sent">온도가 일정할 때 일정한 양의 기체의 압력과 부피를 <span class="bl"><i class="n">⑩</i><b class="a" data-step="2">곱한</b></span> 값은 <span class="bl"><i class="n">⑪</i><b class="a" data-step="3">일정하다</b></span>.</div>
+</div>
+<div class="st" data-step="1">
+<div class="card sent" style="left:96px;top:480px;width:540px;padding:20px 30px;text-align:center">1배 × 60 mL = 60</div>
+<div class="card sent" style="left:690px;top:480px;width:540px;padding:20px 30px;text-align:center">2배 × 30 mL = 60</div>
+<div class="card sent" style="left:1284px;top:480px;width:540px;padding:20px 30px;text-align:center">3배 × 20 mL = 60</div>
+</div>
+<div class="st" data-step="4" style="position:absolute;left:96px;top:700px"><div class="title">압력 × 부피 = 일정</div><div class="sent" style="margin-top:10px">이 관계를 보일 법칙이라고 한다.</div></div>
+</section>
+
+<!-- 9 실험 표 ⑫⑬⑭ -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">실험으로 확인하기</div><div class="title">압력 × 부피 구하기</div></div>
+<canvas id="c9" style="position:absolute;left:96px;top:250px"></canvas>
+<div class="sent" id="st9" style="position:absolute;left:96px;top:640px">압력 1기압, 부피 40 mL</div>
+<table class="tb sent" style="position:absolute;left:890px;top:250px;width:934px">
+<tr><th>압력 (기압)</th><td data-c="0">1</td><td data-c="1">2</td><td data-c="2">4</td><td data-c="3">5</td></tr>
+<tr><th>부피 (mL)</th><td data-c="0">40</td><td data-c="1">20</td><td data-c="2">10</td><td data-c="3">8</td></tr>
+<tr><th>압력 × 부피</th><td data-c="0">40</td><td data-c="1"><span class="bl" style="min-width:90px"><i class="n">⑫</i><b class="a" data-step="4">40</b></span></td><td data-c="2"><span class="bl" style="min-width:90px"><i class="n">⑬</i><b class="a" data-step="5">40</b></span></td><td data-c="3"><span class="bl" style="min-width:90px"><i class="n">⑭</i><b class="a" data-step="6">40</b></span></td></tr>
+</table>
+<div class="note" style="position:absolute;left:890px;top:540px;width:934px">끝을 막은 주사기에 공기 40 mL를 넣고 피스톤을 누르면서 압력과 부피를 측정했다(예시 결과).</div>
+</section>
+
+<!-- 10 알아낸 것 ⑮⑯⑰ -->
+<section class="ls-slide w">
+<div class="hd"><div class="tag">표에서 알아낸 것</div><div class="title">압력이 커지면 부피는?</div></div>
+<svg viewBox="0 0 900 640" width="900" height="640" style="position:absolute;left:96px;top:270px">
+<g><text x="0" y="36" font-size="30" font-weight="600">1기압</text><rect x="150" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="150" y="70" width="400" height="56" rx="10" fill="#86868b"/><text x="570" y="110" font-size="30">40 mL</text></g>
+<g class="st" data-step="1" transform="translate(0,200)"><text x="0" y="36" font-size="30" font-weight="600">2기압</text><rect x="150" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="204" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="150" y="70" width="200" height="56" rx="10" fill="#86868b"/><text x="370" y="110" font-size="30">20 mL</text></g>
+<g class="st" data-step="3" transform="translate(0,400)"><text x="0" y="36" font-size="30" font-weight="600">4기압</text><rect x="150" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="204" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="258" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="312" y="0" width="44" height="44" rx="6" fill="#8944ab"/><rect x="150" y="70" width="100" height="56" rx="10" fill="#86868b"/><text x="270" y="110" font-size="30">10 mL</text></g>
+</svg>
+<div class="card" style="left:1060px;top:270px;width:764px">
+<div class="sent">압력이 2배가 되면 부피는 <span class="bl"><i class="n">⑮</i><b class="a" data-step="2">절반</b></span>이 되고,</div>
+<div class="sent st" data-step="3" style="margin-top:10px">압력이 4배가 되면 부피는 <span class="bl"><i class="n">⑯</i><b class="a" data-step="4">4분의 1</b></span>이 된다.</div>
+<div class="sent" style="margin-top:24px">압력과 부피를 곱한 값은 <span class="bl"><i class="n">⑰</i><b class="a" data-step="5">일정</b></span>하다(보일 법칙).</div>
+</div>
+</section>
+
+<!-- 11 그래프 ⑱⑲ -->
+<section class="ls-slide g">
+<div class="hd"><div class="tag">실험으로 확인하기</div><div class="title">압력과 부피의 그래프</div></div>
+<svg viewBox="0 0 900 720" width="900" height="720" style="position:absolute;left:96px;top:250px">
+<g id="gx"></g>
+<path d="M100 40V640H868" stroke="currentColor" stroke-width="4" fill="none"/>
+<text x="484" y="712" font-size="26" text-anchor="middle">압력 (기압)</text>
+<text x="112" y="30" font-size="26">부피 (mL)</text>
+<g class="st" data-step="1" fill="#1d1d1f"><circle cx="220" cy="120" r="11"/><circle cx="340" cy="380" r="11"/></g>
+<g class="st" data-step="2" fill="#1d1d1f"><circle cx="580" cy="510" r="11"/><circle cx="700" cy="536" r="11"/></g>
+<path id="cv11" data-step="3" pathLength="1" fill="none" stroke="#1d1d1f" stroke-width="5" stroke-linecap="round" style="stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.4s ease"/>
+<g class="st" data-step="5"><line x1="820" y1="560" x2="820" y2="636" stroke="#6e6e73" stroke-width="4" stroke-dasharray="8 8"/><text x="800" y="600" font-size="24" text-anchor="end">이만큼 떨어져 있다</text></g>
+</svg>
+<div class="card" style="left:1060px;top:270px;width:764px">
+<div class="note">표의 값을 점으로 찍어 부드럽게 이었다.</div>
+<div class="sent" style="margin-top:12px">그래프는 직선이 아니라 오른쪽 아래로 휘어지는 <span class="bl"><i class="n">⑱</i><b class="a" data-step="4">곡선</b></span>이다.</div>
+<div class="sent" style="margin-top:14px">부피는 0이 되지 않으므로 곡선은 가로축에 <span class="bl"><i class="n">⑲</i><b class="a" data-step="5">닿지 않는다</b></span>.</div>
+</div>
+</section>
+
+<!-- 12 과자 봉지 ⑳㉑ -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">생활 속 압력과 부피의 관계</div><div class="title">높은 산에 올라간 과자 봉지</div></div>
+<svg viewBox="0 0 900 720" width="900" height="720" style="position:absolute;left:96px;top:250px">
+<rect x="0" y="680" width="900" height="40" fill="#2c2c2e"/>
+<polygon points="30,680 450,300 870,680" fill="#3a3a3c"/>
+<polygon points="450,300 408,345 492,345" fill="#f5f5f7"/>
+<g id="bg12" class="mv" style="transform:translate(130px,605px)">
+<g id="aa12" class="mv"></g><g id="ab12" class="mv" style="opacity:0"></g>
+<g id="bb12" class="mv" style="transform:scale(1)">
+<rect x="-50" y="-60" width="100" height="120" rx="12" fill="#f5f5f7" stroke="#a1a1a6" stroke-width="3"/>
+<rect x="-50" y="-60" width="100" height="14" fill="#a1a1a6"/><rect x="-50" y="46" width="100" height="14" fill="#a1a1a6"/>
+<g fill="#248a3d"><circle cx="-20" cy="-18" r="7"/><circle cx="14" cy="-8" r="7"/><circle cx="-6" cy="16" r="7"/><circle cx="22" cy="24" r="7"/><circle cx="-26" cy="24" r="7"/></g>
+</g></g>
+</svg>
+<div class="card" style="left:1060px;top:270px;width:764px">
+<div class="label">과자 봉지가 높은 산에 올라가면</div>
+<div class="sent" style="margin-top:14px">봉지에 작용하는 압력은 <span class="bl"><i class="n">⑳</i><b class="a" data-step="2">낮아진다</b></span>.</div>
+<div class="sent" style="margin-top:10px">봉지 속 기체의 부피는 <span class="bl"><i class="n">㉑</i><b class="a" data-step="3">커진다</b></span>.</div>
+<div class="note st" data-step="4" style="margin-top:20px">기체의 온도는 변하지 않는다고 본다.</div>
+</div>
+</section>
+
+<!-- 13 물속 공기 방울 ㉒㉓ -->
+<section class="ls-slide d">
+<div class="hd"><div class="tag">생활 속 압력과 부피의 관계</div><div class="title">물속 깊이 내려간 공기 방울</div></div>
+<svg viewBox="0 0 900 720" width="900" height="720" style="position:absolute;left:96px;top:250px">
+<rect x="100" y="90" width="700" height="580" fill="#17324d"/>
+<line x1="100" y1="90" x2="800" y2="90" stroke="#6ea8d8" stroke-width="4"/>
+<text x="100" y="66" font-size="26">수면</text>
+<g id="bg13" class="mv" style="transform:translate(450px,200px)">
+<g id="aa13" class="mv"></g><g id="ab13" class="mv" style="opacity:0"></g>
+<g id="bb13" class="mv" style="transform:scale(1)">
+<circle r="70" fill="rgba(255,255,255,.14)" stroke="#f5f5f7" stroke-width="3"/>
+<g fill="#30d158"><circle cx="-24" cy="-20" r="8"/><circle cx="20" cy="-26" r="8"/><circle cx="-4" cy="10" r="8"/><circle cx="28" cy="20" r="8"/><circle cx="-30" cy="28" r="8"/></g>
+</g></g>
+</svg>
+<div class="card" style="left:1060px;top:270px;width:764px">
+<div class="label">공기 방울이 물속 깊이 내려가면</div>
+<div class="sent" style="margin-top:14px">방울에 작용하는 압력은 <span class="bl"><i class="n">㉒</i><b class="a" data-step="2">높아진다</b></span>.</div>
+<div class="sent" style="margin-top:10px">방울 속 기체의 부피는 <span class="bl"><i class="n">㉓</i><b class="a" data-step="3">작아진다</b></span>.</div>
+<div class="note st" data-step="4" style="margin-top:20px">기체의 온도는 변하지 않는다고 본다.</div>
+</div>
+</section>
+
+<!-- 14 주사기와 풍선 ㉔~㉗ -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">생활 속 압력과 부피의 관계</div><div class="title">주사기와 하늘 높이 올라간 풍선</div></div>
+<canvas id="c14" style="position:absolute;left:96px;top:290px"></canvas>
+<svg viewBox="0 0 840 320" width="840" height="320" style="position:absolute;left:984px;top:290px">
+<line x1="0" y1="304" x2="840" y2="304" stroke="#3a3a3c" stroke-width="4"/>
+<g id="bl14" class="mv" style="transform:translate(420px,230px) scale(1)">
+<ellipse rx="40" ry="48" fill="#f5f5f7"/><path d="M0 48V76" stroke="#a1a1a6" stroke-width="3" fill="none"/>
+<g fill="#248a3d"><circle cx="-14" cy="-14" r="6"/><circle cx="12" cy="-8" r="6"/><circle cx="-4" cy="14" r="6"/><circle cx="16" cy="18" r="6"/></g>
+</g>
+</svg>
+<div class="label" style="position:absolute;left:96px;top:640px">끝을 막고 피스톤을 누른 주사기</div>
+<div class="label" style="position:absolute;left:984px;top:640px">하늘 높이 올라간 풍선</div>
+<div style="position:absolute;left:96px;top:690px;width:840px">
+<div class="sent">작용하는 압력 <span class="bl"><i class="n">㉔</i><b class="a" data-step="2">높아진다</b></span></div>
+<div class="sent">기체의 부피 <span class="bl"><i class="n">㉕</i><b class="a" data-step="3">작아진다</b></span></div>
+</div>
+<div style="position:absolute;left:984px;top:690px;width:840px">
+<div class="sent">작용하는 압력 <span class="bl"><i class="n">㉖</i><b class="a" data-step="5">낮아진다</b></span></div>
+<div class="sent">기체의 부피 <span class="bl"><i class="n">㉗</i><b class="a" data-step="6">커진다</b></span></div>
+</div>
+</section>
+
+<!-- 15 서술형 -->
+<section class="ls-slide k">
+<div class="hd"><div class="tag">정리</div><div class="title">입자 모형으로 설명하기</div></div>
+<canvas id="c15" style="position:absolute;left:96px;top:260px"></canvas>
+<div class="label" style="position:absolute;left:96px;top:680px">2초 동안 벽에 부딪힌 횟수</div>
+<div class="title" id="cn15" style="position:absolute;left:96px;top:718px">0</div>
+<div class="card" style="left:1010px;top:260px;width:814px">
+<div class="sent">온도가 일정할 때 주사기의 피스톤을 누르면 기체의 압력은 <span class="bl" style="min-width:200px"><b class="a" data-step="2">커진다</b></span>.</div>
+<div class="sent" style="margin-top:20px">왜냐하면 부피가 줄어 <span class="bl" style="min-width:300px"><b class="a" data-step="3">입자 사이의 거리가 가까워지고</b></span> 입자가 <span class="bl" style="min-width:300px"><b class="a" data-step="4">벽에 더 많이 부딪히기</b></span> 때문이다.</div>
+</div>
+</section>
+
+<!-- 16 정리 -->
+<section class="ls-slide w">
+<div class="hd"><div class="tag">정리</div><div class="title">빈칸 정답 모아 보기</div></div>
+<div style="position:absolute;left:96px;top:250px;width:1728px">
+<div class="card st sent" data-step="1" style="position:relative;padding:14px 36px;margin-bottom:14px"><span class="label" style="display:inline-block;width:200px">압력과 입자</span><span class="it"><i class="n">①</i><b>충돌</b></span><span class="it"><i class="n">②</i><b>횟수</b></span><span class="it"><i class="n">③</i><b>방향</b></span><span class="it"><i class="n">④</i><b>수</b></span><span class="it"><i class="n">⑤</i><b>크기</b></span><span class="it"><i class="n">⑥</i><b>빠르기</b></span><span class="it"><i class="n">⑦</i><b>온도</b></span></div>
+<div class="card st sent" data-step="2" style="position:relative;padding:14px 36px;margin-bottom:14px"><span class="label" style="display:inline-block;width:200px">압력과 부피</span><span class="it"><i class="n">⑧</i><b>작아진다</b></span><span class="it"><i class="n">⑨</i><b>커진다</b></span><span class="it"><i class="n">⑩</i><b>곱한</b></span><span class="it"><i class="n">⑪</i><b>일정하다</b></span></div>
+<div class="card st sent" data-step="3" style="position:relative;padding:14px 36px;margin-bottom:14px"><span class="label" style="display:inline-block;width:200px">표와 계산</span><span class="it"><i class="n">⑫</i><b>40</b></span><span class="it"><i class="n">⑬</i><b>40</b></span><span class="it"><i class="n">⑭</i><b>40</b></span><span class="it"><i class="n">⑮</i><b>절반</b></span><span class="it"><i class="n">⑯</i><b>4분의 1</b></span><span class="it"><i class="n">⑰</i><b>일정</b></span></div>
+<div class="card st sent" data-step="4" style="position:relative;padding:14px 36px;margin-bottom:14px"><span class="label" style="display:inline-block;width:200px">그래프</span><span class="it"><i class="n">⑱</i><b>곡선</b></span><span class="it"><i class="n">⑲</i><b>닿지 않는다</b></span></div>
+<div class="card st sent" data-step="5" style="position:relative;padding:14px 36px"><span class="label" style="display:inline-block;width:200px">생활 속 예</span><span class="it"><i class="n">⑳</i><b>낮아진다</b></span><span class="it"><i class="n">㉑</i><b>커진다</b></span><span class="it"><i class="n">㉒</i><b>높아진다</b></span><span class="it"><i class="n">㉓</i><b>작아진다</b></span><span class="it"><i class="n">㉔</i><b>높아진다</b></span><span class="it"><i class="n">㉕</i><b>작아진다</b></span><span class="it"><i class="n">㉖</i><b>낮아진다</b></span><span class="it"><i class="n">㉗</i><b>커진다</b></span></div>
+</div>
+</section>
+
+</div>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#000}.ls-deck{position:absolute;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden}.ls-slide{position:absolute;inset:0;display:none}.ls-slide.ls-cur{display:block}.ls-slot:not(.ls-filled){visibility:hidden}</style>
+<script>/* 작은 엔진: 아래 큰 엔진을 불러오지 못해도 넘어가게 한다 */
+(function(){var d=document.querySelector('.ls-deck'),i=0,s=0,H=window.__lsHooks=[];
+function S(){return [].slice.call(d.querySelectorAll('.ls-slide'))}
+function M(e){var m=0;[].forEach.call(e.querySelectorAll('[data-step]'),function(x){m=Math.max(m,+x.getAttribute('data-step')||0)});return m}
+function F(){if(!LiveSlide.full)d.style.transform='translate(-50%,-50%) scale('+Math.min(innerWidth/1920,innerHeight/1080)+')'}
+function R(){var a=S();a.forEach(function(c,n){c.classList.toggle('ls-cur',n===i)});[].forEach.call(a[i].querySelectorAll('[data-step]'),function(x){x.classList.toggle('ls-on',(+x.getAttribute('data-step')||0)<=s)});H.forEach(function(f){try{f(i,s,a[i])}catch(e){}})}
+function G(n){if(LiveSlide.full)return;var a=S();if(n>0){if(s<M(a[i]))s++;else if(i<a.length-1){i++;s=0}}else if(s>0)s--;else if(i>0){i--;s=M(a[i])}R()}
+window.LiveSlide={onStep:function(f){H.push(f);R()},get count(){return S().length},get index(){return i},get step(){return s}};
+addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();G(1)}else if(e.key==='ArrowLeft'){e.preventDefault();G(-1)}});
+addEventListener('click',function(e){if(!e.target.closest('button,a,input,select,textarea,label'))G(1)});addEventListener('resize',F);F();R()})();
+</script>
+<script src="https://scienceisjo.github.io/growing-teachers/live-engine/live-engine.js" data-ls-engine></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},SL=[].slice.call(document.querySelectorAll('.ls-slide')),sims=[];
+function Sim(id,o){
+var cv=$(id),r=o.r||9,sp=o.sp||240,W=o.w,H=o.h;
+o.cv=cv;o.c=cv.getContext('2d');o.W=W;o.H=H;o.r=r;o.dk=!!cv.closest('.k,.d');o.slide=SL.indexOf(cv.closest('.ls-slide'));
+o.bx=o.bx||110;o.bx1=o.bx1||W-200;o.top=o.top||64;o.bot=o.bot||H-64;
+cv.width=o.vert?H:W;cv.height=o.vert?W:H;
+o.p=o.t=o.p0;o.P=[];o.hits=[];o.fl=[];
+var sd=o.seed||7;function rn(){sd=sd*16807%2147483647;return sd/2147483647}
+var px=o.box?o.bx1:o.bx+o.p*(o.bx1-o.bx);
+for(var k=0;k<o.n;k++){var a=rn()*6.283,c=Math.cos(a),s=Math.sin(a);c=(c<0?-1:1)*Math.max(.35,Math.abs(c));var nm=Math.sqrt(c*c+s*s);
+o.P.push({x:o.bx+r+rn()*(px-o.bx-2*r),y:o.top+r+rn()*(o.bot-o.top-2*r),vx:sp*c/nm,vy:sp*s/nm})}
+sims.push(o);return o}
+function hit(o,q,now){o.hits.push(now);if(o.flash)o.fl.push({x:q.x,y:q.y,t:now})}
+function upd(o,dt,now){
+o.p+=(o.t-o.p)*Math.min(1,dt*5);
+var px=o.box?o.bx1:o.bx+o.p*(o.bx1-o.bx),r=o.r;
+o.P.forEach(function(q){q.x+=q.vx*dt;q.y+=q.vy*dt;
+if(q.x<o.bx+r){q.x=o.bx+r;q.vx=Math.abs(q.vx);if(o.box)hit(o,q,now)}
+if(q.x>px-r){q.x=px-r;q.vx=-Math.abs(q.vx);hit(o,q,now)}
+if(q.y<o.top+r){q.y=o.top+r;q.vy=Math.abs(q.vy);if(o.box)hit(o,q,now)}
+if(q.y>o.bot-r){q.y=o.bot-r;q.vy=-Math.abs(q.vy);if(o.box)hit(o,q,now)}})}
+function arrow(c,x,y,dx,dy,l){var ex=x+dx*l,ey=y+dy*l;c.beginPath();c.moveTo(x,y);c.lineTo(ex,ey);c.stroke();c.beginPath();c.moveTo(ex,ey);c.lineTo(ex-dx*14-dy*8,ey-dy*14+dx*8);c.lineTo(ex-dx*14+dy*8,ey-dy*14-dx*8);c.closePath();c.fill()}
+function drw(o,now){
+var c=o.c,dk=o.dk,px=o.box?o.bx1:o.bx+o.p*(o.bx1-o.bx),m=(o.top+o.bot)/2,r=o.r;
+c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,o.cv.width,o.cv.height);
+if(o.vert){c.translate(0,o.cv.height);c.rotate(-Math.PI/2)}
+var ln=dk?'#a1a1a6':'#86868b',pc=dk?'#6e6e73':'#aeaeb2';
+c.fillStyle=dk?'rgba(255,255,255,.07)':'rgba(0,0,0,.05)';c.fillRect(o.bx,o.top,px-o.bx,o.bot-o.top);
+c.lineWidth=5;c.strokeStyle=ln;
+if(!o.box){c.fillStyle=pc;c.fillRect(o.bx-70,m-16,72,32);c.fillStyle=ln;c.fillRect(o.bx-90,m-24,22,48)}
+c.strokeRect(o.bx,o.top,o.bx1-o.bx,o.bot-o.top);
+if(!o.box){c.fillStyle=pc;c.fillRect(px,o.top+3,20,o.bot-o.top-6);
+if(o.vert){c.fillStyle=pc;c.fillRect(px+20,m-122,12,244);c.fillStyle='#bf5af2';for(var k=0;k<(o.wt||0);k++)c.fillRect(px+36+k*62,m-104,56,208)}
+else{c.fillRect(px+20,m-8,150,16);c.fillRect(px+170,m-50,16,100)}}
+c.fillStyle=dk?'#30d158':'#248a3d';
+o.P.forEach(function(q){c.beginPath();c.arc(q.x,q.y,r,0,6.283);c.fill()});
+if(o.arrows){c.strokeStyle=c.fillStyle=dk?'#8ee6a0':'#1d6b30';c.lineWidth=4;var sp=o.sp||240;o.P.forEach(function(q){arrow(c,q.x,q.y,q.vx/sp,q.vy/sp,r+34)})}
+if(o.flash){o.fl=o.fl.filter(function(f){return now-f.t<450});c.lineWidth=4;o.fl.forEach(function(f){var a=(now-f.t)/450;c.strokeStyle='rgba(191,90,242,'+(1-a)+')';c.beginPath();c.arc(f.x,f.y,12+a*22,0,6.283);c.stroke()})}
+if(o.arr4){c.strokeStyle=c.fillStyle='#bf5af2';c.lineWidth=6;var wd=o.bx1-o.bx,ht=o.bot-o.top;
+[.25,.5,.75].forEach(function(f){arrow(c,o.bx+wd*f,o.top,0,-1,56);arrow(c,o.bx+wd*f,o.bot,0,1,56)});
+[.3,.7].forEach(function(f){arrow(c,o.bx,o.top+ht*f,-1,0,56);arrow(c,o.bx1,o.top+ht*f,1,0,56)})}}
+var last=0;
+function loop(now){var dt=Math.min(.05,(now-last)/1000||0);last=now;var i=window.LiveSlide?LiveSlide.index:0;
+sims.forEach(function(o){if(o.slide!==i)return;if(o.auto)o.t=.67+.22*Math.sin(now/1100);upd(o,dt,now);drw(o,now);
+if(o.cnt&&now-(o.cn||0)>400){o.cn=now;while(o.hits.length&&o.hits[0]<now-2000)o.hits.shift();$(o.cnt).textContent=o.hits.length}});
+requestAnimationFrame(loop)}
+var C1=Sim('c1',{w:1000,h:400,n:12,p0:.7,auto:1,seed:3}),
+C2=Sim('c2',{w:860,h:520,n:14,p0:1,box:1,flash:1,bx:100,bx1:760,top:80,bot:440,seed:5}),
+C3=Sim('c3',{w:900,h:400,n:12,p0:.7,cnt:'cn3',seed:11}),
+C4a=Sim('c4a',{w:840,h:340,n:10,p0:.9,seed:13}),C4b=Sim('c4b',{w:840,h:340,n:10,p0:.9,seed:17}),
+C5a=Sim('c5a',{w:840,h:340,n:10,p0:.9,arrows:1,seed:19}),C5b=Sim('c5b',{w:840,h:340,n:10,p0:.9,arrows:1,seed:23}),
+C6=Sim('c6',{w:700,h:460,vert:1,n:9,p0:60/70,bx:110,bx1:440,seed:29}),
+C9=Sim('c9',{w:780,h:360,n:10,p0:40/45,seed:31}),
+C14=Sim('c14',{w:780,h:300,n:8,p0:.9,top:56,bot:244,seed:37}),
+C15=Sim('c15',{w:860,h:380,n:12,p0:.9,cnt:'cn15',seed:41});
+requestAnimationFrame(loop);
+function ar(el,r,g,l,col){var h='';for(var k=0;k<8;k++){var a=k*Math.PI/4,c=Math.cos(a),s=Math.sin(a),r1=r+g,r2=r1+l,rb=r1+18;
+h+='<line x1="'+(r2*c).toFixed(1)+'" y1="'+(r2*s).toFixed(1)+'" x2="'+(rb*c).toFixed(1)+'" y2="'+(rb*s).toFixed(1)+'"/><polygon stroke="none" points="'+(r1*c).toFixed(1)+','+(r1*s).toFixed(1)+' '+(rb*c-9*s).toFixed(1)+','+(rb*s+9*c).toFixed(1)+' '+(rb*c+9*s).toFixed(1)+','+(rb*s-9*c).toFixed(1)+'"/>'}
+el.setAttribute('stroke',col);el.setAttribute('fill',col);el.setAttribute('stroke-width','5');el.innerHTML=h}
+ar($('aa12'),70,10,56,'#bf5af2');ar($('ab12'),105,10,28,'#bf5af2');
+ar($('aa13'),70,8,22,'#bf5af2');ar($('ab13'),35,8,60,'#bf5af2');
+(function(){var h='',k,y,x;for(k=0;k<=9;k++){y=640-65*k;if(k)h+='<line x1="100" x2="868" y1="'+y+'" y2="'+y+'" stroke="#d2d2d7" stroke-width="2"/>';h+='<text x="84" y="'+(y+8)+'" font-size="24" text-anchor="end">'+(k*5)+'</text>'}
+for(k=0;k<=6;k++){x=100+120*k;if(k)h+='<line y1="40" y2="640" x1="'+x+'" x2="'+x+'" stroke="#d2d2d7" stroke-width="2"/>';h+='<text x="'+x+'" y="676" font-size="26" text-anchor="middle">'+k+'</text>'}
+$('gx').innerHTML=h;
+var d='';for(k=0.9;k<=6.001;k+=.1){d+=(d?'L':'M')+(100+120*k).toFixed(1)+' '+(640-13*40/k).toFixed(1)}
+$('cv11').setAttribute('d',d)})();
+var rg=$('rg3');
+rg.addEventListener('input',function(){C3.t=rg.value/100});
+rg.addEventListener('pointerup',function(){rg.blur()});
+var w6=0;
+function setW(w){w6=w;C6.wt=w;C6.t=[60,30,20][w]/70;$('st6w').textContent=w?'추 '+w+'개':'추 없음';$('st6v').textContent=[60,30,20][w]+' mL'}
+$('bu6').addEventListener('click',function(){setW(Math.min(2,w6+1));this.blur()});
+$('bd6').addEventListener('click',function(){setW(Math.max(0,w6-1));this.blur()});
+var F={};
+F[1]=function(s){C2.arr4=s>=3};
+F[2]=function(s){var p=[.7,.35,1,.7,.7][Math.min(s,4)];C3.t=p;rg.value=p*100};
+F[3]=function(s){C4b.t=s>=1?.45:.9};
+F[4]=function(s){C5b.t=s>=1?.45:.9};
+F[5]=function(s){setW([0,1,2,2,1,0][Math.min(s,5)])};
+F[8]=function(s){var k=Math.min(s,3),V=[40,20,10,8][k];C9.t=V/45;
+$('st9').textContent='압력 '+[1,2,4,5][k]+'기압, 부피 '+V+' mL';
+[].forEach.call(document.querySelectorAll('[data-c]'),function(e){e.classList.toggle('hl',s<=3&&+e.getAttribute('data-c')===k)})};
+F[11]=function(s){var m=s>=1;
+$('bg12').style.transform=m?'translate(450px,190px)':'translate(130px,605px)';
+$('bb12').style.transform=m?'scale(1.45)':'scale(1)';
+$('aa12').style.opacity=s===0?1:0;$('ab12').style.opacity=s>=2?1:0};
+F[12]=function(s){var m=s>=1;
+$('bg13').style.transform=m?'translate(450px,520px)':'translate(450px,200px)';
+$('bb13').style.transform=m?'scale(.5)':'scale(1)';
+$('aa13').style.opacity=s===0?1:0;$('ab13').style.opacity=s>=2?1:0};
+F[13]=function(s){C14.t=s>=1?.45:.9;
+$('bl14').style.transform=s>=4?'translate(420px,95px) scale(1.7)':'translate(420px,230px) scale(1)'};
+F[14]=function(s){C15.t=s>=1?.45:.9};
+LiveSlide.onStep(function(i,s){if(F[i])F[i](s)});
+})();
+</script>
+</body>
+</html>
