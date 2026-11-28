@@ -86,6 +86,7 @@ html[data-mode="present"] .byline img{width:64px;height:64px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin:18px 0 6px;max-width:52em}
 .pipe .n{border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font-weight:600;font-size:.95em;background:#fff;white-space:nowrap}
+@media (max-width:760px){.pipe .n{white-space:normal;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere}}
 .pipe .n.hi{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
 .pipe .a{color:var(--ink3);font-size:1.1em}
 html[data-mode="present"] .pipe .n{font-size:1em;padding:9px 18px}
@@ -695,6 +696,24 @@ table.ext td:last-child{color:var(--ink2)}
 .bd-cap{margin:12px 0 0;font-size:.95em}
 .bd-cap b{color:var(--blue)}
 </style>
+<style>
+.live-picker{margin:20px 0 26px;padding:clamp(14px,2vw,24px);border:1px solid var(--line);border-radius:var(--r3);background:var(--bg2)}
+.live-picker label{display:block;font-size:1.15em}
+.live-picker .small{margin:4px 0 10px}
+.live-picker select{box-sizing:border-box;max-width:100%;min-height:42px;padding:7px 32px 7px 10px;font:inherit;color:var(--ink);background:#fff;border:1px solid var(--ink3);border-radius:var(--r2)}
+.live-picker summary{cursor:pointer;color:var(--blue);font-weight:600;margin:12px 0}
+.live-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(145px,100%),1fr));gap:8px;margin:10px 0}
+.live-thumbs button{padding:5px;background:#fff;color:var(--ink);border:2px solid var(--line);border-radius:var(--r2);font:inherit;font-size:.9em;cursor:pointer;text-align:left}
+.live-thumbs button[aria-pressed=true]{border-color:var(--blue)}
+.live-thumbs button[aria-pressed=true] span::before{content:'✓ '}
+.live-thumbs img,.live-preview img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:4px}
+.live-thumbs span{display:block;padding:4px}
+.live-preview{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px}
+.live-preview img{width:min(190px,100%);border:1px solid var(--line)}
+.live-picker [hidden]{display:none!important}
+.live-picker .dl-row{margin-bottom:0}
+</style>
+<link rel="stylesheet" href="service-marks.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -719,7 +738,7 @@ table.ext td:last-child{color:var(--ink2)}
 
 <div class="top">
   <div class="wrap">
-    <a class="brand" href="#top">GitHub와 Copilot<small>해누리중 조승재</small></a>
+    <a class="brand" href="#top"><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub와 <img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot<small>해누리중 조승재</small></a>
     <div class="tools">
       <span class="host-badge" id="hostBadge" hidden>진행 화면</span>
       <button class="btn" id="followBtn" hidden title="강사가 화면을 넘기면 내 화면도 같이 넘어갑니다">따라가기 켬</button>
@@ -743,9 +762,9 @@ table.ext td:last-child{color:var(--ink2)}
     <p class="lead">오늘은 Copilot에게 질문을 받아 작은 프로그램을 만들고, GitHub에 올려 주소를 받고, 다른 분이 만들어 둔 스킬을 가져와 써보겠습니다!</p>
     <div class="meta">
       <span><svg class="ico" aria-hidden="true"><use href="#x-cal"/></svg> <b>2026. 11. 29.(일) 10:00~11:50</b></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#x-pin"/></svg> <b>Microsoft 광화문</b></span>
+      <span><img class="service-mark" src="img/brand-microsoft.png" alt="" width="20" height="20"> <b>Microsoft 광화문</b></span>
       <span><svg class="ico" aria-hidden="true"><use href="#x-people"/></svg> <b>선생님 50명</b></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#x-laptop"/></svg> <b>노트북 · Microsoft 계정 · GitHub 계정</b></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#x-laptop"/></svg> <b>노트북 · <img class="service-mark" src="img/brand-microsoft.png" alt="" width="20" height="20">Microsoft 계정 · <img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub 계정</b></span>
     </div>
     <div class="flow" id="flow"></div>
     <div class="actions">
@@ -778,7 +797,7 @@ table.ext td:last-child{color:var(--ink2)}
         </div>
       </div>
       <ol class="steps" data-key="contest">
-        <li><input type="checkbox"><div><span class="what">Copilot Chat 열기</span><span class="how"><a href="https://m365.cloud.microsoft/chat" target="_blank" rel="noopener">m365.cloud.microsoft/chat</a> 에 받아 오신 Microsoft 계정으로 로그인합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what"><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot Chat 열기</span><span class="how"><a href="https://m365.cloud.microsoft/chat" target="_blank" rel="noopener">m365.cloud.microsoft/chat</a> 에 받아 오신 Microsoft 계정으로 로그인합니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">그림 만들기</span><span class="how">채팅창에 프롬프트를 보내 그림을 받습니다. 마음에 들 때까지 여러 번 고쳐도 됩니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">그림 저장하기</span><span class="how">만들어진 그림 위의 내려받기 단추를 누릅니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">그림과 프롬프트 올리기</span><span class="how">아래 칸에 이름, 프롬프트, 그림 파일을 넣고 [올리기]를 누릅니다.</span></div></li>
@@ -874,7 +893,7 @@ table.ext td:last-child{color:var(--ink2)}
 <!-- ═══════════ 3 바이브코딩과 Interview ═══════════ -->
 <section class="step" id="s3" data-title="바이브코딩과 Interview" data-min="25">
   <div class="wrap">
-    <div class="step-h"><span class="num">3</span><h2>바이브코딩 · Copilot에게 질문받아 만들기</h2><span class="min"><b>25</b>분</span></div>
+    <div class="step-h"><span class="num">3</span><h2><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">바이브코딩 · Copilot에게 질문받아 만들기</h2><span class="min"><b>25</b>분</span></div>
     <p class="goal">바이브코딩이 무엇인지 짧게 보고, Copilot에게 질문을 받아 작은 프로그램 하나를 만들어보겠습니다!</p>
     <div class="blk toon-blk"><figure class="toon"><img src="img/toon1.jpg" alt="만화 1화. 밤에 AI와 이야기를 나누다 태양계 천체를 종류별로 나누는 프로그램을 만들고, 과학 시뮬레이션을 교사 모임에 올리게 된 이야기" onerror="this.closest('.blk').hidden=true"></figure></div>
 
@@ -956,7 +975,7 @@ table.ext td:last-child{color:var(--ink2)}
       </div>
       <ol class="steps" data-key="interview">
         <li><input type="checkbox"><div><span class="what">스킬 파일과 규칙 파일 내려받기</span><span class="how">위 두 단추를 누릅니다. 스킬은 Addy Osmani가 GitHub에 공개한 파일 그대로입니다.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">Copilot Chat 새 대화에 두 파일 첨부하기</span><span class="how">대회 때 쓰던 대화는 그대로 두고 새 대화를 엽니다. 채팅창의 파일 첨부 단추를 누르거나 파일을 끌어다 놓습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what"><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot Chat 새 대화에 두 파일 첨부하기</span><span class="how">대회 때 쓰던 대화는 그대로 두고 새 대화를 엽니다. 채팅창의 파일 첨부 단추를 누르거나 파일을 끌어다 놓습니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">보내는 말을 붙여 넣고 「만들고 싶은 것」 한 줄 고치기</span><span class="how">[복사]를 누르고 채팅창에 붙여 넣습니다. 떠오르는 것이 없으면 아래 예시 주제에서 하나를 고릅니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">Copilot의 질문에 답하기</span><span class="how">「맞아」 또는 「아니, ~야」로 짧게 답합니다. Copilot이 정리한 내용을 보여 주면 「응, 맞아」라고 분명하게 답합니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">요구사항.md 받아서 저장하기</span><span class="how">답으로 나온 요구사항.md 를 복사해 메모장에 붙이고, 파일 이름을 요구사항.md 로 저장합니다.</span></div></li>
@@ -1015,7 +1034,7 @@ table.ext td:last-child{color:var(--ink2)}
 <!-- ═══════════ 4 배포와 GitHub ═══════════ -->
 <section class="step" id="s4" data-title="배포와 GitHub" data-min="20">
   <div class="wrap">
-    <div class="step-h"><span class="num">4</span><h2>GitHub에 올려 주소 받기</h2><span class="min"><b>20</b>분</span></div>
+    <div class="step-h"><span class="num">4</span><h2><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub에 올려 주소 받기</h2><span class="min"><b>20</b>분</span></div>
     <p class="goal">GitHub가 무엇인지 엔더 상자와 인스타그램에 빗대어 보고, 만든 파일을 올려 주소를 받은 뒤, 저장소 화면과 핵심 기능 다섯 가지를 실제 화면에서 읽어보겠습니다!</p>
     <div class="blk toon-blk"><figure class="toon"><img src="img/toon2.jpg" alt="만화 2화. 학생들에게 링크로 주고 싶어서 AI가 알려 주는 대로 단추를 눌렀더니 내 페이지가 생긴 이야기" onerror="this.closest('.blk').hidden=true"></figure></div>
 
@@ -1024,12 +1043,12 @@ table.ext td:last-child{color:var(--ink2)}
       <p class="brief">이름이 비슷한 Git과 GitHub를 나눠 보고, GitHub가 누구의 것인지 알아보겠습니다!</p>
       <div class="grid2">
         <div class="box"><b>Git</b><p>파일을 바꿀 때마다 누가, 언제, 무엇을 바꿨는지 적어 두는 도구입니다. 2005년에 리누스 토르발스가 만들었고, 내 컴퓨터 안에서 돌아갑니다.</p></div>
-        <div class="box"><b>GitHub</b><p>Git으로 남긴 기록을 인터넷에 올려 두는 곳입니다. 2008년에 문을 열었고, 2018년에 Microsoft가 인수했습니다.</p></div>
+        <div class="box"><b><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub</b><p>Git으로 남긴 기록을 인터넷에 올려 두는 곳입니다. 2008년에 문을 열었고, 2018년에 Microsoft가 인수했습니다.</p></div>
         <div class="box"><b>저장소(repository)</b><p>GitHub에 올려 둔 폴더 하나를 부르는 이름입니다. 오늘 선생님들께서 저장소를 하나씩 만드십니다.</p></div>
         <div class="box"><b>VS Code</b><p>Microsoft가 만든 무료 코드 편집기입니다. GitHub와 바로 이어지고, GitHub Copilot이 이 안에서 일합니다. 오늘은 설치하지 않습니다.</p></div>
       </div>
-      <p class="grp">Microsoft가 가진 것들</p>
-      <div class="pipe"><span class="n">Windows</span><span class="n">Microsoft 365</span><span class="n">OneDrive</span><span class="n">Copilot</span><span class="n">VS Code</span><span class="n hi">GitHub (2018년 인수)</span><span class="n hi">Minecraft (2014년 인수)</span></div>
+      <p class="grp"><img class="service-mark" src="img/brand-microsoft.png" alt="" width="20" height="20">Microsoft가 가진 것들</p>
+      <div class="pipe"><span class="n">Windows</span><span class="n">Microsoft 365</span><span class="n">OneDrive</span><span class="n"><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot</span><span class="n">VS Code</span><span class="n hi"><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub (2018년 인수)</span><span class="n hi">Minecraft (2014년 인수)</span></div>
       <div class="detail">
         <p>AI가 만든 코드도, 다른 분이 만든 스킬도, 오픈소스 프로그램도 GitHub에 모입니다. 앞 단계에서 쓴 interview-me 스킬도 GitHub에서 받아 온 파일입니다.</p>
         <p>저는 처음에 GitHub 화면에 파일을 끌어다 놓았고, 지금은 AI가 대신 올립니다. Git 명령어를 외우지 않아도, 바꿀 때마다 기록이 남고 예전 상태로 되돌릴 수 있다는 두 가지를 알면 맡길 수 있었습니다.</p>
@@ -1115,7 +1134,7 @@ table.ext td:last-child{color:var(--ink2)}
       <p class="kw">GitHub Pages로 주소 받기</p>
       <p class="brief">방금 저장한 index.html 과 요구사항.md 를 내 저장소에 올리고, 설정에서 Pages를 켜보겠습니다!</p>
       <ol class="steps" data-key="pages">
-        <li><input type="checkbox"><div><span class="what">저장소 만들기</span><span class="how"><a href="https://github.com" target="_blank" rel="noopener">github.com</a> 오른쪽 위 [+] → [New repository] → 이름을 영어로 적고 [Public] → [Create repository]</span></div></li>
+        <li><input type="checkbox"><div><span class="what">저장소 만들기</span><span class="how"><a href="https://github.com" target="_blank" rel="noopener"><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">github.com</a> 오른쪽 위 [+] → [New repository] → 이름을 영어로 적고 [Public] → [Create repository]</span></div></li>
         <li><input type="checkbox"><div><span class="what">파일 올리기</span><span class="how">「uploading an existing file」을 누르고 index.html 과 요구사항.md 를 끌어다 놓은 뒤 [Commit changes]</span></div></li>
         <li><input type="checkbox"><div><span class="what">Pages 켜기</span><span class="how">[Settings] → 왼쪽 [Pages] → Branch 를 [main] 으로 바꾸고 [Save]</span></div></li>
         <li><input type="checkbox"><div><span class="what">주소 열기</span><span class="how">1~2분 뒤 <code>https://내아이디.github.io/저장소이름/</code> 을 엽니다. Pages 화면 위쪽에도 주소가 뜹니다.</span></div></li>
@@ -1438,7 +1457,7 @@ table.ext td:last-child{color:var(--ink2)}
     </div>
 
     <div class="blk">
-      <p class="kw">GitHub에서 찾을 수 있는 스킬 모음</p>
+      <p class="kw"><img class="service-mark" src="img/brand-github.svg" alt="" width="20" height="20">GitHub에서 찾을 수 있는 스킬 모음</p>
       <p class="brief">해외에서 많이 쓰는 것, 한국에서 많이 쓰는 것, 학교 일에 쓰는 것으로 나눠 모았습니다.</p>
       <p class="grp">해외에서 많이 쓰는 것</p>
       <div class="grid2">
@@ -1505,13 +1524,15 @@ table.ext td:last-child{color:var(--ink2)}
       </div>
     </div>
     <div class="blk">
-      <p class="kw">맛집 지도 자료로 소개 페이지 만들기</p>
+      <p class="kw" id="food-design" data-practice-link>맛집 지도 자료로 소개 페이지 만들기</p>
       <p class="brief">맛집 지도에 모인 자료와 디자인 파일을 Copilot에 올려, 맛집 소개 페이지나 발표 자료를 만들어보겠습니다!</p>
       <div class="dl-row">
         <a class="btn big primary" data-matjip href="matjip.html" target="_blank"><svg class="ico" aria-hidden="true"><use href="#x-map"/></svg> 맛집 지도에서 CSV 받기 ↗</a>
+        <button type="button" class="btn big" id="foodRandomDesign"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 예시 디자인 랜덤 다운로드 받기</button>
         <a class="btn big" href="https://getdesign.md" target="_blank" rel="noopener">getdesign.md 열기 ↗</a>
         <a class="btn big" href="../vibecoding/design.html" target="_blank">디자인 서랍 열기 ↗</a>
       </div>
+      <p class="small" id="foodDesignStatus" role="status"></p>
       <div class="pbox">
         <div class="pbox-h"><b>두 파일을 첨부하고 보내는 말</b><button class="btn" type="button" data-copy="#pPage">복사</button></div>
         <pre class="ptext" id="pPage">첨부한 CSV는 선생님들이 추천한 부산 맛집 목록이야.
@@ -1522,8 +1543,8 @@ CSV에 없는 내용은 지어내지 마.</pre>
       </div>
       <ol class="steps" data-key="matjip-page">
         <li><input type="checkbox"><div><span class="what">맛집 지도에서 CSV 내려받기</span><span class="how">맛집 지도 위쪽의 [CSV 내려받기]를 누릅니다. 가게 이름, 한 줄 추천, 올린 사람이 표로 들어 있습니다.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">디자인 파일 고르기</span><span class="how">getdesign.md 나 디자인 서랍에서 마음에 드는 디자인을 고르고 DESIGN.md 를 내려받습니다.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">Copilot 새 대화에 두 파일 첨부하기</span><span class="how">채팅창의 파일 첨부 단추를 누르거나 파일을 끌어다 놓습니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">디자인 파일 고르기</span><span class="how">직접 고르려면 디자인 서랍이나 getdesign.md를 엽니다. 바로 실습하려면 [예시 디자인 랜덤 다운로드 받기]를 누르세요. 받은 DESIGN.md를 맛집 CSV와 함께 첨부합니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what"><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot 새 대화에 두 파일 첨부하기</span><span class="how">채팅창의 파일 첨부 단추를 누르거나 파일을 끌어다 놓습니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">보내는 말을 붙여 넣고 보내기</span><span class="how">[복사]를 누르고 붙여 넣습니다. 발표 자료로 받고 싶으면 「HTML 파일 하나」를 「PowerPoint 파일」로 바꿉니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">만든 화면 열어 보기</span><span class="how">받은 코드를 메모장에 붙이고 matjip.html 로 저장한 뒤 엽니다.</span></div></li>
       </ol>
@@ -1537,6 +1558,41 @@ CSV에 없는 내용은 지어내지 마.</pre>
     <div class="blk">
       <p class="kw">라이브 슬라이드 스킬로 강의 화면 3장 만들기</p>
       <p class="brief">제가 만든 스킬 파일에 교과서 소단원이나 학습지 하나를 넣어, 방향키로 넘기는 강의 화면 3장을 직접 만들어보겠습니다!</p>
+      <div class="live-picker" id="live-design-picker" data-practice-link>
+        <label for="live-design-choice"><b>강의 화면 디자인 고르기</b></label>
+        <p class="small">목록에서 이름을 고르거나 미리보기 그림을 눌러 보세요. 고른 디자인에 맞춰 아래의 파일이 바뀝니다.</p>
+        <select id="live-design-choice">
+          <option value="sunny-board" data-example="../lecture-board-ai/examples/c1-1/" data-thumb="../lecture-board-ai/examples/c1-1/thumb.webp" data-lesson="중1 · 온도가 같아지는 열평형" data-guide="../lecture-board-ai/examples/design/sunny-board.md" data-filename="DESIGN_햇살게시판.md">햇살 게시판</option>
+          <option value="paper-collage" data-example="../lecture-board-ai/examples/c1-5/" data-thumb="../lecture-board-ai/examples/c1-5/thumb.webp" data-lesson="중1 · 변이와 생물다양성" data-guide="../lecture-board-ai/examples/design/paper-collage.md" data-filename="DESIGN_색종이콜라주.md">색종이 콜라주</option>
+          <option value="parchment-ink" data-example="../lecture-board-ai/examples/c2-2/" data-thumb="../lecture-board-ai/examples/c2-2/thumb.webp" data-lesson="중2 · 크고 작은 여러 개의 판" data-guide="../lecture-board-ai/examples/design/parchment-ink.md" data-filename="DESIGN_양피지와먹.md">양피지와 먹</option>
+          <option value="graph-note" data-example="../lecture-board-ai/examples/c2-5/" data-thumb="../lecture-board-ai/examples/c2-5/thumb.webp" data-lesson="중2 · 광합성에 영향을 미치는 환경요인" data-guide="../lecture-board-ai/examples/design/graph-note.md" data-filename="DESIGN_모눈노트.md">모눈 노트</option>
+          <option value="violet-night" data-example="../lecture-board-ai/examples/c3-3/" data-thumb="../lecture-board-ai/examples/c3-3/thumb.webp" data-lesson="중3 · 연주 시차로 구하는 별까지의 거리" data-guide="../lecture-board-ai/examples/design/violet-night.md" data-filename="DESIGN_보랏빛밤.md">보랏빛 밤</option>
+          <option value="clay-celadon" data-example="../lecture-board-ai/examples/c3-5/" data-thumb="../lecture-board-ai/examples/c3-5/thumb.webp" data-lesson="중3 · 시각을 담당하는 감각 기관, 눈" data-guide="../lecture-board-ai/examples/design/clay-celadon.md" data-filename="DESIGN_흙과청자.md">흙과 청자</option>
+          <option value="arcade" data-example="../lecture-board-ai/examples/t-1/" data-thumb="../lecture-board-ai/examples/t-1/thumb.webp" data-lesson="통합과학 · 중력을 받는 물체의 운동" data-guide="../lecture-board-ai/examples/design/arcade.md" data-filename="DESIGN_오락실교무실.md">오락실 교무실</option>
+          <option value="corkboard" data-example="../lecture-board-ai/examples/t-3/" data-thumb="../lecture-board-ai/examples/t-3/thumb.webp" data-lesson="통합과학 · 생명 시스템에서 일어나는 화학 반응과 효소" data-guide="../lecture-board-ai/examples/design/corkboard.md" data-filename="DESIGN_코르크보드.md">코르크 보드</option>
+          <option value="hand" data-example="../lecture-board-ai/examples/c1-6/" data-thumb="../lecture-board-ai/examples/c1-6/thumb.webp" data-lesson="중1 · 모양이 달라지는 달" data-guide="" data-filename="">손글씨 노트</option>
+          <option value="basic">기본 디자인</option>
+          <option value="external">이미 받은 DESIGN.md 사용</option>
+        </select>
+        <details class="live-gallery"><summary>미리보기 그림에서 고르기</summary><div class="live-thumbs">
+          <button type="button" data-pick="sunny-board" aria-pressed="false"><img src="../lecture-board-ai/examples/c1-1/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>햇살 게시판</span></button>
+          <button type="button" data-pick="paper-collage" aria-pressed="false"><img src="../lecture-board-ai/examples/c1-5/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>색종이 콜라주</span></button>
+          <button type="button" data-pick="parchment-ink" aria-pressed="false"><img src="../lecture-board-ai/examples/c2-2/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>양피지와 먹</span></button>
+          <button type="button" data-pick="graph-note" aria-pressed="false"><img src="../lecture-board-ai/examples/c2-5/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>모눈 노트</span></button>
+          <button type="button" data-pick="violet-night" aria-pressed="false"><img src="../lecture-board-ai/examples/c3-3/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>보랏빛 밤</span></button>
+          <button type="button" data-pick="clay-celadon" aria-pressed="false"><img src="../lecture-board-ai/examples/c3-5/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>흙과 청자</span></button>
+          <button type="button" data-pick="arcade" aria-pressed="false"><img src="../lecture-board-ai/examples/t-1/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>오락실 교무실</span></button>
+          <button type="button" data-pick="corkboard" aria-pressed="false"><img src="../lecture-board-ai/examples/t-3/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>코르크 보드</span></button>
+          <button type="button" data-pick="hand" aria-pressed="false"><img src="../lecture-board-ai/examples/c1-6/thumb.webp" alt="" loading="lazy" width="640" height="360"><span>손글씨 노트</span></button>
+        </div></details>
+        <div class="live-preview"><img src="../lecture-board-ai/examples/c1-1/thumb.webp" alt="" width="640" height="360">
+          <div><b class="live-selected" aria-live="polite">선택한 디자인 · 햇살 게시판</b>
+            <p class="small live-lesson"></p><a class="live-example" href="../lecture-board-ai/examples/c1-1/" target="_blank" rel="noopener">강의 화면 예시 열기 ↗</a></div>
+        </div>
+        <p class="live-instructions">스킬 파일과 디자인 파일을 하나씩 받아 수업 자료와 함께 Copilot에 첨부하세요.</p>
+        <div class="dl-row"><a class="btn big primary live-skill" href="skill/live-slide-3-design.txt" download="라이브슬라이드_3장판_디자인서랍.txt">스킬 파일 받기 (.txt)</a>
+          <a class="btn big live-guide" href="../lecture-board-ai/examples/design/sunny-board.md" download="DESIGN_햇살게시판.md">햇살 게시판 디자인 받기 (.md)</a></div>
+      </div>
       <figure class="vid"><video src="../live-slide/clip2-blank.mp4" poster="../live-slide/clip2-blank.jpg" controls muted loop playsinline preload="none"></video><figcaption>방향키를 누를 때마다 그림과 빈칸이 한 단계씩 열립니다. 기능을 모아 둔 영상은 <a href="../live-slide/" target="_blank">라이브 슬라이드 소개</a>에 있습니다.</figcaption></figure>
       <p class="grp">제가 수업에 쓰는 강의 화면</p>
       <div class="grid2 shots">
@@ -1547,26 +1603,10 @@ CSV에 없는 내용은 지어내지 마.</pre>
         <a class="box pshot" href="https://scienceisjo.github.io/electricity/share/note-01-friction.html" target="_blank" rel="noopener"><img src="../boards/thumbs/electricity_note-01-friction.webp" alt="마찰 전기, 손글씨 노트 강의 화면의 첫 장면" loading="lazy" width="640" height="360"><b>마찰 전기, 손글씨 노트</b><p>모눈종이 위에 한 줄씩 써지는 손글씨 노트 화면입니다.</p></a>
         <a class="box pshot" href="../boards/" target="_blank"><img src="../live-slide/og.jpg" alt="강의 화면 33편 모두 보기 강의 화면의 첫 장면" loading="lazy" width="640" height="360"><b>강의 화면 33편 모두 보기</b><p>전기와 자기, 기체의 성질, 별과 우주 단원의 강의 화면을 모아 둔 곳입니다.</p></a>
       </div>
-      <p class="grp">디자인을 바꿔 만든 예시</p>
-      <p class="small">카드의 「DESIGN.md 받기」로 그 디자인의 설명서를 받습니다. 아래의 「내가 고른 디자인」 스킬 파일과 함께 올리면 그 디자인으로 만들어집니다.</p>
-      <div class="grid2 shots">
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c1-1/" target="_blank"><img src="../lecture-board-ai/examples/c1-1/thumb.webp" alt="햇살 게시판 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>햇살 게시판</b><p>중1 · 온도가 같아지는 열평형</p><div class="links"><a href="../lecture-board-ai/examples/c1-1/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/sunny-board.md" download="DESIGN_햇살게시판.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c1-5/" target="_blank"><img src="../lecture-board-ai/examples/c1-5/thumb.webp" alt="색종이 콜라주 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>색종이 콜라주</b><p>중1 · 변이와 생물다양성</p><div class="links"><a href="../lecture-board-ai/examples/c1-5/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/paper-collage.md" download="DESIGN_색종이콜라주.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c2-2/" target="_blank"><img src="../lecture-board-ai/examples/c2-2/thumb.webp" alt="양피지와 먹 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>양피지와 먹</b><p>중2 · 크고 작은 여러 개의 판</p><div class="links"><a href="../lecture-board-ai/examples/c2-2/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/parchment-ink.md" download="DESIGN_양피지와먹.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c2-5/" target="_blank"><img src="../lecture-board-ai/examples/c2-5/thumb.webp" alt="모눈 노트 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>모눈 노트</b><p>중2 · 광합성에 영향을 미치는 환경요인</p><div class="links"><a href="../lecture-board-ai/examples/c2-5/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/graph-note.md" download="DESIGN_모눈노트.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c3-3/" target="_blank"><img src="../lecture-board-ai/examples/c3-3/thumb.webp" alt="보랏빛 밤 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>보랏빛 밤</b><p>중3 · 연주 시차로 구하는 별까지의 거리</p><div class="links"><a href="../lecture-board-ai/examples/c3-3/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/violet-night.md" download="DESIGN_보랏빛밤.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c3-5/" target="_blank"><img src="../lecture-board-ai/examples/c3-5/thumb.webp" alt="흙과 청자 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>흙과 청자</b><p>중3 · 시각을 담당하는 감각 기관, 눈</p><div class="links"><a href="../lecture-board-ai/examples/c3-5/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/clay-celadon.md" download="DESIGN_흙과청자.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/t-1/" target="_blank"><img src="../lecture-board-ai/examples/t-1/thumb.webp" alt="오락실 교무실 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>오락실 교무실</b><p>통합과학 · 중력을 받는 물체의 운동</p><div class="links"><a href="../lecture-board-ai/examples/t-1/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/arcade.md" download="DESIGN_오락실교무실.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/t-3/" target="_blank"><img src="../lecture-board-ai/examples/t-3/thumb.webp" alt="코르크 보드 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>코르크 보드</b><p>통합과학 · 생명 시스템에서 일어나는 화학 반응과 효소</p><div class="links"><a href="../lecture-board-ai/examples/t-3/" target="_blank">예시 열기 ↗</a><a href="../lecture-board-ai/examples/design/corkboard.md" download="DESIGN_코르크보드.md">DESIGN.md 받기</a></div></div>
-        <div class="box pshot"><a href="../lecture-board-ai/examples/c1-6/" target="_blank"><img src="../lecture-board-ai/examples/c1-6/thumb.webp" alt="손글씨 디자인으로 만든 강의 화면" loading="lazy" width="640" height="360"></a><b>손글씨 노트</b><p>중1 · 모양이 달라지는 달</p><div class="links"><a href="../lecture-board-ai/examples/c1-6/" target="_blank">예시 열기 ↗</a><a href="skill/live-slide-3-hand.txt" download="라이브슬라이드_3장판_손글씨.txt">손글씨 판 받기</a></div></div>
-        <a class="box" href="../lecture-board-ai/examples/" target="_blank"><b>예시 24편 모두 보기</b><p>중학교 1~3학년과 통합과학 예시를 디자인별로 모아 둔 곳입니다.</p></a>
-      </div>
-      <p class="grp">스킬 파일 세 가지와 예시 학습지</p>
+      <p class="grp">예시 강의와 실습 자료</p>
       <div class="dl-row">
-        <a class="btn big primary" href="skill/live-slide-3.txt" download="라이브슬라이드_3장판_기본.txt"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 기본 디자인</a>
-        <a class="btn big" href="skill/live-slide-3-hand.txt" download="라이브슬라이드_3장판_손글씨.txt"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 손글씨 노트</a>
-        <a class="btn big" href="skill/live-slide-3-design.txt" download="라이브슬라이드_3장판_디자인서랍.txt"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 내가 고른 디자인</a>
-        <a class="btn big" href="skill/worksheet-example.txt" download="예시학습지_압력과부피.txt"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 예시 학습지</a>
+        <a class="btn big" href="../lecture-board-ai/examples/" target="_blank" rel="noopener">예시 강의 24편 보기 ↗</a>
+        <a class="btn big" href="skill/worksheet-example.txt" download="예시학습지_압력과부피.txt"><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 예시 학습지 받기</a>
       </div>
       <p class="grp">스킬을 올려 두는 도구에서 쓰는 묶음</p>
       <div class="dl-row">
@@ -1574,9 +1614,9 @@ CSV에 없는 내용은 지어내지 마.</pre>
         <a class="btn big" href="../lecture-board-ai/files/handwritten-note-lecture.zip" download><svg class="ico" aria-hidden="true"><use href="#x-down"/></svg> 손글씨 노트 스킬</a>
       </div>
       <ol class="steps" data-key="live3">
-        <li><input type="checkbox"><div><span class="what">스킬 파일 하나 고르기</span><span class="how">기본 디자인, 손글씨 노트, 내가 고른 디자인 가운데 하나를 내려받습니다. 「내가 고른 디자인」은 위 카드나 앞 실습에서 받은 DESIGN.md 를 함께 올리는 판입니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what">스킬 파일 하나 고르기</span><span class="how">위의 「강의 화면 디자인 고르기」에서 마음에 드는 디자인을 선택하고 스킬 파일을 받습니다. 디자인 파일 단추도 보이면 두 파일을 모두 받으세요.</span></div></li>
         <li><input type="checkbox"><div><span class="what">넣을 자료 정하기</span><span class="how">교과서 소단원 쪽을 사진으로 찍거나 쓰시던 학습지 파일을 준비합니다. 없으면 예시 학습지를 내려받습니다.</span></div></li>
-        <li><input type="checkbox"><div><span class="what">Copilot 새 대화에 스킬 파일과 자료 첨부하기</span><span class="how">「내가 고른 디자인」 판이면 DESIGN.md 도 함께 올립니다.</span></div></li>
+        <li><input type="checkbox"><div><span class="what"><img class="service-mark" src="img/brand-copilot.svg" alt="" width="20" height="20">Copilot 새 대화에 스킬 파일과 자료 첨부하기</span><span class="how">디자인 파일(.md)을 따로 고르셨다면 그 파일도 함께 올립니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">「첨부한 설명서대로 이 자료로 강의 화면을 만들어 줘」 보내기</span><span class="how">Copilot이 장면 계획과 빈칸을 먼저 보여 줍니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">계획을 확인하고 「좋아」 보내기</span><span class="how">고칠 곳이 있으면 그 줄만 말합니다.</span></div></li>
         <li><input type="checkbox"><div><span class="what">만든 화면을 열어 방향키로 넘겨 보기</span><span class="how">받은 코드를 메모장에 붙이고 lecture.html 로 저장한 뒤 엽니다.</span></div></li>
@@ -1769,7 +1809,7 @@ description: 가정통신문 초안을 쓸 때 사용. 「가정통신문 써 �
       </div>
       <table>
         <tr><th scope="col">Windows에서 Python을 받은 방법</th><th scope="col">설치할 때 볼 곳</th></tr>
-        <tr><td><a href="https://apps.microsoft.com/detail/9NQ7512CXL7T" target="_blank" rel="noopener">Microsoft Store에서 Python Install Manager 받기 ↗</a></td><td>[설치]를 누릅니다. 처음부터 PATH에 체크하는 칸은 없습니다. 처음 실행할 때 명령어 폴더를 PATH에 추가할지 물으면 「예」를 선택해도 됩니다.</td></tr>
+        <tr><td><a href="https://apps.microsoft.com/detail/9NQ7512CXL7T" target="_blank" rel="noopener"><img class="service-mark" src="img/brand-microsoft.png" alt="" width="20" height="20">Microsoft Store에서 Python Install Manager 받기 ↗</a></td><td>[설치]를 누릅니다. 처음부터 PATH에 체크하는 칸은 없습니다. 처음 실행할 때 명령어 폴더를 PATH에 추가할지 물으면 「예」를 선택해도 됩니다.</td></tr>
         <tr><td>python.org에서 받은 Windows installer 파일 (옛 방식)</td><td>파일을 연 뒤 첫 화면 맨 아래에서 <strong>Add python.exe to PATH</strong>에 체크하고 [Install Now]를 누릅니다.</td></tr>
       </table>
       <div class="note">PATH는 터미널이 프로그램을 찾을 때 살펴보는 폴더 목록입니다. 설치할 때 Python 폴더를 여기에 추가하면 다른 폴더에서 작업할 때도 <code>python</code>이라고 입력해 실행할 수 있습니다.</div>
@@ -2054,15 +2094,21 @@ function followTo(i, b){
   const blk=blocksOf(i)[b];
   if(blk){ curBlk=b; blk.scrollIntoView({behavior:'instant', block:'start'}); }
 }
+// 실습 바로가기를 열면 강사의 이전 위치를 건너뛰고, 이후 장면 이동부터 따라갑니다.
+let firstFollowRead = true;
 async function followPoll(){
   if(document.hidden) return;
   try{
     const r=await fetch(`${SB.url}/rest/v1/yeonsu_live?s=eq.${encodeURIComponent(CODE)}&kind=eq.follow&select=id,body&order=id.desc&limit=1`,{headers:sbHeaders()});
     if(!r.ok) return;
-    const [row]=await r.json(); if(!row) return;
+    const [row]=await r.json();
+    const keepPractice = firstFollowRead && document.getElementById(location.hash.slice(1))?.hasAttribute('data-practice-link');
+    firstFollowRead = false;
+    if(!row) return;
     { const s0=String(row.body).split('#')[0]; if(s0!=='top' && s0!=='s1') unseal(); }   // 진행 화면이 2단계 이후로 가면 닫아 둔 단계가 열림
     if(row.id===followLastId) return;
     followLastId=row.id;
+    if(keepPractice) return;
     const [sid, bs] = String(row.body).split('#');
     const b = bs!=null && bs!=='' ? +bs : null;
     const i = sid==='top' ? -1 : steps.findIndex(s=>s.id===sid);
@@ -2239,6 +2285,44 @@ function drawQRs(){
   const u=new URL('matjip.html', location.href); u.search='?s='+encodeURIComponent(CODE); u.hash='';
   a.href=u.href; document.getElementById('matjipQr').dataset.url=u.href;
   document.querySelectorAll('[data-matjip]').forEach(x=>{ x.href=u.href; });
+})();
+
+/* 맛집 소개 실습에서 디자인 서랍의 한글 설계서를 한 장 내려받습니다. */
+(function(){
+  const button = document.getElementById('foodRandomDesign');
+  const status = document.getElementById('foodDesignStatus');
+  const folder = '../vibecoding/design/kr/';
+  let designs, previous;
+  button.addEventListener('click', async () => {
+    if (button.disabled) return;
+    button.disabled = true;
+    status.textContent = '디자인 파일을 준비하고 있습니다.';
+    try {
+      if (!designs) {
+        const index = await fetch(folder + 'index.json');
+        if (!index.ok) throw new Error();
+        const catalog = await index.json();
+        designs = catalog.items.filter(item => /^[a-z0-9-]+$/.test(item.slug) && item.name);
+      }
+      const choices = designs.length > 1 ? designs.filter(item => item.slug !== previous) : designs;
+      if (!choices.length) { designs = null; throw new Error(); }
+      const picked = choices[Math.floor(Math.random() * choices.length)];
+      const response = await fetch(folder + picked.slug + '.md');
+      if (!response.ok) throw new Error();
+      const file = await response.blob();
+      if (!file.size || file.type.startsWith('text/html')) throw new Error();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'DESIGN.md';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 30000);
+      previous = picked.slug;
+      status.textContent = '고른 디자인은 「' + picked.name + '」입니다. 받은 DESIGN.md를 맛집 CSV와 함께 Copilot에 올리세요.';
+    } catch {
+      status.textContent = '디자인 파일을 받지 못했습니다. 다시 누르거나 [디자인 서랍 열기]에서 골라 주세요.';
+    } finally { button.disabled = false; }
+  });
 })();
 
 /* ── GitHub 핵심 기능 다섯 가지: 탭을 누르면 그 화면만 보입니다 ── */
@@ -2431,6 +2515,18 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
 
 // 시작: 주소에 #s3 같은 장면이 있으면 그 장면, 발표 모드면 표지, 상세 모드면 스크롤 위치
 (function(){
+  function openPractice(){
+    const target = document.getElementById(location.hash.slice(1));
+    if (!target || !target.hasAttribute('data-practice-link')) return false;
+    const i = steps.indexOf(target.closest('.step'));
+    const b = blocksOf(i).indexOf(target.closest('.blk'));
+    if (b < 0) return false;
+    go(i, b);
+    requestAnimationFrame(() => target.scrollIntoView({block:'start', behavior:'instant'}));
+    return true;
+  }
+  window.addEventListener('hashchange', openPractice);
+  if (openPractice()) return;
   const h=location.hash.replace('#','');
   const i=steps.findIndex(s=>s.id===h);
   if(i>=0) go(i);
@@ -2488,6 +2584,53 @@ if(window.qrcode) drawQRs(); else { document.querySelector('script[src*="qrcode"
   }
   box.querySelectorAll('.bd-tabs button').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.layer)));
   setLayer('3');
+})();
+</script>
+<script>
+(() => {
+  const picker = document.getElementById('live-design-picker');
+  const choice = picker.querySelector('select');
+  const gallery = picker.querySelector('details');
+  const image = picker.querySelector('.live-preview img');
+  const sample = picker.querySelector('.live-example');
+  const skill = picker.querySelector('.live-skill');
+  const guide = picker.querySelector('.live-guide');
+  const tiles = [...gallery.querySelectorAll('[data-pick]')];
+  function paint() {
+    const option = choice.selectedOptions[0];
+    const data = option.dataset;
+    const value = option.value;
+    const skillType = value === 'hand' ? '손글씨' : value === 'basic' ? '기본' : '디자인서랍';
+    skill.href = value === 'hand' ? 'skill/live-slide-3-hand.txt' : value === 'basic' ? 'skill/live-slide-3.txt' : 'skill/live-slide-3-design.txt';
+    skill.download = '라이브슬라이드_3장판_' + skillType + '.txt';
+    picker.querySelector('.live-selected').textContent = '선택한 디자인 · ' + option.textContent;
+    image.hidden = !data.thumb;
+    if (data.thumb) image.src = data.thumb;
+    sample.hidden = !data.example;
+    if (data.example) sample.href = data.example;
+    picker.querySelector('.live-lesson').textContent = data.lesson || '';
+    guide.hidden = !data.guide;
+    if (data.guide) {
+      guide.href = data.guide;
+      guide.download = data.filename;
+      guide.textContent = option.textContent + ' 디자인 받기 (.md)';
+    }
+    picker.querySelector('.live-instructions').textContent = data.guide
+      ? '스킬 파일과 디자인 파일을 하나씩 받아 수업 자료와 함께 Copilot에 첨부하세요.'
+      : value === 'external' ? '아래 스킬 파일을 받아 앞 실습에서 받은 DESIGN.md, 수업 자료와 함께 Copilot에 첨부하세요.'
+      : '아래 스킬 파일을 받아 수업 자료와 함께 Copilot에 첨부하세요.';
+    tiles.forEach(tile => tile.setAttribute('aria-pressed', String(tile.dataset.pick === value)));
+  }
+  choice.addEventListener('change', paint);
+  gallery.addEventListener('click', event => {
+    const tile = event.target.closest('[data-pick]');
+    if (!tile) return;
+    choice.value = tile.dataset.pick;
+    paint();
+    gallery.open = false;
+    choice.focus();
+  });
+  paint();
 })();
 </script>
 <script src="dg.js"></script>

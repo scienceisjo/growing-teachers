@@ -1,0 +1,15 @@
+/* 서비스 이름을 먼저 알아볼 수 있도록 붙이는 로고입니다. */
+.service-mark {
+  display: inline-block;
+  width: 1.12em;
+  height: 1.12em;
+  max-width: none;
+  object-fit: contain;
+  margin-inline-end: .27em;
+  vertical-align: -.16em;
+}
+.top .brand .service-mark { width: 1em; height: 1em; }
+[data-practice-link] { scroll-margin-top: calc(var(--topH, 55px) + 16px); }
+@media (max-width: 760px) {
+  .top .brand .service-mark { display: none; }
+}
